@@ -1,5 +1,4 @@
 app.controller("DashboardController", function ($scope, $http) {
-
     //Add Panels
     $scope.panels = [];
     var uid = 7;

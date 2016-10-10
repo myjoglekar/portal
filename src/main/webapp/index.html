@@ -4,14 +4,35 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html ng-app="VizBoardApp">
+<html>
     <head>
         <title>Viz Board</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="static/css/dashboard.css">
+        
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
     </head>
-    
-    <body>
-        <div>TODO write content</div>
+
+    <body ng-app="VizBoardApp">
+        <ui-view></ui-view>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+        <script src="http://hrajchert.github.io/angular-screenfull/js/angular-animate.min.js"></script>
+        <script src="http://hrajchert.github.io/angular-screenfull/js/marked.js"></script>
+        <script src="http://hrajchert.github.io/angular-screenfull/js/dist/angular-screenfull.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/2.0.0/screenfull.js"></script>        <!-- Generate Chart-->
+        <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        <script src="static/lib/ngDraggable.js"></script>
+
+        <script src="static/js/app.js"></script>
+        <script src="static/js/config/ui-rootprovider.js"></script>
+        <script src="static/js/controllers/vb.dashboard.js"></script>
     </body>
 </html>
