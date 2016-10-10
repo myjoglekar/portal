@@ -1,0 +1,168 @@
+<!-- start: App sidebar -->
+<ul class="nav main-nav" data-ng-controller="AppsidebarCtrl" app-navigation>
+
+    <li data-ng-class="{opened:$state.includes('app.dashboard')}">        
+        <a angular-ripple ui-sref="app.dashboard.v1">
+            <i class="fa fa-dashboard"></i> 
+            <div>
+                <span>{{ 'DASHBOARD' | translate }}</span>
+            </div>
+        </a>
+    </li>
+
+    <li data-ng-class="{opened:$state.includes('app.admin')}">        
+        <a angular-ripple ui-sref="app.admin.dealer">
+            <i class="fa fa-user"></i> 
+            <div>
+                <span>{{ 'DEALER' | translate }}</span>
+            </div>
+        </a>
+    </li>
+
+    <li data-ng-class="{opened:$state.includes('app.report')}">  
+        <a angular-ripple>
+            <i class="fa fa-file-o"></i> 
+            <div>
+                <span >{{ 'REPORTS' | translate }}</span>
+                <i class="nav-arrow fa fa-angle-right "></i>
+            </div>
+        </a>
+        <ul class="nav  nav-children main-nav">
+            <li class="fold-header">
+                <a>
+                    <div>
+                        <span >{{ 'REPORTS' | translate }}</span> 
+                    </div>
+                </a>
+            </li>
+            <li  ui-sref-active="active"> 
+                <a ui-sref="app.report.dealer" angular-ripple>
+                    <i class="fa fa-user"></i> 
+                    <div>
+                        <span >{{ 'DEALER' | translate }}</span>
+                    </div>
+                </a>
+            </li>
+            <li  ui-sref-active="active"> 
+                <a ui-sref="app.report.domain" angular-ripple>
+                    <i class="fa fa-link"></i>  
+                    <div>
+                        <span >{{ 'DOMAIN'| translate }}</span>
+                    </div>
+                </a>
+            </li>
+            <li  ui-sref-active="active"> 
+                <a ui-sref="app.report.location" angular-ripple>
+                    <i class="fa fa-map-marker"></i> 
+                    <div>
+                        <span>{{ 'LOCATION' | translate }}</span>
+                    </div>
+                </a>
+            </li> 
+
+            <li data-ng-class="{opened:$state.includes('app.dailyReport')}">  
+                <a angular-ripple>
+                    <i class="fa fa-times-circle-o"></i> 
+                    <div>
+                        <span >{{ 'DAILYREPORTS' | translate }}</span>
+                        <i class="nav-arrow fa fa-angle-right "></i>
+                    </div>
+                </a>
+                <ul class="nav  nav-children main-nav">
+                    <li class="fold-header">
+                        <a>
+                            <div>
+                                <span >{{ 'DAILYREPORTS' | translate }}</span> 
+                            </div>
+                        </a>
+                    </li>
+                    <li  ui-sref-active="active"> 
+                        <a ui-sref="app.dailyReport.visitReport" angular-ripple>
+                            <i class="fa fa-taxi"></i> 
+                            <div>
+                                <span >{{ 'VISITREPORT' | translate }}</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li  ui-sref-active="active"> 
+                        <a ui-sref="app.dailyReport.locationBased" angular-ripple>
+                            <i class="fa fa-map-marker"></i>  
+                            <div>
+                                <span >{{ 'LOCATIONBASED'| translate }}</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li  ui-sref-active="active"> 
+                        <a ui-sref="app.dailyReport.deviceBased" angular-ripple>
+                            <i class="fa fa-desktop"></i> 
+                            <div>
+                                <span >{{ 'DEVICEBASED' | translate }}</span>
+                            </div>
+                        </a>
+                    </li>            
+                    <li  ui-sref-active="active"> 
+                        <a ui-sref="app.dailyReport.dealerViseReport" angular-ripple>
+                            <i class="fa fa-users"></i> 
+                            <div>
+                                <span >{{ 'DEALERVISEREPORT' | translate }}</span>
+                            </div>
+                        </a>
+                    </li>            
+                </ul>
+            </li>
+
+            <li data-ng-class="{opened:$state.includes('app.monthlyReport')}">  
+                <a angular-ripple>
+                    <i class="fa fa-calendar"></i> 
+                    <div>
+                        <span >{{ 'MONTHLYREPORTS' | translate }}</span>
+                        <i class="nav-arrow fa fa-angle-right "></i>
+                    </div>
+                </a>
+                <ul class="nav  nav-children main-nav">
+                    <li class="fold-header">
+                        <a>
+                            <div>
+                                <span >{{ 'MONTHLYREPORTS' | translate }}</span> 
+                            </div>
+                        </a>
+                    </li>
+                    <li  ui-sref-active="active"> 
+                        <a ui-sref="app.monthlyReport.visitReport" angular-ripple>
+                            <i class="fa fa-taxi"></i> 
+                            <div>
+                                <span >{{ 'VISITREPORT' | translate }}</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li  ui-sref-active="active"> 
+                        <a ui-sref="app.monthlyReport.locationBased" angular-ripple>
+                            <i class="fa fa-map-marker"></i>  
+                            <div>
+                                <span >{{ 'LOCATIONBASED'| translate }}</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li  ui-sref-active="active"> 
+                        <a ui-sref="app.monthlyReport.deviceBased" angular-ripple>
+                            <i class="fa fa-desktop"></i> 
+                            <div>
+                                <span >{{ 'DEVICEBASED' | translate }}</span>
+                            </div>
+                        </a>
+                    </li>            
+                    <li  ui-sref-active="active"> 
+                        <a ui-sref="app.monthlyReport.dealerViseReport" angular-ripple>
+                            <i class="fa fa-users"></i> 
+                            <div>
+                                <span >{{ 'DEALERVISEREPORT' | translate }}</span>
+                            </div>
+                        </a>
+                    </li>            
+                </ul>
+            </li>
+
+        </ul>
+    </li>
+</ul>
+<!-- end: App sidebar -->
