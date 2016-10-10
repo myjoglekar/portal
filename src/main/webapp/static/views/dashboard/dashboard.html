@@ -1,0 +1,141 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="static/css/dashboard.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="http://hrajchert.github.io/angular-screenfull/js/angular-animate.min.js"></script>
+<script src="http://hrajchert.github.io/angular-screenfull/js/marked.js"></script>
+<script src="http://hrajchert.github.io/angular-screenfull/js/dist/angular-screenfull.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/2.0.0/screenfull.js"></script>
+<!-- Generate Chart-->
+<script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="static/lib/ngDraggable.js"></script>
+
+<script src="static/js/app.js"></script>
+<script src="static/js/dashboard.js"></script>
+
+
+<div  ng-app="webAnalyticApp" ng-controller="DashboardController">
+    <nav class="navbar navbar-fixed-top">
+        <a href="#" class="btn btn-default" id="menu-toggle"><span class="fa fa-navicon"></span></a>
+        <span class="companyLogo"><img src="static/img/visumbu.png" class="companyImage"></span>
+
+        <span class="pull-right">
+            <button ng-click="add()" class="btn btn-success buttonadd"><span class="fa fa-plus"></span> Add</button>
+            <button class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()" ><span class="fa fa-expand"></span> Full Screen</button>
+        </span>
+    </nav>
+
+    <div id="wrapper">
+
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#"></a>
+                </li>
+                <li>
+                    <a href="#" style="color:white;">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#" style="color:white;">Dashboard 1</a>
+                </li>
+                <li>
+                    <a href="#" style="color:white;">Dashboard 2</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="row">
+                <div ng-repeat="label in labels">
+                    <div class="col-md-2">
+                        <div class="well" style="background-color:{{label.labelColor}};">
+                            <h4 class="text-danger"  style="color:white;"><span class="pull-right"><span class="glyphicon glyphicon-signal"></span></span>{{label.labelName}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row fullscreen" ngsf-fullscreen="fullscreenCtrl">
+
+                <div class="col-sm-4" ng-repeat="panel in panels" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+                    <div class="panel panel-info panel-resizable" ng-hide="hidenewchart" ngsf-fullscreen="panelCtrl" ng-drag="true" ng-drag-data="panel">
+                        <div class="panel-heading panel-heading-sm" style="background-color: grey;padding: 3px 3px;">
+                            <span class="{{panel.icon}}" style="color: white;"></span> 
+                            <strong ng-hide="panel.chartType" class="text-uppercase">New Chart</strong>
+                            <strong ng-show="panel.chartType" class="text-uppercase">{{panel.chartType}} chart</strong>
+                            <span class="btn-group pull-right">
+                                <button class="btn btn-default btn-xs" style="border-radius: 50%;"><span class="fa fa-refresh"></span></button>
+                                <button class="btn btn-default btn-xs" style="border-radius: 50%;" ng-click="panelCtrl.toggleFullscreen()"><span class="fa fa-expand"></span></button>
+                                <button class="btn btn-default btn-xs" style="border-radius: 50%;" data-toggle="modal" data-target="#chart{{$index + 1}}"><span class="fa fa-edit"></span></button>
+                                <button class="btn btn-default btn-xs"  style="border-radius: 50%;" ng-click="hidenewchart = true"><span class="fa fa-close"></span></button>
+                            </span>
+                        </div>
+
+                        <div class="panel-body">
+                            <center><div id="canvasContainers{{panel.chartId}}" style="height: 200px;; width: 100%;"></div></center>
+                        </div>
+                    </div>
+
+                    <div id="chart{{$index + 1}}" class="modal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" data-dismiss="modal">
+                                    Generate Chart
+                                    <button class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" class="form-control" placeholder="Title" ng-model="panel.title"><br>
+                                    <input type="text" class="form-control" placeholder="Url" ng-model="panel.url"><br>
+
+                                    <div class="form-inline">
+                                        <label class="col-sm-2" style="font-family:cursive">Type</label>
+                                        <span ng-repeat="chartType in chartTypes track by chartType.id">
+                                            <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
+                                                <img src="{{chartType.url}}" class="charttype" ng-value="{{panel.chart = chartType.type}}">
+                                            </span>
+                                        </span>
+                                    </div><br/>
+
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2" style="font-family: cursive">Preview</label>    
+                                        <div id="chartpreview{{panel.chartId}}"class="chartpreview" ng-model="panel.preview"></div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" ng-click="save(panel)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer class="navbar-fixed-bottom text-center">
+    © 2023 Visumbu IT Solutions (P) Ltd. All Rights Reserved.
+</footer>
+
+
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+//    $('.dragdrop').sortable({
+//        placeholderClass: 'col-sm-4'
+//    });
+
+</script>
