@@ -1,2 +1,1 @@
-//var app = angular.module("VizBoardApp", ['angularScreenfull', 'ngDraggable']);
-var app = angular.module("VizBoardApp", ["ui.router","ngTable"]);
+var app = angular.module("VizBoardApp", ["ui.router", "angularScreenfull", "ngDraggable"]);
