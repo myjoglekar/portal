@@ -12,7 +12,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             })
             .state("index.dashboard", {
                 url: "/dashboard",
-                templateUrl: "static/views/vb.index.html"
+                templateUrl: "static/views/dashboard/dashboard.html"
             })
             .state("index.report", {
                 url: "/report",
