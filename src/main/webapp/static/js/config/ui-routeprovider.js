@@ -15,10 +15,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/dashboard/dashboard.html"
             })
             .state("index.report", {
-                url: "/report",
+                url: "/report/:reportId",
                 templateUrl: "static/views/reports/createNewReports.html",
             });
 
-    $urlRouterProvider.otherwise('/index');
+    $urlRouterProvider.otherwise('index/dashboard');
 });
 

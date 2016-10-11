@@ -4,9 +4,21 @@
  * and open the template in the editor.
  */
 
-app.controller("ReportController", function ($scope, $http) {
+app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.reports = [];
-    $scope.add=function(){
-        $scope.reports.push({name:"New Report"});
+    $scope.add = function () {
+        $scope.reports.push({childName: "New Report"});
     };
+    console.log($stateParams.reportId);
+    $http.get('static/datas/report.json').success(function (response) {
+        $scope.reports = response;
+    })
+
+    if ($stateParams.reportId) {
+        $http.get($stateParams.reportId).success(function (response) {
+            $scope.data = response;
+            console.log($scope.data);
+        })
+    }
+
 });
