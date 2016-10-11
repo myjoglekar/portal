@@ -1,14 +1,33 @@
-<ul class="sidebar-nav">
+<ul ng-controller="ReportController" class="sidebar-nav">
     <li class="sidebar-brand">
         <a href="#"></a>
     </li>
     <li>
-        <a ui-sref="dashboard" style="color:white;">Dashboard</a>
+        <a ui-sref="dashboard">Dashboard</a>
     </li>
     <li>
-        <a href="#" style="color:white;">Dashboard 1</a>
+        <a href="#">Dashboard 1</a>
     </li>
     <li>
-        <a href="#" style="color:white;">Dashboard 2</a>
+        <a href="#">Dashboard 2</a>
+    </li>
+    <li>
+        <a ng-click="showSubMenu = !showSubMenu" href="#" style="color:white;">
+            Reports 
+            <i class="fa fa-chevron-right" aria-hidden="true"></i> 
+        </a>
+        <ul>
+            <li ng-show="showSubMenu">
+                <a href="#" style="color:white;" ng-click="add()">
+                    Analytic Reports 
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                </a>
+                <ul>
+                    <li ng-repeat="report in reports">
+                        <a ui-sref="dashboard.report">{{report.name}}</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </li>
 </ul>

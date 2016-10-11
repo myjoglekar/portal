@@ -116,12 +116,12 @@ span.previewChart{
 .sidebar-nav li a {
     display: block;
     text-decoration: none;
-    color: #999999;
+    color: #FFFFFF;
 }
 
 .sidebar-nav li a:hover {
     text-decoration: none;
-    color: black;
+    color: #FFFFFF;
     background: darkgrey;
 }
 

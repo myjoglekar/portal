@@ -10,8 +10,7 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <link rel="stylesheet" href="static/css/dashboard.css">
-        
+        <link rel="stylesheet" href="static/css/dashboard.css">        
         <link rel="stylesheet" href="static/css/areaChart.css">
         <link rel="stylesheet" href="static/css/barChart.css">
         <link rel="stylesheet" href="static/css/donutChart.css">
@@ -21,35 +20,34 @@ and open the template in the editor.
         
         <link rel="stylesheet" href="static/lib/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/lib/css/font-awesome.min.css">
-
     </head>
 
     <body ng-app="VizBoardApp">
-        <ui-view></ui-view>
+    <ui-view></ui-view>
+    
+    <script src="static/lib/js/jquery/jquery.min.js"></script>
+    <script src="static/lib/js/bootstrap.min.js"></script>
+    <script src="static/lib/js/angular/angular.min.js"></script>
+    <script src="static/lib/js/angular/angular-ui-router.min.js"></script>
+    <script src="static/lib/js/angular/angular-animate.min.js"></script>
+    <script src="static/lib/js/marked.js"></script>
+    <script src="static/lib/js/screenfull/angular-screenfull.js"></script>
+    <script src="static/lib/js/screenfull/screenfull.js"></script>        <!-- Generate Chart-->
+    <script src="static/lib/js/canvas/canvasjs.min.js"></script>
+    <!--D3 charts-->
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="static/lib/draganddrop/ngDraggable.js"></script>
 
-        <script src="static/lib/js/jquery/jquery.min.js"></script>
-        <script src="static/lib/js/bootstrap.min.js"></script>
-        <script src="static/lib/js/angular/angular.min.js"></script>
-        <script src="static/lib/js/angular/angular-ui-router.min.js"></script>
-        <script src="static/lib/js/angular/angular-animate.min.js"></script>
-        <script src="static/lib/js/marked.js"></script>
-        <script src="static/lib/js/screenfull/angular-screenfull.js"></script>
-        <script src="static/lib/js/screenfull/screenfull.js"></script>        <!-- Generate Chart-->
-        <script src="static/lib/js/canvas/canvasjs.min.js"></script>
-        <!--D3 charts-->
-        <script src="https://d3js.org/d3.v3.min.js"></script>
-        <script src="static/lib/draganddrop/ngDraggable.js"></script>
+    <script src="static/js/app.js"></script>
+    <script src="static/js/config/ui-routeprovider.js"></script>
+    <script src="static/js/controllers/vb.dashboard.js"></script>
+    <script src="static/js/controllers/vb.reports.js"></script>
 
-        <script src="static/js/app.js"></script>
-        <script src="static/js/config/ui-rootprovider.js"></script>
-        <script src="static/js/controllers/vb.dashboard.js"></script>
-        
-        <script src="static/js/controllers/areaChart.js"></script>
-        <script src="static/js/controllers/barChart.js"></script>
-        <script src="static/js/controllers/donutChart.js"></script>
-        <script src="static/js/controllers/groupedBarChart.js"></script>
-        <script src="static/js/controllers/lineChart.js"></script>
-        <script src="static/js/controllers/pieChart.js"></script>
-        
-    </body>
+    <script src="static/js/controllers/areaChart.js"></script>
+    <script src="static/js/controllers/barChart.js"></script>
+    <script src="static/js/controllers/donutChart.js"></script>
+    <script src="static/js/controllers/groupedBarChart.js"></script>
+    <script src="static/js/controllers/lineChart.js"></script>
+    <script src="static/js/controllers/pieChart.js"></script>
+</body>
 </html>

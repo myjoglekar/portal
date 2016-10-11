@@ -1,0 +1,13 @@
+[{
+        "menuName": "netphenix",
+        "url": "static/datas/employee.json"
+    },
+    {
+        "menuName": "Analytic Reports",
+        "url": "static/datas/employee.json"
+    },
+    {
+        "menuName": "Employee Report",
+        "url": "static/datas/employee.json"
+    }
+]
