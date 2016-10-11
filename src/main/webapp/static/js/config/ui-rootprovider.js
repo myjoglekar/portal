@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 
-app.config(function ($stateProvider, $urlRouterProvider){
-    $stateProvider.state("dashboard", {
-        url: "/dashboard",
-        templateUrl: "static/views/vb.index.html"
-      });
-      
+app.config(function ($stateProvider, $urlRouterProvider) {
+    $stateProvider
+            .state("dashboard", {
+                url: "/dashboard",
+                templateUrl: "static/views/vb.index.html"
+            });
+
     $urlRouterProvider.otherwise('/dashboard');
 });
 
