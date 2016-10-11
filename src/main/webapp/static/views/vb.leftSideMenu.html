@@ -12,19 +12,19 @@
         <a href="#">Dashboard 2</a>
     </li>
     <li>
-        <a ng-click="showSubMenu = !showSubMenu" href="#" style="color:white;">
+        <a ng-click="showSubMenu = !showSubMenu" href="#" >
             Reports 
-            <i class="fa fa-chevron-right" aria-hidden="true"></i> 
+            <i class="fa txt-right" ng-class="{'fa-chevron-right':!showSubMenu, 'fa-chevron-down':showSubMenu}"></i> 
         </a>
         <ul>
-            <li ng-show="showSubMenu">
-                <a href="#" style="color:white;" ng-click="add()">
-                    Analytic Reports 
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            <li class="list-unstyled list-txt-indent" ng-show="showSubMenu" ng-repeat="report in reports">
+                <a href="">
+                    {{report.parentName}}
+                    <i class="fa fa-plus-circle txt-right-circle" ng-click="add()" aria-hidden="true"></i>
                 </a>
                 <ul>
-                    <li ng-repeat="report in reports">
-                        <a ui-sref="index.report">{{report.name}}</a>
+                    <li class="list-unstyled">
+                        <a ui-sref="index.report({reportId: report.parentName})">{{report.childName}}</a>
                     </li>
                 </ul>
             </li>

@@ -1,13 +1,20 @@
-[{
-        "menuName": "netphenix",
+[
+    {
+        "id":1,
+        "parentName": "Analytic Report",
+        "childName": "netphenix",
         "url": "static/datas/employee.json"
     },
     {
-        "menuName": "Analytic Reports",
+        "id":2,
+        "parentName": "Status Report",
+        "childName": "Reports",
         "url": "static/datas/employee.json"
     },
     {
-        "menuName": "Employee Report",
+        "id":3,
+        "parentName": "Employee Report",
+        "childName": "Employee Report",
         "url": "static/datas/employee.json"
     }
 ]
