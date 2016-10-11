@@ -35,7 +35,7 @@ var svg = d3.select("#barChart").append("svg")
 
 svg.call(tip);
 
-d3.tsv("static/data/barchart.tsv", type, function(error, data) {
+d3.tsv("static/datas/barChart.tsv", type, function(error, data) {
   x.domain(data.map(function(d) { return d.letter; }));
   y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
 
