@@ -6,15 +6,19 @@
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
-            .state("dashboard", {
+            .state("index", {
+                url: "/index",
+                templateUrl: "static/views/vb.index.html"
+            })
+            .state("index.dashboard", {
                 url: "/dashboard",
                 templateUrl: "static/views/vb.index.html"
             })
-            .state("dashboard.report", {
+            .state("index.report", {
                 url: "/report",
                 templateUrl: "static/views/reports/createNewReports.html",
             });
 
-    $urlRouterProvider.otherwise('/dashboard');
+    $urlRouterProvider.otherwise('/index');
 });
 
