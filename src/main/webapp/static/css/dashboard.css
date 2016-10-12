@@ -13,17 +13,34 @@ nav.navbar-fixed-top{
     width:14vw;
     background-color: white;
 }
-div.col-md-2{
-    padding-left: 2px;
-    padding-right:2px;
-    margin-bottom: -15px;
-}
+
 .fullscreen{
     background-color: #FFFFFF;
 }
-.panel-info{
-    border: 1px solid grey;
+
+div.col-sm-12{
+    padding-top: 9vh;
+    padding-left: 3vw;
+    padding-right: 3vw;
 }
+div.col-md-2{
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-bottom: -15px;
+}
+h4.text-danger{
+    color:white;
+}
+div.col-sm-4{
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-bottom: -15px;
+}
+div.panel-info{
+    border:1px solid grey;
+}
+
+
 strong.text-uppercase{
     color: white;
 }
@@ -40,20 +57,7 @@ strong.text-uppercase{
     padding-left: 250px;
 }
 
-.col-sm-12{
-    padding-top:9vh;
-    padding-left:3vh;
-    padding-right: 3vh;
-}
-/*.col-md-2{
-    padding-left: 0px;
-    padding-right: 0px;
-}*/
-.col-sm-4{
-    padding-left:2px;
-    margin-bottom: -15px;
-    padding-right: 2px;
-}
+
 div.chartpreview{
     width:30vw;
     height:30vh;
@@ -84,17 +88,6 @@ span.previewChart{
 
 #wrapper.toggled #sidebar-wrapper {
     width: 250px;
-}
-
-#page-content-wrapper {
-    /*    width: 100%;
-        position: absolute;
-        padding: 15px;*/
-}
-
-#wrapper.toggled #page-content-wrapper {
-    /*    position: absolute;
-        margin-right: -250px;*/
 }
 
 /* Sidebar Styles */

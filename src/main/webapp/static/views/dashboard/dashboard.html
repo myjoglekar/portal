@@ -1,65 +1,152 @@
-<div>
-    <div class="col-sm-12">
-        <div class="row">
-            <div ng-repeat="label in labels">
-                <div class="col-md-2">
-                    <div class="well" style="background-color:{{label.labelColor}};">
-                        <h4 class="text-danger"  style="color:white;"><span class="pull-right"><span class="glyphicon glyphicon-signal"></span></span>{{label.labelName}}</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4" ng-repeat="panel in panels" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
-            <div class="panel panel-info panel-resizable" ng-hide="hidenewchart" ngsf-fullscreen="panelCtrl" ng-drag="true" ng-drag-data="panel">
-                <div class="panel-heading panel-heading-sm" style="background-color: grey;padding: 3px 3px;">
-                    <span class="{{panel.icon}}" style="color: white;"></span> 
-                    <strong ng-hide="panel.chartType" class="text-uppercase">New Chart</strong>
-                    <strong ng-show="panel.chartType" class="text-uppercase">{{panel.chartType}} chart</strong>
-                    <span class="btn-group pull-right">
-                        <button class="btn btn-default btn-xs" style="border-radius: 50%;"><span class="fa fa-refresh"></span></button>
-                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" ng-click="panelCtrl.toggleFullscreen()"><span class="fa fa-expand"></span></button>
-                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" data-toggle="modal" data-target="#chart{{$index + 1}}"><span class="fa fa-edit"></span></button>
-                        <button class="btn btn-default btn-xs"  style="border-radius: 50%;" ng-click="hidenewchart = true"><span class="fa fa-close"></span></button>
-                    </span>
-                </div>
+<div class="col-sm-12">
 
-                <div class="panel-body">
-                    <center><div id="canvasContainers{{panel.chartId}}" style="height: 200px;; width: 100%;"></div></center>
-                </div>
-            </div>
-
-            <div id="chart{{$index + 1}}" class="modal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header" data-dismiss="modal">
-                            Generate Chart
-                            <button class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" class="form-control" placeholder="Title" ng-model="panel.title"><br>
-                            <input type="text" class="form-control" placeholder="Url" ng-model="panel.url"><br>
-
-                            <div class="form-inline">
-                                <label class="col-sm-2" style="font-family:cursive">Type</label>
-                                <span ng-repeat="chartType in chartTypes track by chartType.id">
-                                    <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
-                                        <img src="{{chartType.url}}" class="charttype" ng-value="{{panel.chart = chartType.type}}">
-                                    </span>
-                                </span>
-                            </div><br/>
-
-                            <div class="form-group form-inline">
-                                <label class="col-sm-2" style="font-family: cursive">Preview</label>    
-                                <div id="chartpreview{{panel.chartId}}"class="chartpreview" ng-model="panel.preview"></div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-primary" ng-click="save(panel)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
-                        </div>
-                    </div>
+    <div class="row">
+        <div ng-repeat="label in labels">
+            <div class="col-md-2">
+                <div class="well" style="background-color:{{label.labelColor}};">
+                    <h4 class="text-danger"><span class="pull-right"><span class="glyphicon glyphicon-signal"></span></span>{{label.labelName}}</h4>
                 </div>
             </div>
         </div>
     </div>
-</div>    
+
+    <div class="row">
+
+        <div class="col-sm-4" ng-repeat="panel in panels">
+            <div class="panel panel-default lobipanel">
+                <div class="panel-heading panel-heading-sm" style="background-color: grey;padding: 3px 3px;color:white">
+                    <div class="panel-title">
+                        <span class="{{panel.icon}}" style="color: white;"></span> 
+                        <strong  class="text-uppercase">New Chart</strong>
+                        <strong class="text-uppercase">{{panel.chartType}} chart</strong>
+                    </div>
+
+                </div>
+                <div class="panel-body">
+                    <center><div id="canvasContainers{{panel.chartId}}" style="height: 200px;; width: 100%;"></div></center>
+                </div>
+            </div>
+        </div>
+        
+        
+
+
+
+        <!--        <div class="col-sm-4" ng-repeat="panel in panels" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+        
+                    <div class="panel panel-info" ng-hide="hidenewchart" ngsf-fullscreen="panelCtrl" ng-drag="true" ng-drag-data="panel">
+                        <div class="panel-heading panel-heading-sm" style="background-color: grey;padding: 3px 3px;">
+                            <span class="{{panel.icon}}" style="color: white;"></span> 
+                            <strong ng-hide="panel.chartType" class="text-uppercase">New Chart</strong>
+                            <strong ng-show="panel.chartType" class="text-uppercase">{{panel.chartType}} chart</strong>
+                            <span class="btn-group pull-right">
+                                <button class="btn btn-default btn-xs" style="border-radius: 50%;"><span class="fa fa-refresh" style="color:brown;"></span></button>
+                                <button class="btn btn-default btn-xs" style="border-radius: 50%;" ng-click="panelCtrl.toggleFullscreen()"><span class="fa fa-expand" style="color:fuchsia;"></span></button>
+                                <button class="btn btn-default btn-xs" style="border-radius: 50%;" data-toggle="modal" data-target="#chart{{$index + 1}}"><span class="fa fa-edit" style="color:blue;"></span></button>
+                                <button class="btn btn-default btn-xs"  style="border-radius: 50%;" ng-click="hidenewchart = true"><span class="fa fa-close" style="color:red;"></span></button>
+                            </span>
+                        </div>
+        
+                        <div class="panel-body">
+                            <center><div id="canvasContainers{{panel.chartId}}" style="height: 200px;; width: 100%;"></div></center>
+                        </div>
+                    </div>
+        
+                    <div id="chart{{$index + 1}}" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" data-dismiss="modal">
+                                    Generate Chart
+                                    <button class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" class="form-control" placeholder="Title" ng-model="panel.title"><br>
+                                    <input type="text" class="form-control" placeholder="Url" ng-model="panel.url"><br>
+        
+                                    <div class="form-inline">
+                                        <label class="col-sm-2" style="font-family:cursive">Type</label>
+                                        <span ng-repeat="chartType in chartTypes track by chartType.id">
+                                            <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
+                                                <img src="{{chartType.url}}" class="charttype" ng-value="{{panel.chart = chartType.type}}">
+                                            </span>
+                                        </span>
+                                    </div><br/>
+        
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2" style="font-family: cursive">Preview</label>    
+                                        <div id="chartpreview{{panel.chartId}}"class="chartpreview" ng-model="panel.preview"></div>
+                                    </div>
+        
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" ng-click="save(panel)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                </div>-->
+    </div>
+
+
+</div>
+
+
+
+<script>
+    $(function () {
+        var codes = $('.highlight code');
+        codes.each(function (ind, el) {
+            hljs.highlightBlock(el);
+        });
+
+        $('.lobipanel').lobiPanel();
+        $('#demoPanel11').lobiPanel();
+        $('#lobipanel-basic').lobiPanel();
+        $('#lobipanel-custom-control').lobiPanel({
+            reload: false,
+            close: false,
+            editTitle: false
+        });
+        $('#lobipanel-font-awesome').lobiPanel({
+            reload: {
+                icon: 'fa fa-refresh'
+            },
+            editTitle: {
+                icon: 'fa fa-edit',
+                icon2: 'fa fa-save'
+            },
+            unpin: {
+                icon: 'fa fa-arrows'
+            },
+            minimize: {
+                icon: 'fa fa-chevron-up',
+                icon2: 'fa fa-chevron-down'
+            },
+            close: {
+                icon: 'fa fa-times-circle'
+            },
+            expand: {
+                icon: 'fa fa-expand',
+                icon2: 'fa fa-compress'
+            }
+        });
+        $('#lobipanel-constrain-size').lobiPanel({
+            minWidth: 300,
+            minHeight: 300,
+            maxWidth: 600,
+            maxHeight: 480
+        });
+        $('#lobipanel-from-url').on('loaded.lobiPanel', function (ev, lobiPanel) {
+            var $body = lobiPanel.$el.find('.panel-body');
+            $body.html('<div class="highlight"><pre><code>' + $body.html() + '</code></pre></div>');
+            hljs.highlightBlock($body.find('code')[0]);
+        }).lobiPanel({
+            loadUrl: 'bootstrap/dist/css/bootstrap.min.css',
+            bodyHeight: 400
+        });
+        $('#lobipanel-multiple').find('.panel').lobiPanel({
+            sortable: true
+        });
+    });
+</script>
