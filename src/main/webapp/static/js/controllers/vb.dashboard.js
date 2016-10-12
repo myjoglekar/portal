@@ -1,4 +1,4 @@
-app.controller("DashboardController", function ($scope, $http) {
+app.controller("DashboardController", function ($scope, $http) {alert('test')
     //Add Panels 
     $scope.panels = [];
     var uid = 7;
