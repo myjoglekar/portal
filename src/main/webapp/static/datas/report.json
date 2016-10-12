@@ -3,18 +3,18 @@
         "id":1,
         "parentName": "Analytic Report",
         "childName": "netphenix",
-        "url": "static/datas/employee.json"
+        "url": "static/datas/1.json"
     },
     {
         "id":2,
         "parentName": "Status Report",
         "childName": "Reports",
-        "url": "static/datas/employee.json"
+        "url": "static/datas/2.json"
     },
     {
         "id":3,
         "parentName": "Employee Report",
         "childName": "Employee Report",
-        "url": "static/datas/employee.json"
+        "url": "static/datas/3.json"
     }
 ]

@@ -13,9 +13,9 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
     })
-
+    $scope.parentID = $stateParams.reportId
     if ($stateParams.reportId) {
-        $http.get($stateParams.reportId).success(function (response) {
+        $http.get('static/datas/' + $stateParams.reportId + '.json').success(function (response) {
             $scope.data = response;
             console.log($scope.data);
         })

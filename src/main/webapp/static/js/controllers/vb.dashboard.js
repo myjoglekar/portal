@@ -1,5 +1,5 @@
-app.controller("DashboardController", function ($scope, $http) {
-    //Add Panels
+app.controller("DashboardController", function ($scope, $http) {alert('test')
+    //Add Panels 
     $scope.panels = [];
     var uid = 7;
     $scope.add = function () {
@@ -8,7 +8,7 @@ app.controller("DashboardController", function ($scope, $http) {
         console.log("Uid : ", $scope.id);
     };
     
-    $http.get('static/data/labels.json').success(function(response){
+    $http.get('static/datas/labels.json').success(function(response){
         $scope.labels = response;
     })
 
@@ -48,7 +48,7 @@ app.controller("DashboardController", function ($scope, $http) {
     };
     
     //Default Load Chart
-    $http.get('static/data/defaultPanel.json').success(function (response) {
+    $http.get('static/datas/defaultPanel.json').success(function (response) {
         $scope.panels = response;        
         angular.forEach(response, function (value, key) {
             $http.get(value.url).success(function (response) {
