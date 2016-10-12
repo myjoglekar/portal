@@ -1,5 +1,5 @@
 <div ng-controller="ReportController" style="padding-left: 20px;">
-    <div class="col-sm-12 row">
+    <div class="col-sm-12 row" data-ng-hide="parentID">
         <form class="form-horizontal">
             <div class="form-group">
                 <label class="col-sm-2" for="email">Menu Name:</label>
@@ -19,4 +19,16 @@
             </div>
         </form> 
     </div>
+    
+    <div class="col-sm-12 row" data-ng-show="parentID">
+        <table class="table table-condensed table-bordered table-hover">        
+            <thead>
+                <th></th>
+            </thead>
+<!--        <tr ng-hide="group.$hideRows" ng-repeat="user in group.data" ng-repeat-end>
+          <td ng-repeat="col in $columns">{{user[col.field]}}</td>
+        </tr>-->
+      </table>
+    </div>
+    
 </div>
