@@ -1,0 +1,38 @@
+[
+    {
+        "id":1,
+        "url": "static/img/areachart.png",
+        "type": "area",
+        "name": "Area Chart" 
+    },
+    {
+        "id":2,
+        "url": "static/img/barchart.png",
+        "type": "bar",
+        "name": "Bar Chart"
+    },
+    {
+        "id":3,
+        "url": "static/img/linechart.ico",
+        "type": "line",
+        "name": "Line Chart"
+    },
+    {
+        "id":4,
+        "url": "static/img/piechart.ico",
+        "type": "pie",
+        "name": "Pie Chart"
+    },
+    {
+        "id":5,
+        "url": "static/img/bubblechart.png",
+        "type": "bubble",
+        "name": "Bubble Chart"
+    },
+    {
+        "id":6,
+        "url": "static/img/doughnutchart.png",
+        "type": "doughnut",
+        "name": "Doughnut Chart"
+    }
+]
