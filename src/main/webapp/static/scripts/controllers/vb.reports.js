@@ -12,6 +12,12 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.addChild = function (report) {
         report.childItems.push({childName: "New Child Name"});
     }
+    
+    var uid = 4
+    $scope.save=function(report, child){
+        report.id = uid++;
+        $scope.reports.push();
+    }
     console.log($stateParams.reportId);
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
