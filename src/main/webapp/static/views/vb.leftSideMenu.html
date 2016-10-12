@@ -14,17 +14,18 @@
     <li>
         <a ng-click="showSubMenu = !showSubMenu" href="#" >
             Reports 
-            <i class="fa txt-right" ng-class="{'fa-chevron-right':!showSubMenu, 'fa-chevron-down':showSubMenu}"></i> 
+            <i class="fa" ng-class="{'fa-chevron-right':!showSubMenu, 'fa-chevron-down':showSubMenu}"></i>
+            <i class="fa fa-plus-circle" ng-click="addParent()" aria-hidden="true"></i>
         </a>
         <ul>
-            <li class="list-unstyled list-txt-indent" ng-show="showSubMenu" ng-repeat="report in reports">
+            <li class="list-unstyled list-txt-indent" ng-repeat="report in reports">
                 <a href="">
                     {{report.parentName}}
-                    <i class="fa fa-plus-circle txt-right-circle" ng-click="add()" aria-hidden="true"></i>
+                    <i class="fa fa-plus-circle txt-right-circle" ng-click="addChild(report)" aria-hidden="true"></i>
                 </a>
-                <ul>
+                <ul ng-repeat="child in report.childItems">
                     <li class="list-unstyled">
-                        <a ui-sref="index.report({reportId: report.id})">{{report.childName}}</a>
+                        <a ui-sref="index.report({reportId: report.id})">{{child.childName}}</a>
                     </li>
                 </ul>
             </li>

@@ -6,9 +6,13 @@
 
 app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.reports = [];
-    $scope.add = function () {
-        $scope.reports.push({childName: "New Report"});
-    };
+    $scope.addParent=function(){
+        $scope.reports.push({parentName: "New Parent Name", childItems:[]});
+        console.log($scope.reports)
+    }
+    $scope.addChild=function(report){
+        report.childItems.push({childName: "New Child Name"});
+    }
     console.log($stateParams.reportId);
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
