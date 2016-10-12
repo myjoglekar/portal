@@ -7,16 +7,27 @@
 app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.reports = [];
     $scope.addParent = function () {
-        $scope.reports.push({parentName: "New Parent Name", childItems: []});
+        $scope.reports.push({isEdit: true, childItems: []});
     }
+//    var uid = 5;
     $scope.addChild = function (report) {
-        report.childItems.push({childName: "New Child Name"});
+//        report.child = uid++
+        report.childItems.push({isEdit: true});
+        console.log(report.childItems)
     }
+    
+    
+$scope.edit = function(child){
+    $scope.report.child = child;
+    console.log(child)
+}    
+    
+   
     console.log($stateParams.reportId);
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
     })
-    $scope.parentID = $stateParams.reportId;
+    $scope.childID = $stateParams.reportId;
     $scope.datas = [];
     if ($stateParams.reportId) {
         $http.get('static/datas/' + $stateParams.reportId + '.json').success(function (response) {

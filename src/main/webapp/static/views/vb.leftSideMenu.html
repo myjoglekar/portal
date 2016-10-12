@@ -17,15 +17,25 @@
             <i class="fa" ng-class="{'fa-chevron-right':!showSubMenu, 'fa-chevron-down':showSubMenu}"></i>
             <i class="fa fa-plus-circle" ng-click="addParent()" aria-hidden="true"></i>
         </a>
-        <ul>
+        <ul class="left-align-menu">
             <li class="list-unstyled list-txt-indent" ng-repeat="report in reports">
-                <a>
+                <div ng-show="report.isEdit">
+                    <input class="menu-input" ng-model="report.parentName">
+                    <i class="fa fa-save fa-point" ng-click="report.isEdit = false;" style=""></i>
+                </div>
+                <a href="" ng-hide="report.isEdit">
                     {{report.parentName}}
-                    <i class="fa fa-plus-circle txt-right-circle" ng-click="addChild(report)" aria-hidden="true"></i>
+                <i class="fa fa-plus-circle txt-right-circle" ng-click="addChild(report)" aria-hidden="true"></i>
+                    <i class="fa fa-pencil fa-point" ng-click="report.isEdit = true"></i></a>
                 </a>
-                <ul ng-repeat="child in report.childItems">
-                    <li class="list-unstyled">
-                        <a ui-sref="index.report({reportId: child.id})">{{child.childName}}</a>
+                <ul class="left-align-child-menu" ng-repeat="child in report.childItems">
+                    <li class="list-unstyled" ng-click="edit(child)">                       
+                        <div ng-show="child.isEdit">
+                            <input class="menu-input" ng-model="child.childName">
+                            <i class="fa fa-save fa-point" ng-click="child.isEdit = false;" style=""></i>
+                        </div>
+                        <a ng-hide="child.isEdit" ui-sref="index.report({reportId: child.id})">{{child.childName}}
+                            <i class="fa fa-pencil fa-point" ng-click="child.isEdit = true"></i></a>
                     </li>
                 </ul>
             </li>
