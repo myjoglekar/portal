@@ -7,13 +7,17 @@ and open the template in the editor.
     Created on : 11 Oct, 2016, 12:35:40 PM
     Author     : netphenix
 */
-.txt-right{    
-    margin-left: 45%;
-}
-.txt-right-circle{
-    margin-left: 10%;
-}
-/*ul li .list-txt-indent{
-    text-indent: 0px;
-}*/
 
+ul .left-align-menu{
+    padding-left: 3%;
+}
+ul .left-align-child-menu{
+    padding-left: 5%;    
+}
+.fa-point{
+    cursor: pointer; 
+    color: #FFFFFF
+}
+ul li div .menu-input{
+    height: 28px;width: 63%;
+}
