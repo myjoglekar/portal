@@ -1,16 +1,22 @@
 <div ng-controller="ReportController" style="padding-left: 20px;">
-    <div class="col-sm-12 row" data-ng-hide="parentID">
+    <div class="col-sm-12 row" data-ng-hide="parentID"  style="padding-top: 5%;">
         <form class="form-horizontal">
             <div class="form-group">
-                <label class="col-sm-2" for="menu">Menu Name : </label>
+                <label class="col-sm-2" for="name">Parent Name : </label>
                 <div class="col-sm-10">
-                    <input type="menu" class="form-control" id="menu" placeholder="Enter menu name">
+                    <input type="text" ng-model="report.parentName" class="form-control" placeholder="Enter name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2" for="name">Child Name : </label>
+                <div class="col-sm-10">
+                    <input type="text" ng-model="" class="form-control" placeholder="Enter name">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2" for="url">URL : </label>                                                                                                                                                   
                 <div class="col-sm-10">          
-                    <input type="url" class="form-control" id="url" placeholder="Enter url">
+                    <input type="text" class="form-control" placeholder="Enter url">
                 </div>
             </div>
             <div class="text-right">
@@ -20,7 +26,7 @@
         </form> 
     </div>
     
-    <div class="col-sm-12 row" data-ng-show="parentID">
+    <div class="col-sm-12 row" data-ng-show="parentID" style="padding-top: 5%;">
         <table class="table table-condensed table-bordered table-hover">        
             <thead>
             <th ng-repeat="(key, value) in datas[0]" class="text-uppercase">{{key}}</th>
