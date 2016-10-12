@@ -19,22 +19,21 @@ nav.navbar-fixed-top{
 }
 
 div.col-sm-12{
-    padding-top: 9vh;
-    padding-left: 3vw;
-    padding-right: 3vw;
+    padding-left: 35px;
+    padding-right: 35px;
 }
 div.col-md-2{
-    padding-right: 2px;
-    padding-left: 2px;
     margin-bottom: -15px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 h4.text-danger{
     color:white;
 }
 div.col-sm-4{
-    padding-right: 2px;
+    margin-bottom: -10px;
     padding-left: 2px;
-    margin-bottom: -15px;
+    padding-right: 2px;
 }
 div.panel-info{
     border:1px solid grey;
