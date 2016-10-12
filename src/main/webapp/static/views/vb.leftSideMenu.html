@@ -12,20 +12,20 @@
         <a href="#">Dashboard 2</a>
     </li>
     <li>
-        <a ng-click="showSubMenu = !showSubMenu" href="#" >
+        <a ng-click="showSubMenu = !showSubMenu" ui-sref="index" >
             Reports 
             <i class="fa" ng-class="{'fa-chevron-right':!showSubMenu, 'fa-chevron-down':showSubMenu}"></i>
             <i class="fa fa-plus-circle" ng-click="addParent()" aria-hidden="true"></i>
         </a>
         <ul>
             <li class="list-unstyled list-txt-indent" ng-repeat="report in reports">
-                <a href="">
+                <a>
                     {{report.parentName}}
                     <i class="fa fa-plus-circle txt-right-circle" ng-click="addChild(report)" aria-hidden="true"></i>
                 </a>
                 <ul ng-repeat="child in report.childItems">
                     <li class="list-unstyled">
-                        <a ui-sref="index.report({reportId: report.id})">{{child.childName}}</a>
+                        <a ui-sref="index.report({reportId: child.id})">{{child.childName}}</a>
                     </li>
                 </ul>
             </li>
