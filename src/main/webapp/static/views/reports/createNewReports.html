@@ -13,17 +13,23 @@
             </div>
         </form> 
     </div>
-    
+
     <div class="col-sm-12 row" data-ng-show="childID" style="padding-top: 5%;">
-        <table class="table table-condensed table-bordered table-hover table-responsive">        
+        <table st-table="datas" class="table table-condensed table-bordered table-hover table-responsive">        
             <thead>
-            <th class="info text-uppercase" ng-repeat="(key, value) in datas[0]">{{key}}</th>
+<!--            <th class="info text-uppercase" ng-repeat="(key, value) in datas[0]" 
+               st-sort="{{key}}" ng-click="toggleSort($index)">{{key}}
+            </th>-->
+            <th class="info text-uppercase" ng-click="toggleSort($index)" ng-repeat="col in columns">{{col.title}}</th>
             </thead>
             <tbody>
-                <tr ng-repeat="data in datas">
-                    <td ng-repeat="(key, value) in data">{{value}}</td>
+                <tr dir-paginate="data in datas | orderBy:sortColumn:reverse | filter:q | itemsPerPage: pageSize" current-page="currentPage"">
+                    <td ng-repeat="col in columns">{{data[col.field]}}</td>
                 </tr>
             </tbody>
-      </table>
+        </table>
+        <div class="text-center">
+            <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>
+        </div>
     </div>    
 </div>
