@@ -29,7 +29,7 @@
 },
 {
     "chartId": 6,
-    "chartType": "grouped bar",
+    "chartType": "groupedbar",
     "url": "static/datas/newchart.json",
     "icon":"fa fa-pie-chart"
 }]
