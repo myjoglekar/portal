@@ -12,34 +12,43 @@
         <a href="#">Dashboard 2</a>
     </li>
     <li>
-        <a ng-click="showSubMenu = !showSubMenu" ui-sref="index" >
+        <a ui-sref="index" >
             Reports 
-            <i class="fa" ng-class="{'fa-chevron-right':!showSubMenu, 'fa-chevron-down':showSubMenu}"></i>
-            <i class="fa fa-plus-circle" ng-click="addParent()" aria-hidden="true"></i>
+            <span class="pull-right">
+                <span class="fa fa-plus-circle" ng-click="addParent()" aria-hidden="true"></span>
+                <span class="fa" ng-class="{'fa-chevron-right':!showSubMenu, 'fa-chevron-down':showSubMenu}" ng-click="showSubMenu = !showSubMenu"></span>
+            </span>
         </a>
-        <ul class="left-align-menu">
-            <li class="list-unstyled list-txt-indent" ng-repeat="report in reports">
-                <div ng-show="report.isEdit">
-                    <input class="menu-input" ng-model="report.parentName">
-                    <i class="fa fa-save fa-point" ng-click="report.isEdit = false;" style=""></i>
-                </div>
+        <ul class="list-unstyled" ng-show="showSubMenu">
+            <li ng-repeat="report in reports">
+                <span ng-show="report.isEdit">
+                    <input type="text" ng-model="report.parentName" class="textbox">
+                    <span class="fa fa-save" ng-click="report.isEdit = false;"></span>
+                </span>
                 <a href="" ng-hide="report.isEdit">
                     {{report.parentName}}
-                <i class="fa fa-plus-circle txt-right-circle" ng-click="addChild(report)" aria-hidden="true"></i>
-                    <i class="fa fa-pencil fa-point" ng-click="report.isEdit = true"></i>
+                    <span class="pull-right">
+                        <span class="fa fa-plus-circle txt-right-circle" ng-click="addChild(report)" aria-hidden="true"></span>
+                        <span class="fa fa-pencil" ng-click="report.isEdit = true"></span>
+                    </span>
                 </a>
-                <ul class="left-align-child-menu" ng-repeat="child in report.childItems">
-                    <li class="list-unstyled">                       
-                        <div ng-show="child.isEdit">
-                            <input class="menu-input" ng-model="child.childName">
-                            <i class="fa fa-save fa-point" ng-click="child.isEdit = false;" style=""></i>
-                        </div>
-                        <a ng-hide="child.isEdit" ui-sref="index.report({reportId: child.id})">{{child.childName}}
-                            <i class="fa fa-pencil fa-point" ng-click="child.isEdit = true"></i>
+
+                <ul class="list-unstyled">
+                    <li  ng-repeat="child in report.childItems">                       
+                        <span ng-show="child.isEdit">
+                            <input type="text" ng-model="child.childName" class="textbox">
+                            <span class="fa fa-save" ng-click="child.isEdit = false;"></span>
+                        </span>
+                        <a ng-hide="child.isEdit" ui-sref="index.report({reportId: child.id})" class=" text-indent">{{child.childName}}
+                            <span class="pull-right">
+                                <span class="fa fa-pencil fa-point" ng-click="child.isEdit = true"></span>
+                            </span>
                         </a>
                     </li>
                 </ul>
             </li>
         </ul>
+
+
     </li>
 </ul>
