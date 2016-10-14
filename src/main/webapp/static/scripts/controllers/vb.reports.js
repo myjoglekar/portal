@@ -8,8 +8,8 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.currentPage = 1;
     $scope.pageSize = 10;
     $scope.reports = [];
-    $scope.sortType = 'name'; // set the default sort type
-    $scope.sortReverse = false;
+//    $scope.sortType = 'name'; // set the default sort type
+//    $scope.sortReverse = false;
 
     $scope.addParent = function () {
         $scope.reports.push({isEdit: true, childItems: []});
@@ -25,6 +25,7 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.childID = $stateParams.reportId;
     $scope.datas = [];
     $scope.objectHeader = [];
+    $scope.groupProperty = '';
     if ($stateParams.reportId) {
         $http.get('static/datas/' + $stateParams.reportId + '.json').success(function (response) {
             angular.forEach(response, function (value, key) {
@@ -62,7 +63,7 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
 
 //Dir-Paginations
     $scope.pageChangeHandler = function (num) {
-        console.log('meals page changed to ' + num);
+        console.log('reports page changed to ' + num);
     };
 
 });
