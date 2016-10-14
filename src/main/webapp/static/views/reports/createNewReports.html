@@ -13,17 +13,37 @@
             </div>
         </form> 
     </div>
-    
+
     <div class="col-sm-12 row" data-ng-show="childID" style="padding-top: 5%;">
-        <table class="table table-condensed table-bordered table-hover table-responsive">        
+        <select class="form-control" name="group"  ng-model="groupProperty">
+            <option ng-repeat="col in columns"  value="{{col.title}}">{{col.title}}</option>
+        </select> 
+        <table class="table" st-table="datas">
             <thead>
-            <th class="info text-uppercase" ng-repeat="(key, value) in datas[0]">{{key}}</th>
+                <tr>
+                    <th st-sort="{{col.title}}" ng-repeat="col in columns">{{col.title}}</th>
+                </tr>
             </thead>
-            <tbody>
-                <tr ng-repeat="data in datas">
-                    <td ng-repeat="(key, value) in data">{{value}}</td>
+            <tbody ng-if="!isLoading" ng-repeat="(key, value) in datas | groupBy: groupProperty">
+                <tr ng-if="key !== 'undefined'" class="text-center text-uppercase text-danger">
+                    <td colspan="4">{{key}}</td>
+                </tr>
+                <tr ng-repeat="item in value">
+                    <td ng-repeat="col in columns">{{item[col.field]}}</td>
+
                 </tr>
             </tbody>
-      </table>
+            <tbody ng-if="isLoading">
+                <tr>
+                    <td colspan="4" class="text-center">Loading ...</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-center" st-pagination="" st-item-by-page="10" colspan="4"></td>
+                </tr>
+            </tfoot>
+        </table>
+        
     </div>    
 </div>
