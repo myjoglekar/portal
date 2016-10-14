@@ -2,10 +2,10 @@ app.controller("DashboardController", function ($scope, $http) {
     //Add Panels 
     $scope.panels = [];
     var uid = 7;
-    $scope.add = function () {alert("Test")
+    $scope.add = function () {
+        alert("Test")
         $scope.id = uid++;
         $scope.panels.push({chartId: $scope.id});
-        console.log("Uid : ", $scope.id);
     };
 
     $scope.onDropComplete = function (index, panel, evt) {
@@ -24,13 +24,36 @@ app.controller("DashboardController", function ($scope, $http) {
     });
 
     var dataPoints = [];
-
+    var value = [];
     $scope.previewChart = function (chartType, panel) {
         panel.selectedChartType = chartType;
-        $http.get(panel.url).success(function (response) {
-            dataPoints = response;
-            //console.log("dataPoints : "+dataPoints)
-        });
+        console.log(panel.title + " " + panel.url + " " + chartType.type + " " + panel.chartId);
+        value.title = panel.title;
+        value.url = panel.url;
+        value.type = chartType.type;
+        value.chartId = panel.chartId;
+        console.log("Values : " + value.title + " " + value.url + " " + value.type);
+//        $http.get(panel.url).success(function (response) {
+//            dataPoints = response;           
+
+        if (value.type == "line") {
+            lineChart(value);
+        } else if (value.type == "area") {
+            areaChart(value);
+        } else if (value.type == "bar") {
+            barChart(value);
+        } else if (value.type == "groupedbar") {
+            groupedBarChart(value);
+        } else if (value.type == "pie") {
+            pieChart(value);
+        } else if (value.type == "donut") {
+            donutChart(value);
+        } else {
+            alert("No Charts Available");
+        }
+
+        //console.log("dataPoints : "+dataPoints)
+        //});
     };
 
     //Default Load Chart
@@ -40,7 +63,7 @@ app.controller("DashboardController", function ($scope, $http) {
 //            if (value.chartType == "line") {
 //                lineChart(value);
 //            } else if (value.chartType == "area") {
-               // areaChart(value)
+            // areaChart(value)
 //            }
         });
     });
@@ -49,7 +72,6 @@ app.controller("DashboardController", function ($scope, $http) {
     $http.get('static/datas/d3chart.json').success(function (response, error) {
         angular.forEach(response, function (value, key) {
             $scope.charts = value;
-            console.log(value);
         });
     });
 });
