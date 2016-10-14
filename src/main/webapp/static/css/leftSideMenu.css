@@ -1,30 +1,10 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 11 Oct, 2016, 12:35:40 PM
-    Author     : netphenix
-*/
-
-ul .left-align-menu{
-    padding-left: 3%;
+a.text-indent{
+    text-indent: 35px;
 }
-ul .left-align-child-menu{
-    padding-left: 5%;    
+span.pull-right{
+    padding-right:8px;
 }
-.fa-point{
-    cursor: pointer; 
-    color: #FFFFFF
-}
-/*div .dashboard-menu{
-    text-decoration: underline;
-    display: inline;
-    border-color: red;
-    border-bottom: 5px solid #555;
-    margin-bottom: 5px;
-}*/
-ul li div .menu-input{
-    height: 28px;width: 63%;
+.textbox{
+    height:30px;
+    width:180px;
 }

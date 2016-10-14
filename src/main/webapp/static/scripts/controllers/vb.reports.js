@@ -25,7 +25,7 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.childID = $stateParams.reportId;
     $scope.datas = [];
     $scope.objectHeader = [];
-    $scope.groupProperty = '';
+    $scope.groupProperty = "Select";
     if ($stateParams.reportId) {
         $http.get('static/datas/' + $stateParams.reportId + '.json').success(function (response) {
             angular.forEach(response, function (value, key) {
@@ -35,15 +35,13 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
                 for (property in value) {
                     if ($scope.objectHeader.indexOf(property) === -1) {
                         $scope.objectHeader.push(property);
-                    }
+                    }                    
                     $scope.columns.push(
                             {title: $scope.objectHeader[arrayIndex], field: $scope.objectHeader[arrayIndex], visible: true}
                     );
                     arrayIndex++;
                     console.log($scope.columns)
                 }
-
-
 //                console.log($scope.objectHeader)
                 $scope.datas.push(value);
             });

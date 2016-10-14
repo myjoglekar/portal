@@ -15,22 +15,22 @@
     </div>
 
     <div class="col-sm-12 row" data-ng-show="childID" style="padding-top: 5%;">
-        <select class="form-control" name="group"  ng-model="groupProperty">
+        <select class="form-control text-uppercase" name="group"  ng-model="groupProperty">
+            <option disabled="true">Select</option>
             <option ng-repeat="col in columns"  value="{{col.title}}">{{col.title}}</option>
         </select> 
-        <table class="table" st-table="datas">
+        <table class="table tab-content table-bordered table-hover" st-table="datas">
             <thead>
                 <tr>
-                    <th st-sort="{{col.title}}" ng-repeat="col in columns">{{col.title}}</th>
+                    <th class="text-uppercase info" st-sort="{{col.field}}" ng-repeat="col in columns">{{col.title}}</th>
                 </tr>
             </thead>
-            <tbody ng-if="!isLoading" ng-repeat="(key, value) in datas | groupBy: groupProperty">
+            <tbody ng-if="!isLoading" dir-paginate="(key, value) in datas | groupBy: groupProperty | itemsPerPage: pageSize" current-page="currentPage">
                 <tr ng-if="key !== 'undefined'" class="text-center text-uppercase text-danger">
                     <td colspan="4">{{key}}</td>
                 </tr>
                 <tr ng-repeat="item in value">
                     <td ng-repeat="col in columns">{{item[col.field]}}</td>
-
                 </tr>
             </tbody>
             <tbody ng-if="isLoading">
@@ -38,12 +38,9 @@
                     <td colspan="4" class="text-center">Loading ...</td>
                 </tr>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td class="text-center" st-pagination="" st-item-by-page="10" colspan="4"></td>
-                </tr>
-            </tfoot>
-        </table>
-        
+        </table> 
+        <div>
+            <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>
+        </div>
     </div>    
 </div>
