@@ -1,24 +1,26 @@
-
-
-#lineChart {
-  font: 10px sans-serif;
+path {
+    stroke: steelblue;
+    stroke-width: 1;
+    fill: none;
 }
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+.axis {
+    shape-rendering: crispEdges;
+}
+
+.x.axis line {
+    stroke: lightgrey;
+}
+
+.x.axis .minor {
+    stroke-opacity: .5;
 }
 
 .x.axis path {
-  display: none;
+    display: none;
 }
 
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+.y.axis line, .y.axis path {
+    fill: none;
+    stroke: #000;
 }
-
-
