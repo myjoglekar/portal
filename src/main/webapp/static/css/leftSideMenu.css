@@ -1,10 +1,10 @@
-a.text-indent{
-    text-indent: 35px;
+/*a.text-indent{
+    text-indent: 28px;
 }
 span.pull-right{
-    padding-right:8px;
-}
+    padding-right:0px;
+}*/
 .textbox{
     height:30px;
-    width:180px;
+    width:150px;
 }
