@@ -12,7 +12,7 @@
         <a href="#">Dashboard 2</a>
     </li>
     <li>
-        <a ui-sref="index" >
+        <a ui-sref="index">
             Reports 
             <span class="pull-right">
                 <span class="fa fa-plus-circle" ng-click="addParent()" aria-hidden="true"></span>
@@ -25,12 +25,14 @@
                     <input type="text" ng-model="report.parentName" class="textbox">
                     <span class="fa fa-save" ng-click="report.isEdit = false;"></span>
                 </span>
-                <a href="" ng-hide="report.isEdit">
+                <a href="" ng-hide="report.isEdit" style="padding: 10px;">
                     {{report.parentName}}
-                    <span class="pull-right">
-                        <span class="fa fa-plus-circle txt-right-circle" ng-click="addChild(report)" aria-hidden="true"></span>
-                        <span class="fa fa-pencil" ng-click="report.isEdit = true"></span>
+                    <span class="btn-group pull-right" style="padding-top: 1vh;">
+                        <button type="button" class="btn btn-default btn-xs" style="border-radius: 50%;"><i class="fa fa-plus-circle" ng-click="addChild(report)" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-default btn-xs" style="border-radius: 50%;"><i class="fa fa-pencil" ng-click="report.isEdit = true"></i></button>
+                        <button type="button" class="btn btn-default btn-xs" style="border-radius: 50%;"><i class="fa fa-remove"></i></button>
                     </span>
+
                 </a>
 
                 <ul class="list-unstyled">
@@ -39,16 +41,16 @@
                             <input type="text" ng-model="child.childName" class="textbox">
                             <span class="fa fa-save" ng-click="child.isEdit = false;"></span>
                         </span>
-                        <a ng-hide="child.isEdit" ui-sref="index.report({reportId: child.id})" class=" text-indent">{{child.childName}}
-                            <span class="pull-right">
-                                <span class="fa fa-pencil fa-point" ng-click="child.isEdit = true"></span>
+                        <a ng-hide="child.isEdit" ui-sref="index.report({reportId: child.id})" class=" text-indent" style='padding-left: 15px;'>
+                            {{child.childName}}
+                            <span class='pull-right' style="padding-right: 1vw;">
+                                <button type="button" class="btn btn-default btn-xs" style="border-radius: 50%;"><i class="fa fa-pencil" ng-click="child.isEdit = true"></i></button>
                             </span>
                         </a>
                     </li>
                 </ul>
+                
             </li>
         </ul>
-
-
     </li>
 </ul>
