@@ -14,6 +14,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: "/dashboard",
                 templateUrl: "static/views/dashboard/dashboard.html",                
             })
+            .state("index.dashboard.tab", {
+                url: "/tab/:tabId",
+                templateUrl: "static/views/dashboard/dashboardTab.html",                
+            })
+            .state("index.dashboard.tab.panel", {
+                url: "/panel/:panelId",
+                templateUrl: "static/views/dashboard/panels.html",                
+            })
             .state("index.report", {
                 url: "/report/:reportId",
                 templateUrl: "static/views/reports/createNewReports.html",

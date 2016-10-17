@@ -1,37 +1,52 @@
-<nav class="navbar navbar-fixed-top" style="min-height: 0px">
+<nav class="navbar navbar-fixed-top" style="min-height: 0px" ng-controller="HeaderController">
     <ul class="list-inline" style="margin-bottom: 0px">
         <li><img src="static/img/digital.png" class ="digitalLogo"></li>
         <li><img src="static/img/visumbu.png" class ="visumbuLogo"></li>
         <li><a href="#" class="btn btn-default" id="menu-toggle"><span class="fa fa-navicon"></span></a></li> 
-        
+
         <li class="pull-right">
             <select>
                 <option>Sep 11-Oct 10</option>
             </select>
         </li>
         <li class="pull-right">
-            <select>
-                <option>Overall</option>
-                <option>Paid Search</option>
-                <option>Display</option>
-                <option>Dynamic Display</option>
-            </select>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Type
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="dashboard in dashboards">
+                        <a ui-sref="index.dashboard.tab({tabId: dashboard.dashboardValue})">
+                            {{dashboard.dashboardName}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <!--            <select ng-model="tabType">
+                            <option ng-repeat="dashboard in dashboards" ui-sref="index.dashboard.tab({tabId: dashboard.dashboardValue})">
+                                {{dashboard.dashboardName}}
+                            </option>
+                                    <option ng-repeat="dashboard in dashboards" ui-sref="index.dashboard.tab(tabId: dashboard.dashboardValue)">
+                                        {{dashboard.dashboardName}}
+                                    </option>
+                        </select>-->
         </li>
         <li class="pull-right">
             <select>
                 <option>Dealers</option>
             </select>
         </li>
-        
-        
-    </ul>
-<!--    <a href="#" class="btn btn-default" id="menu-toggle"><span class="fa fa-navicon"></span></a>
-    <span class="companyLogo"><img src="static/img/visumbu.png" class="companyImage"></span>
 
-    <span class="pull-right">
-        <button ng-click="add()" class="btn btn-success buttonadd"><span class="fa fa-plus"></span></button>
-        <button class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()" ><span class="fa fa-expand"></span></button>
-    </span>-->
+
+    </ul>
+    <!--    <a href="#" class="btn btn-default" id="menu-toggle"><span class="fa fa-navicon"></span></a>
+        <span class="companyLogo"><img src="static/img/visumbu.png" class="companyImage"></span>
+    
+        <span class="pull-right">
+            <button ng-click="add()" class="btn btn-success buttonadd"><span class="fa fa-plus"></span></button>
+            <button class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()" ><span class="fa fa-expand"></span></button>
+        </span>-->
 </nav>
 
 <script>

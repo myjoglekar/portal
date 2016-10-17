@@ -1,0 +1,18 @@
+[{
+        "chartId": 1,
+        "chartType": "line",
+        "url": "static/datas/lineChart.json",
+        "icon": "fa fa-line-chart"
+    },
+    {
+        "chartId": 5,
+        "chartType": "donut",
+        "url": "static/datas/donutChart.json",
+        "icon": "fa fa-area-chart"
+    },
+    {
+        "chartId": 6,
+        "chartType": "groupedbar",
+        "url": "static/datas/groupedBarChart.json",
+        "icon": "fa fa-pie-chart"
+    }]

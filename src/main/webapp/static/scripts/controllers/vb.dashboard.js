@@ -1,12 +1,23 @@
-app.controller("DashboardController", function ($scope, $http) {
+app.controller("DashboardController", function ($scope, $http, $stateParams) {
     //Add Panels 
     $scope.panels = [];
     var uid = 7;
     $scope.add = function () {
-        alert("Test")
         $scope.id = uid++;
         $scope.panels.push({chartId: $scope.id});
     };
+
+    $scope.tabs = [];
+    $scope.addTab = function () {
+        $scope.tabs.push({tabName: "New Tab"});
+    };
+
+    //Default Load Tab   
+
+//    $http.get("static/datas/" + $stateParams.tabId + ".json").success(function (response) {
+//        $scope.panels = response;
+//    });
+
 
     $scope.onDropComplete = function (index, panel, evt) {
         var otherObj = $scope.panels[index];
@@ -57,16 +68,16 @@ app.controller("DashboardController", function ($scope, $http) {
     };
 
     //Default Load Chart
-    $http.get('static/datas/defaultPanel.json').success(function (response) {
-        $scope.panels = response;
-        angular.forEach(response, function (value, key) {
-//            if (value.chartType == "line") {
-//                lineChart(value);
-//            } else if (value.chartType == "area") {
-            // areaChart(value)
-//            }
-        });
-    });
+//    $http.get('static/datas/defaultPanel.json').success(function (response) {
+//        $scope.panels = response;
+//        angular.forEach(response, function (value, key) {
+////            if (value.chartType == "line") {
+////                lineChart(value);
+////            } else if (value.chartType == "area") {
+//            // areaChart(value)
+////            }
+//        });
+//    });
 
     $scope.charts = [];
     $http.get('static/datas/d3chart.json').success(function (response, error) {

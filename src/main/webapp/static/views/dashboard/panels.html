@@ -1,0 +1,74 @@
+<div ng-controller="PanelController">
+    <span class="pull-right">
+        <button ng-click="add()"><span class="fa fa-plus"> Add</span></button>
+        <button><span class="fa fa-expand"> Full-Screen</span></button>
+    </span><br><br/>
+    <div class="well well-sm"> Questions?</div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title"></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-4" ng-repeat="panel in panels">
+                    <div ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+                        <div class="panel panel-default" ng-hide="hidenewchart" ng-drag="true" ng-drag-data="panel">
+                            <div class="panel-heading panel-heading-sm" style="background-color: grey;padding: 3px 3px;color:white">
+                                <div class="panel-title">
+                                    <span class="{{panel.icon}}" style="color: white;"></span> 
+                                    <strong class="text-uppercase">{{panel.chartType}} chart</strong>
+                                    <span class="btn-group pull-right">
+                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;"><span class="fa fa-refresh"></span></button>
+                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" id="expandChart"><span class="fa fa-expand"></span></button>
+                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" data-toggle="modal" data-target="#preview{{$index + 1}}"><span class="fa fa-edit"></span></button>
+                                        <button class="btn btn-default btn-xs"  style="border-radius: 50%;" ng-click="hidenewchart = true"><span class="fa fa-close"></span></button>
+                                    </span>
+                                    <span>
+                                        <span data-toggle="modal" data-target="#preview{{$index + 1}}">
+                                            <span class="fa fa-edit" style="color:white; background-color: grey; cursor: pointer"></span>                                    
+                                        </span>                                
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div id="graph{{panel.chartId}}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="preview{{$index + 1}}" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Generate Chart
+                                    <button class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" class="form-control" placeholder="Title" ng-model="panel.title"><br>
+                                    <input type="text" class="form-control" placeholder="Url" ng-model="panel.url"><br>
+                                    <div class="form-inline">
+                                        <label class="col-sm-2" style="font-family:cursive">Type</label>
+                                        <span ng-repeat="chartType in chartTypes track by chartType.id">
+                                            <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
+                                                <img src="{{chartType.url}}" class="charttype">
+                                            </span>
+                                        </span>
+                                    </div><br/>
+
+                                    <div class="form-group form-inline">
+                                        <label class="col-sm-2" style="font-family: cursive">Preview</label>    
+                                        <div id="graph{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" ng-click="save(panel)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
