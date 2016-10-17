@@ -8,50 +8,51 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.currentPage = 1;
     $scope.pageSize = 10;
     $scope.reports = [];
-//    $scope.sortType = 'name'; // set the default sort type
-//    $scope.sortReverse = false;
-
     $scope.addParent = function () {
         $scope.reports.push({isEdit: true, childItems: []});
-    }
+    };
     $scope.addChild = function (report) {
         report.childItems.push({isEdit: true});
-        console.log(report.childItems)
-    }
+    };
+    $scope.save = function(item){
+        console.log("Item Name : "+item);
+    };
     console.log($stateParams.reportId);
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
-    })
+    });
     $scope.childID = $stateParams.reportId;
     $scope.datas = [];
+
+    //Table 
     $scope.objectHeader = [];
     $scope.groupProperty = "Select";
+    $scope.orderProperty = "Select";
     if ($stateParams.reportId) {
         $http.get('static/datas/' + $stateParams.reportId + '.json').success(function (response) {
             angular.forEach(response, function (value, key) {
+                $scope.datas.push(value);
                 //iterate header Key
                 var arrayIndex = 0;
                 $scope.columns = []
                 for (property in value) {
                     if ($scope.objectHeader.indexOf(property) === -1) {
                         $scope.objectHeader.push(property);
-                    }                    
+                    }
                     $scope.columns.push(
                             {title: $scope.objectHeader[arrayIndex], field: $scope.objectHeader[arrayIndex], visible: true}
                     );
                     arrayIndex++;
-                    console.log($scope.columns)
+                    $scope.headerLength = $scope.columns.length;
                 }
-//                console.log($scope.objectHeader)
-                $scope.datas.push(value);
             });
         });
     }
-    $scope.displayedCollection = [].concat($scope.datas);
 
-
+//Sort-table from header
     $scope.sortColumn = $scope.columns;
     console.log($scope.objectHeader[0])
+    $scope.reverse = false;
     $scope.toggleSort = function (index) {
         if ($scope.sortColumn === $scope.objectHeader[index]) {
             $scope.reverse = !$scope.reverse;

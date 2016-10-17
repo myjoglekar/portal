@@ -1,5 +1,5 @@
 <div ng-controller="ReportController" style="padding-left: 20px;">
-    <div class="col-sm-12 row" data-ng-hide="childID"  style="padding-top: 5%;">
+    <div class="col-sm-12 row report-margin-top" data-ng-hide="childID"  style="">
         <form class="form-horizontal">            
             <div class="form-group">
                 <label class="col-sm-2" for="url">URL : </label>                                                                                                                                                   
@@ -14,28 +14,56 @@
         </form> 
     </div>
 
-    <div class="col-sm-12 row" data-ng-show="childID" style="padding-top: 5%;">
-        <select class="form-control text-uppercase" name="group"  ng-model="groupProperty">
-            <option disabled="true">Select</option>
-            <option ng-repeat="col in columns"  value="{{col.title}}">{{col.title}}</option>
-        </select> 
-        <table class="table tab-content table-bordered table-hover" st-table="datas">
+    <div class="col-sm-12 row report-margin-top" data-ng-show="childID" style="">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2">Group By : </label>
+                <div class="col-sm-4 report-select-box">
+                    <select class="form-control text-uppercase" name="group"  ng-model="groupProperty">
+                        <option disabled="true">Select</option>
+                        <option ng-repeat="col in columns"  value="{{col.title}}">{{col.title}}</option>
+                    </select> 
+                </div>
+
+                <label class="col-sm-2">Order By : </label>
+                <div class="col-sm-4 report-select-box">
+                    <select class="form-control text-uppercase col-sm-4" name="order"  ng-model="orderProperty">
+                        <option disabled="true">Select</option>
+                        <option ng-repeat="col in columns"  value="{{col.title}}">{{col.title}}</option>
+                    </select> 
+                </div>
+            </div>
+        </form>
+        <table st-table="datas" class="table tab-content table-bordered table-hover">
             <thead>
                 <tr>
-                    <th class="text-uppercase info" st-sort="{{col.field}}" ng-repeat="col in columns">{{col.title}}</th>
+                    <th class="text-uppercase info" ng-click="toggleSort($index); reverse.col.title = !reverse.col.title" ng-repeat="col in columns">
+                        {{col.title}}
+                        <i class="fa pull-right" ng-class="{'fa-caret-down':!reverse.col.title,  'fa-caret-up':reverse.col.title}"></i>
+                    </th>
                 </tr>
             </thead>
-            <tbody ng-if="!isLoading" dir-paginate="(key, value) in datas | groupBy: groupProperty | itemsPerPage: pageSize" current-page="currentPage">
-                <tr ng-if="key !== 'undefined'" class="text-center text-uppercase text-danger">
-                    <td colspan="4">{{key}}</td>
+            <tbody ng-if="!isLoading" dir-paginate="(key, value) in datas |orderBy: orderProperty | orderBy: sortColumn:reverse | groupBy: groupProperty | itemsPerPage: pageSize" current-page="currentPage">
+                <tr ng-if="key !== 'undefined'" class="text-center text-uppercase text-info info">
+                    <td colspan="{{headerLength}}">Group By : {{key}}</td>
                 </tr>
                 <tr ng-repeat="item in value">
-                    <td ng-repeat="col in columns">{{item[col.field]}}</td>
+                    <td ng-repeat="col in columns">
+                        <div ng-click="txt.item[col.field] = true" ng-hide="txt.item[col.field]">
+                            {{item[col.field]}}
+                        </div>
+                        <div ng-show="txt.item[col.field]">
+                            <input ng-model="item[col.field]">
+                            <button ng-click="save(item); txt.item[col.field] = false">
+                                <i class="fa fa-save"></i>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
             <tbody ng-if="isLoading">
                 <tr>
-                    <td colspan="4" class="text-center">Loading ...</td>
+                    <td colspan="{{headerLength}}" class="text-center">Loading ...</td>
                 </tr>
             </tbody>
         </table> 
