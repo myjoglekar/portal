@@ -1,8 +1,8 @@
 <script src="static/scripts/controllers/charts.js"></script>
 <div class="col-sm-12">
     <div class="row" style="padding-top: 5%;">
-        <div ng-repeat="label in labels">
-            <div class="col-md-2" style="">
+        <div ng-repeat="label in labels" id="label">
+            <div class="col-md-2">
                 <div class="well" style="background-color:{{label.labelColor}};" >
                     <h4 class="text-danger">
                         <span class="pull-right">
@@ -17,20 +17,28 @@
 
     <div class="row">
         <div class="col-sm-4" ng-repeat="panel in panels">
-            <div class="panel panel-default">
-                <div class="panel-heading panel-heading-sm" style="background-color: grey;padding: 3px 3px;color:white">
-                    <div class="panel-title">
-                        <span class="{{panel.icon}}" style="color: white;"></span> 
-                        <strong class="text-uppercase">{{panel.chartType}} chart</strong>
-                        <span>
-                            <span data-toggle="modal" data-target="#preview{{$index + 1}}">
-                                <span class="fa fa-edit" style="color:white; background-color: grey; cursor: pointer"></span>                                    
-                            </span>                                
-                        </span>
+            <div ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+                <div class="panel panel-default" ng-hide="hidenewchart" ng-drag="true" ng-drag-data="panel">
+                    <div class="panel-heading panel-heading-sm" style="background-color: grey;padding: 3px 3px;color:white">
+                        <div class="panel-title">
+                            <span class="{{panel.icon}}" style="color: white;"></span> 
+                            <strong class="text-uppercase">{{panel.chartType}} chart</strong>
+                            <span class="btn-group pull-right">
+                                <button class="btn btn-default btn-xs" style="border-radius: 50%;"><span class="fa fa-refresh"></span></button>
+                                <button class="btn btn-default btn-xs" style="border-radius: 50%;" id="expandChart"><span class="fa fa-expand"></span></button>
+                                <button class="btn btn-default btn-xs" style="border-radius: 50%;" data-toggle="modal" data-target="#preview{{$index + 1}}"><span class="fa fa-edit"></span></button>
+                                <button class="btn btn-default btn-xs"  style="border-radius: 50%;" ng-click="hidenewchart = true"><span class="fa fa-close"></span></button>
+                            </span>
+                            <!--                        <span>
+                                                        <span data-toggle="modal" data-target="#preview{{$index + 1}}">
+                                                            <span class="fa fa-edit" style="color:white; background-color: grey; cursor: pointer"></span>                                    
+                                                        </span>                                
+                                                    </span>-->
+                        </div>
                     </div>
-                </div>
-                <div class="panel-body">
-                    <div id="graph{{panel.chartId}}"></div>
+                    <div class="panel-body">
+                        <div id="graph{{panel.chartId}}"></div>
+                    </div>
                 </div>
             </div>
             <div id="preview{{$index + 1}}" class="modal fade">
