@@ -1,0 +1,39 @@
+[{
+        "dashboardTitle": "SEO Performance",
+        "tabItems": [
+            {
+                "tabId": 1,
+                "tabName": "Overall",
+                "tabUrl": "overall"
+            }, {
+                "tabId": 2,
+                "tabName": "Traffic Source",
+                "tabUrl": "trafficsource"
+            },
+            {
+                "tabId": 3,
+                "tabName": "Performance Insights",
+                "tabUrl": "performanceinsights"
+            },
+            {
+                "tabId": 4,
+                "tabName": "Queries",
+                "tabUrl": "queries"
+            },
+            {
+                "tabId": 5,
+                "tabName": "Links",
+                "tabUrl": "links"
+            },
+            {
+                "tabId": 6,
+                "tabName": "Performance Insights",
+                "tabUrl": "performanceinsights"
+            },
+            {
+                "tabId": 6,
+                "tabName": "Definition",
+                "tabUrl": "definition"
+            }
+            ]
+    }]

@@ -1,0 +1,34 @@
+[{
+        "dashboardTitle": "Paid Social Performance",
+        "tabItems": [
+            {
+                "tabId": 1,
+                "tabName": "Overall",
+                "tabUrl": "overall"
+            }, {
+                "tabId": 2,
+                "tabName": "Ad Creatives",
+                "tabUrl": "adcreatives"
+            },
+            {
+                "tabId": 3,
+                "tabName": "GA",
+                "tabUrl": "ga"
+            },
+            {
+                "tabId": 4,
+                "tabName": "Engagements",
+                "tabUrl": "engagements"
+            },
+            {
+                "tabId": 5,
+                "tabName": "Targeting",
+                "tabUrl": "targeting"
+            },
+            {
+                "tabId": 6,
+                "tabName": "Definition",
+                "tabUrl": "definition"
+            }
+            ]
+    }]

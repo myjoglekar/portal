@@ -1,0 +1,33 @@
+[{
+        "dashboardTitle": "Paid Search Performance",
+        "tabItems": [
+            {
+                "tabId": 1,
+                "tabName": "Overall",
+                "tabUrl": "overall"
+            }, {
+                "tabId": 2,
+                "tabName": "Campaigns",
+                "tabUrl": "campaigns"
+            },
+            {
+                "tabId": 3,
+                "tabName": "Ads",
+                "tabUrl": "ads"
+            },
+            {
+                "tabId": 4,
+                "tabName": "Locations",
+                "tabUrl": "locations"
+            },
+            {
+                "tabId": 5,
+                "tabName": "Models",
+                "tabUrl": "modals"
+            },
+            {
+                "tabId": 6,
+                "tabName": "Definition",
+                "tabUrl": "definition"
+            }]
+    }]

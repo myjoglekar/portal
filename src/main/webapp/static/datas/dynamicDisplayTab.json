@@ -1,0 +1,18 @@
+[{
+        "dashboardTitle": "Dynamic Display Performance",
+        "tabItems": [
+            {
+                "tabId": 1,
+                "tabName": "Overall",
+                "tabUrl": "overall"
+            }, {
+                "tabId": 2,
+                "tabName": "VDPs",
+                "tabUrl": "vdps"
+            },
+            {
+                "tabId": 3,
+                "tabName": "Definition",
+                "tabUrl": "definition"
+            }]
+    }]
