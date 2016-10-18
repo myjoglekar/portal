@@ -5,17 +5,23 @@
         <li><a href="#" class="btn btn-default" id="menu-toggle"><span class="fa fa-navicon"></span></a></li> 
 
         <li class="pull-right">
-            <select class="form-control">
-                <option>Sep 11-Oct 10</option>
-            </select>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Date
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="">12-Apr-2016</a>
+                    </li>
+                </ul>
+            </div>
         </li>
         <li class="pull-right">
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Type
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{selectName}}
                     <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li ng-repeat="dashboard in dashboards">
-                        <a ui-sref="index.dashboard.tab({tabId: dashboard.dashboardValue})">
+                        <a ui-sref="index.dashboard.tab({tabId: dashboard.dashboardValue})" ng-click="change(dashboard)">
                             {{dashboard.dashboardName}}
                         </a>
                     </li>
@@ -24,9 +30,15 @@
 
         </li>
         <li class="pull-right">
-            <select class="form-control">
-                <option>Dealers</option>
-            </select>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Type
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="">Dealers</a>
+                    </li>
+                </ul>
+            </div>
         </li>
 
 

@@ -19,10 +19,10 @@
                                     <span class="{{panel.icon}}" style="color: white;"></span> 
                                     <strong class="text-uppercase">{{panel.chartType}} chart</strong>
                                     <span class="btn-group pull-right">
-                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;"><span class="fa fa-refresh"></span></button>
+                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;"><span class="fa fa-refresh" ng-click="$route.reload();"></span></button>
                                         <button class="btn btn-default btn-xs" style="border-radius: 50%;" id="expandChart"><span class="fa fa-expand"></span></button>
                                         <button class="btn btn-default btn-xs" style="border-radius: 50%;" data-toggle="modal" data-target="#preview{{$index + 1}}"><span class="fa fa-edit"></span></button>
-                                        <button class="btn btn-default btn-xs"  style="border-radius: 50%;" ng-click="hidenewchart = true"><span class="fa fa-close"></span></button>
+                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" ng-click="hidenewchart = true"><span class="fa fa-close"></span></button>
                                     </span>
                                     <span>
                                         <span data-toggle="modal" data-target="#preview{{$index + 1}}">
