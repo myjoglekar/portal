@@ -1,6 +1,7 @@
 nav.navbar-fixed-top{
     background-color:grey;
     padding: 1vh;
+    height:10px;
 }
 /*#menu-toggle{
     background-color: gold;
