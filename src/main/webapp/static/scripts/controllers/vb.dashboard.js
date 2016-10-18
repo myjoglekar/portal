@@ -1,11 +1,6 @@
 app.controller("DashboardController", function ($scope, $http, $stateParams) {
     //Add Panels 
-    $scope.panels = [];
-    var uid = 7;
-    $scope.add = function () {
-        $scope.id = uid++;
-        $scope.panels.push({chartId: $scope.id});
-    };    
+     
 
     //Default Load Tab   
 
