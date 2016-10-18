@@ -1,55 +1,56 @@
 <ul ng-controller="ReportController" class="sidebar-nav">
+
     <li class="sidebar-brand">
         <a href="#"></a>
     </li>
+
     <li>
-        <a ui-sref="index.dashboard">Dashboard</a>
+        <a ui-sref="index.dashboard"><span class="glyphicon glyphicon-dashboard"> Dashboard</span></a>
     </li>
-    <li>
-        <a href="#">Dashboard 1</a>
-    </li>
-    <li>
-        <a href="#">Dashboard 2</a>
-    </li>
+
     <li>
         <a ui-sref="index">
-            Reports 
+            <span class="glyphicon glyphicon-list-alt"> Reports</span> 
+
             <span class="pull-right">
                 <span class="fa fa-plus-circle" ng-click="addParent()" aria-hidden="true"></span>
                 <span class="fa" ng-class="{'fa-chevron-right':!showSubMenu, 'fa-chevron-down':showSubMenu}" ng-click="showSubMenu = !showSubMenu"></span>
             </span>
         </a>
+
         <ul class="list-unstyled" ng-show="showSubMenu">
             <li ng-repeat="report in reports">
-                <span ng-show="report.isEdit">
+                <span ng-show="report.isEdit" class="parentEdit">
                     <input type="text" ng-model="report.parentName" class="textbox">
-                    <span class="fa fa-save" ng-click="report.isEdit = false;"></span>
+                    <span class="fa fa-save" ng-click="report.isEdit = false;" style="color:white"></span>
                 </span>
-                <a href="" ng-hide="report.isEdit" style="padding: 10px;">
-                    {{report.parentName}}
-                    <span class="btn-group pull-right" style="padding-top: 1vh;">
-                        <button type="button" class="btn btn-default btn-xs" style="border-radius: 50%;"><i class="fa fa-plus-circle" ng-click="addChild(report)" aria-hidden="true"></i></button>
-                        <button type="button" class="btn btn-default btn-xs" style="border-radius: 50%;"><i class="fa fa-pencil" ng-click="report.isEdit = true"></i></button>
-                        <button type="button" class="btn btn-default btn-xs" style="border-radius: 50%;"><i class="fa fa-remove"></i></button>
-                    </span>
 
+                <a href="" ng-hide="report.isEdit" class="parentActions">
+                    {{report.parentName}}
+
+                    <span class="pull-right">
+                        <i class="fa fa-plus-circle" ng-click="addChild(report)" aria-hidden="true"></i>
+                        <i class="fa fa-pencil" ng-click="report.isEdit = true"></i>
+                        <i class="fa fa-remove"></i>
+                    </span>
                 </a>
 
                 <ul class="list-unstyled">
                     <li  ng-repeat="child in report.childItems">                       
-                        <span ng-show="child.isEdit">
+                        <span ng-show="child.isEdit" class="childEdit">
                             <input type="text" ng-model="child.childName" class="textbox">
-                            <span class="fa fa-save" ng-click="child.isEdit = false;"></span>
+                            <span class="fa fa-save" ng-click="child.isEdit = false;" style="color:white;"></span>
                         </span>
-                        <a ng-hide="child.isEdit" ui-sref="index.report({reportId: child.id})" class=" text-indent" style='padding-left: 15px;'>
+                        <a class="childActions" ng-hide="child.isEdit" ui-sref="index.report({reportId: child.id})">
                             {{child.childName}}
-                            <span class='pull-right' style="padding-right: 1vw;">
-                                <button type="button" class="btn btn-default btn-xs" style="border-radius: 50%;"><i class="fa fa-pencil" ng-click="child.isEdit = true"></i></button>
+                            <span class='pull-right'>
+                                <i class="fa fa-pencil" ng-click="child.isEdit = true"></i>
+                                <i class="fa fa-remove"></i>
                             </span>
                         </a>
                     </li>
                 </ul>
-                
+
             </li>
         </ul>
     </li>

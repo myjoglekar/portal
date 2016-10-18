@@ -1,9 +1,16 @@
-/*a.text-indent{
-    text-indent: 28px;
+.parentEdit
+{
+    padding-left: 2vw;
 }
-span.pull-right{
-    padding-right:0px;
-}*/
+.parentActions{
+    padding-left: 2vw;
+}
+.childEdit{
+    padding-left: 3vw;
+}
+.childActions{
+    padding-left: 3vw;
+}
 .textbox{
     height:30px;
     width:150px;
