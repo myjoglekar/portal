@@ -4,7 +4,7 @@
         "parentName": "Analytic Report",
         "childItems": [{
                 "id": 1,
-                "childName": "netphenix",
+                "childName": "Netphenix",
                 "url": "static/datas/1.json"
             }]
     },
