@@ -44,20 +44,20 @@
                 </tr>
             </thead>
             <tbody ng-if="!isLoading" dir-paginate="(key, value) in datas |orderBy: orderProperty | orderBy: sortColumn:reverse | groupBy: groupProperty | itemsPerPage: pageSize" current-page="currentPage">
-                <tr ng-if="key !== 'undefined'" class="text-center text-uppercase text-info info">
+                <tr ng-if="key !== 'undefined'" class="text-uppercase text-info info">
                     <td colspan="{{headerLength}}">Group By : {{key}}</td>
                 </tr>
                 <tr ng-repeat="item in value">
                     <td ng-repeat="col in columns">
-                        <div ng-click="txt.item[col.field] = true" ng-hide="txt.item[col.field]">
+                        <!--<div ng-click="txt.item[col.field] = true" ng-hide="txt.item[col.field]">-->
                             {{item[col.field]}}
-                        </div>
-                        <div ng-show="txt.item[col.field]">
+                        <!--</div>-->
+<!--                        <div ng-show="txt.item[col.field]">
                             <input ng-model="item[col.field]">
                             <button ng-click="save(item); txt.item[col.field] = false">
                                 <i class="fa fa-save"></i>
                             </button>
-                        </div>
+                        </div>-->
                     </td>
                 </tr>
             </tbody>
