@@ -5,12 +5,7 @@ app.controller("DashboardController", function ($scope, $http, $stateParams) {
     $scope.add = function () {
         $scope.id = uid++;
         $scope.panels.push({chartId: $scope.id});
-    };
-
-    $scope.tabs = [];
-    $scope.addTab = function () {
-        $scope.tabs.push({tabName: "New Tab"});
-    };
+    };    
 
     //Default Load Tab   
 

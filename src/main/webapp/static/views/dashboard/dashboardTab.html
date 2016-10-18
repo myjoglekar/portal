@@ -5,7 +5,7 @@
             <li class="active" ng-repeat="tabItem in tab.tabItems">
                 <a ui-sref="index.dashboard.tab.panel({panelId: tabItem.tabUrl})" data-toggle="tabItem">{{tabItem.tabName}}</a></li>
             <li>
-                <span class="fa fa-plus" ng-click="addTab()"> Add Tab</span></li>
+                <span class="fa fa-plus" ng-click="addTab(tab)"> Add Tab</span></li>
         </ul>
     </div>
     <ui-view></ui-view>
