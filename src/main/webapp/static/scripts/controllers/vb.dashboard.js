@@ -9,12 +9,7 @@ app.controller("DashboardController", function ($scope, $http, $stateParams) {
 //    });
 
 
-    $scope.onDropComplete = function (index, panel, evt) {
-        var otherObj = $scope.panels[index];
-        var otherIndex = $scope.panels.indexOf(panel);
-        $scope.panels[index] = panel;
-        $scope.panels[otherIndex] = otherObj;
-    };
+    
 
     $http.get('static/datas/labels.json').success(function (response) {
         $scope.labels = response;
