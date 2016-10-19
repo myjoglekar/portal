@@ -27,11 +27,11 @@
             },
             {
                 "tabId": 6,
-                "tabName": "Performance Insights",
-                "tabUrl": "performanceinsights"
+                "tabName": "Yext",
+                "tabUrl": "Yext"
             },
             {
-                "tabId": 6,
+                "tabId": 7,
                 "tabName": "Definition",
                 "tabUrl": "definition"
             }

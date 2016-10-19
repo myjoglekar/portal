@@ -1,13 +1,20 @@
 [
     {
-        "chartId": 4,
+        "chartId": 1,
         "chartType": "pie",
         "url": "static/datas/pieChart.json",
         "icon": "fa fa-pie-chart"
     },
     {
-        "chartId": 5,
+        "chartId": 2,
         "chartType": "donut",
         "url": "static/datas/donutChart.json",
         "icon": "fa fa-area-chart"
-    }]
+    },
+    {
+        "chartId": 3,
+        "chartType": "bar",
+        "url": "static/datas/barChart.json",
+        "icon": "fa fa-bar-chart"
+    }
+    ]

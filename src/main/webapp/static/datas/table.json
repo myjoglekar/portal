@@ -1,0 +1,11 @@
+[
+    {
+        "id": 1,
+        "TableName": "Market Share",
+        "childItems": [{
+                "id": 1,
+                "childName": "TableName",
+                "url": "static/datas/marketShare.json"
+            }]
+    }
+]

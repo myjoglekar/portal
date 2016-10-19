@@ -1,16 +1,16 @@
 <div ng-controller="PanelController">
     <span class="pull-right">
-        <button ng-click="add()"><span class="fa fa-plus"> Add</span></button>
-        <button><span class="fa fa-expand"> Full-Screen</span></button>
+        <button ng-click="add()" style="background-color: #74C4C6"><span class="fa fa-plus"> Add</span></button>
+        <button ng-click="fullscreenCtrl.toggleFullscreen()" style="background-color: #F1883C"><span class="fa fa-expand"> Full-Screen</span></button>
     </span><br><br/>
-    <div class="well well-sm"> Questions?</div>
+    <div class="well well-sm" style="background-color: grey;color:white"> Questions?</div>
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="panel-title"></div>
+            <div class="panel-title">Overall Summary</div>
         </div>
         <div class="panel-body">
-            <div class="row">
+            <div class="row"  ngsf-fullscreen="fullscreenCtrl">
                 <div class="col-sm-4" ng-repeat="panel in panels">
                     <div ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
                         <div class="panel panel-default" ng-hide="hidenewchart" ng-drag="true" ng-drag-data="panel">
@@ -18,17 +18,17 @@
                                 <div class="panel-title">
                                     <span class="{{panel.icon}}" style="color: white;"></span> 
                                     <strong class="text-uppercase">{{panel.chartType}} chart</strong>
-                                    <span class="btn-group pull-right">
-                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;"><span class="fa fa-refresh"></span></button>
-                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" id="expandChart"><span class="fa fa-expand"></span></button>
-                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" data-toggle="modal" data-target="#preview{{$index + 1}}"><span class="fa fa-edit"></span></button>
-                                        <button class="btn btn-default btn-xs"  style="border-radius: 50%;" ng-click="hidenewchart = true"><span class="fa fa-close"></span></button>
+                                    <span class="pull-right">
+                                        <span class="fa fa-refresh"></span>
+<!--                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" id="expandChart"><span class="fa fa-expand"></span></button>-->
+                                        <span data-toggle="modal" data-target="#preview{{$index + 1}}"><span class="fa fa-edit"></span></span>
+                                        <span ng-click="hidenewchart = true"><span class="fa fa-close"></span></span>
                                     </span>
-                                    <span>
+<!--                                    <span>
                                         <span data-toggle="modal" data-target="#preview{{$index + 1}}">
                                             <span class="fa fa-edit" style="color:white; background-color: grey; cursor: pointer"></span>                                    
                                         </span>                                
-                                    </span>
+                                    </span>-->
                                 </div>
                             </div>
                             <div class="panel-body">
@@ -36,6 +36,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div id="preview{{$index + 1}}" class="modal fade">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -71,4 +72,5 @@
             </div>
         </div>
     </div>
+    
 </div>
