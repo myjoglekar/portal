@@ -1,12 +1,14 @@
 <div ng-controller="TabController">
-    <div class="tab-pane" ng-repeat="tab in tabs">
+    <div class="tab-content">
+        <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{active:$index == 0}" id="tab{{$index+1}}">
         <h2>{{tab.dashboardTitle}}</h2>
-        <ul class="nav nav-tabs list-inline active">
-            <li ng-repeat="tabItem in tab.tabItems">
-                <a ui-sref="index.dashboard.tab.panel({panelId: tabItem.tabUrl})" data-toggle="tab" class="firsttab" style="cursor: pointer;">{{tabItem.tabName}}</a></li>
+        <ul class="nav nav-tabs list-inline">
+            <li ng-repeat="tabItem in tab.tabItems" ng-class="{active: $index == 0}">
+                <a ui-sref="index.dashboard.tab.panel({panelId: tabItem.tabUrl})" data-toggle="tab" style="cursor: pointer;">{{tabItem.tabName}}</a></li>
             <li>
                 <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span></li>
         </ul>
+    </div>
     </div>
     <ui-view></ui-view>
 </div>
