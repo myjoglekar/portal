@@ -1,5 +1,5 @@
 <div ng-controller="TabController">
-    <div class="tab-content">
+    
         <div class="tab-pane" ng-repeat="tab in tabs" ng-class="{active:$index == 0}" id="tab{{$index+1}}">
         <h2>{{tab.dashboardTitle}}</h2>
         <ul class="nav nav-tabs list-inline">
@@ -9,6 +9,6 @@
                 <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span></li>
         </ul>
     </div>
-    </div>
+   
     <ui-view></ui-view>
 </div>

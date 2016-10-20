@@ -25,9 +25,9 @@
     },
     {
         "id":5,
-        "url": "static/img/bubblechart.png",
+        "url": "static/img/groupedbarchart.png",
         "type": "groupedbar",
-        "name": "Bubble Chart"
+        "name": "Grouped Bar Chart"
     },
     {
         "id":6,
