@@ -4,16 +4,16 @@
             {
                 "tabId": 1,
                 "tabName": "Overall",
-                "tabUrl": "overall"
+                "tabUrl": "seoOverall"
             }, {
                 "tabId": 2,
                 "tabName": "Traffic Source",
-                "tabUrl": "trafficsource"
+                "tabUrl": "trafficSource"
             },
             {
                 "tabId": 3,
                 "tabName": "Performance Insights",
-                "tabUrl": "performanceinsights"
+                "tabUrl": "performanceInsights"
             },
             {
                 "tabId": 4,
@@ -28,12 +28,12 @@
             {
                 "tabId": 6,
                 "tabName": "Yext",
-                "tabUrl": "Yext"
+                "tabUrl": "yext"
             },
             {
                 "tabId": 7,
                 "tabName": "Definition",
-                "tabUrl": "definition"
+                "tabUrl": "seoDefinition"
             }
             ]
     }]
