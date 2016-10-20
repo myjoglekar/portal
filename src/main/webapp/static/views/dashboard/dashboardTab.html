@@ -3,8 +3,8 @@
         <div class="tab-pane active" ng-repeat="tab in tabs">
         <h2>{{tab.dashboardTitle}}</h2>
         <ul class="nav nav-tabs list-inline">
-            <li class="active" ng-repeat="tabItem in tab.tabItems" ui-sref-active="active">
-                <a ui-sref="index.dashboard.tab.panel({panelId: tabItem.tabUrl})" data-toggle="tab" style="cursor: pointer;">{{tabItem.tabName}}</a></li>
+            <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active">
+                <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" style="cursor: pointer;">{{tabItem.tabName}}</a></li>
             <li>
                 <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span></li>
         </ul>
