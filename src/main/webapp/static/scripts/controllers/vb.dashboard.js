@@ -32,17 +32,17 @@ app.controller("DashboardController", function ($scope, $http, $stateParams) {
 //        $http.get(panel.url).success(function (response) {
 //            dataPoints = response;           
 
-        if (value.type == "line") {
+        if (value.type === "line") {
             lineChart(value);
-        } else if (value.type == "area") {
+        } else if (value.type === "area") {
             areaChart(value);
-        } else if (value.type == "bar") {
+        } else if (value.type === "bar") {
             barChart(value);
-        } else if (value.type == "groupedbar") {
+        } else if (value.type === "groupedbar") {
             groupedBarChart(value);
-        } else if (value.type == "pie") {
+        } else if (value.type === "pie") {
             pieChart(value);
-        } else if (value.type == "donut") {
+        } else if (value.type === "donut") {
             donutChart(value);
         } else {
             alert("No Charts Available");
