@@ -1,3 +1,19 @@
+<style>
+    div.col-sm-4{
+        resize:both;
+        overflow:hidden;
+        padding-right: 10px;
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border:1px solid grey;
+
+    }
+    div.panel{
+        margin-bottom:0px;
+    }
+</style>
+
 <div ng-controller="PanelController">
     <span class="pull-right">
         <button ng-click="add()" style="background-color: #74C4C6"><span class="fa fa-plus"> Add</span></button>
@@ -20,23 +36,23 @@
                                     <strong class="text-uppercase">{{panel.chartType}} chart</strong>
                                     <span class="pull-right">
                                         <span class="fa fa-refresh"></span>
-<!--                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" id="expandChart"><span class="fa fa-expand"></span></button>-->
+                                        <!--                                        <button class="btn btn-default btn-xs" style="border-radius: 50%;" id="expandChart"><span class="fa fa-expand"></span></button>-->
                                         <span data-toggle="modal" data-target="#preview{{$index + 1}}"><span class="fa fa-edit"></span></span>
                                         <span ng-click="hidenewchart = true"><span class="fa fa-close"></span></span>
                                     </span>
-<!--                                    <span>
-                                        <span data-toggle="modal" data-target="#preview{{$index + 1}}">
-                                            <span class="fa fa-edit" style="color:white; background-color: grey; cursor: pointer"></span>                                    
-                                        </span>                                
-                                    </span>-->
+                                    <!--                                    <span>
+                                                                            <span data-toggle="modal" data-target="#preview{{$index + 1}}">
+                                                                                <span class="fa fa-edit" style="color:white; background-color: grey; cursor: pointer"></span>                                    
+                                                                            </span>                                
+                                                                        </span>-->
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div id="graph{{panel.chartId}}"></div>
+                                <!--                                <div id="graph{{panel.chartId}}"></div>-->
                             </div>
                         </div>
                     </div>
-                    
+
                     <div id="preview{{$index + 1}}" class="modal fade">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -72,5 +88,5 @@
             </div>
         </div>
     </div>
-    
+
 </div>
