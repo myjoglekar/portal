@@ -9,4 +9,11 @@ app.controller('PanelController', function ($scope, $http, $stateParams) {
         $scope.id = uid++;
         $scope.panels.push({chartId: $scope.id});
     };
+    
+    $scope.onDropComplete = function (index, panel, evt) {
+        var otherObj = $scope.panels[index];
+        var otherIndex = $scope.panels.indexOf(panel);
+        $scope.panels[index] = panel;
+        $scope.panels[otherIndex] = otherObj;
+    };
 });

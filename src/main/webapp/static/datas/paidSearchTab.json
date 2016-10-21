@@ -4,7 +4,7 @@
             {
                 "tabId": 1,
                 "tabName": "Overall",
-                "tabUrl": "overall"
+                "tabUrl": "paidSearchOverall"
             }, {
                 "tabId": 2,
                 "tabName": "Campaigns",
@@ -28,6 +28,6 @@
             {
                 "tabId": 6,
                 "tabName": "Definition",
-                "tabUrl": "definition"
+                "tabUrl": "paidSearchDefinition"
             }]
     }]

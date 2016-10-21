@@ -4,7 +4,7 @@
             {
                 "tabId": 1,
                 "tabName": "Overall",
-                "tabUrl": "overall"
+                "tabUrl": "dynamicOverall"
             }, {
                 "tabId": 2,
                 "tabName": "VDPs",
@@ -13,6 +13,6 @@
             {
                 "tabId": 3,
                 "tabName": "Definition",
-                "tabUrl": "definition"
+                "tabUrl": "dynamicDefinition"
             }]
     }]

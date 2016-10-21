@@ -5,20 +5,20 @@
  */
 $.get('static/datas/defaultPanel.json', function (response, status) {
     angular.forEach(response, function (value, key) {
-        if (value.chartType == "line") {
+        if (value.chartType === "line") {
             lineChart(value);
-        } else if (value.chartType == "area") {
+        } else if (value.chartType === "area") {
             areaChart(value);
-        } else if (value.chartType == "bar") {
+        } else if (value.chartType === "bar") {
             barChart(value);
-        } else if (value.chartType == "groupedbar") {
+        } else if (value.chartType === "groupedbar") {
             groupedBarChart(value);
-        } else if (value.chartType == "pie") {
+        } else if (value.chartType === "pie") {
             pieChart(value);
-        } else if (value.chartType == "donut") {
+        } else if (value.chartType === "donut") {
             donutChart(value);
         }
-        else{
+        else {
             alert("No Charts Available");
         }
     });
@@ -101,7 +101,7 @@ function areaChart(value) {
 //            height = 500 - margin.top - margin.bottom;
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
     width = 400 - margin.left - margin.right,
-            height = 200 - margin.top - margin.bottom;
+            height = 260 - margin.top - margin.bottom;
     var parseDate = d3.time.format("%d-%b-%y").parse;
 
     var x = d3.time.scale()
@@ -169,8 +169,8 @@ function areaChart(value) {
 
 function barChart(value) {
     var margin = {top: 20, right: 20, bottom: 70, left: 40},
-    width = 600 - margin.left - margin.right,
-            height = 300 - margin.top - margin.bottom;
+    width = 400 - margin.left - margin.right,
+            height = 260 - margin.top - margin.bottom;
     var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
 
     var y = d3.scale.linear().range([height, 0]);
@@ -241,8 +241,8 @@ function groupedBarChart(value) {
         bottom: 30,
         left: 40
     },
-    width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+    width = 430 - margin.left - margin.right,
+            height = 200 - margin.top - margin.bottom;
     var x0 = d3.scale.ordinal()
             .rangeRoundBands([0, width], .1);
     var x1 = d3.scale.ordinal();
@@ -398,10 +398,10 @@ function pieChart(value) {
 }
 
 function donutChart(value) {
-    console.log("Donut : ",value.url)
+    console.log("Donut : ", value.url)
     var width = 300;
-     var height = 250;
-     var radius = Math.min(width, height) / 2;
+    var height = 200;
+    var radius = Math.min(width, height) / 2;
 //    var width = 800;
 //     var height = 250;
 
@@ -439,5 +439,5 @@ function donutChart(value) {
                 .text(function (d) {
                     return d.data.crimeType;
                 });
-    })
+    });
 }

@@ -5,12 +5,12 @@
     </li>
 
     <li>
-        <a ui-sref="index.dashboard"><span class="glyphicon glyphicon-dashboard"> Dashboard</span></a>
+        <a ui-sref="index.dashboard"><span class="glyphicon glyphicon-dashboard"><span style="font-size:17px;"> Dashboard</span></span></a>
     </li>
 
     <li>
-        <a ui-sref="index">
-            <span class="glyphicon glyphicon-list-alt"> Reports</span> 
+        <a ui-sref="index" style="padding-right: 10px;">
+            <span class="glyphicon glyphicon-list-alt"><span style="font-size:17px;"> Reports</span></span> 
 
             <span class="pull-right">
                 <span class="fa fa-plus-circle" ng-click="addParent()" aria-hidden="true"></span>
@@ -28,7 +28,7 @@
                 <a href="" ng-hide="report.isEdit" class="parentActions">
                     {{report.parentName}}
 
-                    <span class="pull-right">
+                    <span class="pull-right"  style="padding-right: 10px;">
                         <i class="fa fa-plus-circle" ng-click="addChild(report)" aria-hidden="true"></i>
                         <i class="fa fa-pencil" ng-click="report.isEdit = true"></i>
                         <i class="fa fa-remove"></i>
@@ -43,7 +43,7 @@
                         </span>
                         <a class="childActions" ng-hide="child.isEdit" ui-sref="index.report({reportId: child.id})">
                             {{child.childName}}
-                            <span class='pull-right'>
+                            <span class='pull-right'  style="padding-right: 10px;">
                                 <i class="fa fa-pencil" ng-click="child.isEdit = true"></i>
                                 <i class="fa fa-remove"></i>
                             </span>
