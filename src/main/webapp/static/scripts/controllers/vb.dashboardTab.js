@@ -4,14 +4,16 @@ app.controller('TabController', function ($scope, $http, $stateParams) {
     });
 
     $scope.tabs = [];
+    var uid = 7;
     $scope.addTab = function (tab) {
-        tab.tabItems.push({tabName: "New Tab",tabClose:"isClose"});
+        $scope.id = uid++;
+        tab.tabItems.push({tabId: "$scope.id", tabName: "New Tab", tabClose: "isClose"});
     };
     console.log("StateParams Tab : " + $stateParams);
-    
-     console.log($scope.tabs);
-    $scope.removeTab=function(index){
-        $scope.tabs.splice(index,1);
-       
+
+    console.log($scope.tabs);
+    $scope.removeTab = function (index) {
+        $scope.tabs.splice(index, 1);
+
     };
 });

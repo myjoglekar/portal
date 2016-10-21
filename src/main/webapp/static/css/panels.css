@@ -26,3 +26,7 @@ div.panel-heading-sm{
     padding: 3px 3px;
     color:white;
 }
+
+span.icon{
+    cursor: pointer;
+}
