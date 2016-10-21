@@ -4,7 +4,7 @@
         <h2>{{tab.dashboardTitle}}</h2>
         <ul class="nav nav-tabs list-inline">
             <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active">
-                <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" style="cursor: pointer;">{{tabItem.tabName}}</a></li>
+                <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" style="cursor: pointer;color:black;">{{tabItem.tabName}}</a></li>
             <li>
                 <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span></li>
         </ul>

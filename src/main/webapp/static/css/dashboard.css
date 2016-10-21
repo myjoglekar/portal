@@ -1,5 +1,5 @@
 nav.navbar-fixed-top{
-    background-color:#DDEEFB;
+    background-color:rgb(228,228,228);
     padding: 1vh;
     height:10px;
 }
@@ -79,7 +79,7 @@ span.previewChart{
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
-    background: #DDEEFB;
+    background:rgb(228,228,228);
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -172,7 +172,7 @@ footer {
     height: 3vh;
     bottom: 0;
     width: 100%;
-    background-color: #DDEEFB;
+    background-color: rgb(228,228,228);
     color:black;
 }
 
