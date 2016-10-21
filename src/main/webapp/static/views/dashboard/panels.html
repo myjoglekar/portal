@@ -1,7 +1,8 @@
 <div ng-controller="PanelController">
-    <span class="pull-right">
+    <span class="pull-right" style="padding-top: 5px;padding-right: 5px;">
         <button ng-click="add()" class="addButton"><span class="fa fa-plus"> Add</span></button>
         <button ng-click="fullscreenCtrl.toggleFullscreen()" class="fullScreenButton"><span class="fa fa-expand"> Full-Screen</span></button>
+        <button><span class="fa fa-refresh"> Refresh</span></button>
     </span><br><br/>
     
     <div class="well well-sm"> Questions?</div>
@@ -18,8 +19,8 @@
                         <div class="panel panel-default" ng-hide="hidenewchart" ng-drag="true" ng-drag-data="panel">
                             <div class="panel-heading panel-heading-sm">
                                 <div class="panel-title">
-                                    <span class="{{panel.icon}}" style="color: white;"></span> 
-                                    <strong class="text-uppercase">{{panel.chartType}} chart</strong>
+                                    <span class="{{panel.icon}}"></span> 
+                                    <span class="text-uppercase">{{panel.chartType}} chart</span>
 
                                     <span class="pull-right">
                                         <span class="fa fa-refresh"></span>
