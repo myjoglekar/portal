@@ -5,7 +5,13 @@ app.controller('TabController', function ($scope, $http, $stateParams) {
 
     $scope.tabs = [];
     $scope.addTab = function (tab) {
-        tab.tabItems.push({tabName: "New Tab"});
+        tab.tabItems.push({tabName: "New Tab",tabClose:"isClose"});
     };
     console.log("StateParams Tab : " + $stateParams);
+    
+     console.log($scope.tabs);
+    $scope.removeTab=function(index){
+        $scope.tabs.splice(index,1);
+       
+    };
 });
