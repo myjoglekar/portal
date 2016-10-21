@@ -25,14 +25,20 @@
     },
     {
         "id":5,
-        "url": "static/img/bubblechart.png",
+        "url": "static/img/groupedbarchart.png",
         "type": "groupedbar",
-        "name": "Bubble Chart"
+        "name": "Grouped Bar Chart"
     },
     {
         "id":6,
         "url": "static/img/doughnutchart.png",
         "type": "donut",
         "name": "Doughnut Chart"
+    },
+     {
+        "id":7,
+        "url": "static/img/table.png",
+        "type": "table",
+        "name": "Table"
     }
 ]

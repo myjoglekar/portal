@@ -63,8 +63,8 @@ div.chartpreview{
     height:30vh;
 }
 img.charttype{
-    height:5vh;
-    width:3vw;
+    height:4vh;
+    width:2vw;
     cursor: pointer;
 }
 span.previewChart{
@@ -95,7 +95,7 @@ span.previewChart{
 .sidebar-nav {
     position: absolute;
     top: 0;
-    width: 240px;
+    width: 250px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -152,7 +152,7 @@ span.previewChart{
     }
 
     #wrapper.toggled #sidebar-wrapper {
-        width: 0;
+        width: 35px;
     }
 
     #page-content-wrapper {

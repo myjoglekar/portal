@@ -4,7 +4,7 @@
             {
                 "tabId": 1,
                 "tabName": "Overall",
-                "tabUrl": "overall"
+                "tabUrl": "socialOverall"
             }, {
                 "tabId": 2,
                 "tabName": "Engagement",
@@ -18,7 +18,7 @@
             {
                 "tabId": 4,
                 "tabName": "Definition",
-                "tabUrl": "definition"
+                "tabUrl": "socialDefinition"
             }
             ]
     }]
