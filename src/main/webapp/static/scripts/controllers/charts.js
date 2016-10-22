@@ -25,9 +25,9 @@ $.get('static/datas/defaultPanel.json', function (response, status) {
 });
 
 function lineChart(value) {
-    var m = [80, 80, 80, 80]; // margins
-    var w = 200// width
-    var h = 100 // height
+    var m = [30, 80, 30, 70]; // margins
+    var w = 300// width
+    var h = 200 // height
 //    var w = 400// width
 //    var h = 200 // height
 //        var w = 1000 - m[1] - m[3]; // width
@@ -168,7 +168,7 @@ function areaChart(value) {
 }
 
 function barChart(value) {
-    var margin = {top: 20, right: 20, bottom: 70, left: 40},
+    var margin = {top: 40, right: 40, bottom: 40, left: 40},
     width = 400 - margin.left - margin.right,
             height = 260 - margin.top - margin.bottom;
     var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
@@ -365,11 +365,11 @@ function groupedBarChart(value) {
     })
 }
 function pieChart(value) {
-    var w = 200;
-    var h = 200;
-//    var w = 400;
-//    var h = 400;
-    var r = h / 2;
+//    var w = 300;
+//    var h = 200;
+    var w = 400;
+    var h = 260;
+  var r = h / 2;
     var color = d3.scale.category20c();
     d3.json(value.url, function (error, data) {
         var vis = d3.select('#graph' + value.chartId).append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
@@ -400,7 +400,7 @@ function pieChart(value) {
 function donutChart(value) {
     console.log("Donut : ", value.url)
     var width = 300;
-    var height = 200;
+    var height = 260;
     var radius = Math.min(width, height) / 2;
 //    var width = 800;
 //     var height = 250;
