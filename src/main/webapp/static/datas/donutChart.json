@@ -1,19 +1,19 @@
 [
     {
         "crimeType": "mip",
-        "totalCrimes": 24
+        "totalCrimes": 200
     },
     {
         "crimeType": "theft",
-        "totalCrimes": 558
+        "totalCrimes": 408
     },
     {
         "crimeType": "drugs",
-        "totalCrimes": 81
+        "totalCrimes":250
     },
     {
         "crimeType": "arson",
-        "totalCrimes": 3
+        "totalCrimes": 100
     },
     {
         "crimeType": "assault",
@@ -21,11 +21,7 @@
     },
     {
         "crimeType": "burglary",
-        "totalCrimes": 49
-    },
-    {
-        "crimeType": "disorderlyConduct",
-        "totalCrimes": 63
+        "totalCrimes": 149
     },
     {
         "crimeType": "mischief",
@@ -37,14 +33,6 @@
     },
     {
         "crimeType": "resistingArrest",
-        "totalCrimes": 11
-    },
-    {
-        "crimeType": "sexCrimes",
-        "totalCrimes": 24
-    },
-    {
-        "crimeType": "other",
-        "totalCrimes": 58
+        "totalCrimes": 191
     }
 ]
