@@ -1,0 +1,8 @@
+[
+    {
+        "chartId": 1,
+        "chartType": "bar",
+        "url": "static/datas/barChart.json",
+        "icon": "fa fa-bar-chart"
+    }
+]

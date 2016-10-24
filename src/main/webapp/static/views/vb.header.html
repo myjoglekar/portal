@@ -1,0 +1,56 @@
+<nav class="navbar navbar-fixed-top" ng-controller="HeaderController">
+    <ul class="list-inline">
+        <img src="static/img/digital.png" class="digitalLogo">
+        <img src="static/img/visumbu.png" class="visumbuLogo">
+        <li><a href="#" class="btn btn-default btn-xs" id="menu-toggle"><span class="fa fa-navicon"></span></a></li> 
+
+        <li class="pull-right">
+            <input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" style="width:300px;"/>
+        </li>
+        <li class="pull-right">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{selectName}}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="dashboard in dashboards">
+                        <a ui-sref="index.dashboard.tab({tabId: dashboard.dashboardValue})" ng-click="change(dashboard)">
+                            {{dashboard.dashboardName}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </li>
+        <li class="pull-right">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Type
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="">Dealers</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+
+    </ul>
+
+</nav>
+
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+    $(function () {
+        $('input[name="daterange"]').daterangepicker({
+            timePicker: true,
+            timePickerIncrement: 30,
+            locale: {
+                format: 'MM/DD/YYYY h:mm A'
+            }
+        });
+    });
+</script>

@@ -1,0 +1,57 @@
+<ul ng-controller="ReportController" class="sidebar-nav">
+
+    <li class="sidebar-brand">
+        <a href="#"></a>
+    </li>
+
+    <li>
+        <a ui-sref="index.dashboard"><span class="glyphicon glyphicon-dashboard" style="color:black;"><span style="font-size:17px;color:black;"> Dashboard</span></span></a>
+    </li>
+
+    <li>
+        <a ui-sref="index" style="padding-right: 10px;">
+            <span class="glyphicon glyphicon-list-alt" style="color:black;"><span style="font-size:17px;"> Reports</span></span> 
+
+            <span>
+                <span class="fa fa-plus-circle" ng-click="addParent()" aria-hidden="true" style="color:black;"></span>
+                <span class="fa" ng-class="{'fa-chevron-right':!showSubMenu, 'fa-chevron-down':showSubMenu}" ng-click="showSubMenu = !showSubMenu"  style="color:black;"></span>
+            </span>
+        </a>
+
+        <ul class="list-unstyled" ng-show="showSubMenu">
+            <li ng-repeat="report in reports">
+                <span ng-show="report.isEdit" class="parentEdit">
+                    <input type="text" ng-model="report.parentName" class="textbox">
+                    <span class="fa fa-save" ng-click="report.isEdit = false;" style="color:black;"></span>
+                </span>
+
+                <a href="" ng-hide="report.isEdit" class="parentActions" style="color:black;">
+                    {{report.parentName}}
+
+                    <span class="pull-right"  style="padding-right: 10px;">
+                        <i class="fa fa-plus-circle" ng-click="addChild(report)" aria-hidden="true" style="color:black;"></i>
+                        <i class="fa fa-pencil" ng-click="report.isEdit = true" style="color:black;"></i>
+                        <i class="fa fa-remove" style="color:black;"></i>
+                    </span>
+                </a>
+
+                <ul class="list-unstyled">
+                    <li  ng-repeat="child in report.childItems">                       
+                        <span ng-show="child.isEdit" class="childEdit">
+                            <input type="text" ng-model="child.childName" class="textbox">
+                            <span class="fa fa-save" ng-click="child.isEdit = false;" style="color:white;"></span>
+                        </span>
+                        <a class="childActions" ng-hide="child.isEdit" ui-sref="index.report({reportId: child.id})" style="color:black;">
+                            {{child.childName}}
+                            <span class='pull-right'  style="padding-right: 10px;">
+                                <i class="fa fa-pencil" ng-click="child.isEdit = true" style="color:black;"></i>
+                                <i class="fa fa-remove" style="color:black;"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+
+            </li>
+        </ul>
+    </li>
+</ul>

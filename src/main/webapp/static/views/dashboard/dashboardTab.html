@@ -1,0 +1,20 @@
+<div ng-controller="TabController">
+
+    <div class="tab-pane active" ng-repeat="tab in tabs">
+        <h3>{{tab.dashboardTitle}}</h3>
+        <ul class="nav nav-tabs list-inline">
+            <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active" >
+                <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" style="cursor: pointer;color:black;">
+                    {{tabItem.tabName}}
+                    <i ng-if="tabItem.tabClose" class="fa fa-times-circle" ng-click="removeTab($index)"></i>
+                </a>
+            </li>
+            <li>
+                <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span>
+            </li>
+        </ul>
+    </div>
+    
+    <ui-view></ui-view>
+    
+</div>

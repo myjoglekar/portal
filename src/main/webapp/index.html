@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Viz Board</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+
+        <link rel="stylesheet" href="static/css/lineChart.css">
+        <link rel="stylesheet" href="static/css/barChart.css">
+        <link rel="stylesheet" href="static/css/areaChart.css">
+         <link rel="stylesheet" href="static/css/donutChart.css">
+         <link rel="stylesheet" href="static/css/groupedBarChart.css">
+<!--         <link rel="stylesheet" href="static/css/pieChart.css">-->
+        
+        <link rel="stylesheet" href="static/css/report.css">   
+        <link rel="stylesheet" href="static/css/leftSideMenu.css">
+        <link rel="stylesheet" href="static/css/vb.header.css">
+        <link rel="stylesheet" href="static/css/dashboard.css">
+        <link rel="stylesheet" href="static/css/dashboardTab.css">
+        <link rel="stylesheet" href="static/css/panels.css">
+        
+        <link rel="stylesheet" href="static/lib/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/lib/css/font-awesome.min.css">
+        
+        <!-- DateTime Picker-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+       
+    </head>
+
+    <body ng-app="VizBoardApp">
+    <ui-view></ui-view>
+
+    <script src="static/lib/js/d3/d3.v3.min.js"></script>
+    <script src="static/lib/js/jquery/jquery.min.js"></script>
+    
+    <!-- DateTime Picker-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    
+    <script src="static/lib/js/bootstrap.min.js"></script>
+
+    <script src="static/lib/js/angular/angular.min.js"></script>
+    <script src="static/lib/js/angular/angular-ui-router.min.js"></script>
+    <script src="static/lib/js/angular/angular-animate.min.js"></script>
+    <script src="static/lib/js/angular/angular.filter.js"></script>
+    <script src="static/lib/js/angular/smart-table.debug.js"></script>
+    <script src="static/lib/js/paginations/dirPagination.js"></script>
+    <script src="static/lib/js/marked.js"></script>
+    <script src="static/lib/js/screenfull/angular-screenfull.js"></script>
+    <script src="static/lib/js/screenfull/screenfull.js"></script> 
+    <script src="static/lib/draganddrop/ngDraggable.js"></script>
+
+    <script src="static/scripts/app.js"></script>
+    <script src="static/scripts/config/ui-routeprovider.js"></script>
+    <script src="static/scripts/controllers/vb.dashboard.js"></script>
+    <script src="static/scripts/controllers/vb.header.js"></script>    
+    <script src="static/scripts/controllers/vb.dashboardTab.js"></script>    
+    <script src="static/scripts/controllers/vb.panel.js"></script>    
+    <script src="static/scripts/controllers/vb.reports.js"></script>    
+</body>
+
+</html>

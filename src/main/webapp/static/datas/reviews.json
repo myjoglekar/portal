@@ -1,0 +1,14 @@
+[
+    {
+        "chartId": 1,
+        "chartType": "bar",
+        "url": "static/datas/barChart.json",
+        "icon": "fa fa-bar-chart"
+    },
+    {
+        "chartId": 2,
+        "chartType": "area",
+        "url": "static/datas/areaChart.json",
+        "icon": "fa fa-area-chart"
+    }
+]
