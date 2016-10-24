@@ -241,8 +241,8 @@ function groupedBarChart(value) {
         bottom: 30,
         left: 40
     },
-    width = 430 - margin.left - margin.right,
-            height = 200 - margin.top - margin.bottom;
+    width = 410 - margin.left - margin.right,
+            height = 260 - margin.top - margin.bottom;
     var x0 = d3.scale.ordinal()
             .rangeRoundBands([0, width], .1);
     var x1 = d3.scale.ordinal();
