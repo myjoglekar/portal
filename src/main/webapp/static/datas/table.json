@@ -619,6 +619,548 @@
                 "new":"2016 Chrysler Pacifica",
                 "": "8%"
             }]
+    },
+    {
+        "id": 19,
+        "TableName": "Referral Source",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 20,
+        "TableName": "Campaign Performance Metrics By Video",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 21,
+        "TableName": "Device Performance",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 22,
+        "TableName": "Targeting Behavior",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 23,
+        "TableName": "Seo Device",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 24,
+        "TableName": "GA Goals by Source",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 25,
+        "TableName": "Interaction with Demo Page",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 26,
+        "TableName": "Pages",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 27,
+        "TableName": "Seo Locations",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 28,
+        "TableName": "Top 10 Organic Search Queries",
+        "childItems": [{
+                "id": 1,
+                "query":"bmw silver spring",
+                "impressions": "2924",
+                "clicks": "1574",
+                "ctr": "53.83"
+            },
+            {
+                "id": 2,
+                "query":"bmw of silver spring",
+                "impressions": "1894",
+                "clicks": "1163",
+                "ctr": "61.4"
+            },
+            {
+                "id": 3,
+                "query":"silver spring bmw",
+                "impressions": "623",
+                "clicks": "382",
+                "ctr": "61.31"
+            },
+            {
+                "id": 4,
+               "query":"bmw",
+                "impressions": "10645",
+                "clicks": "158",
+                "ctr": "1.48"
+            },
+            {
+                "id": 5,
+               "query":"bmw maryland",
+                "impressions": "535",
+                "clicks": "122",
+                "ctr": "22.8"
+            }]
+    },
+    {
+        "id": 29,
+        "TableName": "Active Links",
+        "childItems": [{
+                "id": 1,
+                "link type":"Blog",
+                "active": "52"
+            },
+            {
+                "id": 2,
+                "link type":"Onsite Page",
+                "active": "13"
+            },
+            {
+                "id": 3,
+                "link type":"Optimized Page",
+                "active": "14"
+            },
+            {
+                "id": 4,
+                 "link type":"Social Linking",
+                "active": "28"
+            }]
+    },
+    {
+        "id": 30,
+        "TableName": "Active Links",
+        "childItems": [{
+                "id": 1,
+                "link type":"Onsite Page",
+                "link text": "2017 BMW 640i",
+                "link":"http://www.bmwsilverspring.com"
+            },
+            {
+                "id": 2,
+                "link type":"Optimized Page",
+                "link text": "BMW lease offers",
+                "link":"http://www.bmwsilverspring.com"
+            }]
+    },
+    {
+        "id": 31,
+        "TableName": "Search Terms",
+        "childItems": [{
+                "id": 1,
+                "link type":"Onsite Page",
+                "link text": "2017 BMW 640i",
+                "link":"http://www.bmwsilverspring.com"
+            },
+            {
+                "id": 2,
+                "link type":"Optimized Page",
+                "link text": "BMW lease offers",
+                "link":"http://www.bmwsilverspring.com"
+            }]
+    },
+    {
+        "id": 32,
+        "TableName": "Paid Campaign",
+        "childItems": [{
+                "id": 1,
+                "link type":"Onsite Page",
+                "link text": "2017 BMW 640i",
+                "link":"http://www.bmwsilverspring.com"
+            },
+            {
+                "id": 2,
+                "link type":"Optimized Page",
+                "link text": "BMW lease offers",
+                "link":"http://www.bmwsilverspring.com"
+            }]
+    },
+    {
+        "id": 33,
+        "TableName": "Ad Type",
+        "childItems": [{
+                "id": 1,
+                "link type":"Onsite Page",
+                "link text": "2017 BMW 640i",
+                "link":"http://www.bmwsilverspring.com"
+            },
+            {
+                "id": 2,
+                "link type":"Optimized Page",
+                "link text": "BMW lease offers",
+                "link":"http://www.bmwsilverspring.com"
+            }]
+    },
+    {
+        "id": 34,
+        "TableName": "Paid Device",
+        "childItems": [{
+                "id": 1,
+                "link type":"Onsite Page",
+                "link text": "2017 BMW 640i",
+                "link":"http://www.bmwsilverspring.com"
+            },
+            {
+                "id": 2,
+                "link type":"Optimized Page",
+                "link text": "BMW lease offers",
+                "link":"http://www.bmwsilverspring.com"
+            }]
+    },
+    {
+        "id": 35,
+        "TableName": "Facebook vs Instagram",
+        "childItems": [{
+                "id": 1,
+                "link type":"Onsite Page",
+                "link text": "2017 BMW 640i",
+                "link":"http://www.bmwsilverspring.com"
+            },
+            {
+                "id": 2,
+                "link type":"Optimized Page",
+                "link text": "BMW lease offers",
+                "link":"http://www.bmwsilverspring.com"
+            }]
+    },
+    {
+        "id": 36,
+        "TableName": "Paid Targeting Behavior",
+        "childItems": [{
+                "id": 1,
+                "link type":"Onsite Page",
+                "link text": "2017 BMW 640i",
+                "link":"http://www.bmwsilverspring.com"
+            },
+            {
+                "id": 2,
+                "link type":"Optimized Page",
+                "link text": "BMW lease offers",
+                "link":"http://www.bmwsilverspring.com"
+            }]
+    },
+    {
+        "id": 37,
+        "TableName": "Paid Competitor",
+        "childItems": [{
+                "id": 1,
+                "link type":"Onsite Page",
+                "link text": "2017 BMW 640i",
+                "link":"http://www.bmwsilverspring.com"
+            },
+            {
+                "id": 2,
+                "link type":"Optimized Page",
+                "link text": "BMW lease offers",
+                "link":"http://www.bmwsilverspring.com"
+            }]
+    },
+    {
+        "id": 38,
+        "TableName": "Reviews",
+        "childItems": [{
+                "id": 1,
+                "site":"Google",
+                "current overall ratings": 4.6,
+                "mtd positive reviews":7,
+                "mtd negative reviews":1
+            },
+            {
+                "id": 2,
+                "site":"Yelp",
+                "current overall ratings": 4,
+                "mtd positive reviews":2,
+                "mtd negative reviews":2
+            }]
+    },
+     {
+        "id": 39,
+        "TableName": "Posts",
+        "childItems": [{
+                "id": 1,
+                "site":"Google",
+                "current overall ratings": 4.6,
+                "mtd positive reviews":7,
+                "mtd negative reviews":1
+            },
+            {
+                "id": 2,
+                "site":"Yelp",
+                "current overall ratings": 4,
+                "mtd positive reviews":2,
+                "mtd negative reviews":2
+            }]
+    },
+    {
+        "id": 40,
+        "TableName": "Likes",
+        "childItems": [{
+                "id": 1,
+                "site":"Google",
+                "current overall ratings": 4.6,
+                "mtd positive reviews":7,
+                "mtd negative reviews":1
+            },
+            {
+                "id": 2,
+                "site":"Yelp",
+                "current overall ratings": 4,
+                "mtd positive reviews":2,
+                "mtd negative reviews":2
+            }]
+    },
+    {
+        "id": 41,
+        "TableName": "Comments",
+        "childItems": [{
+                "id": 1,
+                "site":"Google",
+                "current overall ratings": 4.6,
+                "mtd positive reviews":7,
+                "mtd negative reviews":1
+            },
+            {
+                "id": 2,
+                "site":"Yelp",
+                "current overall ratings": 4,
+                "mtd positive reviews":2,
+                "mtd negative reviews":2
+            }]
+    },
+    {
+        "id": 42,
+        "TableName": "Shares",
+        "childItems": [{
+                "id": 1,
+                "site":"Google",
+                "current overall ratings": 4.6,
+                "mtd positive reviews":7,
+                "mtd negative reviews":1
+            },
+            {
+                "id": 2,
+                "site":"Yelp",
+                "current overall ratings": 4,
+                "mtd positive reviews":2,
+                "mtd negative reviews":2
+            }]
     }
     
 ]
