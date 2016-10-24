@@ -4,8 +4,621 @@
         "TableName": "Market Share",
         "childItems": [{
                 "id": 1,
-                "childName": "TableName",
-                "url": "static/datas/marketShare.json"
+                "Name": "Arun",
+                "age": 27,
+                "designation": "Web Developer",
+                "address": "Chennai",
+                "salary": 10000
+            },
+            {
+                "id": 2,
+                "Name": "Anand",
+                "age": 27,
+                "designation": "Web Designing",
+                "address": "Coimbatore",
+                "salary": 20000
+            },
+            {
+                "id": 3,
+                "Name": "Kishore",
+                "age": 27,
+                "designation": "Software Engineer",
+                "address": "Ooty",
+                "salary": 30000
+            },
+            {
+                "id": 4,
+                "Name": "Santhosh",
+                "age": 27,
+                "designation": "Software Testing",
+                "address": "Erode",
+                "salary": 40000
+            }]
+    },
+    {
+        "id": 2,
+        "TableName": "Paid Search Performance",
+        "childItems": [{
+                "id": 1,
+                "Name": "Arun",
+                "age": 27,
+                "designation": "Web Developer",
+                "address": "Chennai",
+                "salary": 10000
+            },
+            {
+                "id": 2,
+                "Name": "Anand",
+                "age": 27,
+                "designation": "Web Designing",
+                "address": "Coimbatore",
+                "salary": 20000
+            },
+            {
+                "id": 3,
+                "Name": "Kishore",
+                "age": 27,
+                "designation": "Software Engineer",
+                "address": "Ooty",
+                "salary": 30000
+            },
+            {
+                "id": 4,
+                "Name": "Santhosh",
+                "age": 27,
+                "designation": "Software Testing",
+                "address": "Erode",
+                "salary": 40000
+            }]
+    },
+    {
+        "id": 3,
+        "TableName": "Campaign Performance Metrics",
+        "childItems": [{
+                "id": 1,
+                "Name": "Arun",
+                "age": 27,
+                "designation": "Web Developer",
+                "address": "Chennai",
+                "salary": 10000
+            },
+            {
+                "id": 2,
+                "Name": "Anand",
+                "age": 27,
+                "designation": "Web Designing",
+                "address": "Coimbatore",
+                "salary": 20000
+            },
+            {
+                "id": 3,
+                "Name": "Kishore",
+                "age": 27,
+                "designation": "Software Engineer",
+                "address": "Ooty",
+                "salary": 30000
+            },
+            {
+                "id": 4,
+                "Name": "Santhosh",
+                "age": 27,
+                "designation": "Software Testing",
+                "address": "Erode",
+                "salary": 40000
+            }]
+    },
+    {
+        "id": 4,
+        "TableName": "Campaign Performance Metrics - Google",
+        "childItems": [{
+                "id": 1,
+                "Name": "Arun",
+                "age": 27,
+                "designation": "Web Developer",
+                "address": "Chennai",
+                "salary": 10000
+            },
+            {
+                "id": 2,
+                "Name": "Anand",
+                "age": 27,
+                "designation": "Web Designing",
+                "address": "Coimbatore",
+                "salary": 20000
+            },
+            {
+                "id": 3,
+                "Name": "Kishore",
+                "age": 27,
+                "designation": "Software Engineer",
+                "address": "Ooty",
+                "salary": 30000
+            },
+            {
+                "id": 4,
+                "Name": "Santhosh",
+                "age": 27,
+                "designation": "Software Testing",
+                "address": "Erode",
+                "salary": 40000
+            }]
+    },
+    {
+        "id": 5,
+        "TableName": "Campaign Performance Metrics - Bing",
+        "childItems": [{
+                "id": 1,
+                "Name": "Arun",
+                "age": 27,
+                "designation": "Web Developer",
+                "address": "Chennai",
+                "salary": 10000
+            },
+            {
+                "id": 2,
+                "Name": "Anand",
+                "age": 27,
+                "designation": "Web Designing",
+                "address": "Coimbatore",
+                "salary": 20000
+            },
+            {
+                "id": 3,
+                "Name": "Kishore",
+                "age": 27,
+                "designation": "Software Engineer",
+                "address": "Ooty",
+                "salary": 30000
+            },
+            {
+                "id": 4,
+                "Name": "Santhosh",
+                "age": 27,
+                "designation": "Software Testing",
+                "address": "Erode",
+                "salary": 40000
+            }]
+    },
+    {
+        "id": 6,
+        "TableName": "Top PPC Performing Ad",
+        "childItems": [{
+                "id": 1,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "26.87%",
+                "clicks": "316"
+            },
+            {
+                "id": 2,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Branded",
+                "ad group": "BMW of Silver Spring BMW",
+                "ctr": "36.21%",
+                "clicks": "243"
+            },
+            {
+                "id": 3,
+                "ad":"new BMW Offers",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "33.27%",
+                "clicks": "196"
+            },
+            {
+                "id": 4,
+                "ad":"BMW of Silver Spring",
+                "campaign": "New/BMW",
+                "ad group": "new BMW-car",
+                "ctr": "7.84%",
+                "clicks": "121"
+            }]
+    },
+    {
+        "id": 7,
+        "TableName": "Locations",
+        "childItems": [{
+                "id": 1,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "26.87%",
+                "clicks": "316"
+            },
+            {
+                "id": 2,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Branded",
+                "ad group": "BMW of Silver Spring BMW",
+                "ctr": "36.21%",
+                "clicks": "243"
+            },
+            {
+                "id": 3,
+                "ad":"new BMW Offers",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "33.27%",
+                "clicks": "196"
+            },
+            {
+                "id": 4,
+                "ad":"BMW of Silver Spring",
+                "campaign": "New/BMW",
+                "ad group": "new BMW-car",
+                "ctr": "7.84%",
+                "clicks": "121"
+            }]
+    },
+    {
+        "id": 8,
+        "TableName": "Models",
+        "childItems": [{
+                "id": 1,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "26.87%",
+                "clicks": "316"
+            },
+            {
+                "id": 2,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Branded",
+                "ad group": "BMW of Silver Spring BMW",
+                "ctr": "36.21%",
+                "clicks": "243"
+            },
+            {
+                "id": 3,
+                "ad":"new BMW Offers",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "33.27%",
+                "clicks": "196"
+            },
+            {
+                "id": 4,
+                "ad":"BMW of Silver Spring",
+                "campaign": "New/BMW",
+                "ad group": "new BMW-car",
+                "ctr": "7.84%",
+                "clicks": "121"
+            }]
+    },
+    {
+        "id": 9,
+        "TableName": "Campaign Performance Metrics",
+        "childItems": [{
+                "id": 1,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "26.87%",
+                "clicks": "316"
+            },
+            {
+                "id": 2,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Branded",
+                "ad group": "BMW of Silver Spring BMW",
+                "ctr": "36.21%",
+                "clicks": "243"
+            },
+            {
+                "id": 3,
+                "ad":"new BMW Offers",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "33.27%",
+                "clicks": "196"
+            },
+            {
+                "id": 4,
+                "ad":"BMW of Silver Spring",
+                "campaign": "New/BMW",
+                "ad group": "new BMW-car",
+                "ctr": "7.84%",
+                "clicks": "121"
+            }]
+    },
+    {
+        "id": 10,
+        "TableName": "Creative Type",
+        "childItems": [{
+                "id": 1,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "26.87%",
+                "clicks": "316"
+            },
+            {
+                "id": 2,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Branded",
+                "ad group": "BMW of Silver Spring BMW",
+                "ctr": "36.21%",
+                "clicks": "243"
+            },
+            {
+                "id": 3,
+                "ad":"new BMW Offers",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "33.27%",
+                "clicks": "196"
+            },
+            {
+                "id": 4,
+                "ad":"BMW of Silver Spring",
+                "campaign": "New/BMW",
+                "ad group": "new BMW-car",
+                "ctr": "7.84%",
+                "clicks": "121"
+            }]
+    },
+    {
+        "id": 11,
+        "TableName": "Display Locations",
+        "childItems": [{
+                "id": 1,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "26.87%",
+                "clicks": "316"
+            },
+            {
+                "id": 2,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Branded",
+                "ad group": "BMW of Silver Spring BMW",
+                "ctr": "36.21%",
+                "clicks": "243"
+            },
+            {
+                "id": 3,
+                "ad":"new BMW Offers",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "33.27%",
+                "clicks": "196"
+            },
+            {
+                "id": 4,
+                "ad":"BMW of Silver Spring",
+                "campaign": "New/BMW",
+                "ad group": "new BMW-car",
+                "ctr": "7.84%",
+                "clicks": "121"
+            }]
+    },
+    {
+        "id": 12,
+        "TableName": "Display Ads",
+        "childItems": [{
+                "id": 1,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "26.87%",
+                "clicks": "316"
+            },
+            {
+                "id": 2,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Branded",
+                "ad group": "BMW of Silver Spring BMW",
+                "ctr": "36.21%",
+                "clicks": "243"
+            },
+            {
+                "id": 3,
+                "ad":"new BMW Offers",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "33.27%",
+                "clicks": "196"
+            },
+            {
+                "id": 4,
+                "ad":"BMW of Silver Spring",
+                "campaign": "New/BMW",
+                "ad group": "new BMW-car",
+                "ctr": "7.84%",
+                "clicks": "121"
+            }]
+    },
+    {
+        "id": 13,
+        "TableName": "Display Frequency",
+        "childItems": [{
+                "id": 1,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "26.87%",
+                "clicks": "316"
+            },
+            {
+                "id": 2,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Branded",
+                "ad group": "BMW of Silver Spring BMW",
+                "ctr": "36.21%",
+                "clicks": "243"
+            },
+            {
+                "id": 3,
+                "ad":"new BMW Offers",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "33.27%",
+                "clicks": "196"
+            },
+            {
+                "id": 4,
+                "ad":"BMW of Silver Spring",
+                "campaign": "New/BMW",
+                "ad group": "new BMW-car",
+                "ctr": "7.84%",
+                "clicks": "121"
+            }]
+    },
+    {
+        "id": 14,
+        "TableName": "Dynamic Display Campaign Performance Metrics ",
+        "childItems": [{
+                "id": 1,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "26.87%",
+                "clicks": "316"
+            },
+            {
+                "id": 2,
+                "ad":"BMW of Silver Spring",
+                "campaign": "Branded",
+                "ad group": "BMW of Silver Spring BMW",
+                "ctr": "36.21%",
+                "clicks": "243"
+            },
+            {
+                "id": 3,
+                "ad":"new BMW Offers",
+                "campaign": "Regional",
+                "ad group": "Silver Spring BMW",
+                "ctr": "33.27%",
+                "clicks": "196"
+            },
+            {
+                "id": 4,
+                "ad":"BMW of Silver Spring",
+                "campaign": "New/BMW",
+                "ad group": "new BMW-car",
+                "ctr": "7.84%",
+                "clicks": "121"
+            }]
+    },
+    {
+        "id": 15,
+        "TableName": "Top 5 Clicked Vehicles",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 16,
+        "TableName": "VDPs",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    ,
+    {
+        "id": 17,
+        "TableName": "Device",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
+            }]
+    },
+    {
+        "id": 18,
+        "TableName": "Geo",
+        "childItems": [{
+                "id": 1,
+                "new":"2015 Chrysler 300",
+                "": "17%"
+            },
+            {
+                "id": 2,
+                "new":"2016 Chrysler 200",
+                "": "14%"
+            },
+            {
+                "id": 3,
+                "new":"2016 Jeep Cherokee",
+                "": "8%"
+            },
+            {
+                "id": 4,
+                "new":"2017 Chrysler Pacifica",
+                "": "8%"
+            },
+            {
+                "id": 5,
+                "new":"2016 Chrysler Pacifica",
+                "": "8%"
             }]
     }
+    
 ]

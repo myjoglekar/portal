@@ -369,7 +369,7 @@ function pieChart(value) {
 //    var h = 200;
     var w = 400;
     var h = 260;
-  var r = h / 2;
+    var r = Math.min(w, h) / 2;
     var color = d3.scale.category20c();
     d3.json(value.url, function (error, data) {
         var vis = d3.select('#graph' + value.chartId).append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
