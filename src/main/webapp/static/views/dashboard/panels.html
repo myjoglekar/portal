@@ -30,10 +30,11 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <center><div id="graph{{panel.chartId}}"></div></center>
+<!--                                <center><div id="graph{{panel.chartId}}"></div></center>-->
                             </div>
                         </div>
                     </div>
+                    
 
                     <div id="preview{{$index + 1}}" class="modal fade">
                         <div class="modal-dialog">
@@ -56,7 +57,7 @@
 
                                     <div class="form-group form-inline">
                                         <label class="col-sm-2" style="font-family: cursive">Preview</label>    
-                                        <div id="graph{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div>
+                                        <center><div id="graph{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div></center>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
