@@ -367,10 +367,11 @@ function groupedBarChart(value) {
 function pieChart(value) {
 //    var w = 300;
 //    var h = 200;
-    var w = 400;
+    var w = 300;
     var h = 260;
-    var r = Math.min(w, h) / 2;
-    var color = d3.scale.category20c();
+    var r = h / 2;
+    var color = d3.scale.category20b();
+
     d3.json(value.url, function (error, data) {
         var vis = d3.select('#graph' + value.chartId).append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
         var pie = d3.layout.pie().value(function (d) {
@@ -394,7 +395,7 @@ function pieChart(value) {
             return data[i].label;
         }
         );
-    })
+    });
 }
 
 function donutChart(value) {
