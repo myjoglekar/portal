@@ -7,13 +7,13 @@ app.controller('TabController', function ($scope, $http, $stateParams) {
     var uid = 7;
     $scope.addTab = function (tab) {
         $scope.id = uid++;
-        tab.tabItems.push({tabId: "$scope.id", tabName: "New Tab", tabClose: "isClose"});
+        tab.tabItems.push({tabId: $scope.id, tabName: "New Tab", tabClose: "isClose"});
     };
     console.log("StateParams Tab : " + $stateParams);
 
     console.log($scope.tabs);
-    $scope.removeTab = function (index) {
+    $scope.deleteTab = function (index) {
         $scope.tabs.splice(index, 1);
-
     };
+    
 });

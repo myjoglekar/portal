@@ -6,7 +6,7 @@
             <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active" >
                 <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" style="cursor: pointer;color:black;">
                     {{tabItem.tabName}}
-                    <i ng-if="tabItem.tabClose" class="fa fa-times-circle" ng-click="removeTab($index)"></i>
+                    <button class="btn btn-danger btn-xs" ng-if="tabItem.tabClose" ng-click="deleteTab($index)" style="border-radius: 50%;"><span  class="fa fa-times-circle"></span></button>
                 </a>
             </li>
             <li>
