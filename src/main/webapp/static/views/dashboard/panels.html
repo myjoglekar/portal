@@ -1,3 +1,10 @@
+<style>
+    table,td, th {
+        border:1px solid black;
+        padding: 10px;
+        border-collapse: collapse; 
+    }
+</style>
 <div ng-controller="PanelController">
     <span class="pull-right" style="padding-top: 5px;padding-right: 5px;">
         <button ng-click="add()" class="addButton"><span class="fa fa-plus"> Add</span></button>
@@ -14,14 +21,13 @@
 
         <div class="panel-body">
             <div class="row"  ngsf-fullscreen="fullscreenCtrl">
-                <div class="col-sm-4" ng-repeat="panel in panels">
+                <div ng-repeat="panel in panels" class="col-sm-4">
                     <div ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
                         <div class="panel panel-default sample" ng-drag="true" ng-drag-data="panel">
                             <div class="panel-heading panel-heading-sm">
                                 <div class="panel-title">
                                     <span class="{{panel.icon}}"></span> 
-                                    <span class="text-uppercase">{{panel.chartType}} chart</span>
-
+                                    <span class="text-uppercase">{{panel.chartType}}</span>
                                     <span class="pull-right">
                                         <span class="fa fa-refresh icon" ></span>
                                         <span data-toggle="modal" data-target="#preview{{$index + 1}}" ><span class="fa fa-edit icon"></span></span>

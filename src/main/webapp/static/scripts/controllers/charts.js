@@ -469,7 +469,7 @@ function table(value) {
   function tabulate(data, columns) {
 		var table = d3.select("#graph" + value.chartId).append('table')
 		var thead = table.append('thead')
-		var	tbody = table.append('tbody');
+		var tbody = table.append('tbody');
 
 		// append the header row
 		thead.append('tr')

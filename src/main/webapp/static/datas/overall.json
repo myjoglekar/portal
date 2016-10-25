@@ -27,5 +27,11 @@
         "chartType": "donut",
         "url": "static/datas/donutChart.json",
         "icon": "fa fa-area-chart"
+    },
+    {
+        "chartId": 6,
+        "chartType": "Market Share",
+        "url": "static/datas/marketShare.json",
+        "icon": "fa fa-table"
     }
 ]
