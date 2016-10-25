@@ -32,4 +32,10 @@
     "chartType": "groupedbar",
     "url": "static/datas/groupedBarChart.json",
     "icon":"fa fa-pie-chart"
+},
+{
+    "chartId": 7,
+    "chartType": "table",
+    "url": "static/datas/table.json",
+    "icon":"fa fa-pie-chart"
 }]

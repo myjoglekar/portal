@@ -17,6 +17,8 @@ $.get('static/datas/defaultPanel.json', function (response, status) {
             pieChart(value);
         } else if (value.chartType === "donut") {
             donutChart(value);
+        }else if (value.chartType === "table") {
+            table(value);
         }
         else {
             alert("No Charts Available");
@@ -441,4 +443,62 @@ function donutChart(value) {
                     return d.data.crimeType;
                 });
     });
+}
+
+
+function table(value) {
+    d3.json(value.url, function (error,data) {
+        var columns = [];
+        var columnsObject = [];
+        angular.forEach(data, function(child, childKey){
+        console.log("child : "+child+" ----- "+child.TableName);
+        angular.forEach(child.childItems, function(value, key){
+            columnsObject.push(value);
+            angular.forEach(value, function(object, header){
+                        console.log("Header : "+header)
+                for (property in header) {
+                    if (columns.indexOf(header) === -1) {
+                        columns.push(header);
+                        console.log(columns);
+                    };
+                };            
+            });
+           
+        });
+})
+  function tabulate(data, columns) {
+		var table = d3.select("#graph" + value.chartId).append('table')
+		var thead = table.append('thead')
+		var	tbody = table.append('tbody');
+
+		// append the header row
+		thead.append('tr')
+		  .selectAll('th')
+		  .data(columns).enter()
+		  .append('th')
+		    .text(function (column) { return column; });
+
+		// create a row for each object in the data
+		var rows = tbody.selectAll('tr')
+		  .data(data)
+		  .enter()
+		  .append('tr');
+
+		// create a cell in each row for each column
+		var cells = rows.selectAll('td')
+		  .data(function (row) {
+		    return columns.map(function (column) {
+		      return {column: column, value: row[column]};
+		    });
+		  })
+		  .enter()
+		  .append('td')
+		    .text(function (d) { return d.value; });
+
+	  return table;
+	}
+	// render the table(s)
+	tabulate(columnsObject, columns); // 2 column table
+
+});
 }

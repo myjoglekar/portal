@@ -44,7 +44,9 @@ app.controller("DashboardController", function ($scope, $http, $stateParams) {
             pieChart(value);
         } else if (value.type === "donut") {
             donutChart(value);
-        } else {
+        } else if (value.type === "table") {
+            table(value);
+        }else {
             alert("No Charts Available");
         }
 
