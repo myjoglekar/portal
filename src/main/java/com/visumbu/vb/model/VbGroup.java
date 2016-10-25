@@ -23,15 +23,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author user
  */
 @Entity
-@Table(name = "wa_group")
+@Table(name = "vb_group")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WaGroup.findAll", query = "SELECT w FROM WaGroup w"),
-    @NamedQuery(name = "WaGroup.findById", query = "SELECT w FROM WaGroup w WHERE w.id = :id"),
-    @NamedQuery(name = "WaGroup.findByDescription", query = "SELECT w FROM WaGroup w WHERE w.description = :description"),
-    @NamedQuery(name = "WaGroup.findByName", query = "SELECT w FROM WaGroup w WHERE w.name = :name"),
-    @NamedQuery(name = "WaGroup.findByState", query = "SELECT w FROM WaGroup w WHERE w.state = :state")})
-public class WaGroup implements Serializable {
+    @NamedQuery(name = "VbGroup.findAll", query = "SELECT v FROM VbGroup w"),
+    @NamedQuery(name = "VbGroup.findById", query = "SELECT v FROM VbGroup v WHERE v.id = :id"),
+    @NamedQuery(name = "VbGroup.findByDescription", query = "SELECT v FROM VbGroup v WHERE v.description = :description"),
+    @NamedQuery(name = "VbGroup.findByName", query = "SELECT v FROM VbGroup v WHERE v.name = :name"),
+    @NamedQuery(name = "VbGroup.findByState", query = "SELECT v FROM VbGroup v WHERE v.state = :state")})
+public class VbGroup implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +48,10 @@ public class WaGroup implements Serializable {
     @Column(name = "state")
     private String state;
 
-    public WaGroup() {
+    public VbGroup() {
     }
 
-    public WaGroup(Integer id) {
+    public VbGroup(Integer id) {
         this.id = id;
     }
 
@@ -97,10 +97,10 @@ public class WaGroup implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof WaGroup)) {
+        if (!(object instanceof VbGroup)) {
             return false;
         }
-        WaGroup other = (WaGroup) object;
+        VbGroup other = (VbGroup) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -109,7 +109,7 @@ public class WaGroup implements Serializable {
 
     @Override
     public String toString() {
-        return "com.visumbu.wa.model.WaGroup[ id=" + id + " ]";
+        return "com.visumbu.vb.model.VbGroup[ id=" + id + " ]";
     }
     
 }

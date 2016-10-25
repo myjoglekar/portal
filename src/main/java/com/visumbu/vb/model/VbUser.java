@@ -26,28 +26,28 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author user
  */
 @Entity
-@Table(name = "wa_user")
+@Table(name = "vb_user")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WaUser.findAll", query = "SELECT w FROM WaUser w"),
-    @NamedQuery(name = "WaUser.findById", query = "SELECT w FROM WaUser w WHERE w.id = :id"),
-    @NamedQuery(name = "WaUser.findByCreatedTime", query = "SELECT w FROM WaUser w WHERE w.createdTime = :createdTime"),
-    @NamedQuery(name = "WaUser.findByDisableNotification", query = "SELECT w FROM WaUser w WHERE w.disableNotification = :disableNotification"),
-    @NamedQuery(name = "WaUser.findByEmail", query = "SELECT w FROM WaUser w WHERE w.email = :email"),
-    @NamedQuery(name = "WaUser.findByEmailSignature", query = "SELECT w FROM WaUser w WHERE w.emailSignature = :emailSignature"),
-    @NamedQuery(name = "WaUser.findByFailedLoginCount", query = "SELECT w FROM WaUser w WHERE w.failedLoginCount = :failedLoginCount"),
-    @NamedQuery(name = "WaUser.findByFirstName", query = "SELECT w FROM WaUser w WHERE w.firstName = :firstName"),
-    @NamedQuery(name = "WaUser.findByGender", query = "SELECT w FROM WaUser w WHERE w.gender = :gender"),
-    @NamedQuery(name = "WaUser.findByIsAdmin", query = "SELECT w FROM WaUser w WHERE w.isAdmin = :isAdmin"),
-    @NamedQuery(name = "WaUser.findByLastLoginTime", query = "SELECT w FROM WaUser w WHERE w.lastLoginTime = :lastLoginTime"),
-    @NamedQuery(name = "WaUser.findByLastName", query = "SELECT w FROM WaUser w WHERE w.lastName = :lastName"),
-    @NamedQuery(name = "WaUser.findByPassword", query = "SELECT w FROM WaUser w WHERE w.password = :password"),
-    @NamedQuery(name = "WaUser.findByPrimaryPhone", query = "SELECT w FROM WaUser w WHERE w.primaryPhone = :primaryPhone"),
-    @NamedQuery(name = "WaUser.findBySecondaryPhone", query = "SELECT w FROM WaUser w WHERE w.secondaryPhone = :secondaryPhone"),
-    @NamedQuery(name = "WaUser.findByStatus", query = "SELECT w FROM WaUser w WHERE w.status = :status"),
-    @NamedQuery(name = "WaUser.findByTheme", query = "SELECT w FROM WaUser w WHERE w.theme = :theme"),
-    @NamedQuery(name = "WaUser.findByUserName", query = "SELECT w FROM WaUser w WHERE w.userName = :userName")})
-public class WaUser implements Serializable {
+    @NamedQuery(name = "VbUser.findAll", query = "SELECT v FROM VbUser w"),
+    @NamedQuery(name = "VbUser.findById", query = "SELECT v FROM VbUser v WHERE v.id = :id"),
+    @NamedQuery(name = "VbUser.findByCreatedTime", query = "SELECT v FROM VbUser v WHERE v.createdTime = :createdTime"),
+    @NamedQuery(name = "VbUser.findByDisableNotification", query = "SELECT v FROM VbUser v WHERE v.disableNotification = :disableNotification"),
+    @NamedQuery(name = "VbUser.findByEmail", query = "SELECT v FROM VbUser v WHERE v.email = :email"),
+    @NamedQuery(name = "VbUser.findByEmailSignature", query = "SELECT v FROM VbUser v WHERE v.emailSignature = :emailSignature"),
+    @NamedQuery(name = "VbUser.findByFailedLoginCount", query = "SELECT v FROM VbUser v WHERE v.failedLoginCount = :failedLoginCount"),
+    @NamedQuery(name = "VbUser.findByFirstName", query = "SELECT v FROM VbUser v WHERE v.firstName = :firstName"),
+    @NamedQuery(name = "VbUser.findByGender", query = "SELECT v FROM VbUser v WHERE v.gender = :gender"),
+    @NamedQuery(name = "VbUser.findByIsAdmin", query = "SELECT v FROM VbUser v WHERE v.isAdmin = :isAdmin"),
+    @NamedQuery(name = "VbUser.findByLastLoginTime", query = "SELECT v FROM VbUser v WHERE v.lastLoginTime = :lastLoginTime"),
+    @NamedQuery(name = "VbUser.findByLastName", query = "SELECT v FROM VbUser v WHERE v.lastName = :lastName"),
+    @NamedQuery(name = "VbUser.findByPassword", query = "SELECT v FROM VbUser v WHERE v.password = :password"),
+    @NamedQuery(name = "VbUser.findByPrimaryPhone", query = "SELECT v FROM VbUser v WHERE v.primaryPhone = :primaryPhone"),
+    @NamedQuery(name = "VbUser.findBySecondaryPhone", query = "SELECT v FROM VbUser v WHERE v.secondaryPhone = :secondaryPhone"),
+    @NamedQuery(name = "VbUser.findByStatus", query = "SELECT v FROM VbUser v WHERE v.status = :status"),
+    @NamedQuery(name = "VbUser.findByTheme", query = "SELECT v FROM VbUser v WHERE v.theme = :theme"),
+    @NamedQuery(name = "VbUser.findByUserName", query = "SELECT v FROM VbUser v WHERE v.userName = :userName")})
+public class VbUser implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,10 +102,10 @@ public class WaUser implements Serializable {
     @Column(name = "user_name")
     private String userName;
 
-    public WaUser() {
+    public VbUser() {
     }
 
-    public WaUser(Integer id) {
+    public VbUser(Integer id) {
         this.id = id;
     }
 
@@ -255,10 +255,10 @@ public class WaUser implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof WaUser)) {
+        if (!(object instanceof VbUser)) {
             return false;
         }
-        WaUser other = (WaUser) object;
+        VbUser other = (VbUser) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -267,7 +267,7 @@ public class WaUser implements Serializable {
 
     @Override
     public String toString() {
-        return "com.visumbu.wa.model.WaUser[ id=" + id + " ]";
+        return "com.visumbu.vb.model.VbUser[ id=" + id + " ]";
     }
     
 }

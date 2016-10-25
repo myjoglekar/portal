@@ -7,7 +7,7 @@ package com.visumbu.vb.admin.controller;
 
 import com.visumbu.vb.admin.service.UserService;
 import com.visumbu.vb.bean.LoginUserBean;
-import com.visumbu.vb.model.WaUser;
+import com.visumbu.vb.model.VbUser;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -38,13 +38,13 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    WaUser create(HttpServletRequest request, HttpServletResponse response, @RequestBody WaUser teUser) {
+    VbUser create(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
         return userService.create(teUser);
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
-    WaUser update(HttpServletRequest request, HttpServletResponse response, @RequestBody WaUser teUser) {
+    VbUser update(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
         return userService.update(teUser);
     }
 
@@ -56,13 +56,13 @@ public class UserController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    WaUser read(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+    VbUser read(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
         return userService.read(id);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
-    WaUser delete(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+    VbUser delete(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
         return userService.delete(id);
     }
 

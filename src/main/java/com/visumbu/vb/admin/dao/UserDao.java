@@ -6,7 +6,7 @@
 package com.visumbu.vb.admin.dao;
 
 import com.visumbu.vb.dao.BaseDao;
-import com.visumbu.vb.model.WaUser;
+import com.visumbu.vb.model.VbUser;
 import java.util.List;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -20,12 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository("userDao")
 public class UserDao extends BaseDao {
 
-    public List<WaUser> read() {
+    public List<VbUser> read() {
         Query query = sessionFactory.getCurrentSession().createQuery("from WaUser where status is null or status != 'Deleted'");
         return query.list();
     }
     
-    public List<WaUser> findByUserName(String username) {
+    public List<VbUser> findByUserName(String username) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery("WaUser.findByUserName");
         query.setParameter("userName", username);
         return query.list();

@@ -8,7 +8,7 @@ package com.visumbu.vb.admin.controller;
 import com.visumbu.vb.admin.service.DashboardService;
 import com.visumbu.vb.admin.service.DataSourceService;
 import com.visumbu.vb.admin.service.DealerService;
-import com.visumbu.vb.model.WaUser;
+import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.utils.DateUtils;
 import java.io.IOException;
 import java.security.GeneralSecurityException;

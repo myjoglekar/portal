@@ -7,7 +7,7 @@ package com.visumbu.vb.admin.service;
 
 import com.visumbu.vb.admin.dao.UserDao;
 import com.visumbu.vb.bean.LoginUserBean;
-import com.visumbu.vb.model.WaUser;
+import com.visumbu.vb.model.VbUser;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,45 +26,45 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    public WaUser create(WaUser teUser) {
-        List<WaUser> users = userDao.findByUserName(teUser.getUserName());
+    public VbUser create(VbUser teUser) {
+        List<VbUser> users = userDao.findByUserName(teUser.getUserName());
         if (users.isEmpty()) {
             teUser.setStatus("Active");
             teUser.setCreatedTime(new Date());
             teUser.setTheme("default");
-            return (WaUser) userDao.create(teUser);
+            return (VbUser) userDao.create(teUser);
         }
         return null;
     }
 
-    public WaUser read(Integer id) {
-        return (WaUser) userDao.read(WaUser.class, id);
+    public VbUser read(Integer id) {
+        return (VbUser) userDao.read(VbUser.class, id);
     }
 
-    public List<WaUser> read() {
-        List<WaUser> users = userDao.read();
+    public List<VbUser> read() {
+        List<VbUser> users = userDao.read();
         return users;
     }
 
-    public WaUser update(WaUser teUser) {
-        return (WaUser) userDao.update(teUser);
+    public VbUser update(VbUser teUser) {
+        return (VbUser) userDao.update(teUser);
     }
 
-    public WaUser delete(Integer id) {
-        WaUser teUser = read(id);
+    public VbUser delete(Integer id) {
+        VbUser teUser = read(id);
         teUser.setStatus("Deleted");
         return update(teUser);
     }
 
-    public WaUser delete(WaUser teUser) {
-        return (WaUser) userDao.delete(teUser);
+    public VbUser delete(VbUser teUser) {
+        return (VbUser) userDao.delete(teUser);
     }
 
     public LoginUserBean authenicate(LoginUserBean userBean) {
-        List<WaUser> users = userDao.findByUserName(userBean.getUsername());
+        List<VbUser> users = userDao.findByUserName(userBean.getUsername());
         LoginUserBean loginUserBean = null;
         if (!users.isEmpty()) {
-            WaUser user = users.get(0);
+            VbUser user = users.get(0);
             if (user.getPassword().equals(userBean.getPassword())) {
                 user.setFailedLoginCount(0);
                 user.setLastLoginTime(new Date());
@@ -84,7 +84,7 @@ public class UserService {
         return loginUserBean;
     }
 
-    private LoginUserBean toLoginUserBean(WaUser teUser) {
+    private LoginUserBean toLoginUserBean(VbUser teUser) {
         LoginUserBean userBean = new LoginUserBean();
         userBean.setUsername(teUser.getUserName());
         userBean.setFailLoginCount(teUser.getFailedLoginCount());
