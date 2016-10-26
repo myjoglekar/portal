@@ -38,11 +38,12 @@ public class DataSourceService {
     
     public List getAllDimensions(String dataSourceName, String dataSet) throws IOException, GeneralSecurityException {
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
-        return dataSource.getDataDimensions(dataSet);
+        return dataSource.getDataDimensions();
     }
     
-    public List getData(String dataSourceName, String dataSet, String dimension, String profileId) throws IOException, GeneralSecurityException {
+    public List getData(String dataSourceName, String dataSet, String dimensions, String profileId, String filter, String sort) throws IOException, GeneralSecurityException {
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
-        return dataSource.getData(dataSet, dimension, profileId);
+        return dataSource.getData(dataSet, dimensions, profileId, filter, sort);
     }
+
 }

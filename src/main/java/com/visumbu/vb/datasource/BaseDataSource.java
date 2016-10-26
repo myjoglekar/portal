@@ -8,6 +8,7 @@ package com.visumbu.vb.datasource;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -37,31 +38,44 @@ public abstract class BaseDataSource {
     }
 
     public abstract List getDataSets();
-    
+
+    public abstract List getDataDimensions();
+
     public abstract List getDataDimensions(String dataSetName);
     
-    public abstract List getData(String dataSetName, String dimension, String profileId)  throws IOException;
-    
-    public static List<String> getAllDataSources() {
-        List<String> dataSources = new ArrayList<>();
-        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(true);
-        provider.addIncludeFilter(new AssignableTypeFilter(BaseDataSource.class));
-
-// scan in org.example.package
-        Set<BeanDefinition> components = provider.findCandidateComponents("com/visumbu/vb/datasource");
-        for (BeanDefinition component : components) {
-            try {
-                Class cls = Class.forName(component.getBeanClassName());
-                System.out.println(cls);
-                // use class cls found
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BaseDataSource.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return dataSources;
+    public  List getData(String dataSetName, String dimension, String profileId)  throws IOException {
+        return null;
     }
-    
+
+    public List getData(String dataSet, String dimensions, String profileId, String filter, String sort) throws IOException {
+        return null;
+    }
+
+    public static List<String> getAllDataSources() {
+        String[] dataSourcesArr = {"BingDataSource", "CenturyInteractiveDataSource", "DealerVaultDataSource", "FacebookDataSource", "GaDataSource", "GoogleAdWordsDataSource", "MapDataSource", "ReviewPushDataSource", "SpeedShiftDataSource", "YestDataSource"};
+        return Arrays.asList(dataSourcesArr);
+        /*
+         List<String> dataSources = new ArrayList<>();
+         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(true);
+         provider.addIncludeFilter(new AssignableTypeFilter(BaseDataSource.class));
+
+         // scan in org.example.package
+         Set<BeanDefinition> components = provider.findCandidateComponents("com/visumbu/vb/datasource");
+         for (BeanDefinition component : components) {
+         try {
+         Class cls = Class.forName(component.getBeanClassName());
+         System.out.println(cls);
+         // use class cls found
+         } catch (ClassNotFoundException ex) {
+         Logger.getLogger(BaseDataSource.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         }
+         return dataSources;
+         */
+    }
+
     public static void main(String argv[]) {
         BaseDataSource.getAllDataSources();
     }
+
 }

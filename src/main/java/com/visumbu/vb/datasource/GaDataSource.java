@@ -51,6 +51,12 @@ public class GaDataSource extends BaseDataSource {
         gaSessionMetric.setDimenstions("Duraction Bucket,ga:sessionDurationBucket");
         metricList.add(gaSessionMetric);
 
+        GaMetric gaAllMetric = new GaMetric();
+        gaAllMetric.setName("all");
+        gaAllMetric.setDisplayName("All");
+        gaAllMetric.setDimenstions("User Type,ga:userType;Session Count,ga:sessionCount;Days Since Last Session,ga:daysSinceLastSession");
+        metricList.add(gaAllMetric);
+
         GaMetric gaUserMetric = new GaMetric();
         gaUserMetric.setName("ga:users");
         gaUserMetric.setDisplayName("Users");
@@ -63,6 +69,11 @@ public class GaDataSource extends BaseDataSource {
     @Override
     public List getDataSets() {
         return getAllDataSets();
+    }
+
+    @Override
+    public List getDataDimensions() {
+        return getDataDimensions("all");
     }
 
     @Override
@@ -89,13 +100,22 @@ public class GaDataSource extends BaseDataSource {
         return dataSets;
     }
 
-    public List getData(String profileId, String metric, String dimension) throws IOException {
+    public List getData(String dataSet, String dimensions, String profileId, String filter, String sort) throws IOException {
         if (profileId == null) {
             profileId = getFirstProfileId(analytics);
         }
-        GaData gaData = analytics.data().ga()
-                .get("ga:" + profileId, "7daysAgo", "today", metric)
-                .setDimensions(dimension)
+        Analytics.Data.Ga.Get get = analytics.data().ga()
+                .get("ga:" + profileId, "7daysAgo", "today", dataSet);
+        if (filter != null) {
+            get.setFilters(filter);
+        }
+        if (sort != null) {
+            get.setSort(sort);
+        }
+        if (dimensions != null) {
+            get.setDimensions(dimensions);
+        }
+        GaData gaData = get
                 .execute();
         return gaData.getRows();
     }
@@ -238,8 +258,8 @@ public class GaDataSource extends BaseDataSource {
         // Query the Core Reporting API for the number of sessions
         // in the past seven days.
         return analytics.data().ga()
-                .get("ga:" + profileId, "7daysAgo", "today", "ga:organicSearches")
-                .setDimensions("ga:source,ga:medium")
+                .get("ga:" + profileId, "7daysAgo", "today", "ga:newUsers,ga:percentNewSessions")
+                .setDimensions("ga:userType")
                 .execute();
     }
 

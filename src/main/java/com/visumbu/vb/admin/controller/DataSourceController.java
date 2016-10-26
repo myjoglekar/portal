@@ -47,24 +47,28 @@ public class DataSourceController {
         return dataSourceService.getAllDataSources();
     }
 
-    @RequestMapping(value = "dataSets/{dataSourceName}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "dataSet/{dataSourceName}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getAllDataSets(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName) throws IOException, GeneralSecurityException {
         return dataSourceService.getAllDataSets(dataSourceName);
     }
 
-    @RequestMapping(value = "dataDimensions/{dataSourceName}/{dataSet}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "dataDimensions/{dataSourceName}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    List getAllDataDimensions(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName,  @PathVariable String dataSet) throws IOException, GeneralSecurityException {
+    List getAllDataDimensions(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName) throws IOException, GeneralSecurityException {
+        String dataSet = request.getParameter("dataSet");
         return dataSourceService.getAllDimensions(dataSourceName, dataSet);
     }
 
-    @RequestMapping(value = "data/{dataSourceName}/{dataSet}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "data/{dataSourceName}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    List getData(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName,  @PathVariable String dataSet) throws IOException, GeneralSecurityException {
+    List getData(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName) throws IOException, GeneralSecurityException {
         String profileId = request.getParameter("profileId");
         String dimensions = request.getParameter("dimensions");
-        return dataSourceService.getData(dataSourceName, dataSet, dimensions, profileId);
+        String dataSet = request.getParameter("dataSet");
+        String sort = request.getParameter("sort");
+        String filter = request.getParameter("filter");
+        return dataSourceService.getData(dataSourceName, dataSet, dimensions, profileId, filter, sort);
     }
 
     @ExceptionHandler
