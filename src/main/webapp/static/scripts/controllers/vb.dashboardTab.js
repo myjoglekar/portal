@@ -12,8 +12,9 @@ app.controller('TabController', function ($scope, $http, $stateParams) {
     console.log("StateParams Tab : " + $stateParams);
 
     console.log($scope.tabs);
-    $scope.deleteTab = function (index) {
-        $scope.tabs.splice(index, 1);
+    
+    $scope.deleteTab = function (index, tab) {
+        tab.tabItems.splice(index, 1);
     };
     
 });

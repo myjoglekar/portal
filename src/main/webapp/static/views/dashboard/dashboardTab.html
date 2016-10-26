@@ -2,19 +2,19 @@
 
     <div class="tab-pane active" ng-repeat="tab in tabs">
         <h3>{{tab.dashboardTitle}}</h3>
-        <ul class="nav nav-tabs list-inline">
-            <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active" >
+        <ul class="nav nav-tabs list-inline"> 
+            <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active"> <span class="fa fa-times-circle" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)" style="border-radius: 50%;"></span>
                 <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" style="cursor: pointer;color:black;">
                     {{tabItem.tabName}}
-                    <button class="btn btn-danger btn-xs" ng-if="tabItem.tabClose" ng-click="deleteTab($index)" style="border-radius: 50%;"><span  class="fa fa-times-circle"></span></button>
                 </a>
+
             </li>
             <li>
                 <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span>
             </li>
         </ul>
     </div>
-    
+
     <ui-view></ui-view>
-    
+
 </div>
