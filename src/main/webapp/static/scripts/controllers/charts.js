@@ -17,7 +17,7 @@ $.get('static/datas/defaultPanel.json', function (response, status) {
             pieChart(value);
         } else if (value.chartType === "donut") {
             donutChart(value);
-        }else if (value.chartType === "table") {
+        } else if (value.chartType === "table") {
             table(value);
         }
         else {
@@ -77,7 +77,7 @@ function lineChart(value) {
                 .y(function (d) {
                     return y(y_dim_accessor(d));
                 })
-        var graph = d3.select("#graph" + value.chartId).append("svg:svg")
+        var graph = d3.select("#" + value.dispChart + value.chartId).append("svg:svg")
                 .attr("width", w + m[1] + m[3])
                 .attr("height", h + m[0] + m[2])
                 .append("svg:g")
@@ -125,7 +125,7 @@ function areaChart(value) {
             .y1(function (d) {
                 return y(d.close);
             });
-    var svg = d3.select("#graph" + value.chartId).append("svg")
+    var svg = d3.select("#" + value.dispChart + value.chartId).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -183,7 +183,7 @@ function barChart(value) {
             .scale(y)
             .orient("left")
             .ticks(10);
-    var svg = d3.select("#graph" + value.chartId).append("svg")
+    var svg = d3.select("#" + value.dispChart + value.chartId).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -259,7 +259,7 @@ function groupedBarChart(value) {
             .scale(y)
             .orient("left")
             .tickFormat(d3.format(".2s"));
-    var svg = d3.select("#graph" + value.chartId).append("svg")
+    var svg = d3.select("#" + value.dispChart + value.chartId).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -375,7 +375,7 @@ function pieChart(value) {
     var color = d3.scale.category20b();
 
     d3.json(value.url, function (error, data) {
-        var vis = d3.select('#graph' + value.chartId).append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
+        var vis = d3.select("#" + value.dispChart + value.chartId).append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
         var pie = d3.layout.pie().value(function (d) {
             return d.value;
         });
@@ -418,7 +418,7 @@ function donutChart(value) {
             .value(function (d) {
                 return d.totalCrimes;
             });
-    var svg = d3.select("#graph" + value.chartId).append("svg")
+    var svg = d3.select("#" + value.dispChart + value.chartId).append("svg")
             .attr("width", width)
             .attr("height", height)
             .append("g")
@@ -447,6 +447,8 @@ function donutChart(value) {
 
 
 function table(value) {
+
+    
     d3.json(value.url, function (error,data) {
         var columns = [];
         var columnsObject = [];
@@ -467,7 +469,7 @@ function table(value) {
         });
 })
   function tabulate(data, columns) {
-		var table = d3.select("#graph" + value.chartId).append('table')
+		var table = d3.select("#" + value.dispChart + value.chartId).append('table')
 		var thead = table.append('thead')
 		var tbody = table.append('tbody');
 

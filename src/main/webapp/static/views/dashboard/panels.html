@@ -1,4 +1,4 @@
-<style>
+<!--<style>
     table,td, th {
         border:1px solid black;
         padding: 5px;
@@ -8,7 +8,7 @@
         background-color: grey;
         color:white;
     }
-</style>
+</style>-->
 <div ng-controller="PanelController">
     <span class="pull-right" style="padding-top: 5px;padding-right: 5px;">
         <button ng-click="add()" class="addButton"><span class="fa fa-plus"> Add</span></button>
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-<!--                                <center><div id="graph{{panel.chartId}}"></div></center>-->
+                                <center><div id="widget{{panel.chartId}}"></div></center>
                             </div>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
 
                                     <div class="form-group form-inline">
                                         <label class="col-sm-2" style="font-family: cursive">Preview</label>    
-                                        <center><div id="graph{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div></center>
+                                        <center><div id="previewChart{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div></center>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -78,6 +78,8 @@
                         </div>
                     </div>
                 </div>
+                
+                
             </div>
         </div>
     </div>
