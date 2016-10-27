@@ -77,13 +77,13 @@
         <!-- Optionally, you can add icons to the links -->
         <li class="active">
             <a ui-sref="dashboard">
-                <i class="fa fa-link"></i> 
+                <i class="glyphicon glyphicon-dashboard"></i> 
                 <span>Dashboard</span>
             </a>
         </li>
         <li class="treeview"> 
-            <a href="#"><i class="fa fa-link"></i> 
-                <span>Multilevel</span> 
+            <a href="#"><i class="glyphicon glyphicon-list-alt"></i> 
+                <span>Reports</span> 
                 <span class="pull-right-container"> 
                     <i class="fa fa-angle-left pull-right"></i> 
                 </span> 
@@ -92,16 +92,16 @@
                 <li ng-repeat="report in reports">
                     <span ng-show="report.isEdit" class="parentEdit">
                         <input type="text" ng-model="report.parentName" class="textbox">
-                        <span class="fa fa-save" ng-click="report.isEdit = false;" style="color:black;"></span>
+                        <span class="fa fa-save" ng-click="report.isEdit = false;" style="white;"></span>
                     </span>
 
-                    <a href="" ng-hide="report.isEdit" class="parentActions" style="color:black;">
+                    <a href="" ng-hide="report.isEdit" class="parentActions" style="color:white;">
                         {{report.parentName}}
 
                         <span class="pull-right"  style="padding-right: 10px;">
-                            <i class="fa fa-plus-circle" ng-click="addChild(report)" aria-hidden="true" style="color:black;"></i>
-                            <i class="fa fa-pencil" ng-click="report.isEdit = true" style="color:black;"></i>
-                            <i class="fa fa-remove" style="color:black;"></i>
+                            <i class="fa fa-plus-circle" ng-click="addChild(report)" aria-hidden="true" style="color:white;"></i>
+                            <i class="fa fa-pencil" ng-click="report.isEdit = true" style="color:white;"></i>
+                            <i class="fa fa-remove" style="color:white;"></i>
                         </span>
                     </a>
 
@@ -111,11 +111,11 @@
                                 <input type="text" ng-model="child.childName" class="textbox">
                                 <span class="fa fa-save" ng-click="child.isEdit = false;" style="color:white;"></span>
                             </span>
-                            <a class="childActions" ng-hide="child.isEdit" ui-sref="report({reportId: child.id})" style="color:black;">
+                            <a class="childActions" ng-hide="child.isEdit" ui-sref="report({reportId: child.id})" style="color:white;">
                                 {{child.childName}}
                                 <span class='pull-right'  style="padding-right: 10px;">
-                                    <i class="fa fa-pencil" ng-click="child.isEdit = true" style="color:black;"></i>
-                                    <i class="fa fa-remove" style="color:black;"></i>
+                                    <i class="fa fa-pencil" ng-click="child.isEdit = true" style="color:white;"></i>
+                                    <i class="fa fa-remove" style="color:white;"></i>
                                 </span>
                             </a>
                         </li>

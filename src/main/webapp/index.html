@@ -6,6 +6,20 @@
         <title>L2T Media | Dashboard</title>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         
+        <link rel="stylesheet" href="static/css/lineChart.css">
+        <link rel="stylesheet" href="static/css/barChart.css">
+        <link rel="stylesheet" href="static/css/areaChart.css">
+         <link rel="stylesheet" href="static/css/donutChart.css">
+         <link rel="stylesheet" href="static/css/groupedBarChart.css">
+<!--         <link rel="stylesheet" href="static/css/pieChart.css">-->
+
+    <link rel="stylesheet" href="static/css/report.css">   
+        <link rel="stylesheet" href="static/css/leftSideMenu.css">
+        <link rel="stylesheet" href="static/css/vb.header.css">
+        
+        <link rel="stylesheet" href="static/css/dashboardTab.css">
+        <link rel="stylesheet" href="static/css/panels.css">
+        
         <link rel="stylesheet" href="static/css/dashboard.css">
         <link rel="stylesheet" href="static/lib/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/lib/css/font-awesome.min.css">
@@ -13,6 +27,9 @@
         <link rel="stylesheet" href="static/lib/css/ionicons.min.css">
         <link rel="stylesheet" href="static/lib/css/AdminLTE.min.css">
         <link rel="stylesheet" href="static/lib/css/skin-blue.min.css">
+        
+        <link rel="stylesheet" href="static/lib/css/daterangepicker.css">
+        
         <style type="text/css">
             .mar-top {
                 margin-top: 8px;
@@ -83,165 +100,7 @@
         <script src="static/scripts/controllers/vb.panel.js"></script>    
         <script src="static/scripts/controllers/vb.reports.js"></script>    
         <!-- Page script -->
-        <script>
-                $(function () {
-                    //Initialize Select2 Elements
-                    $(".select2").select2();
-
-                    //Datemask dd/mm/yyyy
-                    $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-                    //Datemask2 mm/dd/yyyy
-                    $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
-                    //Money Euro
-                    $("[data-mask]").inputmask();
-
-                    //Date range picker
-                    $('#reservation').daterangepicker();
-                    //Date range picker with time picker
-                    $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
-                    //Date range as a button
-                    $('#daterange-btn').daterangepicker(
-                            {
-                                ranges: {
-                                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                                },
-                                startDate: moment().subtract(29, 'days'),
-                                endDate: moment()
-                            },
-                            function (start, end) {
-                                $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                            }
-                    );
-
-                    //Date picker
-                    $('#datepicker').datepicker({
-                        autoclose: true
-                    });
-
-                    //iCheck for checkbox and radio inputs
-                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-                        checkboxClass: 'icheckbox_minimal-blue',
-                        radioClass: 'iradio_minimal-blue'
-                    });
-                    //Red color scheme for iCheck
-                    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-                        checkboxClass: 'icheckbox_minimal-red',
-                        radioClass: 'iradio_minimal-red'
-                    });
-                    //Flat red color scheme for iCheck
-                    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-                        checkboxClass: 'icheckbox_flat-green',
-                        radioClass: 'iradio_flat-green'
-                    });
-
-                    //Colorpicker
-                    $(".my-colorpicker1").colorpicker();
-                    //color picker with addon
-                    $(".my-colorpicker2").colorpicker();
-
-                    //Timepicker
-                    $(".timepicker").timepicker({
-                        showInputs: false
-                    });
-                });
-        </script>
-        <!-- page script -->
-        <script>
-            $(function () {
-                $("#example1").DataTable();
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false
-                });
-            });
-        </script>
-        <script>
-            $(function () {
-                "use strict";
-
-                // AREA CHART
-                var area = new Morris.Area({
-                    element: 'revenue-chart',
-                    resize: true,
-                    data: [
-                        {y: '2011 Q1', item1: 2666, item2: 2666},
-                        {y: '2011 Q2', item1: 2778, item2: 2294},
-                        {y: '2011 Q3', item1: 4912, item2: 1969},
-                        {y: '2011 Q4', item1: 3767, item2: 3597},
-                        {y: '2012 Q1', item1: 6810, item2: 1914},
-                        {y: '2012 Q2', item1: 5670, item2: 4293},
-                        {y: '2012 Q3', item1: 4820, item2: 3795},
-                        {y: '2012 Q4', item1: 15073, item2: 5967},
-                        {y: '2013 Q1', item1: 10687, item2: 4460},
-                        {y: '2013 Q2', item1: 8432, item2: 5713}
-                    ],
-                    xkey: 'y',
-                    ykeys: ['item1', 'item2'],
-                    labels: ['Item 1', 'Item 2'],
-                    lineColors: ['#a0d0e0', '#3c8dbc'],
-                    hideHover: 'auto'
-                });
-
-                // LINE CHART
-                var line = new Morris.Line({
-                    element: 'line-chart',
-                    resize: true,
-                    data: [
-                        {y: '2011 Q1', item1: 2666},
-                        {y: '2011 Q2', item1: 2778},
-                        {y: '2011 Q3', item1: 4912},
-                        {y: '2011 Q4', item1: 3767},
-                        {y: '2012 Q1', item1: 6810},
-                        {y: '2012 Q2', item1: 5670},
-                        {y: '2012 Q3', item1: 4820},
-                        {y: '2012 Q4', item1: 15073},
-                        {y: '2013 Q1', item1: 10687},
-                        {y: '2013 Q2', item1: 8432}
-                    ],
-                    xkey: 'y',
-                    ykeys: ['item1'],
-                    labels: ['Item 1'],
-                    lineColors: ['#3c8dbc'],
-                    hideHover: 'auto'
-                });
-
-                //DONUT CHART
-                var donut = new Morris.Donut({
-                    element: 'sales-chart',
-                    resize: true,
-                    colors: ["#3c8dbc", "#f56954", "#00a65a"],
-                    data: [
-                        {label: "Download Sales", value: 12},
-                        {label: "In-Store Sales", value: 30},
-                        {label: "Mail-Order Sales", value: 20}
-                    ],
-                    hideHover: 'auto'
-                });
-                //BAR CHART
-                var bar = new Morris.Bar({
-                    element: 'bar-chart',
-                    resize: true,
-                    data: [
-                        {y: '2006', a: 100, b: 90},
-                        {y: '2007', a: 75, b: 65},
-                        {y: '2008', a: 50, b: 40},
-                        {y: '2009', a: 75, b: 65},
-                        {y: '2010', a: 50, b: 40},
-                        {y: '2011', a: 75, b: 65},
-                        {y: '2012', a: 100, b: 90}
-                    ],
-                    barColors: ['#00a65a', '#f56954'],
-                    xkey: 'y',
-                    ykeys: ['a', 'b'],
-                    labels: ['CPU', 'DISK'],
-                    hideHover: 'auto'
-                });
-            });
-        </script>
+        
     </body>
 
 </html>
