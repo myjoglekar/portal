@@ -33,29 +33,44 @@
                 <!--<div class="chart" id="line-chart" style="height: 300px;"></div>-->
             </div> 
         </div>
-        <div id="preview{{$index + 1}}" class="modal fade">
-            <div class="modal-dialog">
+        <div class="modal fade" id="preview{{$index + 1}}">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                       Chart
+                        Chart
                         <button class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <input type="text" class="form-control" placeholder="Title" ng-model="panel.title"><br>
-                        <input type="text" class="form-control" placeholder="Url" ng-model="panel.url"><br>
-                        <div class="form-inline">
-                            <label class="col-sm-2" style="font-family:cursive">Type</label>
-                            <span ng-repeat="chartType in chartTypes track by chartType.id">
-                                <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
-                                    <img src="{{chartType.url}}" class="charttype">
-                                </span>
-                            </span>
-                        </div><br/>
-
-                        <div class="form-group form-inline">
-                            <label class="col-sm-2" style="font-family: cursive">Preview</label>    
-                            <center><div id="previewChart{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div></center>
+                        <div class="col-md-6"> 
+                            <div class="form-group">
+                                <div class="form-control">
+                                    <div class="col-md-4"><label>Data Source</label></div>
+                                    <div class="col-md-8">
+                                        <ui-select ng-model="ctrl.person.datasource" theme="bootstrap">
+                                            <ui-select-match placeholder="">{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices repeat="item in ctrl.people | filter: $select.search">
+                                                <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <!--                        <input type="text" class="form-control" placeholder="Title" ng-model="panel.title"><br>
+                                                <input type="text" class="form-control" placeholder="Url" ng-model="panel.url"><br>
+                                                <div class="form-inline">
+                                                    <label class="col-sm-2" style="font-family:cursive">Type</label>
+                                                    <span ng-repeat="chartType in chartTypes track by chartType.id">
+                                                        <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
+                                                            <img src="{{chartType.url}}" class="charttype">
+                                                        </span>
+                                                    </span>
+                                                </div><br/>
+                        
+                                                <div class="form-group form-inline">
+                                                    <label class="col-sm-2" style="font-family: cursive">Preview</label>    
+                                                    <center><div id="previewChart{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div></center>
+                                                </div>-->
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" ng-click="save(panel)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>

@@ -1,17 +1,12 @@
 app.controller("DashboardController", function ($scope, $http, $stateParams) {
     
-     $http.get("static/datas/" + $stateParams.tabId + "Tab.json").success(function (response) {
-        $scope.tabs = response;
-    });
-    
     $http.get('static/datas/labels.json').success(function (response) {
         $scope.labels = response;
     });
 
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
-    });
-
+    });    
     
     var value = [];
     $scope.previewChart = function (chartType, panel) {
