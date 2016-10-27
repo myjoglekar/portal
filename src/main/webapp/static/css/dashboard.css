@@ -1,11 +1,11 @@
-nav.navbar-fixed-top{
+/*nav.navbar-fixed-top{
     background-color:rgb(228,228,228);
     padding: 1vh;
     height:10px;
 }
-/*#menu-toggle{
+#menu-toggle{
     background-color: gold;
-}*/
+}
 .companyLogo{
     padding-left:40vw;
 }
@@ -28,11 +28,11 @@ div.col-sm-4{
     padding-left: 2px;
     padding-right: 2px;
 }
-/*div.sample{
+div.sample{
     resize: both;
     overflow: auto;
     z-index: 1000;
-}*/
+}
 h4.text-danger{
     color:white;
 }
@@ -92,7 +92,7 @@ span.previewChart{
     width: 250px;
 }
 
-/* Sidebar Styles */
+ Sidebar Styles 
 
 .sidebar-nav {
     position: absolute;
@@ -178,7 +178,7 @@ footer {
     color:black;
 }
 
-/*drag and drop*/ 
+drag and drop 
 * {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -197,4 +197,4 @@ footer {
 [ng-drop] div {
     position: relative;
     z-index: 2;
-}
+}*/
