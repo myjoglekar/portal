@@ -8,6 +8,7 @@ package com.visumbu.vb.admin.controller;
 import com.visumbu.vb.admin.service.DashboardService;
 import com.visumbu.vb.admin.service.DataSourceService;
 import com.visumbu.vb.admin.service.DealerService;
+import com.visumbu.vb.bean.ReportPage;
 import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.utils.DateUtils;
 import java.io.IOException;
@@ -15,7 +16,9 @@ import java.security.GeneralSecurityException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,13 +65,39 @@ public class DataSourceController {
 
     @RequestMapping(value = "data/{dataSourceName}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    List getData(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName) throws IOException, GeneralSecurityException {
+    Object getData(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName) throws IOException, GeneralSecurityException {
         String profileId = request.getParameter("profileId");
         String dimensions = request.getParameter("dimensions");
         String dataSet = request.getParameter("dataSet");
         String sort = request.getParameter("sort");
         String filter = request.getParameter("filter");
-        return dataSourceService.getData(dataSourceName, dataSet, dimensions, profileId, filter, sort);
+        Map options = new HashMap();
+        options.put("profileId", profileId);
+        options.put("dimensions", dimensions);
+        options.put("sort", sort);
+        options.put("filter", filter);
+        ReportPage page = getPage(request);
+        return dataSourceService.getData(dataSourceName, dataSet, options, page);
+    }
+
+    private ReportPage getPage(HttpServletRequest request) {
+        ReportPage reportPage = new ReportPage();
+        if (request.getParameter("page") == null && request.getParameter("count") == null) {
+            return null;
+        }
+        Integer count = 50;
+        if (request.getParameter("count") != null) {
+            count = Integer.parseInt(request.getParameter("count"));
+        }
+        if (request.getParameter("page") != null) {
+            Integer start = 0;
+            Integer page = Integer.parseInt(request.getParameter("page"));
+            start = count * (page - 1);
+            reportPage.setStart(start);
+            reportPage.setPageNo(page);
+            reportPage.setCount(count);
+        }
+        return reportPage;
     }
 
     @ExceptionHandler
