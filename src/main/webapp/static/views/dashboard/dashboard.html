@@ -1,17 +1,41 @@
 <script src="static/scripts/controllers/charts.js"></script>
-<section class="content"> 
-    <div class="row">
-        <div class="col-md-12">
-            <ui-view></ui-view>
-            
-        </div>
-    </div>
-</section>
-
-<!--    <div class="col-sm-12" style="padding-top: 3%;">
-        <div class="tab-content">
-            <div class="tab-pane active">
-                <ui-view></ui-view>
+<div ng-controller="DashboardController">
+    <section class="content-header">
+        <h1> Overall <small>Dashboard</small> </h1>
+        <ol class="breadcrumb">
+            <li><a href=" "><i class="fa fa-dashboard"></i> L2tmedia</a></li>
+            <li class="active">Here</li>
+        </ol>
+    </section>
+    <section class="content"> 
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel with-nav-tabs">
+                        <ui-view></ui-view>
+<!--                    <div class="panel-heading">-->
+                        <!--                    <ul class="nav nav-tabs">
+                                                    <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active">
+                                                        <span class="fa fa-times-circle" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)" style="border-radius: 50%;"></span>
+                                                        <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" >
+                                                            {{tabItem.tabName}}
+                                                        </a>
+                                                    </li>
+                                                    <li> <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span></li>
+                        
+                        
+                                                <li class="active"><a href="#tab1success" data-toggle="tab">Overall</a></li>
+                                                <li class=""><a href="#tab2success" data-toggle="tab">VDPs</a></li>
+                                                <li class=""><a href="#tab3success" data-toggle="tab">Definitions</a></li>
+                                                <a href="#" class="add-tab">+ Add Tab</a>-->
+                        <!--</ul>--> 
+                    <!--</div>-->
+<!--                    <div class="pull-right l2t-tab">
+                        <a href="#" class="btn btn-warning"><i class="fa fa-plus"></i> Add New</a>
+                        <a href="#" class="btn btn-warning"><i class="fa fa-arrows-alt"></i> Full screen</a>
+                        <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
+                    </div>-->                    
+                </div>
             </div>
         </div>
-    </div>-->
+</section>
+</div>

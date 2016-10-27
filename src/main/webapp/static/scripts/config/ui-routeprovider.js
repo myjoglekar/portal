@@ -6,27 +6,28 @@
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
-            .state("index", {
-                url: "/index",
-                templateUrl: "static/views/vb.index.html"
-            })
-            .state("index.dashboard", {
+//            .state("index", {
+//                url: "/index",
+//                templateUrl: "static/views/vb.index.html"
+//            })
+            .state("dashboard", {
                 url: "/dashboard",
-                templateUrl: "static/views/dashboard/dashboard.html",                
+                templateUrl: "static/views/dashboard/dashboard.html", 
+                controller: 'DashboardController'
             })
-            .state("index.dashboard.tab", {
+            .state("dashboard.tab", {
                 url: "/tab/:tabId",
                 templateUrl: "static/views/dashboard/dashboardTab.html",                
             })
-            .state("index.dashboard.tab.panel", {
+            .state("dashboard.tab.panel", {
                 url: "/panel/:panelId",
                 templateUrl: "static/views/dashboard/panels.html",                
             })
-            .state("index.report", {
+            .state("report", {
                 url: "/report/:reportId",
                 templateUrl: "static/views/reports/createNewReports.html",
             });
 
-    $urlRouterProvider.otherwise('index/dashboard');
+    $urlRouterProvider.otherwise('/dashboard');
 });
 

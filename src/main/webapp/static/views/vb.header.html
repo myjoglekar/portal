@@ -1,4 +1,4 @@
-<style type="text/css">
+<!--<style type="text/css">
     .mar-top {
         margin-top: 8px;
     }
@@ -8,21 +8,21 @@
 </style>
 
 <div ng-controller="HeaderController">
-<!-- Main Header -->
+ Main Header 
 <header class="main-header"> 
-    <!-- Logo --> 
+     Logo  
     <a class="logo"> 
-        <!-- mini logo for sidebar mini 50x50 pixels --> 
+         mini logo for sidebar mini 50x50 pixels  
         <span class="logo-mini"><img src="static/img/logo-mobile.png" width="30" /></span> 
-        <!-- logo for regular state and mobile devices --> 
+         logo for regular state and mobile devices  
         <span class="logo-lg"><img src="static/img/Logo-l2t.png" width="150" /></span> 
     </a> 
 
-    <!-- Header Navbar -->
+     Header Navbar 
     <nav class="navbar navbar-static-top" role="navigation"> 
-        <!-- Sidebar toggle button--> 
+         Sidebar toggle button 
         <span class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span></span> 
-        <!-- Navbar Right Menu -->
+         Navbar Right Menu 
         <div class="row col-md-8 pull-right">
             <div class="col-lg-4 col-xs-4">
                 <div class="mar-top">
@@ -135,7 +135,7 @@
 
 
 
-<!--<nav class="navbar navbar-fixed-top" ng-controller="HeaderController">
+<nav class="navbar navbar-fixed-top" ng-controller="HeaderController">
     <ul class="list-inline">
         <img src="static/img/digital.png" class="digitalLogo">
         <img src="static/img/visumbu.png" class="visumbuLogo">
@@ -191,3 +191,55 @@
         });
     });
 </script>-->
+<!-- Logo --> 
+<a href="index2.html" class="logo"> 
+    <!-- mini logo for sidebar mini 50x50 pixels --> 
+    <span class="logo-mini"><img src="static/img/logo-mobile.png" width="30" /></span> 
+    <!-- logo for regular state and mobile devices --> 
+    <span class="logo-lg"><img src="static/img/Logo-l2t.png" width="150" /></span> </a> 
+
+<!-- Header Navbar -->
+<nav class="navbar navbar-static-top" role="navigation" ng-controller="HeaderController"> 
+    <!-- Sidebar toggle button--> 
+    <a href=" " class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a> 
+    <!-- Navbar Right Menu -->
+    <div class="row col-md-8 pull-right">
+        <div class="col-lg-4 col-xs-4">
+            <div class="mar-top">
+                <select class="form-control">
+                    <option>Dealer 1</option>
+                    <option>Dealer 2</option>
+                    <option>Dealer 3</option>
+                    <option>Dealer 4</option>
+                    <option>Dealer 5</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-xs-4">
+            <div class="mar-top">
+                <select class="form-control">
+                    <option ng-repeat="dashboard in dashboards" 
+                            ui-sref="dashboard.tab({tabId: dashboard.dashboardValue})" value="{{dashboard.dashboardValue}}">
+                        {{dashboard.dashboardName}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-xs-4">
+            <div class="mar-top">
+                <div class="form-group">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-default pull-right" id="daterange-btn">
+                            <span>
+                                <i class="fa fa-calendar"></i>&nbsp;&nbsp;September 7, 2016 - October 5, 2016
+                            </span>
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

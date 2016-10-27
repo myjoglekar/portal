@@ -1,4 +1,9 @@
 app.controller("DashboardController", function ($scope, $http, $stateParams) {
+    
+     $http.get("static/datas/" + $stateParams.tabId + "Tab.json").success(function (response) {
+        $scope.tabs = response;
+    });
+    
     $http.get('static/datas/labels.json').success(function (response) {
         $scope.labels = response;
     });

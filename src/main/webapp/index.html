@@ -1,78 +1,247 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Viz Board</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-
-        <link rel="stylesheet" href="static/css/lineChart.css">
-        <link rel="stylesheet" href="static/css/barChart.css">
-        <link rel="stylesheet" href="static/css/areaChart.css">
-         <link rel="stylesheet" href="static/css/donutChart.css">
-         <link rel="stylesheet" href="static/css/groupedBarChart.css">
-<!--         <link rel="stylesheet" href="static/css/pieChart.css">-->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>L2T Media | Dashboard</title>
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         
-        <link rel="stylesheet" href="static/css/report.css">   
-        <link rel="stylesheet" href="static/css/leftSideMenu.css">
-        <link rel="stylesheet" href="static/css/vb.header.css">
         <link rel="stylesheet" href="static/css/dashboard.css">
-        <link rel="stylesheet" href="static/css/dashboardTab.css">
-        <link rel="stylesheet" href="static/css/panels.css">
-        
         <link rel="stylesheet" href="static/lib/css/bootstrap.min.css">
         <link rel="stylesheet" href="static/lib/css/font-awesome.min.css">
-        
+
         <link rel="stylesheet" href="static/lib/css/ionicons.min.css">
         <link rel="stylesheet" href="static/lib/css/AdminLTE.min.css">
         <link rel="stylesheet" href="static/lib/css/skin-blue.min.css">
-        
-        <!-- DateTime Picker-->
-<!--        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />-->
-  <link rel="stylesheet" href="static/lib/css/daterangepicker.css">
-  
+        <style type="text/css">
+            .mar-top {
+                margin-top: 8px;
+            }
+            .pull-right {
+                padding: 0px 4px;
+            }
+        </style>
     </head>
 
-    <body ng-app="VizBoardApp" class="hold-transition skin-blue sidebar-mini" >
-    <ui-view></ui-view>
+    <body ng-app="VizBoardApp" class="hold-transition skin-blue sidebar-mini">
+        <div class="wrapper"> 
+            <!-- Main Header -->
+            <header class="main-header" ng-include="'static/views/vb.header.html'"></header>
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar" ng-include="'static/views/vb.leftSideMenu.html'"></aside>
 
-    <script src="static/lib/js/d3/d3.v3.min.js"></script>
-<!--    <script src="static/lib/js/jquery/jquery.min.js"></script>-->
-    <script src="static/lib/js/jquery/jquery-2.2.3.min.js"></script>
-    <script src="static/lib/js/bootstrap.min.js"></script>
-    
-    <script src="static/lib/js/jquery/select2.full.min.js"></script>
-    <script src="static/lib/js/jquery/jquery.inputmask.js"></script>
-    <script src="static/lib/js/jquery/jquery.inputmask.date.extensions.js"></script>
-    <script src="static/lib/js/jquery/jquery.inputmask.extensions.js"></script>
-    <!-- DateTime Picker-->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-    
-    <script src="static/lib/js/jquery/bootstrap-datepicker.js"></script>
-    <script src="static/lib/js/jquery/bootstrap-colorpicker.min.js"></script>
-    <script src="static/lib/js/jquery/bootstrap-timepicker.min.js"></script>
+            <div class="content-wrapper">
+                <ui-view></ui-view>
+            </div>
 
-    <script src="static/lib/js/jquery/icheck.min.js"></script>
-     <script src="static/lib/js/jquery/app.min.js"></script>
-    
-    <script src="static/lib/js/angular/angular.min.js"></script>
-    <script src="static/lib/js/angular/angular-ui-router.min.js"></script>
-    <script src="static/lib/js/angular/angular-animate.min.js"></script>
-    <script src="static/lib/js/angular/angular.filter.js"></script>
-    <script src="static/lib/js/angular/smart-table.debug.js"></script>
-    <script src="static/lib/js/paginations/dirPagination.js"></script>
-    <script src="static/lib/js/marked.js"></script>
-    <script src="static/lib/js/screenfull/angular-screenfull.js"></script>
-    <script src="static/lib/js/screenfull/screenfull.js"></script> 
-    <script src="static/lib/draganddrop/ngDraggable.js"></script>
+            <!-- Main Footer -->
+            <footer class="main-footer" ng-include="'static/views/vb.footer.html'"></footer>
 
-    <script src="static/scripts/app.js"></script>
-    <script src="static/scripts/config/ui-routeprovider.js"></script>
-    <script src="static/scripts/controllers/vb.dashboard.js"></script>
-    <script src="static/scripts/controllers/vb.header.js"></script>    
-    <script src="static/scripts/controllers/vb.dashboardTab.js"></script>    
-    <script src="static/scripts/controllers/vb.panel.js"></script>    
-    <script src="static/scripts/controllers/vb.reports.js"></script>    
-</body>
+            <div class="control-sidebar-bg"></div>
+        </div>
+        <!-- ./wrapper --> 
+
+        <!-- REQUIRED JS SCRIPTS --> 
+
+        <!-- jQuery 2.2.3 --> 
+        <script src="static/lib/js/d3/d3.v3.min.js"></script>
+        <!--    <script src="static/lib/js/jquery/jquery.min.js"></script>-->
+        <script src="static/lib/js/jquery/jquery-2.2.3.min.js"></script>
+        <script src="static/lib/js/bootstrap.min.js"></script>
+
+        <script src="static/lib/js/jquery/select2.full.min.js"></script>
+        <script src="static/lib/js/jquery/jquery.inputmask.js"></script>
+        <script src="static/lib/js/jquery/jquery.inputmask.date.extensions.js"></script>
+        <script src="static/lib/js/jquery/jquery.inputmask.extensions.js"></script>
+        <!-- DateTime Picker-->
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
+        <script src="static/lib/js/jquery/bootstrap-datepicker.js"></script>
+        <script src="static/lib/js/jquery/bootstrap-colorpicker.min.js"></script>
+        <script src="static/lib/js/jquery/bootstrap-timepicker.min.js"></script>
+
+        <script src="static/lib/js/jquery/icheck.min.js"></script>
+        <script src="static/lib/js/jquery/app.min.js"></script>
+
+        <script src="static/lib/js/angular/angular.min.js"></script>
+        <script src="static/lib/js/angular/angular-ui-router.min.js"></script>
+        <script src="static/lib/js/angular/angular-animate.min.js"></script>
+        <script src="static/lib/js/angular/angular.filter.js"></script>
+        <script src="static/lib/js/angular/smart-table.debug.js"></script>
+        <script src="static/lib/js/paginations/dirPagination.js"></script>
+        <script src="static/lib/js/marked.js"></script>
+        <script src="static/lib/js/screenfull/angular-screenfull.js"></script>
+        <script src="static/lib/js/screenfull/screenfull.js"></script> 
+        <script src="static/lib/draganddrop/ngDraggable.js"></script>
+
+        <script src="static/scripts/app.js"></script>
+        <script src="static/scripts/config/ui-routeprovider.js"></script>
+        <script src="static/scripts/controllers/vb.dashboard.js"></script>
+        <script src="static/scripts/controllers/vb.header.js"></script>    
+        <script src="static/scripts/controllers/vb.dashboardTab.js"></script>    
+        <script src="static/scripts/controllers/vb.panel.js"></script>    
+        <script src="static/scripts/controllers/vb.reports.js"></script>    
+        <!-- Page script -->
+        <script>
+                $(function () {
+                    //Initialize Select2 Elements
+                    $(".select2").select2();
+
+                    //Datemask dd/mm/yyyy
+                    $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+                    //Datemask2 mm/dd/yyyy
+                    $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
+                    //Money Euro
+                    $("[data-mask]").inputmask();
+
+                    //Date range picker
+                    $('#reservation').daterangepicker();
+                    //Date range picker with time picker
+                    $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
+                    //Date range as a button
+                    $('#daterange-btn').daterangepicker(
+                            {
+                                ranges: {
+                                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                                },
+                                startDate: moment().subtract(29, 'days'),
+                                endDate: moment()
+                            },
+                            function (start, end) {
+                                $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                            }
+                    );
+
+                    //Date picker
+                    $('#datepicker').datepicker({
+                        autoclose: true
+                    });
+
+                    //iCheck for checkbox and radio inputs
+                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                        checkboxClass: 'icheckbox_minimal-blue',
+                        radioClass: 'iradio_minimal-blue'
+                    });
+                    //Red color scheme for iCheck
+                    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                        checkboxClass: 'icheckbox_minimal-red',
+                        radioClass: 'iradio_minimal-red'
+                    });
+                    //Flat red color scheme for iCheck
+                    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                        checkboxClass: 'icheckbox_flat-green',
+                        radioClass: 'iradio_flat-green'
+                    });
+
+                    //Colorpicker
+                    $(".my-colorpicker1").colorpicker();
+                    //color picker with addon
+                    $(".my-colorpicker2").colorpicker();
+
+                    //Timepicker
+                    $(".timepicker").timepicker({
+                        showInputs: false
+                    });
+                });
+        </script>
+        <!-- page script -->
+        <script>
+            $(function () {
+                $("#example1").DataTable();
+                $('#example2').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": false,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false
+                });
+            });
+        </script>
+        <script>
+            $(function () {
+                "use strict";
+
+                // AREA CHART
+                var area = new Morris.Area({
+                    element: 'revenue-chart',
+                    resize: true,
+                    data: [
+                        {y: '2011 Q1', item1: 2666, item2: 2666},
+                        {y: '2011 Q2', item1: 2778, item2: 2294},
+                        {y: '2011 Q3', item1: 4912, item2: 1969},
+                        {y: '2011 Q4', item1: 3767, item2: 3597},
+                        {y: '2012 Q1', item1: 6810, item2: 1914},
+                        {y: '2012 Q2', item1: 5670, item2: 4293},
+                        {y: '2012 Q3', item1: 4820, item2: 3795},
+                        {y: '2012 Q4', item1: 15073, item2: 5967},
+                        {y: '2013 Q1', item1: 10687, item2: 4460},
+                        {y: '2013 Q2', item1: 8432, item2: 5713}
+                    ],
+                    xkey: 'y',
+                    ykeys: ['item1', 'item2'],
+                    labels: ['Item 1', 'Item 2'],
+                    lineColors: ['#a0d0e0', '#3c8dbc'],
+                    hideHover: 'auto'
+                });
+
+                // LINE CHART
+                var line = new Morris.Line({
+                    element: 'line-chart',
+                    resize: true,
+                    data: [
+                        {y: '2011 Q1', item1: 2666},
+                        {y: '2011 Q2', item1: 2778},
+                        {y: '2011 Q3', item1: 4912},
+                        {y: '2011 Q4', item1: 3767},
+                        {y: '2012 Q1', item1: 6810},
+                        {y: '2012 Q2', item1: 5670},
+                        {y: '2012 Q3', item1: 4820},
+                        {y: '2012 Q4', item1: 15073},
+                        {y: '2013 Q1', item1: 10687},
+                        {y: '2013 Q2', item1: 8432}
+                    ],
+                    xkey: 'y',
+                    ykeys: ['item1'],
+                    labels: ['Item 1'],
+                    lineColors: ['#3c8dbc'],
+                    hideHover: 'auto'
+                });
+
+                //DONUT CHART
+                var donut = new Morris.Donut({
+                    element: 'sales-chart',
+                    resize: true,
+                    colors: ["#3c8dbc", "#f56954", "#00a65a"],
+                    data: [
+                        {label: "Download Sales", value: 12},
+                        {label: "In-Store Sales", value: 30},
+                        {label: "Mail-Order Sales", value: 20}
+                    ],
+                    hideHover: 'auto'
+                });
+                //BAR CHART
+                var bar = new Morris.Bar({
+                    element: 'bar-chart',
+                    resize: true,
+                    data: [
+                        {y: '2006', a: 100, b: 90},
+                        {y: '2007', a: 75, b: 65},
+                        {y: '2008', a: 50, b: 40},
+                        {y: '2009', a: 75, b: 65},
+                        {y: '2010', a: 50, b: 40},
+                        {y: '2011', a: 75, b: 65},
+                        {y: '2012', a: 100, b: 90}
+                    ],
+                    barColors: ['#00a65a', '#f56954'],
+                    xkey: 'y',
+                    ykeys: ['a', 'b'],
+                    labels: ['CPU', 'DISK'],
+                    hideHover: 'auto'
+                });
+            });
+        </script>
+    </body>
 
 </html>

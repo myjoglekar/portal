@@ -9,19 +9,64 @@
         color:white;
     }
 </style>-->
-<div ng-controller="PanelController">
-    <span class="pull-right" style="padding-top: 5px;padding-right: 5px;">
-        <button ng-click="add()" class="addButton"><span class="fa fa-plus"> Add</span></button>
-        <button ng-click="fullscreenCtrl.toggleFullscreen()" class="fullScreenButton"><span class="fa fa-expand"> Full-Screen</span></button>
-        <button><span class="fa fa-refresh"> Refresh</span></button>
-    </span><br><br/>
+<div ng-controller="PanelController">   
+    <div class="col-md-6" ng-repeat="panel in panels">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <span class="{{panel.icon}}"></span> 
+                    <span class="text-uppercase">{{panel.chartType}}</span>
+                </h3>
 
-    <div class="well well-sm"> Questions?</div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title"><strong>Overall Summary</strong></h2>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{$index + 1}}" data-widget=""><i class="fa fa-pencil"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget=""><i class="fa fa-refresh"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="box-body chart-responsive">
+                <center><div id="widget{{panel.chartId}}"></div></center>
+                <!--<div class="chart" id="line-chart" style="height: 300px;"></div>-->
+            </div> 
         </div>
+        <div id="preview{{$index + 1}}" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                       Chart
+                        <button class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Title" ng-model="panel.title"><br>
+                        <input type="text" class="form-control" placeholder="Url" ng-model="panel.url"><br>
+                        <div class="form-inline">
+                            <label class="col-sm-2" style="font-family:cursive">Type</label>
+                            <span ng-repeat="chartType in chartTypes track by chartType.id">
+                                <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
+                                    <img src="{{chartType.url}}" class="charttype">
+                                </span>
+                            </span>
+                        </div><br/>
+
+                        <div class="form-group form-inline">
+                            <label class="col-sm-2" style="font-family: cursive">Preview</label>    
+                            <center><div id="previewChart{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div></center>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" ng-click="save(panel)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--    <div class="panel panel-default">       
 
         <div class="panel-body">
             <div class="row"  ngsf-fullscreen="fullscreenCtrl">
@@ -35,7 +80,7 @@
                                     <span class="pull-right">
                                         <span class="fa fa-refresh icon" ></span>
                                         <span data-toggle="modal" data-target="#preview{{$index + 1}}" ><span class="fa fa-edit icon"></span></span>
-                                        <!--                                        <span ng-click="hidenewchart = true" ><span class="fa fa-close icon"></span></span>-->
+                                                                                <span ng-click="hidenewchart = true" ><span class="fa fa-close icon"></span></span>
                                         <span ng-click="removePanel($index)" ><span class="fa fa-close icon"></span></span>
                                     </span>
                                 </div>
@@ -45,42 +90,8 @@
                             </div>
                         </div>
                     </div>
-
-
-                    <div id="preview{{$index + 1}}" class="modal fade">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    Generate Chart
-                                    <button class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="text" class="form-control" placeholder="Title" ng-model="panel.title"><br>
-                                    <input type="text" class="form-control" placeholder="Url" ng-model="panel.url"><br>
-                                    <div class="form-inline">
-                                        <label class="col-sm-2" style="font-family:cursive">Type</label>
-                                        <span ng-repeat="chartType in chartTypes track by chartType.id">
-                                            <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
-                                                <img src="{{chartType.url}}" class="charttype">
-                                            </span>
-                                        </span>
-                                    </div><br/>
-
-                                    <div class="form-group form-inline">
-                                        <label class="col-sm-2" style="font-family: cursive">Preview</label>    
-                                        <center><div id="previewChart{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div></center>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-primary" ng-click="save(panel)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
                 
             </div>
         </div>
-    </div>
-</div>
+    </div>-->
+<!--</div>-->

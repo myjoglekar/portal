@@ -1,4 +1,4 @@
-<div ng-controller="TabController">
+<!--<div ng-controller="TabController">
 
     <div ng-repeat="tab in tabs">
         <section class="content-header">
@@ -41,10 +41,10 @@
 
 
 
-                        <!--                        <div class="tab-pane fade" id="tab2success">Default 2</div>
-                                                <div class="tab-pane fade" id="tab3success">Default 3</div>-->
+                                                <div class="tab-pane fade" id="tab2success">Default 2</div>
+                                                <div class="tab-pane fade" id="tab3success">Default 3</div>
                     </div>
-                </div> <!-- panel body ends -->
+                </div>  panel body ends 
 
 
 
@@ -52,7 +52,7 @@
             </div>
             bkdbaskjdbhd <ui-view></ui-view>
 
-            <!--            <div class="tab-pane active" ng-repeat="tab in tabs">
+                        <div class="tab-pane active" ng-repeat="tab in tabs">
                             <h3>{{tab.dashboardTitle}}</h3>
                             <ul class="nav nav-tabs list-inline"> 
                                 <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active"> <span class="fa fa-times-circle" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)" style="border-radius: 50%;"></span>
@@ -67,7 +67,147 @@
                             </ul>
                         </div>
             
-                    <ui-view></ui-view>-->
+                    <ui-view></ui-view>
 
         </div>
+    </div>-->
+<div ng-controller="TabController">
+    <div class="panel-heading">
+        <ul class="nav nav-tabs" ng-repeat="tab in tabs">
+            <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active">
+                <span class="fa fa-times-circle" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)" style="border-radius: 50%;"></span>
+                <a class="active" ui-sref="dashboard.tab.panel({panelId:tabItem.tabUrl})" >
+                    {{tabItem.tabName}}
+                </a>
+            </li>
+            <a class="add-tab" ng-click="addTab(tab)" style="cursor: pointer">+ Add Tab</a>
+            <!--<li> <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span></li>-->
+        </ul>
+        <div class="pull-right l2t-tab">
+            <a href="#" class="btn btn-warning"><i class="fa fa-plus"></i> Add New</a>
+            <a href="#" class="btn btn-warning"><i class="fa fa-arrows-alt"></i> Full screen</a>
+            <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
+        </div>
     </div>
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade in active">
+                <div class="box box-info light">
+                    <div class="box-header with-border light-blue">
+                        <h3 class="box-title">Questions?</h3>
+                    </div>
+                </div>
+                <div class="row">
+                <ui-view></ui-view>
+                </div>
+                <!--                <div class="box box-info">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Heading</h3>
+                
+                                        <div class="box-tools pull-right">
+                                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-box-tool" data-widget=""><i class="fa fa-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-box-tool" data-widget=""><i class="fa fa-refresh"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="box-body chart-responsive">
+                                        <div class="box table-responsive" >-->
+
+                <!--                            <table id="example1" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Rendering engine</th>
+                                                        <th>Browser</th>
+                                                        <th>Platform(s)</th>
+                                                        <th>Engine version</th>
+                                                        <th>CSS grade</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Trident</td>
+                                                        <td>Internet
+                                                            Explorer 4.0
+                                                        </td>
+                                                        <td>Win 95+</td>
+                                                        <td> 4</td>
+                                                        <td>X</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Trident</td>
+                                                        <td>Internet
+                                                            Explorer 5.0
+                                                        </td>
+                                                        <td>Win 95+</td>
+                                                        <td>5</td>
+                                                        <td>C</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Trident</td>
+                                                        <td>Internet
+                                                            Explorer 5.5
+                                                        </td>
+                                                        <td>Win 95+</td>
+                                                        <td>5.5</td>
+                                                        <td>A</td>
+                                                    </tr>
+                                                </tbody>
+                
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>-->
+                <!--                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="box box-primary">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Area Chart</h3>
+                
+                                                <div class="box-tools pull-right">
+                                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-box-tool" data-widget=""><i class="fa fa-pencil"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-box-tool" data-widget=""><i class="fa fa-refresh"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                                </div>            </div>
+                                            <div class="box-body chart-responsive">
+                                                <div class="chart" id="revenue-chart" style="height: 300px;"></div>
+                                            </div> 
+                                        </div>
+                
+                
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="box box-info">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Line Chart</h3>
+                
+                                                <div class="box-tools pull-right">
+                                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-box-tool" data-widget=""><i class="fa fa-pencil"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-box-tool" data-widget=""><i class="fa fa-refresh"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="box-body chart-responsive">
+                                                <div class="chart" id="line-chart" style="height: 300px;"></div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>-->
+                <!--</div>-->
+                <!--            <div class="tab-pane fade" id="tab2success">Default 2</div>
+                            <div class="tab-pane fade" id="tab3success">Default 3</div>-->
+            </div>
+        </div>
+    </div>
+</div>
