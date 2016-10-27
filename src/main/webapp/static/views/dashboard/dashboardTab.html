@@ -84,8 +84,8 @@
             <!--<li> <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span></li>-->
         </ul>
         <div class="pull-right l2t-tab">
-            <a href="#" class="btn btn-warning"><i class="fa fa-plus"></i> Add New</a>
-            <a href="#" class="btn btn-warning"><i class="fa fa-arrows-alt"></i> Full screen</a>
+            <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
+            <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
             <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
         </div>
     </div>
@@ -97,7 +97,7 @@
                         <h3 class="box-title">Questions?</h3>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" ngsf-fullscreen="fullscreenCtrl">
                 <ui-view></ui-view>
                 </div>
                 <!--                <div class="box box-info">
