@@ -17,6 +17,8 @@ $.get('static/datas/defaultPanel.json', function (response, status) {
             pieChart(value);
         } else if (value.chartType === "donut") {
             donutChart(value);
+        } else if (value.chartType === "table") {
+            table(value);
         }
         else {
             alert("No Charts Available");
@@ -75,7 +77,7 @@ function lineChart(value) {
                 .y(function (d) {
                     return y(y_dim_accessor(d));
                 })
-        var graph = d3.select("#graph" + value.chartId).append("svg:svg")
+        var graph = d3.select("#" + value.dispChart + value.chartId).append("svg:svg")
                 .attr("width", w + m[1] + m[3])
                 .attr("height", h + m[0] + m[2])
                 .append("svg:g")
@@ -123,7 +125,7 @@ function areaChart(value) {
             .y1(function (d) {
                 return y(d.close);
             });
-    var svg = d3.select("#graph" + value.chartId).append("svg")
+    var svg = d3.select("#" + value.dispChart + value.chartId).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -181,7 +183,7 @@ function barChart(value) {
             .scale(y)
             .orient("left")
             .ticks(10);
-    var svg = d3.select("#graph" + value.chartId).append("svg")
+    var svg = d3.select("#" + value.dispChart + value.chartId).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -257,7 +259,7 @@ function groupedBarChart(value) {
             .scale(y)
             .orient("left")
             .tickFormat(d3.format(".2s"));
-    var svg = d3.select("#graph" + value.chartId).append("svg")
+    var svg = d3.select("#" + value.dispChart + value.chartId).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -367,12 +369,13 @@ function groupedBarChart(value) {
 function pieChart(value) {
 //    var w = 300;
 //    var h = 200;
-    var w = 400;
+    var w = 300;
     var h = 260;
-    var r = Math.min(w, h) / 2;
-    var color = d3.scale.category20c();
+    var r = h / 2;
+    var color = d3.scale.category20b();
+
     d3.json(value.url, function (error, data) {
-        var vis = d3.select('#graph' + value.chartId).append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
+        var vis = d3.select("#" + value.dispChart + value.chartId).append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
         var pie = d3.layout.pie().value(function (d) {
             return d.value;
         });
@@ -394,7 +397,7 @@ function pieChart(value) {
             return data[i].label;
         }
         );
-    })
+    });
 }
 
 function donutChart(value) {
@@ -415,7 +418,7 @@ function donutChart(value) {
             .value(function (d) {
                 return d.totalCrimes;
             });
-    var svg = d3.select("#graph" + value.chartId).append("svg")
+    var svg = d3.select("#" + value.dispChart + value.chartId).append("svg")
             .attr("width", width)
             .attr("height", height)
             .append("g")
@@ -440,4 +443,64 @@ function donutChart(value) {
                     return d.data.crimeType;
                 });
     });
+}
+
+
+function table(value) {
+
+    
+    d3.json(value.url, function (error,data) {
+        var columns = [];
+        var columnsObject = [];
+        angular.forEach(data, function(child, childKey){
+        console.log("child : "+child+" ----- "+child.TableName);
+        angular.forEach(child.childItems, function(value, key){
+            columnsObject.push(value);
+            angular.forEach(value, function(object, header){
+                        console.log("Header : "+header)
+                for (property in header) {
+                    if (columns.indexOf(header) === -1) {
+                        columns.push(header);
+                        console.log(columns);
+                    };
+                };            
+            });
+           
+        });
+})
+  function tabulate(data, columns) {
+		var table = d3.select("#" + value.dispChart + value.chartId).append('table')
+		var thead = table.append('thead')
+		var tbody = table.append('tbody');
+
+		// append the header row
+		thead.append('tr')
+		  .selectAll('th')
+		  .data(columns).enter()
+		  .append('th')
+		    .text(function (column) { return column; });
+
+		// create a row for each object in the data
+		var rows = tbody.selectAll('tr')
+		  .data(data)
+		  .enter()
+		  .append('tr');
+
+		// create a cell in each row for each column
+		var cells = rows.selectAll('td')
+		  .data(function (row) {
+		    return columns.map(function (column) {
+		      return {column: column, value: row[column]};
+		    });
+		  })
+		  .enter()
+		  .append('td')
+		    .text(function (d) { return d.value; });
+
+	  return table;
+	}
+	// render the table(s)
+	tabulate(columnsObject, columns); // 2 column table
+
+});
 }

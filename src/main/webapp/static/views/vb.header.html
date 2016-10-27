@@ -1,11 +1,148 @@
-<nav class="navbar navbar-fixed-top" ng-controller="HeaderController">
+<style type="text/css">
+    .mar-top {
+        margin-top: 8px;
+    }
+    .pull-right {
+        padding: 0px 4px;
+    }
+</style>
+
+<div ng-controller="HeaderController">
+<!-- Main Header -->
+<header class="main-header"> 
+    <!-- Logo --> 
+    <a class="logo"> 
+        <!-- mini logo for sidebar mini 50x50 pixels --> 
+        <span class="logo-mini"><img src="static/img/logo-mobile.png" width="30" /></span> 
+        <!-- logo for regular state and mobile devices --> 
+        <span class="logo-lg"><img src="static/img/Logo-l2t.png" width="150" /></span> 
+    </a> 
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation"> 
+        <!-- Sidebar toggle button--> 
+        <span class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span></span> 
+        <!-- Navbar Right Menu -->
+        <div class="row col-md-8 pull-right">
+            <div class="col-lg-4 col-xs-4">
+                <div class="mar-top">
+                    <select class="form-control">
+                        <option>Dealer 1</option>
+                        <option>Dealer 2</option>
+                        <option>Dealer 3</option>
+                        <option>Dealer 4</option>
+                        <option>Dealer 5</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-xs-4">
+                <div class="mar-top">
+                    <select class="form-control">
+                        <option ng-repeat="dashboard in dashboards" 
+                                ui-sref="index.dashboard.tab({tabId: dashboard.dashboardValue})" value="{{dashboard.dashboardValue}}">
+                            {{dashboard.dashboardName}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-xs-4">
+                <div class="mar-top">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-default pull-right" id="daterange-btn">
+                                <span>
+                                    <i class="fa fa-calendar"></i>&nbsp;&nbsp;September 7, 2016 - October 5, 2016
+                                </span>
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+</div>
+
+
+
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $(".select2").select2();
+
+    //Datemask dd/mm/yyyy
+    $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    //Datemask2 mm/dd/yyyy
+    $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
+    //Money Euro
+    $("[data-mask]").inputmask();
+
+    //Date range picker
+    $('#reservation').daterangepicker();
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+        {
+          ranges: {            
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          },
+          startDate: moment().subtract(29, 'days'),
+          endDate: moment()
+        },
+        function (start, end) {
+          $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+    );
+
+    //Date picker
+    $('#datepicker').datepicker({
+      autoclose: true
+    });
+
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass: 'iradio_minimal-blue'
+    });
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass: 'iradio_minimal-red'
+    });
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass: 'iradio_flat-green'
+    });
+
+    //Colorpicker
+    $(".my-colorpicker1").colorpicker();
+    //color picker with addon
+    $(".my-colorpicker2").colorpicker();
+
+    //Timepicker
+    $(".timepicker").timepicker({
+      showInputs: false
+    });
+  });
+</script>
+
+
+
+
+<!--<nav class="navbar navbar-fixed-top" ng-controller="HeaderController">
     <ul class="list-inline">
         <img src="static/img/digital.png" class="digitalLogo">
         <img src="static/img/visumbu.png" class="visumbuLogo">
-        <li><a href="#" class="btn btn-default btn-xs" id="menu-toggle"><span class="fa fa-navicon"></span></a></li> 
+        <li class="pull-right"><a href="#" class="btn btn-default" id="menu-toggle"><span class="fa fa-navicon"></span></a></li> 
 
         <li class="pull-right">
-            <input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" style="width:300px;"/>
+            <input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" style="width:300px;cursor:pointer;"/>
         </li>
         <li class="pull-right">
             <div class="dropdown">
@@ -53,4 +190,4 @@
             }
         });
     });
-</script>
+</script>-->

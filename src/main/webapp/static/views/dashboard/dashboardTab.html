@@ -1,20 +1,73 @@
 <div ng-controller="TabController">
 
-    <div class="tab-pane active" ng-repeat="tab in tabs">
-        <h3>{{tab.dashboardTitle}}</h3>
-        <ul class="nav nav-tabs list-inline">
-            <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active" >
-                <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" style="cursor: pointer;color:black;">
-                    {{tabItem.tabName}}
-                    <i ng-if="tabItem.tabClose" class="fa fa-times-circle" ng-click="removeTab($index)"></i>
-                </a>
-            </li>
-            <li>
-                <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span>
-            </li>
-        </ul>
+    <div ng-repeat="tab in tabs">
+        <section class="content-header">
+            <h1>{{tab.dashboardTitle}} <small>Dashboard</small> </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> L2tmedia</a></li>
+                <li class="active">Here</li>
+            </ol>
+        </section>
+        <div class="panel with-nav-tabs">
+
+
+            <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active">
+                        <span class="fa fa-times-circle" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)" style="border-radius: 50%;"></span>
+                        <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" >
+                            {{tabItem.tabName}}
+                        </a>
+                    </li>
+                    <li> <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span></li>
+                </ul> 
+
+            </div>
+
+            <div class="pull-right l2t-tab">
+                <a href="#" class="btn btn-warning"><i class="fa fa-plus"></i> Add New</a>
+                <a href="#" class="btn btn-warning"><i class="fa fa-arrows-alt"></i> Full screen</a>
+                <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
+            </div>
+
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="tab1success">
+                        <div class="box box-info light">
+                            <div class="box-header with-border light-blue">
+                                <h3 class="box-title">Questions?</h3>
+                            </div>
+                        </div>
+
+
+
+                        <!--                        <div class="tab-pane fade" id="tab2success">Default 2</div>
+                                                <div class="tab-pane fade" id="tab3success">Default 3</div>-->
+                    </div>
+                </div> <!-- panel body ends -->
+
+
+
+
+            </div>
+            bkdbaskjdbhd <ui-view></ui-view>
+
+            <!--            <div class="tab-pane active" ng-repeat="tab in tabs">
+                            <h3>{{tab.dashboardTitle}}</h3>
+                            <ul class="nav nav-tabs list-inline"> 
+                                <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active"> <span class="fa fa-times-circle" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)" style="border-radius: 50%;"></span>
+                                    <a class="active" ui-sref="index.dashboard.tab.panel({panelId:tabItem.tabUrl})" style="cursor: pointer;color:black;">
+                                        {{tabItem.tabName}}
+                                    </a>
+                    
+                                </li>
+                                <li>
+                                    <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span>
+                                </li>
+                            </ul>
+                        </div>
+            
+                    <ui-view></ui-view>-->
+
+        </div>
     </div>
-    
-    <ui-view></ui-view>
-    
-</div>

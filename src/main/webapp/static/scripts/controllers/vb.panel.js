@@ -16,4 +16,8 @@ app.controller('PanelController', function ($scope, $http, $stateParams) {
         $scope.panels[index] = panel;
         $scope.panels[otherIndex] = otherObj;
     };
+    
+    $scope.removePanel = function (index) {
+        $scope.panels.splice(index, 1);
+    };
 });

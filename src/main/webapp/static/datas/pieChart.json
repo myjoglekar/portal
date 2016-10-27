@@ -1,7 +1,8 @@
 [
     {
         "label": "Category A",
-        "value": 20
+        "value": 20,
+        "color" : "#8c564b"
     },
     {
         "label": "Category B",
