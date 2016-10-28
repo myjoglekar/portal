@@ -9,7 +9,22 @@
         color:white;
     }
 </style>
-<div ng-controller="PanelController">   
+<div ng-controller="PanelController">
+    <div class="container-fluid">
+        <div class="pull-right l2t-tab">
+            <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
+            <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
+            <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
+        </div><br><br><br/>
+
+
+        <div class="box box-info light">
+            <div class="box-header with-border light-blue">
+                <h3 class="box-title">Questions?</h3>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-6" ng-repeat="panel in panels">
         <div class="box box-info">
             <div class="box-header with-border">
