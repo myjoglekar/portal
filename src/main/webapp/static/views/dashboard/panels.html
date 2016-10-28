@@ -25,8 +25,10 @@
         </div>
     </div>
 
+   
     <div class="col-md-6" ng-repeat="panel in panels">
-        <div class="box box-info">
+         <div ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+        <div class="box box-info" ng-drag="true" ng-drag-data="panel">
             <div class="box-header with-border">
                 <h3 class="box-title">
                     <span class="{{panel.icon}}"></span> 
@@ -131,6 +133,7 @@
                 </div>
             </div>
         </div>
+         </div>
     </div>
 </div>
 
