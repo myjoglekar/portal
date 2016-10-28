@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Rendering engine</th>
+            <th>Browser</th>
+            <th>Platform(s)</th>
+            <th>Engine version</th>
+            <th>CSS grade</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Trident</td>
+            <td>Internet
+                Explorer 4.0
+            </td>
+            <td>Win 95+</td>
+            <td> 4</td>
+            <td>X</td>
+        </tr>
+        <tr>
+            <td>Trident</td>
+            <td>Internet
+                Explorer 5.0
+            </td>
+            <td>Win 95+</td>
+            <td>5</td>
+            <td>C</td>
+        </tr>
+        <tr>
+            <td>Trident</td>
+            <td>Internet
+                Explorer 5.5
+            </td>
+            <td>Win 95+</td>
+            <td>5.5</td>
+            <td>A</td>
+        </tr>
+    </tbody>
+
+</table>
+
+<!--<table st-table="datas" class="table tab-content table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="text-uppercase info" ng-click="toggleSort($index); reverse.col.title = !reverse.col.title" ng-repeat="col in columns">
+                        {{col.title}}
+                        <i class="fa pull-right" ng-class="{'fa-caret-down':!reverse.col.title,  'fa-caret-up':reverse.col.title}"></i>
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-if="!isLoading" dir-paginate="(key, value) in datas |orderBy: orderProperty | orderBy: sortColumn:reverse | groupBy: groupProperty | itemsPerPage: pageSize" current-page="currentPage">
+                <tr ng-if="key !== 'undefined'" class="text-center text-uppercase text-info info">
+                    <td colspan="{{headerLength}}">Group By : {{key}}</td>
+                </tr>
+                <tr ng-repeat="item in value">
+                    <td ng-repeat="col in columns">
+                        <div ng-click="txt.item[col.field] = true" ng-hide="txt.item[col.field]">
+                            {{item[col.field]}}
+                        </div>
+                        <div ng-show="txt.item[col.field]">
+                            <input ng-model="item[col.field]">
+                            <button ng-click="save(item); txt.item[col.field] = false">
+                                <i class="fa fa-save"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-if="isLoading">
+                <tr>
+                    <td colspan="{{headerLength}}" class="text-center">Loading ...</td>
+                </tr>
+            </tbody>
+        </table> 
+        <div>
+            <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>
+        </div>-->
