@@ -4,18 +4,19 @@
         "width" : 4,
         "minHeight" : "25vh",
         "widthClass" : "col-md-4",
-        "chartType": "line",
-        "url": "static/datas/lineChart.json",
-        "icon": "fa fa-line-chart"
-    }, {
-        "chartId": "widget2",
-        "width" : 2,
-        "minHeight" : "25vh",
-        "widthClass" : "col-md-4",
         "chartType": "area",
         "url": "static/datas/areaChart.json",
         "icon": "fa fa-area-chart"
     },
+    {
+        "chartId": "widget2",
+        "width" : 2,
+        "minHeight" : "25vh",
+        "widthClass" : "col-md-4",
+        "chartType": "line",
+        "url": "static/datas/lineChart.json",
+        "icon": "fa fa-line-chart"
+    }, 
     {
         "chartId": "widget3",
         "width" : 2,
@@ -45,15 +46,6 @@
     },
     {
         "chartId": "widget6",
-        "width" : 2,
-        "minHeight" : "25vh",
-        "widthClass" : "col-md-4",
-        "chartType": "Market Share",
-        "url": "static/datas/marketShare.json",
-        "icon": "fa fa-table"
-    },
-    {
-        "chartId": "widget7",
         "width" : 6,
         "minHeight" : "25vh",
         "widthClass" : "col-md-4",
