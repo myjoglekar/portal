@@ -11,7 +11,9 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     var uid = 7;
     $scope.add = function () {
         $scope.id = uid++;
-        $scope.panels.push({chartId: "widget" + $scope.id});
+        $scope.panels.push({chartId: "widget" + $scope.id, width : 2,
+        minHeight : "25vh",
+        widthClass : "col-md-4"});
     };
 
     $scope.dataSet = function () {
