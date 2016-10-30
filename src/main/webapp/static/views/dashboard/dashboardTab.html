@@ -1,34 +1,37 @@
 
 <div ng-controller="TabController">
-    
+
     <div class="panel-heading">
         <ul class="nav nav-tabs" ng-repeat="tab in tabs">
             <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active">
-                <span class="fa fa-times-circle" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)" style="border-radius: 50%;"></span>
-                <a class="active" ui-sref="dashboard.tab.panel({panelId:tabItem.tabUrl})" >
+
+                <a class="active" ui-sref="dashboard.tab.panel({panelId:tabItem.tabUrl})" style="padding:3px 15px;display: inline-block;">
                     {{tabItem.tabName}}
                 </a>
+                <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">
+                    <i class="glyphicon glyphicon-remove" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)"></i>
+                </sup>
             </li>
             <a class="add-tab" ng-click="addTab(tab)" style="cursor: pointer">+ Add Tab</a>
             <!--<li> <span class="fa fa-plus-circle" ng-click="addTab(tab)"> Add Tab</span></li>-->
         </ul>
-<!--        <div class="pull-right l2t-tab">
-            <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
-            <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
-            <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
-        </div>-->
+        <!--        <div class="pull-right l2t-tab">
+                    <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
+                    <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
+                    <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
+                </div>-->
     </div>
-<!--   -->
-     <div class="panel-body">
+    <!--   -->
+    <div class="panel-body">
         <div class="tab-content">
             <div class="tab-pane fade in active">
-                
-                 <div class="row" ngsf-fullscreen="fullscreenCtrl">
-                <ui-view></ui-view>
+
+                <div class="row" ngsf-fullscreen="fullscreenCtrl">
+                    <ui-view></ui-view>
                 </div>
             </div>
         </div>
     </div>
-                
-    
+
+
 </div>
