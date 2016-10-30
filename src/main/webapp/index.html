@@ -45,16 +45,22 @@
     <body ng-app="VizBoardApp" class="hold-transition skin-blue sidebar-mini">
         <div class="wrapper"> 
             <!-- Main Header -->
-            <header class="main-header" ng-include="'static/views/vb.header.html'"></header>
-            <!-- Left side column. contains the logo and sidebar -->
-            <aside class="main-sidebar" ng-include="'static/views/vb.leftSideMenu.html'"></aside>
-
+            <header class="main-header">
+                <span ng-include="'static/views/vb.header.html'"></span>
+            </header>
+            <!-- Left Side Menu -->
+            <aside class="main-sidebar">
+                <span ng-include="'static/views/vb.leftSideMenu.html'"></span>
+            </aside>
+            <!--Content-->
             <div class="content-wrapper">
                 <ui-view></ui-view>
             </div>
 
             <!-- Main Footer -->
-            <footer class="main-footer" ng-include="'static/views/vb.footer.html'"></footer>
+            <footer class="main-footer">
+                <span ng-include="'static/views/vb.footer.html'"></span>
+            </footer>
 
             <!--            <div class="control-sidebar-bg"></div>-->
         </div>
