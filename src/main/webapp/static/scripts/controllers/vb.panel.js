@@ -175,7 +175,6 @@ app.directive('areaChartDirective', function () {
             areaChartUrl: '@'
         },
         link: function (attr, element, scope) {
-
             var margin = {top: 30, right: 20, bottom: 30, left: 50},
             width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
