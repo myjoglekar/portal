@@ -8,17 +8,49 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     });
 
     $scope.panels = [];
-    var uid = 7;
+    var uid = 10;
     $scope.add = function () {
         $scope.id = uid++;
-        $scope.panels.push({chartId: "widget" + $scope.id, width : 2,
-        minHeight : "25vh",
-        widthClass : "col-md-4"});
+        $scope.panels.push({chartId: "widget" + $scope.id, width: 2,
+            minHeight: "25vh",
+            widthClass: "col-md-4", chartType: "line"});
     };
 
-    $scope.dataSet = function () {
-        console.log($scope.datasource)
+    //Data Source
+    $http.get('admin/datasources').success(function (response) {
+        $scope.datasources = response;
+    });
+
+    $scope.selectedDataSource = function (selectedItem) {
+        dataSet(selectedItem);
+        //$scope.selectDataSet = selectedItem;
+        console.log("Data Source : " + selectedItem)
+    };
+
+    //Data Set
+    function dataSet(selectedItem) {
+        console.log("Data Set : " + selectedItem)
+        $http.get('admin/datasources/dataSet/' + selectedItem).success(function (response) {
+
+        });
     }
+
+    $scope.selectedDataSet = function (selected) {
+        console.log(selected)
+    };
+
+    $http.get('static/datas/imageUrl.json').success(function (response) {
+        $scope.chartTypes = response;
+    });
+
+    var value = [];
+    $scope.previewChart = function (chartType, panel) {
+        console.log(chartType, panel);
+        $scope.previewChartType = chartType.type
+    };
+
+    $scope.save = function (panel) {
+    };
 
     $scope.onDropComplete = function (index, panel, evt) {
         var otherObj = $scope.panels[index];
@@ -30,10 +62,6 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     $scope.removePanel = function (index) {
         $scope.panels.splice(index, 1);
     };
-    // angular.$apply();
-    //chart();
-//    $timeout(function(){chart()}, 1000)
-
 });
 app.directive('dynamicTable', function () {
     return{
@@ -44,11 +72,19 @@ app.directive('dynamicTable', function () {
 app.directive('lineChartDirective', function () {
     return{
         restrict: 'A',
-        template: '<div id="lineChartDashboard"></div>',
+        replace: true,
         scope: {
-            value: "@value"
+            // value: "@value",
+            collection: '@',
+            lineChartId: '@',
+            lineChartUrl: '@'
         },
+        template: '<div id="lineChartDashboard{{lineChartId}}"></div>',
         link: function (attr, element, scope) {
+            console.log("lineChart : " + scope.collection)
+            console.log("lineChart Item : " + scope.lineChartId)
+            console.log("lineChart Url : " + scope.lineChartUrl)
+
             var m = [30, 80, 30, 70]; // margins
             var w = 200// width
             var h = 200 // height
@@ -64,7 +100,7 @@ app.directive('lineChartDirective', function () {
             };
             var x_range;
             var y_range;
-            d3.json('static/datas/lineChart.json', function (error, json) {
+            d3.json(scope.lineChartUrl, function (error, json) {
                 var data;
                 if (!json)
                     json = error; //not sure why error seems to contain the data!...
@@ -99,7 +135,7 @@ app.directive('lineChartDirective', function () {
                         .y(function (d) {
                             return y(y_dim_accessor(d));
                         })
-                var graph = d3.select("#lineChartDashboard").append("svg:svg")
+                var graph = d3.select("#lineChartDashboard" + scope.lineChartId).append("svg:svg")
                         .attr("width", w + m[1] + m[3])
                         .attr("height", h + m[0] + m[2])
                         .append("svg:g")
@@ -124,7 +160,10 @@ app.directive('areaChartDirective', function () {
         restrict: 'A',
         template: '<div id="areaChartDashboard"></div>',
         scope: {
-            value: "@value"
+            // value: "@value",
+            //collection: '@',
+            areaChartId: '@',
+            areaChartUrl: '@'
         },
         link: function (attr, element, scope) {
 //    var margin = {top: 20, right: 20, bottom: 30, left: 50},
@@ -159,7 +198,7 @@ app.directive('areaChartDirective', function () {
                     .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            d3.json('static/datas/areaChart.json', function (error, json) {
+            d3.json(scope.areaChartUrl, function (error, json) {
                 var data;
                 if (!json)
                     json = error; //not sure why error seems to contain the data!...
@@ -204,7 +243,10 @@ app.directive('barChartDirective', function () {
         restrict: 'A',
         template: '<div id="barChartDashboard"></div>',
         scope: {
-            value: "@value"
+            // value: "@value",
+            //collection: '@',
+            barChartId: '@',
+            barChartUrl: '@'
         },
         link: function (attr, element, scope) {
             var margin = {top: 40, right: 40, bottom: 40, left: 40},
@@ -226,7 +268,7 @@ app.directive('barChartDirective', function () {
                     .append("g")
                     .attr("transform",
                             "translate(" + margin.left + "," + margin.top + ")");
-            d3.json('static/datas/barChart.json', function (error, data) {
+            d3.json(scope.barChartUrl, function (error, data) {
                 data.forEach(function (d) {
                     d.Letter = d.Letter;
                     d.Freq = +d.Freq;
@@ -279,7 +321,10 @@ app.directive('pieChartDirective', function () {
         restrict: 'A',
         template: '<div id="pieChartDashboard"></div>',
         scope: {
-            value: "@value"
+            // value: "@value",
+            //collection: '@',
+            pieChartId: '@',
+            pieChartUrl: '@'
         },
         link: function (attr, element, scope) {
 //    var w = 300;
@@ -289,7 +334,7 @@ app.directive('pieChartDirective', function () {
             var r = h / 2;
             var color = d3.scale.category20b();
 
-            d3.json('static/datas/pieChart.json', function (error, data) {
+            d3.json(scope.pieChartUrl, function (error, data) {
                 var vis = d3.select("#pieChartDashboard")
                         .append("svg:svg")
                         .data([data])
@@ -326,7 +371,10 @@ app.directive('donutChartDirective', function () {
         restrict: 'A',
         template: '<div id="donutChartDashboard"></div>',
         scope: {
-            value: "@value"
+            // value: "@value",
+            //collection: '@',
+            donutChartId: '@',
+            donutChartUrl: '@'
         },
         link: function (attr, element, scope) {
             var width = 300;
@@ -350,7 +398,7 @@ app.directive('donutChartDirective', function () {
                     .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-            d3.json('static/datas/donutChart.json', function (error, data) {
+            d3.json(scope.donutChartUrl, function (error, data) {
                 var g = svg.selectAll(".arc")
                         .data(pie(data))
                         .enter().append("g")

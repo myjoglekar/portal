@@ -21,7 +21,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             })
             .state("dashboard.tab.panel", {
                 url: "/panel/:panelId",
-                templateUrl: "static/views/dashboard/panels.html",                
+                templateUrl: "static/views/dashboard/panels.html",   
+                controller:'PanelController'
             })
             .state("report", {
                 url: "/report/:reportId",

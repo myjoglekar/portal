@@ -6,28 +6,26 @@
         right: 10px;
         margin-top: -2px;
         padding: 0px;
-    </style>
+    }
+</style>
 
-    <div ng-controller="PanelController">
-        <div class="container-fluid">
-            <div class="pull-right l2t-tab">
-                <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
-                <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
-                <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
-            </div><br><br><br/>
+<div>
+    <div class="container-fluid">
+        <div class="pull-right l2t-tab">
+            <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
+            <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
+            <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
+        </div><br><br><br/>
 
-
-            <div class="box box-info light">
-                <div class="box-header with-border light-blue">
-                    <h3 class="box-title">Questions?</h3>
-                </div>
+        <div class="box box-info light">
+            <div class="box-header with-border light-blue">
+                <h3 class="box-title">Questions?</h3>
             </div>
         </div>
+    </div>
 
-
-
-        <div ng-repeat="panel in panels"    class="col-md-{{2 * panel.width}}">
-
+    <div ng-repeat="panel in panels">
+        <div class="col-md-{{2 * panel.width}}">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">
@@ -45,122 +43,135 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
-                <div class="box-body chart-responsive" ng-if="panel.chartType == 'line'">
+                <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'line'">
                     <!--<div ng-show="panel.chartType == 'line'" class="box-body chart-responsive">-->
-                    <div line-Chart-Directive value="panel" style="min-height:25vh"></div>
-                        <!--<center><div id="{{panel.chartId}}" style="min-height:{{panel.minHeight}}"></div></center>-->
-                        <!--<div class="chart" id="line-chart" style="height: 300px;"></div>-->
-                    </div> 
-                    <div class="box-body chart-responsive" ng-if="panel.chartType == 'area'">
-                        <div area-Chart-Directive value="panel" style="min-height:25vh"></div>
-                    </div> 
-                    <div class="box-body chart-responsive" ng-if="panel.chartType == 'bar'">
-                        <div bar-Chart-Directive value="panel" style="min-height:25vh"></div>
-                    </div> 
-                    <div class="box-body chart-responsive" ng-if="panel.chartType == 'pie'">
-                        <div pie-Chart-Directive value="panel" style="min-height:25vh"></div>
-                    </div> 
-                    <div class="box-body chart-responsive" ng-if="panel.chartType == 'donut'">
-                        <div donut-Chart-Directive value="panel" style="min-height:25vh"></div>
-                    </div> 
-                    <div ng-show="panel.chartType == 'table'" class="box-body chart-responsive">
-                        <div dynamic-Table style="min-height:{{panel.minHeight}}"></div>
-                    </div>  
-                </div>
-                <div id="preview{{$index + 1}}" class="modal fade">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                Chart
-                                <button class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <form class="form-horizontal">
-                                    <div class="form-group">
-                                        <label class="col-sm-2">Data Source</label>
-                                        <div class="col-sm-4">
-                                            <ui-select ng-model="datasource" theme="bootstrap" ng-disabled="">
-                                                <ui-select-match placeholder="">{{$select.selected}}</ui-select-match>
-                                                <ui-select-choices repeat="datasource in datasources | filter: $select.search">
-                                                    <div ng-click="dataSet()" ng-bind-html="datasource | highlight: $select.search"></div>
-                                                </ui-select-choices>
-                                            </ui-select>                                        
-                                        </div>
-
-                                        <label class="col-sm-2">Data Set</label>
-                                        <div class="col-sm-4">
-                                            <ui-select ng-model="datasource" theme="bootstrap" ng-disabled="">
-                                                <ui-select-match placeholder="">{{$select.selected}}</ui-select-match>
-                                                <ui-select-choices repeat="datasource in datasources | filter: $select.search">
-                                                    <div ng-click="dataSet()" ng-bind-html="datasource | highlight: $select.search"></div>
-                                                </ui-select-choices>
-                                            </ui-select>
-                                        </div>
+                    <div line-Chart-Url='{{panel.url}}' line-Chart-Directive collection='{{panel}}' line-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                    <!--<center><div id="{{panel.chartId}}" style="min-height:{{panel.minHeight}}"></div></center>-->
+                    <!--<div class="chart" id="line-chart" style="height: 300px;"></div>-->
+                </div> 
+                <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'area'">
+                    <div area-Chart-Url='{{panel.url}}' area-Chart-Directive style="min-height:{{panel.minHeight}}"></div>
+                </div> 
+                <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'bar'">
+                    <div bar-Chart-Url='{{panel.url}}' bar-Chart-Directive bar-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                </div> 
+                <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'pie'">
+                    <div pie-Chart-Url='{{panel.url}}' pie-Chart-Directive pie-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                </div> 
+                <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'donut'">
+                    <div donut-Chart-Url='{{panel.url}}' donut-Chart-Directive donut-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                </div> 
+                <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'table'">
+                    <div dynamic-Table-Url='{{panel.url}}' dynamic-Table dynamic-Table-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                </div>  
+            </div>
+            <div id="preview{{$index + 1}}" class="modal fade">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Chart
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-2">Data Source</label>
+                                    <div class="col-sm-4">
+                                        <ui-select ng-model="dataSet" on-select="selectedDataSource(dataSet)" theme="bootstrap">
+                                            <ui-select-match placeholder="">{{$select.selected}}</ui-select-match>
+                                            <ui-select-choices repeat="datasource in datasources | filter: $select.search">
+                                                <div ng-bind-html="datasource | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>                                         
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-2">Dimensions</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control" placeholder="Dimensions">
-                                        </div>
+                                    <label class="col-sm-2">Data Set</label>
+                                    <div class="col-sm-4">
+                                        <ui-select multiple ng-model="multipleDemo.colors" theme="bootstrap" ng-disabled="disabled">
+                                            <ui-select-match placeholder="Select colors...">{{$item}}</ui-select-match>
+                                            <ui-select-choices repeat="datasource in datasources | filter:$select.search">
+                                                {{datasource}}
+                                            </ui-select-choices>
+                                        </ui-select> 
+                                    </div>
+                                </div>
 
-                                        <label class="col-sm-2">Filter</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control" placeholder="Filter">
-                                        </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2">Dimensions</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" placeholder="Dimensions">
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-2">Sort</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control" placeholder="Sort">
-                                        </div>
+                                    <label class="col-sm-2">Filter</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" placeholder="Filter">
+                                    </div>
+                                </div>
 
-                                        <label class="col-sm-2">Widget Title</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control" placeholder="title">
-                                        </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2">Sort</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" placeholder="Sort">
                                     </div>
 
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <textarea class="form-control"></textarea>
-                                        </div>
+                                    <label class="col-sm-2">Widget Title</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" placeholder="title">
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2">Url</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" placeholder="Url" ng-model="panel.url">
-                                        </div>
-                                    </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-2" style="font-family:cursive">Type</label>
-                                        <div class="col-sm-10">
-                                            <span ng-repeat="chartType in chartTypes track by chartType.id">
-                                                <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
-                                                    <img src="{{chartType.url}}" class="charttype">
-                                                </span>
+                                <div class="form-group">
+                                    <label class="col-sm-2">Url</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" placeholder="Url" ng-model="panel.url">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2">Type</label>
+                                    <div class="col-sm-10">
+                                        <span ng-repeat="chartType in chartTypes track by chartType.id">
+                                            <span ng-click="previewChart(chartType, panel);" class="previewChart" title="{{chartType.name}}">
+                                                <img src="{{chartType.url}}" class="charttype">
                                             </span>
-                                        </div>
+                                        </span>
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-2">Preview</label>
-                                        <div class="col-sm-10">
-                                            <div id="previewChart{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div>
-                                        </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2">Preview</label>
+                                    <div class="col-sm-10">
+                                        <!--<div id="previewChart{{panel.chartId}}" class="chartpreview" ng-model="panel.preview"></div>-->
+                                        <div class="box-body chart-responsive" ng-if="previewChartType == 'line'">
+                                            <div line-Chart-Directive style="min-height:{{panel.minHeight}}"></div>
+                                        </div> 
+                                        <div class="box-body chart-responsive" ng-if="previewChartType == 'area'">
+                                            <div area-Chart-Directive style="min-height:{{panel.minHeight}}"></div>
+                                        </div> 
+                                        <div class="box-body chart-responsive" ng-if="previewChartType == 'bar'">
+                                            <div bar-Chart-Directive style="min-height:{{panel.minHeight}}"></div>
+                                        </div> 
+                                        <div class="box-body chart-responsive" ng-if="previewChartType == 'pie'">
+                                            <div pie-Chart-Directive style="min-height:{{panel.minHeight}}"></div>
+                                        </div> 
+                                        <div class="box-body chart-responsive" ng-if="previewChartType == 'donut'">
+                                            <div donut-Chart-Directive style="min-height:{{panel.minHeight}}"></div>
+                                        </div> 
+                                        <div ng-show="previewChartType == 'table'" class="box-body chart-responsive">
+                                            <div dynamic-Table style="min-height:{{panel.minHeight}}"></div>
+                                        </div> 
                                     </div>
-                                </form>
+                                </div>
+                            </form>
 
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-primary" ng-click="save(panel)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" ng-click="save(panel)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
                         </div>
                     </div>
                 </div>
-
             </div>
 
         </div>
+    </div>
+</div>
