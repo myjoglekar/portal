@@ -250,17 +250,17 @@
             <version>1.4</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client-gson -->
-<dependency>
-    <groupId>com.google.api-client</groupId>
-    <artifactId>google-api-client-gson</artifactId>
-    <version>1.22.0</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-analytics -->
-<dependency>
-    <groupId>com.google.apis</groupId>
-    <artifactId>google-api-services-analytics</artifactId>
-    <version>v3-rev135-1.22.0</version>
-</dependency>
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client-gson</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-analytics -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-analytics</artifactId>
+            <version>v3-rev135-1.22.0</version>
+        </dependency>
 
     </dependencies>
 
