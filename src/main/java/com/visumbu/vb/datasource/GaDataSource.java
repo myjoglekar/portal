@@ -39,7 +39,7 @@ public class GaDataSource extends BaseDataSource {
 
     private static final String APPLICATION_NAME = "Hello Analytics";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final String KEY_FILE_LOCATION = "f:\\API Project-da31f3788962.p12";
+    private static final String KEY_FILE_LOCATION = "/tmp/API Project-da31f3788962.p12";
     private static final String SERVICE_ACCOUNT_EMAIL = "vs-test-ga@api-project-384381056232.iam.gserviceaccount.com";
     private static Analytics analytics = null;
 
