@@ -14,7 +14,7 @@
         "minHeight" : "25vh",
         "widthClass" : "col-md-4",
         "chartType": "donut",
-        "url": "static/datas/donutChart.json",
+        "url": "static/datas/donutChart.csv",
         "icon": "fa fa-area-chart"
     },
     {
