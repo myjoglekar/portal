@@ -2,18 +2,18 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="com.netphenix_webanalytics_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>com.visumbu.wa.model.WaGroup</class>
-    <class>com.visumbu.wa.model.WaUser</class>
     <class>com.visumbu.wa.model.VisitedSites</class>
     <class>com.visumbu.wa.model.DealerSite</class>
     <class>com.visumbu.wa.model.VisitLog</class>
-    <class>com.visumbu.wa.model.Dealer</class>
     <class>com.visumbu.wa.model.UniqueVisitSessionId</class>
     <class>com.visumbu.wa.model.UniqueVisit</class>
     <class>com.visumbu.wa.model.UniqueVisitFingerprint</class>
     <class>com.visumbu.wa.model.UniqueVisitVisitId</class>
     <class>com.visumbu.wa.model.VisitPluginProperties</class>
     <class>com.visumbu.wa.model.ActionLog</class>
+    <class>com.visumbu.vb.model.Dealer</class>
+    <class>com.visumbu.vb.model.VbUser</class>
+    <class>com.visumbu.vb.model.VbGroup</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/wa?zeroDateTimeBehavior=convertToNull"/>

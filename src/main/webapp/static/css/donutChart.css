@@ -1,6 +1,4 @@
-
-
-.arc text {
+/*.arc text {
   font: 10px sans-serif;
   text-anchor: middle;
 }
@@ -9,4 +7,12 @@
   stroke: #fff;
 }
 
+*/
+.arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
 
+.arc path {
+  stroke: #fff;
+}

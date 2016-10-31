@@ -1,11 +1,11 @@
-nav.navbar-fixed-top{
-    background-color:grey;
+/*nav.navbar-fixed-top{
+    background-color:rgb(228,228,228);
     padding: 1vh;
     height:10px;
 }
-/*#menu-toggle{
+#menu-toggle{
     background-color: gold;
-}*/
+}
 .companyLogo{
     padding-left:40vw;
 }
@@ -15,29 +15,33 @@ nav.navbar-fixed-top{
     background-color: white;
 }
 
+*/
 .fullscreen{
     background-color: #FFFFFF;
 }
+/*
 
 div.col-sm-12{
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
-div.col-md-2{
-    margin-bottom: -15px;
+div.col-sm-4{
+    margin-bottom: 5px;
     padding-left: 2px;
     padding-right: 2px;
+}
+div.sample{
+    resize: both;
+    overflow: auto;
+    z-index: 1000;
 }
 h4.text-danger{
     color:white;
 }
-div.col-sm-4{
-    margin-bottom: -10px;
-    padding-left: 2px;
-    padding-right: 2px;
-}
-div.panel-info{
+
+div.panel{
     border:1px solid grey;
+    margin-bottom: 15px;
 }
 
 
@@ -58,6 +62,7 @@ strong.text-uppercase{
 }
 
 
+*/
 div.chartpreview{
     width:30vw;
     height:30vh;
@@ -70,6 +75,7 @@ img.charttype{
 span.previewChart{
     padding: 1vw;
 }
+/*
 
 #sidebar-wrapper {
     z-index: 1000;
@@ -79,7 +85,7 @@ span.previewChart{
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
-    background: grey;
+    background:rgb(228,228,228);
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -90,7 +96,7 @@ span.previewChart{
     width: 250px;
 }
 
-/* Sidebar Styles */
+ Sidebar Styles 
 
 .sidebar-nav {
     position: absolute;
@@ -172,11 +178,11 @@ footer {
     height: 3vh;
     bottom: 0;
     width: 100%;
-    background-color: grey;
-    color:white;
+    background-color: rgb(228,228,228);
+    color:black;
 }
 
-/*drag and drop*/ 
+drag and drop 
 * {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -195,4 +201,4 @@ footer {
 [ng-drop] div {
     position: relative;
     z-index: 2;
-}
+}*/

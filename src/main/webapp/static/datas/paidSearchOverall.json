@@ -1,8 +1,20 @@
 [
     {
         "chartId": 1,
+        "width" : 2,
+        "minHeight" : "25vh",
+        "widthClass" : "col-md-4",
         "chartType": "line",
         "url": "static/datas/lineChart.json",
+        "icon": "fa fa-line-chart"
+    },
+    {
+        "chartId": 2,
+        "width" : 2,
+        "minHeight" : "25vh",
+        "widthClass" : "col-md-4",
+        "chartType": "Paid Search Overall Table",
+        "url": "static/datas/paidSearchOverallTable.json",
         "icon": "fa fa-line-chart"
     }
 ]
