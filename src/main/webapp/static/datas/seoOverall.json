@@ -14,7 +14,7 @@
         "minHeight" : "25vh",
         "widthClass" : "col-md-4",
         "chartType": "area",
-        "url": "static/datas/areaChart.json",
+        "url": "static/datas/areaChart.tsv",
         "icon": "fa fa-area-chart"
     }
 ]

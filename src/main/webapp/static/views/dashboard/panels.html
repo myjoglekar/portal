@@ -45,24 +45,27 @@
                 </div>
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'line'">
                     <!--<div ng-show="panel.chartType == 'line'" class="box-body chart-responsive">-->
-                    <div line-Chart-Url='{{panel.url}}' line-Chart-Directive collection='{{panel}}' line-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                    <center><div line-Chart-Url='{{panel.url}}' line-Chart-Directive collection='{{panel}}' line-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
                     <!--<center><div id="{{panel.chartId}}" style="min-height:{{panel.minHeight}}"></div></center>-->
                     <!--<div class="chart" id="line-chart" style="height: 300px;"></div>-->
-                </div> 
+                </div>
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'area'">
-                    <div area-Chart-Url='{{panel.url}}' area-Chart-Directive style="min-height:{{panel.minHeight}}"></div>
+                    <center><div area-Chart-Url='{{panel.url}}' area-Chart-Directive style="min-height:{{panel.minHeight}}"></div></center>
                 </div> 
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'bar'">
-                    <div bar-Chart-Url='{{panel.url}}' bar-Chart-Directive bar-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                    <center><div bar-Chart-Url='{{panel.url}}' bar-Chart-Directive bar-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
                 </div> 
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'pie'">
-                    <div pie-Chart-Url='{{panel.url}}' pie-Chart-Directive pie-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                    <center><div pie-Chart-Url='{{panel.url}}' pie-Chart-Directive pie-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
                 </div> 
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'donut'">
-                    <div donut-Chart-Url='{{panel.url}}' donut-Chart-Directive donut-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                    <center><div donut-Chart-Url='{{panel.url}}' donut-Chart-Directive donut-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
+                </div> 
+                <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'groupedBar'">
+                    <div grouped-Bar-Chart-Url='{{panel.url}}' grouped-Bar-Chart-Directive grouped-Bar-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
                 </div> 
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'table'">
-                    <div dynamic-Table-Url='{{panel.url}}' dynamic-Table dynamic-Table-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
+                    <center><div dynamic-Table-Url='{{panel.url}}' dynamic-Table dynamic-Table-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
                 </div>  
             </div>
             <div id="preview{{$index + 1}}" class="modal fade">
@@ -156,6 +159,9 @@
                                         </div> 
                                         <div class="box-body chart-responsive" ng-if="previewChartType == 'donut'">
                                             <div donut-Chart-Directive style="min-height:{{panel.minHeight}}"></div>
+                                        </div> 
+                                        <div class="box-body chart-responsive" ng-if="previewChartType == 'groupedBar'">
+                                            <div grouped-Bar-Chart-Directive style="min-height:{{panel.minHeight}}"></div>
                                         </div> 
                                         <div ng-show="previewChartType == 'table'" class="box-body chart-responsive">
                                             <div dynamic-Table style="min-height:{{panel.minHeight}}"></div>

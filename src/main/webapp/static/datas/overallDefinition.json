@@ -13,7 +13,7 @@
         "minHeight" : "25vh",
         "widthClass" : "col-md-4",
         "chartType": "area",
-        "url": "static/datas/areaChart.json",
+        "url": "static/datas/areaChart.tsv",
         "icon": "fa fa-area-chart"
     },
     {
@@ -31,7 +31,7 @@
         "minHeight" : "25vh",
         "widthClass" : "col-md-4",
         "chartType": "pie",
-        "url": "static/datas/pieChart.json",
+        "url": "static/datas/pieChart.csv",
         "icon": "fa fa-pie-chart"
     },
     {
@@ -40,7 +40,7 @@
         "minHeight" : "25vh",
         "widthClass" : "col-md-4",
         "chartType": "donut",
-        "url": "static/datas/donutChart.json",
+        "url": "static/datas/donutChart.csv",
         "icon": "fa fa-area-chart"
     },
     {
@@ -48,8 +48,8 @@
         "width" : 2,
         "minHeight" : "25vh",
         "widthClass" : "col-md-4",
-        "chartType": "groupedbar",
-        "url": "static/datas/groupedBarChart.json",
+        "chartType": "groupedBar",
+        "url": "static/datas/groupedBarChart.csv",
         "icon": "fa fa-pie-chart"
     }
 ]
