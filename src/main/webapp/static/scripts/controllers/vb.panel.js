@@ -144,8 +144,9 @@ app.directive('lineChartDirective', function () {
                             return y(y_dim_accessor(d));
                         })
                 var graph = d3.select("#lineChartDashboard" + scope.lineChartId).append("svg:svg")
-                        .attr("width", w + m[1] + m[3])
-                        .attr("height", h + m[0] + m[2])
+//                        .attr("width", w + m[1] + m[3])
+//                        .attr("height", h + m[0] + m[2])
+        .attr("viewBox","0 0 380 250")
                         .append("svg:g")
                         .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
                 var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
@@ -175,7 +176,7 @@ app.directive('areaChartDirective', function () {
         },
         link: function (attr, element, scope) {
 
-            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+            var margin = {top: 30, right: 20, bottom: 30, left: 50},
             width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
 
@@ -205,8 +206,9 @@ app.directive('areaChartDirective', function () {
                     });
 
             var svg = d3.select("#areaChartDashboard").append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
+            .attr("viewBox","0 0 380 250")
+//                    .attr("width", width + margin.left + margin.right)
+//                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -343,8 +345,9 @@ app.directive('barChartDirective', function () {
                     .orient("left")
                     .ticks(10);
             var svg = d3.select("#barChartDashboard").append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
+            .attr("viewBox","0 0 380 250")
+//                    .attr("width", width + margin.left + margin.right)
+//                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform",
                             "translate(" + margin.left + "," + margin.top + ")");
@@ -431,8 +434,9 @@ app.directive('pieChartDirective', function () {
                     });
 
             var svg = d3.select("#pieChartDashboard").append("svg")
-                    .attr("width", width)
-                    .attr("height", height)
+            .attr("viewBox","0 0 380 250")
+//                    .attr("width", width)
+//                    .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -534,8 +538,9 @@ app.directive('donutChartDirective', function () {
                     });
 
             var svg = d3.select("#donutChartDashboard").append("svg")
-                    .attr("width", width)
-                    .attr("height", height)
+            .attr("viewBox","0 0 380 250")
+//                    .attr("width", width)
+//                    .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -629,8 +634,8 @@ app.directive('groupedBarChartDirective', function () {
             groupedBarChartUrl: '@'
         },
         link: function (attr, element, scope) {
-            var margin = {top: 20, right: 20, bottom: 30, left: 40},
-            width = 360 - margin.left - margin.right,
+            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+            width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
 
             var x0 = d3.scale.ordinal()
@@ -654,8 +659,9 @@ app.directive('groupedBarChartDirective', function () {
                     .tickFormat(d3.format(".2s"));
 
             var svg = d3.select("#groupedBarChartDashboard").append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
+            .attr("viewBox","0 0 380 250")
+//                    .attr("width", width + margin.left + margin.right)
+//                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
