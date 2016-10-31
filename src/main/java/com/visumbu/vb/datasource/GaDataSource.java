@@ -95,7 +95,8 @@ public class GaDataSource extends BaseDataSource {
         for (Iterator<GaMetric> iterator = allMetrics.iterator(); iterator.hasNext();) {
             GaMetric gaMetric = iterator.next();
             Map map = new HashMap();
-            map.put(gaMetric.getName(), gaMetric.getDisplayName());
+            map.put("name", gaMetric.getName()); 
+            map.put("displayName", gaMetric.getDisplayName());
             dataSets.add(map);
         }
         return dataSets;
