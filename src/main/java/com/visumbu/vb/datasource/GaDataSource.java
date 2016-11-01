@@ -18,6 +18,7 @@ import com.google.api.services.analytics.model.Accounts;
 import com.google.api.services.analytics.model.GaData;
 import com.google.api.services.analytics.model.Profiles;
 import com.google.api.services.analytics.model.Webproperties;
+import com.visumbu.vb.bean.ReportPage;
 import com.visumbu.vb.datasource.bean.GaDimension;
 import com.visumbu.vb.datasource.bean.GaMetric;
 
@@ -38,7 +39,7 @@ public class GaDataSource extends BaseDataSource {
 
     private static final String APPLICATION_NAME = "Hello Analytics";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final String KEY_FILE_LOCATION = "f:\\API Project-da31f3788962.p12";
+    private static final String KEY_FILE_LOCATION = "/tmp/API Project-da31f3788962.p12";
     private static final String SERVICE_ACCOUNT_EMAIL = "vs-test-ga@api-project-384381056232.iam.gserviceaccount.com";
     private static Analytics analytics = null;
 
@@ -94,18 +95,30 @@ public class GaDataSource extends BaseDataSource {
         for (Iterator<GaMetric> iterator = allMetrics.iterator(); iterator.hasNext();) {
             GaMetric gaMetric = iterator.next();
             Map map = new HashMap();
-            map.put(gaMetric.getName(), gaMetric.getDisplayName());
+            map.put("name", gaMetric.getName()); 
+            map.put("displayName", gaMetric.getDisplayName());
             dataSets.add(map);
         }
         return dataSets;
     }
 
-    public List getData(String dataSet, String dimensions, String profileId, String filter, String sort) throws IOException {
+    @Override
+    public Object getData(String dataSetName, Map options, ReportPage page) throws IOException {
+        if (options == null) {
+            options = new HashMap();
+        }
+        String profileId = options.get("profileId") != null ? (String) options.get("profileId") : null;
         if (profileId == null) {
             profileId = getFirstProfileId(analytics);
         }
+        String dimensions = options.get("dimensions") != null ? (String) options.get("dimensions") : null;
+        String startDate = options.get("startDate") != null ? (String) options.get("startDate") : "7daysAgo";
+        String endDate = options.get("endDate") != null ? (String) options.get("endDate") : "today";
+        String filter = options.get("filter") != null ? (String) options.get("filter") : null;
+        String sort = options.get("sort") != null ? (String) options.get("sort") : null;
+
         Analytics.Data.Ga.Get get = analytics.data().ga()
-                .get("ga:" + profileId, "7daysAgo", "today", dataSet);
+                .get("ga:" + profileId, startDate, endDate, dataSetName);
         if (filter != null) {
             get.setFilters(filter);
         }
@@ -114,6 +127,14 @@ public class GaDataSource extends BaseDataSource {
         }
         if (dimensions != null) {
             get.setDimensions(dimensions);
+        }
+        if (page != null) {
+            if (page.getStart() != null) {
+                get.setStartIndex(page.getStart());
+            }
+            if (page.getCount() != null) {
+                get.setMaxResults(page.getCount());
+            }
         }
         GaData gaData = get
                 .execute();

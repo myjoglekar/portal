@@ -5,11 +5,13 @@
  */
 package com.visumbu.vb.datasource;
 
+import com.visumbu.vb.bean.ReportPage;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,13 +45,10 @@ public abstract class BaseDataSource {
 
     public abstract List getDataDimensions(String dataSetName);
     
-    public  List getData(String dataSetName, String dimension, String profileId)  throws IOException {
+    public  Object getData(String dataSetName, Map options, ReportPage page)  throws IOException {
         return null;
     }
-
-    public List getData(String dataSet, String dimensions, String profileId, String filter, String sort) throws IOException {
-        return null;
-    }
+    
 
     public static List<String> getAllDataSources() {
         String[] dataSourcesArr = {"BingDataSource", "CenturyInteractiveDataSource", "DealerVaultDataSource", "FacebookDataSource", "GaDataSource", "GoogleAdWordsDataSource", "MapDataSource", "ReviewPushDataSource", "SpeedShiftDataSource", "YestDataSource"};

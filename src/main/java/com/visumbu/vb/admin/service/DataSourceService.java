@@ -6,11 +6,13 @@
 package com.visumbu.vb.admin.service;
 
 import com.visumbu.vb.admin.dao.DashboardDao;
+import com.visumbu.vb.bean.ReportPage;
 import com.visumbu.vb.datasource.BaseDataSource;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -41,9 +43,9 @@ public class DataSourceService {
         return dataSource.getDataDimensions();
     }
     
-    public List getData(String dataSourceName, String dataSet, String dimensions, String profileId, String filter, String sort) throws IOException, GeneralSecurityException {
+    public Object getData(String dataSourceName, String dataSet, Map options, ReportPage page) throws IOException, GeneralSecurityException {
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
-        return dataSource.getData(dataSet, dimensions, profileId, filter, sort);
+        return dataSource.getData(dataSet, options, page);
     }
 
 }
