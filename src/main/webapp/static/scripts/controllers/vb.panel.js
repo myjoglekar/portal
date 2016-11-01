@@ -17,7 +17,7 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
         $scope.datasources = response;
     });
 
-    $scope.refresh = function () {
+    $scope.pageRefresh = function () {
         getItem();
     };
 
@@ -75,10 +75,6 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     $scope.objectHeader = [];
     $scope.columns = []
     $scope.previewChart = function (chartType, panel) {
-        console.log(chartType.type, panel.url)
-        //$scope.data = '';
-        //$scope.columns = '';
-        // $scope.objectHeader = '';
         $scope.previewChartType = chartType.type;
         $scope.previewChartUrl = panel.url;
         if (chartType.type == "table") {
@@ -100,8 +96,6 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
                 });
             });
         }
-        //panel.url = '';
-        //chartType.type = '';
     };
 
     $scope.save = function (panel) {
@@ -117,24 +111,48 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     $scope.removePanel = function (index) {
         $scope.panels.splice(index, 1);
     };
-    //$scope.lineChartDirectiveControl = {};
-    
-     $scope.setLineFn = function (lineFn) {
+
+    $scope.setLineFn = function (lineFn) {
         $scope.directiveLineFn = lineFn;
     };
-     $scope.setAreaFn = function (areaFn) {
+    $scope.setAreaFn = function (areaFn) {
         $scope.directiveAreaFn = areaFn;
     };
-    
-//     $scope.setDirectiveFns = function (directiveFn) {
-//        $scope.directiveFn = directiveFn;
-//    };
-   
 });
-app.directive('dynamicTable', function () {
+app.directive('dynamicTable', function ($http) {
     return{
         restrict: 'A',
-        templateUrl: 'static/views/dashboard/dynamicTable.html'
+        scope:{
+          dynamicTableUrl:'@'  
+        },
+        templateUrl: 'static/views/dashboard/dynamicTable.html',
+        link: function (scope, element, attr) {
+            scope.currentPage = 1;
+            scope.pageSize = 3;
+            scope.objectHeader = []
+            $http.get(scope.dynamicTableUrl).success(function (response) {
+                console.log("datas :", JSON.stringify(response))
+                scope.columns = []
+                angular.forEach(response, function(obj, header){
+                scope.colName = obj.childItems.slice(0, 1);
+                scope.tableItems = obj.childItems;
+                    //console.log(obj.childItems)
+                angular.forEach(scope.colName, function (value, key) {
+                    var arrayIndex = 0;
+                    for (property in value) {
+                        if (scope.objectHeader.indexOf(property) === -1) {
+                            scope.objectHeader.push(property);
+                        }
+                        scope.columns.push(
+                                {title: scope.objectHeader[arrayIndex], field: scope.objectHeader[arrayIndex], visible: true}
+                        );
+                        arrayIndex++;
+                        scope.headerLength = scope.columns.length;
+                    }
+                });
+            });
+            });
+        }
     }
 });
 app.directive('previewDynamicTable', function () {
@@ -235,7 +253,7 @@ app.directive('lineChartDirective', function () {
                 var graph = d3.select("#lineChartDashboard" + scope.lineChartId).append("svg:svg")
 //                        .attr("width", w + m[1] + m[3])
 //                        .attr("height", h + m[0] + m[2])
-        .attr("viewBox","0 0 380 250")
+                        .attr("viewBox", "0 0 380 250")
                         .append("svg:g")
                         .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
                 var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
@@ -259,13 +277,13 @@ app.directive('areaChartDirective', function () {
         restrict: 'A',
         replace: true,
         scope: {
-            setAreaChartFn: '&',            
+            setAreaChartFn: '&',
             areaChartId: '@',
             areaChartUrl: '@'
         },
         template: '<div id="areaChartDashboard"></div>',
         link: function (scope, element, attr) {
-            var margin = {top: 30, right: 20, bottom: 30, left: 50},
+            var margin = {top: 20, right: 20, bottom: 30, left: 50},
             width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
 
@@ -295,7 +313,7 @@ app.directive('areaChartDirective', function () {
                     });
 
             var svg = d3.select("#areaChartDashboard").append("svg")
-            .attr("viewBox","0 0 380 252")
+                    .attr("viewBox","0 0 380 252")
 //                    .attr("width", width + margin.left + margin.right)
 //                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
@@ -372,7 +390,7 @@ app.directive('barChartDirective', function () {
                     .orient("left")
                     .ticks(10);
             var svg = d3.select("#barChartDashboard").append("svg")
-            .attr("viewBox","0 0 380 250")
+                    .attr("viewBox", "0 0 380 250")
 //                    .attr("width", width + margin.left + margin.right)
 //                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
@@ -440,7 +458,7 @@ app.directive('pieChartDirective', function () {
         link: function (attr, element, scope) {
 
             var width = 300,
-                    height = 250,
+                    height = 260,
                     radius = Math.min(width, height) / 2;
 
             var color = d3.scale.ordinal()
@@ -461,7 +479,7 @@ app.directive('pieChartDirective', function () {
                     });
 
             var svg = d3.select("#pieChartDashboard").append("svg")
-            .attr("viewBox","0 0 380 250")
+                    .attr("viewBox","0 0 380 250") 
 //                    .attr("width", width)
 //                    .attr("height", height)
                     .append("g")
@@ -548,7 +566,7 @@ app.directive('donutChartDirective', function () {
         },
         link: function (attr, element, scope) {
             var width = 300,
-                    height = 250,
+                    height = 260,
                     radius = Math.min(width, height) / 2;
 
             var color = d3.scale.ordinal()
@@ -565,7 +583,7 @@ app.directive('donutChartDirective', function () {
                     });
 
             var svg = d3.select("#donutChartDashboard").append("svg")
-            .attr("viewBox","0 0 380 250")
+                    .attr("viewBox","0 0 380 250")
 //                    .attr("width", width)
 //                    .attr("height", height)
                     .append("g")
@@ -686,7 +704,7 @@ app.directive('groupedBarChartDirective', function () {
                     .tickFormat(d3.format(".2s"));
 
             var svg = d3.select("#groupedBarChartDashboard").append("svg")
-            .attr("viewBox","0 0 380 250")
+                    .attr("viewBox", "0 0 380 250")
 //                    .attr("width", width + margin.left + margin.right)
 //                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
