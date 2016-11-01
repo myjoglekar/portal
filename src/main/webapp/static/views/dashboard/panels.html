@@ -10,11 +10,11 @@
 </style>
 
 <div>
-    <div class="container-fluid">
+    <div class="container-fluid" ng-model="panels">
         <div class="pull-right l2t-tab">
             <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
             <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
-            <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
+            <a class="btn btn-warning" ng-click="refresh()"><i class="fa fa-refresh"></i> Refresh</a>
         </div><br><br><br/>
 
         <div class="box box-info light">
@@ -38,19 +38,18 @@
                         </button>
                         <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview" data-widget=""><i class="fa fa-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-box-tool" data-widget=""><i class="fa fa-refresh"></i>
+                        <button type="button" ng-if="panel.chartType == 'line'" class="btn btn-box-tool" data-widget="" ng-click="directiveLineFn()"><i class="fa fa-refresh"></i>
+                        </button>
+                        <button type="button" ng-if="panel.chartType == 'area'" class="btn btn-box-tool" data-widget="" ng-click="directiveAreaFn()"><i class="fa fa-refresh"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'line'">
-                    <!--<div ng-show="panel.chartType == 'line'" class="box-body chart-responsive">-->
-                    <center><div line-Chart-Url='{{panel.url}}' line-Chart-Directive collection='{{panel}}' line-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
-                    <!--<center><div id="{{panel.chartId}}" style="min-height:{{panel.minHeight}}"></div></center>-->
-                    <!--<div class="chart" id="line-chart" style="height: 300px;"></div>-->
+                    <center><div set-Line-Chart-Fn="setLineFn(lineChartFn)" line-Chart-Directive line-Chart-Url='{{panel.url}}' collection='{{panel}}' line-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
                 </div>
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'area'">
-                    <center><div area-Chart-Url='{{panel.url}}' area-Chart-Directive style="min-height:{{panel.minHeight}}"></div></center>
+                    <center><div set-Area-Chart-Fn="setAreaFn(areaChartFn)" area-Chart-Directive area-Chart-Url='{{panel.url}}' style="min-height:{{panel.minHeight}}"></div></center>
                 </div> 
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'bar'">
                     <center><div bar-Chart-Url='{{panel.url}}' bar-Chart-Directive bar-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
