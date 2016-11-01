@@ -12,21 +12,19 @@
     <div class="row col-md-8 pull-right">
         <div class="col-lg-4 col-xs-4">
             <div class="mar-top">
-                <select class="form-control">
-                    <option>Dealer 1</option>
-                    <option>Dealer 2</option>
-                    <option>Dealer 3</option>
-                    <option>Dealer 4</option>
-                    <option>Dealer 5</option>
+                <select class="form-control" id="selectDealer">
+                    <option ng-repeat="dealer in dealers" value="{{dealer.dealerValue}}">
+                        {{dealer.dealerName}}
+                    </option>
                 </select>
-            </div>
+            </div>  
         </div>
 
         <div class="col-lg-3 col-xs-4">
             <div class="mar-top">
-                <select class="form-control">
+                <select class="form-control" id="selectDashboard">
                     <option ng-repeat="dashboard in dashboards" 
-                            ui-sref="dashboard.tab({tabId: dashboard.dashboardValue})" value="{{dashboard.dashboardValue}}">
+                            ui-sref="dashboard.tab({tabId: dashboard.dashboardValue})" ui-sref-reload="true" value="{{dashboard.dashboardValue}}">
                         {{dashboard.dashboardName}}
                     </option>
                 </select>
@@ -113,3 +111,4 @@
         });
     });
 </script>
+

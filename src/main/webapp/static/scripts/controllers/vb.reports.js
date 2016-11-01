@@ -17,7 +17,7 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.save = function(item){
         console.log("Item Name : "+item);
     };
-    console.log($stateParams.reportId);
+    //console.log($stateParams.reportId);
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
     });

@@ -1,11 +1,17 @@
 app.controller('PanelController', function ($scope, $http, $stateParams, $timeout) {
-    $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
-        $scope.panels = response;
-    });
-
+    function getItem() {
+        $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
+            $scope.panels = response;
+        });
+    }
+    getItem();
     $http.get('admin/datasources').success(function (response) {
         $scope.datasources = response;
     });
+
+    $scope.refresh = function () {
+        getItem();
+    };
 
     $scope.panels = [];
     var uid = 10;
@@ -62,6 +68,7 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     $scope.removePanel = function (index) {
         $scope.panels.splice(index, 1);
     };
+    //$scope.lineChartDirectiveControl = {};
 });
 app.directive('dynamicTable', function () {
     return{
@@ -74,16 +81,17 @@ app.directive('lineChartDirective', function () {
         restrict: 'A',
         replace: true,
         scope: {
-            // value: "@value",
+            control: "=",
             collection: '@',
             lineChartId: '@',
             lineChartUrl: '@'
         },
         template: '<div id="lineChartDashboard{{lineChartId}}"></div>',
-        link: function (attr, element, scope) {
-            console.log("lineChart : " + scope.collection)
-            console.log("lineChart Item : " + scope.lineChartId)
-            console.log("lineChart Url : " + scope.lineChartUrl)
+        link: function (attr, element, $scope) {
+            //scope.internalControl = scope.control || {};
+            console.log("lineChart : " + $scope.collection);
+            console.log("lineChart Item : " + $scope.lineChartId);
+            console.log("lineChart Url : " + $scope.lineChartUrl);
 
             var m = [30, 80, 30, 70]; // margins
             var w = 200// width
@@ -100,30 +108,36 @@ app.directive('lineChartDirective', function () {
             };
             var x_range;
             var y_range;
-            d3.json(scope.lineChartUrl, function (error, json) {
-                var data;
-                if (!json)
-                    json = error; //not sure why error seems to contain the data!...
-                if (json[0] && json[0].summary) {
-                    data = json[0].summary;
-                } else {
-                    data = json;
-                }
-                x_range = [
-                    d3.min(data, x_dim_accessor),
-                    d3.max(data, x_dim_accessor)
-                ];
-                y_range = [
-                    d3.min(data, y_dim_accessor),
-                    d3.max(data, y_dim_accessor)
-                ];
-                var data2 = data.filter(function (d) {
-                    return d.label
-                }).sort(function (a, b) {
-                    return x_dim_accessor(a) - x_dim_accessor(b);
+            
+            $scope.reload = function (lineChartUrl) {
+                alert(lineChartUrl)
+                d3.json(lineChartUrl, function (error, json) {
+                    var data;
+                    if (!json)
+                        json = error; //not sure why error seems to contain the data!...
+                    if (json[0] && json[0].summary) {
+                        data = json[0].summary;
+                    } else {
+                        data = json;
+                    }
+                    x_range = [
+                        d3.min(data, x_dim_accessor),
+                        d3.max(data, x_dim_accessor)
+                    ];
+                    y_range = [
+                        d3.min(data, y_dim_accessor),
+                        d3.max(data, y_dim_accessor)
+                    ];
+                    var data2 = data.filter(function (d) {
+                        return d.label
+                    }).sort(function (a, b) {
+                        return x_dim_accessor(a) - x_dim_accessor(b);
+                    });
+                    renderLineChart(data2);
                 });
-                renderLineChart(data2);
-            });
+            };
+            
+            $scope.reload($scope.lineChartUrl);
 
             function renderLineChart(data) {
                 var x = d3.scale.linear().domain(x_range).range([0, w]);
@@ -135,7 +149,7 @@ app.directive('lineChartDirective', function () {
                         .y(function (d) {
                             return y(y_dim_accessor(d));
                         })
-                var graph = d3.select("#lineChartDashboard" + scope.lineChartId).append("svg:svg")
+                var graph = d3.select("#lineChartDashboard" + $scope.lineChartId).append("svg:svg")
                         .attr("width", w + m[1] + m[3])
                         .attr("height", h + m[0] + m[2])
                         .append("svg:g")
@@ -155,6 +169,7 @@ app.directive('lineChartDirective', function () {
         }
     };
 });
+
 app.directive('areaChartDirective', function () {
     return{
         restrict: 'A',

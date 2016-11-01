@@ -10,11 +10,11 @@
 </style>
 
 <div>
-    <div class="container-fluid">
+    <div class="container-fluid" ng-model="panels">
         <div class="pull-right l2t-tab">
             <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
             <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
-            <a href="#" class="btn btn-warning"><i class="fa fa-refresh"></i> Refresh</a>
+            <a class="btn btn-warning" ng-click="refresh()"><i class="fa fa-refresh"></i> Refresh</a>
         </div><br><br><br/>
 
         <div class="box box-info light">
@@ -38,7 +38,7 @@
                         </button>
                         <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview" data-widget=""><i class="fa fa-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-box-tool" data-widget=""><i class="fa fa-refresh"></i>
+                        <button type="button" class="btn btn-box-tool" data-widget="" ng-click="reload(panel.url)"><i class="fa fa-refresh"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>

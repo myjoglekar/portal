@@ -9,4 +9,8 @@ app.controller('HeaderController', function ($scope, $http, $stateParams) {
         $scope.selectName = dashboard.dashboardName;
     };
     
-})
+    $http.get('static/datas/dealer.json').success(function (response) {
+        $scope.dealers = response;
+    });
+    
+});
