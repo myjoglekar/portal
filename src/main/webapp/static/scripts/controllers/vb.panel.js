@@ -2,7 +2,7 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
         $scope.panels = response;
     });
-    
+
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
     });
@@ -19,42 +19,79 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
             minHeight: "25vh",
             widthClass: "col-md-4", chartType: "line"});
     };
-
     //Data Source
     $http.get('admin/datasources').success(function (response) {
         $scope.datasources = response;
     });
 
     $scope.selectedDataSource = function (selectedItem) {
-        dataSet(selectedItem);
+        $scope.selectItem = selectedItem
+        selectedItems(selectedItem);
         //$scope.selectDataSet = selectedItem;
         console.log("Data Source : " + selectedItem)
     };
 
     //Data Set
-    function dataSet(selectedItem) {
+    function selectedItems(selectedItem) {
         console.log("Data Set : " + selectedItem)
         $http.get('admin/datasources/dataSet/' + selectedItem).success(function (response) {
             $scope.dataSets = response;
         });
         $http.get('admin/datasources/dataDimensions/' + selectedItem).success(function (response) {
             $scope.dataDimensions = response;
-        })
+        });
     }
-
-    $scope.selectedDataSet = function (selected) {
-        console.log(selected)
+    $scope.dataSetName = [];
+    $scope.selectedDataSet = function (dataSet) {
+        angular.forEach(dataSet, function (value, key) {
+            console.log(value.name)
+            $scope.dataSetName.push(value.name);
+            dataSet = '';
+        });
+        console.log("Name : " + $scope.dataSetName);
     };
-    $scope.selectedDimensions = function(dimensions){
-        console.log(dimensions)
-    }
+    $scope.selectedDimensions = function (dimension, dataSet) {
+        angular.forEach(dimension, function (value, key) {
+            $scope.dimensionName = value.name;
+        });
+        $http.get('admin/datasources/dataDimensions/' + $scope.selectItem + '?' + 'dimensions=' + $scope.dimensionName + '&dataSet=' + $scope.dataSetName + '&sort=ga:sessions').success(function () {
 
-    
+        });
+        console.log($scope.dimensionName, $scope.dataSetName);
+    };
+
 
     var value = [];
+    $scope.objectHeader = [];
+    $scope.columns = []
     $scope.previewChart = function (chartType, panel) {
-        console.log(chartType, panel);
-        $scope.previewChartType = chartType.type
+        console.log(chartType.type, panel.url)
+        //$scope.data = '';
+        //$scope.columns = '';
+       // $scope.objectHeader = '';
+        $scope.previewChartType = chartType.type;
+        $scope.previewChartUrl = panel.url;
+        if (chartType.type == "table") {
+            $http.get(panel.url).success(function (response) {
+                $scope.data = response.slice(0, 4);
+                $scope.colName = response.slice(0, 1);
+                angular.forEach($scope.colName, function (value, key) {
+                    var arrayIndex = 0;
+                    for (property in value) {
+                        if ($scope.objectHeader.indexOf(property) === -1) {
+                            $scope.objectHeader.push(property);
+                        }
+                        $scope.columns.push(
+                                {title: $scope.objectHeader[arrayIndex], field: $scope.objectHeader[arrayIndex], visible: true}
+                        );
+                        arrayIndex++;
+                        $scope.headerLength = $scope.columns.length;
+                    }
+                });
+            });
+        }
+        //panel.url = '';
+        //chartType.type = '';
     };
 
     $scope.save = function (panel) {
@@ -76,6 +113,22 @@ app.directive('dynamicTable', function () {
         restrict: 'A',
         templateUrl: 'static/views/dashboard/dynamicTable.html'
     }
+});
+app.directive('previewDynamicTable', function () {
+    return{
+        restrict: 'A',
+        template: '<table st-table="data" class="table table-bordered table-hover">' +
+                '<thead><tr>' +
+                '<th class="text-uppercase info" ng-repeat="col in columns">' +
+                '<input type="checkbox" value="">{{col.title}}</th>' +
+                '</tr></thead>' +
+                '<tbody>' +
+                '<tr ng-repeat="value in data">' +
+                '<td ng-repeat="col in columns"> {{value[col.field] | limitTo: 5}} </td>' +
+                '</tr>' +
+                '</tbody>' +
+                '</table>'
+    };
 });
 app.directive('lineChartDirective', function () {
     return{
