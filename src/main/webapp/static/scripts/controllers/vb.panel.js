@@ -265,7 +265,7 @@ app.directive('areaChartDirective', function () {
         },
         template: '<div id="areaChartDashboard"></div>',
         link: function (scope, element, attr) {
-            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+            var margin = {top: 30, right: 20, bottom: 30, left: 50},
             width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
 
@@ -295,7 +295,7 @@ app.directive('areaChartDirective', function () {
                     });
 
             var svg = d3.select("#areaChartDashboard").append("svg")
-            .attr("viewBox","0 0 380 250")
+            .attr("viewBox","0 0 380 252")
 //                    .attr("width", width + margin.left + margin.right)
 //                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
@@ -440,7 +440,7 @@ app.directive('pieChartDirective', function () {
         link: function (attr, element, scope) {
 
             var width = 300,
-                    height = 260,
+                    height = 250,
                     radius = Math.min(width, height) / 2;
 
             var color = d3.scale.ordinal()
@@ -461,9 +461,9 @@ app.directive('pieChartDirective', function () {
                     });
 
             var svg = d3.select("#pieChartDashboard").append("svg")
-            //.attr("viewBox","0 0 380 250")
-                    .attr("width", width)
-                    .attr("height", height)
+            .attr("viewBox","0 0 380 250")
+//                    .attr("width", width)
+//                    .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -548,7 +548,7 @@ app.directive('donutChartDirective', function () {
         },
         link: function (attr, element, scope) {
             var width = 300,
-                    height = 260,
+                    height = 250,
                     radius = Math.min(width, height) / 2;
 
             var color = d3.scale.ordinal()
@@ -565,9 +565,9 @@ app.directive('donutChartDirective', function () {
                     });
 
             var svg = d3.select("#donutChartDashboard").append("svg")
-            //.attr("viewBox","0 0 380 250")
-                    .attr("width", width)
-                    .attr("height", height)
+            .attr("viewBox","0 0 380 250")
+//                    .attr("width", width)
+//                    .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
