@@ -1,7 +1,13 @@
 app.controller('PanelController', function ($scope, $http, $stateParams, $timeout) {
-    $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
-        $scope.panels = response;
-    });
+    function getItem() {
+        $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
+            $scope.panels = response;
+        });
+    }
+    getItem();
+//    $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
+//        $scope.panels = response;
+//    });
 
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
@@ -10,6 +16,10 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     $http.get('admin/datasources').success(function (response) {
         $scope.datasources = response;
     });
+
+    $scope.refresh = function () {
+        getItem();
+    };
 
     $scope.panels = [];
     var uid = 10;
@@ -25,7 +35,7 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     });
 
     $scope.selectedDataSource = function (selectedItem) {
-        $scope.selectItem = selectedItem
+        $scope.selectItem = selectedItem;
         selectedItems(selectedItem);
         //$scope.selectDataSet = selectedItem;
         console.log("Data Source : " + selectedItem)
@@ -68,7 +78,7 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
         console.log(chartType.type, panel.url)
         //$scope.data = '';
         //$scope.columns = '';
-       // $scope.objectHeader = '';
+        // $scope.objectHeader = '';
         $scope.previewChartType = chartType.type;
         $scope.previewChartUrl = panel.url;
         if (chartType.type == "table") {
@@ -107,6 +117,19 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     $scope.removePanel = function (index) {
         $scope.panels.splice(index, 1);
     };
+    //$scope.lineChartDirectiveControl = {};
+    
+     $scope.setLineFn = function (lineFn) {
+        $scope.directiveLineFn = lineFn;
+    };
+     $scope.setAreaFn = function (areaFn) {
+        $scope.directiveAreaFn = areaFn;
+    };
+    
+//     $scope.setDirectiveFns = function (directiveFn) {
+//        $scope.directiveFn = directiveFn;
+//    };
+   
 });
 app.directive('dynamicTable', function () {
     return{
@@ -130,21 +153,24 @@ app.directive('previewDynamicTable', function () {
                 '</table>'
     };
 });
+
 app.directive('lineChartDirective', function () {
     return{
         restrict: 'A',
         replace: true,
         scope: {
-            // value: "@value",
+            setLineChartFn: '&',
+            control: "=",
             collection: '@',
             lineChartId: '@',
-            lineChartUrl: '@'
+            lineChartUrl: '@',
         },
         template: '<div id="lineChartDashboard{{lineChartId}}"></div>',
-        link: function (attr, element, scope) {
-            console.log("lineChart : " + scope.collection)
-            console.log("lineChart Item : " + scope.lineChartId)
-            console.log("lineChart Url : " + scope.lineChartUrl)
+        link: function (scope, element, attr) {
+            //scope.internalControl = scope.control || {};
+            console.log("lineChart : " + scope.collection);
+            console.log("lineChart Item : " + scope.lineChartId);
+            console.log("lineChart Url : " + scope.lineChartUrl);
 
             var m = [30, 80, 30, 70]; // margins
             var w = 300// width
@@ -161,30 +187,36 @@ app.directive('lineChartDirective', function () {
             };
             var x_range;
             var y_range;
-            d3.json(scope.lineChartUrl, function (error, json) {
-                var data;
-                if (!json)
-                    json = error; //not sure why error seems to contain the data!...
-                if (json[0] && json[0].summary) {
-                    data = json[0].summary;
-                } else {
-                    data = json;
-                }
-                x_range = [
-                    d3.min(data, x_dim_accessor),
-                    d3.max(data, x_dim_accessor)
-                ];
-                y_range = [
-                    d3.min(data, y_dim_accessor),
-                    d3.max(data, y_dim_accessor)
-                ];
-                var data2 = data.filter(function (d) {
-                    return d.label
-                }).sort(function (a, b) {
-                    return x_dim_accessor(a) - x_dim_accessor(b);
+
+            scope.refreshWidgetLine = function () {
+                element.html('');
+                d3.json(scope.lineChartUrl, function (error, json) {
+                    var data;
+                    if (!json)
+                        json = error; //not sure why error seems to contain the data!...
+                    if (json[0] && json[0].summary) {
+                        data = json[0].summary;
+                    } else {
+                        data = json;
+                    }
+                    x_range = [
+                        d3.min(data, x_dim_accessor),
+                        d3.max(data, x_dim_accessor)
+                    ];
+                    y_range = [
+                        d3.min(data, y_dim_accessor),
+                        d3.max(data, y_dim_accessor)
+                    ];
+                    var data2 = data.filter(function (d) {
+                        return d.label
+                    }).sort(function (a, b) {
+                        return x_dim_accessor(a) - x_dim_accessor(b);
+                    });
+                    renderLineChart(data2);
                 });
-                renderLineChart(data2);
-            });
+            };
+            scope.setLineChartFn({lineChartFn: scope.refreshWidgetLine});
+            scope.refreshWidgetLine();
 
             function renderLineChart(data) {
                 var x = d3.scale.linear().domain(x_range).range([0, w]);
@@ -217,18 +249,19 @@ app.directive('lineChartDirective', function () {
         }
     };
 });
+
 app.directive('areaChartDirective', function () {
     return{
         restrict: 'A',
-        template: '<div id="areaChartDashboard"></div>',
+        replace: true,
         scope: {
-            // value: "@value",
-            //collection: '@',
+            setAreaChartFn: '&',            
             areaChartId: '@',
             areaChartUrl: '@'
         },
-        link: function (attr, element, scope) {
-            var margin = {top: 30, right: 20, bottom: 30, left: 50},
+        template: '<div id="areaChartDashboard"></div>',
+        link: function (scope, element, attr) {
+            var margin = {top: 20, right: 20, bottom: 30, left: 50},
             width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
 
@@ -264,114 +297,52 @@ app.directive('areaChartDirective', function () {
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            d3.tsv(scope.areaChartUrl, function (error, areaData) {
-                var data = areaData
-                if (error)
-                    throw error;
+            scope.refreshWidgetArea = function () {
+//                element.html('');
+                d3.tsv(scope.areaChartUrl, function (error, areaData) {
+                    var data = areaData;
+                    if (error)
+                        throw error;
 
-                data.forEach(function (d) {
-                    d.date = parseDate(d.date);
-                    d.close = +d.close;
+                    data.forEach(function (d) {
+                        d.date = parseDate(d.date);
+                        d.close = +d.close;
+                    });
+
+                    x.domain(d3.extent(data, function (d) {
+                        return d.date;
+                    }));
+                    y.domain([0, d3.max(data, function (d) {
+                            return d.close;
+                        })]);
+
+                    svg.append("path")
+                            .datum(data)
+                            .attr("class", "area")
+                            .attr("d", area);
+
+                    svg.append("g")
+                            .attr("class", "x axis")
+                            .attr("transform", "translate(0," + height + ")")
+                            .call(xAxis);
+
+                    svg.append("g")
+                            .attr("class", "y axis")
+                            .call(yAxis)
+                            .append("text")
+                            .attr("transform", "rotate(-90)")
+                            .attr("y", 6)
+                            .attr("dy", ".71em")
+                            .style("text-anchor", "end")
+                            .text("Price ($)");
                 });
-
-                x.domain(d3.extent(data, function (d) {
-                    return d.date;
-                }));
-                y.domain([0, d3.max(data, function (d) {
-                        return d.close;
-                    })]);
-
-                svg.append("path")
-                        .datum(data)
-                        .attr("class", "area")
-                        .attr("d", area);
-
-                svg.append("g")
-                        .attr("class", "x axis")
-                        .attr("transform", "translate(0," + height + ")")
-                        .call(xAxis);
-
-                svg.append("g")
-                        .attr("class", "y axis")
-                        .call(yAxis)
-                        .append("text")
-                        .attr("transform", "rotate(-90)")
-                        .attr("y", 6)
-                        .attr("dy", ".71em")
-                        .style("text-anchor", "end")
-                        .text("Price ($)");
-            });
-
-
-//            var margin = {top: 20, right: 20, bottom: 30, left: 50},
-//            width = 380 - margin.left - margin.right,
-//                    height = 260 - margin.top - margin.bottom;
-//            var parseDate = d3.time.format("%d-%b-%y").parse;
-//
-//            var x = d3.time.scale()
-//                    .range([0, width]);
-//            var y = d3.scale.linear()
-//                    .range([height, 0]);
-//
-//            var xAxis = d3.svg.axis()
-//                    .scale(x)
-//                    .orient("bottom");
-//            var yAxis = d3.svg.axis()
-//                    .scale(y)
-//                    .orient("left");
-//            var area = d3.svg.area()
-//                    .x(function (d) {
-//                        return x(d.date);
-//                    })
-//                    .y0(height)
-//                    .y1(function (d) {
-//                        return y(d.close);
-//                    });
-//            var svg = d3.select("#areaChartDashboard").append("svg")
-//                    .attr("width", width + margin.left + margin.right)
-//                    .attr("height", height + margin.top + margin.bottom)
-//                    .append("g")
-//                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-//            d3.json(scope.areaChartUrl, function (error, json) {
-//                var data;
-//                if (!json)
-//                    json = error; //not sure why error seems to contain the data!...
-//                if (json[0] && json[0].summary) {
-//                    data = json[0].summary;
-//                } else {
-//                    data = json;
-//                }
-//                data.forEach(function (d) {
-//                    d.date = parseDate(d.date);
-//                    d.close = +d.close;
-//                });
-//                x.domain(d3.extent(data, function (d) {
-//                    return d.date;
-//                }));
-//                y.domain([0, d3.max(data, function (d) {
-//                        return d.close;
-//                    })]);
-//                svg.append("path")
-//                        .datum(data)
-//                        .attr("class", "area")
-//                        .attr("d", area);
-//                svg.append("g")
-//                        .attr("class", "x axis")
-//                        .attr("transform", "translate(0," + height + ")")
-//                        .call(xAxis);
-//                svg.append("g")
-//                        .attr("class", "y axis")
-//                        .call(yAxis)
-//                        .append("text")
-//                        .attr("transform", "rotate(-90)")
-//                        .attr("y", 6)
-//                        .attr("dy", ".71em")
-//                        .style("text-anchor", "end")
-//                        .text("Price ($)");
-//            });
+            };
+            scope.setAreaChartFn({areaChartFn: scope.refreshWidgetArea});
+            scope.refreshWidgetArea();
         }
     };
 });
+
 app.directive('barChartDirective', function () {
     return{
         restrict: 'A',
