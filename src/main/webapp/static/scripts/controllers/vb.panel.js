@@ -313,7 +313,7 @@ app.directive('areaChartDirective', function () {
                     });
 
             var svg = d3.select("#areaChartDashboard").append("svg")
-                    .attr("viewBox","0 0 380 252")
+                    .attr("viewBox","0 0 380 250")
 //                    .attr("width", width + margin.left + margin.right)
 //                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
