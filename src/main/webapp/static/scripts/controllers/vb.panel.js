@@ -140,10 +140,14 @@ app.directive('dynamicTable', function () {
 app.directive('previewDynamicTable', function () {
     return{
         restrict: 'A',
-        template: '<table st-table="data" class="table table-bordered table-hover">' +
+        template: '<table st-table="data" class="table table-bordered table-responsive">' +
                 '<thead><tr>' +
-                '<th class="text-uppercase info" ng-repeat="col in columns">' +
-                '<input type="checkbox" value="">{{col.title}}</th>' +
+                '<th class="text-uppercase info" ng-repeat="col in columns">' + '<form class="form-inline">' +
+                '<div class="checkbox">' +
+                '<label><input type="checkbox">{{col.title}}</label>' +
+                '</div>' +
+                '</form></th>' +
+                '' +
                 '</tr></thead>' +
                 '<tbody>' +
                 '<tr ng-repeat="value in data">' +
