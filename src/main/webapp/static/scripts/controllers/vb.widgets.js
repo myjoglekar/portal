@@ -137,33 +137,38 @@ app.directive('dynamicTable', function ($http) {
     return{
         restrict: 'A',
         scope: {
-            dynamicTableUrl: '@'
+            dynamicTableUrl: '@',
+            setTableFn: '&'
         },
         templateUrl: 'static/views/dashboard/dynamicTable.html',
         link: function (scope, element, attr) {
-            scope.currentPage = 1;
-            scope.pageSize = 3;
-            scope.objectHeader = []
-            $http.get(scope.dynamicTableUrl).success(function (response) {
-                scope.columns = []
-                angular.forEach(response, function (obj, header) {
-                    scope.colName = obj.childItems.slice(0, 1);
-                    scope.tableItems = obj.childItems;
-                    angular.forEach(scope.colName, function (value, key) {
-                        var arrayIndex = 0;
-                        for (property in value) {
-                            if (scope.objectHeader.indexOf(property) === -1) {
-                                scope.objectHeader.push(property);
+            scope.refreshTable = function () {
+                scope.currentPage = 1;
+                scope.pageSize = 3;
+                scope.objectHeader = []
+                $http.get(scope.dynamicTableUrl).success(function (response) {
+                    scope.columns = []
+                    angular.forEach(response, function (obj, header) {
+                        scope.colName = obj.childItems.slice(0, 1);
+                        scope.tableItems = obj.childItems;
+                        angular.forEach(scope.colName, function (value, key) {
+                            var arrayIndex = 0;
+                            for (property in value) {
+                                if (scope.objectHeader.indexOf(property) === -1) {
+                                    scope.objectHeader.push(property);
+                                }
+                                scope.columns.push(
+                                        {title: scope.objectHeader[arrayIndex], field: scope.objectHeader[arrayIndex], visible: true}
+                                );
+                                arrayIndex++;
+                                scope.headerLength = scope.columns.length;
                             }
-                            scope.columns.push(
-                                    {title: scope.objectHeader[arrayIndex], field: scope.objectHeader[arrayIndex], visible: true}
-                            );
-                            arrayIndex++;
-                            scope.headerLength = scope.columns.length;
-                        }
+                        });
                     });
                 });
-            });
+            }
+            scope.setTableFn({tableFn: scope.refreshTable});
+            scope.refreshTable();
         }
     }
 });
@@ -593,7 +598,7 @@ app.directive('groupedBarChartDirective', function () {
             groupedBarChartId: '@',
             groupedBarChartUrl: '@'
         },
-        link: function (attr, element, scope) {
+        link: function (scope, element, attr) {
             var margin = {top: 20, right: 20, bottom: 30, left: 50},
             width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
