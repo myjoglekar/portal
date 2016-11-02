@@ -313,7 +313,7 @@ app.directive('areaChartDirective', function () {
                         return y(d.close);
                     });
             var svg = d3.select("#areaChartDashboard").append("svg")
-                    .attr("viewBox", "0 0 380 252")
+                    .attr("viewBox", "0 0 380 250")
 //                    .attr("width", width + margin.left + margin.right)
 //                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
@@ -527,7 +527,7 @@ app.directive('donutChartDirective', function () {
             donutChartUrl: '@'
         },
         link: function (scope, element, attr) {
-            var width = 300,
+            var width = 320,
                     height = 260,
                     radius = Math.min(width, height) / 2;
             var color = d3.scale.ordinal()
