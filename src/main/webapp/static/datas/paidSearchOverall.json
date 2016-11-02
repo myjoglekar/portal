@@ -1,5 +1,14 @@
 [
     {
+        "chartId": 2,
+        "width" : 6,
+        "minHeight" : "25vh",
+        "widthClass" : "col-md-4",
+        "chartType": "table",
+        "url": "static/datas/paidSearchOverallTable.json",
+        "icon": "fa fa-table"
+    },
+    {
         "chartId": 1,
         "width" : 2,
         "minHeight" : "25vh",
@@ -7,14 +16,6 @@
         "chartType": "line",
         "url": "static/datas/lineChart.json",
         "icon": "fa fa-line-chart"
-    },
-    {
-        "chartId": 2,
-        "width" : 2,
-        "minHeight" : "25vh",
-        "widthClass" : "col-md-4",
-        "chartType": "Paid Search Overall Table",
-        "url": "static/datas/paidSearchOverallTable.json",
-        "icon": "fa fa-line-chart"
     }
+    
 ]
