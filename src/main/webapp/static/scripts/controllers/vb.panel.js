@@ -565,7 +565,7 @@ app.directive('donutChartDirective', function () {
             donutChartUrl: '@'
         },
         link: function (attr, element, scope) {
-            var width = 300,
+            var width = 320,
                     height = 260,
                     radius = Math.min(width, height) / 2;
 
