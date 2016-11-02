@@ -1,13 +1,11 @@
-app.controller('PanelController', function ($scope, $http, $stateParams, $timeout) {
+app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
+    $scope.widgets = [];
     function getItem() {
-        $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
-            $scope.panels = response;
+        $http.get("static/datas/" + $stateParams.widgetId + ".json").success(function (response) {
+            $scope.widgets = response;
         });
     }
     getItem();
-//    $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
-//        $scope.panels = response;
-//    });
 
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
@@ -19,24 +17,25 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     $scope.pageRefresh = function () {
         getItem();
     };
-    $scope.panels = [];
+
     var uid = 10;
     $scope.add = function () {
         $scope.id = uid++;
-        $scope.panels.push({chartId: "widget" + $scope.id, width: 2,
+        $scope.widgets.push({chartId: "widget" + $scope.id, width: 2,
             minHeight: "25vh",
             widthClass: "col-md-4", chartType: "line"});
     };
+
     //Data Source
     $http.get('admin/datasources').success(function (response) {
         $scope.datasources = response;
     });
+
     $scope.selectedDataSource = function (selectedItem) {
         $scope.selectItem = selectedItem;
         selectedItems(selectedItem);
-        //$scope.selectDataSet = selectedItem;
-        console.log("Data Source : " + selectedItem)
     };
+
     //Data Set
     function selectedItems(selectedItem) {
         console.log("Data Set : " + selectedItem)
@@ -47,6 +46,7 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
             $scope.dataDimensions = response;
         });
     }
+
     $scope.dataSetName = [];
     $scope.selectedDataSet = function (dataSet) {
         angular.forEach(dataSet, function (value, key) {
@@ -67,12 +67,12 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     };
     var value = [];
     $scope.objectHeader = [];
-    $scope.columns = []
-    $scope.previewChart = function (chartType, panel) {
+    $scope.columns = [];
+    $scope.previewChart = function (chartType, widget) {
         $scope.previewChartType = chartType.type;
-        $scope.previewChartUrl = panel.url;
+        $scope.previewChartUrl = widget.url;
         if (chartType.type == "table") {
-            $http.get(panel.url).success(function (response) {
+            $http.get(widget.url).success(function (response) {
                 $scope.data = response.slice(0, 4);
                 $scope.colName = response.slice(0, 1);
                 angular.forEach($scope.colName, function (value, key) {
@@ -91,18 +91,24 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
             });
         }
     };
-    $scope.save = function (panel) {
-    };
-    $scope.onDropComplete = function (index, panel, evt) {
-        var otherObj = $scope.panels[index];
-        var otherIndex = $scope.panels.indexOf(panel);
-        $scope.panels[index] = panel;
-        $scope.panels[otherIndex] = otherObj;
-    };
-    $scope.removePanel = function (index) {
-        $scope.panels.splice(index, 1);
+
+    $scope.save = function (widget) {
+
     };
 
+    $scope.onDropComplete = function (index, widget, evt) {
+        var otherObj = $scope.widgets[index];
+        var otherIndex = $scope.widgets.indexOf(widget);
+        $scope.widgets[index] = widget;
+        $scope.widgets[otherIndex] = otherObj;
+    };
+
+    //Remove widget
+//    $scope.removeWidget = function (index) {
+//        $scope.widgets.splice(index, 1);
+//    };
+
+    //widget refresh
     $scope.setLineFn = function (lineFn) {
         $scope.directiveLineFn = lineFn;
     };
@@ -126,6 +132,7 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     };
 
 });
+
 app.directive('dynamicTable', function ($http) {
     return{
         restrict: 'A',
