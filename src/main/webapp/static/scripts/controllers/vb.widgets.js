@@ -1,13 +1,11 @@
-app.controller('PanelController', function ($scope, $http, $stateParams, $timeout) {
+app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
+    $scope.widgets = [];
     function getItem() {
-        $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
-            $scope.panels = response;
+        $http.get("static/datas/" + $stateParams.widgetId + ".json").success(function (response) {
+            $scope.widgets = response;
         });
     }
     getItem();
-//    $http.get("static/datas/" + $stateParams.panelId + ".json").success(function (response) {
-//        $scope.panels = response;
-//    });
 
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
@@ -19,24 +17,25 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     $scope.pageRefresh = function () {
         getItem();
     };
-    $scope.panels = [];
+
     var uid = 10;
     $scope.add = function () {
         $scope.id = uid++;
-        $scope.panels.push({chartId: "widget" + $scope.id, width: 2,
+        $scope.widgets.push({chartId: "widget" + $scope.id, width: 2,
             minHeight: "25vh",
             widthClass: "col-md-4", chartType: "line"});
     };
+
     //Data Source
     $http.get('admin/datasources').success(function (response) {
         $scope.datasources = response;
     });
+
     $scope.selectedDataSource = function (selectedItem) {
         $scope.selectItem = selectedItem;
         selectedItems(selectedItem);
-        //$scope.selectDataSet = selectedItem;
-        console.log("Data Source : " + selectedItem)
     };
+
     //Data Set
     function selectedItems(selectedItem) {
         console.log("Data Set : " + selectedItem)
@@ -47,6 +46,7 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
             $scope.dataDimensions = response;
         });
     }
+
     $scope.dataSetName = [];
     $scope.selectedDataSet = function (dataSet) {
         angular.forEach(dataSet, function (value, key) {
@@ -67,12 +67,12 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     };
     var value = [];
     $scope.objectHeader = [];
-    $scope.columns = []
-    $scope.previewChart = function (chartType, panel) {
+    $scope.columns = [];
+    $scope.previewChart = function (chartType, widget) {
         $scope.previewChartType = chartType.type;
-        $scope.previewChartUrl = panel.url;
+        $scope.previewChartUrl = widget.url;
         if (chartType.type == "table") {
-            $http.get(panel.url).success(function (response) {
+            $http.get(widget.url).success(function (response) {
                 $scope.data = response.slice(0, 4);
                 $scope.colName = response.slice(0, 1);
                 angular.forEach($scope.colName, function (value, key) {
@@ -91,18 +91,24 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
             });
         }
     };
-    $scope.save = function (panel) {
-    };
-    $scope.onDropComplete = function (index, panel, evt) {
-        var otherObj = $scope.panels[index];
-        var otherIndex = $scope.panels.indexOf(panel);
-        $scope.panels[index] = panel;
-        $scope.panels[otherIndex] = otherObj;
-    };
-    $scope.removePanel = function (index) {
-        $scope.panels.splice(index, 1);
+
+    $scope.save = function (widget) {
+
     };
 
+    $scope.onDropComplete = function (index, widget, evt) {
+        var otherObj = $scope.widgets[index];
+        var otherIndex = $scope.widgets.indexOf(widget);
+        $scope.widgets[index] = widget;
+        $scope.widgets[otherIndex] = otherObj;
+    };
+
+    //Remove widget
+//    $scope.removeWidget = function (index) {
+//        $scope.widgets.splice(index, 1);
+//    };
+
+    //widget refresh
     $scope.setLineFn = function (lineFn) {
         $scope.directiveLineFn = lineFn;
     };
@@ -126,43 +132,38 @@ app.controller('PanelController', function ($scope, $http, $stateParams, $timeou
     };
 
 });
+
 app.directive('dynamicTable', function ($http) {
     return{
         restrict: 'A',
         scope: {
-            dynamicTableUrl: '@',
-            setTableFn: '&'
+            dynamicTableUrl: '@'
         },
         templateUrl: 'static/views/dashboard/dynamicTable.html',
         link: function (scope, element, attr) {
-            //element.html('');
             scope.currentPage = 1;
             scope.pageSize = 3;
             scope.objectHeader = []
-            scope.refreshWidgetTable = function () {
-                $http.get(scope.dynamicTableUrl).success(function (response) {
-                    scope.columns = [];
-                    angular.forEach(response, function (obj, header) {
-                        scope.colName = obj.childItems.slice(0, 1);
-                        scope.tableItems = obj.childItems;
-                        angular.forEach(scope.colName, function (value, key) {
-                            var arrayIndex = 0;
-                            for (property in value) {
-                                if (scope.objectHeader.indexOf(property) === -1) {
-                                    scope.objectHeader.push(property);
-                                }
-                                scope.columns.push(
-                                        {title: scope.objectHeader[arrayIndex], field: scope.objectHeader[arrayIndex], visible: true}
-                                );
-                                arrayIndex++;
-                                scope.headerLength = scope.columns.length;
+            $http.get(scope.dynamicTableUrl).success(function (response) {
+                scope.columns = []
+                angular.forEach(response, function (obj, header) {
+                    scope.colName = obj.childItems.slice(0, 1);
+                    scope.tableItems = obj.childItems;
+                    angular.forEach(scope.colName, function (value, key) {
+                        var arrayIndex = 0;
+                        for (property in value) {
+                            if (scope.objectHeader.indexOf(property) === -1) {
+                                scope.objectHeader.push(property);
                             }
-                        });
+                            scope.columns.push(
+                                    {title: scope.objectHeader[arrayIndex], field: scope.objectHeader[arrayIndex], visible: true}
+                            );
+                            arrayIndex++;
+                            scope.headerLength = scope.columns.length;
+                        }
                     });
                 });
-            };
-            scope.setTableFn({tableFn: scope.refreshWidgetTable});
-            scope.refreshWidgetTable();
+            });
         }
     }
 });
@@ -388,6 +389,7 @@ app.directive('barChartDirective', function () {
                     .append("g")
                     .attr("transform",
                             "translate(" + margin.left + "," + margin.top + ")");
+
             scope.refreshWidgetBar = function () {
 //                element.html('');
                 d3.json(scope.barChartUrl, function (error, barData) {
@@ -478,6 +480,8 @@ app.directive('pieChartDirective', function () {
 //                    .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+
             scope.refreshWidgetPie = function () {
 //                element.html('');
                 d3.csv(scope.pieChartUrl, type, function (error, data) {
@@ -542,6 +546,7 @@ app.directive('donutChartDirective', function () {
 //                    .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
             scope.refreshWidgetDonut = function () {
 //                element.html('');
                 d3.csv(scope.donutChartUrl, type, function (error, data) {
@@ -576,6 +581,7 @@ app.directive('donutChartDirective', function () {
         }
     };
 });
+
 app.directive('groupedBarChartDirective', function () {
     return{
         restrict: 'A',
@@ -587,7 +593,7 @@ app.directive('groupedBarChartDirective', function () {
             groupedBarChartId: '@',
             groupedBarChartUrl: '@'
         },
-        link: function (scope, element, attr) {
+        link: function (attr, element, scope) {
             var margin = {top: 20, right: 20, bottom: 30, left: 50},
             width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
@@ -611,6 +617,7 @@ app.directive('groupedBarChartDirective', function () {
 //                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
             scope.refreshWidgetGroupedBar = function () {
 //                               element.html('');
                 d3.csv(scope.groupedBarChartUrl, function (error, data) {

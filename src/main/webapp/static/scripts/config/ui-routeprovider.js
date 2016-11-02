@@ -11,24 +11,24 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 //                templateUrl: "static/views/vb.index.html"
 //            })
             .state("dashboard", {
-                url: "/dashboard",
-                templateUrl: "static/views/dashboard/dashboard.html", 
-                controller: 'DashboardController'
+                url: "/dashboard/:tabId",
+                templateUrl: "static/views/dashboard/dashboard.html",                
             })
             .state("dashboard.tab", {
-                url: "/tab/:tabId",
-                templateUrl: "static/views/dashboard/dashboardTab.html",                
+                url: "/tab",
+                templateUrl: "static/views/dashboard/dashboardTabs.html", 
+                controller: 'TabController'
             })
-            .state("dashboard.tab.panel", {
-                url: "/panel/:panelId",
-                templateUrl: "static/views/dashboard/panels.html",   
-                controller:'PanelController'
+            .state("dashboard.tab.widget", {
+                url: "/widget/:widgetId",
+                templateUrl: "static/views/dashboard/widgets.html",   
+                controller:'WidgetController'
             })
             .state("report", {
                 url: "/report/:reportId",
                 templateUrl: "static/views/reports/createNewReports.html",
             });
 
-    $urlRouterProvider.otherwise('/dashboard');
+    $urlRouterProvider.otherwise('/dashboard/dashboard');
 });
 

@@ -22,7 +22,7 @@
         "width" : 2,
         "minHeight" : "25vh",
         "widthClass" : "col-md-4",
-        "chartType": "groupedbar",
+        "chartType": "groupedBar",
         "url": "static/datas/groupedBarChart.json",
         "icon": "fa fa-pie-chart"
     }

@@ -1,6 +1,8 @@
 app.controller('TabController', function ($scope, $http, $stateParams) {
 
-    $http.get("static/datas/" + $stateParams.dashboardId + "Tab.json").success(function (response) {
+$scope.dashboardName = $stateParams.tabId
+
+    $http.get("static/datas/" + $stateParams.tabId + "Tab.json").success(function (response) {
         $scope.tabs = response;
     });
 
