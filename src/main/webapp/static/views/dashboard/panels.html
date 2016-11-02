@@ -48,6 +48,8 @@
                         </button>
                         <button type="button" ng-if="panel.chartType == 'donut'" class="btn btn-box-tool" data-widget="" ng-click="directiveDonutFn()"><i class="fa fa-refresh"></i>
                         </button>
+                        <button type="button" ng-if="panel.chartType == 'groupedBar'" class="btn btn-box-tool" data-widget="" ng-click="directiveGroupedBarFn()"><i class="fa fa-refresh"></i>
+                        </button>
                         <button type="button" ng-if="panel.chartType == 'table'" class="btn btn-box-tool" data-widget="" ng-click="directiveTableFn()"><i class="fa fa-refresh"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -69,8 +71,8 @@
                     <center><div set-Donut-Chart-Fn="setDonutFn(donutChartFn)" Donut-Chart-Fn="setDonutFn(donutChartFn)" donut-Chart-Url='{{panel.url}}' donut-Chart-Directive donut-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
                 </div> 
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'groupedBar'">
-                    <div set-Grouped-Bar-Chart-Fn="setGroupedBarFn(groupedBarChartFn)" set-grouped-Bar-Chart-Url='{{panel.url}}' grouped-Bar-Chart-Directive grouped-Bar-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div>
-                </div> 
+                    <center><div set-Grouped-Bar-Chart-Fn="setGroupedBarFn(groupedBarChartFn)" Grouped-Bar-Chart-Fn="setGroupedBarFn(groupedBarChartFn)" grouped-Bar-Chart-Url='{{panel.url}}' grouped-Bar-Chart-Directive grouped-Bar-Chart-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
+                </div>             
                 <div id="{{panel.chartId}}" class="box-body chart-responsive" ng-if="panel.chartType == 'table'">
                     <center><div set-Table-Fn="setTableFn(tableFn)" dynamic-Table-Url='{{panel.url}}' dynamic-Table dynamic-Table-Id='{{panel.chartId}}' style="min-height:{{panel.minHeight}}"></div></center>
                 </div>  
