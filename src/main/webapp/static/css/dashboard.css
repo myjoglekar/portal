@@ -25,11 +25,11 @@ div.col-sm-12{
     padding-left: 40px;
     padding-right: 40px;
 }
-div.col-sm-4{
-    margin-bottom: 5px;
-    padding-left: 2px;
-    padding-right: 2px;
-}
+*/div.panelsize{
+    margin-bottom: -12px;
+    padding-left: 5px;
+    padding-right: 5px;
+}/*
 div.sample{
     resize: both;
     overflow: auto;

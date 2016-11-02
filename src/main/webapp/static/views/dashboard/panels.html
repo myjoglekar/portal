@@ -10,14 +10,14 @@
 </style>
 
 <div>
-    <div class="container-fluid" ng-model="panels">
+    <div class="" ng-model="panels" style="padding:5px;">
         <div class="pull-right l2t-tab">
             <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
             <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
             <a class="btn btn-warning" ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh</a>
-        </div><br><br><br/>
-
-        <div class="box box-info light">
+        </div><br><br/><br/>
+        
+        <div class="box box-info light" style="margin-bottom:0px;">
             <div class="box-header with-border light-blue">
                 <h3 class="box-title">Questions?</h3>
             </div>
@@ -25,7 +25,7 @@
     </div>
 
     <div ng-repeat="panel in panels">
-        <div class="col-md-{{2 * panel.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+        <div class="col-md-{{2 * panel.width}} panelsize" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
             <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="panelCtrl" ng-drag="true" ng-drag-data="panel">
                 <div class="box-header with-border">
                     <h3 class="box-title">
