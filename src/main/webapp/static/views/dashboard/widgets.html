@@ -158,25 +158,25 @@
                             <label class="col-sm-2">Preview</label>
                             <div class="col-sm-12">
                                 <!--<div id="previewChart{{widget.chartId}}" class="chartpreview" ng-model="widget.preview"></div>-->
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'line'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
                                     <div line-Chart-Url='{{previewChartUrl}}' line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'area'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
                                     <div area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'bar'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
                                     <div bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'pie'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
                                     <div pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'donut'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'donut'">
                                     <div donut-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'groupedBar'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'groupedBar'">
                                     <div grouped-Bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div ng-show="previewChartType == 'table'" class="box-body chart-responsive" style="overflow: auto;">
+                                <div ng-show="previewChartType === 'table'" class="box-body chart-responsive" style="overflow: auto;">
                                     <div preview-Dynamic-Table style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
                             </div>
@@ -185,7 +185,7 @@
 
                 </div>
                 <div class="modal-footer" style="padding:10px;background-color:#9DD6D7">
-                    <button class="btn btn-primary" ng-click="save(widget)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
+                    <button class="btn btn-primary" ng-click="save(widget)" data-dismiss="modal"><span class="fa fa-save"></span> SAVE</button>
                 </div>
             </div>
         </div>
