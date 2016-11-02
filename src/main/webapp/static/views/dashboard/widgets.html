@@ -25,7 +25,7 @@
     </div>
 
     <div ng-repeat="widget in widgets">
-        <div class="col-md-{{2 * widget.width}} widgetsize" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+        <div class="col-md-{{2 * widget.width}} widgetsize resize" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
             <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl" ng-drag="true" ng-drag-data="widget">
                 <div class="box-header with-border">
                     <h3 class="box-title">
