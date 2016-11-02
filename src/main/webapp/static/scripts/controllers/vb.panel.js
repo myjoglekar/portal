@@ -130,33 +130,39 @@ app.directive('dynamicTable', function ($http) {
     return{
         restrict: 'A',
         scope: {
-            dynamicTableUrl: '@'
+            dynamicTableUrl: '@',
+            setTableFn: '&'
         },
         templateUrl: 'static/views/dashboard/dynamicTable.html',
         link: function (scope, element, attr) {
+            //element.html('');
             scope.currentPage = 1;
             scope.pageSize = 3;
             scope.objectHeader = []
-            $http.get(scope.dynamicTableUrl).success(function (response) {
-                scope.columns = []
-                angular.forEach(response, function (obj, header) {
-                    scope.colName = obj.childItems.slice(0, 1);
-                    scope.tableItems = obj.childItems;
-                    angular.forEach(scope.colName, function (value, key) {
-                        var arrayIndex = 0;
-                        for (property in value) {
-                            if (scope.objectHeader.indexOf(property) === -1) {
-                                scope.objectHeader.push(property);
+            scope.refreshWidgetTable = function () {
+                $http.get(scope.dynamicTableUrl).success(function (response) {
+                    scope.columns = [];
+                    angular.forEach(response, function (obj, header) {
+                        scope.colName = obj.childItems.slice(0, 1);
+                        scope.tableItems = obj.childItems;
+                        angular.forEach(scope.colName, function (value, key) {
+                            var arrayIndex = 0;
+                            for (property in value) {
+                                if (scope.objectHeader.indexOf(property) === -1) {
+                                    scope.objectHeader.push(property);
+                                }
+                                scope.columns.push(
+                                        {title: scope.objectHeader[arrayIndex], field: scope.objectHeader[arrayIndex], visible: true}
+                                );
+                                arrayIndex++;
+                                scope.headerLength = scope.columns.length;
                             }
-                            scope.columns.push(
-                                    {title: scope.objectHeader[arrayIndex], field: scope.objectHeader[arrayIndex], visible: true}
-                            );
-                            arrayIndex++;
-                            scope.headerLength = scope.columns.length;
-                        }
+                        });
                     });
                 });
-            });
+            };
+            scope.setTableFn({tableFn: scope.refreshWidgetTable});
+            scope.refreshWidgetTable();
         }
     }
 });
@@ -382,7 +388,6 @@ app.directive('barChartDirective', function () {
                     .append("g")
                     .attr("transform",
                             "translate(" + margin.left + "," + margin.top + ")");
-
             scope.refreshWidgetBar = function () {
 //                element.html('');
                 d3.json(scope.barChartUrl, function (error, barData) {
@@ -473,8 +478,6 @@ app.directive('pieChartDirective', function () {
 //                    .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-
             scope.refreshWidgetPie = function () {
 //                element.html('');
                 d3.csv(scope.pieChartUrl, type, function (error, data) {
@@ -539,7 +542,6 @@ app.directive('donutChartDirective', function () {
 //                    .attr("height", height)
                     .append("g")
                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
             scope.refreshWidgetDonut = function () {
 //                element.html('');
                 d3.csv(scope.donutChartUrl, type, function (error, data) {
@@ -574,7 +576,6 @@ app.directive('donutChartDirective', function () {
         }
     };
 });
-
 app.directive('groupedBarChartDirective', function () {
     return{
         restrict: 'A',
@@ -586,7 +587,7 @@ app.directive('groupedBarChartDirective', function () {
             groupedBarChartId: '@',
             groupedBarChartUrl: '@'
         },
-        link: function (attr, element, scope) {
+        link: function (scope, element, attr) {
             var margin = {top: 20, right: 20, bottom: 30, left: 50},
             width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
@@ -610,7 +611,6 @@ app.directive('groupedBarChartDirective', function () {
 //                    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
             scope.refreshWidgetGroupedBar = function () {
 //                               element.html('');
                 d3.csv(scope.groupedBarChartUrl, function (error, data) {
