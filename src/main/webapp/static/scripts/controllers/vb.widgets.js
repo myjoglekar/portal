@@ -23,7 +23,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.id = uid++;
         $scope.widgets.push({chartId: "widget" + $scope.id, width: 2,
             minHeight: "25vh",
-            widthClass: "col-md-4", chartType: "line"});
+            widthClass: "col-md-4", chartType: "New Widget"});
     };
 
     //Data Source
