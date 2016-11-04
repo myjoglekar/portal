@@ -176,7 +176,7 @@
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'groupedBar'">
                                     <div grouped-Bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div ng-show="previewChartType === 'table'" class="box-body chart-responsive" style="overflow: auto;">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
                                     <div preview-Dynamic-Table style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
                             </div>

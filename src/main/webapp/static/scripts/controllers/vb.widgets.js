@@ -23,7 +23,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.id = uid++;
         $scope.widgets.push({chartId: "widget" + $scope.id, width: 2,
             minHeight: "25vh",
-            widthClass: "col-md-4", chartType: "New Widget"});
+            widthClass: "col-md-4"});
     };
 
     //Data Source
@@ -71,7 +71,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.previewChart = function (chartType, widget) {
         $scope.previewChartType = chartType.type;
         $scope.previewChartUrl = widget.url;
-        if (chartType.type == "table") {
+        if (chartType.type === "table") {
             $http.get(widget.url).success(function (response) {
                 $scope.data = response.slice(0, 4);
                 $scope.colName = response.slice(0, 1);
@@ -89,6 +89,14 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                     }
                 });
             });
+        }
+        if(chartType.type==="line"){
+//             $http.get(widget.url).success(function (response) {
+//                 $scope.data=response;
+//                 console.log("test:",$scope.data);
+//             });
+             $scope.previewChartUrl=widget.url;
+             console.log("chartType:",$scope.previewChartUrl,$scope.previewChartType);
         }
     };
 
@@ -200,6 +208,7 @@ app.directive('lineChartDirective', function () {
         },
         template: '<div id="lineChartDashboard{{lineChartId}}"></div>',
         link: function (scope, element, attr) {
+            console.log("lineChart:",scope.lineChartUrl);
             //scope.internalControl = scope.control || {};
             console.log("lineChart : " + scope.collection);
             console.log("lineChart Item : " + scope.lineChartId);
@@ -239,7 +248,7 @@ app.directive('lineChartDirective', function () {
                         d3.max(data, y_dim_accessor)
                     ];
                     var data2 = data.filter(function (d) {
-                        return d.label
+                        return d.label;
                     }).sort(function (a, b) {
                         return x_dim_accessor(a) - x_dim_accessor(b);
                     });
