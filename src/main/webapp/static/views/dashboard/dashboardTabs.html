@@ -2,7 +2,7 @@
     <ul class="nav nav-tabs" ng-repeat="tab in tabs">
         <li ng-repeat="tabItem in tab.tabItems" ui-sref-active="active">
 
-            <a class="active" ui-sref="dashboard.tab.widget({widgetId:tabItem.tabUrl})" style="padding:3px 15px;display: inline-block;">
+            <a class="active" ui-sref="dashboard.tab.widget({widgetId: tabItem.tabUrl})" style="padding:3px 15px;display: inline-block;">
                 {{tabItem.tabName}}
             </a>
             <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">
