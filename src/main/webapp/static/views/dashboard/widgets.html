@@ -10,14 +10,15 @@
 </style>
 
 <div>
-    <div class="container-fluid" style="padding:5px;">
+    <div class="container-fluid" style="padding:5px;margin-top: -2%;">
         <div class="pull-right l2t-tab">
-            <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>
-            <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full screen</a>
+            <!--            <a class="btn btn-warning" ng-click="add()"><i class="fa fa-plus"></i> Add New</a>-->
+            <a class="btn btn-warning" data-toggle="modal" data-target="#addNew"><i class="fa fa-plus"></i> Add New</a>
+            <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full Screen</a>
             <a class="btn btn-warning" ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh</a>
         </div><br><br><br/>
 
-        <div class="box box-info light" style="margin-bottom:0px;">
+        <div class="box box-info light" style="margin-bottom:0px;margin-top: -1%">
             <div class="box-header with-border light-blue">
                 <h3 class="box-title">Questions?</h3>
             </div>
@@ -25,7 +26,7 @@
     </div>
 
     <div ng-repeat="widget in widgets">
-        <div class="col-md-{{2 * widget.width}} widgetsize" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+        <div class="col-md-{{2 * widget.width}} widgetsize resize" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
             <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl" ng-drag="true" ng-drag-data="widget">
                 <div class="box-header with-border">
                     <h3 class="box-title">
@@ -38,15 +39,15 @@
                         </button>
                         <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview" data-widget=""><i class="fa fa-pencil"></i>
                         </button>
-                        <button type="button" ng-if="widget.chartType == 'line'" class="btn btn-box-tool" data-widget="" ng-click="directiveLineFn()"><i class="fa fa-refresh"></i>
+                        <button type="button" ng-if="widget.chartType === 'line'" class="btn btn-box-tool" data-widget="" ng-click="directiveLineFn()"><i class="fa fa-refresh"></i>
                         </button>
-                        <button type="button" ng-if="widget.chartType == 'area'" class="btn btn-box-tool" data-widget="" ng-click="directiveAreaFn()"><i class="fa fa-refresh"></i>
+                        <button type="button" ng-if="widget.chartType === 'area'" class="btn btn-box-tool" data-widget="" ng-click="directiveAreaFn()"><i class="fa fa-refresh"></i>
                         </button>
-                        <button type="button" ng-if="widget.chartType == 'bar'" class="btn btn-box-tool" data-widget="" ng-click="directiveBarFn()"><i class="fa fa-refresh"></i>
+                        <button type="button" ng-if="widget.chartType === 'bar'" class="btn btn-box-tool" data-widget="" ng-click="directiveBarFn()"><i class="fa fa-refresh"></i>
                         </button>
-                        <button type="button" ng-if="widget.chartType == 'pie'" class="btn btn-box-tool" data-widget="" ng-click="directivePieFn()"><i class="fa fa-refresh"></i>
+                        <button type="button" ng-if="widget.chartType === 'pie'" class="btn btn-box-tool" data-widget="" ng-click="directivePieFn()"><i class="fa fa-refresh"></i>
                         </button>
-                        <button type="button" ng-if="widget.chartType == 'donut'" class="btn btn-box-tool" data-widget="" ng-click="directiveDonutFn()"><i class="fa fa-refresh"></i>
+                        <button type="button" ng-if="widget.chartType === 'donut'" class="btn btn-box-tool" data-widget="" ng-click="directiveDonutFn()"><i class="fa fa-refresh"></i>
                         </button>
                         <button type="button" ng-if="widget.chartType == 'groupedBar'" class="btn btn-box-tool" data-widget="" ng-click="directiveGroupedBarFn()"><i class="fa fa-refresh"></i>
                         </button>
@@ -55,25 +56,27 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType == 'line'">
+                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'line'">
                     <center><div set-Line-Chart-Fn="setLineFn(lineChartFn)" line-Chart-Directive line-Chart-Url='{{widget.url}}' collection='{{widget}}' line-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
                 </div>
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType == 'area'">
+                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
                     <center><div set-Area-Chart-Fn="setAreaFn(areaChartFn)" area-Chart-Directive area-Chart-Url='{{widget.url}}' style="min-height:{{widget.minHeight}}"></div></center>
                 </div> 
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType == 'bar'">
+                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
                     <center><div set-Bar-Chart-Fn="setBarFn(barChartFn)" bar-Chart-Url='{{widget.url}}' bar-Chart-Directive bar-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
                 </div> 
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType == 'pie'">
+                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
                     <center><div set-Pie-Chart-Fn="setPieFn(pieChartFn)" pie-Chart-Url='{{widget.url}}' pie-Chart-Directive pie-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
                 </div> 
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType == 'donut'">
-                    <center><div set-Donut-Chart-Fn="setDonutFn(donutChartFn)" Donut-Chart-Fn="setDonutFn(donutChartFn)" donut-Chart-Url='{{widget.url}}' donut-Chart-Directive donut-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
+                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'donut'">
+                    <center><div set-Donut-Chart-Fn="setDonutFn(donutChartFn)" donut-Chart-Url='{{widget.url}}' donut-Chart-Directive donut-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
                 </div> 
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType == 'groupedBar'">
+                
+                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'groupedBar'">
                     <div set-Grouped-Bar-Chart-Fn="setGroupedBarFn(groupedBarChartFn)" grouped-Bar-Chart-Url='{{widget.url}}' grouped-Bar-Chart-Directive grouped-Bar-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div>
                 </div> 
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType == 'table'">
+                
+                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'table'">
                     <center><div set-Table-Fn="setTableFn(tableFn)" dynamic-Table-Url='{{widget.url}}' dynamic-Table dynamic-Table-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
                 </div>  
             </div>
@@ -82,17 +85,17 @@
     <div id="preview" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background-color:#337AB7;color:white;">
-                   <strong> CHART</strong>
-                    <strong><button class="close" data-dismiss="modal" style="color:white;">&times;</button></strong>
+                <div class="modal-header" style="background-color:#9DD6D7;color:black;">
+                    <strong>CHART</strong>
+                    <strong><button class="close" data-dismiss="modal">&times;</button></strong>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal">
                         <div class="form-group">
                             <label class="col-sm-2">Data Source</label>
                             <div class="col-sm-4">
-                                <ui-select ng-model="dataSet" on-select="selectedDataSource(dataSet)" theme="bootstrap">
-                                    <ui-select-match placeholder="">{{$select.selected}}</ui-select-match>
+                                <ui-select ng-model="dataSource" on-select="selectedDataSource(dataSource)" theme="bootstrap">
+                                    <ui-select-match placeholder="Select Data Source">{{$select.selected}}</ui-select-match>
                                     <ui-select-choices repeat="datasource in datasources | filter: $select.search">
                                         <div ng-bind-html="datasource | highlight: $select.search"></div>
                                     </ui-select-choices>
@@ -102,7 +105,7 @@
                             <label class="col-sm-2">Data Set</label>
                             <div class="col-sm-4">
                                 <ui-select multiple ng-model="dataSet" on-select="selectedDataSet(dataSet)" theme="bootstrap" ng-disabled="disabled">
-                                    <ui-select-match placeholder="Select Data Set...">{{$item.name}}</ui-select-match>
+                                    <ui-select-match placeholder="Select Data Set">{{$item.name}}</ui-select-match>
                                     <ui-select-choices repeat="dataSet in dataSets | filter:$select.search">
                                         {{dataSet.displayName}}
                                     </ui-select-choices>
@@ -114,7 +117,7 @@
                             <label class="col-sm-2">Dimensions</label>
                             <div class="col-sm-4">
                                 <ui-select multiple on-select="selectedDimensions(dimension)" ng-model="dimension" theme="bootstrap" ng-disabled="disabled">
-                                    <ui-select-match placeholder="Select Dimensions...">{{$item.name}}</ui-select-match>
+                                    <ui-select-match placeholder="Select Dimensions">{{$item.name}}</ui-select-match>
                                     <ui-select-choices repeat="dataDimension in dataDimensions | filter:$select.search">
                                         {{dataDimension.displayName}}
                                     </ui-select-choices>
@@ -134,7 +137,7 @@
 
                             <label class="col-sm-2">Widget Title</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" placeholder="title">
+                                <input type="text" class="form-control" placeholder="title" ng-model="widget.test">
                             </div>
                         </div>
 
@@ -160,25 +163,25 @@
                             <label class="col-sm-2">Preview</label>
                             <div class="col-sm-12">
                                 <!--<div id="previewChart{{widget.chartId}}" class="chartpreview" ng-model="widget.preview"></div>-->
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'line'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
                                     <div line-Chart-Url='{{previewChartUrl}}' line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'area'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
                                     <div area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'bar'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
                                     <div bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'pie'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
                                     <div pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'donut'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'donut'">
                                     <div donut-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType == 'groupedBar'">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'groupedBar'">
                                     <div grouped-Bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
-                                <div ng-show="previewChartType == 'table'" class="box-body chart-responsive" style="overflow: auto;">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
                                     <div preview-Dynamic-Table style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
                             </div>
@@ -186,10 +189,81 @@
                     </form>
 
                 </div>
-                <div class="modal-footer" style="padding:10px;">
-                    <button class="btn btn-primary" ng-click="save(widget)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>
+                <div class="modal-footer" style="padding:10px;background-color:#9DD6D7">
+                    <button class="btn btn-primary" ng-click="save(widget)" data-dismiss="modal"><span class="fa fa-save"></span> SAVE</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <!-- Add New -->
+    <div class="modal fade" id="addNew" role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"> Select Panel Size</h4>
+                </div>
+                <div class="modal-body">
+                    <div ng-repeat="newPanel in newPanels" data-dismiss="modal" ng-click="addNewPanel(newPanel)" style="cursor:pointer;">
+                        <div class="{{newPanel.panelClass}}">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">
+                                        Header
+                                    </h3>
+
+                                    <div class="box-tools pull-right">
+
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    {{newPanel.panelClass}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                     <a href="" ng-click="addMedium()" data-dismiss="modal"><div class="col-sm-8">
+                                            <div class="box box-primary">
+                                                <div class="box-header with-border">
+                                                    <h3 class="box-title">
+                                                        Header
+                                                    </h3>
+                    
+                                                    <div class="box-tools pull-right">
+                    
+                                                    </div>
+                                                </div>
+                                                <div class="box-body">
+                                                    col-sm-8
+                                                </div>
+                                            </div>
+                                             </div></a>
+                                         <a href="" ng-click="addLarge()" data-dismiss="modal"><div class="col-sm-12">
+                                           <div class="box box-primary">
+                                                <div class="box-header with-border">
+                                                    <h3 class="box-title">
+                                                        Header
+                                                    </h3>
+                    
+                                                    <div class="box-tools pull-right">
+                    
+                                                    </div>
+                                                </div>
+                                                <div class="box-body">
+                                                    col-sm-12
+                                                </div>
+                                            </div>
+                                             </div></a>-->
+
+                </div>
+                <div class="modal-footer">
+                    <!--                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>

@@ -25,12 +25,14 @@ div.col-sm-12{
     padding-left: 40px;
     padding-right: 40px;
 }
-*/div.widgetsize{
+*/
+div.widgetsize{
     margin-bottom: -12px;
     padding-left: 5px;
     padding-right: 5px;
-}/*
-div.sample{
+}
+/*
+div.resize{
     resize: both;
     overflow: auto;
     z-index: 1000;

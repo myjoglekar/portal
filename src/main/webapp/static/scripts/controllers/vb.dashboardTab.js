@@ -17,5 +17,11 @@ $scope.dashboardName = $stateParams.tabId
     $scope.deleteTab = function (index, tab) {
         tab.tabItems.splice(index, 1);
     };
+    
 
 });
+//app.filter('capitalize', function() {
+//    return function(input) {
+//      return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+//    }
+//});

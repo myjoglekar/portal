@@ -17,14 +17,17 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.pageRefresh = function () {
         getItem();
     };
+    $http.get("static/datas/panelWidth.json").success(function (response) {
+        $scope.newPanels = response;
+    });
+
 
     var uid = 10;
-    $scope.add = function () {
+    $scope.addNewPanel = function (newPanel) {
         $scope.id = uid++;
-        $scope.widgets.push({chartId: "widget" + $scope.id, width: 2,
-            minHeight: "25vh",
-            widthClass: "col-md-4", chartType: "line"});
+        $scope.widgets.push({chartId: "widget" + $scope.id, chartType: "New Widget", width: newPanel.panelWidth, });
     };
+
 
     //Data Source
     $http.get('admin/datasources').success(function (response) {
@@ -71,7 +74,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.previewChart = function (chartType, widget) {
         $scope.previewChartType = chartType.type;
         $scope.previewChartUrl = widget.url;
-        if (chartType.type == "table") {
+        if (chartType.type === "table") {
             $http.get(widget.url).success(function (response) {
                 $scope.data = response.slice(0, 4);
                 $scope.colName = response.slice(0, 1);
@@ -89,6 +92,14 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                     }
                 });
             });
+        }
+        if (chartType.type === "line") {
+//             $http.get(widget.url).success(function (response) {
+//                 $scope.data=response;
+//                 console.log("test:",$scope.data);
+//             });
+            $scope.previewChartUrl = widget.url;
+            console.log("chartType:", $scope.previewChartUrl, $scope.previewChartType);
         }
     };
 
@@ -205,6 +216,7 @@ app.directive('lineChartDirective', function () {
         },
         template: '<div id="lineChartDashboard{{lineChartId}}"></div>',
         link: function (scope, element, attr) {
+            console.log("lineChart:", scope.lineChartUrl);
             //scope.internalControl = scope.control || {};
             console.log("lineChart : " + scope.collection);
             console.log("lineChart Item : " + scope.lineChartId);
@@ -244,7 +256,7 @@ app.directive('lineChartDirective', function () {
                         d3.max(data, y_dim_accessor)
                     ];
                     var data2 = data.filter(function (d) {
-                        return d.label
+                        return d.label;
                     }).sort(function (a, b) {
                         return x_dim_accessor(a) - x_dim_accessor(b);
                     });
@@ -296,19 +308,25 @@ app.directive('areaChartDirective', function () {
         template: '<div id="areaChartDashboard"></div>',
         link: function (scope, element, attr) {
             var margin = {top: 20, right: 20, bottom: 30, left: 50},
-            width = 380 - margin.left - margin.right,
+            width = 360 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
+
             var parseDate = d3.time.format("%d-%b-%y").parse;
+
             var x = d3.time.scale()
                     .range([0, width]);
+
             var y = d3.scale.linear()
                     .range([height, 0]);
+
             var xAxis = d3.svg.axis()
                     .scale(x)
                     .orient("bottom");
+
             var yAxis = d3.svg.axis()
                     .scale(y)
                     .orient("left");
+
             var area = d3.svg.area()
                     .x(function (d) {
                         return x(d.date);
@@ -317,36 +335,40 @@ app.directive('areaChartDirective', function () {
                     .y1(function (d) {
                         return y(d.close);
                     });
+
             var svg = d3.select("#areaChartDashboard").append("svg")
                     .attr("viewBox", "0 0 380 250")
-//                    .attr("width", width + margin.left + margin.right)
-//                    .attr("height", height + margin.top + margin.bottom)
+//    .attr("width", width + margin.left + margin.right)
+//    .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             scope.refreshWidgetArea = function () {
-//                element.html('');
-                d3.tsv(scope.areaChartUrl, function (error, areaData) {
-                    var data = areaData;
+                d3.tsv(scope.areaChartUrl, function (error, data) {
                     if (error)
                         throw error;
+
                     data.forEach(function (d) {
                         d.date = parseDate(d.date);
                         d.close = +d.close;
                     });
+
                     x.domain(d3.extent(data, function (d) {
                         return d.date;
                     }));
                     y.domain([0, d3.max(data, function (d) {
                             return d.close;
                         })]);
+
                     svg.append("path")
                             .datum(data)
                             .attr("class", "area")
                             .attr("d", area);
+
                     svg.append("g")
                             .attr("class", "x axis")
                             .attr("transform", "translate(0," + height + ")")
                             .call(xAxis);
+
                     svg.append("g")
                             .attr("class", "y axis")
                             .call(yAxis)
@@ -357,9 +379,79 @@ app.directive('areaChartDirective', function () {
                             .style("text-anchor", "end")
                             .text("Price ($)");
                 });
-            };
+
+            }
             scope.setAreaChartFn({areaChartFn: scope.refreshWidgetArea});
             scope.refreshWidgetArea();
+
+//            var margin = {top: 20, right: 20, bottom: 30, left: 50},
+//            width = 380 - margin.left - margin.right,
+//                    height = 260 - margin.top - margin.bottom;
+//            var parseDate = d3.time.format("%d-%b-%y").parse;
+//            var x = d3.time.scale()
+//                    .range([0, width]);
+//            var y = d3.scale.linear()
+//                    .range([height, 0]);
+//            var xAxis = d3.svg.axis()
+//                    .scale(x)
+//                    .orient("bottom");
+//            var yAxis = d3.svg.axis()
+//                    .scale(y)
+//                    .orient("left");
+//            var area = d3.svg.area()
+//                    .x(function (d) {
+//                        return x(d.date);
+//                    })
+//                    .y0(height)
+//                    .y1(function (d) {
+//                        return y(d.close);
+//                    });
+//                    
+//            var svg = d3.select("#areaChartDashboard").append("svg")
+//                   .attr("viewBox", "0 0 380 250") 
+//                   
+////                    .attr("width", width + margin.left + margin.right)
+////                    .attr("height", height + margin.top + margin.bottom)
+//       
+//                    .append("g")
+//                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+//            scope.refreshWidgetArea = function () {
+////                element.html('');
+//                d3.tsv(scope.areaChartUrl, function (error, areaData) {
+//                    var data = areaData;
+//                    if (error)
+//                        throw error;
+//                    data.forEach(function (d) {
+//                        d.date = parseDate(d.date);
+//                        d.close = +d.close;
+//                    });
+//                    x.domain(d3.extent(data, function (d) {
+//                        return d.date;
+//                    }));
+//                    y.domain([0, d3.max(data, function (d) {
+//                            return d.close;
+//                        })]);
+//                    svg.append("path")
+//                            .datum(data)
+//                            .attr("class", "area")
+//                            .attr("d", area);
+//                    svg.append("g")
+//                            .attr("class", "x axis")
+//                            .attr("transform", "translate(0," + height + ")")
+//                            .call(xAxis);
+//                    svg.append("g")
+//                            .attr("class", "y axis")
+//                            .call(yAxis)
+//                            .append("text")
+//                            .attr("transform", "rotate(-90)")
+//                            .attr("y", 6)
+//                            .attr("dy", ".71em")
+//                            .style("text-anchor", "end")
+//                            .text("Price ($)");
+//                });
+//            };
+//            scope.setAreaChartFn({areaChartFn: scope.refreshWidgetArea});
+//            scope.refreshWidgetArea();
         }
     };
 });
