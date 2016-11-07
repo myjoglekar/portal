@@ -25,7 +25,7 @@ $scope.newPanels = response;
     var uid = 10;
     $scope.addNewPanel = function (newPanel) {
         $scope.id = uid++;
-        $scope.widgets.push({chartId: "widget" + $scope.id, width: newPanel.panelWidth});
+        $scope.widgets.push({chartId: "widget" + $scope.id, chartType:"New Widget",width: newPanel.panelWidth,});
     };
    
 
