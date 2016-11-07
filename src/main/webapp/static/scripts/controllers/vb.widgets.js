@@ -17,14 +17,17 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.pageRefresh = function () {
         getItem();
     };
+    $http.get("static/datas/panelWidth.json").success(function(response){
+$scope.newPanels = response;
+        });
+
 
     var uid = 10;
-    $scope.add = function () {
+    $scope.addNewPanel = function (newPanel) {
         $scope.id = uid++;
-        $scope.widgets.push({chartId: "widget" + $scope.id, width: 2,
-            minHeight: "25vh",
-            widthClass: "col-md-4"});
+        $scope.widgets.push({chartId: "widget" + $scope.id, width: newPanel.panelWidth});
     };
+   
 
     //Data Source
     $http.get('admin/datasources').success(function (response) {
@@ -321,10 +324,13 @@ app.directive('areaChartDirective', function () {
                     .y1(function (d) {
                         return y(d.close);
                     });
+                    
             var svg = d3.select("#areaChartDashboard").append("svg")
-                    .attr("viewBox", "0 0 380 250")
+                   .attr("viewBox", "0 0 380 250")
+                   
 //                    .attr("width", width + margin.left + margin.right)
 //                    .attr("height", height + margin.top + margin.bottom)
+       
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             scope.refreshWidgetArea = function () {
