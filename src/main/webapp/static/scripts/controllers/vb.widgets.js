@@ -72,8 +72,8 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
     var value = [];
     $scope.objectHeader = [];
-    $scope.columns = [];
     $scope.previewChart = function (chartType, widget) {
+    $scope.columns = [];
         $scope.previewChartType = chartType.type;
         $scope.previewChartUrl = widget.url;
         if (chartType.type === "table") {
