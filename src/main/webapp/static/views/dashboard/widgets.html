@@ -59,8 +59,16 @@
                 <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'line'">
                     <center><div set-Line-Chart-Fn="setLineFn(lineChartFn)" line-Chart-Directive line-Chart-Url='{{widget.url}}' collection='{{widget}}' line-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
                 </div>
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
-                    <center><div set-Area-Chart-Fn="setAreaFn(areaChartFn)" area-Chart-Directive area-Chart-Url='{{widget.url}}' style="min-height:{{widget.minHeight}}"></div></center>
+                <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
+                    <center>
+                        <div area-Chart-Id="widgetwidget1"
+                             set-Area-Chart-Fn="setAreaFn(areaChartFn)"
+                             area-Chart-Directive
+                             area-Chart-Url='{{widget.url}}'
+                             style="min-height:{{widget.minHeight}}">
+                            <div id="widgetwidget1"></div>
+                        </div>
+                    </center>
                 </div> 
                 <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
                     <center><div set-Bar-Chart-Fn="setBarFn(barChartFn)" bar-Chart-Url='{{widget.url}}' bar-Chart-Directive bar-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>

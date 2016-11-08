@@ -305,7 +305,7 @@ app.directive('areaChartDirective', function () {
             areaChartId: '@',
             areaChartUrl: '@'
         },
-        template: '<div id="areaChartDashboard"></div>',
+        //template: '<div id="1{{areaChartId}}">{{areaChartId?"0":"1"}}</div>',
         link: function (scope, element, attr) {
             var margin = {top: 20, right: 20, bottom: 30, left: 50},
             width = 360 - margin.left - margin.right,
@@ -335,8 +335,10 @@ app.directive('areaChartDirective', function () {
                     .y1(function (d) {
                         return y(d.close);
                     });
-
-            var svg = d3.select("#areaChartDashboard").append("svg")
+                    console.log($('#widgetwidget1'));
+                    console.log($('#' +scope.areaChartId).attr('id'));
+                    alert(scope.areaChartId);
+            var svg = d3.select("#"+scope.areaChartId).append("svg")
                     .attr("viewBox", "0 0 380 250")
 //    .attr("width", width + margin.left + margin.right)
 //    .attr("height", height + margin.top + margin.bottom)
@@ -383,75 +385,6 @@ app.directive('areaChartDirective', function () {
             }
             scope.setAreaChartFn({areaChartFn: scope.refreshWidgetArea});
             scope.refreshWidgetArea();
-
-//            var margin = {top: 20, right: 20, bottom: 30, left: 50},
-//            width = 380 - margin.left - margin.right,
-//                    height = 260 - margin.top - margin.bottom;
-//            var parseDate = d3.time.format("%d-%b-%y").parse;
-//            var x = d3.time.scale()
-//                    .range([0, width]);
-//            var y = d3.scale.linear()
-//                    .range([height, 0]);
-//            var xAxis = d3.svg.axis()
-//                    .scale(x)
-//                    .orient("bottom");
-//            var yAxis = d3.svg.axis()
-//                    .scale(y)
-//                    .orient("left");
-//            var area = d3.svg.area()
-//                    .x(function (d) {
-//                        return x(d.date);
-//                    })
-//                    .y0(height)
-//                    .y1(function (d) {
-//                        return y(d.close);
-//                    });
-//                    
-//            var svg = d3.select("#areaChartDashboard").append("svg")
-//                   .attr("viewBox", "0 0 380 250") 
-//                   
-////                    .attr("width", width + margin.left + margin.right)
-////                    .attr("height", height + margin.top + margin.bottom)
-//       
-//                    .append("g")
-//                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-//            scope.refreshWidgetArea = function () {
-////                element.html('');
-//                d3.tsv(scope.areaChartUrl, function (error, areaData) {
-//                    var data = areaData;
-//                    if (error)
-//                        throw error;
-//                    data.forEach(function (d) {
-//                        d.date = parseDate(d.date);
-//                        d.close = +d.close;
-//                    });
-//                    x.domain(d3.extent(data, function (d) {
-//                        return d.date;
-//                    }));
-//                    y.domain([0, d3.max(data, function (d) {
-//                            return d.close;
-//                        })]);
-//                    svg.append("path")
-//                            .datum(data)
-//                            .attr("class", "area")
-//                            .attr("d", area);
-//                    svg.append("g")
-//                            .attr("class", "x axis")
-//                            .attr("transform", "translate(0," + height + ")")
-//                            .call(xAxis);
-//                    svg.append("g")
-//                            .attr("class", "y axis")
-//                            .call(yAxis)
-//                            .append("text")
-//                            .attr("transform", "rotate(-90)")
-//                            .attr("y", 6)
-//                            .attr("dy", ".71em")
-//                            .style("text-anchor", "end")
-//                            .text("Price ($)");
-//                });
-//            };
-//            scope.setAreaChartFn({areaChartFn: scope.refreshWidgetArea});
-//            scope.refreshWidgetArea();
         }
     };
 });
