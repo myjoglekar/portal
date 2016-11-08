@@ -56,36 +56,68 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'line'">
-                    <center><div set-Line-Chart-Fn="setLineFn(lineChartFn)" line-Chart-Directive line-Chart-Url='{{widget.url}}' collection='{{widget}}' line-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
+                <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">
+                    <center>
+                        <div set-Line-Chart-Fn="setLineFn(lineChartFn)" 
+                             line-Chart-Directive 
+                             line-Chart-Url='{{widget.url}}' 
+                             collection='{{widget}}' 
+                             line-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
                 </div>
                 <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
                     <center>
-                        <div area-Chart-Id="widgetwidget1"
-                             set-Area-Chart-Fn="setAreaFn(areaChartFn)"
+                        <div set-Area-Chart-Fn="setAreaFn(areaChartFn)"
                              area-Chart-Directive
                              area-Chart-Url='{{widget.url}}'
                              style="min-height:{{widget.minHeight}}">
-                            <div id="widgetwidget1"></div>
                         </div>
                     </center>
                 </div> 
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
-                    <center><div set-Bar-Chart-Fn="setBarFn(barChartFn)" bar-Chart-Url='{{widget.url}}' bar-Chart-Directive bar-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
+                <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
+                    <center>
+                        <div set-Bar-Chart-Fn="setBarFn(barChartFn)"
+                             bar-Chart-Directive 
+                             bar-Chart-Url='{{widget.url}}' 
+                             style="min-height:{{widget.minHeight}}">
+                        </div>
+                    </center>
                 </div> 
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
-                    <center><div set-Pie-Chart-Fn="setPieFn(pieChartFn)" pie-Chart-Url='{{widget.url}}' pie-Chart-Directive pie-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
+                <div class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
+                    <center>
+                        <div set-Pie-Chart-Fn="setPieFn(pieChartFn)"
+                             pie-Chart-Directive
+                             pie-Chart-Url='{{widget.url}}'
+                             style="min-height:{{widget.minHeight}}">
+                        </div>
+                    </center>
                 </div> 
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'donut'">
-                    <center><div set-Donut-Chart-Fn="setDonutFn(donutChartFn)" donut-Chart-Url='{{widget.url}}' donut-Chart-Directive donut-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
+                <div class="box-body chart-responsive" ng-if="widget.chartType === 'donut'">
+                    <center>
+                        <div set-Donut-Chart-Fn="setDonutFn(donutChartFn)"
+                             donut-Chart-Directive
+                             donut-Chart-Url='{{widget.url}}'
+                             style="min-height:{{widget.minHeight}}">
+                        </div>
+                    </center>
                 </div> 
-                
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'groupedBar'">
-                    <div set-Grouped-Bar-Chart-Fn="setGroupedBarFn(groupedBarChartFn)" grouped-Bar-Chart-Url='{{widget.url}}' grouped-Bar-Chart-Directive grouped-Bar-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div>
+
+                <div class="box-body chart-responsive" ng-if="widget.chartType === 'groupedBar'">
+                    <div set-Grouped-Bar-Chart-Fn="setGroupedBarFn(groupedBarChartFn)"
+                         grouped-Bar-Chart-Directive
+                         grouped-Bar-Chart-Url='{{widget.url}}'
+                         style="min-height:{{widget.minHeight}}">                             
+                    </div>
                 </div> 
-                
-                <div id="{{widget.chartId}}" class="box-body chart-responsive" ng-if="widget.chartType === 'table'">
-                    <center><div set-Table-Fn="setTableFn(tableFn)" dynamic-Table-Url='{{widget.url}}' dynamic-Table dynamic-Table-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
+
+                <div class="box-body chart-responsive" ng-if="widget.chartType === 'table'">
+                    <center>
+                        <div set-Table-Fn="setTableFn(tableFn)"
+                             dynamic-Table-Url='{{widget.url}}'
+                             dynamic-Table 
+                             dynamic-Table-Id='{{widget.chartId}}'
+                             style="min-height:{{widget.minHeight}}">
+                        </div>
+                    </center>
                 </div>  
             </div>
         </div>
@@ -170,24 +202,23 @@
                         <div class="form-group">
                             <label class="col-sm-2">Preview</label>
                             <div class="col-sm-12">
-                                <!--<div id="previewChart{{widget.chartId}}" class="chartpreview" ng-model="widget.preview"></div>-->
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
                                     <div line-Chart-Url='{{previewChartUrl}}' line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
-                                    <div area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                    <div area-Chart-Url='{{previewChartUrl}}' area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
-                                    <div bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                    <div bar-Chart-Url='{{previewChartUrl}}' bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
-                                    <div pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                    <div pie-Chart-Url='{{previewChartUrl}}' pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'donut'">
-                                    <div donut-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                    <div donut-Chart-Url='{{previewChartUrl}}' donut-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'groupedBar'">
-                                    <div grouped-Bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                    <div grouped-Bar-Chart-Url='{{previewChartUrl}}' grouped-Bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
                                     <div preview-Dynamic-Table style="min-height:{{widget.minHeight}}"></div>
@@ -195,7 +226,6 @@
                             </div>
                         </div>
                     </form>
-
                 </div>
                 <div class="modal-footer" style="padding:10px;background-color:#9DD6D7">
                     <button class="btn btn-primary" ng-click="save(widget)" data-dismiss="modal"><span class="fa fa-save"></span> SAVE</button>
@@ -232,42 +262,8 @@
                             </div>
                         </div>
                     </div>
-                    <!--                     <a href="" ng-click="addMedium()" data-dismiss="modal"><div class="col-sm-8">
-                                            <div class="box box-primary">
-                                                <div class="box-header with-border">
-                                                    <h3 class="box-title">
-                                                        Header
-                                                    </h3>
-                    
-                                                    <div class="box-tools pull-right">
-                    
-                                                    </div>
-                                                </div>
-                                                <div class="box-body">
-                                                    col-sm-8
-                                                </div>
-                                            </div>
-                                             </div></a>
-                                         <a href="" ng-click="addLarge()" data-dismiss="modal"><div class="col-sm-12">
-                                           <div class="box box-primary">
-                                                <div class="box-header with-border">
-                                                    <h3 class="box-title">
-                                                        Header
-                                                    </h3>
-                    
-                                                    <div class="box-tools pull-right">
-                    
-                                                    </div>
-                                                </div>
-                                                <div class="box-body">
-                                                    col-sm-12
-                                                </div>
-                                            </div>
-                                             </div></a>-->
-
                 </div>
                 <div class="modal-footer">
-                    <!--                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                 </div>
             </div>
         </div>

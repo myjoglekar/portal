@@ -1,4 +1,6 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
+    
+    $scope.myData = [10,20,30,40,60, 80, 20, 50];
     $scope.widgets = [];
     function getItem() {
         $http.get("static/datas/" + $stateParams.widgetId + ".json").success(function (response) {
@@ -214,13 +216,9 @@ app.directive('lineChartDirective', function () {
             lineChartId: '@',
             lineChartUrl: '@',
         },
-        template: '<div id="lineChartDashboard{{lineChartId}}"></div>',
         link: function (scope, element, attr) {
-            console.log("lineChart:", scope.lineChartUrl);
-            //scope.internalControl = scope.control || {};
-            console.log("lineChart : " + scope.collection);
-            console.log("lineChart Item : " + scope.lineChartId);
-            console.log("lineChart Url : " + scope.lineChartUrl);
+//            collectionData = JSON.parse(scope.collection);
+//            console.log(collectionData.chartId);
             var m = [30, 80, 30, 70]; // margins
             var w = 300// width
             var h = 200 // height
@@ -275,7 +273,7 @@ app.directive('lineChartDirective', function () {
                         .y(function (d) {
                             return y(y_dim_accessor(d));
                         })
-                var graph = d3.select("#lineChartDashboard" + scope.lineChartId).append("svg:svg")
+                var graph = d3.select(element[0]).append("svg:svg")
 //                        .attr("width", w + m[1] + m[3])
 //                        .attr("height", h + m[0] + m[2])
                         .attr("viewBox", "0 0 380 250")
@@ -337,8 +335,8 @@ app.directive('areaChartDirective', function () {
                     });
                     console.log($('#widgetwidget1'));
                     console.log($('#' +scope.areaChartId).attr('id'));
-                    alert(scope.areaChartId);
-            var svg = d3.select("#"+scope.areaChartId).append("svg")
+                    
+            var svg = d3.select(element[0]).append("svg")
                     .attr("viewBox", "0 0 380 250")
 //    .attr("width", width + margin.left + margin.right)
 //    .attr("height", height + margin.top + margin.bottom)
@@ -391,10 +389,7 @@ app.directive('areaChartDirective', function () {
 app.directive('barChartDirective', function () {
     return{
         restrict: 'A',
-        template: '<div id="barChartDashboard"></div>',
         scope: {
-            // value: "@value",
-            //collection: '@',
             setBarChartFn: '&',
             barChartId: '@',
             barChartUrl: '@'
@@ -412,7 +407,7 @@ app.directive('barChartDirective', function () {
                     .scale(y)
                     .orient("left")
                     .ticks(10);
-            var svg = d3.select("#barChartDashboard").append("svg")
+            var svg = d3.select(element[0]).append("svg")
                     .attr("viewBox", "0 0 380 250")
 //                    .attr("width", width + margin.left + margin.right)
 //                    .attr("height", height + margin.top + margin.bottom)
@@ -477,7 +472,7 @@ app.directive('barChartDirective', function () {
 app.directive('pieChartDirective', function () {
     return{
         restrict: 'A',
-        template: '<div id="pieChartDashboard"></div>',
+//        template: '<div id="pieChartDashboard"></div>',
         scope: {
             // value: "@value
             // ",
@@ -504,7 +499,7 @@ app.directive('pieChartDirective', function () {
                     .value(function (d) {
                         return d.population;
                     });
-            var svg = d3.select("#pieChartDashboard").append("svg")
+            var svg = d3.select(element[0]).append("svg")
                     .attr("viewBox", "0 0 380 250")
 //                    .attr("width", width)
 //                    .attr("height", height)
@@ -548,7 +543,7 @@ app.directive('pieChartDirective', function () {
 app.directive('donutChartDirective', function () {
     return{
         restrict: 'A',
-        template: '<div id="donutChartDashboard"></div>',
+//        template: '<div id="donutChartDashboard"></div>',
         scope: {
             // value: "@value",
             //collection: '@',
@@ -570,7 +565,7 @@ app.directive('donutChartDirective', function () {
                     .value(function (d) {
                         return d.population;
                     });
-            var svg = d3.select("#donutChartDashboard").append("svg")
+            var svg = d3.select(element[0]).append("svg")
                     .attr("viewBox", "0 0 380 250")
 //                    .attr("width", width)
 //                    .attr("height", height)
@@ -615,7 +610,7 @@ app.directive('donutChartDirective', function () {
 app.directive('groupedBarChartDirective', function () {
     return{
         restrict: 'A',
-        template: '<div id="groupedBarChartDashboard"></div>',
+//        template: '<div id="groupedBarChartDashboard"></div>',
         scope: {
             // value: "@value",
             //collection: '@',
@@ -641,7 +636,7 @@ app.directive('groupedBarChartDirective', function () {
                     .scale(y)
                     .orient("left")
                     .tickFormat(d3.format(".2s"));
-            var svg = d3.select("#groupedBarChartDashboard").append("svg")
+            var svg = d3.select(element[0]).append("svg")
                     .attr("viewBox", "0 0 380 250")
 //                    .attr("width", width + margin.left + margin.right)
 //                    .attr("height", height + margin.top + margin.bottom)
@@ -729,7 +724,7 @@ app.directive('groupedBarChartDirective', function () {
                                 return d;
                             });
                 });
-            }
+            };
             scope.setGroupedBarChartFn({groupedBarChartFn: scope.refreshWidgetGroupedBar});
             scope.refreshWidgetGroupedBar();
         }
