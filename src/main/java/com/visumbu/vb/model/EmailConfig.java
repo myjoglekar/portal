@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author vsamraj
  */
 @Entity
-@Table(name = "EMAIL_CONFIG")
+@Table(name = "email_config")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EmailConfig.findAll", query = "SELECT e FROM EmailConfig e"),

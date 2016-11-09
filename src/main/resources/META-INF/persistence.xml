@@ -14,6 +14,12 @@
     <class>com.visumbu.vb.model.Dealer</class>
     <class>com.visumbu.vb.model.VbUser</class>
     <class>com.visumbu.vb.model.VbGroup</class>
+    <class>com.visumbu.vb.model.DealerProduct</class>
+    <class>com.visumbu.vb.model.Report</class>
+    <class>com.visumbu.vb.model.DashboardTabs</class>
+    <class>com.visumbu.vb.model.Dashboard</class>
+    <class>com.visumbu.vb.model.TabWidget</class>
+    <class>com.visumbu.vb.model.ReportTypes</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/wa?zeroDateTimeBehavior=convertToNull"/>

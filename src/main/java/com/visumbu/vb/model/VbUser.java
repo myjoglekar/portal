@@ -6,6 +6,7 @@
 package com.visumbu.vb.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,11 +16,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -48,6 +52,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "VbUser.findByTheme", query = "SELECT v FROM VbUser v WHERE v.theme = :theme"),
     @NamedQuery(name = "VbUser.findByUserName", query = "SELECT v FROM VbUser v WHERE v.userName = :userName")})
 public class VbUser implements Serializable {
+    @OneToMany(mappedBy = "createdBy")
+    private Collection<TabWidget> tabWidgetCollection;
+    @OneToMany(mappedBy = "createdBy")
+    private Collection<Report> reportCollection;
+    @OneToMany(mappedBy = "userId")
+    private Collection<ReportTypes> reportTypesCollection;
+    @OneToMany(mappedBy = "createdBy")
+    private Collection<ReportTypes> reportTypesCollection1;
+    @OneToMany(mappedBy = "userId")
+    private Collection<Dashboard> dashboardCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -268,6 +282,56 @@ public class VbUser implements Serializable {
     @Override
     public String toString() {
         return "com.visumbu.vb.model.VbUser[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<TabWidget> getTabWidgetCollection() {
+        return tabWidgetCollection;
+    }
+
+    public void setTabWidgetCollection(Collection<TabWidget> tabWidgetCollection) {
+        this.tabWidgetCollection = tabWidgetCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Report> getReportCollection() {
+        return reportCollection;
+    }
+
+    public void setReportCollection(Collection<Report> reportCollection) {
+        this.reportCollection = reportCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<ReportTypes> getReportTypesCollection() {
+        return reportTypesCollection;
+    }
+
+    public void setReportTypesCollection(Collection<ReportTypes> reportTypesCollection) {
+        this.reportTypesCollection = reportTypesCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<ReportTypes> getReportTypesCollection1() {
+        return reportTypesCollection1;
+    }
+
+    public void setReportTypesCollection1(Collection<ReportTypes> reportTypesCollection1) {
+        this.reportTypesCollection1 = reportTypesCollection1;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Dashboard> getDashboardCollection() {
+        return dashboardCollection;
+    }
+
+    public void setDashboardCollection(Collection<Dashboard> dashboardCollection) {
+        this.dashboardCollection = dashboardCollection;
     }
     
 }

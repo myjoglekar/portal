@@ -44,6 +44,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Dealer.findByLastSiteVisit", query = "SELECT w FROM Dealer w WHERE w.lastSiteVisit = :lastSiteVisit"),
     @NamedQuery(name = "Dealer.findByStatus", query = "SELECT w FROM Dealer w WHERE w.status = :status")})
 public class Dealer implements Serializable {
+    @OneToMany(mappedBy = "dealerId")
+    private Collection<DealerProduct> dealerProductCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -179,6 +181,16 @@ public class Dealer implements Serializable {
     @Override
     public String toString() {
         return "com.visumbu.wa.model.Dealer[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<DealerProduct> getDealerProductCollection() {
+        return dealerProductCollection;
+    }
+
+    public void setDealerProductCollection(Collection<DealerProduct> dealerProductCollection) {
+        this.dealerProductCollection = dealerProductCollection;
     }
 
 }

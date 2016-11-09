@@ -115,6 +115,12 @@
             <artifactId>spring-expression</artifactId>
             <version>4.0.1.RELEASE</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-autoconfigure -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>1.4.1.RELEASE</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-framework-bom -->
         <dependency>
@@ -262,14 +268,19 @@
             <version>v3-rev135-1.22.0</version>
         </dependency>
         <dependency>
-          <groupId>com.google.api-ads</groupId>
-          <artifactId>ads-lib</artifactId>
-          <version>2.21.0</version>
+            <groupId>com.google.api-ads</groupId>
+            <artifactId>ads-lib</artifactId>
+            <version>2.21.0</version>
         </dependency>
         <dependency>
-          <groupId>com.google.api-ads</groupId>
-          <artifactId>adwords-axis</artifactId>
-          <version>2.21.0</version>
+            <groupId>com.google.api-ads</groupId>
+            <artifactId>adwords-axis</artifactId>
+            <version>2.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.bingads</groupId>
+            <artifactId>microsoft.bingads</artifactId>
+            <version>10.4.9</version>
         </dependency>
     </dependencies>
 
