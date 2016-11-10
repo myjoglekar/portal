@@ -1,6 +1,4 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
-    
-    $scope.myData = [10,20,30,40,60, 80, 20, 50];
     $scope.widgets = [];
     function getItem() {
         $http.get("static/datas/" + $stateParams.widgetId + ".json").success(function (response) {
@@ -12,6 +10,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
     });
+
     $http.get('admin/datasources').success(function (response) {
         $scope.datasources = response;
     });
@@ -19,7 +18,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.pageRefresh = function () {
         getItem();
     };
-    $http.get("static/datas/panelWidth.json").success(function (response) {
+    $http.get("static/datas/panelSize.json").success(function (response) {
         $scope.newPanels = response;
     });
 
@@ -27,7 +26,8 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     var uid = 10;
     $scope.addNewPanel = function (newPanel) {
         $scope.id = uid++;
-        $scope.widgets.push({chartId: "widget" + $scope.id, chartType: "New Widget", width: newPanel.panelWidth, });
+        $scope.widgets.push({chartId: "widget" + $scope.id, chartType: "New Widget", width: newPanel.panelWidth});
+        $("#"+$scope.isOpen).modal('show');
     };
 
 
@@ -59,8 +59,8 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             $scope.dataSetName.push(value.name);
             dataSet = '';
         });
-        console.log("Name : " + $scope.dataSetName);
     };
+
     $scope.selectedDimensions = function (dimension, dataSet) {
         angular.forEach(dimension, function (value, key) {
             $scope.dimensionName = value.name;
@@ -68,12 +68,11 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $http.get('admin/datasources/dataDimensions/' + $scope.selectItem + '?' + 'dimensions=' + $scope.dimensionName + '&dataSet=' + $scope.dataSetName + '&sort=ga:sessions').success(function () {
 
         });
-        console.log($scope.dimensionName, $scope.dataSetName);
     };
-    var value = [];
+
     $scope.objectHeader = [];
     $scope.previewChart = function (chartType, widget) {
-    $scope.columns = [];
+        $scope.columns = [];
         $scope.previewChartType = chartType.type;
         $scope.previewChartUrl = widget.url;
         if (chartType.type === "table") {
@@ -95,14 +94,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 });
             });
         }
-        if (chartType.type === "line") {
-//             $http.get(widget.url).success(function (response) {
-//                 $scope.data=response;
-//                 console.log("test:",$scope.data);
-//             });
-            $scope.previewChartUrl = widget.url;
-            console.log("chartType:", $scope.previewChartUrl, $scope.previewChartType);
-        }
     };
 
     $scope.save = function (widget) {
@@ -115,11 +106,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.widgets[index] = widget;
         $scope.widgets[otherIndex] = otherObj;
     };
-
-    //Remove widget
-//    $scope.removeWidget = function (index) {
-//        $scope.widgets.splice(index, 1);
-//    };
 
     //widget refresh
     $scope.setLineFn = function (lineFn) {
@@ -179,11 +165,11 @@ app.directive('dynamicTable', function ($http) {
                         });
                     });
                 });
-            }
+            };
             scope.setTableFn({tableFn: scope.refreshTable});
             scope.refreshTable();
         }
-    }
+    };
 });
 app.directive('previewDynamicTable', function () {
     return{
@@ -333,9 +319,9 @@ app.directive('areaChartDirective', function () {
                     .y1(function (d) {
                         return y(d.close);
                     });
-                    console.log($('#widgetwidget1'));
-                    console.log($('#' +scope.areaChartId).attr('id'));
-                    
+            console.log($('#widgetwidget1'));
+            console.log($('#' + scope.areaChartId).attr('id'));
+
             var svg = d3.select(element[0]).append("svg")
                     .attr("viewBox", "0 0 380 250")
 //    .attr("width", width + margin.left + margin.right)
