@@ -26,74 +26,73 @@
         </li>
         <li class="pull-right">
             <div class="mar-top">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{selectName}}
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li ng-repeat="dashboard in dashboards">
-                        <a ui-sref="dashboard.tab({tabId: dashboard.dashboardValue})" ng-click="change(dashboard)">
-                            {{dashboard.dashboardName}}
-                        </a>
-                    </li>
-                </ul>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{selectName}}
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="dashboard in dashboards">
+                            <a ui-sref="dashboard.tab({tabId: dashboard.dashboardValue})" ng-click="change(dashboard)">
+                                {{dashboard.productName}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            </div>
-
         </li>
         <li class="pull-right">
             <div class="mar-top">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Type
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="">Dealers</a>
-                    </li>
-                </ul>
-            </div>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Type
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="">Dealers</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </li>
 
 
     </ul>
-    
-<!--    <div class="row col-md-8 pull-right">
-        <div class="col-lg-4 col-xs-4">
-            <div class="mar-top">
-                <select class="form-control">
-                    <option ng-repeat="dealer in dealers" value="{{dealer.dealerValue}}">
-                        {{dealer.dealerName}}
-                    </option>
-                </select>
-            </div>  
-        </div>
 
-        <div class="col-lg-3 col-xs-4">
-            <div class="mar-top">
-                <select class="form-control">
-                    <option ng-repeat="dashboard in dashboards" 
-                            ui-sref="dashboard.tab({tabId: dashboard.dashboardValue})" ui-sref-reload="true" value="{{dashboard.dashboardValue}}">
-                        {{dashboard.dashboardName}}
-                    </option>
-                </select>
+    <!--    <div class="row col-md-8 pull-right">
+            <div class="col-lg-4 col-xs-4">
+                <div class="mar-top">
+                    <select class="form-control">
+                        <option ng-repeat="dealer in dealers" value="{{dealer.dealerValue}}">
+                            {{dealer.dealerName}}
+                        </option>
+                    </select>
+                </div>  
             </div>
-        </div>
-
-        <div class="col-lg-4 col-xs-4">
-            <div class="mar-top">
-                <div class="form-group">
-                    <div class="input-group">
-                        <button type="button" class="btn btn-default pull-right" id="daterange-btn">
-                            <span>
-                                <i class="fa fa-calendar"></i>&nbsp;&nbsp;September 7, 2016 - October 5, 2016
-                            </span>
-                            <i class="fa fa-caret-down"></i>
-                        </button>
+    
+            <div class="col-lg-3 col-xs-4">
+                <div class="mar-top">
+                    <select class="form-control">
+                        <option ng-repeat="dashboard in dashboards" 
+                                ui-sref="dashboard.tab({tabId: dashboard.dashboardValue})" ui-sref-reload="true" value="{{dashboard.dashboardValue}}">
+                            {{dashboard.dashboardName}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="col-lg-4 col-xs-4">
+                <div class="mar-top">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-default pull-right" id="daterange-btn">
+                                <span>
+                                    <i class="fa fa-calendar"></i>&nbsp;&nbsp;September 7, 2016 - October 5, 2016
+                                </span>
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>-->
+        </div>-->
 </nav>
 
 
@@ -122,9 +121,9 @@
                     startDate: moment().subtract(29, 'days'),
                     endDate: moment()
                 },
-        function (start, end) {
-            $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        }
+                function (start, end) {
+                    $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
         );
 
         //Date picker

@@ -25,7 +25,7 @@ public class BaseDao {
 
     public Object create(Object object) {
         try {
-            System.out.println("Object: "+object);
+            System.out.println("Object: " + object);
             sessionFactory.getCurrentSession().save(object);
             //sessionFactory.getCurrentSession().flush();
         } catch (Exception e) {

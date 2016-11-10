@@ -14,19 +14,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author jp
+ * @author Netphenix
  */
 @Transactional
 @Repository("userDao")
 public class UserDao extends BaseDao {
 
     public List<VbUser> read() {
-        Query query = sessionFactory.getCurrentSession().createQuery("from WaUser where status is null or status != 'Deleted'");
+        Query query = sessionFactory.getCurrentSession().createQuery("from VbUser where status is null or status != 'Deleted'");
         return query.list();
     }
     
     public List<VbUser> findByUserName(String username) {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery("WaUser.findByUserName");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("VbUser.findByUserName");
         query.setParameter("userName", username);
         return query.list();
     }
