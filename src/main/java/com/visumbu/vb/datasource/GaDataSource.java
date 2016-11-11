@@ -39,7 +39,7 @@ public class GaDataSource extends BaseDataSource {
 
     private static final String APPLICATION_NAME = "Hello Analytics";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final String KEY_FILE_LOCATION = "/tmp/API Project-da31f3788962.p12";
+    private static final String KEY_FILE_LOCATION = "f:\\API Project-da31f3788962.p12";
     private static final String SERVICE_ACCOUNT_EMAIL = "vs-test-ga@api-project-384381056232.iam.gserviceaccount.com";
     private static Analytics analytics = null;
 
@@ -144,8 +144,8 @@ public class GaDataSource extends BaseDataSource {
     public GaDataSource() throws GeneralSecurityException, IOException {
         /**
          * Client ID:
-         * 384381056232-cnd1svpact5vlhl1236hp99pcjjcl2f8.apps.googleusercontent.com
-         * Client secret: kNfgoMGdfn_Y9pKc9BdlNRMb U: l2tanalytics@gmail.com P:
+         * 384381056232-sqrgb2u8j26gbkqi6dis682ojapsf85a.apps.googleusercontent.com
+         * Client secret: 1nJygCmZKdFCOykaGmbjBpKy U: l2tanalytics@gmail.com P:
          * l2tmedia2016!!
          */
 
