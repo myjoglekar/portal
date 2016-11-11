@@ -5,8 +5,11 @@
  */
 package com.visumbu.vb.admin.service;
 
-import com.visumbu.vb.admin.dao.DashboardTabDao;
+import com.visumbu.vb.admin.dao.UiDao;
+import com.visumbu.vb.model.Dashboard;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.TabWidget;
+import com.visumbu.vb.model.VbUser;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,15 +20,22 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author netphenix
  */
-@Service("dashboardTabService")
+@Service("uiService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-public class DashboardTabService {
+public class UiService {
 
     @Autowired
-    private DashboardTabDao dashboardTabDao;
+    private UiDao uiDao;
 
-    public List<DashboardTabs> read() {
-        List<DashboardTabs> dashboardTabs = dashboardTabDao.read(DashboardTabs.class);
-        return dashboardTabs;
+    public List<Dashboard> getDashboards(VbUser user) {
+        return uiDao.getDashboards(user);
+    }
+
+    public List<DashboardTabs> getDashboardTabs(Integer dbId) {
+        return uiDao.getDashboardTabs(dbId);
+    }
+
+    public List<TabWidget> getTabWidget(Integer tabId) {
+        return uiDao.getTabWidget(tabId);
     }
 }
