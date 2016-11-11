@@ -6,10 +6,10 @@
 package com.visumbu.vb.admin.service;
 
 import com.visumbu.vb.admin.dao.UiDao;
-import com.visumbu.vb.admin.dao.UserDao;
-import com.visumbu.vb.bean.LoginUserBean;
+import com.visumbu.vb.model.Dashboard;
+import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,17 +18,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author jp
+ * @author netphenix
  */
 @Service("uiService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class UiService {
 
     @Autowired
-    private UserDao userDao;
-    @Autowired
     private UiDao uiDao;
-    public List getDashboard(VbUser user) {
+
+    public List<Dashboard> getDashboards(VbUser user) {
         return uiDao.getDashboards(user);
+    }
+    
+    public List<DashboardTabs> getDashboardTabs(Integer dbId){
+    return uiDao.getDashboardTabs(dbId);
+    }
+    
+    public List<TabWidget> getTabWidget(Integer tabId) {
+        return uiDao.getTabWidget(tabId);
     }
 }

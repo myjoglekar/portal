@@ -2,9 +2,14 @@ app.controller('TabController', function ($scope, $http, $stateParams) {
 
 $scope.dashboardName = $stateParams.tabId
 
-    $http.get("static/datas/" + $stateParams.tabId + "Tab.json").success(function (response) {
+//    $http.get("static/datas/" + $stateParams.tabId + "Tab.json").success(function (response) {
+//        $scope.tabs = response;
+//    });
+    
+    $http.get("admin/ui/dbTabs/1").success(function (response) {
         $scope.tabs = response;
     });
+    
 
     $scope.tabs = [];
     var uid = 7;
