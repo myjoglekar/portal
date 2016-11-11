@@ -15,6 +15,58 @@
     </properties>
     
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client-gson -->
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client-gson</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-analytics -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-analytics</artifactId>
+            <version>v3-rev135-1.22.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-analyticsreporting -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-analyticsreporting</artifactId>
+            <version>v4-rev12-1.22.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.oauth-client/google-oauth-client-java6 -->
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client-java6</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.oauth-client/google-oauth-client-jetty -->
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client-jetty</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.api-ads</groupId>
+            <artifactId>ads-lib</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api-ads</groupId>
+            <artifactId>adwords-axis</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.bingads</groupId>
+            <artifactId>microsoft.bingads</artifactId>
+            <version>10.4.10</version>
+        </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -34,6 +86,11 @@
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-servlet</artifactId>
             <version>3.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.8.0</version>
         </dependency>
         <dependency>
             <groupId>c3p0</groupId>
@@ -109,12 +166,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
             <version>4.0.1.RELEASE</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-autoconfigure -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>1.4.1.RELEASE</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-framework-bom -->
@@ -250,63 +301,8 @@
             <artifactId>commons-email</artifactId>
             <version>1.4</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client-gson -->
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client-gson</artifactId>
-            <version>1.22.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-analytics -->
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-analytics</artifactId>
-            <version>v3-rev135-1.22.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-analyticsreporting -->
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-analyticsreporting</artifactId>
-            <version>v4-rev12-1.22.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.oauth-client/google-oauth-client-java6 -->
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client-java6</artifactId>
-            <version>1.22.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.oauth-client/google-oauth-client-jetty -->
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client-jetty</artifactId>
-            <version>1.22.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.api-ads</groupId>
-            <artifactId>ads-lib</artifactId>
-            <version>2.20.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.api-ads</groupId>
-            <artifactId>adwords-axis</artifactId>
-            <version>2.20.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>19.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.bingads</groupId>
-            <artifactId>microsoft.bingads</artifactId>
-            <version>10.4.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
-        </dependency>
+        <!-- TEST IF REQUIRED -->
+        
     </dependencies>
 
     <build>
