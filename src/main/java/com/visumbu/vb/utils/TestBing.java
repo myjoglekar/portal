@@ -5,7 +5,7 @@
  */
 package com.visumbu.vb.utils;
 
-import com.microsoft.bingads.ApiEnvironment;
+/*import com.microsoft.bingads.ApiEnvironment;
 import com.microsoft.bingads.AuthorizationData;
 import com.microsoft.bingads.PasswordAuthentication;
 import com.microsoft.bingads.reporting.AccountThroughAdGroupReportScope;
@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  */
 public class TestBing {
 
-    static ReportingServiceManager ReportingServiceManager;
+  /*  static ReportingServiceManager ReportingServiceManager;
 
     // The directory for the report file.
     static java.lang.String FileDirectory = "f:\\reports\\";
@@ -186,5 +186,5 @@ public class TestBing {
         report.setMaxRows(10);
 
         return report;
-    }
+    }*/
 }

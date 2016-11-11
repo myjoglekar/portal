@@ -32,7 +32,7 @@ public class UiController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "dashboards", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "dashboard", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDashboards(HttpServletRequest request, HttpServletResponse response) {
         VbUser user = userService.read(1);
