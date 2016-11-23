@@ -60,6 +60,14 @@ public class UserService {
         return (VbUser) userDao.delete(teUser);
     }
 
+    public VbUser findByUsername(String username) {
+        List<VbUser> vbUsers = userDao.findByUserName(username);
+        if(!vbUsers.isEmpty()) {
+            return vbUsers.get(0);
+        }
+        return null;
+    }
+    
     public LoginUserBean authenicate(LoginUserBean userBean) {
         List<VbUser> users = userDao.findByUserName(userBean.getUsername());
         LoginUserBean loginUserBean = null;

@@ -14,21 +14,21 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: "/dashboard/:tabId",
                 templateUrl: "static/views/dashboard/dashboard.html",                
             })
-            .state("dashboard.tab", {
-                url: "/tab",
-                templateUrl: "static/views/dashboard/dashboardTabs.html", 
-                controller: 'TabController'
-            })
-            .state("dashboard.tab.widget", {
+//            .state("dashboard.tab", {
+//                url: "/tab",
+//                templateUrl: "static/views/dashboard/dashboardTabs.html", 
+//                controller: 'UiController'
+//            })
+            .state("dashboard.widget", {
                 url: "/widget/:widgetId",
                 templateUrl: "static/views/dashboard/widgets.html",   
-                controller:'WidgetController'
+                controller:'UiController'
             })
             .state("report", {
                 url: "/report/:reportId",
                 templateUrl: "static/views/reports/createNewReports.html",
             });
 
-    $urlRouterProvider.otherwise('/dashboard/dashboard');
+    $urlRouterProvider.otherwise('/dashboard/dashboard/widget/1');
 });
 

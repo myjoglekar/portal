@@ -1,6 +1,6 @@
-<div ng-controller="TabController">
+<div ng-controller="UiController">
     <section class="content-header">
-        <h1> {{dashboardName | uppercase}} <small>Dashboard</small> </h1>
+        <h1> {{dashboardName| uppercase}} <small>Dashboard</small> </h1>
         <ol class="breadcrumb">
             <li><a href=" "><i class="fa fa-dashboard"></i> L2tmedia</a></li>
             <li class="active">Here</li>
@@ -10,7 +10,28 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel with-nav-tabs" style="background-color:rgb(234,234,234)">
-                    <ui-view></ui-view>                    
+                    <div class="panel-heading">
+                        <ul class="nav nav-tabs">
+                            <li ng-repeat="tab in tabs" ui-sref-active="active">
+                                <a class="active" ui-sref="dashboard.widget({widgetId: tab.id})" style="padding:3px 15px;display: inline-block;">
+                                    {{tab.tabName}}
+                                </a>
+                                <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">
+                                    <i class="glyphicon glyphicon-remove" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)"></i>
+                                </sup>
+                            </li>
+                            <a class="add-tab" ng-click="addTab(tab)" style="cursor: pointer">+ Add Tab</a>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active">                
+                                <div class="row" ngsf-fullscreen="fullscreenCtrl">
+                                    <ui-view></ui-view>
+                                </div>
+                            </div>
+                        </div>
+                    </div>            
                 </div>
             </div>
         </div>

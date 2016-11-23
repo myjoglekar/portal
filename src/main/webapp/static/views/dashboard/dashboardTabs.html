@@ -1,7 +1,6 @@
 <div class="panel-heading">
     <ul class="nav nav-tabs">
         <li ng-repeat="tab in tabs" ui-sref-active="active">
- {{tab.tabName}}
             <a class="active" ui-sref="dashboard.tab.widget({widgetId: tabItem.tabUrl})" style="padding:3px 15px;display: inline-block;">
                 {{tab.tabName}}
             </a>

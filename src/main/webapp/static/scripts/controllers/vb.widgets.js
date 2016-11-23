@@ -1,8 +1,10 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
-    $scope.widgets = [];
+    $scope.widgets = [];   
+
     function getItem() {
-        $http.get("static/datas/" + $stateParams.widgetId + ".json").success(function (response) {
+        $http.get("admin/ui/dbWidget/" + $stateParams.widgetId).success(function (response) {
             $scope.widgets = response;
+            $scope.defaultWidget = response[0];
         });
     }
     getItem();
@@ -27,7 +29,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.addNewPanel = function (newPanel) {
         $scope.id = uid++;
         $scope.widgets.push({chartId: "widget" + $scope.id, chartType: "New Widget", width: newPanel.panelWidth});
-        $("#"+$scope.isOpen).modal('show');
+        $("#" + $scope.isOpen).modal('show');
     };
 
 
@@ -292,7 +294,7 @@ app.directive('areaChartDirective', function () {
         //template: '<div id="1{{areaChartId}}">{{areaChartId?"0":"1"}}</div>',
         link: function (scope, element, attr) {
             var margin = {top: 20, right: 20, bottom: 30, left: 50},
-            width = 360 - margin.left - margin.right,
+                    width = 360 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
 
             var parseDate = d3.time.format("%d-%b-%y").parse;
@@ -382,7 +384,7 @@ app.directive('barChartDirective', function () {
         },
         link: function (scope, element, attr) {
             var margin = {top: 40, right: 40, bottom: 40, left: 40},
-            width = 420 - margin.left - margin.right,
+                    width = 420 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
             var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
             var y = d3.scale.linear().range([height, 0]);
@@ -606,7 +608,7 @@ app.directive('groupedBarChartDirective', function () {
         },
         link: function (scope, element, attr) {
             var margin = {top: 20, right: 20, bottom: 30, left: 50},
-            width = 380 - margin.left - margin.right,
+                    width = 380 - margin.left - margin.right,
                     height = 260 - margin.top - margin.bottom;
             var x0 = d3.scale.ordinal()
                     .rangeRoundBands([0, width], .1);

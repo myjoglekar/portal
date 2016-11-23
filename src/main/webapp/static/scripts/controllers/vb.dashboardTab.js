@@ -1,15 +1,21 @@
-app.controller('TabController', function ($scope, $http, $stateParams) {
+app.controller('UiController', function ($scope, $http, $stateParams) {
 
-$scope.dashboardName = $stateParams.tabId
+    // $scope.dashboardName = $stateParams.tabId
 
-//    $http.get("static/datas/" + $stateParams.tabId + "Tab.json").success(function (response) {
-//        $scope.tabs = response;
-//    });
-    
+    $http.get("admin/ui/dashboard").success(function () {
+
+    })
+    console.log($stateParams.widgetId)
+
+
     $http.get("admin/ui/dbTabs/1").success(function (response) {
         $scope.tabs = response;
     });
-    
+
+    $http.get("admin/ui/dbWidget/1").success(function (response) {
+        $scope.widgets = response;
+        //$scope.defaultWidget = response[0];
+    });
 
     $scope.tabs = [];
     var uid = 7;
@@ -22,7 +28,7 @@ $scope.dashboardName = $stateParams.tabId
     $scope.deleteTab = function (index, tab) {
         tab.tabItems.splice(index, 1);
     };
-    
+
 
 });
 //app.filter('capitalize', function() {

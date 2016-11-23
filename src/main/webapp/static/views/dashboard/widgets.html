@@ -78,13 +78,13 @@
                              line-Chart-Directive 
                              line-Chart-Url='{{widget.url}}' 
                              collection='{{widget}}' 
-                             line-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}"></div></center>
+                             line-Chart-Id='{{widget.chartId}}' style="min-height:{{widget.minHeight}}vh"></div></center>
                 </div>
                 <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
                     <div set-Area-Chart-Fn="setAreaFn(areaChartFn)"
                          area-Chart-Directive
                          area-Chart-Url='{{widget.url}}'
-                         style="min-height:{{widget.minHeight}}">
+                         style="min-height:{{widget.minHeight}}vh">
                     </div>
                 </div> 
                 <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
@@ -92,7 +92,7 @@
                         <div set-Bar-Chart-Fn="setBarFn(barChartFn)"
                              bar-Chart-Directive 
                              bar-Chart-Url='{{widget.url}}' 
-                             style="min-height:{{widget.minHeight}}">
+                             style="min-height:{{widget.minHeight}}vh">
                         </div>
                     </center>
                 </div> 
@@ -101,7 +101,7 @@
                         <div set-Pie-Chart-Fn="setPieFn(pieChartFn)"
                              pie-Chart-Directive
                              pie-Chart-Url='{{widget.url}}'
-                             style="min-height:{{widget.minHeight}}">
+                             style="min-height:{{widget.minHeight}}vh">
                         </div>
                     </center>
                 </div> 
@@ -110,7 +110,7 @@
                         <div set-Donut-Chart-Fn="setDonutFn(donutChartFn)"
                              donut-Chart-Directive
                              donut-Chart-Url='{{widget.url}}'
-                             style="min-height:{{widget.minHeight}}">
+                             style="min-height:{{widget.minHeight}}vh">
                         </div>
                     </center>
                 </div> 
@@ -119,7 +119,7 @@
                     <div set-Grouped-Bar-Chart-Fn="setGroupedBarFn(groupedBarChartFn)"
                          grouped-Bar-Chart-Directive
                          grouped-Bar-Chart-Url='{{widget.url}}'
-                         style="min-height:{{widget.minHeight}}">                             
+                         style="min-height:{{widget.minHeight}}vh">                             
                     </div>
                 </div> 
 
@@ -129,7 +129,7 @@
                              dynamic-Table-Url='{{widget.url}}'
                              dynamic-Table 
                              dynamic-Table-Id='{{widget.chartId}}'
-                             style="min-height:{{widget.minHeight}}">
+                             style="min-height:{{widget.minHeight}}vh">
                         </div>
                     </center>
                 </div>  

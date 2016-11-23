@@ -35,7 +35,10 @@ public class UiController {
     @RequestMapping(value = "dashboard", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDashboards(HttpServletRequest request, HttpServletResponse response) {
-        VbUser user = userService.read(1);
+        VbUser user = userService.findByUsername((String) request.getSession().getAttribute("username"));
+        if(user == null) {
+            return null;
+        }
         return uiService.getDashboards(user);
     }
 
