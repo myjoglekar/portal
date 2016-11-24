@@ -10,7 +10,7 @@ app.controller('HeaderController', function ($scope, $http, $stateParams) {
     };
     
     
-    $http.get('static/datas/dealer.json').success(function (response) {
+    $http.get('admin/dealer').success(function (response) {
         $scope.dealers = response;
     });
     

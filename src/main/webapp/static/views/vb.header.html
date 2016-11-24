@@ -45,8 +45,8 @@
                     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Type
                         <span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a href="">Dealers</a>
+                        <li ng-repeat="dealer in dealers">
+                            <a ui-sref="dashboard.tab({dealerId: dealer.id})">{{dealer.dealerName}}</a>
                         </li>
                     </ul>
                 </div>

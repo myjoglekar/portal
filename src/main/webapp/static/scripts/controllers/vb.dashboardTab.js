@@ -12,16 +12,21 @@ app.controller('UiController', function ($scope, $http, $stateParams) {
         $scope.tabs = response;
     });
 
-    $http.get("admin/ui/dbWidget/1").success(function (response) {
-        $scope.widgets = response;
-        //$scope.defaultWidget = response[0];
-    });
+//    $http.get("admin/ui/dbWidget/1").success(function (response) {
+//        $scope.widgets = response;
+//        //$scope.defaultWidget = response[0];
+//    });
 
     $scope.tabs = [];
     var uid = 7;
-    $scope.addTab = function (tab) {
-        $scope.id = uid++;
-        tab.tabItems.push({tabId: $scope.id, tabName: "New Tab", tabClose: "isClose"});
+    $scope.addTab = function () { 
+        $scope.tabs.push({tabId: $scope.id, tabName: "New Tab", tabClose: "isClose"});
+        var tabData = {
+                tabName: 'New Tab'
+        }
+        $http({method: 'POST', url:'admin/ui/dbTabs', data: tabData}).success(function(response){
+            
+        });
     };
     console.log($scope.tabs);
 

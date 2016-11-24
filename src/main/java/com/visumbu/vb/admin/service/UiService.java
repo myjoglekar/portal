@@ -26,16 +26,28 @@ public class UiService {
 
     @Autowired
     private UiDao uiDao;
-
+    
     public List<Dashboard> getDashboards(VbUser user) {
         return uiDao.getDashboards(user);
+    }
+    
+    public DashboardTabs createDashboardTabs(DashboardTabs dashboardTabs) {
+        return (DashboardTabs) uiDao.create(dashboardTabs);
     }
 
     public List<DashboardTabs> getDashboardTabs(Integer dbId) {
         return uiDao.getDashboardTabs(dbId);
     }
+    
+    public TabWidget createTabWidget (TabWidget tabWidget){
+    return (TabWidget) uiDao.create(tabWidget);
+    }
 
     public List<TabWidget> getTabWidget(Integer tabId) {
         return uiDao.getTabWidget(tabId);
+    }
+
+    public Dashboard getDashboardById(Integer dashboardId) {
+        return uiDao.getDashboardById(dashboardId);
     }
 }
