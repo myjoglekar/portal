@@ -31,7 +31,7 @@
                         <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li ng-repeat="dashboard in dashboards">
-                            <a ui-sref="dashboard.tab({tabId: dashboard.dashboardValue})" ng-click="change(dashboard)">
+                            <a ui-sref="dashboard({tabId:dashboard.id})" ng-click="change(dashboard)">
                                 {{dashboard.productName}}
                             </a>
                         </li>
@@ -52,8 +52,6 @@
                 </div>
             </div>
         </li>
-
-
     </ul>
 
     <!--    <div class="row col-md-8 pull-right">

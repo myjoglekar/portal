@@ -20,7 +20,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'WidgetController'
             })
             .state("report", {
-                url: "/report/:reportId",
+                url: "/report/:tabId/:reportId",
                 templateUrl: "static/views/reports/createNewReports.html",
             });
 

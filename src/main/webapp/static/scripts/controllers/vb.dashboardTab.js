@@ -1,15 +1,20 @@
-app.controller('UiController', function ($scope, $http, $stateParams) {
+app.controller('UiController', function ($scope, $http, $stateParams, $state) {
 
     // $scope.dashboardName = $stateParams.tabId
 
-    $http.get("admin/ui/dashboard").success(function () {
+//    $http.get("admin/ui/dashboard").success(function () {
+//
+//    })
+//    console.log($stateParams.widgetId)
+    if ($stateParams.tabId == 'dashboard') {
+        $stateParams.tabId = 1;
+    }
 
-    })
-    console.log($stateParams.widgetId)
-
-
-    $http.get("admin/ui/dbTabs/1").success(function (response) {
+    console.log("tabId : " + $stateParams.tabId)
+    $http.get("admin/ui/dbTabs/" + $stateParams.tabId).success(function (response) {
         $scope.tabs = response;
+        console.log("id : "+response[0].id)
+        $state.go("dashboard.widget",{widgetId: response[0].id});
     });
 
 //    $http.get("admin/ui/dbWidget/1").success(function (response) {
@@ -19,13 +24,13 @@ app.controller('UiController', function ($scope, $http, $stateParams) {
 
     $scope.tabs = [];
     var uid = 7;
-    $scope.addTab = function () { 
+    $scope.addTab = function () {
         $scope.tabs.push({tabId: $scope.id, tabName: "New Tab", tabClose: "isClose"});
         var tabData = {
-                tabName: 'New Tab'
+            tabName: 'New Tab'
         }
-        $http({method: 'POST', url:'admin/ui/dbTabs', data: tabData}).success(function(response){
-            
+        $http({method: 'POST', url: 'admin/ui/dbTabs', data: tabData}).success(function (response) {
+
         });
     };
     console.log($scope.tabs);

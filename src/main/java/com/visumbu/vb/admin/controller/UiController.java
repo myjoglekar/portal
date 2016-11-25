@@ -35,6 +35,12 @@ public class UiController extends BaseController{
 
     @Autowired
     private UserService userService;
+    
+    @RequestMapping(value = "product", method=RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getProduct(HttpServletRequest request, HttpServletResponse response){
+        return uiService.getProduct();
+    }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody

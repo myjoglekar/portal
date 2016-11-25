@@ -1,13 +1,18 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
-    $scope.widgets = [];   
+    $scope.widgets = [];
+    console.log("Widget : " + $stateParams.widgetId)
 
-    function getItem() {
+    function getWidgetItem() {
+        if (!$stateParams.widgetId) {
+            $stateParams.widgetId = 1
+        }
+        console.log("Widget 1 : " + $stateParams.widgetId)
         $http.get("admin/ui/dbWidget/" + $stateParams.widgetId).success(function (response) {
             $scope.widgets = response;
             $scope.defaultWidget = response[0];
         });
     }
-    getItem();
+    getWidgetItem();
 
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
@@ -18,7 +23,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     });
 
     $scope.pageRefresh = function () {
-        getItem();
+        getWidgetItem();
     };
     $http.get("static/datas/panelSize.json").success(function (response) {
         $scope.newPanels = response;
