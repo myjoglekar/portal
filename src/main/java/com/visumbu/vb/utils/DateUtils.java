@@ -133,6 +133,31 @@ public class DateUtils {
         cal.add(Calendar.DATE, -1);
         return cal.getTime();
     }
+
+    public static Date getOneMonthsBack(Date date) {
+        Calendar cal = Calendar.getInstance();
+        if (date != null) {
+            cal.setTime(date);
+        }
+        cal.add(Calendar.MONTH, -1);
+        cal.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        return cal.getTime();
+    }
+
+    public static Date getSixMonthsBack(Date date) {
+        Calendar cal = Calendar.getInstance();
+        if (date != null) {
+            cal.setTime(date);
+        }
+        cal.add(Calendar.MONTH, -6);
+        cal.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        return cal.getTime();
+    }
+
     public static Date getYesterday() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
@@ -142,7 +167,22 @@ public class DateUtils {
         return cal.getTime();
     }
 
+    public static Date getYesterday(String date) {
+        Calendar cal = Calendar.getInstance();
+        Date parsedDate = getEndDate(date);
+        cal.setTime(parsedDate);
+        cal.add(Calendar.DATE, -1);
+        cal.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        return cal.getTime();
+    }
+
     public static Date getEndDate(String strEnd) {
+        System.out.println("Start Date " + strEnd);
+        if (strEnd.length() < 12) {
+            strEnd += " 23:59:59";
+        }
         DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date endDate = null;
         try {
@@ -155,6 +195,10 @@ public class DateUtils {
     }
 
     public static Date getStartDate(String strStart) {
+        System.out.println("Start Date " + strStart);
+        if (strStart.length() < 12) {
+            strStart += " 00:00:00";
+        }
         DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date startDate = null;
         try {
@@ -167,6 +211,10 @@ public class DateUtils {
     }
 
     public static Date getStartTodayDate(String strStart) {
+        System.out.println("Start Date " + strStart);
+        if (strStart.length() < 12) {
+            strStart += " 00:00:00";
+        }
         DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date startDate = null;
         try {
@@ -193,12 +241,18 @@ public class DateUtils {
     }
 
     public static Date toDate(String dateStr) {
+        if (dateStr.length() < 12) {
+            dateStr += " 00:00:00";
+        }
         String format = "dd-M-yyyy HH:mm:ss";
         return toDate(dateStr, format);
 
     }
 
     public static Date jsToJavaDate(String dateStr) {
+        if (dateStr.length() < 12) {
+            dateStr += " 00:00:00";
+        }
         String format = "dd/M/yyyy HH:mm:ss";
         return toDate(dateStr, format);
     }
@@ -210,11 +264,42 @@ public class DateUtils {
         return Math.abs(date1.getTime() - date2.getTime()) / (60 * 60 * 1000);
     }
 
+    public static Long dateDiffInSec(Date date1, Date date2) {
+        if (date1 == null || date2 == null) {
+            return 0L;
+        }
+        return (date1.getTime() - date2.getTime()) / 1000;
+    }
+
     public static Long timeDiff(Date date1, Date date2) {
         if (date1 == null || date2 == null) {
             return 0L;
         }
         return Math.abs(date1.getTime() - date2.getTime());
+    }
+
+    public static Integer getDifferenceInMonths(Date startDate, Date endDate) {
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(startDate);
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(endDate);
+        int diff = 0;
+        if (c2.after(c1)) {
+            while (c2.after(c1)) {
+                c1.add(Calendar.MONTH, 1);
+                if (c2.after(c1)) {
+                    diff++;
+                }
+            }
+        } else if (c2.before(c1)) {
+            while (c2.before(c1)) {
+                c1.add(Calendar.MONTH, -1);
+                if (c1.before(c2)) {
+                    diff--;
+                }
+            }
+        }
+        return diff;
     }
 
     public static List<Date> getDaysBetweenDates(Date startdate, Date enddate) {

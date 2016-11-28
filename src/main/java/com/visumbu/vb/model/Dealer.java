@@ -5,6 +5,7 @@
  */
 package com.visumbu.vb.model;
 
+import com.visumbu.vb.utils.DateUtils;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -44,8 +45,18 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Dealer.findByLastSiteVisit", query = "SELECT w FROM Dealer w WHERE w.lastSiteVisit = :lastSiteVisit"),
     @NamedQuery(name = "Dealer.findByStatus", query = "SELECT w FROM Dealer w WHERE w.status = :status")})
 public class Dealer implements Serializable {
+
+    @Size(max = 256)
+    @Column(name = "dealer_group")
+    private String dealerGroup;
+    @Size(max = 1024)
+    @Column(name = "oem")
+    private String oem;
     @OneToMany(mappedBy = "dealerId")
     private Collection<DealerProduct> dealerProductCollection;
+
+    @OneToMany(mappedBy = "dealerId")
+    private Collection<DealerSite> dealerSiteCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -62,22 +73,63 @@ public class Dealer implements Serializable {
     @Size(max = 1024)
     @Column(name = "dealer_name")
     private String dealerName;
+    @Size(max = 4000)
+    @Column(name = "dealer_address")
+    private String dealerAddress;
+    @Size(max = 4000)
+    @Column(name = "dealer_state")
+    private String dealerState;
+    @Size(max = 4000)
+    @Column(name = "dealer_city")
+    private String dealerCity;
+    @Size(max = 64)
+    @Column(name = "dealer_zip")
+    private String dealerZip;
+    @Size(max = 1024)
+    @Column(name = "segment_name")
+    private String segmentName;
+    @Size(max = 1024)
+    @Column(name = "timezoneName")
+    private String timezoneName;
+    @Size(max = 1024)
+    @Column(name = "oemName")
+    private String oemName;
+    @Size(max = 1024)
+    @Column(name = "active_clients_product_name")
+    private String activeClientsProductName;
+    @Size(max = 1024)
+    @Column(name = "digital_advisor")
+    private String digitalAdvisor;
+    @Size(max = 64)
+    @Column(name = "phone")
+    private String phone;
     @Size(max = 1024)
     @Column(name = "website")
     private String website;
     @Column(name = "created_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdTime;
+    @Column(name = "campaign_launch_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date campaignLaunchDate;
+    @Column(name = "first_contract_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date firstContractTime;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 1024)
     @Column(name = "email")
     private String email;
+    @Size(max = 1024)
+    @Column(name = "communication_email")
+    private String communicationEmail;
     @Column(name = "last_site_visit")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastSiteVisit;
     @Size(max = 45)
     @Column(name = "status")
     private String status;
+    @Column(name = "budget")
+    private Double budget;
 
     public Dealer() {
     }
@@ -142,6 +194,14 @@ public class Dealer implements Serializable {
         this.email = email;
     }
 
+    public String getCommunicationEmail() {
+        return communicationEmail;
+    }
+
+    public void setCommunicationEmail(String communicationEmail) {
+        this.communicationEmail = communicationEmail;
+    }
+
     public Date getLastSiteVisit() {
         return lastSiteVisit;
     }
@@ -151,11 +211,127 @@ public class Dealer implements Serializable {
     }
 
     public String getStatus() {
-        return status;
+        if (lastSiteVisit == null) {
+            return "InActive";
+        }
+
+        Date yesterday = DateUtils.getYesterday();
+
+        Long dateDiff = DateUtils.dateDiffInSec(yesterday, lastSiteVisit);
+        if (dateDiff > 0) {
+            System.out.println(this.getDealerName() + " - " + yesterday + " - " + lastSiteVisit + " Diff: " + dateDiff);
+            return "InActive";
+        }
+
+        return "Active";
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDealerAddress() {
+        return dealerAddress;
+    }
+
+    public void setDealerAddress(String dealerAddress) {
+        this.dealerAddress = dealerAddress;
+    }
+
+    public String getDealerState() {
+        return dealerState;
+    }
+
+    public void setDealerState(String dealerState) {
+        this.dealerState = dealerState;
+    }
+
+    public String getDealerCity() {
+        return dealerCity;
+    }
+
+    public void setDealerCity(String dealerCity) {
+        this.dealerCity = dealerCity;
+    }
+
+    public String getDealerZip() {
+        return dealerZip;
+    }
+
+    public void setDealerZip(String dealerZip) {
+        this.dealerZip = dealerZip;
+    }
+
+    public String getSegmentName() {
+        return segmentName;
+    }
+
+    public void setSegmentName(String segmentName) {
+        this.segmentName = segmentName;
+    }
+
+    public String getTimezoneName() {
+        return timezoneName;
+    }
+
+    public void setTimezoneName(String timezoneName) {
+        this.timezoneName = timezoneName;
+    }
+
+    public String getOemName() {
+        return oemName;
+    }
+
+    public void setOemName(String oemName) {
+        this.oemName = oemName;
+    }
+
+    public String getActiveClientsProductName() {
+        return activeClientsProductName;
+    }
+
+    public void setActiveClientsProductName(String activeClientsProductName) {
+        this.activeClientsProductName = activeClientsProductName;
+    }
+
+    public String getDigitalAdvisor() {
+        return digitalAdvisor;
+    }
+
+    public void setDigitalAdvisor(String digitalAdvisor) {
+        this.digitalAdvisor = digitalAdvisor;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getCampaignLaunchDate() {
+        return campaignLaunchDate;
+    }
+
+    public void setCampaignLaunchDate(Date campaignLaunchDate) {
+        this.campaignLaunchDate = campaignLaunchDate;
+    }
+
+    public Date getFirstContractTime() {
+        return firstContractTime;
+    }
+
+    public void setFirstContractTime(Date firstContractTime) {
+        this.firstContractTime = firstContractTime;
+    }
+
+    public Double getBudget() {
+        return budget;
+    }
+
+    public void setBudget(Double budget) {
+        this.budget = budget;
     }
 
     @Override
@@ -181,6 +357,32 @@ public class Dealer implements Serializable {
     @Override
     public String toString() {
         return "com.visumbu.wa.model.Dealer[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<DealerSite> getDealerSiteCollection() {
+        return dealerSiteCollection;
+    }
+
+    public void setDealerSiteCollection(Collection<DealerSite> dealerSiteCollection) {
+        this.dealerSiteCollection = dealerSiteCollection;
+    }
+
+    public String getDealerGroup() {
+        return dealerGroup;
+    }
+
+    public void setDealerGroup(String dealerGroup) {
+        this.dealerGroup = dealerGroup;
+    }
+
+    public String getOem() {
+        return oem;
+    }
+
+    public void setOem(String oem) {
+        this.oem = oem;
     }
 
     @XmlTransient

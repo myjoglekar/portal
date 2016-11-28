@@ -6,6 +6,7 @@
 package com.visumbu.vb.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,11 +18,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -34,14 +38,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "DealerProduct.findAll", query = "SELECT d FROM DealerProduct d"),
     @NamedQuery(name = "DealerProduct.findById", query = "SELECT d FROM DealerProduct d WHERE d.id = :id"),
     @NamedQuery(name = "DealerProduct.findByProductName", query = "SELECT d FROM DealerProduct d WHERE d.productName = :productName"),
-    @NamedQuery(name = "DealerProduct.findByAccountId", query = "SELECT d FROM DealerProduct d WHERE d.accountId = :accountId"),
-    @NamedQuery(name = "DealerProduct.findByProfileId", query = "SELECT d FROM DealerProduct d WHERE d.profileId = :profileId"),
-    @NamedQuery(name = "DealerProduct.findByGaId", query = "SELECT d FROM DealerProduct d WHERE d.gaId = :gaId"),
-    @NamedQuery(name = "DealerProduct.findByCustomerId", query = "SELECT d FROM DealerProduct d WHERE d.customerId = :customerId"),
-    @NamedQuery(name = "DealerProduct.findByProductStatus", query = "SELECT d FROM DealerProduct d WHERE d.productStatus = :productStatus"),
-    @NamedQuery(name = "DealerProduct.findByCreatedTime", query = "SELECT d FROM DealerProduct d WHERE d.createdTime = :createdTime"),
-    @NamedQuery(name = "DealerProduct.findByModifiedTime", query = "SELECT d FROM DealerProduct d WHERE d.modifiedTime = :modifiedTime")})
+    @NamedQuery(name = "DealerProduct.findByBudget", query = "SELECT d FROM DealerProduct d WHERE d.budget = :budget"),
+    @NamedQuery(name = "DealerProduct.findByStartDate", query = "SELECT d FROM DealerProduct d WHERE d.startDate = :startDate"),
+    @NamedQuery(name = "DealerProduct.findByEndDate", query = "SELECT d FROM DealerProduct d WHERE d.endDate = :endDate")})
 public class DealerProduct implements Serializable {
+    @Size(max = 8)
+    @Column(name = "status")
+    private String status;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,30 +54,22 @@ public class DealerProduct implements Serializable {
     @Size(max = 256)
     @Column(name = "product_name")
     private String productName;
-    @Size(max = 256)
-    @Column(name = "account_id")
-    private String accountId;
-    @Size(max = 256)
-    @Column(name = "profile_id")
-    private String profileId;
-    @Size(max = 256)
-    @Column(name = "ga_id")
-    private String gaId;
-    @Size(max = 256)
-    @Column(name = "customer_id")
-    private String customerId;
-    @Size(max = 32)
-    @Column(name = "product_status")
-    private String productStatus;
-    @Column(name = "created_time")
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "budget")
+    private Double budget;
+    @Column(name = "start_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdTime;
-    @Column(name = "modified_time")
+    private Date startDate;
+    @Column(name = "end_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date modifiedTime;
+    private Date endDate;
     @JoinColumn(name = "dealer_id", referencedColumnName = "id")
     @ManyToOne
     private Dealer dealerId;
+    @OneToMany(mappedBy = "dealerProductId")
+    private Collection<DealerProductSource> dealerProductSourceCollection;
+    @OneToMany(mappedBy = "dealerProductId")
+    private Collection<DealerProductService> dealerProductServiceCollection;
 
     public DealerProduct() {
     }
@@ -99,60 +94,28 @@ public class DealerProduct implements Serializable {
         this.productName = productName;
     }
 
-    public String getAccountId() {
-        return accountId;
+    public Double getBudget() {
+        return budget;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setBudget(Double budget) {
+        this.budget = budget;
     }
 
-    public String getProfileId() {
-        return profileId;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setProfileId(String profileId) {
-        this.profileId = profileId;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public String getGaId() {
-        return gaId;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setGaId(String gaId) {
-        this.gaId = gaId;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getProductStatus() {
-        return productStatus;
-    }
-
-    public void setProductStatus(String productStatus) {
-        this.productStatus = productStatus;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public Dealer getDealerId() {
@@ -161,6 +124,26 @@ public class DealerProduct implements Serializable {
 
     public void setDealerId(Dealer dealerId) {
         this.dealerId = dealerId;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<DealerProductSource> getDealerProductSourceCollection() {
+        return dealerProductSourceCollection;
+    }
+
+    public void setDealerProductSourceCollection(Collection<DealerProductSource> dealerProductSourceCollection) {
+        this.dealerProductSourceCollection = dealerProductSourceCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<DealerProductService> getDealerProductServiceCollection() {
+        return dealerProductServiceCollection;
+    }
+
+    public void setDealerProductServiceCollection(Collection<DealerProductService> dealerProductServiceCollection) {
+        this.dealerProductServiceCollection = dealerProductServiceCollection;
     }
 
     @Override
@@ -185,7 +168,15 @@ public class DealerProduct implements Serializable {
 
     @Override
     public String toString() {
-        return "com.visumbu.vb.model.DealerProduct[ id=" + id + " ]";
+        return "com.visumbu.wa.model.DealerProduct[ id=" + id + " ]";
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
 }
