@@ -14,6 +14,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 //                templateUrl: "static/views/dashboard/dashboardTabs.html", 
 //                controller: 'UiController'
 //            })
+            .state("header", {
+                url: "/header/:tabId",
+                templateUrl: "static/views/dashboard/dashboardTabs.html", 
+                controller: 'HeaderController'
+            })
             .state("dashboard.widget", {
                 url: "/widget/:widgetId",
                 templateUrl: "static/views/dashboard/widgets.html",
@@ -22,10 +27,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             .state("report", {
                 url: "/report/:tabId/:reportId",
                 templateUrl: "static/views/reports/createNewReports.html",
+                controller: 'ReportController'
             });
 
-    $urlRouterProvider.otherwise('/dashboard/dashboard/widget/1');
-});
+    $urlRouterProvider.otherwise('/dashboard/dashboard/widget/:tabId');
+})
 //        .run(['$rootScope', '$state', '$stateParams',
 //            function ($rootScope, $state, $stateParams) {
 //                $rootScope.$state = $state;
