@@ -1,26 +1,22 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 app.controller("ReportController", function ($scope, $http, $stateParams) {
+    console.log("Report: "+$stateParams.tabId);
+    console.log("Report widget : "+$stateParams.widgetId);
     $scope.currentPage = 1;
     $scope.pageSize = 10;
-    $scope.reports = [];
-    $scope.addParent = function () {
-        $scope.reports.push({isEdit: true, childItems: []});
-    };
-    $scope.addChild = function (report) {
-        report.childItems.push({isEdit: true});
-    };
-    $scope.save = function(item){
-        console.log("Item Name : "+item);
-    };
-    //console.log($stateParams.reportId);
-    $http.get('static/datas/report.json').success(function (response) {
-        $scope.reports = response;
-    });
+//    $scope.reports = [];
+//    $scope.addParent = function () {
+//        $scope.reports.push({isEdit: true, childItems: []});
+//    };
+//    $scope.addChild = function (report) {
+//        report.childItems.push({isEdit: true});
+//    };
+//    $scope.save = function(item){
+//        console.log("Item Name : "+item);
+//    };
+//    //console.log($stateParams.reportId);
+//    $http.get('static/datas/report.json').success(function (response) {
+//        $scope.reports = response;
+//    });
     $scope.childID = $stateParams.reportId;
     $scope.datas = [];
 

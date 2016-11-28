@@ -44,4 +44,8 @@ public class UiDao extends BaseDao {
         return query.list();
     }
 
+    public Dashboard getDashboardById(Integer dashboardId) {
+        return (Dashboard) sessionFactory.getCurrentSession().get(Dashboard.class, dashboardId);
+    }
+
 }

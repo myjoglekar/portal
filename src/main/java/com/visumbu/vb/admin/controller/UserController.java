@@ -82,7 +82,7 @@ public class UserController {
     void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         session.invalidate();
-        response.sendRedirect("../../index.html");
+        response.sendRedirect("../../login.html");
     }
     
     

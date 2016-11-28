@@ -1,15 +1,31 @@
 <div ng-controller="UiController">
     <section class="content-header">
-        <h1> {{dashboardName| uppercase}} <small>Dashboard</small> </h1>
-        <ol class="breadcrumb">
-            <li><a href=" "><i class="fa fa-dashboard"></i> L2tmedia</a></li>
-            <li class="active">Here</li>
-        </ol>
+        <!--<h1> {{dashboardName}} <small>Dashboard</small> </h1>-->
+        <h1 class="text-capitalize"> {{dashboardName}}</h1>
+        <!--        <ol class="breadcrumb">
+                    <li><a href=" "><i class="fa fa-dashboard"></i> L2tmedia</a></li>
+                    <li class="active">Here</li>
+                </ol>-->
+        <div class="pull-right breadcrumb">
+            <!--<a class="btn btn-warning" data-toggle="modal" data-target="#addNew"><i class="fa fa-plus"></i> Add New</a>-->
+            <span class="dropdown">
+                <a class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+                    <i class="fa fa-plus"></i> Add <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li  ng-repeat="newPanel in newPanels">
+                        <a href="" ng-click="addNewPanel(newPanel)">{{newPanel.panelId}}</a>
+                    </li>
+                </ul>
+            </span>
+            <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full Screen</a>
+            <a class="btn btn-warning" ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh</a>
+        </div>
     </section>
     <section class="content"> 
         <div class="row">
             <div class="col-md-12">
-                <div class="panel with-nav-tabs" style="background-color:rgb(234,234,234)">
+                <div class="panel with-nav-tabs">
                     <div class="panel-heading">
                         <ul class="nav nav-tabs">
                             <li ng-repeat="tab in tabs" ui-sref-active="active">
@@ -21,7 +37,7 @@
                                 </sup>
                             </li>
                             <a class="add-tab" ng-click="addTab(tab)" style="cursor: pointer">+ Add Tab</a>
-                        </ul>
+                        </ul>                        
                     </div>
                     <div class="panel-body">
                         <div class="tab-content">

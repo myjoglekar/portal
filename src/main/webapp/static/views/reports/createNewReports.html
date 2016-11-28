@@ -1,4 +1,4 @@
-<div ng-controller="ReportController" style="padding-left: 20px;">
+<div style="padding-left: 20px;">
     <div class="col-sm-12 row report-margin-top" data-ng-hide="childID"  style="">
         <form class="form-horizontal">            
             <div class="form-group">
@@ -24,14 +24,6 @@
                         <option ng-repeat="col in columns"  value="{{col.title}}">{{col.title}}</option>
                     </select> 
                 </div>
-
-<!--                <label class="col-sm-2">Order By : </label>
-                <div class="col-sm-4 report-select-box">
-                    <select class="form-control text-uppercase col-sm-4" name="order"  ng-model="orderProperty">
-                        <option disabled="true">Select</option>
-                        <option ng-repeat="col in columns"  value="{{col.title}}">{{col.title}}</option>
-                    </select> 
-                </div>-->
             </div>
         </form>
         <table st-table="datas" class="table tab-content table-bordered table-hover">
@@ -49,15 +41,7 @@
                 </tr>
                 <tr ng-repeat="item in value">
                     <td ng-repeat="col in columns">
-                        <!--<div ng-click="txt.item[col.field] = true" ng-hide="txt.item[col.field]">-->
                             {{item[col.field]}}
-                        <!--</div>-->
-<!--                        <div ng-show="txt.item[col.field]">
-                            <input ng-model="item[col.field]">
-                            <button ng-click="save(item); txt.item[col.field] = false">
-                                <i class="fa fa-save"></i>
-                            </button>
-                        </div>-->
                     </td>
                 </tr>
             </tbody>

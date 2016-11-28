@@ -7,6 +7,10 @@ package com.visumbu.vb.controller;
 
 import com.visumbu.vb.bean.ReportPage;
 import javax.servlet.http.HttpServletRequest;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.http.auth.AuthenticationException;
 
 /**
  *
@@ -31,5 +35,16 @@ public class BaseController {
             reportPage.setCount(count);
         }
         return reportPage;
+    }
+    protected String getUser(HttpServletRequest request) {
+        String username = (String) request.getSession().getAttribute("username");
+        if(username == null) {
+            try {
+                throw new AuthenticationException("User not logged in");
+            } catch (AuthenticationException ex) {
+                Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return username;
     }
 }

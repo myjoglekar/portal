@@ -7,6 +7,9 @@ package com.visumbu.vb.admin.controller;
 
 import com.visumbu.vb.admin.service.UiService;
 import com.visumbu.vb.admin.service.UserService;
+import com.visumbu.vb.controller.BaseController;
+import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,32 +28,49 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("ui")
-public class UiController {
+public class UiController extends BaseController{
 
     @Autowired
     private UiService uiService;
 
     @Autowired
     private UserService userService;
+    
+    @RequestMapping(value = "product", method=RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getProduct(HttpServletRequest request, HttpServletResponse response){
+        return uiService.getProduct();
+    }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDashboards(HttpServletRequest request, HttpServletResponse response) {
-        VbUser user = userService.findByUsername((String) request.getSession().getAttribute("username"));
-        if(user == null) {
+        VbUser user = userService.findByUsername(getUser(request));
+        if (user == null) {
             return null;
         }
         return uiService.getDashboards(user);
     }
 
-    // dbtabs/{dashboardId}
+    @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    DashboardTabs createDashboardTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId, @RequestBody DashboardTabs dashboardTabs) {
+        dashboardTabs.setDashboardId(uiService.getDashboardById(dashboardId));
+        return uiService.createDashboardTabs(dashboardTabs);
+    }
+
     @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDashboardTabs(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId) {
         return uiService.getDashboardTabs(dashboardId);
     }
 
-    // dbwidget/{tabid}
+    @RequestMapping(value = "dbWidget", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    TabWidget createTabWidget(HttpServletRequest request, HttpServletResponse response, @RequestBody TabWidget tabWidget) {
+        return uiService.createTabWidget(tabWidget);
+    }
+
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {

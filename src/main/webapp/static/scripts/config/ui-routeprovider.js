@@ -1,8 +1,3 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -12,23 +7,34 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 //            })
             .state("dashboard", {
                 url: "/dashboard/:tabId",
-                templateUrl: "static/views/dashboard/dashboard.html",                
+                templateUrl: "static/views/dashboard/dashboard.html",
             })
 //            .state("dashboard.tab", {
 //                url: "/tab",
 //                templateUrl: "static/views/dashboard/dashboardTabs.html", 
 //                controller: 'UiController'
 //            })
+            .state("header", {
+                url: "/header/:tabId",
+                templateUrl: "static/views/dashboard/dashboardTabs.html", 
+                controller: 'HeaderController'
+            })
             .state("dashboard.widget", {
                 url: "/widget/:widgetId",
-                templateUrl: "static/views/dashboard/widgets.html",   
-                controller:'UiController'
+                templateUrl: "static/views/dashboard/widgets.html",
+                controller: 'WidgetController'
             })
             .state("report", {
-                url: "/report/:reportId",
+                url: "/report/:tabId/:reportId",
                 templateUrl: "static/views/reports/createNewReports.html",
+                controller: 'ReportController'
             });
 
-    $urlRouterProvider.otherwise('/dashboard/dashboard/widget/1');
-});
+    $urlRouterProvider.otherwise('/dashboard/dashboard/widget/:tabId');
+})
+//        .run(['$rootScope', '$state', '$stateParams',
+//            function ($rootScope, $state, $stateParams) {
+//                $rootScope.$state = $state;
+//                $rootScope.$stateParams = $stateParams;
+//            }])
 
