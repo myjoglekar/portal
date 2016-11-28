@@ -40,8 +40,13 @@ import com.microsoft.bingads.reporting.ReportTimePeriod;
 import com.microsoft.bingads.reporting.ReportingDownloadParameters;
 import com.microsoft.bingads.reporting.ReportingServiceManager;
 import com.microsoft.bingads.reporting.SortOrder;
+import com.visumbu.api.bing.report.xml.bean.AccountDayOfWeekPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountHourOfDayPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.AdGroupPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.CampaignPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.KeywordPerformanceReport;
 import com.visumbu.api.utils.FileReader;
 import java.io.File;
@@ -102,7 +107,7 @@ public class BingService {
 
         ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
         reportingDownloadParameters.setReportRequest(reportRequest);
-        reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+        reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
         reportingDownloadParameters.setResultFileName(filename);
         reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -126,7 +131,7 @@ public class BingService {
 
         ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
         reportingDownloadParameters.setReportRequest(reportRequest);
-        reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+        reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
         reportingDownloadParameters.setResultFileName(filename);
         reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -150,7 +155,7 @@ public class BingService {
 
         ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
         reportingDownloadParameters.setReportRequest(reportRequest);
-        reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+        reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
         reportingDownloadParameters.setResultFileName(filename);
         reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -165,7 +170,7 @@ public class BingService {
         System.out.println(report);
         return report;
     }
-    /*
+    
      public AccountDayOfWeekPerformanceReport getAccountDayOfWeekPerformanceReport(Date startDate, Date endDate)
      throws InterruptedException, ExecutionException, TimeoutException {
      initAuthentication();
@@ -177,7 +182,7 @@ public class BingService {
 
      ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
      reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
      reportingDownloadParameters.setResultFileName(filename);
      reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -201,7 +206,7 @@ public class BingService {
 
      ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
      reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
      reportingDownloadParameters.setResultFileName(filename);
      reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -225,7 +230,7 @@ public class BingService {
 
      ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
      reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
      reportingDownloadParameters.setResultFileName(filename);
      reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -249,7 +254,7 @@ public class BingService {
 
      ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
      reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
      reportingDownloadParameters.setResultFileName(filename);
      reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -273,7 +278,7 @@ public class BingService {
 
      ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
      reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
      reportingDownloadParameters.setResultFileName(filename);
      reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -286,7 +291,7 @@ public class BingService {
      return report;
      }
 
-     public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate)
+     /*public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate)
      throws InterruptedException, ExecutionException, TimeoutException {
      initAuthentication();
      ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -797,7 +802,7 @@ public class BingService {
 
     private ReportRequest getAccountDevicePerformaceReportRequest(Date startDate, Date endDate) {
         AccountPerformanceReportRequest report = new AccountPerformanceReportRequest();
-        ReportFormat ReportFileFormat = ReportFormat.CSV;
+        ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
@@ -854,7 +859,7 @@ public class BingService {
 
     private ReportRequest getCampaignPerformaceReportRequest(Date startDate, Date endDate) {
         CampaignPerformanceReportRequest report = new CampaignPerformanceReportRequest();
-        ReportFormat ReportFileFormat = ReportFormat.CSV;
+        ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
@@ -912,7 +917,7 @@ public class BingService {
 
     private ReportRequest getCampaignDevicePerformaceReportRequest(Date startDate, Date endDate) {
         CampaignPerformanceReportRequest report = new CampaignPerformanceReportRequest();
-        ReportFormat ReportFileFormat = ReportFormat.CSV;
+        ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
@@ -971,7 +976,7 @@ public class BingService {
 
     private ReportRequest getAdGroupPerformaceReportRequest(Date startDate, Date endDate) {
         AdGroupPerformanceReportRequest report = new AdGroupPerformanceReportRequest();
-        ReportFormat ReportFileFormat = ReportFormat.CSV;
+        ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);

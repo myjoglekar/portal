@@ -41,6 +41,71 @@ public class AdwordsController {
         String accountId = "581-484-4675";
         return adwordsService.getCampaignReport(startDate, endDate, accountId);
     }
+    
+    @RequestMapping(value = "getAccount", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAccount(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        String accountId = "581-484-4675";
+        return adwordsService.getAccountReport(startDate, endDate, accountId);
+    }
+    @RequestMapping(value = "getAdGroup", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAdGroup(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        String accountId = "581-484-4675";
+        return adwordsService.getAdGroupReport(startDate, endDate, accountId);
+    }
+    @RequestMapping(value = "getAccountDevice", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAccountDevice(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        String accountId = "581-484-4675";
+        return adwordsService.getAccountDeviceReport(startDate, endDate, accountId);
+    }
+    @RequestMapping(value = "getCampaignDevice", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getCampaignDevice(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        String accountId = "581-484-4675";
+        return adwordsService.getCampaignDeviceReport(startDate, endDate, accountId);
+    }
+    @RequestMapping(value = "getAdReport", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAdReport(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        String accountId = "581-484-4675";
+        return adwordsService.getAdReport(startDate, endDate, accountId);
+    }
+    @RequestMapping(value = "getAccountHourOfDayReport", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAccountHourOfDayReport(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        String accountId = "581-484-4675";
+        return adwordsService.getAccountHourOfDayReport(startDate, endDate, accountId);
+    }
+    @RequestMapping(value = "getAccountDayOfWeekReport", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAccountDayOfWeekReport(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        String accountId = "581-484-4675";
+        return adwordsService.getAccountDayOfWeekReport(startDate, endDate, accountId);
+    }
+    @RequestMapping(value = "getGeoReport", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getGeoReport(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        String accountId = "581-484-4675";
+        return adwordsService.getGeoReport(startDate, endDate, accountId);
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
