@@ -110,6 +110,87 @@ public class GaService {
         return getGenericData(startDate1, endDate1, null, null, metrics, dimentions);
     }
 
+    public GetReportsResponse getSeoPerformance(Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
+         Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        String metricsList = "ga:visits,Visits;ga:sessions,Sessions;ga:percentNewSessions,PercentNewSessions;"
+                + "ga:newUsers,NewUsers;ga:pageViews,PageViews;ga:bounceRate,BounceRate;ga:averageTimeOnPage,AverageTimeOnPage;"
+                + "ga:goalOneCompletions,GoalOneCompletions;ga:goalTwoCompletions,GoalTwoCompletions;ga:goalThreeCompletions,GoalThreeCompletions;"
+                + "ga:goalFourCompletions,GoalFourCompletions;ga:goalFiveCompletions,GoalFiveCompletions;ga:goalSixCompletions,GoalSixCompletions;";
+        String dimensions = "ga:medium";
+        String filter = "ga:medium==organic";
+        return getGenericData(startDate1, endDate1,  startDate2,  endDate2, metricsList, dimensions, filter);
+    }
+    
+    
+    public GetReportsResponse getGenericData(Date startDate1, Date endDate1, Date startDate2, Date endDate2, String metrics, String dimentions, String filter) {
+        try {
+            List<DateRange> dateRangeList = new ArrayList<>();
+            DateRange dateRange = new DateRange();
+            dateRange.setStartDate(DateUtils.getGaStartDate(startDate1));
+            dateRange.setEndDate(DateUtils.getGaEndDate(endDate1));
+            dateRangeList.add(dateRange);
+
+            if (startDate2 != null) {
+                DateRange dateRange1 = new DateRange();
+                dateRange1.setStartDate(DateUtils.getGaStartDate(startDate2));
+                if (endDate2 != null) {
+                    dateRange1.setEndDate(DateUtils.getGaEndDate(endDate2));
+                } else {
+                    dateRange1.setEndDate(DateUtils.getGaEndDate(startDate1));
+                }
+                dateRangeList.add(dateRange1);
+            }
+            String[] metricsArray = metrics.split(";");
+            List<Metric> metricList = new ArrayList<>();
+            for (int i = 0; i < metricsArray.length; i++) {
+                String metricStr = metricsArray[i];
+                String[] nameAliasArray = metricStr.split(",");
+                if (nameAliasArray.length >= 2) {
+                    Metric metric = new Metric()
+                            .setExpression(nameAliasArray[0])
+                            .setAlias(nameAliasArray[1]);
+                    metricList.add(metric);
+                } else if (nameAliasArray.length >= 1) {
+                    Metric metric = new Metric()
+                            .setExpression(nameAliasArray[0]);
+                    metricList.add(metric);
+                }
+            }
+
+            String[] dimensionArray = dimentions.split(";");
+            List<Dimension> dimensionList = new ArrayList<>();
+            for (int i = 0; i < dimensionArray.length; i++) {
+                String dimensionStr = dimensionArray[i];
+                Dimension dimension = new Dimension()
+                        .setName(dimensionStr);
+                dimensionList.add(dimension);
+
+            }
+
+            ReportRequest request = new ReportRequest()
+                    .setViewId(VIEW_ID)
+                    .setDateRanges(dateRangeList)
+                    .setDimensions(dimensionList)
+                    .setFiltersExpression(filter)
+                    .setMetrics(metricList);
+            ArrayList<ReportRequest> requests = new ArrayList<ReportRequest>();
+            requests.add(request);
+            // Create the GetReportsRequest object.
+            GetReportsRequest getReport = new GetReportsRequest()
+                    .setReportRequests(requests);
+
+            // Call the batchGet method.
+            GetReportsResponse response = analyticsReporting.reports().batchGet(getReport).execute();
+
+            // Return the response.
+            return response;
+        } catch (IOException ex) {
+            Logger.getLogger(GaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public GetReportsResponse getGenericData(Date startDate1, Date endDate1, Date startDate2, Date endDate2, String metrics, String dimentions) {
         try {
             List<DateRange> dateRangeList = new ArrayList<>();

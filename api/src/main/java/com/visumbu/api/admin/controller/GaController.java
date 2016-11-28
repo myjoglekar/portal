@@ -51,6 +51,17 @@ public class GaController {
         return gaService.getGenericData(startDate, endDate, metrics, dimensions);
     }
     
+    
+    @RequestMapping(value = "seoPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getSeoPerformance(HttpServletRequest request, HttpServletResponse response) throws IOException, GeneralSecurityException {
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        return gaService.getSeoPerformance(startDate, endDate, null, null);
+    }
+    
+    
+    
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {

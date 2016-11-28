@@ -8,6 +8,8 @@ package com.visumbu.api.admin.controller;
 import com.visumbu.api.admin.service.BingService;
 import com.visumbu.api.admin.service.UserService;
 import com.visumbu.api.bean.LoginUserBean;
+import com.visumbu.api.bing.report.xml.bean.AccountHourOfDayPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.AccountPerformanceReport;
 import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -58,6 +60,40 @@ public class BingController {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    @RequestMapping(value = "accountPerformanceReport", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    AccountPerformanceReport getAccountPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Date startDate = DateUtils.get30DaysBack();
+            Date endDate = new Date();
+            return bingService.getAccountPerformanceReport(startDate, endDate);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null; 
+    }
+    
+    @RequestMapping(value = "accountHourOfDayPerformanceReport", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    AccountHourOfDayPerformanceReport getAccountHourOfDayPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Date startDate = DateUtils.get30DaysBack();
+            Date endDate = new Date();
+            return bingService.getAccountHourOfDayPerformanceReport(startDate, endDate);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null; 
     }
 
     @ExceptionHandler
