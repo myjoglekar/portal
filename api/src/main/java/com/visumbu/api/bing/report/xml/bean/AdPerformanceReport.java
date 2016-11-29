@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Report")
 public class AdPerformanceReport {
-    private List<Column> keywordPerformanceReportColumns;
+    private List<Column> columns;
     private String reportName;
     private String xmlns;
     private String reportTime;
@@ -110,17 +110,17 @@ public class AdPerformanceReport {
         this.potentialIncompleteData = potentialIncompleteData;
     }
 
-    public List<Column> getKeywordPerformanceReportColumns() {
-        return keywordPerformanceReportColumns;
+    public List<Column> getcolumns() {
+        return columns;
     }
 
-    @XmlElement(name = "KeywordPerformanceReportColumns")
-    public void setKeywordPerformanceReportColumns(List<Column> keywordPerformanceReportColumns) {
-        this.keywordPerformanceReportColumns = keywordPerformanceReportColumns;
+    @XmlElement(name = "AdPerformanceReportColumns")
+    public void setColumns(List<Column> columns) {
+        this.columns = columns;
     }
 
     @Override
     public String toString() {
-        return "AdPerformanceReport{" + "keywordPerformanceReportColumns=" + keywordPerformanceReportColumns + ", reportName=" + reportName + ", xmlns=" + xmlns + ", reportTime=" + reportTime + ", timeZone=" + timeZone + ", reportAggregation=" + reportAggregation + ", lastCompletedAvailableDay=" + lastCompletedAvailableDay + ", lastCompletedAvailableHour=" + lastCompletedAvailableHour + ", potentialIncompleteData=" + potentialIncompleteData + ", adPerformanceRows=" + adPerformanceRows + '}';
+        return "AdPerformanceReport{" + "columns=" + columns + ", reportName=" + reportName + ", xmlns=" + xmlns + ", reportTime=" + reportTime + ", timeZone=" + timeZone + ", reportAggregation=" + reportAggregation + ", lastCompletedAvailableDay=" + lastCompletedAvailableDay + ", lastCompletedAvailableHour=" + lastCompletedAvailableHour + ", potentialIncompleteData=" + potentialIncompleteData + ", adPerformanceRows=" + adPerformanceRows + '}';
     }
 }

@@ -59,6 +59,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -83,6 +85,7 @@ public class BingService {
     public static final String PASSWORD = "l2ttangocode2016";
     public static final Long customerId = 14195800L;
     public static final Long accountId = 2610614L;
+    public static final String tmpDir = "/tmp/";
 
     private void initAuthentication() {
         PasswordAuthentication passwordAuthentication
@@ -110,7 +113,7 @@ public class BingService {
 
         ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
         reportingDownloadParameters.setReportRequest(reportRequest);
-        reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
+        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
         reportingDownloadParameters.setResultFileName(filename);
         reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -134,7 +137,7 @@ public class BingService {
 
         ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
         reportingDownloadParameters.setReportRequest(reportRequest);
-        reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
+        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
         reportingDownloadParameters.setResultFileName(filename);
         reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -158,7 +161,7 @@ public class BingService {
 
         ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
         reportingDownloadParameters.setReportRequest(reportRequest);
-        reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
+        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
         reportingDownloadParameters.setResultFileName(filename);
         reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -168,204 +171,219 @@ public class BingService {
                 null).get(3600000, TimeUnit.MILLISECONDS);
         AccountPerformanceReport report1 = (AccountPerformanceReport) FileReader.readXML(resultFile, AccountPerformanceReport.class);
         System.out.println(report1);
-        
+
         AccountHourOfDayPerformanceReport report = (AccountHourOfDayPerformanceReport) FileReader.readXML(resultFile, AccountHourOfDayPerformanceReport.class);
         System.out.println(report);
         return report;
     }
-    
-     public AccountDayOfWeekPerformanceReport getAccountDayOfWeekPerformanceReport(Date startDate, Date endDate)
-     throws InterruptedException, ExecutionException, TimeoutException {
-     initAuthentication();
-     ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
-     reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
-     String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
-     ReportRequest reportRequest
-     = getAccountDayOfWeekPerformaceReportRequest(startDate, endDate);
 
-     ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
-     reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
-     reportingDownloadParameters.setResultFileName(filename);
-     reportingDownloadParameters.setOverwriteResultFile(true);
+    public AccountDayOfWeekPerformanceReport getAccountDayOfWeekPerformanceReport(Date startDate, Date endDate)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        initAuthentication();
+        ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
+        reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
+        String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+        ReportRequest reportRequest
+                = getAccountDayOfWeekPerformaceReportRequest(startDate, endDate);
 
-     // You may optionally cancel the downloadFileAsync operation after a specified time interval.
-     File resultFile = reportingServiceManager.downloadFileAsync(
-     reportingDownloadParameters,
-     null).get(3600000, TimeUnit.MILLISECONDS);
-     AccountDayOfWeekPerformanceReport report = (AccountDayOfWeekPerformanceReport) FileReader.readXML(resultFile, AccountDayOfWeekPerformanceReport.class);
-     System.out.println(report);
-     return report;
-     }
+        ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
+        reportingDownloadParameters.setReportRequest(reportRequest);
+        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
+        reportingDownloadParameters.setResultFileName(filename);
+        reportingDownloadParameters.setOverwriteResultFile(true);
 
-     public AccountDevicePerformanceReport getAccountDevicePerformanceReport(Date startDate, Date endDate)
-     throws InterruptedException, ExecutionException, TimeoutException {
-     initAuthentication();
-     ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
-     reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
-     String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
-     ReportRequest reportRequest
-     = getAccountDevicePerformaceReportRequest(startDate, endDate);
+        // You may optionally cancel the downloadFileAsync operation after a specified time interval.
+        File resultFile = reportingServiceManager.downloadFileAsync(
+                reportingDownloadParameters,
+                null).get(3600000, TimeUnit.MILLISECONDS);
+        AccountDayOfWeekPerformanceReport report = (AccountDayOfWeekPerformanceReport) FileReader.readXML(resultFile, AccountDayOfWeekPerformanceReport.class);
+        System.out.println(report);
+        return report;
+    }
 
-     ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
-     reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
-     reportingDownloadParameters.setResultFileName(filename);
-     reportingDownloadParameters.setOverwriteResultFile(true);
+    public AccountDevicePerformanceReport getAccountDevicePerformanceReport(Date startDate, Date endDate)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        initAuthentication();
+        ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
+        reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
+        String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+        ReportRequest reportRequest
+                = getAccountDevicePerformaceReportRequest(startDate, endDate);
 
-     // You may optionally cancel the downloadFileAsync operation after a specified time interval.
-     File resultFile = reportingServiceManager.downloadFileAsync(
-     reportingDownloadParameters,
-     null).get(3600000, TimeUnit.MILLISECONDS);
-     AccountDevicePerformanceReport report = (AccountDevicePerformanceReport) FileReader.readXML(resultFile, AccountDevicePerformanceReport.class);
-     System.out.println(report);
-     return report;
-     }
+        ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
+        reportingDownloadParameters.setReportRequest(reportRequest);
+        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
+        reportingDownloadParameters.setResultFileName(filename);
+        reportingDownloadParameters.setOverwriteResultFile(true);
 
-     public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate)
-     throws InterruptedException, ExecutionException, TimeoutException {
-     initAuthentication();
-     ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
-     reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
-     String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
-     ReportRequest reportRequest
-     = getCampaignPerformaceReportRequest(startDate, endDate);
+        // You may optionally cancel the downloadFileAsync operation after a specified time interval.
+        File resultFile = reportingServiceManager.downloadFileAsync(
+                reportingDownloadParameters,
+                null).get(3600000, TimeUnit.MILLISECONDS);
+        AccountDevicePerformanceReport report = (AccountDevicePerformanceReport) FileReader.readXML(resultFile, AccountDevicePerformanceReport.class);
+        System.out.println(report);
+        return report;
+    }
 
-     ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
-     reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
-     reportingDownloadParameters.setResultFileName(filename);
-     reportingDownloadParameters.setOverwriteResultFile(true);
+    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate) {
+        try {
+            initAuthentication();
+            ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
+            reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
+            String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            ReportRequest reportRequest
+                    = getCampaignPerformaceReportRequest(startDate, endDate);
 
-     // You may optionally cancel the downloadFileAsync operation after a specified time interval.
-     File resultFile = reportingServiceManager.downloadFileAsync(
-     reportingDownloadParameters,
-     null).get(3600000, TimeUnit.MILLISECONDS);
-     CampaignPerformanceReport report = (CampaignPerformanceReport) FileReader.readXML(resultFile, CampaignPerformanceReport.class);
-     System.out.println(report);
-     return report;
-     }
+            ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
+            reportingDownloadParameters.setReportRequest(reportRequest);
+            reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
+            reportingDownloadParameters.setResultFileName(filename);
+            reportingDownloadParameters.setOverwriteResultFile(true);
 
-     public CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(Date startDate, Date endDate)
-     throws InterruptedException, ExecutionException, TimeoutException {
-     initAuthentication();
-     ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
-     reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
-     String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
-     ReportRequest reportRequest
-     = getCampaignDevicePerformaceReportRequest(startDate, endDate);
+            // You may optionally cancel the downloadFileAsync operation after a specified time interval.
+            File resultFile = reportingServiceManager.downloadFileAsync(
+                    reportingDownloadParameters,
+                    null).get(3600000, TimeUnit.MILLISECONDS);
+            CampaignPerformanceReport report = (CampaignPerformanceReport) FileReader.readXML(resultFile, CampaignPerformanceReport.class);
+            System.out.println(report);
+            return report;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BingService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(BingService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(BingService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
-     ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
-     reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
-     reportingDownloadParameters.setResultFileName(filename);
-     reportingDownloadParameters.setOverwriteResultFile(true);
+    public CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(Date startDate, Date endDate)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        initAuthentication();
+        ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
+        reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
+        String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+        ReportRequest reportRequest
+                = getCampaignDevicePerformaceReportRequest(startDate, endDate);
 
-     // You may optionally cancel the downloadFileAsync operation after a specified time interval.
-     File resultFile = reportingServiceManager.downloadFileAsync(
-     reportingDownloadParameters,
-     null).get(3600000, TimeUnit.MILLISECONDS);
-     CampaignDevicePerformanceReport report = (CampaignDevicePerformanceReport) FileReader.readXML(resultFile, CampaignDevicePerformanceReport.class);
-     System.out.println(report);
-     return report;
-     }
+        ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
+        reportingDownloadParameters.setReportRequest(reportRequest);
+        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
+        reportingDownloadParameters.setResultFileName(filename);
+        reportingDownloadParameters.setOverwriteResultFile(true);
 
-     public AdGroupPerformanceReport getAdGroupPerformanceReport(Date startDate, Date endDate)
-     throws InterruptedException, ExecutionException, TimeoutException {
-     initAuthentication();
-     ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
-     reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
-     String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
-     ReportRequest reportRequest
-     = getAdGroupPerformaceReportRequest(startDate, endDate);
+        // You may optionally cancel the downloadFileAsync operation after a specified time interval.
+        File resultFile = reportingServiceManager.downloadFileAsync(
+                reportingDownloadParameters,
+                null).get(3600000, TimeUnit.MILLISECONDS);
+        CampaignDevicePerformanceReport report = (CampaignDevicePerformanceReport) FileReader.readXML(resultFile, CampaignDevicePerformanceReport.class);
+        System.out.println(report);
+        return report;
+    }
 
-     ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
-     reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
-     reportingDownloadParameters.setResultFileName(filename);
-     reportingDownloadParameters.setOverwriteResultFile(true);
+    public AdGroupPerformanceReport getAdGroupPerformanceReport(Date startDate, Date endDate) {
+        try {
+            initAuthentication();
+            ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
+            reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
+            String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            ReportRequest reportRequest
+                    = getAdGroupPerformaceReportRequest(startDate, endDate);
+            
+            ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
+            reportingDownloadParameters.setReportRequest(reportRequest);
+            reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
+            reportingDownloadParameters.setResultFileName(filename);
+            reportingDownloadParameters.setOverwriteResultFile(true);
+            
+            // You may optionally cancel the downloadFileAsync operation after a specified time interval.
+            File resultFile = reportingServiceManager.downloadFileAsync(
+                    reportingDownloadParameters,
+                    null).get(3600000, TimeUnit.MILLISECONDS);
+            AdGroupPerformanceReport report = (AdGroupPerformanceReport) FileReader.readXML(resultFile, AdGroupPerformanceReport.class);
+            System.out.println(report);
+            return report;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BingService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(BingService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(BingService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
-     // You may optionally cancel the downloadFileAsync operation after a specified time interval.
-     File resultFile = reportingServiceManager.downloadFileAsync(
-     reportingDownloadParameters,
-     null).get(3600000, TimeUnit.MILLISECONDS);
-     AdGroupPerformanceReport report = (AdGroupPerformanceReport) FileReader.readXML(resultFile, AdGroupPerformanceReport.class);
-     System.out.println(report);
-     return report;
-     }
+    public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        initAuthentication();
+        ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
+        reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
+        String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+        ReportRequest reportRequest
+                = getAdPerformaceReportRequest(startDate, endDate);
 
-     public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate)
-     throws InterruptedException, ExecutionException, TimeoutException {
-     initAuthentication();
-     ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
-     reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
-     String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
-     ReportRequest reportRequest
-     = getAdPerformaceReportRequest(startDate, endDate);
+        ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
+        reportingDownloadParameters.setReportRequest(reportRequest);
+        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
+        reportingDownloadParameters.setResultFileName(filename);
+        reportingDownloadParameters.setOverwriteResultFile(true);
 
-     ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
-     reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
-     reportingDownloadParameters.setResultFileName(filename);
-     reportingDownloadParameters.setOverwriteResultFile(true);
+        // You may optionally cancel the downloadFileAsync operation after a specified time interval.
+        File resultFile = reportingServiceManager.downloadFileAsync(
+                reportingDownloadParameters,
+                null).get(3600000, TimeUnit.MILLISECONDS);
+        AdPerformanceReport report = (AdPerformanceReport) FileReader.readXML(resultFile, AdPerformanceReport.class);
+        System.out.println(report);
+        return report;
+    }
 
-     // You may optionally cancel the downloadFileAsync operation after a specified time interval.
-     File resultFile = reportingServiceManager.downloadFileAsync(
-     reportingDownloadParameters,
-     null).get(3600000, TimeUnit.MILLISECONDS);
-     AdPerformanceReport report = (AdPerformanceReport) FileReader.readXML(resultFile, AdGroupPerformanceReport.class);
-     System.out.println(report);
-     return report;
-     }
+    public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        initAuthentication();
+        ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
+        reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
+        String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+        ReportRequest reportRequest
+                = getGeoCityLocationPerformanceReportRequest(startDate, endDate);
 
-     public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate)
-     throws InterruptedException, ExecutionException, TimeoutException {
-     initAuthentication();
-     ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
-     reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
-     String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
-     ReportRequest reportRequest
-     = getGeoCityLocationPerformaceReportRequest(startDate, endDate);
+        ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
+        reportingDownloadParameters.setReportRequest(reportRequest);
+        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
+        reportingDownloadParameters.setResultFileName(filename);
+        reportingDownloadParameters.setOverwriteResultFile(true);
 
-     ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
-     reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
-     reportingDownloadParameters.setResultFileName(filename);
-     reportingDownloadParameters.setOverwriteResultFile(true);
+        // You may optionally cancel the downloadFileAsync operation after a specified time interval.
+        File resultFile = reportingServiceManager.downloadFileAsync(
+                reportingDownloadParameters,
+                null).get(3600000, TimeUnit.MILLISECONDS);
+        GeoCityLocationPerformanceReport report = (GeoCityLocationPerformanceReport) FileReader.readXML(resultFile, GeoCityLocationPerformanceReport.class);
+        System.out.println(report);
+        return report;
+    }
 
-     // You may optionally cancel the downloadFileAsync operation after a specified time interval.
-     File resultFile = reportingServiceManager.downloadFileAsync(
-     reportingDownloadParameters,
-     null).get(3600000, TimeUnit.MILLISECONDS);
-     GeoCityLocationPerformanceReport report = (GeoCityLocationPerformanceReport) FileReader.readXML(resultFile, GeoCityLocationPerformanceReport.class);
-     System.out.println(report);
-     return report;
-     }
+    public GeoZipLocationPerformanceReport getGeoZipLocationPerformanceReport(Date startDate, Date endDate)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        initAuthentication();
+        ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
+        reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
+        String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+        ReportRequest reportRequest
+                = getGeoZipLocationPerformanceReportRequest(startDate, endDate);
 
-     public GeoZipLocationPerformanceReport getGeoZipLocationPerformanceReport(Date startDate, Date endDate)
-     throws InterruptedException, ExecutionException, TimeoutException {
-     initAuthentication();
-     ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
-     reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
-     String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
-     ReportRequest reportRequest
-     = getGeoZipLocationPerformaceReportRequest(startDate, endDate);
+        ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
+        reportingDownloadParameters.setReportRequest(reportRequest);
+        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
+        reportingDownloadParameters.setResultFileName(filename);
+        reportingDownloadParameters.setOverwriteResultFile(true);
 
-     ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
-     reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
-     reportingDownloadParameters.setResultFileName(filename);
-     reportingDownloadParameters.setOverwriteResultFile(true);
-
-     // You may optionally cancel the downloadFileAsync operation after a specified time interval.
-     File resultFile = reportingServiceManager.downloadFileAsync(
-     reportingDownloadParameters,
-     null).get(3600000, TimeUnit.MILLISECONDS);
-     GeoZipLocationPerformanceReport report = (GeoZipLocationPerformanceReport) FileReader.readXML(resultFile, GeoZipLocationPerformanceReport.class);
-     System.out.println(report);
-     return report;
-     }
-     
+        // You may optionally cancel the downloadFileAsync operation after a specified time interval.
+        File resultFile = reportingServiceManager.downloadFileAsync(
+                reportingDownloadParameters,
+                null).get(3600000, TimeUnit.MILLISECONDS);
+        GeoZipLocationPerformanceReport report = (GeoZipLocationPerformanceReport) FileReader.readXML(resultFile, GeoZipLocationPerformanceReport.class);
+        System.out.println(report);
+        return report;
+    }
 
     private ReportRequest getKeywordPerformanceReportRequest(Date startDate, Date endDate) {
         KeywordPerformanceReportRequest report = new KeywordPerformanceReportRequest();
@@ -473,7 +491,7 @@ public class BingService {
         return report;
     }
 
-    private ReportRequest getGeoCityLocationPerformaceReportRequest(Date startDate, Date endDate) {
+    private ReportRequest getGeoCityLocationPerformanceReportRequest(Date startDate, Date endDate) {
         GeoLocationPerformanceReportRequest report = new GeoLocationPerformanceReportRequest();
         ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
@@ -527,7 +545,7 @@ public class BingService {
         return report;
     }
 
-    private ReportRequest getGeoZipLocationPerformaceReportRequest(Date startDate, Date endDate) {
+    private ReportRequest getGeoZipLocationPerformanceReportRequest(Date startDate, Date endDate) {
         GeoLocationPerformanceReportRequest report = new GeoLocationPerformanceReportRequest();
         ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);

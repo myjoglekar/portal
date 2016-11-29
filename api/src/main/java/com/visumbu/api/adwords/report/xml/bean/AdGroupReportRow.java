@@ -60,7 +60,7 @@ public class AdGroupReportRow {
         return campaign;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "campaign")
     public void setCampaign(String campaign) {
         this.campaign = campaign;
     }
@@ -78,7 +78,7 @@ public class AdGroupReportRow {
         return adGroupName;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "adGroup")
     public void setAdGroupName(String adGroupName) {
         this.adGroupName = adGroupName;
     }
@@ -201,6 +201,9 @@ public class AdGroupReportRow {
     }
 
     public String getCost() {
+        if (cost == null || cost.contains("-")) {
+            return "0";
+        }
         return cost;
     }
 
@@ -239,6 +242,6 @@ public class AdGroupReportRow {
     @Override
     public String toString() {
         return "AdGroupReportRow{" + "campaignID=" + campaignID + ", account=" + account + ", campaign=" + campaign + ", adGroupId=" + adGroupId + ", adGroupName=" + adGroupName + ", impressions=" + impressions + ", clicks=" + clicks + ", day=" + day + ", searchExactMatchIS=" + searchExactMatchIS + ", searchLostISBudget=" + searchLostISBudget + ", searchLostISRank=" + searchLostISRank + ", conversions=" + conversions + ", searchImprShare=" + searchImprShare + ", avgPosition=" + avgPosition + ", allConv=" + allConv + ", phoneCalls=" + phoneCalls + ", avgCPC=" + avgCPC + ", ctr=" + ctr + ", cost=" + cost + ", costConv=" + costConv + ", budget=" + budget + ", convRate=" + convRate + '}';
-    }   
-    
+    }
+
 }

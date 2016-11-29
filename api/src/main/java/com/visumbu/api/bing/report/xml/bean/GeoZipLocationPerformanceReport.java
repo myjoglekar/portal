@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Report")
 public class GeoZipLocationPerformanceReport {
-    private List<Column> keywordPerformanceReportColumns;
+    private List<Column> columns;
     private String reportName;
     private String xmlns;
     private String reportTime;
@@ -27,20 +27,22 @@ public class GeoZipLocationPerformanceReport {
     private String lastCompletedAvailableHour;
     private String potentialIncompleteData;
     private List<GeoZipLocationPerformanceRow> geoZipLocationPerformanceRows;
-    
+
     public List<GeoZipLocationPerformanceRow> getGeoZipLocationPerformanceRows() {
         return geoZipLocationPerformanceRows;
     }
     
     @XmlElementWrapper(name = "Table")
     @XmlElement(name = "Row")
-    public void setGeoCityLocationPerformanceRows(List<GeoZipLocationPerformanceRow> geoZipLocationPerformanceRows) {
+    public void setGeoZipLocationPerformanceRows(List<GeoZipLocationPerformanceRow> geoZipLocationPerformanceRows) {
         this.geoZipLocationPerformanceRows = geoZipLocationPerformanceRows;
     }
+   
     
     public String getXmlns() {
         return xmlns;
     }
+
 
     @XmlAttribute(name = "xmlns")
     public void setXmlns(String xmlns) {
@@ -110,17 +112,17 @@ public class GeoZipLocationPerformanceReport {
         this.potentialIncompleteData = potentialIncompleteData;
     }
 
-    public List<Column> getKeywordPerformanceReportColumns() {
-        return keywordPerformanceReportColumns;
-    }
-
-    @XmlElement(name = "KeywordPerformanceReportColumns")
-    public void setKeywordPerformanceReportColumns(List<Column> keywordPerformanceReportColumns) {
-        this.keywordPerformanceReportColumns = keywordPerformanceReportColumns;
-    }
+//    public List<Column> getColumns() {
+//        return columns;
+//    }
+//
+//    @XmlElement(name = "GeographicallocationReportColumns")
+//    public void setColumns(List<Column> columns) {
+//        this.columns = columns;
+//    }
 
     @Override
     public String toString() {
-        return "GeoZipLocationPerformanceReport{" + "keywordPerformanceReportColumns=" + keywordPerformanceReportColumns + ", reportName=" + reportName + ", xmlns=" + xmlns + ", reportTime=" + reportTime + ", timeZone=" + timeZone + ", reportAggregation=" + reportAggregation + ", lastCompletedAvailableDay=" + lastCompletedAvailableDay + ", lastCompletedAvailableHour=" + lastCompletedAvailableHour + ", potentialIncompleteData=" + potentialIncompleteData + ", geoZipLocationPerformanceRows=" + geoZipLocationPerformanceRows + '}';
-    }    
+        return "GeoZipLocationPerformanceReport{" + "columns=" + columns + ", reportName=" + reportName + ", xmlns=" + xmlns + ", reportTime=" + reportTime + ", timeZone=" + timeZone + ", reportAggregation=" + reportAggregation + ", lastCompletedAvailableDay=" + lastCompletedAvailableDay + ", lastCompletedAvailableHour=" + lastCompletedAvailableHour + ", potentialIncompleteData=" + potentialIncompleteData + ", geoZipLocationPerformanceRows=" + geoZipLocationPerformanceRows + '}';
+    }
 }

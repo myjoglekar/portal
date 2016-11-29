@@ -69,7 +69,7 @@ public class BingController {
         }
         return null;
     }
-    
+
     @RequestMapping(value = "accountPerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     AccountPerformanceReport getAccountPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
@@ -84,9 +84,9 @@ public class BingController {
         } catch (TimeoutException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return null; 
+        return null;
     }
-    
+
     @RequestMapping(value = "accountHourOfDayPerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     AccountHourOfDayPerformanceReport getAccountHourOfDayPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
@@ -101,8 +101,9 @@ public class BingController {
         } catch (TimeoutException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return null; 
+        return null;
     }
+
     @RequestMapping(value = "accountDayOfWeekPerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     AccountDayOfWeekPerformanceReport getAccountDayOfWeekPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
@@ -117,8 +118,9 @@ public class BingController {
         } catch (TimeoutException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return null; 
+        return null;
     }
+
     @RequestMapping(value = "accountDevicePerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     AccountDevicePerformanceReport getAccountDevicePerformanceReport(HttpServletRequest request, HttpServletResponse response) {
@@ -133,24 +135,17 @@ public class BingController {
         } catch (TimeoutException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return null; 
+        return null;
     }
+
     @RequestMapping(value = "getCampaignPerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     CampaignPerformanceReport getCampaignPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Date startDate = DateUtils.get30DaysBack();
-            Date endDate = new Date();
-            return bingService.getCampaignPerformanceReport(startDate, endDate);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExecutionException ex) {
-            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TimeoutException ex) {
-            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       return null; 
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        return bingService.getCampaignPerformanceReport(startDate, endDate);
     }
+
     @RequestMapping(value = "getCampaignDevicePerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(HttpServletRequest request, HttpServletResponse response) {
@@ -165,9 +160,9 @@ public class BingController {
         } catch (TimeoutException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return null; 
+        return null;
     }
-    
+
     @RequestMapping(value = "getAdGroupPerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     AdGroupPerformanceReport getAdGroupPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
@@ -182,9 +177,11 @@ public class BingController {
         } catch (TimeoutException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return null; 
+        return null;
     }
+
     //Error
+
     @RequestMapping(value = "getAdPerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     AdPerformanceReport getAdPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
@@ -199,9 +196,9 @@ public class BingController {
         } catch (TimeoutException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return null; 
+        return null;
     }
-    
+
     @RequestMapping(value = "getGeoCityLocationPerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
@@ -216,9 +213,9 @@ public class BingController {
         } catch (TimeoutException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return null; 
+        return null;
     }
-    
+
     @RequestMapping(value = "getGeoZipLocationPerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     GeoZipLocationPerformanceReport getGeoZipLocationPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
@@ -233,7 +230,7 @@ public class BingController {
         } catch (TimeoutException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return null; 
+        return null;
     }
 
     @ExceptionHandler

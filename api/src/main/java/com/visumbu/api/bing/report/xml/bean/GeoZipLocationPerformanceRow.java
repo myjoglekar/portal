@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author duc-dev-04
  */
-@XmlRootElement
+@XmlRootElement(name = "Row")
 public class GeoZipLocationPerformanceRow {
 
     private Data clicks;
@@ -78,7 +78,7 @@ public class GeoZipLocationPerformanceRow {
     public Data getConversions() {
         return conversions;
     }
-    
+
     @XmlElement(name = "Conversions")
     public void setConversions(Data conversions) {
         this.conversions = conversions;

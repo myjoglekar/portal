@@ -18,6 +18,8 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.ads.adwords.axis.v201609.cm.DateRange;
 import com.google.api.ads.adwords.lib.client.reporting.ReportingConfiguration;
 import com.google.api.ads.adwords.lib.jaxb.v201609.DownloadFormat;
+import com.google.api.ads.adwords.lib.jaxb.v201609.Predicate;
+import com.google.api.ads.adwords.lib.jaxb.v201609.PredicateOperator;
 import com.google.api.ads.adwords.lib.jaxb.v201609.ReportDefinition;
 import com.google.api.ads.adwords.lib.jaxb.v201609.ReportDefinitionDateRangeType;
 import com.google.api.ads.adwords.lib.jaxb.v201609.ReportDefinitionReportType;
@@ -40,6 +42,8 @@ import com.visumbu.api.utils.DateUtils;
 import com.visumbu.api.utils.FileReader;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,7 +94,7 @@ public class AdwordsService {
         return null;
     }
 
-    public CampaignReport getCampaignReport(Date startDate, Date endDate, String accountId) {
+    public CampaignReport getCampaignReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName",
@@ -100,7 +104,16 @@ public class AdwordsService {
                 "NumOfflineInteractions",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
         ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
 
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -115,18 +128,18 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
 
         try {
-            String filename = "adwords-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            String filename = XML_FILE_DIR + "adwords-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             // Set the property api.adwords.reportDownloadTimeout or call
             // ReportDownloader.setReportDownloadTimeout to set a timeout (in milliseconds)
             // for CONNECT and READ in report downloads.
@@ -173,12 +186,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -207,7 +220,7 @@ public class AdwordsService {
         return null;
     }
 
-    public AddGroupReport getAdGroupReport(Date startDate, Date endDate, String accountId) {
+    public AddGroupReport getAdGroupReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "AdGroupId", "AdGroupName",
@@ -217,7 +230,17 @@ public class AdwordsService {
                 "NumOfflineInteractions",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
         ));
-
+        
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
+        
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -232,12 +255,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -290,12 +313,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -349,12 +372,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -407,12 +430,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -465,12 +488,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -523,12 +546,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -580,12 +603,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
