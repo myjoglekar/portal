@@ -201,7 +201,7 @@ public class CampaignDevicePerformanceRow {
         return deviceType;
     }
 
-    @XmlElement(name = "DeviceType")
+    @XmlElement(name = "Devicetype")
     public void setDeviceType(Data deviceType) {
         this.deviceType = deviceType;
     }

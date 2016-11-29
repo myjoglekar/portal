@@ -23,7 +23,7 @@ public class CampaignDeviceReportRow {
     private String videoQuartile100Rate;
     private String videoQuartile25Rate;
     private String videoQuartile50Rate;
-    private String videoQuartile75Rate;    
+    private String videoQuartile75Rate;
     private String impressions;
     private String clicks;
     private String day;
@@ -41,6 +41,16 @@ public class CampaignDeviceReportRow {
     private String costConv;
     private String budget;
     private String convRate;
+    private String device;
+
+    public String getDevice() {
+        return device;
+    }
+
+    @XmlAttribute
+    public void setDevice(String device) {
+        this.device = device;
+    }
 
     public String getCampaignID() {
         return campaignID;
@@ -279,5 +289,5 @@ public class CampaignDeviceReportRow {
     @Override
     public String toString() {
         return "CampaignDeviceReportRow{" + "campaignID=" + campaignID + ", account=" + account + ", campaign=" + campaign + ", videoViews=" + videoViews + ", videoViewRate=" + videoViewRate + ", videoQuartile100Rate=" + videoQuartile100Rate + ", videoQuartile25Rate=" + videoQuartile25Rate + ", videoQuartile50Rate=" + videoQuartile50Rate + ", videoQuartile75Rate=" + videoQuartile75Rate + ", impressions=" + impressions + ", clicks=" + clicks + ", day=" + day + ", searchExactMatchIS=" + searchExactMatchIS + ", searchLostISBudget=" + searchLostISBudget + ", searchLostISRank=" + searchLostISRank + ", conversions=" + conversions + ", searchImprShare=" + searchImprShare + ", avgPosition=" + avgPosition + ", allConv=" + allConv + ", phoneCalls=" + phoneCalls + ", avgCPC=" + avgCPC + ", ctr=" + ctr + ", cost=" + cost + ", costConv=" + costConv + ", budget=" + budget + ", convRate=" + convRate + '}';
-    }   
+    }
 }

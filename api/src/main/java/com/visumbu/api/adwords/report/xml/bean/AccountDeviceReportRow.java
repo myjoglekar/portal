@@ -34,6 +34,16 @@ public class AccountDeviceReportRow {
     private String costConv;
     private String SearchBudgetLostImpressionShare;
     private String convRate;
+    private String device;
+
+    public String getDevice() {
+        return device;
+    }
+
+    @XmlAttribute
+    public void setDevice(String device) {
+        this.device = device;
+    }
 
     public String getVideoViews() {
         return videoViews;
@@ -210,5 +220,5 @@ public class AccountDeviceReportRow {
     public String toString() {
         return "AccountDeviceReportRow{" + "videoViews=" + videoViews + ", videoViewRate=" + videoViewRate + ", account=" + account + ", impressions=" + impressions + ", clicks=" + clicks + ", day=" + day + ", searchExactMatchIS=" + searchExactMatchIS + ", searchLostISBudget=" + searchLostISBudget + ", searchLostISRank=" + searchLostISRank + ", conversions=" + conversions + ", searchImprShare=" + searchImprShare + ", avgPosition=" + avgPosition + ", allConv=" + allConv + ", avgCPC=" + avgCPC + ", ctr=" + ctr + ", cost=" + cost + ", costConv=" + costConv + ", SearchBudgetLostImpressionShare=" + SearchBudgetLostImpressionShare + ", convRate=" + convRate + '}';
     }
-        
+
 }

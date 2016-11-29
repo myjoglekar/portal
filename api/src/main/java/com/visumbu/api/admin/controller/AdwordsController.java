@@ -64,7 +64,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getAccountDeviceReport(startDate, endDate, accountId);
+        return adwordsService.getAccountDevicePerformanceReport(startDate, endDate, accountId, "SEARCH");
     }
     @RequestMapping(value = "getCampaignDevice", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -72,7 +72,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getCampaignDeviceReport(startDate, endDate, accountId);
+        return adwordsService.getCampaignDeviceReport(startDate, endDate, accountId, "SEARCH");
     }
     @RequestMapping(value = "getAdReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
