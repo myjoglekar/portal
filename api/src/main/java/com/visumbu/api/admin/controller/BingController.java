@@ -13,8 +13,11 @@ import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountHourOfDayPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AdGroupPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.AdPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.CampaignPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.GeoZipLocationPerformanceReport;
 import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -172,6 +175,57 @@ public class BingController {
             Date startDate = DateUtils.get30DaysBack();
             Date endDate = new Date();
             return bingService.getAdGroupPerformanceReport(startDate, endDate);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null; 
+    }
+    //Error
+    @RequestMapping(value = "getAdPerformanceReport", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    AdPerformanceReport getAdPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Date startDate = DateUtils.get30DaysBack();
+            Date endDate = new Date();
+            return bingService.getAdPerformanceReport(startDate, endDate);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null; 
+    }
+    
+    @RequestMapping(value = "getGeoCityLocationPerformanceReport", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Date startDate = DateUtils.get30DaysBack();
+            Date endDate = new Date();
+            return bingService.getGeoCityLocationPerformanceReport(startDate, endDate);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return null; 
+    }
+    
+    @RequestMapping(value = "getGeoZipLocationPerformanceReport", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    GeoZipLocationPerformanceReport getGeoZipLocationPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Date startDate = DateUtils.get30DaysBack();
+            Date endDate = new Date();
+            return bingService.getGeoZipLocationPerformanceReport(startDate, endDate);
         } catch (InterruptedException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {

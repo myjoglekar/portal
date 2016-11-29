@@ -45,8 +45,11 @@ import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountHourOfDayPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AdGroupPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.AdPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.CampaignPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.GeoZipLocationPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.KeywordPerformanceReport;
 import com.visumbu.api.utils.FileReader;
 import java.io.File;
@@ -291,7 +294,7 @@ public class BingService {
      return report;
      }
 
-     /*public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate)
+     public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate)
      throws InterruptedException, ExecutionException, TimeoutException {
      initAuthentication();
      ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -302,7 +305,7 @@ public class BingService {
 
      ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
      reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
      reportingDownloadParameters.setResultFileName(filename);
      reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -326,7 +329,7 @@ public class BingService {
 
      ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
      reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
      reportingDownloadParameters.setResultFileName(filename);
      reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -350,7 +353,7 @@ public class BingService {
 
      ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
      reportingDownloadParameters.setReportRequest(reportRequest);
-     reportingDownloadParameters.setResultFileDirectory(new File("f:\\test"));
+     reportingDownloadParameters.setResultFileDirectory(new File("/tmp/"));
      reportingDownloadParameters.setResultFileName(filename);
      reportingDownloadParameters.setOverwriteResultFile(true);
 
@@ -362,7 +365,7 @@ public class BingService {
      System.out.println(report);
      return report;
      }
-     */
+     
 
     private ReportRequest getKeywordPerformanceReportRequest(Date startDate, Date endDate) {
         KeywordPerformanceReportRequest report = new KeywordPerformanceReportRequest();
@@ -438,7 +441,7 @@ public class BingService {
 
     private ReportRequest getAccountDayofWeekPerformaceReportRequest() {
         AccountPerformanceReportRequest report = new AccountPerformanceReportRequest();
-        ReportFormat ReportFileFormat = ReportFormat.CSV;
+        ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
@@ -472,7 +475,7 @@ public class BingService {
 
     private ReportRequest getGeoCityLocationPerformaceReportRequest(Date startDate, Date endDate) {
         GeoLocationPerformanceReportRequest report = new GeoLocationPerformanceReportRequest();
-        ReportFormat ReportFileFormat = ReportFormat.CSV;
+        ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
@@ -526,7 +529,7 @@ public class BingService {
 
     private ReportRequest getGeoZipLocationPerformaceReportRequest(Date startDate, Date endDate) {
         GeoLocationPerformanceReportRequest report = new GeoLocationPerformanceReportRequest();
-        ReportFormat ReportFileFormat = ReportFormat.CSV;
+        ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
@@ -580,7 +583,7 @@ public class BingService {
 
     private ReportRequest getAdPerformaceReportRequest(Date startDate, Date endDate) {
         AdPerformanceReportRequest report = new AdPerformanceReportRequest();
-        ReportFormat ReportFileFormat = ReportFormat.CSV;
+        ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
