@@ -67,7 +67,6 @@ public class PaidTabController {
     @Autowired
     private AdwordsService adwordsService;
 
-    
     @RequestMapping(value = "deviceConversion", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getDeviceConversion(HttpServletRequest request, HttpServletResponse response) {
@@ -99,9 +98,6 @@ public class PaidTabController {
         return performanceReportBeans;
     }
 
-    
-    
-    
     @RequestMapping(value = "campaignDevice", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getCampaignDevice(HttpServletRequest request, HttpServletResponse response) {
@@ -137,7 +133,7 @@ public class PaidTabController {
             CampaignDevicePerformanceRow row = reportRow.next();
             CampaignDevicePerformanceReportBean performanceBean = new CampaignDevicePerformanceReportBean();
             performanceBean.setSource("bing");
-            
+
             performanceBean.setCampaignName(row.getCampaignName().getValue());
             performanceBean.setDevice(row.getDeviceType().getValue());
             performanceBean.setImpressions(row.getImpressions().getValue());
@@ -171,7 +167,19 @@ public class PaidTabController {
             AccountDeviceReportRow row = reportRow.next();
             DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
             performanceBean.setSource("adwords");
-            performanceBean.setDevice(row.getDevice());
+            if (row.getDevice().contains("Tablet")) {
+
+                performanceBean.setDevice("Tablet");
+            }
+            if (row.getDevice().contains("Mobile")) {
+
+                performanceBean.setDevice("Smartphone");
+            }
+            if (row.getDevice().contains("Computer")) {
+
+                performanceBean.setDevice("Computer");
+            }
+//            performanceBean.setDevice(row.getDevice());
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
             performanceBean.setCtr(row.getCtr());
