@@ -158,21 +158,21 @@ app.directive('dynamicTable', function ($http) {
                 scope.data = response;
                 //console.log(response)
                 angular.forEach(response[0], function (value, key) {
-                   // scope.columnDefs.push({name: key, enableCellEdit: true})
+                    // scope.columnDefs.push({name: key, enableCellEdit: true})
                 })
-                            scope.columnDefs = [
-                {name: 'device', enableCellEdit: true},
-                {name: 'impressions', enableCellEdit: true},
-                {name: 'clicks', enableCellEdit: false},
-                {name: 'ctr', enableCellEdit: false},
-                {name: 'averagePosition', enableCellEdit: false},
-                {name: 'cost', enableCellEdit: false},
-                {name: 'averageCpc', enableCellEdit: false},
-                {name: 'conversions', enableCellEdit: false},
-                {name: 'cpa', enableCellEdit: false},
-                {name: 'searchImpressionsShare', enableCellEdit: false},
-                {name: 'source', enableCellEdit: false}
-            ];
+                scope.columnDefs = [
+                    {name: 'device', enableCellEdit: true},
+                    {name: 'impressions', enableCellEdit: true},
+                    {name: 'clicks', enableCellEdit: false},
+                    {name: 'ctr', enableCellEdit: false},
+                    {name: 'averagePosition', enableCellEdit: false},
+                    {name: 'cost', enableCellEdit: false},
+                    {name: 'averageCpc', enableCellEdit: false},
+                    {name: 'conversions', enableCellEdit: false},
+                    {name: 'cpa', enableCellEdit: false},
+                    {name: 'searchImpressionsShare', enableCellEdit: false},
+                    {name: 'source', enableCellEdit: false}
+                ];
                 scope.gridOptions = {columnDefs: scope.columnDefs, data: scope.data};
             })
             console.log(scope.columnDefs)
@@ -331,7 +331,7 @@ app.directive('barChartDirective', function () {
         }
     };
 });
-app.directive('pieChartDirective', function () {
+app.directive('pieChartDirective', function ($http) {
     return{
         restrict: 'A',
         scope: {
@@ -340,29 +340,52 @@ app.directive('pieChartDirective', function () {
             pieChartUrl: '@'
         },
         link: function (scope, element, attr) {
-            var chart = c3.generate({
-                bindto: element[0],
-                data: {
-                    columns: [
-                        ['Paid', 40],
-                        ['Display', 20],
-                        ['SEO', 10],
-                        ['Overall', 10],
-                        ['Dynamic Display', 20],
-                    ],
-                    type: 'pie',
-                    colors: {
-                        Paid: '#74C4C6',
-                        Display: '#228995',
-                        SEO: '#5A717A',
-                        Overall: '#3D464D',
-                        'Dynamic Display': '#F1883C',
+            $http.get(scope.pieChartUrl).success(function (response) {
+                scope.items = []
+                console.log(response)
+                angular.forEach(response, function (value, key) {
+                    scope.items.push({name: value.source, upload: value.conversions});
+                    console.log(scope.items)
+//                    //console.log(value.conversions+" - "+value.source)
+//                    scope.data.push([value.conversions, value.source])
+//                    console.log(scope.data)
+//                    angular.forEach(value, function(data, header){                        
+//                    })
+                })
+                var data = {};
+                var sites = [];
+                scope.items.forEach(function (e) {
+                    sites.push(e.name);
+                    data[e.name] = e.upload;
+                })
+                var chart = c3.generate({
+                    bindto: element[0],
+                    data: {
+                        json: [data],
+                        keys: {
+                            value: sites,
+                        },
+                        type: 'pie',
+                        colors: {
+                            Paid: '#74C4C6',
+                            Display: '#228995',
+                            SEO: '#5A717A',
+                            Overall: '#3D464D',
+                            'Dynamic Display': '#F1883C',
+                        },
                     },
-                },
+                    pie: {
+                        label: {
+                            format: function (value, ratio, id) {
+                                return value;
+                            }
+                        }
+                    }
 //                donut: {
 //                    title: "Dogs love:",
 //                }
-            });
+                });
+            })
         }
     };
 });
