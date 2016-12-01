@@ -30,7 +30,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'ReportController'
             });
 
-    $urlRouterProvider.otherwise('/dashboard/dashboard/widget/:tabId');
+    $urlRouterProvider.otherwise('/dashboard/dashboard/widget/1');
 })
 //        .run(['$rootScope', '$state', '$stateParams',
 //            function ($rootScope, $state, $stateParams) {

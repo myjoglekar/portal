@@ -1,55 +1,61 @@
 <div ng-controller="UiController">
     <section class="content-header">
-        <!--<h1> {{dashboardName}} <small>Dashboard</small> </h1>-->
-        <h1 class="text-capitalize"> {{dashboardName}}</h1>
-        <!--        <ol class="breadcrumb">
-                    <li><a href=" "><i class="fa fa-dashboard"></i> L2tmedia</a></li>
-                    <li class="active">Here</li>
-                </ol>-->
-        <div class="pull-right breadcrumb">
-            <!--<a class="btn btn-warning" data-toggle="modal" data-target="#addNew"><i class="fa fa-plus"></i> Add New</a>-->
-            <span class="dropdown">
-                <a class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                    <i class="fa fa-plus"></i> Add <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li  ng-repeat="newPanel in newPanels">
-                        <a href="" ng-click="addNewPanel(newPanel)">{{newPanel.panelId}}</a>
-                    </li>
-                </ul>
-            </span>
-            <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full Screen</a>
-            <a class="btn btn-warning" ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh</a>
-        </div>
+        <h1 class="text-capitalize"> {{dashboardName}}</h1>        
     </section>
-    <section class="content"> 
+    <tabset class="tab-container">
+        <tab ng-repeat="tab in tabs" 
+             tab-highlight 
+             ui-sref="dashboard.widget({widgetId: tab.id})"
+             ng-init="isActive = isActiveTab(tab.tabName, $index)"
+            active="isActive"
+            select="setActiveTab(tab.tabName)">
+            <tab-heading>
+                <span>{{tab.tabName}}</span> 
+                <i class="glyphicon glyphicon-remove" ng-if="tab.tabClose" ng-click="removeTab($event, $index)"></i>
+            </tab-heading>
+        </tab>
+        <button class="btn btn-default" ng-click="addTab()"><i class="fa fa-plus"></i></button>
+    </tabset>
+            <section class="content"> 
+                <div class="row">
+                    <div class="col-md-12">                
+                        <div class="row" ngsf-fullscreen="fullscreenCtrl">
+                             <ui-view></ui-view>
+                         </div>
+                    </div>
+                </div>
+            </section> 
+<!--    <section class="content"> 
         <div class="row">
             <div class="col-md-12">
-                <div class="panel with-nav-tabs">
-                    <div class="panel-heading">
-                        <ul class="nav nav-tabs">
-                            <li ng-repeat="tab in tabs" ui-sref-active="active">
-                                <a class="active" ui-sref="dashboard.widget({widgetId: tab.id})" style="padding:3px 15px;display: inline-block;">
-                                    {{tab.tabName}}
-                                </a>
-                                <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">
-                                    <i class="glyphicon glyphicon-remove" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)"></i>
-                                </sup>
-                            </li>
-                            <a class="add-tab" ng-click="addTab(tab)" style="cursor: pointer">+ Add Tab</a>
-                        </ul>                        
-                    </div>
-                    <div class="panel-body">
-                        <div class="tab-content">
-                            <div class="tab-pane fade in active">                
-                                <div class="row" ngsf-fullscreen="fullscreenCtrl">
-                                    <ui-view></ui-view>
+
+
+
+                                <div class="panel with-nav-tabs">
+                                    <div class="panel-heading">
+                                        <ul class="nav nav-tabs">
+                                            <li ng-repeat="tab in tabs" ui-sref-active="active">
+                                                <a class="active" ui-sref="dashboard.widget({widgetId: tab.id})" style="padding:3px 15px;display: inline-block;">
+                                                    {{tab.tabName}}
+                                                </a>
+                                                <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">
+                                                    <i class="glyphicon glyphicon-remove" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)"></i>
+                                                </sup>
+                                            </li>
+                                            <a class="add-tab" ng-click="addTab(tab)" style="cursor: pointer">+ Add Tab</a>
+                                        </ul>                        
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade in active">                
+                                                <div class="row" ngsf-fullscreen="fullscreenCtrl">
+                                                    <ui-view></ui-view>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>            
                                 </div>
-                            </div>
-                        </div>
-                    </div>            
-                </div>
             </div>
         </div>
-    </section> 
+    </section> -->
 </div>

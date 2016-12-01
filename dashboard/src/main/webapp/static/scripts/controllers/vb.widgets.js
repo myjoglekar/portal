@@ -17,6 +17,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
     });
+//    $http.get('../api/admin/paid/accountDevice').success(function (response) {
+//       // $scope.chartTypes = response;
+//    });
 
     $http.get('admin/datasources').success(function (response) {
         $scope.datasources = response;
@@ -28,7 +31,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $http.get("static/datas/panelSize.json").success(function (response) {
         $scope.newPanels = response;
     });
-
 
     var uid = 10;
     $scope.addNewPanel = function (newPanel) {
@@ -115,27 +117,27 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     //widget refresh
-    $scope.setLineFn = function (lineFn) {
-        $scope.directiveLineFn = lineFn;
-    };
-    $scope.setAreaFn = function (areaFn) {
-        $scope.directiveAreaFn = areaFn;
-    };
-    $scope.setBarFn = function (barFn) {
-        $scope.directiveBarFn = barFn;
-    };
-    $scope.setPieFn = function (pieFn) {
-        $scope.directivePieFn = pieFn;
-    };
-    $scope.setDonutFn = function (donutFn) {
-        $scope.directiveDonutFn = donutFn;
-    };
-    $scope.setGroupedBarFn = function (groupedBarFn) {
-        $scope.directiveGroupedBarFn = groupedBarFn;
-    };
-    $scope.setTableFn = function (tableFn) {
-        $scope.directiveTableFn = tableFn;
-    };
+//    $scope.setLineFn = function (lineFn) {
+//        $scope.directiveLineFn = lineFn;
+//    };
+//    $scope.setAreaFn = function (areaFn) {
+//        $scope.directiveAreaFn = areaFn;
+//    };
+//    $scope.setBarFn = function (barFn) {
+//        $scope.directiveBarFn = barFn;
+//    };
+//    $scope.setPieFn = function (pieFn) {
+//        $scope.directivePieFn = pieFn;
+//    };
+//    $scope.setDonutFn = function (donutFn) {
+//        $scope.directiveDonutFn = donutFn;
+//    };
+//    $scope.setGroupedBarFn = function (groupedBarFn) {
+//        $scope.directiveGroupedBarFn = groupedBarFn;
+//    };
+//    $scope.setTableFn = function (tableFn) {
+//        $scope.directiveTableFn = tableFn;
+//    };
 
 });
 
@@ -146,35 +148,61 @@ app.directive('dynamicTable', function ($http) {
             dynamicTableUrl: '@',
             setTableFn: '&'
         },
-        templateUrl: 'static/views/dashboard/dynamicTable.html',
+//        templateUrl: 'static/views/dashboard/dynamicTable.html',
+        template: '<div ui-grid="gridOptions" ui-grid-grouping></div></div>',
         link: function (scope, element, attr) {
-            scope.refreshTable = function () {
-                scope.currentPage = 1;
-                scope.pageSize = 3;
-                scope.objectHeader = []
-                $http.get(scope.dynamicTableUrl).success(function (response) {
-                    scope.columns = []
-                    angular.forEach(response, function (obj, header) {
-                        scope.colName = obj.childItems.slice(0, 1);
-                        scope.tableItems = obj.childItems;
-                        angular.forEach(scope.colName, function (value, key) {
-                            var arrayIndex = 0;
-                            for (property in value) {
-                                if (scope.objectHeader.indexOf(property) === -1) {
-                                    scope.objectHeader.push(property);
-                                }
-                                scope.columns.push(
-                                        {title: scope.objectHeader[arrayIndex], field: scope.objectHeader[arrayIndex], visible: true}
-                                );
-                                arrayIndex++;
-                                scope.headerLength = scope.columns.length;
-                            }
-                        });
-                    });
-                });
-            };
-            scope.setTableFn({tableFn: scope.refreshTable});
-            scope.refreshTable();
+
+            scope.gridOptions = {}
+            $http.get(scope.dynamicTableUrl).success(function (response) {
+                scope.columnDefs = []
+                scope.data = response;
+                //console.log(response)
+                angular.forEach(response[0], function (value, key) {
+                   // scope.columnDefs.push({name: key, enableCellEdit: true})
+                })
+                            scope.columnDefs = [
+                {name: 'device', enableCellEdit: true},
+                {name: 'impressions', enableCellEdit: true},
+                {name: 'clicks', enableCellEdit: false},
+                {name: 'ctr', enableCellEdit: false},
+                {name: 'averagePosition', enableCellEdit: false},
+                {name: 'cost', enableCellEdit: false},
+                {name: 'averageCpc', enableCellEdit: false},
+                {name: 'conversions', enableCellEdit: false},
+                {name: 'cpa', enableCellEdit: false},
+                {name: 'searchImpressionsShare', enableCellEdit: false},
+                {name: 'source', enableCellEdit: false}
+            ];
+                scope.gridOptions = {columnDefs: scope.columnDefs, data: scope.data};
+            })
+            console.log(scope.columnDefs)
+            console.log(scope.data)
+//            scope.data = [
+//                {name: 'Bob', title: 'CEO', 'total': 10},
+//                {name: 'Bob', title: 'Lowly Developer', 'total': 100},
+//                {name: 'Frank', title: 'Lowly Developer', 'total': 20}
+//            ];
+
+//            scope.columnDefs = [
+//                {name: 'device', enableCellEdit: true},
+//                {name: 'impressions', enableCellEdit: true},
+//                {name: 'clicks', enableCellEdit: false}
+//                {name: 'ctr', enableCellEdit: false}
+//                {name: 'averagePosition', enableCellEdit: false}
+//                {name: 'cost', enableCellEdit: false}
+//                {name: 'averageCpc', enableCellEdit: false}
+//                {name: 'conversions', enableCellEdit: false}
+//                {name: 'cpa', enableCellEdit: false}
+//                {name: 'searchImpressionsShare', enableCellEdit: false}
+//                {name: 'source', enableCellEdit: false}
+//            ];
+
+
+
+//            $http.get(scope.dynamicTableUrl).success(function (response) {
+//
+//            });
+
         }
     };
 });
@@ -185,7 +213,7 @@ app.directive('previewDynamicTable', function () {
                 '<thead class="text-uppercase info">' +
                 '<th>Dealer Name</th>' +
                 '<th>Product Name</th>' +
-                '<th>Count</th>'+
+                '<th>Count</th>' +
                 '</thead>' +
                 '<tbody>' +
                 '<tr>' +
@@ -222,7 +250,7 @@ app.directive('previewDynamicTable', function () {
                 '<td>Dealer</td>' +
                 '<td>Paid</td>' +
                 '<td>10</td>' +
-                '</tr>' +                
+                '</tr>' +
                 '</tbody>' +
                 '</table>'
     };
@@ -281,7 +309,10 @@ app.directive('barChartDirective', function () {
                     columns: [
                         ['data1', 30, 200, 100, 400, 150, 250]
                     ],
-                    type: 'bar'
+                    type: 'bar',
+                    colors: {
+                        data1: '#74C4C6'
+                    }
                 },
                 grid: {
                     x: {
@@ -313,13 +344,20 @@ app.directive('pieChartDirective', function () {
                 bindto: element[0],
                 data: {
                     columns: [
-                        ['paid', 40],
-                        ['display', 20],
+                        ['Paid', 40],
+                        ['Display', 20],
                         ['SEO', 10],
                         ['Overall', 10],
                         ['Dynamic Display', 20],
                     ],
-                    type: 'pie'
+                    type: 'pie',
+                    colors: {
+                        Paid: '#74C4C6',
+                        Display: '#228995',
+                        SEO: '#5A717A',
+                        Overall: '#3D464D',
+                        'Dynamic Display': '#F1883C',
+                    },
                 },
 //                donut: {
 //                    title: "Dogs love:",
