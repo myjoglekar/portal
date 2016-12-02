@@ -9,8 +9,7 @@ html, body {
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-family: 'proxima_nova_rgregular', Helvetica, Arial, sans-serif;
     overflow-x: hidden;
     overflow-y: auto
 }
@@ -113,7 +112,7 @@ body.hold-transition .content-wrapper, body.hold-transition .right-side, body.ho
     padding-right: 15px
 }
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: 'Source Sans Pro', sans-serif
+    font-family: 'proxima_nova_rgregular', Helvetica, Arial, sans-serif;
 }
 a {
     color: #3c8dbc
@@ -236,7 +235,6 @@ a:hover, a:active, a:focus {
     line-height: 50px;
     text-align: left;
     width: 230px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     padding: 0 15px;
     font-weight: 300;
     overflow: hidden
@@ -256,7 +254,8 @@ a:hover, a:active, a:focus {
 }
 .content-header>h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 28px;
+    font-weight:600;
     color: #fff;
 }
 .content-header>h1>small {
@@ -1521,7 +1520,8 @@ a:hover, a:active, a:focus {
 }
 .box-header>.fa, .box-header>.glyphicon, .box-header>.ion, .box-header .box-title {
     display: inline-block;
-    font-size: 16px;
+    font-weight: bold;
+    font-size: 18px;
     margin: 0;
     line-height: 1
 }
@@ -4392,18 +4392,22 @@ a.mail-to {
     color: #9dd5d7 !important;
 }
 .ui-grid-cell-contents {
-height:40px;
+    color:#000;
+    height:40px;
 }
 ui-grid-header-cell-label ng-binding {
-z-index: 999999;
-position: relative;
-height: 40px;
+    z-index: 999999;
+    position: relative;
+    height: 40px;
 }
 
 .ui-grid-header-cell {
-height:40px;
+    height:40px;
 }
 
 .ui-grid-header-canvas {
-height: 40px;
+    height: 40px;
+}
+.ui-grid-viewport{
+    overflow: inherit !important;
 }

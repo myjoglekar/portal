@@ -26,7 +26,7 @@
     border-top-right-radius: 28px 145px;
     padding: 0 30px 0 25px;
     height: 170px;
-    background: #9dd5d7;
+    background: #c1dfe0;
     position: relative;
     -moz-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
     -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
@@ -46,7 +46,9 @@
     display: block;
     max-width: 100%;
     text-decoration: none;
-    color: #222;
+    color: #000;
+    font-weight:600;
+    font-size:16px;
     padding: 3px 7px;
     background: none;
 }

@@ -32,11 +32,11 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.newPanels = response;
     });
 
-    var uid = 10;
+    var uid = 100;
     $scope.addNewPanel = function (newPanel) {
         $scope.id = uid++;
-        $scope.widgets.push({chartId: "widget" + $scope.id, chartType: "New Widget", width: newPanel.panelWidth});
-        $("#" + $scope.isOpen).modal('show');
+        $scope.widgets.push({id: $scope.id, chartType: "", width: newPanel.panelWidth});
+       // $("#" + $scope.isOpen).modal('show');
     };
 
 
@@ -149,34 +149,37 @@ app.directive('dynamicTable', function ($http) {
             setTableFn: '&'
         },
 //        templateUrl: 'static/views/dashboard/dynamicTable.html',
-        template: '<div ui-grid="gridOptions" ui-grid-grouping></div></div>',
+        template: '<div ng-show="loadingPie" class="text-center" style="color: #228995;">Data Fetching ...</div>' +
+                '<div class="grid" ui-grid="gridOptions" ui-grid-grouping></div>',
         link: function (scope, element, attr) {
-
+            scope.loadingPie = true;
             scope.gridOptions = {}
-            $http.get(scope.dynamicTableUrl).success(function (response) {
-                scope.columnDefs = []
-                scope.data = response;
-                //console.log(response)
-                angular.forEach(response[0], function (value, key) {
-                    // scope.columnDefs.push({name: key, enableCellEdit: true})
+            if (scope.dynamicTableUrl) {
+                $http.get(scope.dynamicTableUrl).success(function (response) {
+                    scope.loadingPie = false;
+                    scope.columnDefs = []
+                    scope.data = response;
+                    //console.log(response)
+                    angular.forEach(response[0], function (value, key) {
+                        scope.columnDefs.push({name: key, enableCellEdit: true})
+                    })
+//                scope.columnDefs = [
+//                    {name: 'device', enableCellEdit: true},
+//                    {name: 'impressions', enableCellEdit: true},
+//                    {name: 'clicks', enableCellEdit: false},
+//                    {name: 'ctr', enableCellEdit: false},
+//                    {name: 'averagePosition', enableCellEdit: false},
+//                    {name: 'cost', enableCellEdit: false},
+//                    {name: 'averageCpc', enableCellEdit: false},
+//                    {name: 'conversions', enableCellEdit: false},
+//                    {name: 'cpa', enableCellEdit: false},
+//                    {name: 'searchImpressionsShare', enableCellEdit: false},
+//                    {name: 'source', enableCellEdit: false}
+//                ];
+                    scope.gridOptions = {columnDefs: scope.columnDefs, data: scope.data};
                 })
-                scope.columnDefs = [
-                    {name: 'device', enableCellEdit: true},
-                    {name: 'impressions', enableCellEdit: true},
-                    {name: 'clicks', enableCellEdit: false},
-                    {name: 'ctr', enableCellEdit: false},
-                    {name: 'averagePosition', enableCellEdit: false},
-                    {name: 'cost', enableCellEdit: false},
-                    {name: 'averageCpc', enableCellEdit: false},
-                    {name: 'conversions', enableCellEdit: false},
-                    {name: 'cpa', enableCellEdit: false},
-                    {name: 'searchImpressionsShare', enableCellEdit: false},
-                    {name: 'source', enableCellEdit: false}
-                ];
-                scope.gridOptions = {columnDefs: scope.columnDefs, data: scope.data};
-            })
-            console.log(scope.columnDefs)
-            console.log(scope.data)
+                console.log(scope.columnDefs)
+                console.log(scope.data)
 //            scope.data = [
 //                {name: 'Bob', title: 'CEO', 'total': 10},
 //                {name: 'Bob', title: 'Lowly Developer', 'total': 100},
@@ -203,6 +206,7 @@ app.directive('dynamicTable', function ($http) {
 //
 //            });
 
+            }
         }
     };
 });
@@ -333,59 +337,68 @@ app.directive('barChartDirective', function () {
 });
 app.directive('pieChartDirective', function ($http) {
     return{
-        restrict: 'A',
+        restrict: 'AC',
+        template: '<div ng-show="loadingPie" class="text-center" style="color: #228995;">Data Fetching ...</div>',
+//        template: '<div class="text-center"><img ng-show="loadingPie" src="static/img/loading.gif"></div>',
         scope: {
             setPieChartFn: '&',
             pieChartId: '@',
-            pieChartUrl: '@'
+            pieChartUrl: '@',
+            loadingPie: '&'
         },
         link: function (scope, element, attr) {
-            $http.get(scope.pieChartUrl).success(function (response) {
-                scope.items = []
-                console.log(response)
-                angular.forEach(response, function (value, key) {
-                    scope.items.push({name: value.source, upload: value.conversions});
-                    console.log(scope.items)
+            scope.loadingPie = true;
+            if (scope.pieChartUrl) {
+                $http.get(scope.pieChartUrl).success(function (response) {
+                    scope.items = []
+                    scope.loadingPie = false;
+                    console.log(response)
+                    angular.forEach(response, function (value, key) {
+                        scope.items.push({upload: value.conversions, name: value.source});
+                        console.log(scope.items)
 //                    //console.log(value.conversions+" - "+value.source)
 //                    scope.data.push([value.conversions, value.source])
 //                    console.log(scope.data)
 //                    angular.forEach(value, function(data, header){                        
 //                    })
-                })
-                var data = {};
-                var sites = [];
-                scope.items.forEach(function (e) {
-                    sites.push(e.name);
-                    data[e.name] = e.upload;
-                })
-                var chart = c3.generate({
-                    bindto: element[0],
-                    data: {
-                        json: [data],
-                        keys: {
-                            value: sites,
+                    })
+                    //if (scope.items.length > 0) {
+                    var data = {};
+                    var sites = [];
+                    scope.items.forEach(function (e) {
+                        sites.push(e.name);
+                        data[e.name] = e.upload;
+                    })
+                    var chart = c3.generate({
+                        bindto: element[0],
+                        data: {
+                            json: [data],
+                            keys: {
+                                value: sites,
+                            },
+                            type: 'pie',
+                            colors: {
+                                Paid: '#74C4C6',
+                                Display: '#228995',
+                                SEO: '#5A717A',
+                                Overall: '#3D464D',
+                                'Dynamic Display': '#F1883C',
+                            },
                         },
-                        type: 'pie',
-                        colors: {
-                            Paid: '#74C4C6',
-                            Display: '#228995',
-                            SEO: '#5A717A',
-                            Overall: '#3D464D',
-                            'Dynamic Display': '#F1883C',
-                        },
-                    },
-                    pie: {
-                        label: {
-                            format: function (value, ratio, id) {
-                                return value;
+                        pie: {
+                            label: {
+                                format: function (value, ratio, id) {
+                                    return value;
+                                }
                             }
                         }
-                    }
 //                donut: {
 //                    title: "Dogs love:",
 //                }
-                });
-            })
+                    });
+                    // }
+                })
+            }
         }
     };
 });

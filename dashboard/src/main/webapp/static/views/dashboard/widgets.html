@@ -49,8 +49,10 @@
                 </div>-->
 
         <div ng-if="widget.chartType != 'tickers'">
-            <div class="col-md-{{2 * widget.width}} widgetsize resize" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
-                <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl" ng-drag="true" ng-drag-data="widget">
+            <div class="col-md-{{2 * widget.width}} widgetsize resize">
+                <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl">
+<!--            <div class="col-md-{{2 * widget.width}} widgetsize resize" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+                <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl" ng-drag="true" ng-drag-data="widget">-->
                     <div class="box-header with-border">
                         <h3 class="box-title">
                             <span class="{{widget.icon}}"></span> 
@@ -105,6 +107,7 @@
                                                 </center>-->
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
+
                         <div pie-Chart-Directive pie-Chart-Url='{{widget.directUrl}}'></div>
                         <!--                        <center>
                                                     <div set-Pie-Chart-Fn="setPieFn(pieChartFn)"
@@ -124,15 +127,15 @@
                                                     </div>
                                                 </center>-->
                     </div> 
-                    <div class="box-body chart-responsive" ng-if="widget.chartType === 'table'">
+                    <div class="box-body table-responsive" ng-if="widget.chartType === 'table'">
                         <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}"></div>
                         <!--<div dynamic-Table style="height: 100%;" class="ag-fresh"></div>-->
-<!--                                <div set-Table-Fn="setTableFn(tableFn)"
-                                     dynamic-Table-Url='{{widget.directUrl}}'
-                                     dynamic-Table 
-                                     dynamic-Table-Id='{{widget.chartId}}'
-                                     style="min-height:{{widget.minHeight}}vh">
-                                </div>-->
+                        <!--                                <div set-Table-Fn="setTableFn(tableFn)"
+                                                             dynamic-Table-Url='{{widget.directUrl}}'
+                                                             dynamic-Table 
+                                                             dynamic-Table-Id='{{widget.chartId}}'
+                                                             style="min-height:{{widget.minHeight}}vh">
+                                                        </div>-->
                         <!--<div ui-grid="gridOptions" ui-grid-grouping ></div>-->
                     </div> <!--
                                         <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">

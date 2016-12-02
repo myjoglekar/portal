@@ -24,7 +24,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state) {
     $scope.tabs = [];
 
     var addTab = function () {
-        $scope.tabs.push({tabName: "New Tab", title: 'Tab ' + counter, content: 'Tab ' + counter, tabClose: 'isClose'});
+        $scope.tabs.push({id: 100, tabName: "New Tab", title: 'Tab ' + counter, content: 'Tab ' + counter, tabClose: 'isClose'});
         counter++;
         $scope.tabs[$scope.tabs.length - 1].active = true;
     };

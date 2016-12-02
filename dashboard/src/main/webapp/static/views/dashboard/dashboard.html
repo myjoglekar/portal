@@ -5,7 +5,7 @@
     <tabset class="tab-container">
         <tab ng-repeat="tab in tabs" 
              tab-highlight 
-             ui-sref="dashboard.widget({widgetId: tab.id})"
+             ui-sref="dashboard.widget({widgetId: tab.id?tab.id:100})"
              ng-init="isActive = isActiveTab(tab.tabName, $index)"
             active="isActive"
             select="setActiveTab(tab.tabName)">
@@ -15,6 +15,7 @@
             </tab-heading>
         </tab>
         <button class="btn btn-default" ng-click="addTab()"><i class="fa fa-plus"></i></button>
+<!--        <button class="btn btn-default" ng-click="addTab()"><i class="fa fa-plus"></i></button>-->
     </tabset>
             <section class="content"> 
                 <div class="row">
