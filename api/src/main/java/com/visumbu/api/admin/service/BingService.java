@@ -843,7 +843,7 @@ public class BingService {
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
-        report.setAggregation(ReportAggregation.YEARLY); // TODO need to remove
+        report.setAggregation(ReportAggregation.DAILY); // TODO need to remove
 
         ArrayOflong accountIds = new ArrayOflong();
         accountIds.getLongs().add(authorizationData.getAccountId());
@@ -851,7 +851,7 @@ public class BingService {
         report.setScope(new AccountReportScope());
         report.getScope().setAccountIds(accountIds);
         report.setTime(new ReportTime());
-        report.setTime(new ReportTime());
+        //report.setTime(new ReportTime());
          report.getTime().setPredefinedTime(ReportTimePeriod.YESTERDAY);
         /* Start Date */
 //        Calendar startCal = Calendar.getInstance();
