@@ -98,7 +98,16 @@ public class PaidTabController {
             performanceBean.setConversions(row.getConversions().getValue());
             performanceReportBeans.add(performanceBean);
         }
-        return performanceReportBeans;
+
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "Source"));
+        columnDefs.add(new ColumnDef("device", "Device"));
+        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
+
+        Map returnMap = new HashMap();
+        returnMap.put("data", performanceReportBeans);
+        returnMap.put("columnDefs", columnDefs);
+        return returnMap;
     }
 
     @RequestMapping(value = "campaignDevice", method = RequestMethod.GET, produces = "application/json")
@@ -151,8 +160,25 @@ public class PaidTabController {
             performanceReportBeans.add(performanceBean);
 
         }
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "Source"));
+        columnDefs.add(new ColumnDef("campaignName", "Campaign Name"));
+        columnDefs.add(new ColumnDef("device", "Device"));
+        columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.AVG));
 
-        return performanceReportBeans;
+        columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "Average Cpc", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.SUM));
+
+        Map returnMap = new HashMap();
+        returnMap.put("data", performanceReportBeans);
+        returnMap.put("columnDefs", columnDefs);
+        return returnMap;
     }
 
     @RequestMapping(value = "accountDevice", method = RequestMethod.GET, produces = "application/json")
@@ -186,12 +212,12 @@ public class PaidTabController {
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
             performanceBean.setCtr(row.getCtr());
-            String cost = Integer.toString(Integer.parseInt(row.getCost())/1000000);            
+            String cost = Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
             performanceBean.setCost(cost);
-            String cpc = Integer.toString(Integer.parseInt(row.getAvgCPC())/1000000);            
+            String cpc = Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
 
             performanceBean.setAverageCpc(cpc);
-                        String cpa = Integer.toString(Integer.parseInt(row.getCostConv())/1000000);            
+            String cpa = Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
 
             performanceBean.setCpa(cpa);
 
@@ -225,20 +251,20 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.AVG));
-        
+
         columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "Average Cpc", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.SUM));
-        
+
         Map returnMap = new HashMap();
         returnMap.put("data", performanceReportBeans);
         returnMap.put("columnDefs", columnDefs);
         return returnMap;
     }
-    
+
     @RequestMapping(value = "adGroups", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getAdGroups(HttpServletRequest request, HttpServletResponse response) {

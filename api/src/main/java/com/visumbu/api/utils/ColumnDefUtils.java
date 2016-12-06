@@ -12,6 +12,7 @@ import com.visumbu.api.bean.ColumnDef;
  * @author user
  */
 public class ColumnDefUtils {
+
     public static ColumnDef getCtrColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("ctr");
@@ -19,6 +20,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType("sum");
         return columnDef;
     }
+
     public static ColumnDef getImpressionsColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("impressions");
@@ -26,7 +28,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType("sum");
         return columnDef;
     }
-    
+
     public static ColumnDef getClicksColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("clicks");
@@ -34,7 +36,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType("sum");
         return columnDef;
     }
-    
+
     public static ColumnDef getDeviceColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("device");
@@ -42,6 +44,7 @@ public class ColumnDefUtils {
         columnDef.setGroupOrder(1);
         return columnDef;
     }
+
     public static ColumnDef getCostColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("cost");
@@ -49,7 +52,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType("sum");
         return columnDef;
     }
-    
+
     public static ColumnDef getAverageCpcColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("averageCpc");
@@ -57,7 +60,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType("avg");
         return columnDef;
     }
-    
+
     public static ColumnDef getAveragePositionColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("averagePosition");
@@ -65,7 +68,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType("avg");
         return columnDef;
     }
-    
+
     public static ColumnDef getConversionsColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("conversions");
@@ -73,6 +76,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType("avg");
         return columnDef;
     }
+
     public static ColumnDef getSearchImpressionsShare() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("searchImpressionsShare");
@@ -80,7 +84,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType("avg");
         return columnDef;
     }
-    
+
     public static ColumnDef getCpaColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("cpa");
@@ -88,8 +92,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType("avg");
         return columnDef;
     }
-    
-    
+
     public static ColumnDef getCampaignDeviceColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("device");
@@ -97,14 +100,14 @@ public class ColumnDefUtils {
         columnDef.setGroupOrder(2);
         return columnDef;
     }
-    
+
     public static ColumnDef getSourceColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("source");
         columnDef.setDisplayName("Source");
         return columnDef;
     }
-    
+
     public static ColumnDef getCampaignNameColumnDef() {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName("campaignName");
@@ -112,14 +115,14 @@ public class ColumnDefUtils {
         columnDef.setGroupOrder(1);
         return columnDef;
     }
-    
+
     public static ColumnDef getGenericColumnDef(String name, String displayName) {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName(name);
         columnDef.setDisplayName(displayName);
         return columnDef;
     }
-    
+
     public static ColumnDef getGenericColumnDef(String name, String displayName, String agreegationType) {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName(name);
@@ -127,7 +130,7 @@ public class ColumnDefUtils {
         columnDef.setAggregationType(agreegationType);
         return columnDef;
     }
-    
+
     public static ColumnDef getGenericColumnDef(String name, String displayName, Integer groupOrder) {
         ColumnDef columnDef = new ColumnDef();
         columnDef.setName(name);
@@ -135,5 +138,5 @@ public class ColumnDefUtils {
         columnDef.setGroupOrder(groupOrder);
         return columnDef;
     }
-    
+
 }

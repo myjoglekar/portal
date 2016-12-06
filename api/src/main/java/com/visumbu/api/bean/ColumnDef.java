@@ -59,6 +59,9 @@ public class ColumnDef {
         this.format = format;
     }
 
+    public ColumnDef() {
+    }
+    
     public String getFormat() {
         return format;
     }
