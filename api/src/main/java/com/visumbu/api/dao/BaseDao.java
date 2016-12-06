@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Repository("baseDao")
 public class BaseDao {
-
+/*
     @Autowired
     protected SessionFactory sessionFactory;
 
@@ -69,5 +69,5 @@ public class BaseDao {
         }
         return object;
     }
-    
+    */
 }

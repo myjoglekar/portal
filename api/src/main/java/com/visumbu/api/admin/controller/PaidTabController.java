@@ -16,6 +16,7 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReportRow;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReportRow;
+import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceRow;
@@ -33,8 +34,10 @@ import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -216,9 +219,26 @@ public class PaidTabController {
 
         }
 
-        return performanceReportBeans;
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "Source"));
+        columnDefs.add(new ColumnDef("device", "Device"));
+        columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.AVG));
+        
+        columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "Average Cpc", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.SUM));
+        
+        Map returnMap = new HashMap();
+        returnMap.put("data", performanceReportBeans);
+        returnMap.put("columnDefs", columnDefs);
+        return returnMap;
     }
-
+    
     @RequestMapping(value = "adGroups", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getAdGroups(HttpServletRequest request, HttpServletResponse response) {
