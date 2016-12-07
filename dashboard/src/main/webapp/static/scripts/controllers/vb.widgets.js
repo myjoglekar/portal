@@ -36,7 +36,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.addNewPanel = function (newPanel) {
         $scope.id = uid++;
         $scope.widgets.push({id: $scope.id, chartType: "", width: newPanel.panelWidth});
-       // $("#" + $scope.isOpen).modal('show');
+        // $("#" + $scope.isOpen).modal('show');
     };
 
 
@@ -141,7 +141,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
 });
 
-app.directive('dynamicTable', function ($http) {
+app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout) {
     return{
         restrict: 'A',
         scope: {
@@ -153,60 +153,50 @@ app.directive('dynamicTable', function ($http) {
                 '<div class="grid" ui-grid="gridOptions" ui-grid-grouping></div>',
         link: function (scope, element, attr) {
             scope.loadingPie = true;
-            scope.gridOptions = {}
-            if (scope.dynamicTableUrl) {
-                $http.get(scope.dynamicTableUrl).success(function (response) {
-                    scope.loadingPie = false;
-                    scope.columnDefs = []
-                    scope.data = response;
-                    //console.log(response)
-                    angular.forEach(response[0], function (value, key) {
-                        scope.columnDefs.push({name: key, enableCellEdit: true})
-                    })
-//                scope.columnDefs = [
-//                    {name: 'device', enableCellEdit: true},
-//                    {name: 'impressions', enableCellEdit: true},
-//                    {name: 'clicks', enableCellEdit: false},
-//                    {name: 'ctr', enableCellEdit: false},
-//                    {name: 'averagePosition', enableCellEdit: false},
-//                    {name: 'cost', enableCellEdit: false},
-//                    {name: 'averageCpc', enableCellEdit: false},
-//                    {name: 'conversions', enableCellEdit: false},
-//                    {name: 'cpa', enableCellEdit: false},
-//                    {name: 'searchImpressionsShare', enableCellEdit: false},
-//                    {name: 'source', enableCellEdit: false}
-//                ];
-                    scope.gridOptions = {columnDefs: scope.columnDefs, data: scope.data};
-                })
-                console.log(scope.columnDefs)
-                console.log(scope.data)
-//            scope.data = [
-//                {name: 'Bob', title: 'CEO', 'total': 10},
-//                {name: 'Bob', title: 'Lowly Developer', 'total': 100},
-//                {name: 'Frank', title: 'Lowly Developer', 'total': 20}
-//            ];
+            scope.gridOptions = {enableColumnMenus: true,
+                    enableGridMenu: true,
+                    enableRowSelection: false,
+                    enableGroupHeaderSelection: false,
+                    enableRowHeaderSelection: false,
+                    enableSorting: true}
 
-//            scope.columnDefs = [
-//                {name: 'device', enableCellEdit: true},
-//                {name: 'impressions', enableCellEdit: true},
-//                {name: 'clicks', enableCellEdit: false}
-//                {name: 'ctr', enableCellEdit: false}
-//                {name: 'averagePosition', enableCellEdit: false}
-//                {name: 'cost', enableCellEdit: false}
-//                {name: 'averageCpc', enableCellEdit: false}
-//                {name: 'conversions', enableCellEdit: false}
-//                {name: 'cpa', enableCellEdit: false}
-//                {name: 'searchImpressionsShare', enableCellEdit: false}
-//                {name: 'source', enableCellEdit: false}
-//            ];
+            $http.get(scope.dynamicTableUrl).success(function (response) {
 
-
-
-//            $http.get(scope.dynamicTableUrl).success(function (response) {
-//
-//            });
-
-            }
+                scope.gridOptions = {
+                    enableColumnMenus: true,
+                    enableGridMenu: true,
+                    enableRowSelection: false,
+                    enableGroupHeaderSelection: false,
+                    enableRowHeaderSelection: false,
+                    enableSorting: true,
+                    data: response.data,
+                    columnDefs: response.columnDefs,
+                    onRegisterApi: function onRegisterApi(gridApi) {
+                        $timeout(function () {
+                            gridApi.grouping.clearGrouping();
+                            gridApi.grouping.groupColumn('source');
+                            gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                        });
+                    }
+                };
+                function lineage() {
+                    return this.name + ' of ' + this.parent;
+                }
+            })
+//            if (scope.dynamicTableUrl) {
+            //$http.get(scope.dynamicTableUrl).success(function (response) {
+//                    scope.loadingPie = false;
+//                    scope.columnDefs = []
+//                    scope.data = response;
+//                    //console.log(response)
+//                    angular.forEach(response[0], function (value, key) {
+//                        scope.columnDefs.push({name: key, enableCellEdit: true})
+//                    })
+//                    scope.gridOptions = {columnDefs: scope.columnDefs, data: scope.data};
+           // })
+//                console.log(scope.columnDefs)
+//                console.log(scope.data)
+//            }
         }
     };
 });
@@ -353,7 +343,7 @@ app.directive('pieChartDirective', function ($http) {
                     scope.items = []
                     scope.loadingPie = false;
                     console.log(response)
-                    angular.forEach(response, function (value, key) {
+                    angular.forEach(response.data, function (value, key) {
                         scope.items.push({upload: value.conversions, name: value.source});
                         console.log(scope.items)
 //                    //console.log(value.conversions+" - "+value.source)
