@@ -1,25 +1,29 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
     $scope.widgets = [];
-    console.log("Widget : " + $stateParams.widgetId)
-//alert('test')
+
     function getWidgetItem() {
         if (!$stateParams.widgetId) {
-            $stateParams.widgetId = 1
+            $stateParams.widgetId = 1;
         }
-        console.log("Widget 1 : " + $stateParams.widgetId)
         $http.get("admin/ui/dbWidget/" + $stateParams.widgetId).success(function (response) {
             $scope.widgets = response;
-            $scope.defaultWidget = response[0];
         });
     }
     getWidgetItem();
 
+    $scope.addColumns = function (widget) {
+        widget.columns.push({isEdit: true})
+    };
+
+    $scope.saveColumn = function (widget, column) {
+        //console.log(column)
+       // widget.columns.push({displayName: column.displayName, fieldName: column.displayName, agregationFunction: column.agregationFunction})
+        //console.log(widget.columns)
+    }
+
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
     });
-//    $http.get('../api/admin/paid/accountDevice').success(function (response) {
-//       // $scope.chartTypes = response;
-//    });
 
     $http.get('admin/datasources').success(function (response) {
         $scope.datasources = response;
@@ -52,7 +56,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
     //Data Set
     function selectedItems(selectedItem) {
-        console.log("Data Set : " + selectedItem)
+        // console.log("Data Set : " + selectedItem)
         $http.get('admin/datasources/dataSet/' + selectedItem).success(function (response) {
             $scope.dataSets = response;
         });
@@ -64,7 +68,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.dataSetName = [];
     $scope.selectedDataSet = function (dataSet) {
         angular.forEach(dataSet, function (value, key) {
-            console.log(value.name)
+            // console.log(value.name)
             $scope.dataSetName.push(value.name);
             dataSet = '';
         });
@@ -155,8 +159,8 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 '<div class="grid" ui-grid="gridOptions" ui-grid-grouping></div>',
         link: function (scope, element, attr) {
 
-            console.log($stateParams.widgetId)
-            console.log(scope.widgetColumns)
+            //console.log($stateParams.widgetId)
+            //console.log(scope.widgetColumns)
 
 
             scope.loadingPie = true;
@@ -237,7 +241,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.groupPriority) {
                     columnDef.grouping = {groupPriority: value.groupPriority};
                 }
-                console.log(columnDef);
+                //console.log(columnDef);
                 columnDefs.push(columnDef);
             });
             //console.log(columnDefs);
