@@ -43,14 +43,19 @@ public class UiDao extends BaseDao {
         String queryStr = "select d from TabWidget d where d.tabId.id = :tabId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("tabId", tabId);
-        
+
         List<TabWidget> tabWidgets = query.list();
         for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
             TabWidget widget = iterator.next();
             widget.setColumns(getColumns(widget));
         }
-        
+
         return tabWidgets;
+    }
+
+    public TabWidget getTabWidgetById(Integer widgetId) {
+        TabWidget tabWidget = (TabWidget) sessionFactory.getCurrentSession().get(TabWidget.class, widgetId);
+        return tabWidget;
     }
 
     public Dashboard getDashboardById(Integer dashboardId) {
@@ -61,8 +66,24 @@ public class UiDao extends BaseDao {
         String queryStr = "select d from WidgetColumn d where d.widgetId = :widgetId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("widgetId", widget);
-        
+
         return query.list();
+    }
+
+    public WidgetColumn addWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
+        widgetColumn.setWidgetId(getTabWidgetById(widgetId));
+        create(widgetColumn);
+        return widgetColumn;
+    }
+
+    public WidgetColumn deleteWidgetColumn(Integer id) {
+        delete(getTabWidgetColumnById(id));
+        return null;
+    }
+
+    private WidgetColumn getTabWidgetColumnById(Integer id) {
+        WidgetColumn widgetColumn = (WidgetColumn) sessionFactory.getCurrentSession().get(WidgetColumn.class, id);
+        return widgetColumn;
     }
 
 }

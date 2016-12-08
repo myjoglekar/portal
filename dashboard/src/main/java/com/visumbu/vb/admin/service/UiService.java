@@ -11,6 +11,7 @@ import com.visumbu.vb.model.DashboardTabs;
 import com.visumbu.vb.model.Product;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
+import com.visumbu.vb.model.WidgetColumn;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,5 +56,13 @@ public class UiService {
 
     public Dashboard getDashboardById(Integer dashboardId) {
         return uiDao.getDashboardById(dashboardId);
+    }
+
+    public WidgetColumn addWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
+        return uiDao.addWidgetColumn(widgetId, widgetColumn);
+    }
+
+    public WidgetColumn deleteWidgetColumn(Integer id) {
+        return uiDao.deleteWidgetColumn(id);
     }
 }

@@ -11,6 +11,7 @@ import com.visumbu.vb.controller.BaseController;
 import com.visumbu.vb.model.DashboardTabs;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
+import com.visumbu.vb.model.WidgetColumn;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,5 +77,18 @@ public class UiController extends BaseController{
     List getTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
         return uiService.getTabWidget(tabId);
     }
+    
+    @RequestMapping(value = "widgetColumn/{widgetId}", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    WidgetColumn addWidgetColumn(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer widgetId, @RequestBody WidgetColumn widgetColumn) {
+        return uiService.addWidgetColumn(widgetId, widgetColumn);
+    }
+    @RequestMapping(value = "widgetColumn/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    WidgetColumn deleteWidgetColumn(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+        return uiService.deleteWidgetColumn(id);
+    }
+    
+    
 
 }
