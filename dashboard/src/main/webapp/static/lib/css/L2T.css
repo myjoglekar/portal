@@ -4392,7 +4392,11 @@ a.mail-to {
     color: #9dd5d7 !important;
 }
 .ui-grid-cell-contents {
-    color:#000;
+    color: #000;
+    font-size: 12px;
+    font-family: "proxima_nova_semibold",Helvetica,Arial,sans-serif;
+    text-overflow: inherit;
+    word-wrap: break-word;
     height:40px;
 }
 ui-grid-header-cell-label ng-binding {
@@ -4409,5 +4413,5 @@ ui-grid-header-cell-label ng-binding {
     height: 40px;
 }
 .ui-grid-viewport{
-    overflow: inherit !important;
+    /*overflow: auto !important;*/
 }

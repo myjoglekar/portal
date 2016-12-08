@@ -80,30 +80,30 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.objectHeader = [];
-    $scope.previewChart = function (chartType, widget) {
-        $scope.columns = [];
-        $scope.previewChartType = chartType.type;
-        $scope.previewChartUrl = widget.url;
-        if (chartType.type === "table") {
-            $http.get(widget.url).success(function (response) {
-                $scope.data = response.slice(0, 4);
-                $scope.colName = response.slice(0, 1);
-                angular.forEach($scope.colName, function (value, key) {
-                    var arrayIndex = 0;
-                    for (property in value) {
-                        if ($scope.objectHeader.indexOf(property) === -1) {
-                            $scope.objectHeader.push(property);
-                        }
-                        $scope.columns.push(
-                                {title: $scope.objectHeader[arrayIndex], field: $scope.objectHeader[arrayIndex], visible: true}
-                        );
-                        arrayIndex++;
-                        $scope.headerLength = $scope.columns.length;
-                    }
-                });
-            });
-        }
-    };
+//    $scope.previewChart = function (chartType, widget) {
+//        $scope.columns = [];
+//        $scope.previewChartType = chartType.type;
+//        $scope.previewChartUrl = widget.url;
+//        if (chartType.type === "table") {
+//            $http.get(widget.url).success(function (response) {
+//                $scope.data = response.slice(0, 4);
+//                $scope.colName = response.slice(0, 1);
+//                angular.forEach($scope.colName, function (value, key) {
+//                    var arrayIndex = 0;
+//                    for (property in value) {
+//                        if ($scope.objectHeader.indexOf(property) === -1) {
+//                            $scope.objectHeader.push(property);
+//                        }
+//                        $scope.columns.push(
+//                                {title: $scope.objectHeader[arrayIndex], field: $scope.objectHeader[arrayIndex], visible: true}
+//                        );
+//                        arrayIndex++;
+//                        $scope.headerLength = $scope.columns.length;
+//                    }
+//                });
+//            });
+//        }
+//    };
 
     $scope.save = function (widget) {
 
@@ -149,19 +149,90 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
             setTableFn: '&'
         },
 //        templateUrl: 'static/views/dashboard/dynamicTable.html',
-        template: '<div ng-show="loadingPie" class="text-center" style="color: #228995;">Data Fetching ...</div>' +
+        template: '<div ng-show="loadingPie" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<div class="grid" ui-grid="gridOptions" ui-grid-grouping></div>',
         link: function (scope, element, attr) {
             scope.loadingPie = true;
-            scope.gridOptions = {enableColumnMenus: true,
-                    enableGridMenu: true,
-                    enableRowSelection: false,
-                    enableGroupHeaderSelection: false,
-                    enableRowHeaderSelection: false,
-                    enableSorting: true}
+            scope.gridOptions = {
+                enableColumnMenus: true,
+                enableGridMenu: true,
+                enableRowSelection: false,
+                enableGroupHeaderSelection: false,
+                enableRowHeaderSelection: false,
+                enableSorting: true,
+                multiSelect: false,
+                enableColumnResize: true,
+                showColumnFooter: true
+            }
 
             $http.get(scope.dynamicTableUrl).success(function (response) {
+                scope.loadingPie = false;
+                columnDefs = [];
+                angular.forEach(response.columnDefs, function (value, key) {
+                    columnDef = {
+                        field: value.name,
+                        displayName: value.displayName,
+//                        cellClass: 'space-numbers',
+                        cellTooltip: true,
+                        headerTooltip: true
+                    }
 
+                    if (value.aggregationType == "sum") {
+                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
+                                columnDef.cellFilter = 'number: 2',
+//                                columnDef.cellClass = 'space-numbers',
+                                columnDef.cellTooltip = true,
+                                columnDef.headerTooltip = true,
+                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD | number:2}}</span></div>'
+                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+                    }
+                    if (value.aggregationType == "count") {
+                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.COUNT,
+                                //columnDef.cellFilter = 'number: 2';
+//                                columnDef.cellClass = 'space-numbers',
+                                columnDef.cellTooltip = true,
+                                columnDef.headerTooltip = true,
+                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
+                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+
+                    }
+                    if (value.aggregationType == "max") {
+                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MAX,
+                                //columnDef.cellFilter = 'number: 2';
+//                                columnDef.cellClass = 'space-numbers',
+                                columnDef.cellTooltip = true,
+                                columnDef.headerTooltip = true,
+                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
+                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+
+                    }
+                    if (value.aggregationType == "avg") {
+                        //columnDef.cellFilter = 'number: 2';
+                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.AVG,
+//                                columnDef.cellClass = 'space-numbers',
+                                columnDef.cellTooltip = true,
+                                columnDef.headerTooltip = true,
+                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD | setDecimal:2 }}</span></div>'
+                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+                        // columnDef.cellFilter = 'formatCaller'
+
+                    }
+                    if (value.aggregationType == "min") {
+
+                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MIN,
+//                                columnDef.cellFilter = 'number: 2';
+//                                columnDef.cellClass = 'space-numbers',
+                                columnDef.cellTooltip = true,
+                                columnDef.headerTooltip = true,
+                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
+                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+                    }
+                    if (value.groupOrder) {
+                        columnDef.grouping = {groupPriority: value.groupOrder};
+                    }
+                    //console.log(columnDef);
+                    columnDefs.push(columnDef);
+                });
                 scope.gridOptions = {
                     enableColumnMenus: true,
                     enableGridMenu: true,
@@ -169,8 +240,12 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     enableGroupHeaderSelection: false,
                     enableRowHeaderSelection: false,
                     enableSorting: true,
+                    multiSelect: false,
+                    enableColumnResize: true,
                     data: response.data,
-                    columnDefs: response.columnDefs,
+//                    data: response.data.slice(0, 14),
+                    columnDefs: columnDefs,
+                    showColumnFooter: true,
                     onRegisterApi: function onRegisterApi(gridApi) {
                         $timeout(function () {
                             gridApi.grouping.clearGrouping();
@@ -179,24 +254,11 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                         });
                     }
                 };
+
                 function lineage() {
                     return this.name + ' of ' + this.parent;
                 }
             })
-//            if (scope.dynamicTableUrl) {
-            //$http.get(scope.dynamicTableUrl).success(function (response) {
-//                    scope.loadingPie = false;
-//                    scope.columnDefs = []
-//                    scope.data = response;
-//                    //console.log(response)
-//                    angular.forEach(response[0], function (value, key) {
-//                        scope.columnDefs.push({name: key, enableCellEdit: true})
-//                    })
-//                    scope.gridOptions = {columnDefs: scope.columnDefs, data: scope.data};
-           // })
-//                console.log(scope.columnDefs)
-//                console.log(scope.data)
-//            }
         }
     };
 });
@@ -331,33 +393,27 @@ app.directive('pieChartDirective', function ($http) {
         template: '<div ng-show="loadingPie" class="text-center" style="color: #228995;">Data Fetching ...</div>',
 //        template: '<div class="text-center"><img ng-show="loadingPie" src="static/img/loading.gif"></div>',
         scope: {
+            pieChartUrl: '@',
             setPieChartFn: '&',
             pieChartId: '@',
-            pieChartUrl: '@',
             loadingPie: '&'
         },
         link: function (scope, element, attr) {
             scope.loadingPie = true;
             if (scope.pieChartUrl) {
                 $http.get(scope.pieChartUrl).success(function (response) {
-                    scope.items = []
-                    scope.loadingPie = false;
-                    console.log(response)
-                    angular.forEach(response.data, function (value, key) {
-                        scope.items.push({upload: value.conversions, name: value.source});
-                        console.log(scope.items)
-//                    //console.log(value.conversions+" - "+value.source)
-//                    scope.data.push([value.conversions, value.source])
-//                    console.log(scope.data)
-//                    angular.forEach(value, function(data, header){                        
-//                    })
-                    })
-                    //if (scope.items.length > 0) {
                     var data = {};
                     var sites = [];
+                    scope.items = []
+                    scope.loadingPie = false;
+                    // console.log(response)
+                    angular.forEach(response.data, function (value, key) {
+                        scope.items.push({value: value.conversions, label: value.source});                        
+                    })
+
                     scope.items.forEach(function (e) {
-                        sites.push(e.name);
-                        data[e.name] = e.upload;
+                        sites.push(e.label);
+                        data[e.label] = e.value;
                     })
                     var chart = c3.generate({
                         bindto: element[0],
@@ -382,12 +438,8 @@ app.directive('pieChartDirective', function ($http) {
                                 }
                             }
                         }
-//                donut: {
-//                    title: "Dogs love:",
-//                }
                     });
-                    // }
-                })
+                });
             }
         }
     };
@@ -433,5 +485,13 @@ app.directive('areaChartDirective', function () {
             });
         }
     };
-});
+})
+        .filter('setDecimal', function () {
+            return function (input, places) {
+                if (isNaN(input))
+                    return input;
+                var factor = "1" + Array(+(places > 0 && places + 1)).join("0");
+                return Math.round(input * factor) / factor;
+            };
+        });
 

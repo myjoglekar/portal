@@ -12200,12 +12200,19 @@ module.filter('px', function() {
           hide: 'Hide Column'
         },
         aggregation: {
-          count: 'total rows: ',
-          sum: 'total: ',
-          avg: 'avg: ',
-          min: 'min: ',
-          max: 'max: '
+          count: ' ',
+          sum: ' ',
+          avg: ' ',
+          min: ' ',
+          max: ' '
         },
+//        aggregation: {
+//          count: 'total rows:',
+//          sum: 'total: ',
+//          avg: 'avg: ',
+//          min: 'min: ',
+//          max: 'max: '
+//        },
         pinning: {
           pinLeft: 'Pin Left',
           pinRight: 'Pin Right',
@@ -12248,6 +12255,16 @@ module.filter('px', function() {
           through: 'through',
           of: 'of'
         },
+//        grouping: {
+//          group: ' ',
+//          ungroup: ' ',
+//          aggregate_count: ' ',
+//          aggregate_sum: ' ',
+//          aggregate_max: ' ',
+//          aggregate_min: ' ',
+//          aggregate_avg: ' ',
+//          aggregate_remove: ' '
+//        },
         grouping: {
           group: 'Group',
           ungroup: 'Ungroup',

@@ -22,11 +22,20 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state) {
     
     var counter = 1;
     $scope.tabs = [];
-
-    var addTab = function () {
-        $scope.tabs.push({id: 100, tabName: "New Tab", title: 'Tab ' + counter, content: 'Tab ' + counter, tabClose: 'isClose'});
-        counter++;
-        $scope.tabs[$scope.tabs.length - 1].active = true;
+//$scope.
+   $scope.addTab = function (tab) {//tab = {}
+        //console.log(tab)
+        $scope.tabs.push({tabName: tab.tabName, tabClose: 'isClose'});
+        //counter++;
+        
+        var data = {
+            tabName: tab.tabName
+        };
+        
+        $http({method: 'POST', url: 'admin/ui/dbTabs/'+$stateParams.tabId, data: data}).success(function(response){
+            
+        })
+        //$scope.tabs[$scope.tabs.length - 1].active = true;
     };
 
     var removeTab = function (event, index) {
@@ -35,11 +44,11 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state) {
         $scope.tabs.splice(index, 1);
     };
 
-    $scope.addTab = addTab;
+    //$scope.addTab = addTab;
     $scope.removeTab = removeTab;
 
     for (var i = 0; i < 5; i++) {
-        addTab();
+       // addTab();
     }
 
 //     $scope.dashboardName = $stateParams.tabId

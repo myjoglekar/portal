@@ -7,56 +7,127 @@
              tab-highlight 
              ui-sref="dashboard.widget({widgetId: tab.id?tab.id:100})"
              ng-init="isActive = isActiveTab(tab.tabName, $index)"
-            active="isActive"
-            select="setActiveTab(tab.tabName)">
+             active="isActive"
+             select="setActiveTab(tab.tabName)">
             <tab-heading>
                 <span>{{tab.tabName}}</span> 
                 <i class="glyphicon glyphicon-remove" ng-if="tab.tabClose" ng-click="removeTab($event, $index)"></i>
             </tab-heading>
         </tab>
-        <button class="btn btn-default" ng-click="addTab()"><i class="fa fa-plus"></i></button>
-<!--        <button class="btn btn-default" ng-click="addTab()"><i class="fa fa-plus"></i></button>-->
-    </tabset>
-            <section class="content"> 
-                <div class="row">
-                    <div class="col-md-12">                
-                        <div class="row" ngsf-fullscreen="fullscreenCtrl">
-                             <ui-view></ui-view>
-                         </div>
+        <button class="btn btn-default" data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus"></i></button>
+        <!--        <button class="btn btn-default" ng-click="addTab()"><i class="fa fa-plus"></i></button>-->
+
+
+        <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
+            <div class="modal-dialog modal-md">
+                <!-- Modal content-->
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">TAB</h4>
                     </div>
-                </div>
-            </section> 
-<!--    <section class="content"> 
-        <div class="row">
-            <div class="col-md-12">
 
+                    <div class="modal-body ">
+                        <form class="form-horizontal" role="form">
 
-
-                                <div class="panel with-nav-tabs">
-                                    <div class="panel-heading">
-                                        <ul class="nav nav-tabs">
-                                            <li ng-repeat="tab in tabs" ui-sref-active="active">
-                                                <a class="active" ui-sref="dashboard.widget({widgetId: tab.id})" style="padding:3px 15px;display: inline-block;">
-                                                    {{tab.tabName}}
-                                                </a>
-                                                <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">
-                                                    <i class="glyphicon glyphicon-remove" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)"></i>
-                                                </sup>
-                                            </li>
-                                            <a class="add-tab" ng-click="addTab(tab)" style="cursor: pointer">+ Add Tab</a>
-                                        </ul>                        
+                            <div class="form-group">
+                                <div class="col-sm-12  col-md-12">
+                                    <div class="col-sm-3 col-md-3">
+                                        <label>Tab Name </label>
                                     </div>
-                                    <div class="panel-body">
-                                        <div class="tab-content">
-                                            <div class="tab-pane fade in active">                
-                                                <div class="row" ngsf-fullscreen="fullscreenCtrl">
-                                                    <ui-view></ui-view>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>            
+                                    <div class="col-sm-9 col-md-9">
+                                        <input type="text" ng-model="tab.tabName" class="form-control "/>
+                                    </div>
                                 </div>
+                            </div>
+
+<!--                            <div class="form-group">   
+                                <div class="col-sm col-md-12">
+                                    <div class="col-sm-3 col-md-3">
+                                        <label>Status </label>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3">
+                                        <div ng-controller="DemoController" ng-init="init()">
+
+                                            <i class="fa fa-toggle-on active" ng-if="status == true" ng-click="changeStatus();"></i>
+                                            <i class="fa fa-toggle-on fa-rotate-180 inactive" ng-if="status == false" ng-click="changeStatus();"></i>
+
+
+                                        </div>     
+                                    </div>
+
+                                    <div class="col-sm-2 col-md-1">
+                                        <label>Order</label>
+                                    </div>
+
+                                    <div class="col-sm-2 col-md-5">
+                                        <input type="text" class="form-control "/>
+                                    </div>
+
+                                </div>   
+
+                            </div>-->
+
+                        </form>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-primary btn-xs" ng-click="addTab(tab)"><span class="fa fa-save"></span> Save</button>  
+                            <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> Cancel
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-    </section> -->
+
+
+
+    </tabset>
+    <section class="content"> 
+        <div class="row">
+            <div class="col-md-12">                
+                <div class="row" ngsf-fullscreen="fullscreenCtrl">
+                    <ui-view></ui-view>
+                </div>
+            </div>
+        </div>
+    </section> 
+    <!--    <section class="content"> 
+            <div class="row">
+                <div class="col-md-12">
+    
+    
+    
+                                    <div class="panel with-nav-tabs">
+                                        <div class="panel-heading">
+                                            <ul class="nav nav-tabs">
+                                                <li ng-repeat="tab in tabs" ui-sref-active="active">
+                                                    <a class="active" ui-sref="dashboard.widget({widgetId: tab.id})" style="padding:3px 15px;display: inline-block;">
+                                                        {{tab.tabName}}
+                                                    </a>
+                                                    <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">
+                                                        <i class="glyphicon glyphicon-remove" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)"></i>
+                                                    </sup>
+                                                </li>
+                                                <a class="add-tab" ng-click="addTab(tab)" style="cursor: pointer">+ Add Tab</a>
+                                            </ul>                        
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade in active">                
+                                                    <div class="row" ngsf-fullscreen="fullscreenCtrl">
+                                                        <ui-view></ui-view>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>            
+                                    </div>
+                </div>
+            </div>
+        </section> -->
 </div>
