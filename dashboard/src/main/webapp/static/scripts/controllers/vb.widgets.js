@@ -1,5 +1,7 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
     $scope.widgets = [];
+    
+    $scope.selectAgregations = [{name: 'sum'},{name: 'avg'},{name: 'count'},{name: 'min'},{name: 'max'}]
 
     function getWidgetItem() {
         if (!$stateParams.widgetId) {
@@ -12,14 +14,19 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     getWidgetItem();
 
     $scope.addColumns = function (widget) {
-        widget.columns.push({isEdit: true})
+        widget.columns.unshift({isEdit: true, isDelete: true})
     };
 
     $scope.saveColumn = function (widget, column) {
+        console.log(column)
         //console.log(column)
        // widget.columns.push({displayName: column.displayName, fieldName: column.displayName, agregationFunction: column.agregationFunction})
         //console.log(widget.columns)
     }
+    
+    $scope.deleteColumn = function (index, widget) {
+        widget.columns.splice(index, 1);
+    };
 
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
