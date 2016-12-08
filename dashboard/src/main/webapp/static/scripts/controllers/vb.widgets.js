@@ -141,118 +141,121 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
 });
 
-app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout) {
+app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams) {
     return{
         restrict: 'A',
         scope: {
             dynamicTableUrl: '@',
+            widgetId: '@',
+            widgetColumns: '@',
             setTableFn: '&'
         },
 //        templateUrl: 'static/views/dashboard/dynamicTable.html',
         template: '<div ng-show="loadingPie" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<div class="grid" ui-grid="gridOptions" ui-grid-grouping></div>',
         link: function (scope, element, attr) {
+
+            console.log($stateParams.widgetId)
+            console.log(scope.widgetColumns)
+
+
             scope.loadingPie = true;
             scope.gridOptions = {
-                enableColumnMenus: true,
-                enableGridMenu: true,
+                enableColumnMenus: false,
+                enableGridMenu: false,
                 enableRowSelection: false,
                 enableGroupHeaderSelection: false,
                 enableRowHeaderSelection: false,
-                enableSorting: true,
+                enableSorting: false,
                 multiSelect: false,
-                enableColumnResize: true,
+                enableColumnResize: false,
                 showColumnFooter: true
             }
+            var startDate = "";
+            var endDate = "";
+            var columnDefs = [];
 
-            $http.get(scope.dynamicTableUrl).success(function (response) {
-                scope.loadingPie = false;
-                columnDefs = [];
-                angular.forEach(response.columnDefs, function (value, key) {
-                    columnDef = {
-                        field: value.name,
-                        displayName: value.displayName,
+            angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                columnDef = {
+                    field: value.fieldName,
+                    displayName: value.displayName,
 //                        cellClass: 'space-numbers',
-                        cellTooltip: true,
-                        headerTooltip: true
-                    }
+                    cellTooltip: true,
+                    headerTooltip: true
+                }
 
-                    if (value.aggregationType == "sum") {
-                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
-                                columnDef.cellFilter = 'number: 2',
+                if (value.agregationFunction == "sum") {
+                    columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
+                            columnDef.cellFilter = 'number: 2',
 //                                columnDef.cellClass = 'space-numbers',
-                                columnDef.cellTooltip = true,
-                                columnDef.headerTooltip = true,
-                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD | number:2}}</span></div>'
-                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
-                    }
-                    if (value.aggregationType == "count") {
-                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.COUNT,
-                                //columnDef.cellFilter = 'number: 2';
+                            columnDef.cellTooltip = true,
+                            columnDef.headerTooltip = true,
+                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD | number:2}}</span></div>'
+                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+                }
+                if (value.agregationFunction == "count") {
+                    columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.COUNT,
+                            //columnDef.cellFilter = 'number: 2';
 //                                columnDef.cellClass = 'space-numbers',
-                                columnDef.cellTooltip = true,
-                                columnDef.headerTooltip = true,
-                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
-                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+                            columnDef.cellTooltip = true,
+                            columnDef.headerTooltip = true,
+                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
+                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
 
-                    }
-                    if (value.aggregationType == "max") {
-                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MAX,
-                                //columnDef.cellFilter = 'number: 2';
+                }
+                if (value.agregationFunction == "max") {
+                    columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MAX,
+                            //columnDef.cellFilter = 'number: 2';
 //                                columnDef.cellClass = 'space-numbers',
-                                columnDef.cellTooltip = true,
-                                columnDef.headerTooltip = true,
-                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
-                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+                            columnDef.cellTooltip = true,
+                            columnDef.headerTooltip = true,
+                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
+                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
 
-                    }
-                    if (value.aggregationType == "avg") {
-                        //columnDef.cellFilter = 'number: 2';
-                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.AVG,
+                }
+                if (value.agregationFunction == "avg") {
+                    //columnDef.cellFilter = 'number: 2';
+                    columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.AVG,
 //                                columnDef.cellClass = 'space-numbers',
-                                columnDef.cellTooltip = true,
-                                columnDef.headerTooltip = true,
-                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD | setDecimal:2 }}</span></div>'
-                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
-                        // columnDef.cellFilter = 'formatCaller'
+                            columnDef.cellTooltip = true,
+                            columnDef.headerTooltip = true,
+                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD | setDecimal:2 }}</span></div>'
+                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+                    // columnDef.cellFilter = 'formatCaller'
 
-                    }
-                    if (value.aggregationType == "min") {
+                }
+                if (value.agregationFunction == "min") {
 
-                        columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MIN,
+                    columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MIN,
 //                                columnDef.cellFilter = 'number: 2';
 //                                columnDef.cellClass = 'space-numbers',
-                                columnDef.cellTooltip = true,
-                                columnDef.headerTooltip = true,
-                                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
-                                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
-                    }
-                    if (value.groupOrder) {
-                        columnDef.grouping = {groupPriority: value.groupOrder};
-                    }
-                    //console.log(columnDef);
-                    columnDefs.push(columnDef);
-                });
+                            columnDef.cellTooltip = true,
+                            columnDef.headerTooltip = true,
+                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
+                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
+                }
+                if (value.groupPriority) {
+                    columnDef.grouping = {groupPriority: value.groupPriority};
+                }
+                console.log(columnDef);
+                columnDefs.push(columnDef);
+            });
+            //console.log(columnDefs);
+            $http.get(scope.dynamicTableUrl + "?widgetId=" + scope.widgetId + "&startDate=" + startDate + "&endDate=" + endDate).success(function (response) {
+                scope.loadingPie = false;
                 scope.gridOptions = {
-                    enableColumnMenus: true,
-                    enableGridMenu: true,
+                    enableColumnMenus: false,
+                    enableGridMenu: false,
                     enableRowSelection: false,
                     enableGroupHeaderSelection: false,
                     enableRowHeaderSelection: false,
-                    enableSorting: true,
+                    enableSorting: false,
                     multiSelect: false,
-                    enableColumnResize: true,
+                    enableColumnResize: false,
                     data: response.data,
 //                    data: response.data.slice(0, 14),
                     columnDefs: columnDefs,
-                    showColumnFooter: true,
-                    onRegisterApi: function onRegisterApi(gridApi) {
-                        $timeout(function () {
-                            gridApi.grouping.clearGrouping();
-                            gridApi.grouping.groupColumn('source');
-                            gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-                        });
-                    }
+                    showColumnFooter: true
                 };
 
                 function lineage() {
@@ -408,7 +411,7 @@ app.directive('pieChartDirective', function ($http) {
                     scope.loadingPie = false;
                     // console.log(response)
                     angular.forEach(response.data, function (value, key) {
-                        scope.items.push({value: value.conversions, label: value.source});                        
+                        scope.items.push({value: value.conversions, label: value.source});
                     })
 
                     scope.items.forEach(function (e) {

@@ -6,7 +6,9 @@
 package com.visumbu.vb.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,11 +20,15 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -130,7 +136,12 @@ public class TabWidget implements Serializable {
     @JoinColumn(name = "tab_id", referencedColumnName = "id")
     @ManyToOne
     private DashboardTabs tabId;
+    @OneToMany(mappedBy = "widgetId")
+    private Collection<WidgetColumn> widgetColumnCollection;
 
+    @Transient
+    private List<WidgetColumn> columns;
+    
     public TabWidget() {
     }
 
@@ -344,6 +355,24 @@ public class TabWidget implements Serializable {
 
     public void setTabId(DashboardTabs tabId) {
         this.tabId = tabId;
+    }
+
+    public List<WidgetColumn> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<WidgetColumn> columns) {
+        this.columns = columns;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<WidgetColumn> getWidgetColumnCollection() {
+        return widgetColumnCollection;
+    }
+
+    public void setWidgetColumnCollection(Collection<WidgetColumn> widgetColumnCollection) {
+        this.widgetColumnCollection = widgetColumnCollection;
     }
 
     @Override

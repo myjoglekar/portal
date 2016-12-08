@@ -128,7 +128,7 @@
                                                 </center>-->
                     </div> 
                     <div class="box-body table-responsive" ng-if="widget.chartType === 'table'">
-                        <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}"></div>
+                        <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}"  widget-Columns="{{widget.columns}}"></div>
                         <!--<div dynamic-Table style="height: 100%;" class="ag-fresh"></div>-->
                         <!--                                <div set-Table-Fn="setTableFn(tableFn)"
                                                              dynamic-Table-Url='{{widget.directUrl}}'
@@ -232,19 +232,34 @@
                                     </div>
                                 </div>
 
+                                <!--                                <div class="form-group">
+                                                                    <label class="col-sm-2">Dimensions</label>
+                                                                    <div class="col-sm-4">
+                                                                        <ui-select multiple on-select="selectedDimensions(dimension)" ng-model="dimension" theme="bootstrap" ng-disabled="disabled">
+                                                                            <ui-select-match placeholder="Select Dimensions">{{$item.name}}</ui-select-match>
+                                                                            <ui-select-choices repeat="dataDimension in dataDimensions | filter:$select.search">
+                                                                                {{dataDimension.displayName}}
+                                                                            </ui-select-choices>
+                                                                        </ui-select>                                    
+                                                                    </div>
+                                                                    <label class="col-sm-2">Filter</label>
+                                                                    <div class="col-sm-4">
+                                                                        <input type="text" class="form-control" placeholder="Filter">
+                                                                    </div>
+                                                                </div>-->
                                 <div class="form-group">
-                                    <label class="col-sm-2">Dimensions</label>
-                                    <div class="col-sm-4">
-                                        <ui-select multiple on-select="selectedDimensions(dimension)" ng-model="dimension" theme="bootstrap" ng-disabled="disabled">
-                                            <ui-select-match placeholder="Select Dimensions">{{$item.name}}</ui-select-match>
-                                            <ui-select-choices repeat="dataDimension in dataDimensions | filter:$select.search">
-                                                {{dataDimension.displayName}}
-                                            </ui-select-choices>
-                                        </ui-select>                                    
-                                    </div>
-                                    <label class="col-sm-2">Filter</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" placeholder="Filter">
+                                    <label class="col-sm-2">Columns</label>
+                                    <div class="col-sm-12">
+                                        <!--<input type="text" class="form-control" placeholder="Filter">-->
+                                        <button class="btn btn-warning btn-xs" ng-click="showFieldTable = true"><i class="fa fa-plus"></i></button>
+                                        
+                                        <div ng-show="showFieldTable" class="table-responsive">                                               
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    
+                                                </thead>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
 
