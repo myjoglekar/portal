@@ -84,7 +84,7 @@ public class PaidTabController {
         for (Iterator<AccountDeviceReportRow> reportRow = adwordsAccountDeviceReportRow.iterator(); reportRow.hasNext();) {
             AccountDeviceReportRow row = reportRow.next();
             DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
-            performanceBean.setSource("adwords");
+            performanceBean.setSource("Google");
             performanceBean.setDevice(row.getDevice());
             performanceBean.setConversions(row.getConversions());
             performanceReportBeans.add(performanceBean);
@@ -93,7 +93,7 @@ public class PaidTabController {
         for (Iterator<AccountDevicePerformanceRow> reportRow = bingAccountDevicePerformanceRows.iterator(); reportRow.hasNext();) {
             AccountDevicePerformanceRow row = reportRow.next();
             DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
-            performanceBean.setSource("bing");
+            performanceBean.setSource("Bing");
             performanceBean.setDevice(row.getDeviceType().getValue());
             performanceBean.setConversions(row.getConversions().getValue());
             performanceReportBeans.add(performanceBean);
@@ -124,7 +124,7 @@ public class PaidTabController {
         for (Iterator<CampaignDeviceReportRow> reportRow = adwordsCampaignDeviceReportRow.iterator(); reportRow.hasNext();) {
             CampaignDeviceReportRow row = reportRow.next();
             CampaignDevicePerformanceReportBean performanceBean = new CampaignDevicePerformanceReportBean();
-            performanceBean.setSource("adwords");
+            performanceBean.setSource("Google");
             performanceBean.setDevice(row.getDevice());
             performanceBean.setCampaignName(row.getCampaign());
             performanceBean.setImpressions(row.getImpressions());
@@ -144,7 +144,7 @@ public class PaidTabController {
         for (Iterator<CampaignDevicePerformanceRow> reportRow = bingCampaignDevicePerformanceRows.iterator(); reportRow.hasNext();) {
             CampaignDevicePerformanceRow row = reportRow.next();
             CampaignDevicePerformanceReportBean performanceBean = new CampaignDevicePerformanceReportBean();
-            performanceBean.setSource("bing");
+            performanceBean.setSource("Bing");
 
             performanceBean.setCampaignName(row.getCampaignName().getValue());
             performanceBean.setDevice(row.getDeviceType().getValue());
@@ -161,19 +161,19 @@ public class PaidTabController {
 
         }
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("source", "Source"));
+        columnDefs.add(new ColumnDef("source", "Source", 1));
         columnDefs.add(new ColumnDef("campaignName", "Campaign Name"));
         columnDefs.add(new ColumnDef("device", "Device"));
         columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.SUM));
 
         columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averageCpc", "Average Cpc", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averageCpc", "Average CPC", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.AVG));
         columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.AVG));
 
         Map returnMap = new HashMap();
         returnMap.put("data", performanceReportBeans);
@@ -195,7 +195,7 @@ public class PaidTabController {
         for (Iterator<AccountDeviceReportRow> reportRow = adwordsAccountDeviceReportRow.iterator(); reportRow.hasNext();) {
             AccountDeviceReportRow row = reportRow.next();
             DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
-            performanceBean.setSource("adwords");
+            performanceBean.setSource("Google");
             if (row.getDevice().contains("Tablet")) {
 
                 performanceBean.setDevice("Tablet");
@@ -230,7 +230,7 @@ public class PaidTabController {
         for (Iterator<AccountDevicePerformanceRow> reportRow = bingAccountDevicePerformanceRows.iterator(); reportRow.hasNext();) {
             AccountDevicePerformanceRow row = reportRow.next();
             DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
-            performanceBean.setSource("bing");
+            performanceBean.setSource("Bing");
             performanceBean.setDevice(row.getDeviceType().getValue());
             performanceBean.setImpressions(row.getImpressions().getValue());
             performanceBean.setClicks(row.getClicks().getValue());
@@ -246,18 +246,18 @@ public class PaidTabController {
         }
 
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("source", "Source"));
+        columnDefs.add(new ColumnDef("source", "Source", 1));
         columnDefs.add(new ColumnDef("device", "Device"));
         columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.SUM));
 
         columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averageCpc", "Average Cpc", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averageCpc", "Average CPC", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.AVG));
 
         Map returnMap = new HashMap();
         returnMap.put("data", performanceReportBeans);
@@ -281,7 +281,7 @@ public class PaidTabController {
         for (Iterator<AdGroupReportRow> reportRow = adwordsAdGroupReportRow.iterator(); reportRow.hasNext();) {
             AdGroupReportRow row = reportRow.next();
             AdGroupPerformanceReportBean performanceBean = new AdGroupPerformanceReportBean();
-            performanceBean.setSource("adwords");
+            performanceBean.setSource("Google");
             performanceBean.setCampaignName(row.getCampaign());
             performanceBean.setAdGroupName(row.getAdGroupName());
             performanceBean.setImpressions(row.getImpressions());
@@ -301,7 +301,7 @@ public class PaidTabController {
         for (Iterator<AdGroupPerformanceRow> reportRow = bingAdGroupPerformanceRows.iterator(); reportRow.hasNext();) {
             AdGroupPerformanceRow row = reportRow.next();
             AdGroupPerformanceReportBean performanceBean = new AdGroupPerformanceReportBean();
-            performanceBean.setSource("bing");
+            performanceBean.setSource("Bing");
             performanceBean.setCampaignName(row.getCampaignName().getValue());
             performanceBean.setAdGroupName(row.getAdGroupName().getValue());
             performanceBean.setImpressions(row.getImpressions().getValue());
@@ -335,7 +335,7 @@ public class PaidTabController {
         for (Iterator<CampaignReportRow> reportRow = adwordsCampaignReportRow.iterator(); reportRow.hasNext();) {
             CampaignReportRow row = reportRow.next();
             CampaignPerformanceReportBean campaignBean = new CampaignPerformanceReportBean();
-            campaignBean.setSource("adwords");
+            campaignBean.setSource("Google");
             campaignBean.setCampaignName(row.getCampaign());
             campaignBean.setImpressions(row.getImpressions());
             campaignBean.setClicks(row.getClicks());
@@ -354,7 +354,7 @@ public class PaidTabController {
         for (Iterator<CampaignPerformanceRow> reportRow = bingCampaignPerformanceRows.iterator(); reportRow.hasNext();) {
             CampaignPerformanceRow row = reportRow.next();
             CampaignPerformanceReportBean campaignBean = new CampaignPerformanceReportBean();
-            campaignBean.setSource("bing");
+            campaignBean.setSource("Bing");
             campaignBean.setCampaignName(row.getCampaignName().getValue());
             campaignBean.setImpressions(row.getImpressions().getValue());
             campaignBean.setClicks(row.getClicks().getValue());

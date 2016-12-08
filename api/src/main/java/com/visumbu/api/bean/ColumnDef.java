@@ -35,6 +35,11 @@ public class ColumnDef {
         this.name = name;
         this.displayName = displayName;
     }
+    public ColumnDef(String name, String displayName, Integer groupOrder) {
+        this.name = name;
+        this.displayName = displayName;
+        this.groupOrder = groupOrder;
+    }
 
     public ColumnDef(String name, String displayName, String aggregationType, String format) {
         this.name = name;

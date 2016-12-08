@@ -966,26 +966,26 @@ public class BingService {
         report.setScope(new AccountThroughCampaignReportScope());
         report.getScope().setAccountIds(accountIds);
         report.setTime(new ReportTime());
-        report.setTime(new ReportTime());
-         report.getTime().setPredefinedTime(ReportTimePeriod.YESTERDAY);
+        //report.setTime(new ReportTime());
+        // report.getTime().setPredefinedTime(ReportTimePeriod.YESTERDAY);
         /* Start Date */
-//        Calendar startCal = Calendar.getInstance();
-//        startCal.setTime(startDate);
-//        report.getTime().setCustomDateRangeStart(new com.microsoft.bingads.reporting.Date());
-//        report.getTime().getCustomDateRangeStart().setDay(startCal.get(Calendar.DAY_OF_MONTH));
-//        report.getTime().getCustomDateRangeStart().setMonth(startCal.get(Calendar.MONTH) + 1);
-//        report.getTime().getCustomDateRangeStart().setYear(startCal.get(Calendar.YEAR));
-//
-//        // End Date 
-//        Calendar endCal = Calendar.getInstance();
-//        endCal.setTime(endDate);
-//        report.getTime().setCustomDateRangeEnd(new com.microsoft.bingads.reporting.Date());
-//        System.out.println(endCal.get(Calendar.DAY_OF_MONTH));
-//        System.out.println(endCal.get(Calendar.MONTH) + 1);
-//        System.out.println(endCal.get(Calendar.YEAR));
-//        report.getTime().getCustomDateRangeEnd().setDay(endCal.get(Calendar.DAY_OF_MONTH));
-//        report.getTime().getCustomDateRangeEnd().setMonth(endCal.get(Calendar.MONTH) + 1);
-//        report.getTime().getCustomDateRangeEnd().setYear(endCal.get(Calendar.YEAR));
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTime(startDate);
+        report.getTime().setCustomDateRangeStart(new com.microsoft.bingads.reporting.Date());
+        report.getTime().getCustomDateRangeStart().setDay(startCal.get(Calendar.DAY_OF_MONTH));
+        report.getTime().getCustomDateRangeStart().setMonth(startCal.get(Calendar.MONTH) + 1);
+        report.getTime().getCustomDateRangeStart().setYear(startCal.get(Calendar.YEAR));
+
+        // End Date 
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(endDate);
+        report.getTime().setCustomDateRangeEnd(new com.microsoft.bingads.reporting.Date());
+        System.out.println(endCal.get(Calendar.DAY_OF_MONTH));
+        System.out.println(endCal.get(Calendar.MONTH) + 1);
+        System.out.println(endCal.get(Calendar.YEAR));
+        report.getTime().getCustomDateRangeEnd().setDay(endCal.get(Calendar.DAY_OF_MONTH));
+        report.getTime().getCustomDateRangeEnd().setMonth(endCal.get(Calendar.MONTH) + 1);
+        report.getTime().getCustomDateRangeEnd().setYear(endCal.get(Calendar.YEAR));
 
         ArrayOfCampaignPerformanceReportColumn campaignPerformanceReportColumn = new ArrayOfCampaignPerformanceReportColumn();
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.IMPRESSIONS);
