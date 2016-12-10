@@ -55,6 +55,20 @@ public class WidgetColumn implements Serializable {
     @Size(max = 32)
     @Column(name = "field_name")
     private String fieldName;
+    
+    @Size(max = 128)
+    @Column(name = "x_axis")
+    private String xAxis;
+    @Size(max = 128)
+    @Column(name = "y_axis")
+    private String yAxis;
+    @Size(max = 128)
+    @Column(name = "y_axis_label")
+    private String yAxisLabel;
+    @Size(max = 128)
+    @Column(name = "x_axis_label")
+    private String xAxisLabel;
+    
     @Size(max = 1024)
     @Column(name = "display_name")
     private String displayName;
@@ -114,6 +128,38 @@ public class WidgetColumn implements Serializable {
         this.fieldName = fieldName;
     }
 
+    public String getxAxis() {
+        return xAxis;
+    }
+
+    public void setxAxis(String xAxis) {
+        this.xAxis = xAxis;
+    }
+
+    public String getyAxis() {
+        return yAxis;
+    }
+
+    public void setyAxis(String yAxis) {
+        this.yAxis = yAxis;
+    }
+
+    public String getyAxisLabel() {
+        return yAxisLabel;
+    }
+
+    public void setyAxisLabel(String yAxisLabel) {
+        this.yAxisLabel = yAxisLabel;
+    }
+
+    public String getxAxisLabel() {
+        return xAxisLabel;
+    }
+
+    public void setxAxisLabel(String xAxisLabel) {
+        this.xAxisLabel = xAxisLabel;
+    }
+    
     public String getDisplayName() {
         return displayName;
     }
