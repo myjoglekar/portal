@@ -12,6 +12,7 @@ package com.visumbu.api.bean;
 public class ColumnDef {
 
     private String name;
+    private String type;
     private String sortPriority;
     private String sortDirection;
     private String aggregationType;
@@ -65,6 +66,14 @@ public class ColumnDef {
     }
 
     public ColumnDef() {
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
     
     public String getFormat() {

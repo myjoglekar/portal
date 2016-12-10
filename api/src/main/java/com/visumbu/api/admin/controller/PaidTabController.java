@@ -75,6 +75,16 @@ public class PaidTabController {
     Object getDeviceConversion(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "Source"));
+        columnDefs.add(new ColumnDef("device", "Device"));
+        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
         AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "581-484-4675", "SEARCH");
         AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate);
         List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
@@ -98,15 +108,7 @@ public class PaidTabController {
             performanceBean.setConversions(row.getConversions().getValue());
             performanceReportBeans.add(performanceBean);
         }
-
-        List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("source", "Source"));
-        columnDefs.add(new ColumnDef("device", "Device"));
-        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
-
-        Map returnMap = new HashMap();
         returnMap.put("data", performanceReportBeans);
-        returnMap.put("columnDefs", columnDefs);
         return returnMap;
     }
 
@@ -115,6 +117,27 @@ public class PaidTabController {
     Object getCampaignDevice(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "Source", 1));
+        columnDefs.add(new ColumnDef("campaignName", "Campaign Name"));
+        columnDefs.add(new ColumnDef("device", "Device"));
+        columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.SUM));
+
+        columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "Average CPC", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.AVG));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+
         CampaignDeviceReport adwordsCampaignDeviceReport = adwordsService.getCampaignDeviceReport(startDate, endDate, "581-484-4675", "SEARCH");
         CampaignDevicePerformanceReport bingCampaignDevicePerformanceReport = bingService.getCampaignDevicePerformanceReport(startDate, endDate);
         List<CampaignDeviceReportRow> adwordsCampaignDeviceReportRow = adwordsCampaignDeviceReport.getCampaignDeviceReportRow();
@@ -160,24 +183,7 @@ public class PaidTabController {
             performanceReportBeans.add(performanceBean);
 
         }
-        List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("source", "Source", 1));
-        columnDefs.add(new ColumnDef("campaignName", "Campaign Name"));
-        columnDefs.add(new ColumnDef("device", "Device"));
-        columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.SUM));
-
-        columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averageCpc", "Average CPC", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.AVG));
-
-        Map returnMap = new HashMap();
         returnMap.put("data", performanceReportBeans);
-        returnMap.put("columnDefs", columnDefs);
         return returnMap;
     }
 
@@ -186,6 +192,26 @@ public class PaidTabController {
     Object getAccountDevice(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "Source", 1));
+        columnDefs.add(new ColumnDef("device", "Device"));
+        columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.SUM));
+
+        columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "Average CPC", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.AVG));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
         AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "581-484-4675", "SEARCH");
         AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate);
         List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
@@ -197,15 +223,12 @@ public class PaidTabController {
             DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
             performanceBean.setSource("Google");
             if (row.getDevice().contains("Tablet")) {
-
                 performanceBean.setDevice("Tablet");
             }
             if (row.getDevice().contains("Mobile")) {
-
                 performanceBean.setDevice("Smartphone");
             }
             if (row.getDevice().contains("Computer")) {
-
                 performanceBean.setDevice("Computer");
             }
 //            performanceBean.setDevice(row.getDevice());
@@ -245,23 +268,7 @@ public class PaidTabController {
 
         }
 
-        List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("source", "Source", 1));
-        columnDefs.add(new ColumnDef("device", "Device"));
-        columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.SUM));
-
-        columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averageCpc", "Average CPC", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.AVG));
-
-        Map returnMap = new HashMap();
         returnMap.put("data", performanceReportBeans);
-        returnMap.put("columnDefs", columnDefs);
         return returnMap;
     }
 
@@ -270,6 +277,26 @@ public class PaidTabController {
     Object getAdGroups(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "Source", 1));
+        columnDefs.add(new ColumnDef("campaignName", "Campaign Name"));
+        columnDefs.add(new ColumnDef("adGroupName", "Ad Group Name", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "Average CPC", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.AVG));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
         AddGroupReport adwordsAdGroupReport = adwordsService.getAdGroupReport(startDate, endDate, "581-484-4675", "SEARCH");
         AdGroupPerformanceReport bingAdGroupPerformanceReport = bingService.getAdGroupPerformanceReport(startDate, endDate);
 
@@ -326,6 +353,26 @@ public class PaidTabController {
     Object getCampaign(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "Source", 1));
+        columnDefs.add(new ColumnDef("campaignName", "Campaign Name"));
+        columnDefs.add(new ColumnDef("impressions", "Impressions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("clicks", "Clicks", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("ctr", "CTR", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cost", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "Average CPC", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averagePosition", "Average Position", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("conversions", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "CPA", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "Search Impressions Share", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("searchImpressionsShareLostByBudget", "Search Impressions Share Lost By Budget", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("searchImpressionsShareLostByRank", "Search Impressions Share Lost By Rank", ColumnDef.Aggregation.AVG));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
         CampaignPerformanceReport campaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate);
         CampaignReport campaignReport = adwordsService.getCampaignReport(startDate, endDate, "581-484-4675", "SEARCH");
         List<CampaignPerformanceRow> bingCampaignPerformanceRows = campaignPerformanceReport.getCampaignPerformanceRows();
