@@ -32,24 +32,27 @@ public class ColumnDef {
         public static final String CURRENCY = "currency";
     }
 
-    public ColumnDef(String name, String displayName) {
+    public ColumnDef(String name, String type, String displayName) {
         this.name = name;
+        this.type = type;
         this.displayName = displayName;
     }
-    public ColumnDef(String name, String displayName, Integer groupOrder) {
+    public ColumnDef(String name, String type, String displayName, Integer groupOrder) {
         this.name = name;
+        this.type = type;
         this.displayName = displayName;
         this.groupOrder = groupOrder;
     }
 
-    public ColumnDef(String name, String displayName, String aggregationType, String format) {
+    public ColumnDef(String name, String type, String displayName, String aggregationType, String format) {
         this.name = name;
+        this.type = type;
         this.aggregationType = aggregationType;
         this.displayName = displayName;
         this.format = format;
     }
 
-    public ColumnDef(String name, String displayName, String aggregationType) {
+    public ColumnDef(String name,String type, String displayName, String aggregationType) {
         this.name = name;
         this.aggregationType = aggregationType;
         this.displayName = displayName;
@@ -57,6 +60,7 @@ public class ColumnDef {
 
     public ColumnDef(String name, String sortPriority, String sortDirection, String aggregationType, String displayName, Integer groupOrder, String format) {
         this.name = name;
+        this.type = type;
         this.sortPriority = sortPriority;
         this.sortDirection = sortDirection;
         this.aggregationType = aggregationType;
