@@ -76,6 +76,14 @@ public class UiDao extends BaseDao {
         return widgetColumn;
     }
 
+    public WidgetColumn updateWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
+        if (widgetColumn.getId() != null) {
+            widgetColumn.setWidgetId(getTabWidgetById(widgetId));
+            update(widgetColumn);
+        }
+        return widgetColumn;
+    }
+
     public WidgetColumn deleteWidgetColumn(Integer id) {
         delete(getTabWidgetColumnById(id));
         return null;

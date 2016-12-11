@@ -29,17 +29,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("ui")
-public class UiController extends BaseController{
+public class UiController extends BaseController {
 
     @Autowired
     private UiService uiService;
 
     @Autowired
     private UserService userService;
-    
-    @RequestMapping(value = "product", method=RequestMethod.GET, produces = "application/json")
+
+    @RequestMapping(value = "product", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    List getProduct(HttpServletRequest request, HttpServletResponse response){
+    List getProduct(HttpServletRequest request, HttpServletResponse response) {
         return uiService.getProduct();
     }
 
@@ -77,18 +77,23 @@ public class UiController extends BaseController{
     List getTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
         return uiService.getTabWidget(tabId);
     }
-    
+
     @RequestMapping(value = "widgetColumn/{widgetId}", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     WidgetColumn addWidgetColumn(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer widgetId, @RequestBody WidgetColumn widgetColumn) {
         return uiService.addWidgetColumn(widgetId, widgetColumn);
     }
+
+    @RequestMapping(value = "widgetColumn/{widgetId}", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    WidgetColumn update(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer widgetId, @RequestBody WidgetColumn widgetColumn) {
+        return uiService.updateWidgetColumn(widgetId, widgetColumn);
+    }
+
     @RequestMapping(value = "widgetColumn/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     WidgetColumn deleteWidgetColumn(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
         return uiService.deleteWidgetColumn(id);
     }
-    
-    
 
 }
