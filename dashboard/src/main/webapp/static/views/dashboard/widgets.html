@@ -303,18 +303,18 @@
                                                         </td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
                                                             <div ng-hide="column.isEdit">
-                                                                {{widget.xAxis}}
+                                                                {{column.xAxis}}
                                                             </div>
                                                             <div ng-show="column.isEdit">
-                                                                <input type="text" class="form-control" ng-model="widget.xAxis">
+                                                                <input type="text" class="form-control" ng-model="column.xAxis">
                                                             </div>
                                                         </td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
                                                             <div ng-hide="column.isEdit">
-                                                                {{widget.yAxis}}
+                                                                {{column.yAxis}}
                                                             </div>
                                                             <div ng-show="column.isEdit">
-                                                                <input type="text" class="form-control" ng-model="widget.yAxis">
+                                                                <input type="text" class="form-control" ng-model="column.yAxis">
                                                             </div>                                                            
                                                         </td>
                                                         <td>

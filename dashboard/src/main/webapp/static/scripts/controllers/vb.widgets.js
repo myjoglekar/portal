@@ -275,10 +275,10 @@ app.directive('lineChartDirective', function ($http) {
             var ySeriesOrder = 1;
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 if (value.xAxis) {
-                    xAxis = {name: value.name, displayName: value.displayName};
+                    xAxis = {fieldName: value.fieldName, displayName: value.displayName};
                 }
                 if (value.yAxis) {
-                    yAxis.push({name: value.name, displayName: value.displayName});
+                    yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
                 }
             });
 
@@ -287,18 +287,18 @@ app.directive('lineChartDirective', function ($http) {
 
             $http.get(scope.lineChartUrl).success(function (response) {
                 scope.xAxis = [];
-                console.log(response.data);
+                //console.log(response.data);
                 var loopCount = 1;
-                xTicks = [xAxis.name];
+                xTicks = [xAxis.fieldName];
                 xData = response.data.map(function (a) {
                     xTicks.push(loopCount);
                     loopCount++;
-                    return a[xAxis.name];
+                    return a[xAxis.fieldName];
                 });
                 columns.push(xTicks);
                 angular.forEach(yAxis, function (value, key) {
                     ySeriesData = response.data.map(function (a) {
-                        return a[value.name];
+                        return a[value.fieldName];
                     });
                     ySeriesData.unshift(value.displayName);
                     columns.push(ySeriesData);
@@ -306,7 +306,7 @@ app.directive('lineChartDirective', function ($http) {
                 /*
                  angular.forEach(response.data, function (value, key) {
                  xTicks.push(loopCount);
-                 xData.push(value[xAxis.name]);
+                 xData.push(value[xAxis.fieldName]);
                  //console.log(value)
                  //console.log(key)
                  scope.xAxis.push(value.impressions)
@@ -331,10 +331,11 @@ app.directive('lineChartDirective', function ($http) {
 //                    modData.push(item);
 //                    console.log(modData)
 //                });
+console.log(columns);
                 var chart = c3.generate({
                     bindto: element[0],
                     data: {
-                        x: xAxis.name,
+                        x: xAxis.fieldName,
                         columns: columns
                     },
                     grid: {
