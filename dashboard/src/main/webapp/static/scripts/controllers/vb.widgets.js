@@ -254,6 +254,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
         }
     };
 });
+
 app.directive('lineChartDirective', function ($http) {
     return{
         restrict: 'A',
@@ -267,7 +268,6 @@ app.directive('lineChartDirective', function ($http) {
             lineChartId: '@',
         },
         link: function (scope, element, attr) {
-
 
             var yAxis = [];
             var columns = [];
@@ -287,7 +287,6 @@ app.directive('lineChartDirective', function ($http) {
 
             $http.get(scope.lineChartUrl).success(function (response) {
                 scope.xAxis = [];
-                //console.log(response.data);
                 var loopCount = 1;
                 xTicks = [xAxis.fieldName];
                 xData = response.data.map(function (a) {
@@ -313,25 +312,7 @@ app.directive('lineChartDirective', function ($http) {
                  console.log(scope.xAxis)
                  })
                  */
-
-
-//                var modData = [];
-//                var data = [{"param": "x",
-//                        "val": [1, 2, 3, 4, 6]
-//                    },
-//                    {"param": "y",
-//                        "val": [2, 3, 5, 6, 9]
-//                    }];
-//
-//                data.forEach(function (d, i) {
-//                    var item = ["param-" + d.param];
-//                    d.val.forEach(function (j) {
-//                        item.push(j);
-//                    });
-//                    modData.push(item);
-//                    console.log(modData)
-//                });
-console.log(columns);
+                console.log(columns);
                 var chart = c3.generate({
                     bindto: element[0],
                     data: {
@@ -357,32 +338,10 @@ console.log(columns);
                     }
                 });
             });
-
-//            var chart = c3.generate({
-//                bindto: element[0],
-//                data: {
-//                    columns: [
-//                        ['data1', 30, 200, 100, 400, 150, 250],
-//                        ['data2', 50, 20, 10, 40, 15, 25]
-//                    ]
-//                },
-//                grid: {
-//                    x: {
-//                        show: true,
-////                        lines: [{
-////                                value: 2,
-////                                text: 'Label 2',
-////                                class: 'lineFor2'
-////                            }]
-//                    },
-//                    y: {
-//                        show: true,
-//                    }
-//                }
-//            });
         }
     };
 });
+
 app.directive('barChartDirective', function ($http) {
     return{
         restrict: 'A',
@@ -390,29 +349,58 @@ app.directive('barChartDirective', function ($http) {
             barChartUrl: '@',
             setBarChartFn: '&',
             barChartId: '@',
+            widgetColumns: '@'
         },
         link: function (scope, element, attr) {
 
+            var yAxis = [];
+            var columns = [];
+            var xAxis;
+            var ySeriesOrder = 1;
+            angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                if (value.xAxis) {
+                    xAxis = {fieldName: value.fieldName, displayName: value.displayName};
+                }
+                if (value.yAxis) {
+                    yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
+                }
+            });
+
+            var xData = [];
+            var xTicks = [];
+
+            $http.get(scope.barChartUrl).success(function (response) {
+                scope.xAxis = [];
+                var loopCount = 1;
+                xTicks = [xAxis.fieldName];
+                xData = response.data.map(function (a) {
+                    xTicks.push(loopCount);
+                    loopCount++;
+                    return a[xAxis.fieldName];
+                });
+                columns.push(xTicks);
+                angular.forEach(yAxis, function (value, key) {
+                    ySeriesData = response.data.map(function (a) {
+                        return a[value.fieldName];
+                    });
+                    ySeriesData.unshift(value.displayName);
+                    columns.push(ySeriesData);
+                });
+
+            })
             var chart = c3.generate({
                 bindto: element[0],
                 data: {
-                    columns: [
-                        ['data1', 30, 200, 100, 400, 150, 250],
-                        ['data2', 80, 20, 10, 70, 150, 250]
-                    ],
+                    x: xAxis.fieldName,
+                    columns: columns,
                     type: 'bar',
-                    colors: {
-                        data1: '#74C4C6'
-                    }
+//                    colors: {
+//                        data1: '#74C4C6'
+//                    }
                 },
                 grid: {
                     x: {
-                        show: true,
-//                        lines: [{
-//                                value: 2,
-//                                text: 'Label 2',
-//                                class: 'lineFor2'
-//                            }]
+                        show: true
                     },
                     y: {
                         show: true,

@@ -379,7 +379,7 @@
                                                 <div class="svg-container" area-Chart-Url='{{previewColumn.previewUrl}}' area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                             </div> 
                                             <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
-                                                <div bar-Chart-Url='{{previewColumn.previewUrl}}' bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                                <div bar-Chart-Url='{{previewColumn.previewUrl}}'  widget-Columns="{{previewColumn.columns}}" bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                             </div> 
                                             <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
                                                 <div pie-Chart-Url='{{previewColumn.previewUrl}}' pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
