@@ -60,7 +60,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     , @NamedQuery(name = "TabWidget.findByWidgetTitle", query = "SELECT t FROM TabWidget t WHERE t.widgetTitle = :widgetTitle")
     , @NamedQuery(name = "TabWidget.findByWidth", query = "SELECT t FROM TabWidget t WHERE t.width = :width")
     , @NamedQuery(name = "TabWidget.findByWidthClass", query = "SELECT t FROM TabWidget t WHERE t.widthClass = :widthClass")
-    , @NamedQuery(name = "TabWidget.findByOrder", query = "SELECT t FROM TabWidget t WHERE t.order = :order")
+    , @NamedQuery(name = "TabWidget.findByOrder", query = "SELECT t FROM TabWidget t WHERE t.widgetOrder = :widgetOrder")
     , @NamedQuery(name = "TabWidget.findByDirectUrl", query = "SELECT t FROM TabWidget t WHERE t.directUrl = :directUrl")})
 public class TabWidget implements Serializable {
 
@@ -125,8 +125,8 @@ public class TabWidget implements Serializable {
     @Size(max = 255)
     @Column(name = "width_class")
     private String widthClass;
-    @Column(name = "order")
-    private Integer order;
+    @Column(name = "widget_order")
+    private Integer widgetOrder;
     @Size(max = 45)
     @Column(name = "direct_url")
     private String directUrl;
@@ -325,14 +325,14 @@ public class TabWidget implements Serializable {
         this.widthClass = widthClass;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getWidgetOrder() {
+        return widgetOrder;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setWidgetOrder(Integer widgetOrder) {
+        this.widgetOrder = widgetOrder;
     }
-
+    
     public String getDirectUrl() {
         return directUrl;
     }

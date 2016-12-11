@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">
-                        <div line-Chart-Directive></div>
+                        <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" widget-Columns="{{widget.columns}}"></div>
                         <!--                        <div set-Area-Chart-Fn="setAreaFn(areaChartFn)"
                                                      area-Chart-Directive
                                                      area-Chart-Url='{{widget.url}}'
@@ -97,7 +97,7 @@
                                                 </div>-->
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
-                        <div bar-Chart-Directive></div>
+                        <div bar-Chart-Directive bar-Chart-Url="{{widget.directUrl}}" widget-Columns="{{widget.columns}}"></div>
                         <!--                        <center>
                                                     <div set-Bar-Chart-Fn="setBarFn(barChartFn)"
                                                          bar-Chart-Directive 
@@ -108,7 +108,7 @@
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
 
-                        <div pie-Chart-Directive pie-Chart-Url='{{widget.directUrl}}'></div>
+                        <div pie-Chart-Directive pie-Chart-Url='{{widget.directUrl}}' widget-Columns="{{widget.columns}}"></div>
                         <!--                        <center>
                                                     <div set-Pie-Chart-Fn="setPieFn(pieChartFn)"
                                                          pie-Chart-Directive
@@ -118,7 +118,7 @@
                                                 </center>-->
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
-                        <div area-Chart-Directive></div>
+                        <div area-Chart-Directive area-Chart-Url="{{widget.directUrl}}" widget-Columns="{{widget.columns}}"></div>
                         <!--                        <center>
                                                     <div set-Pie-Chart-Fn="setPieFn(pieChartFn)"
                                                          pie-Chart-Directive
@@ -376,13 +376,13 @@
                                                 <div line-Chart-Url='{{previewColumn.previewUrl}}' widget-Columns="{{previewColumn.columns}}" line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                             </div> 
                                             <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
-                                                <div class="svg-container" area-Chart-Url='{{previewColumn.previewUrl}}' area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                                <div area-Chart-Url='{{previewColumn.previewUrl}}' widget-Columns="{{previewColumn.columns}}" area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                             </div> 
                                             <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
-                                                <div bar-Chart-Url='{{previewColumn.previewUrl}}'  widget-Columns="{{previewColumn.columns}}" bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                                <div bar-Chart-Url='{{previewColumn.previewUrl}}' widget-Columns="{{previewColumn.columns}}" bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                             </div> 
                                             <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
-                                                <div pie-Chart-Url='{{previewColumn.previewUrl}}' pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                                <div pie-Chart-Url='{{previewColumn.previewUrl}}' widget-Columns="{{previewColumn.columns}}" pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                             </div> 
                                             <div class="box-body chart-responsive" ng-if="previewChartType === 'donut'">
                                                 <div donut-Chart-Url='{{previewChartUrl}}' donut-Chart-Directive style="min-height:{{widget.minHeight}}"></div>

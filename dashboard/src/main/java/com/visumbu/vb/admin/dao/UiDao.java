@@ -94,4 +94,9 @@ public class UiDao extends BaseDao {
         return widgetColumn;
     }
 
+    public DashboardTabs getTabById(Integer tabId) {
+        DashboardTabs dashboardTab = (DashboardTabs) sessionFactory.getCurrentSession().get(DashboardTabs.class, tabId);
+        return dashboardTab;
+    }
+
 }

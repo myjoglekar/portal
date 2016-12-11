@@ -46,7 +46,11 @@ public class UiService {
         return uiDao.getDashboardTabs(dbId);
     }
 
-    public TabWidget createTabWidget(TabWidget tabWidget) {
+    public TabWidget createTabWidget(Integer tabId, TabWidget tabWidget) {
+        tabWidget.setTabId(uiDao.getTabById(tabId));
+        if (tabWidget.getId() != null) {
+            return (TabWidget) uiDao.update(tabWidget);
+        }
         return (TabWidget) uiDao.create(tabWidget);
     }
 
@@ -61,7 +65,7 @@ public class UiService {
     public WidgetColumn addWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
         return uiDao.addWidgetColumn(widgetId, widgetColumn);
     }
-    
+
     public WidgetColumn updateWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
         return (WidgetColumn) uiDao.updateWidgetColumn(widgetId, widgetColumn);
     }

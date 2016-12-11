@@ -66,10 +66,16 @@ public class UiController extends BaseController {
         return uiService.getDashboardTabs(dashboardId);
     }
 
-    @RequestMapping(value = "dbWidget", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    TabWidget createTabWidget(HttpServletRequest request, HttpServletResponse response, @RequestBody TabWidget tabWidget) {
-        return uiService.createTabWidget(tabWidget);
+    TabWidget createTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId, @RequestBody TabWidget tabWidget) {
+        return uiService.createTabWidget(tabId, tabWidget);
+    }
+    
+    @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    TabWidget updateTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId, @RequestBody TabWidget tabWidget) {
+        return uiService.createTabWidget(tabId, tabWidget);
     }
 
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.GET, produces = "application/json")

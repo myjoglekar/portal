@@ -99,12 +99,23 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         //$timeout(function () {
         $scope.previewChartType = chartType.type;
         $scope.previewColumn = widget;
+        $scope.widgetPreviewChartUrl = widget.previewUrl;
         console.log($scope.previewColumn)
+        console.log(widget.previewUrl)
         // }, 500);
     };
     $scope.save = function (widget) {
-        console.log(widget, $scope.previewChartType, $scope.widgetPreviewChart);
 
+        var data = {
+            id: widget.id,
+            chartType: $scope.widgetPreviewChart,
+            directUrl: $scope.widgetPreviewChartUrl
+        }
+        $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.widgetId, data: data}).success(function (response) {
+            //getWidgetItem();
+        })
+        widget.directUrl = $scope.widgetPreviewChartUrl;
+        widget.chartType = $scope.previewChartType;
     };
     $scope.onDropComplete = function (index, widget, evt) {
         var otherObj = $scope.widgets[index];
@@ -357,6 +368,7 @@ app.directive('barChartDirective', function ($http) {
             var columns = [];
             var xAxis;
             var ySeriesOrder = 1;
+
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 if (value.xAxis) {
                     xAxis = {fieldName: value.fieldName, displayName: value.displayName};
@@ -425,97 +437,182 @@ app.directive('pieChartDirective', function ($http) {
 //        template: '<div class="text-center"><img ng-show="loadingPie" src="static/img/loading.gif"></div>',
         scope: {
             pieChartUrl: '@',
+            widgetColumns: '@',
             setPieChartFn: '&',
             pieChartId: '@',
             loadingPie: '&'
         },
         link: function (scope, element, attr) {
-            scope.loadingPie = true;
-            if (scope.pieChartUrl) {
-                $http.get(scope.pieChartUrl).success(function (response) {
-                    scope.ajaxLoadingPie = true;
-                    var data = {};
-                    var sites = [];
-                    scope.items = []
-                    scope.loadingPie = false;
-                    // console.log(response)
-                    angular.forEach(response.data, function (value, key) {
-                        scope.items.push({value: value.conversions, label: value.source});
-                    })
+            var yAxis = [];
+            var columns = [];
+            var xAxis;
+            var ySeriesOrder = 1;
+            angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                if (value.xAxis) {
+                    xAxis = {fieldName: value.fieldName, displayName: value.displayName};
+                }
+                if (value.yAxis) {
+                    yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
+                }
+            });
 
-                    scope.items.forEach(function (e) {
-                        sites.push(e.label);
-                        data[e.label] = e.value;
-                    })
-                    var chart = c3.generate({
-                        bindto: element[0],
-//                        bindto: element[0],
-                        data: {
-                            json: [data],
-                            keys: {
-                                value: sites,
-                            },
-                            type: 'pie',
-                            colors: {
-                                Paid: '#74C4C6',
-                                Display: '#228995',
-                                SEO: '#5A717A',
-                                Overall: '#3D464D',
-                                'Dynamic Display': '#F1883C',
-                            },
+            var xData = [];
+            var xTicks = [];
+
+            $http.get(scope.pieChartUrl).success(function (response) {
+                scope.xAxis = [];
+                var loopCount = 1;
+                xTicks = [xAxis.fieldName];
+                xData = response.data.map(function (a) {
+                    xTicks.push(loopCount);
+                    loopCount++;
+                    return a[xAxis.fieldName];
+                });
+                columns.push(xTicks);
+                angular.forEach(yAxis, function (value, key) {
+                    ySeriesData = response.data.map(function (a) {
+                        return a[value.fieldName];
+                    });
+                    ySeriesData.unshift(value.displayName);
+                    columns.push(ySeriesData);
+                });
+
+
+                console.log(columns)
+                var chart = c3.generate({
+                    bindto: element[0],
+                    data: {
+                        x: xAxis.fieldName,
+                        columns: columns,
+                        type: 'pie'
+                    },
+                    grid: {
+                        x: {
+                            show: true
                         },
-                        pie: {
-                            label: {
-                                format: function (value, ratio, id) {
-                                    return value;
+                        y: {
+                            show: true,
+                        }
+                    },
+                    axis: {
+                        x: {
+                            tick: {
+                                format: function (x) {
+                                    return xData[x];
                                 }
                             }
                         }
-                    });
+                    }
                 });
-            }
+            });
         }
     };
 });
-app.directive('areaChartDirective', function () {
+app.directive('areaChartDirective', function ($http) {
     return{
         restrict: 'A',
         scope: {
             setPieChartFn: '&',
-            pieChartId: '@',
-            pieChartUrl: '@'
+            areaChartUrl: '@',
+            widgetColumns: '@',
+            pieChartId: '@'
         },
         link: function (scope, element, attr) {
-            var chart = c3.generate({
-                bindto: element[0],
-                data: {
-                    columns: [
-                        ['data1', 300, 350, 300, 0, 0, 0],
-                        ['data2', 130, 100, 140, 200, 150, 50]
-                    ],
-                    types: {
-                        data1: 'area',
-                        data2: 'area-spline'
-                    },
-                    colors: {
-                        data1: 'hotpink',
-                        data2: 'pink'
-                    }
-                },
-                grid: {
-                    x: {
-                        show: true,
-//                        lines: [{
-//                                value: 2,
-//                                text: 'Label 2',
-//                                class: 'lineFor2'
-//                            }]
-                    },
-                    y: {
-                        show: true,
-                    }
+
+            var yAxis = [];
+            var columns = [];
+            var xAxis;
+            var ySeriesOrder = 1;
+            console.log(scope.widgetColumns)
+            angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                if (value.xAxis) {
+                    xAxis = {fieldName: value.fieldName, displayName: value.displayName};
+                }
+                if (value.yAxis) {
+                    yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
                 }
             });
+
+            var xData = [];
+            var xTicks = [];
+
+            $http.get(scope.areaChartUrl).success(function (response) {
+                scope.xAxis = [];
+                var loopCount = 1;
+                xTicks = [xAxis.fieldName];
+                xData = response.data.map(function (a) {
+                    xTicks.push(loopCount);
+                    loopCount++;
+                    return a[xAxis.fieldName];
+                });
+                columns.push(xTicks);
+                angular.forEach(yAxis, function (value, key) {
+                    ySeriesData = response.data.map(function (a) {
+                        return a[value.fieldName];
+                    });
+                    ySeriesData.unshift(value.displayName);
+                    columns.push(ySeriesData);
+                });
+
+
+                console.log(columns)
+                var chart = c3.generate({
+                    bindto: element[0],
+                    data: {
+                        x: xAxis.fieldName,
+                        columns: columns,
+                        type: 'area'
+                    },
+                    grid: {
+                        x: {
+                            show: true
+                        },
+                        y: {
+                            show: true,
+                        }
+                    },
+                    axis: {
+                        x: {
+                            tick: {
+                                format: function (x) {
+                                    return xData[x];
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+
+//            var chart = c3.generate({
+//                bindto: element[0],
+//                data: {
+//                    columns: [
+//                        ['data1', 300, 350, 300, 0, 0, 0],
+//                        ['data2', 130, 100, 140, 200, 150, 50]
+//                    ],
+//                    types: {
+//                        data1: 'area',
+//                        data2: 'area-spline'
+//                    },
+//                    colors: {
+//                        data1: 'hotpink',
+//                        data2: 'pink'
+//                    }
+//                },
+//                grid: {
+//                    x: {
+//                        show: true,
+////                        lines: [{
+////                                value: 2,
+////                                text: 'Label 2',
+////                                class: 'lineFor2'
+////                            }]
+//                    },
+//                    y: {
+//                        show: true,
+//                    }
+//                }
+//            });
         }
     };
 })
