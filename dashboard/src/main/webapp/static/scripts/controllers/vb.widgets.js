@@ -315,26 +315,26 @@ app.directive('lineChartDirective', function ($http) {
                  */
 
 
-                var modData = [];
-                var data = [{"param": "x",
-                        "val": [1, 2, 3, 4, 6]
-                    },
-                    {"param": "y",
-                        "val": [2, 3, 5, 6, 9]
-                    }];
-
-                data.forEach(function (d, i) {
-                    var item = ["param-" + d.param];
-                    d.val.forEach(function (j) {
-                        item.push(j);
-                    });
-                    modData.push(item);
-                    console.log(modData)
-                });
+//                var modData = [];
+//                var data = [{"param": "x",
+//                        "val": [1, 2, 3, 4, 6]
+//                    },
+//                    {"param": "y",
+//                        "val": [2, 3, 5, 6, 9]
+//                    }];
+//
+//                data.forEach(function (d, i) {
+//                    var item = ["param-" + d.param];
+//                    d.val.forEach(function (j) {
+//                        item.push(j);
+//                    });
+//                    modData.push(item);
+//                    console.log(modData)
+//                });
                 var chart = c3.generate({
                     bindto: element[0],
                     data: {
-                        x: xAxis[x.name],
+                        x: xAxis.name,
                         columns: columns
                     },
                     grid: {

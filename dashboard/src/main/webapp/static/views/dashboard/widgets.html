@@ -303,7 +303,7 @@
                                                         </td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
                                                             <div ng-hide="column.isEdit">
-                                                                {{}}
+                                                                {{widget.xAxis}}
                                                             </div>
                                                             <div ng-show="column.isEdit">
                                                                 <input type="text" class="form-control" ng-model="widget.xAxis">
@@ -311,7 +311,7 @@
                                                         </td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
                                                             <div ng-hide="column.isEdit">
-                                                                {{}}
+                                                                {{widget.yAxis}}
                                                             </div>
                                                             <div ng-show="column.isEdit">
                                                                 <input type="text" class="form-control" ng-model="widget.yAxis">
@@ -373,7 +373,7 @@
                                     <div ng-show="showPreviewChart">
                                         <div class="col-md-12">
                                             <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
-                                                <div line-Chart-Url='{{previewColumn.previewUrl}}' line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                                <div line-Chart-Url='{{previewColumn.previewUrl}}' widget-Columns="{{previewColumn.columns}}" line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                             </div> 
                                             <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
                                                 <div class="svg-container" area-Chart-Url='{{previewColumn.previewUrl}}' area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
