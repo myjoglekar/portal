@@ -387,25 +387,33 @@ app.directive('barChartDirective', function ($http) {
                     columns.push(ySeriesData);
                 });
 
-            })
-            var chart = c3.generate({
-                bindto: element[0],
-                data: {
-                    x: xAxis.fieldName,
-                    columns: columns,
-                    type: 'bar',
-//                    colors: {
-//                        data1: '#74C4C6'
-//                    }
-                },
-                grid: {
-                    x: {
-                        show: true
+
+                console.log(columns)
+                var chart = c3.generate({
+                    bindto: element[0],
+                    data: {
+                        x: xAxis.fieldName,
+                        columns: columns,
+                        type: 'bar'
                     },
-                    y: {
-                        show: true,
+                    grid: {
+                        x: {
+                            show: true
+                        },
+                        y: {
+                            show: true,
+                        }
+                    },
+                    axis: {
+                        x: {
+                            tick: {
+                                format: function (x) {
+                                    return xData[x];
+                                }
+                            }
+                        }
                     }
-                }
+                });
             });
         }
     };

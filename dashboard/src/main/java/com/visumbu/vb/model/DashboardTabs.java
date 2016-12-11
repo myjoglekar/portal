@@ -42,7 +42,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "DashboardTabs.findByModifiedTime", query = "SELECT d FROM DashboardTabs d WHERE d.modifiedTime = :modifiedTime"),
     @NamedQuery(name = "DashboardTabs.findByRemarks", query = "SELECT d FROM DashboardTabs d WHERE d.remarks = :remarks"),
     @NamedQuery(name = "DashboardTabs.findByStatus", query = "SELECT d FROM DashboardTabs d WHERE d.status = :status"),
-    @NamedQuery(name = "DashboardTabs.findByOrder", query = "SELECT d FROM DashboardTabs d WHERE d.order = :order")})
+    @NamedQuery(name = "DashboardTabs.findByTabOrder", query = "SELECT d FROM DashboardTabs d WHERE d.tabOrder = :tabOrder")})
 public class DashboardTabs implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -65,8 +65,8 @@ public class DashboardTabs implements Serializable {
     @Size(max = 64)
     @Column(name = "status")
     private String status;
-    @Column(name = "order")
-    private Integer order;
+    @Column(name = "tab_order")
+    private Integer tabOrder;
     @OneToMany(mappedBy = "tabId")
     private Collection<TabWidget> tabWidgetCollection;
     @JoinColumn(name = "dashboard_id", referencedColumnName = "id")
@@ -128,12 +128,12 @@ public class DashboardTabs implements Serializable {
         this.status = status;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getTabOrder() {
+        return tabOrder;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setTabOrder(Integer tabOrder) {
+        this.tabOrder = tabOrder;
     }
 
     @XmlTransient
