@@ -61,6 +61,10 @@ public class UiService {
     public WidgetColumn addWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
         return uiDao.addWidgetColumn(widgetId, widgetColumn);
     }
+    
+    public WidgetColumn updateWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
+        return (WidgetColumn) uiDao.updateWidgetColumn(widgetId, widgetColumn);
+    }
 
     public WidgetColumn deleteWidgetColumn(Integer id) {
         return uiDao.deleteWidgetColumn(id);
