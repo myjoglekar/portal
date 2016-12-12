@@ -84,19 +84,19 @@ public class PaidTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("source", "string", "Source"));
-        columnDefs.add(new ColumnDef("country", "string", "Country"));
-        columnDefs.add(new ColumnDef("state", "string", "State"));
-        columnDefs.add(new ColumnDef("city", "string", "City"));
-        columnDefs.add(new ColumnDef("zip", "string", "Zip"));
+        columnDefs.add(new ColumnDef("campaignName", "string", "Campaign Name"));
         columnDefs.add(new ColumnDef("impressions", "string", "Impressions"));
         columnDefs.add(new ColumnDef("clicks", "string", "Clicks"));
         columnDefs.add(new ColumnDef("ctr", "string", "CTR"));
-        columnDefs.add(new ColumnDef("cpc", "string", "CPC"));
+        columnDefs.add(new ColumnDef("averagePosition", "string", "Average Position"));
+        columnDefs.add(new ColumnDef("cost", "string", "Cost"));
+        columnDefs.add(new ColumnDef("averageCpc", "string", "Average CPC"));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
         columnDefs.add(new ColumnDef("cpa", "string", "CPA"));
         columnDefs.add(new ColumnDef("impressionShare", "string", "Impression Share"));
-        columnDefs.add(new ColumnDef("avgPosition", "string", "Average Position"));
+        columnDefs.add(new ColumnDef("searchImpressionsShareLostByBudget", "string", "Search Impressions Share Lost By Budget"));
+        columnDefs.add(new ColumnDef("searchImpressionsShareLostByRank", "string", "Search Impressions Share Lost By Rank"));
+        columnDefs.add(new ColumnDef("source", "string", "Source"));
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
@@ -107,6 +107,45 @@ public class PaidTabController {
         List<CampaignPerformanceRow> bingCampaignPerformanceRows = bingCampaignPerformanceReport.getCampaignPerformanceRows();
         List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
         
+        for (Iterator<CampaignPerformanceReportRow> reportRow = adwordsCampaignPerformanceReportRow.iterator(); reportRow.hasNext();) {
+            CampaignPerformanceReportRow row = reportRow.next();
+            CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
+            performanceBean.setSource("Google");
+            performanceBean.setImpressions(row.getImpressions());
+            performanceBean.setClicks(row.getClicks());
+            performanceBean.setCtr(row.getCtr());
+            performanceBean.setAveragePosition(row.getAvgPosition());
+            performanceBean.setCost(row.getCost());
+            performanceBean.setAverageCpc(row.getAvgCPC());
+            performanceBean.setConversions(row.getConversions());
+            performanceBean.setCpa("--");
+            performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());
+            performanceBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
+            performanceBean.setSearchImpressionsShareLostByRank(row.getSearchLostISRank());
+            performanceReportBeans.add(performanceBean);
+        }
+        
+        for (Iterator<CampaignPerformanceRow> reportRow = bingCampaignPerformanceRows.iterator(); reportRow.hasNext();) {
+            CampaignPerformanceRow row = reportRow.next();
+            CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
+            performanceBean.setSource("Bing");
+            performanceBean.setImpressions(row.getImpressions().getValue());
+            performanceBean.setClicks(row.getClicks().getValue());
+            performanceBean.setCtr(row.getCtr().getValue());
+            performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+            performanceBean.setCost(row.getCostPerConversion().getValue());
+            performanceBean.setAverageCpc(row.getClicks().getValue());
+            performanceBean.setCtr(row.getCtr().getValue());
+            performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+            performanceBean.setConversions(row.getConversions().getValue());
+            performanceBean.setCpa("--");
+            performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
+            performanceBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
+            performanceBean.setSearchImpressionsShareLostByRank("--");
+            performanceReportBeans.add(performanceBean);
+
+        }
+        returnMap.put("data", performanceReportBeans);
         
         return returnMap;
     }
