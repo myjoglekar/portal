@@ -83,6 +83,12 @@ public class UiController extends BaseController {
     List getTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
         return uiService.getTabWidget(tabId);
     }
+    
+    @RequestMapping(value = "dbWidget/{widgetId}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    TabWidget deleteTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer widgetId) {
+        return uiService.deleteTabWidget(widgetId);
+    }
 
     @RequestMapping(value = "widgetColumn/{widgetId}", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody

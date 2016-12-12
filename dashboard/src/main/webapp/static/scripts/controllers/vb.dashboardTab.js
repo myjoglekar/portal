@@ -6,36 +6,30 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state) {
     $scope.setActiveTab = function (activeTab) {
         sessionStorage.setItem("activeTab", activeTab);
     };
-    
+
     // Get active tab from localStorage
     $scope.getActiveTab = function () {
         return sessionStorage.getItem("activeTab");
     };
-    
+
     // Check if current tab is active
     $scope.isActiveTab = function (tabName, index) {
         var activeTab = $scope.getActiveTab();
         return (activeTab === tabName || (activeTab === null && index === 0));
     }
-    
-    
-    
+
+
+
     var counter = 1;
     $scope.tabs = [];
-//$scope.
-   $scope.addTab = function (tab) {//tab = {}
-        //console.log(tab)
-        $scope.tabs.push({tabName: tab.tabName, tabClose: 'isClose'});
-        //counter++;
-        
+    $scope.addTab = function (tab) {
+        $scope.tabs.push({tabName: tab.tabName, tabClose: true});
         var data = {
             tabName: tab.tabName
         };
-        
-        $http({method: 'POST', url: 'admin/ui/dbTabs/'+$stateParams.tabId, data: data}).success(function(response){
-            
+        $http({method: 'POST', url: 'admin/ui/dbTabs/' + $stateParams.tabId, data: data}).success(function (response) {
+            tab.tabClose = false;
         })
-        //$scope.tabs[$scope.tabs.length - 1].active = true;
     };
 
     var removeTab = function (event, index) {
@@ -48,7 +42,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state) {
     $scope.removeTab = removeTab;
 
     for (var i = 0; i < 5; i++) {
-       // addTab();
+        // addTab();
     }
 
 //     $scope.dashboardName = $stateParams.tabId

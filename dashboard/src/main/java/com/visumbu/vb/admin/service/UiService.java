@@ -53,6 +53,10 @@ public class UiService {
         }
         return (TabWidget) uiDao.create(tabWidget);
     }
+    
+    public TabWidget deleteTabWidget(Integer id) {
+        return uiDao.deleteTabWidget(id);
+    }
 
     public List<TabWidget> getTabWidget(Integer tabId) {
         return uiDao.getTabWidget(tabId);

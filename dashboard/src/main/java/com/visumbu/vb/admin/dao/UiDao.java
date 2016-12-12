@@ -84,6 +84,11 @@ public class UiDao extends BaseDao {
         return widgetColumn;
     }
 
+    public TabWidget deleteTabWidget(Integer id) {
+        delete(getTabWidgetById(id));
+        return null;
+    }
+
     public WidgetColumn deleteWidgetColumn(Integer id) {
         delete(getTabWidgetColumnById(id));
         return null;
