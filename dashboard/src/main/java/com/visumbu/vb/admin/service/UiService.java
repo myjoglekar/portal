@@ -49,11 +49,21 @@ public class UiService {
     public TabWidget createTabWidget(Integer tabId, TabWidget tabWidget) {
         tabWidget.setTabId(uiDao.getTabById(tabId));
         if (tabWidget.getId() != null) {
-            return (TabWidget) uiDao.update(tabWidget);
+            TabWidget tabWidgetDb = uiDao.getTabWidgetById(tabWidget.getId());
+            if (tabWidget.getWidgetTitle() != null) {
+                tabWidgetDb.setWidgetTitle(tabWidget.getWidgetTitle());
+            }
+            if (tabWidget.getDirectUrl() != null) {
+                tabWidgetDb.setDirectUrl(tabWidget.getDirectUrl());
+            }
+            if (tabWidget.getChartType() != null) {
+                tabWidgetDb.setChartType(tabWidget.getChartType());
+            }
+            return (TabWidget) uiDao.update(tabWidgetDb);
         }
         return (TabWidget) uiDao.create(tabWidget);
     }
-    
+
     public TabWidget deleteTabWidget(Integer id) {
         return uiDao.deleteTabWidget(id);
     }
