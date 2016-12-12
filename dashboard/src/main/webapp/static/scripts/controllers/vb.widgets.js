@@ -1,10 +1,13 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
     $scope.widgets = [];
     $scope.selectAgregations = [{name: 'sum'}, {name: 'avg'}, {name: 'count'}, {name: 'min'}, {name: 'max'}]
-    $http.get('../api/admin/paid/accountDevice?fieldsOnly=true').success(function (response) {
-        $scope.collectionFields = response.columnDefs;
-        //console.log(response)
-    });
+
+    $scope.tableDef = function (widget) {
+        $http.get(widget.directUrl+"?fieldsOnly=true").success(function (response) {
+            $scope.collectionFields = response.columnDefs;
+            //console.log(response)
+        });
+    };
 
     function getWidgetItem() {
         if (!$stateParams.widgetId) {
@@ -26,7 +29,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             agregationFunction: column.agregationFunction,
             displayName: column.displayName,
             fieldName: column.fieldName,
-            groupPriority: column.groupPriority
+            groupPriority: column.groupPriority,
+            xAxis: column.xAxis,
+            yAxis: column.yAxis
         }
         $http({method: column.id ? 'PUT' : 'POST', url: 'admin/ui/widgetColumn/' + widget.id, data: data}).success(function (response) {
             column.id = response.id;
@@ -49,7 +54,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
     $scope.deleteWidget = function (widget) {
         $http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {
-             //getWidgetItem();
+            //getWidgetItem();
         });
     };
 
