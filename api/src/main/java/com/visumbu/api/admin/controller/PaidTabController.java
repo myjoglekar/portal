@@ -106,8 +106,46 @@ public class PaidTabController {
         List<GeoCityLocationPerformanceRow> bingGeoPerformanceRows = bingGeoReport.getGeoCityLocationPerformanceRows();
         List<GeoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
         
-        return null;
+        for (Iterator<GeoReportRow> reportRow = adWordsGeoPerformanceRow.iterator(); reportRow.hasNext();) {
+            GeoReportRow row = reportRow.next();
+            GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
+            performanceBean.setSource("Google");
+            performanceBean.setCountry(row.getCountryCriteriaId());
+            performanceBean.setState("--");
+            performanceBean.setCity(row.getCityCriteriaId());
+            performanceBean.setZip("--");
+            performanceBean.setImpressions(row.getImpressions());
+            performanceBean.setClicks(row.getClicks());
+            performanceBean.setCtr(row.getCtr());
+            performanceBean.setAverageCpc(row.getAvgCPC());
+            performanceBean.setConversions(row.getConversions());
+            performanceBean.setCpa("--");
+            performanceBean.setSearchImpressionsShare(row.getSearchBudgetLostImpressionShare());
+            performanceBean.setAveragePosition(row.getAvgPosition());
+            performanceReportBeans.add(performanceBean);
+        }
+        
+        for (Iterator<GeoCityLocationPerformanceRow> reportRow = bingGeoPerformanceRows.iterator(); reportRow.hasNext();) {
+            GeoCityLocationPerformanceRow row = reportRow.next();
+            GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
+            performanceBean.setSource("Bing");
+            performanceBean.setCountry(row.getCountry() == null ? "-" : row.getCountry().getValue());
+            performanceBean.setState(row.getState().getValue());
+            performanceBean.setCity(row.getCity().getValue());
+            performanceBean.setZip("--");            
+            performanceBean.setImpressions(row.getImpressions().getValue());
+            performanceBean.setClicks(row.getClicks().getValue());
+            performanceBean.setCtr(row.getCtr().getValue());            
+            performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+            performanceBean.setConversions(row.getConversions().getValue());
+            performanceBean.setCpa(row.getCostPerConversion().getValue());
+            performanceBean.setSearchImpressionsShare("--");            
+            performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+            performanceReportBeans.add(performanceBean);
 
+        }
+        returnMap.put("data", performanceReportBeans);
+        return returnMap;
     }
 
     @RequestMapping(value = "deviceConversion", method = RequestMethod.GET, produces = "application/json")
