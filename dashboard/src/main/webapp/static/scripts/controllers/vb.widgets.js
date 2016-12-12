@@ -30,8 +30,28 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         }
         $http({method: column.id ? 'PUT' : 'POST', url: 'admin/ui/widgetColumn/' + widget.id, data: data}).success(function (response) {
             column.id = response.id;
-        })
-    }
+        });
+    };
+
+    //var uid = 100;
+    $scope.addWidget = function (newWidget) {
+        //$scope.id = uid++;
+        $scope.widgets.push({width: newWidget.panelWidth, 'minHeight': 25, columns: []});
+
+        var data = {
+            width: newWidget.panelWidth, 'minHeight': 25, columns: []
+        };
+
+        $http({method: 'POST', url: 'admin/ui/dbWidget/' + $stateParams.widgetId, data: data}).success(function (response) {
+            getWidgetItem();
+        });
+    };
+
+    $scope.deleteWidget = function (widget) {
+        $http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {
+             //getWidgetItem();
+        });
+    };
 
     $scope.deleteColumn = function (index, widget, column) {
         $http({method: 'DELETE', url: 'admin/ui/widgetColumn/' + column.id}).success(function () {
@@ -50,11 +70,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $http.get("static/datas/panelSize.json").success(function (response) {
         $scope.newPanels = response;
     });
-    var uid = 100;
-    $scope.addNewPanel = function (newPanel) {
-        $scope.id = uid++;
-        $scope.widgets.push({id: $scope.id, chartType: "", width: newPanel.panelWidth});
-    };
 
     //Data Source
     $http.get('admin/datasources').success(function (response) {

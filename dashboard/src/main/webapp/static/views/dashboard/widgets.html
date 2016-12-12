@@ -18,21 +18,14 @@
                     <i class="fa fa-plus"></i> Add Widget <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li  ng-repeat="newPanel in newPanels">
-                        <a href="" ng-click="addNewPanel(newPanel)">{{newPanel.panelId}}</a>
+                    <li  ng-repeat="newWidget in newPanels">
+                        <a href="" ng-click="addWidget(newWidget)">{{newWidget.panelId}}</a>
                     </li>
                 </ul>
             </span>
             <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full Screen</a>
             <a class="btn btn-warning" ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh</a>
         </div>
-        <!--<br><br><br/>-->
-
-        <!--                <div class="box box-info light" style="margin-bottom:0px;margin-top: 0%">
-                            <div class="box-header with-border light-blue">
-                                <h3 class="box-title">Questions?</h3>
-                            </div>
-                        </div>-->
     </div> 
     <div ng-repeat="widget in widgets">
 
@@ -85,7 +78,24 @@
                                                         <button type="button" ng-if="widget.chartType == 'table'" class="btn btn-box-tool" data-widget="" ng-click="directiveTableFn()">
                                                             <i class="fa fa-refresh"></i>
                                                         </button>-->
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            <!--<button type="button" class="btn btn-box-tool" data-widget="remove" ng-click="deleteWidget(widget)"><i class="fa fa-times"></i></button>-->
+                            <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                            <div id="delete{{widget.id}}" class="modal fade">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color:#9DD6D7;color:black;">
+                                            <strong>Delete</strong>
+                                            <strong><button class="close" data-dismiss="modal">&times;</button></strong>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span>Want to delete ? </span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget)" data-dismiss="modal">Ok</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">

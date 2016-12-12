@@ -11,7 +11,7 @@
              select="setActiveTab(tab.tabName)">
             <tab-heading>
                 <span>{{tab.tabName}}</span> 
-                <i class="glyphicon glyphicon-remove" ng-if="tab.tabClose" ng-click="removeTab($event, $index)"></i>
+                <i class="glyphicon glyphicon-remove" ng-show="tab.tabClose" ng-click="removeTab($event, $index)"></i>
             </tab-heading>
         </tab>
         <button class="btn btn-default" data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus"></i></button>
