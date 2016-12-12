@@ -16,6 +16,8 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReportRow;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReportRow;
+import com.visumbu.api.adwords.report.xml.bean.GeoReport;
+import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
@@ -26,10 +28,13 @@ import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceRow;
 import com.visumbu.api.bing.report.xml.bean.CampaignPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.CampaignPerformanceRow;
+import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceRow;
 import com.visumbu.api.dashboard.bean.AdGroupPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignDevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.DevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
+import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
 import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,6 +74,41 @@ public class PaidTabController {
 
     @Autowired
     private AdwordsService adwordsService;
+
+    @RequestMapping(value = "geoPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getGeoPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "string", "Source"));
+        columnDefs.add(new ColumnDef("country", "string", "Country"));
+        columnDefs.add(new ColumnDef("state", "string", "State"));
+        columnDefs.add(new ColumnDef("city", "string", "City"));
+        columnDefs.add(new ColumnDef("zip", "string", "Zip"));
+        columnDefs.add(new ColumnDef("impressions", "string", "Impressions"));
+        columnDefs.add(new ColumnDef("clicks", "string", "Clicks"));
+        columnDefs.add(new ColumnDef("ctr", "string", "CTR"));
+        columnDefs.add(new ColumnDef("cpc", "string", "CPC"));
+        columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "string", "CPA"));
+        columnDefs.add(new ColumnDef("impressionShare", "string", "Impression Share"));
+        columnDefs.add(new ColumnDef("avgPosition", "string", "Average Position"));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        GeoReport adWordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "581-484-4675", "SEARCH");
+        GeoCityLocationPerformanceReport bingGeoReport = bingService.getGeoCityLocationPerformanceReport(startDate, endDate);
+        List<GeoReportRow> adWordsGeoPerformanceRow = adWordsGeoReport.getGeoReportRow();
+        List<GeoCityLocationPerformanceRow> bingGeoPerformanceRows = bingGeoReport.getGeoCityLocationPerformanceRows();
+        List<GeoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        
+        return null;
+
+    }
 
     @RequestMapping(value = "deviceConversion", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody

@@ -353,28 +353,36 @@ public class BingService {
         return report;
     }
 
-    public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate)
-            throws InterruptedException, ExecutionException, TimeoutException {
-        initAuthentication();
-        ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
-        reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
-        String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
-        ReportRequest reportRequest
-                = getGeoCityLocationPerformanceReportRequest(startDate, endDate);
-
-        ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
-        reportingDownloadParameters.setReportRequest(reportRequest);
-        reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
-        reportingDownloadParameters.setResultFileName(filename);
-        reportingDownloadParameters.setOverwriteResultFile(true);
-
-        // You may optionally cancel the downloadFileAsync operation after a specified time interval.
-        File resultFile = reportingServiceManager.downloadFileAsync(
-                reportingDownloadParameters,
-                null).get(3600000, TimeUnit.MILLISECONDS);
-        GeoCityLocationPerformanceReport report = (GeoCityLocationPerformanceReport) FileReader.readXML(resultFile, GeoCityLocationPerformanceReport.class);
-        System.out.println(report);
-        return report;
+    public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate) {
+        try {
+            initAuthentication();
+            ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
+            reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
+            String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            ReportRequest reportRequest
+                    = getGeoCityLocationPerformanceReportRequest(startDate, endDate);
+            
+            ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
+            reportingDownloadParameters.setReportRequest(reportRequest);
+            reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
+            reportingDownloadParameters.setResultFileName(filename);
+            reportingDownloadParameters.setOverwriteResultFile(true);
+            
+            // You may optionally cancel the downloadFileAsync operation after a specified time interval.
+            File resultFile = reportingServiceManager.downloadFileAsync(
+                    reportingDownloadParameters,
+                    null).get(3600000, TimeUnit.MILLISECONDS);
+            GeoCityLocationPerformanceReport report = (GeoCityLocationPerformanceReport) FileReader.readXML(resultFile, GeoCityLocationPerformanceReport.class);
+            System.out.println(report);
+            return report;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BingService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(BingService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(BingService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public GeoZipLocationPerformanceReport getGeoZipLocationPerformanceReport(Date startDate, Date endDate)

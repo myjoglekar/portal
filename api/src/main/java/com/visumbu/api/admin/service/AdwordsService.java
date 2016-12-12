@@ -588,7 +588,7 @@ public class AdwordsService {
         return null;
     }
 
-    public GeoReport getGeoReport(Date startDate, Date endDate, String accountId) {
+    public GeoReport getGeoReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
