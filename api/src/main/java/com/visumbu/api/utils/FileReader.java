@@ -6,6 +6,9 @@
 package com.visumbu.api.utils;
 
 import com.google.api.ads.adwords.axis.v201603.rm.Rule;
+import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
+import com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.GeoZipLocationPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.KeywordPerformanceReport;
 import java.io.File;
@@ -132,8 +135,8 @@ public class FileReader {
     }
 
     public static void main(String[] argv) {
-        String fileName = "E:\\tmp\\bing-7RCL4QVTA16M57291DSM4Z4XAWXLUNOG.xml";
-        GeoZipLocationPerformanceReport report = (GeoZipLocationPerformanceReport) FileReader.readXML(fileName, GeoZipLocationPerformanceReport.class);
+        String fileName = "E:\\tmp\\adwords-MIZRG2ACLY2WAU2WOT9W92FVS4LC5BJU.xml";
+        CampaignPerformanceReport report = (CampaignPerformanceReport) FileReader.readXML(fileName, CampaignPerformanceReport.class);
         System.out.println(report);
     }
 }

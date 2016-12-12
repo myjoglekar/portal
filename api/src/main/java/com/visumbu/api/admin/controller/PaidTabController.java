@@ -14,6 +14,7 @@ import com.visumbu.api.adwords.report.xml.bean.AdGroupReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AddGroupReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReportRow;
+import com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReportRow;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReportRow;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
@@ -75,6 +76,41 @@ public class PaidTabController {
     @Autowired
     private AdwordsService adwordsService;
 
+    @RequestMapping(value = "campaignPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getCampaignPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "string", "Source"));
+        columnDefs.add(new ColumnDef("country", "string", "Country"));
+        columnDefs.add(new ColumnDef("state", "string", "State"));
+        columnDefs.add(new ColumnDef("city", "string", "City"));
+        columnDefs.add(new ColumnDef("zip", "string", "Zip"));
+        columnDefs.add(new ColumnDef("impressions", "string", "Impressions"));
+        columnDefs.add(new ColumnDef("clicks", "string", "Clicks"));
+        columnDefs.add(new ColumnDef("ctr", "string", "CTR"));
+        columnDefs.add(new ColumnDef("cpc", "string", "CPC"));
+        columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "string", "CPA"));
+        columnDefs.add(new ColumnDef("impressionShare", "string", "Impression Share"));
+        columnDefs.add(new ColumnDef("avgPosition", "string", "Average Position"));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, "581-484-4675", "SEARCH");
+        CampaignPerformanceReport bingCampaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate);
+        List<CampaignPerformanceReportRow> adwordsCampaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
+        List<CampaignPerformanceRow> bingCampaignPerformanceRows = bingCampaignPerformanceReport.getCampaignPerformanceRows();
+        List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        
+        
+        return returnMap;
+    }
+
     @RequestMapping(value = "geoPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getGeoPerformance(HttpServletRequest request, HttpServletResponse response) {
@@ -105,7 +141,7 @@ public class PaidTabController {
         List<GeoReportRow> adWordsGeoPerformanceRow = adWordsGeoReport.getGeoReportRow();
         List<GeoCityLocationPerformanceRow> bingGeoPerformanceRows = bingGeoReport.getGeoCityLocationPerformanceRows();
         List<GeoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-        
+
         for (Iterator<GeoReportRow> reportRow = adWordsGeoPerformanceRow.iterator(); reportRow.hasNext();) {
             GeoReportRow row = reportRow.next();
             GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
@@ -124,7 +160,7 @@ public class PaidTabController {
             performanceBean.setAveragePosition(row.getAvgPosition());
             performanceReportBeans.add(performanceBean);
         }
-        
+
         for (Iterator<GeoCityLocationPerformanceRow> reportRow = bingGeoPerformanceRows.iterator(); reportRow.hasNext();) {
             GeoCityLocationPerformanceRow row = reportRow.next();
             GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
@@ -132,14 +168,14 @@ public class PaidTabController {
             performanceBean.setCountry(row.getCountry() == null ? "-" : row.getCountry().getValue());
             performanceBean.setState(row.getState().getValue());
             performanceBean.setCity(row.getCity().getValue());
-            performanceBean.setZip("--");            
+            performanceBean.setZip("--");
             performanceBean.setImpressions(row.getImpressions().getValue());
             performanceBean.setClicks(row.getClicks().getValue());
-            performanceBean.setCtr(row.getCtr().getValue());            
+            performanceBean.setCtr(row.getCtr().getValue());
             performanceBean.setAverageCpc(row.getAverageCpc().getValue());
             performanceBean.setConversions(row.getConversions().getValue());
             performanceBean.setCpa(row.getCostPerConversion().getValue());
-            performanceBean.setSearchImpressionsShare("--");            
+            performanceBean.setSearchImpressionsShare("--");
             performanceBean.setAveragePosition(row.getAveragePosition().getValue());
             performanceReportBeans.add(performanceBean);
 

@@ -14,10 +14,10 @@ http://www.springframework.org/schema/tx/spring-tx.xsd
 http://www.springframework.org/schema/mvc
 http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:property-placeholder location="/WEB-INF/database.properties" />
+   <!-- <context:property-placeholder location="/WEB-INF/database.properties" /> -->
     <context:component-scan base-package="com.visumbu.api.admin" />
 
-    <tx:annotation-driven transaction-manager="hibernateTransactionManager"/>
+<!--     <tx:annotation-driven transaction-manager="hibernateTransactionManager"/> -->
     <mvc:annotation-driven />
 
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
@@ -58,7 +58,7 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd">
             </list>
         </property>
     </bean>
-    
+    <!--
     <bean id="dataSource"
           class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="${database.driver}" />
@@ -87,7 +87,7 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <bean id="hibernateTransactionManager"
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
-    </bean>
+    </bean> -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
     </bean>
 </beans>

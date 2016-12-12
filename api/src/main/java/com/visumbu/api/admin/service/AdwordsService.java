@@ -35,6 +35,7 @@ import com.visumbu.api.adwords.report.xml.bean.AccountReport;
 import com.visumbu.api.adwords.report.xml.bean.AdReport;
 import com.visumbu.api.adwords.report.xml.bean.AddGroupReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
+import com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.bing.report.xml.bean.KeywordPerformanceReport;
@@ -347,6 +348,71 @@ public class AdwordsService {
         return null;
     }
 
+    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate, String accountId, String filter) {
+        AdWordsSession session = getSession(accountId);
+        com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
+        selector.getFields().addAll(Lists.newArrayList("CampaignId", "CampaignName", "Impressions", "Clicks", "Date",
+                "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
+        ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
+        // Create report definition.
+        ReportDefinition reportDefinition = new ReportDefinition();
+        reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setReportType(ReportDefinitionReportType.CAMPAIGN_PERFORMANCE_REPORT);
+        reportDefinition.setDownloadFormat(DownloadFormat.XML);
+
+        // Optional: Set the reporting configuration of the session to suppress header, column name, or
+        // summary rows in the report output. You can also configure this via your ads.properties
+        // configuration file. See AdWordsSession.Builder.from(Configuration) for details.
+        // In addition, you can set whether you want to explicitly include or exclude zero impression
+        // rows.
+        ReportingConfiguration reportingConfiguration
+                = new ReportingConfiguration.Builder()
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
+        session.setReportingConfiguration(reportingConfiguration);
+
+        reportDefinition.setSelector(selector);
+
+        try {
+            String filename = XML_FILE_DIR + "adwords-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            // Set the property api.adwords.reportDownloadTimeout or call
+            // ReportDownloader.setReportDownloadTimeout to set a timeout (in milliseconds)
+            // for CONNECT and READ in report downloads.
+            ReportDownloadResponse response
+                    = new ReportDownloader(session).downloadReport(reportDefinition);
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(response.getInputStream(), Charsets.UTF_8));
+            response.saveToFile(filename);
+
+            CampaignPerformanceReport report = (CampaignPerformanceReport) FileReader.readXML(filename, CampaignPerformanceReport.class);
+            System.out.println(report);
+            System.out.printf("Report successfully downloaded to: %s%n", filename);
+            return report;
+        } catch (ReportDownloadResponseException e) {
+            System.out.printf("Report was not downloaded due to: %s%n", e);
+        } catch (ReportException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public CampaignDeviceReport getCampaignDeviceReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
