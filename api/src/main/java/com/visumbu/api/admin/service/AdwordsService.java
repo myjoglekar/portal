@@ -174,13 +174,21 @@ public class AdwordsService {
             aggregationDuration = "HourOfDay";
         }
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
-        selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                "Impressions", "Clicks", aggregationDuration,
-                "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
-        ));
-
+        if (aggregation.equalsIgnoreCase("hourOfDay")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", aggregationDuration,
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", aggregationDuration,
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());

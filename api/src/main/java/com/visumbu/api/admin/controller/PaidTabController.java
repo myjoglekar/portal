@@ -40,6 +40,7 @@ import com.visumbu.api.dashboard.bean.CampaignDevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.DevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
+import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
 import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
@@ -112,18 +113,18 @@ public class PaidTabController {
             List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
             //returnMap.put("bing", bingAccountPerformanceRows);
             //returnMap.put("adwords", adwordsAccountReportRows);
-            Map<String, ClicksImpressionsGraphBean> dataMap = new HashMap<>();
+            Map<String, ClicksImpressionsHourOfDayBean> dataMap = new HashMap<>();
             for (Iterator<AccountReportRow> iterator = adwordsAccountReportRows.iterator(); iterator.hasNext();) {
                 AccountReportRow accountReportRow = iterator.next();
-                String day = accountReportRow.getDayOfWeek();
+                String day = accountReportRow.getHourOfDay();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
                 Double cost = Double.parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
                 Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
 
                 String adwordsStartDayOfWeek = day;
-                ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
-                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                ClicksImpressionsHourOfDayBean oldBean = dataMap.get(adwordsStartDayOfWeek);
+                ClicksImpressionsHourOfDayBean bean = new ClicksImpressionsHourOfDayBean();
                 if (oldBean != null) {
                     clicks += oldBean.getClicks();
                     impressions += oldBean.getImpressions();
@@ -134,21 +135,21 @@ public class PaidTabController {
                 bean.setImpressions(impressions);
                 bean.setCost(cost);
                 bean.setConversions(conversions);
-                bean.setWeekDay(adwordsStartDayOfWeek);
+                bean.setHourOfDay(adwordsStartDayOfWeek);
                 dataMap.put(adwordsStartDayOfWeek, bean);
             }
 
             for (Iterator<AccountPerformanceRow> iterator = bingAccountPerformanceRows.iterator(); iterator.hasNext();) {
                 AccountPerformanceRow accountReportRow = iterator.next();
-                String day = accountReportRow.getDayOfWeek().getValue();
+                String day = accountReportRow.getHourOfDay().getValue();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
                 Double cost = Double.parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
                 Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
 
-                String bingStartDayOfWeek = DateUtils.getDayOfWeek(Integer.parseInt(day));
-                ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
-                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                String bingStartDayOfWeek = day;
+                ClicksImpressionsHourOfDayBean oldBean = dataMap.get(bingStartDayOfWeek);
+                ClicksImpressionsHourOfDayBean bean = new ClicksImpressionsHourOfDayBean();
                 if (oldBean != null) {
                     clicks += oldBean.getClicks();
                     impressions += oldBean.getImpressions();
@@ -159,7 +160,7 @@ public class PaidTabController {
                 bean.setImpressions(impressions);
                 bean.setCost(cost);
                 bean.setConversions(conversions);
-                bean.setWeekDay(bingStartDayOfWeek);
+                bean.setHourOfDay(bingStartDayOfWeek);
                 dataMap.put(bingStartDayOfWeek, bean);
             }
             returnMap.put("data", dataMap.values());

@@ -35,7 +35,17 @@ public class AccountReportRow {
     private String SearchBudgetLostImpressionShare;
     private String convRate;
     private String dayOfWeek;
+    private String hourOfDay;
 
+    public String getHourOfDay() {
+        return hourOfDay;
+    }
+
+    @XmlAttribute
+    public void setHourOfDay(String hourOfDay) {
+        this.hourOfDay = hourOfDay;
+    }
+    
     public String getDayOfWeek() {
         return dayOfWeek;
     }
