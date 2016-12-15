@@ -170,6 +170,8 @@ public class AdwordsService {
             aggregationDuration = "Week";
         } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
             aggregationDuration = "DayOfWeek";
+        } else if (aggregation.equalsIgnoreCase("hourOfDay")) {
+            aggregationDuration = "HourOfDay";
         }
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",

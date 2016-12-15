@@ -33,6 +33,16 @@ public class AccountPerformanceRow {
     private Data averagePosition;
     private Data phoneCalls;
     private Data dayOfWeek;
+    private Data hourOfDay;
+
+    public Data getHourOfDay() {
+        return hourOfDay;
+    }
+
+    @XmlElement(name = "HourOfDay")
+    public void setHourOfDay(Data hourOfDay) {
+        this.hourOfDay = hourOfDay;
+    }
 
     public Data getDayOfWeek() {
         return dayOfWeek;
