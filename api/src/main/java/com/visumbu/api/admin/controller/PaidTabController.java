@@ -10,6 +10,8 @@ import com.visumbu.api.admin.service.BingService;
 import com.visumbu.api.admin.service.UserService;
 import com.visumbu.api.adwords.report.xml.bean.AccountDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.AccountDeviceReportRow;
+import com.visumbu.api.adwords.report.xml.bean.AccountReport;
+import com.visumbu.api.adwords.report.xml.bean.AccountReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AdGroupReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AddGroupReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
@@ -23,6 +25,8 @@ import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceRow;
+import com.visumbu.api.bing.report.xml.bean.AccountPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.AccountPerformanceRow;
 import com.visumbu.api.bing.report.xml.bean.AdGroupPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AdGroupPerformanceRow;
 import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceReport;
@@ -35,6 +39,7 @@ import com.visumbu.api.dashboard.bean.AdGroupPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignDevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.DevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
+import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
 import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
@@ -44,6 +49,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -76,6 +85,91 @@ public class PaidTabController {
     @Autowired
     private AdwordsService adwordsService;
 
+    @RequestMapping(value = "clicksImpressionsGraph", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getClicksImpressionsGraph(HttpServletRequest request, HttpServletResponse response) {
+        Map returnMap = new HashMap();
+        try {
+            Date startDate = DateUtils.get12WeeksBack();
+            Date endDate = DateUtils.getToday();
+            String fieldsOnly = request.getParameter("fieldsOnly");
+            List<ColumnDef> columnDefs = new ArrayList<>();
+            columnDefs.add(new ColumnDef("weekDay", "String", "Week Day"));
+            columnDefs.add(new ColumnDef("clicks", "number", "Clicks"));
+            columnDefs.add(new ColumnDef("impressions", "number", "Impressions"));
+            returnMap.put("columnDefs", columnDefs);
+            if (fieldsOnly != null) {
+                return returnMap;
+            }
+            List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
+            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily");
+            AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, "daily");
+            List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
+            List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
+            //returnMap.put("bing", bingAccountPerformanceRows);
+            //returnMap.put("adwords", adwordsAccountReportRows);
+            Map<String, ClicksImpressionsGraphBean> dataMap = new HashMap<>();
+            for (Iterator<AccountReportRow> iterator = adwordsAccountReportRows.iterator(); iterator.hasNext();) {
+                AccountReportRow accountReportRow = iterator.next();
+                String day = accountReportRow.getDay();
+                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
+                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
+                Integer cost = Integer.parseInt(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
+                Integer conversions = Integer.parseInt(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+
+                String adwordsStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "yyyy-MM-dd"));
+                ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
+                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                if (oldBean != null) {
+                    clicks += oldBean.getClicks();
+                    impressions += oldBean.getImpressions();
+                    cost += oldBean.getCost();
+                    conversions += oldBean.getConversions();
+                }
+                bean.setClicks(clicks);
+                bean.setImpressions(impressions);
+                bean.setCost(cost);
+                bean.setConversions(conversions);
+                bean.setWeekDay(adwordsStartDayOfWeek);
+                dataMap.put(adwordsStartDayOfWeek, bean);
+            }
+
+            for (Iterator<AccountPerformanceRow> iterator = bingAccountPerformanceRows.iterator(); iterator.hasNext();) {
+                AccountPerformanceRow accountReportRow = iterator.next();
+                String day = accountReportRow.getGregorianDate().getValue();
+                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
+                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
+                Integer cost = Integer.parseInt(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
+                Integer conversions = Integer.parseInt(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+
+                String bingStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "MM/dd/yyyy"));
+                ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
+                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                if (oldBean != null) {
+                    clicks += oldBean.getClicks();
+                    impressions += oldBean.getImpressions();
+                    cost += oldBean.getCost();
+                    conversions += oldBean.getConversions();
+                }
+                bean.setClicks(clicks);
+                bean.setImpressions(impressions);
+                bean.setCost(cost);
+                bean.setConversions(conversions);
+                bean.setWeekDay(bingStartDayOfWeek);
+                dataMap.put(bingStartDayOfWeek, bean);
+            }
+            returnMap.put("data", dataMap.values());
+
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnMap;
+    }
+
     @RequestMapping(value = "campaignPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getCampaignPerformance(HttpServletRequest request, HttpServletResponse response) {
@@ -106,7 +200,7 @@ public class PaidTabController {
         List<CampaignPerformanceReportRow> adwordsCampaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
         List<CampaignPerformanceRow> bingCampaignPerformanceRows = bingCampaignPerformanceReport.getCampaignPerformanceRows();
         List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-        
+
         for (Iterator<CampaignPerformanceReportRow> reportRow = adwordsCampaignPerformanceReportRow.iterator(); reportRow.hasNext();) {
             CampaignPerformanceReportRow row = reportRow.next();
             CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
@@ -124,7 +218,7 @@ public class PaidTabController {
             performanceBean.setSearchImpressionsShareLostByRank(row.getSearchLostISRank());
             performanceReportBeans.add(performanceBean);
         }
-        
+
         for (Iterator<CampaignPerformanceRow> reportRow = bingCampaignPerformanceRows.iterator(); reportRow.hasNext();) {
             CampaignPerformanceRow row = reportRow.next();
             CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
@@ -146,7 +240,7 @@ public class PaidTabController {
 
         }
         returnMap.put("data", performanceReportBeans);
-        
+
         return returnMap;
     }
 

@@ -192,11 +192,11 @@ public class AccountReportRow {
         return SearchBudgetLostImpressionShare;
     }
 
+    @XmlAttribute
     public void setSearchBudgetLostImpressionShare(String SearchBudgetLostImpressionShare) {
         this.SearchBudgetLostImpressionShare = SearchBudgetLostImpressionShare;
     }    
 
-    @XmlAttribute
     public String getConvRate() {
         return convRate;
     }

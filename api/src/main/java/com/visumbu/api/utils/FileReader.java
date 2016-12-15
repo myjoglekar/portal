@@ -6,6 +6,7 @@
 package com.visumbu.api.utils;
 
 import com.google.api.ads.adwords.axis.v201603.rm.Rule;
+import com.visumbu.api.adwords.report.xml.bean.AccountReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceReport;
@@ -135,8 +136,10 @@ public class FileReader {
     }
 
     public static void main(String[] argv) {
-        String fileName = "E:\\tmp\\adwords-MIZRG2ACLY2WAU2WOT9W92FVS4LC5BJU.xml";
-        CampaignPerformanceReport report = (CampaignPerformanceReport) FileReader.readXML(fileName, CampaignPerformanceReport.class);
-        System.out.println(report);
+        String fileName = "E:\\tmp\\adwords-WOV6LJ5ETDUPPKYBMZ9SORHF2YABHCFQ.xml";
+                    AccountReport areport = (AccountReport) FileReader.readXML(fileName, AccountReport.class);
+System.out.println(areport);
+        //CampaignPerformanceReport report = (CampaignPerformanceReport) FileReader.readXML(fileName, CampaignPerformanceReport.class);
+        //System.out.println(report);
     }
 }

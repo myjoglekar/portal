@@ -15,8 +15,8 @@ import com.google.api.ads.common.lib.auth.OfflineCredentials;
 import com.google.api.ads.common.lib.exception.OAuthException;
 import com.google.api.ads.common.lib.exception.ValidationException;
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.ads.adwords.axis.v201609.cm.DateRange;
 import com.google.api.ads.adwords.lib.client.reporting.ReportingConfiguration;
+import com.google.api.ads.adwords.lib.jaxb.v201609.DateRange;
 import com.google.api.ads.adwords.lib.jaxb.v201609.DownloadFormat;
 import com.google.api.ads.adwords.lib.jaxb.v201609.Predicate;
 import com.google.api.ads.adwords.lib.jaxb.v201609.PredicateOperator;
@@ -163,11 +163,15 @@ public class AdwordsService {
         return null;
     }
 
-    public AccountReport getAccountReport(Date startDate, Date endDate, String accountId) {
+    public AccountReport getAccountReport(Date startDate, Date endDate, String accountId, String aggregation) {
         AdWordsSession session = getSession(accountId);
+        String aggregationDuration = "Date";
+        if(aggregation.equalsIgnoreCase("weekly")) {
+            aggregationDuration = "Week";
+        }
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                "Impressions", "Clicks", "Date",
+                "Impressions", "Clicks", aggregationDuration,
                 "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
                 "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
@@ -176,7 +180,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+            dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+            dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+            selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -710,59 +718,59 @@ public class AdwordsService {
         }
         return null;
     }
-
-    public Object getCampaigns(Date startDate, Date endDate) {
-        try {
-            Credential credential = new OfflineCredentials.Builder()
-                    .forApi(OfflineCredentials.Api.ADWORDS)
-                    .withClientSecrets(clientId, clientSecret)
-                    .withRefreshToken(refreshToken)
-                    .build()
-                    .generateCredential();
-
-            // Construct an AdWordsSession.
-            AdWordsSession session = new AdWordsSession.Builder()
-                    .withDeveloperToken(developerToken)
-                    .withClientCustomerId("581-484-4675")
-                    // ...
-                    .withOAuth2Credential(credential)
-                    .build();
-            // Get the CampaignService.
-            CampaignServiceInterface campaignService
-                    = new AdWordsServices().get(session, CampaignServiceInterface.class);
-
-            /**
-             * Create data objects and invoke methods on the service class
-             * instance. The data objects and methods map directly to the data
-             * objects and requests for the corresponding web service.
-             */
-            // Create selector.
-            Selector selector = new Selector();
-            selector.setFields(new String[]{"Id", "Name", "Impressions", "Clicks", "Date",
-                "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                "Conversions", "SearchImpressionShare", "AveratePosition", "AllConversions",
-                "NumOfflineInteractions",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"});
-            DateRange dateRange = new DateRange();
-            dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
-            dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
-            selector.setDateRange(dateRange);
-
-            // Get all campaigns.
-            CampaignPage page = campaignService.get(selector);
-            Campaign[] entries = page.getEntries();
-            for (int i = 0; i < entries.length; i++) {
-                Campaign entry = entries[i];
-                System.out.println(entry.getName());
-            }
-            return entries;
-        } catch (ValidationException ex) {
-            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (OAuthException ex) {
-            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+//
+//    public Object getCampaigns1(Date startDate, Date endDate) {
+//        try {
+//            Credential credential = new OfflineCredentials.Builder()
+//                    .forApi(OfflineCredentials.Api.ADWORDS)
+//                    .withClientSecrets(clientId, clientSecret)
+//                    .withRefreshToken(refreshToken)
+//                    .build()
+//                    .generateCredential();
+//
+//            // Construct an AdWordsSession.
+//            AdWordsSession session = new AdWordsSession.Builder()
+//                    .withDeveloperToken(developerToken)
+//                    .withClientCustomerId("581-484-4675")
+//                    // ...
+//                    .withOAuth2Credential(credential)
+//                    .build();
+//            // Get the CampaignService.
+//            CampaignServiceInterface campaignService
+//                    = new AdWordsServices().get(session, CampaignServiceInterface.class);
+//
+//            /**
+//             * Create data objects and invoke methods on the service class
+//             * instance. The data objects and methods map directly to the data
+//             * objects and requests for the corresponding web service.
+//             */
+//            // Create selector.
+//            Selector selector = new Selector();
+//            selector.setFields(new String[]{"Id", "Name", "Impressions", "Clicks", "Date",
+//                "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+//                "Conversions", "SearchImpressionShare", "AveratePosition", "AllConversions",
+//                "NumOfflineInteractions",
+//                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"});
+//            DateRange dateRange = new DateRange();
+//            dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+//            dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+//            selector.setDateRange(dateRange);
+//
+//            // Get all campaigns.
+//            CampaignPage page = campaignService.get(selector);
+//            Campaign[] entries = page.getEntries();
+//            for (int i = 0; i < entries.length; i++) {
+//                Campaign entry = entries[i];
+//                System.out.println(entry.getName());
+//            }
+//            return entries;
+//        } catch (ValidationException ex) {
+//            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (RemoteException ex) {
+//            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (OAuthException ex) {
+//            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
 }

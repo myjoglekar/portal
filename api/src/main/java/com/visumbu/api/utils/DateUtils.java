@@ -22,6 +22,23 @@ import java.util.logging.Logger;
  */
 public class DateUtils {
 
+    public static String getStartDayOfWeek(Date date) {
+        // Get calendar set to current date and time
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+// Set the calendar to sunday of the current week
+        c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+
+// Print dates of the current week starting on Monday
+        return toGaDate(c.getTime());
+    }
+
+    public static Date get12WeeksBack() {
+        Calendar calReturn = Calendar.getInstance();
+        calReturn.add(Calendar.DATE, -84);
+        return calReturn.getTime();
+    }
+
     public static Date get30DaysBack() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd ");
         Calendar cal = Calendar.getInstance();

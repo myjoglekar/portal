@@ -126,14 +126,14 @@ public class BingService {
         return report;
     }
 
-    public AccountPerformanceReport getAccountPerformanceReport(Date startDate, Date endDate)
+    public AccountPerformanceReport getAccountPerformanceReport(Date startDate, Date endDate, String aggregation)
             throws InterruptedException, ExecutionException, TimeoutException {
         initAuthentication();
         ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
         reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
         String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
         ReportRequest reportRequest
-                = getAccountPerformaceReportRequest(startDate, endDate);
+                = getAccountPerformaceReportRequest(startDate, endDate, aggregation);
 
         ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
         reportingDownloadParameters.setReportRequest(reportRequest);
@@ -209,13 +209,13 @@ public class BingService {
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
                     = getAccountDevicePerformaceReportRequest(startDate, endDate);
-            
+
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
             reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
             reportingDownloadParameters.setResultFileName(filename);
             reportingDownloadParameters.setOverwriteResultFile(true);
-            
+
             // You may optionally cancel the downloadFileAsync operation after a specified time interval.
             File resultFile = reportingServiceManager.downloadFileAsync(
                     reportingDownloadParameters,
@@ -273,13 +273,13 @@ public class BingService {
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
                     = getCampaignDevicePerformaceReportRequest(startDate, endDate);
-            
+
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
             reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
             reportingDownloadParameters.setResultFileName(filename);
             reportingDownloadParameters.setOverwriteResultFile(true);
-            
+
             // You may optionally cancel the downloadFileAsync operation after a specified time interval.
             File resultFile = reportingServiceManager.downloadFileAsync(
                     reportingDownloadParameters,
@@ -305,13 +305,13 @@ public class BingService {
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
                     = getAdGroupPerformaceReportRequest(startDate, endDate);
-            
+
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
             reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
             reportingDownloadParameters.setResultFileName(filename);
             reportingDownloadParameters.setOverwriteResultFile(true);
-            
+
             // You may optionally cancel the downloadFileAsync operation after a specified time interval.
             File resultFile = reportingServiceManager.downloadFileAsync(
                     reportingDownloadParameters,
@@ -361,13 +361,13 @@ public class BingService {
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
                     = getGeoCityLocationPerformanceReportRequest(startDate, endDate);
-            
+
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
             reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
             reportingDownloadParameters.setResultFileName(filename);
             reportingDownloadParameters.setOverwriteResultFile(true);
-            
+
             // You may optionally cancel the downloadFileAsync operation after a specified time interval.
             File resultFile = reportingServiceManager.downloadFileAsync(
                     reportingDownloadParameters,
@@ -683,13 +683,17 @@ public class BingService {
         return report;
     }
 
-    private ReportRequest getAccountPerformaceReportRequest(Date startDate, Date endDate) {
+    private ReportRequest getAccountPerformaceReportRequest(Date startDate, Date endDate, String aggregation) {
         AccountPerformanceReportRequest report = new AccountPerformanceReportRequest();
         ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
-        report.setAggregation(ReportAggregation.DAILY);
+        if (aggregation.equalsIgnoreCase("weekly")) {
+            report.setAggregation(ReportAggregation.WEEKLY);
+        } else {
+            report.setAggregation(ReportAggregation.DAILY);
+        }
 
         ArrayOflong accountIds = new ArrayOflong();
         accountIds.getLongs().add(authorizationData.getAccountId());
@@ -860,7 +864,7 @@ public class BingService {
         report.getScope().setAccountIds(accountIds);
         report.setTime(new ReportTime());
         //report.setTime(new ReportTime());
-         report.getTime().setPredefinedTime(ReportTimePeriod.YESTERDAY);
+        report.getTime().setPredefinedTime(ReportTimePeriod.YESTERDAY);
         /* Start Date */
 //        Calendar startCal = Calendar.getInstance();
 //        startCal.setTime(startDate);

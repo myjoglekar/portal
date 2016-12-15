@@ -76,7 +76,7 @@ public class BingController {
         try {
             Date startDate = DateUtils.get30DaysBack();
             Date endDate = new Date();
-            return bingService.getAccountPerformanceReport(startDate, endDate);
+            return bingService.getAccountPerformanceReport(startDate, endDate, "daily");
         } catch (InterruptedException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
