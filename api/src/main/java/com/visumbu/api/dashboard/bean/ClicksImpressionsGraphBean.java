@@ -14,43 +14,43 @@ public class ClicksImpressionsGraphBean {
     private String weekDay;
     private Integer impressions;
     private Integer clicks;
-    private Integer cost;
-    private Integer cpc;
-    private Integer conversions;
-    private Integer cpa;
+    private Double cost;
+    private Double cpc;
+    private Double conversions;
+    private Double cpa;
 
-    public Integer getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(Integer cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 
-    public Integer getCpc() {
+    public Double getCpc() {
         return cpc;
     }
 
-    public void setCpc(Integer cpc) {
+    public void setCpc(Double cpc) {
         this.cpc = cpc;
     }
 
-    public Integer getConversions() {
+    public Double getConversions() {
         return conversions;
     }
 
-    public void setConversions(Integer conversions) {
+    public void setConversions(Double conversions) {
         this.conversions = conversions;
     }
 
-    public Integer getCpa() {
+    public Double getCpa() {
         return cpa;
     }
 
-    public void setCpa(Integer cpa) {
+    public void setCpa(Double cpa) {
         this.cpa = cpa;
     }
-    
+   
     public String getWeekDay() {
         return weekDay;
     }

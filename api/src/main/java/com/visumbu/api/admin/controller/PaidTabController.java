@@ -97,6 +97,10 @@ public class PaidTabController {
             columnDefs.add(new ColumnDef("weekDay", "String", "Week Day"));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks"));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions"));
+            columnDefs.add(new ColumnDef("cost", "number", "Cost"));
+            columnDefs.add(new ColumnDef("conversions", "number", "Conversions"));
+            columnDefs.add(new ColumnDef("cpc", "number", "CPC"));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPA"));
             returnMap.put("columnDefs", columnDefs);
             if (fieldsOnly != null) {
                 return returnMap;
@@ -114,8 +118,8 @@ public class PaidTabController {
                 String day = accountReportRow.getDay();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
-                Integer cost = Integer.parseInt(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
-                Integer conversions = Integer.parseInt(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+                Double cost = Double.parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
+                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
 
                 String adwordsStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "yyyy-MM-dd"));
                 ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
@@ -139,8 +143,8 @@ public class PaidTabController {
                 String day = accountReportRow.getGregorianDate().getValue();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
-                Integer cost = Integer.parseInt(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                Integer conversions = Integer.parseInt(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                Double cost = Double.parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
+                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
 
                 String bingStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "MM/dd/yyyy"));
                 ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
