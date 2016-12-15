@@ -4371,12 +4371,6 @@ a.mail-to {
     border-color: #565d64;
 }
 
-.btn-default:hover, .btn-default:active, .btn-default.hover {
-    color: #ceeaeb;
-    background-color: #3d464d;
-    border-color: #565d64;
-}
-
 #daterange-btn {
     background-color: #3d464d;
     color: #9dd5d7;
@@ -4392,12 +4386,12 @@ a.mail-to {
     color: #9dd5d7 !important;
 }
 .ui-grid-cell-contents {
-    color: #000;
+/*    color: #000;
     font-size: 12px;
     font-family: "proxima_nova_semibold",Helvetica,Arial,sans-serif;
     text-overflow: inherit;
     word-wrap: break-word;
-    height:40px;
+    height:40px;*/
 }
 ui-grid-header-cell-label ng-binding {
     z-index: 999999;

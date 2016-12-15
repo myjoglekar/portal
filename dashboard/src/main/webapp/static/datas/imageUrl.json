@@ -1,44 +1,37 @@
 [
     {
-        "id":1,
+        "id": 1,
         "url": "static/img/areachart.png",
         "type": "area",
-        "name": "Area Chart" 
+        "name": "Area Chart",
+        "icon": "fa-area-chart"
     },
     {
-        "id":2,
+        "id": 2,
         "url": "static/img/barchart.png",
         "type": "bar",
-        "name": "Bar Chart"
+        "name": "Bar Chart",
+        "icon": "fa-bar-chart"
     },
     {
-        "id":3,
+        "id": 3,
         "url": "static/img/linechart.ico",
         "type": "line",
-        "name": "Line Chart"
+        "name": "Line Chart",
+        "icon": "fa-line-chart"
     },
     {
-        "id":4,
+        "id": 4,
         "url": "static/img/piechart.ico",
         "type": "pie",
-        "name": "Pie Chart"
-    },
+        "name": "Pie Chart",
+        "icon": "fa-pie-chart"
+    },    
     {
-        "id":5,
-        "url": "static/img/groupedbarchart.png",
-        "type": "groupedbar",
-        "name": "Grouped Bar Chart"
-    },
-    {
-        "id":6,
-        "url": "static/img/doughnutchart.png",
-        "type": "donut",
-        "name": "Doughnut Chart"
-    },
-     {
-        "id":7,
+        "id": 7,
         "url": "static/img/table.png",
         "type": "table",
-        "name": "Table"
+        "name": "Table",
+        "icon": "fa-table"
     }
 ]

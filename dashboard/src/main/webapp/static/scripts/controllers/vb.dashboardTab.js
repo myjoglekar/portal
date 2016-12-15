@@ -27,7 +27,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state) {
         var data = {
             tabName: tab.tabName
         };
-        $http({method: 'POST', url: 'admin/ui/dbTabs/' + $stateParams.tabId, data: data}).success(function (response) {
+        $http({method: 'POST', url: 'admin/ui/dbTabs/' + $stateParams.dashboardId, data: data}).success(function (response) {
             tab.tabClose = false;
         })
     };
@@ -45,24 +45,23 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state) {
         // addTab();
     }
 
-//     $scope.dashboardName = $stateParams.tabId
 
 //    $http.get("admin/ui/dashboard").success(function () {
 //
 //    })
-//    console.log($stateParams.widgetId)
-    if ($stateParams.tabId == 'dashboard') {
-        $stateParams.tabId = 1;
+//    console.log($stateParams.tabId)
+    if ($stateParams.dashboardId == 'dashboard') {
+        $stateParams.dashboardId = 1;
     }
     //$scope.currentTabId = $stateParams.tabId
 
-    console.log("tabId : " + $stateParams.tabId)
-    $http.get("admin/ui/dbTabs/" + $stateParams.tabId).success(function (response) {
+    console.log("dashboardId : " + $stateParams.dashboardId)
+    $http.get("admin/ui/dbTabs/" + $stateParams.dashboardId).success(function (response) {
         $scope.tabs = response;
         angular.forEach(response, function (value, key) {
             $scope.dashboardName = value.dashboardId.dashboardTitle;
         })
-        $state.go("dashboard.widget", {widgetId: $stateParams.widgetId ? $stateParams.widgetId : response[0].id});
+        $state.go("dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : response[0].id});
     });
 
 //    $http.get("admin/ui/dbWidget/1").success(function (response) {

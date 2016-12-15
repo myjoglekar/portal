@@ -1,24 +1,31 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
     $scope.widgets = [];
-    $scope.selectAgregations = [{name: 'sum'}, {name: 'avg'}, {name: 'count'}, {name: 'min'}, {name: 'max'}]
+    $scope.selectAggregations = [{name: 'sum'}, {name: 'avg'}, {name: 'count'}, {name: 'min'}, {name: 'max'}];   //Aggregation Type-Popup
 
-    $scope.tableDef = function (widget) {
-        $http.get(widget.directUrl+"?fieldsOnly=true").success(function (response) {
+    $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
+        $http.get(widget.directUrl + "?fieldsOnly=true").success(function (response) {
             $scope.collectionFields = response.columnDefs;
-            //console.log(response)
         });
     };
 
-    function getWidgetItem() {
-        if (!$stateParams.widgetId) {
-            $stateParams.widgetId = 1;
+    function getWidgetItem() {      //Default Loading Items
+        if (!$stateParams.tabId) {
+            $stateParams.tabId = 1;
         }
-        $http.get("admin/ui/dbWidget/" + $stateParams.widgetId).success(function (response) {
+        $http.get("admin/ui/dbWidget/" + $stateParams.tabId).success(function (response) {
             $scope.widgets = response;
         });
     }
     getWidgetItem();
 
+    $scope.pageRefresh = function () {          //Page Refresh
+        getWidgetItem();
+    };
+    $http.get("static/datas/panelSize.json").success(function (response) {      //Default Panel in Ui
+        $scope.newWidgets = response;
+    });
+
+    //Columns - Popup
     $scope.addColumns = function (widget) {
         widget.columns.unshift({isEdit: true, isDelete: true})
     };
@@ -38,42 +45,36 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         });
     };
 
-    //var uid = 100;
-    $scope.addWidget = function (newWidget) {
-        //$scope.id = uid++;
-        $scope.widgets.push({width: newWidget.panelWidth, 'minHeight': 25, columns: []});
+    $scope.deleteColumn = function (index, widget, column) {
+        $http({method: 'DELETE', url: 'admin/ui/widgetColumn/' + column.id}).success(function () {
+            widget.columns.splice(index, 1);
+        });
+    };
 
+    //Widget
+    $scope.addWidget = function (newWidget) {
+        $scope.widgets.push({width: newWidget.panelWidth, 'minHeight': 25, columns: []});
         var data = {
             width: newWidget.panelWidth, 'minHeight': 25, columns: []
         };
-
-        $http({method: 'POST', url: 'admin/ui/dbWidget/' + $stateParams.widgetId, data: data}).success(function (response) {
+        $http({method: 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
             getWidgetItem();
         });
     };
 
     $scope.deleteWidget = function (widget) {
         $http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {
-            //getWidgetItem();
         });
     };
 
-    $scope.deleteColumn = function (index, widget, column) {
-        $http({method: 'DELETE', url: 'admin/ui/widgetColumn/' + column.id}).success(function () {
-            widget.columns.splice(index, 1);
-        });
-    };
+    //Popup- Select Chart-Type Json
     $http.get('static/datas/imageUrl.json').success(function (response) {
         $scope.chartTypes = response;
     });
+
+    //DataSource
     $http.get('admin/datasources').success(function (response) {
         $scope.datasources = response;
-    });
-    $scope.pageRefresh = function () {
-        getWidgetItem();
-    };
-    $http.get("static/datas/panelSize.json").success(function (response) {
-        $scope.newPanels = response;
     });
 
     //Data Source
@@ -84,6 +85,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.selectItem = selectedItem;
         selectedItems(selectedItem);
     };
+
     //Data Set
     function selectedItems(selectedItem) {
         $http.get('admin/datasources/dataSet/' + selectedItem).success(function (response) {
@@ -111,32 +113,51 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 //        });
 //    };
     $scope.objectHeader = [];
-    $scope.previewChart = function (chartType, widget) {
+    $scope.previewChart = function (chartType, widget, index) {
+
+        $scope.selectedRow = chartType.type;
+
         widget.widgetChartType = chartType.type;
         $scope.widgetPreviewChart = widget.widgetChartType;
-        $scope.previewChartType = "";
-        $scope.columns = [];
-        //$timeout(function () {
         $scope.previewChartType = chartType.type;
         $scope.previewColumn = widget;
-        $scope.widgetPreviewChartUrl = widget.previewUrl;
-        console.log($scope.previewColumn)
-        console.log(widget.previewUrl)
+//        $scope.previewChartType = "";
+//        $scope.columns = [];
+        //$timeout(function () {
+//        $scope.widgetPreviewChartUrl = widget.previewUrl;
         // }, 500);
     };
+
+    $scope.editWidget = function (widget) {
+        $scope.tableDef(widget);
+        $scope.selectedRow = widget.chartType;
+        widget.previewUrl = widget.directUrl;
+        widget.previewType = widget.chartType;
+        widget.previewTitle = widget.widgetTitle;
+    }
+
     $scope.save = function (widget) {
+        console.log("Widget Name : " + $scope.widgetPreviewChartUrl + " " + widget.previewUrl)
 
         var data = {
             id: widget.id,
-            chartType: $scope.widgetPreviewChart,
-            directUrl: $scope.widgetPreviewChartUrl
+            chartType: $scope.previewChartType,
+            directUrl: widget.previewUrl,
+            widgetTitle: widget.previewTitle
         }
-        $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.widgetId, data: data}).success(function (response) {
+        $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
             //getWidgetItem();
         })
-        widget.directUrl = $scope.widgetPreviewChartUrl;
+        widget.directUrl = widget.previewUrl;
         widget.chartType = $scope.previewChartType;
     };
+
+    $scope.$watch('widget.previewUrl', function (newValue, oldValue) {
+        console.log('oldValue=' + oldValue);
+        console.log('newValue=' + newValue);
+        //do something
+    });
+
     $scope.onDropComplete = function (index, widget, evt) {
         var otherObj = $scope.widgets[index];
         var otherIndex = $scope.widgets.indexOf(widget);
@@ -167,6 +188,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 //    };
 
 });
+
 app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams) {
     return{
         restrict: 'A',
@@ -176,12 +198,13 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
             widgetColumns: '@',
             setTableFn: '&'
         },
-        template: '<div ng-show="loadingPie" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
-                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" ui-grid-grouping></div>',
+        template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
+                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-if="gridOptions.data.length>0" ui-grid="gridOptions" ng-style="getTableHeight()" ui-grid-grouping></div>',
         link: function (scope, element, attr) {
-
-            scope.loadingPie = true;
+//scope.rowData = []ui-if="gridData.data.length>0"
+            scope.loadingTable = true;
             scope.gridOptions = {
+//                rowHeight: 30,
                 enableColumnMenus: false,
                 enableGridMenu: false,
                 enableRowSelection: false,
@@ -189,8 +212,10 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 enableRowHeaderSelection: false,
                 enableSorting: false,
                 multiSelect: false,
-                enableColumnResize: false,
-                showColumnFooter: true
+                enableColumnResize: true,
+                showColumnFooter: true,
+                enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+                enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             }
             var startDate = "";
             var endDate = "";
@@ -263,8 +288,9 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
             //console.log(columnDefs);
             $http.get(scope.dynamicTableUrl + "?widgetId=" + scope.widgetId + "&startDate=" + startDate + "&endDate=" + endDate).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
-                scope.loadingPie = false;
+                scope.loadingTable = false;
                 scope.gridOptions = {
+//                    rowHeight: 30,
                     enableColumnMenus: false,
                     enableGridMenu: false,
                     enableRowSelection: false,
@@ -272,15 +298,28 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     enableRowHeaderSelection: false,
                     enableSorting: false,
                     multiSelect: false,
-                    enableColumnResize: false,
+                    enableColumnResize: true,
                     data: response.data,
 //                    data: response.data.slice(0, 14),
                     columnDefs: columnDefs,
-                    showColumnFooter: true
+                    showColumnFooter: true,
+                    enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+                    enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER
+
                 };
                 function lineage() {
                     return this.name + ' of ' + this.parent;
                 }
+
+                scope.getTableHeight = function () {
+                    var rowHeight = 30; // your row height
+                    var headerHeight = 30; // your header height
+                    return {
+                        height: (scope.gridOptions.data.length * rowHeight + headerHeight) + "px"
+                    };
+                };
+
+//                $(".ngViewport").height(scope.rowData.length * scope.gridOptions.rowHeight)
             });
         }
     };
@@ -289,7 +328,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
 app.directive('lineChartDirective', function ($http) {
     return{
         restrict: 'A',
-        replace: true,
+        template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             lineChartUrl: '@',
             setLineChartFn: '&',
@@ -299,7 +338,7 @@ app.directive('lineChartDirective', function ($http) {
             lineChartId: '@',
         },
         link: function (scope, element, attr) {
-
+            scope.loadingLine = true;
             var yAxis = [];
             var columns = [];
             var xAxis;
@@ -317,6 +356,7 @@ app.directive('lineChartDirective', function ($http) {
             var xTicks = [];
 
             $http.get(scope.lineChartUrl).success(function (response) {
+                scope.loadingLine = false;
                 scope.xAxis = [];
                 var loopCount = 1;
                 xTicks = [xAxis.fieldName];
@@ -332,18 +372,8 @@ app.directive('lineChartDirective', function ($http) {
                     });
                     ySeriesData.unshift(value.displayName);
                     columns.push(ySeriesData);
-                })
-                /*
-                 angular.forEach(response.data, function (value, key) {
-                 xTicks.push(loopCount);
-                 xData.push(value[xAxis.fieldName]);
-                 //console.log(value)
-                 //console.log(key)
-                 scope.xAxis.push(value.impressions)
-                 console.log(scope.xAxis)
-                 })
-                 */
-                console.log(columns);
+                });
+
                 var chart = c3.generate({
                     bindto: element[0],
                     data: {
@@ -376,6 +406,7 @@ app.directive('lineChartDirective', function ($http) {
 app.directive('barChartDirective', function ($http) {
     return{
         restrict: 'A',
+        template: '<div ng-show="loadingBar" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             barChartUrl: '@',
             setBarChartFn: '&',
@@ -383,7 +414,7 @@ app.directive('barChartDirective', function ($http) {
             widgetColumns: '@'
         },
         link: function (scope, element, attr) {
-
+            scope.loadingBar = true;
             var yAxis = [];
             var columns = [];
             var xAxis;
@@ -402,6 +433,7 @@ app.directive('barChartDirective', function ($http) {
             var xTicks = [];
 
             $http.get(scope.barChartUrl).success(function (response) {
+                scope.loadingBar = false;
                 scope.xAxis = [];
                 var loopCount = 1;
                 xTicks = [xAxis.fieldName];
@@ -419,8 +451,6 @@ app.directive('barChartDirective', function ($http) {
                     columns.push(ySeriesData);
                 });
 
-
-                console.log(columns)
                 var chart = c3.generate({
                     bindto: element[0],
                     data: {
@@ -453,8 +483,7 @@ app.directive('barChartDirective', function ($http) {
 app.directive('pieChartDirective', function ($http) {
     return{
         restrict: 'AC',
-        template: '<div ng-show="loadingPie" class="text-center" style="color: #228995;">Data Fetching ...</div>',
-//        template: '<div class="text-center"><img ng-show="loadingPie" src="static/img/loading.gif"></div>',
+        template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             pieChartUrl: '@',
             widgetColumns: '@',
@@ -463,6 +492,7 @@ app.directive('pieChartDirective', function ($http) {
             loadingPie: '&'
         },
         link: function (scope, element, attr) {
+            scope.loadingPie = true;
             var yAxis = [];
             var columns = [];
             var xAxis;
@@ -480,6 +510,7 @@ app.directive('pieChartDirective', function ($http) {
             var xTicks = [];
 
             $http.get(scope.pieChartUrl).success(function (response) {
+                scope.loadingPie = false;
                 scope.xAxis = [];
                 var loopCount = 1;
                 xTicks = [xAxis.fieldName];
@@ -497,8 +528,6 @@ app.directive('pieChartDirective', function ($http) {
                     columns.push(ySeriesData);
                 });
 
-
-                console.log(columns)
                 var chart = c3.generate({
                     bindto: element[0],
                     data: {
@@ -528,9 +557,11 @@ app.directive('pieChartDirective', function ($http) {
         }
     };
 });
+
 app.directive('areaChartDirective', function ($http) {
     return{
         restrict: 'A',
+        template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             setPieChartFn: '&',
             areaChartUrl: '@',
@@ -538,12 +569,11 @@ app.directive('areaChartDirective', function ($http) {
             pieChartId: '@'
         },
         link: function (scope, element, attr) {
-
+            scope.loadingArea = true;
             var yAxis = [];
             var columns = [];
             var xAxis;
             var ySeriesOrder = 1;
-            console.log(scope.widgetColumns)
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 if (value.xAxis) {
                     xAxis = {fieldName: value.fieldName, displayName: value.displayName};
@@ -557,6 +587,7 @@ app.directive('areaChartDirective', function ($http) {
             var xTicks = [];
 
             $http.get(scope.areaChartUrl).success(function (response) {
+                scope.loadingArea = false;
                 scope.xAxis = [];
                 var loopCount = 1;
                 xTicks = [xAxis.fieldName];
@@ -574,8 +605,6 @@ app.directive('areaChartDirective', function ($http) {
                     columns.push(ySeriesData);
                 });
 
-
-                console.log(columns)
                 var chart = c3.generate({
                     bindto: element[0],
                     data: {

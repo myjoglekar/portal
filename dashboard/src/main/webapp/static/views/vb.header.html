@@ -24,7 +24,7 @@
                     <div class="input-group">
                         <button type="button" class="btn btn-default pull-right" id="daterange-btn">
                             <span>
-                                <i class="fa fa-calendar"></i>&nbsp;&nbsp;September 7, 2016 - October 5, 2016
+                                <i class="fa fa-calendar"></i>September 7, 2016 - October 5, 2016
                             </span>
                             <i class="fa fa-caret-down"></i>
                         </button>
@@ -39,7 +39,7 @@
                         <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li ng-repeat="product in products">
-                            <a data-ui-sref="dashboard({tabId:product.id})" ng-click="change(product)">
+                            <a data-ui-sref="dashboard({dashboardId:product.id})" ng-click="change(product)">
                                 {{product.productName}}
                             </a>
                         </li>
@@ -77,7 +77,7 @@
                 <div class="mar-top">
                     <select class="form-control">
                         <option ng-repeat="dashboard in dashboards" 
-                                ui-sref="dashboard.tab({tabId: dashboard.dashboardValue})" ui-sref-reload="true" value="{{dashboard.dashboardValue}}">
+                                ui-sref="dashboard.tab({dashboardId: dashboard.dashboardValue})" ui-sref-reload="true" value="{{dashboard.dashboardValue}}">
                             {{dashboard.dashboardName}}
                         </option>
                     </select>

@@ -5,7 +5,7 @@
     <tabset class="tab-container">
         <tab ng-repeat="tab in tabs" 
              tab-highlight 
-             ui-sref="dashboard.widget({widgetId: tab.id?tab.id:100})"
+             ui-sref="dashboard.widget({tabId: tab.id?tab.id:100})"
              ng-init="isActive = isActiveTab(tab.tabName, $index)"
              active="isActive"
              select="setActiveTab(tab.tabName)">
@@ -107,7 +107,7 @@
                                         <div class="panel-heading">
                                             <ul class="nav nav-tabs">
                                                 <li ng-repeat="tab in tabs" ui-sref-active="active">
-                                                    <a class="active" ui-sref="dashboard.widget({widgetId: tab.id})" style="padding:3px 15px;display: inline-block;">
+                                                    <a class="active" ui-sref="dashboard.widget({tabId: tab.id})" style="padding:3px 15px;display: inline-block;">
                                                         {{tab.tabName}}
                                                     </a>
                                                     <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">

@@ -1,18 +1,17 @@
 app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $stateParams, $state) {
     $scope.userName = $cookies.getObject("username");
-    
-//alert($stateParams.tabId)
-console.log($stateParams)
-    
-    
+    console.log($stateParams)
     $scope.selectName = "Select Product";
     $scope.change = function (product) {
         //$state.go('dashboard.widget', { tabId: product.id });
         $scope.selectName = product.productName;
-        $scope.tabId = product.id;
+        $scope.dashboardId = product.id;
        // $stateParams.tabId = product.id;
         //$scope.cookieProducId = $stateParams.tabId
     };
+    
+    var dates=$(".pull-right i").text();
+//    alert(dates)
 //    console.log("Header : ", $scope.cookieProducId)
 //
 //    console.log($scope.tabId)
@@ -23,7 +22,6 @@ console.log($stateParams)
         // $scope.searchProduct.unshift({"id": 0, "productName": "All Product"});
         //$scope.name = $filter('filter')($scope.dashboards, {id: $stateParams.tabId?$stateParams.tabId:3})[0];
         //$scope.selectName = $scope.name.productName;
-        console.log($scope.selectName)
     });
 
 
@@ -31,6 +29,7 @@ console.log($stateParams)
     $http.get('admin/dealer').success(function (response) {
         $scope.dealers = response;
     });
+    
     
     $(function () {
         //Initialize Select2 Elements

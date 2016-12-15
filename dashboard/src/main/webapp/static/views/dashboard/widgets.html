@@ -7,6 +7,19 @@
         margin-top: -2px;
         padding: 0px;
     }
+    .previewChart{
+        border-radius: 5px;
+        border: none;
+        font-size: 10px;
+        padding: 5px;
+    }
+    .selected{
+        color: rgb(240, 173, 78);
+        border-radius: 5px;
+        border: 1px solid rgb(240, 173, 78);
+        font-size: 10px;
+        padding: 5px;
+    }
 </style>
 
 <div>
@@ -18,7 +31,7 @@
                     <i class="fa fa-plus"></i> Add Widget <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li  ng-repeat="newWidget in newPanels">
+                    <li  ng-repeat="newWidget in newWidgets">
                         <a href="" ng-click="addWidget(newWidget)">{{newWidget.panelId}}</a>
                     </li>
                 </ul>
@@ -42,7 +55,7 @@
                 </div>-->
 
         <div ng-if="widget.chartType != 'tickers'">
-            <div class="col-md-{{2 * widget.width}} widgetsize resize">
+            <div class="col-md-{{2 * widget.width}} ">
                 <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl">
                     <!--            <div class="col-md-{{2 * widget.width}} widgetsize resize" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
                                     <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl" ng-drag="true" ng-drag-data="widget">-->
@@ -55,7 +68,7 @@
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
-                            <button type="button" class="btn btn-box-tool" ng-click="widget.previewUrl = widget.directUrl; tableDef(widget)" data-toggle="modal" data-target="#preview{{widget.id}}"><i class="fa fa-pencil"></i>
+                            <button type="button" class="btn btn-box-tool" ng-click="editWidget(widget);" data-toggle="modal" data-target="#preview{{widget.id}}"><i class="fa fa-pencil"></i>
                             </button>
                             <!--                            <button type="button" ng-if="widget.chartType === 'line'" class="btn btn-box-tool" data-widget="" ng-click="directiveLineFn()">
                                                             <i class="fa fa-refresh"></i>
@@ -137,7 +150,7 @@
                                                     </div>
                                                 </center>-->
                     </div> 
-                    <div class="box-body table-responsive" ng-if="widget.chartType === 'table'">
+                    <div class="box-body" ng-if="widget.chartType === 'table'">
                         <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}"  widget-Columns="{{widget.columns}}"></div>
                         <!--<div dynamic-Table style="height: 100%;" class="ag-fresh"></div>-->
                         <!--                                <div set-Table-Fn="setTableFn(tableFn)"
@@ -214,7 +227,7 @@
             <div id="preview{{widget.id}}" class="modal fade">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <div class="modal-header" style="background-color:#9DD6D7;color:black;">
+                        <div class="modal-header">
                             <strong>CHART</strong>
                             <strong><button class="close" data-dismiss="modal">&times;</button></strong>
                         </div>
@@ -251,20 +264,33 @@
 
                                 <div class="form-group">
                                     <label class="col-sm-2">Type</label>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-4">
                                         <span ng-repeat="chartType in chartTypes track by chartType.id">
-                                            <span ng-click="previewChart(chartType, widget);" class="previewChart" title="{{chartType.name}}">
-                                                <img src="{{chartType.url}}" class="charttype">
+                                            <span ng-click="previewChart(chartType, widget, $index);" class="previewChart" title="{{chartType.name}}">
+                                                <!--<img src="{{chartType.url}}" class="charttype">-->
+                                                <i class="fa {{chartType.icon}}" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i>
                                             </span>
                                         </span>
+                                    </div>
+                                    <label class="col-sm-2">Widget Title</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" ng-model="widget.previewTitle">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-sm-4">Columns
-                                        <button ng-hide="showAddButton" ng-disabled="(widget.previewUrl && (widget.widgetChartType ? widget.widgetChartType : widget.chartType)) ? false : true;" class="btn btn-warning btn-xs" ng-click="showFieldTable = true; showAddButton = true;"><i class="fa fa-plus"></i></button>
-                                        <button ng-show="showAddButton" class="btn btn-warning btn-xs" ng-click="showFieldTable = false; showAddButton = false;"><i class="fa fa-close"></i></button>
-                                    </label>
+                                    <label class="col-sm-6">Columns
+                                        <button ng-hide="showAddButton" 
+                                                ng-disabled="(widget.previewUrl && (widget.widgetChartType ? widget.widgetChartType : widget.chartType)) ? false : true;" 
+                                                class="btn btn-warning btn-xs" ng-click="showFieldTable = true; showAddButton = true;">
+                                            <i class="fa fa-plus"></i> Add / Edit
+                                        </button>
+                                        <button ng-show="showAddButton" 
+                                                class="btn btn-warning btn-xs" 
+                                                ng-click="showFieldTable = false; showAddButton = false;">
+                                            <i class="fa fa-close"></i> Close
+                                        </button>
+                                    </label>                                    
                                     <div class="col-sm-12">
                                         <div ng-show="showFieldTable" class="table-responsive">                                               
                                             <table class="table table table-bordered table-hover">
@@ -300,7 +326,7 @@
                                                             <div ng-show="column.isEdit">
                                                                 <!--<input type="text" class="form-control" ng-model="column.agregationFunction">-->
                                                                 <select ng-model="column.agregationFunction" class="form-control">
-                                                                    <option ng-repeat="selectAgregation in selectAgregations" value="{{selectAgregation.name}}">{{selectAgregation.name}}</option>
+                                                                    <option ng-repeat="selectAggregation in selectAggregations" value="{{selectAggregation.name}}">{{selectAggregation.name}}</option>
                                                                 </select>
                                                             </div>
                                                         </td>
@@ -374,11 +400,10 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-10">
-                                        <label>Preview
-                                            <label class="label-warning badge" ng-click="showPreviewChart = !showPreviewChart">
-                                                <i class="fa" ng-class="{'fa-angle-down': !showPreviewChart, 'fa-angle-up': showPreviewChart}"></i></label>
-                                        </label>
-                                    </div>
+                                        <button class="btn btn-warning btn-xs" ng-click="showPreviewChart = !showPreviewChart">
+                                            <i class="fa" ng-class="{'fa-angle-down': !showPreviewChart, 'fa-angle-up': showPreviewChart}"></i> Preview
+                                        </button>
+                                    </div>                                    
                                     <div ng-show="showPreviewChart">
                                         <div class="col-md-12">
                                             <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
@@ -407,7 +432,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="modal-footer" style="padding:10px;background-color:#9DD6D7">
+                        <div class="modal-footer">
                             <button class="btn btn-primary" ng-click="save(widget)" data-dismiss="modal"><span class="fa fa-save"></span> SAVE</button>
                         </div>
                     </div>

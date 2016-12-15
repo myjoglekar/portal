@@ -6,7 +6,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 //                templateUrl: "static/views/vb.index.html"
 //            })
             .state("dashboard", {
-                url: "/dashboard/:tabId",
+                url: "/dashboard/:dashboardId",
                 templateUrl: "static/views/dashboard/dashboard.html",
             })
 //            .state("dashboard.tab", {
@@ -15,17 +15,17 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 //                controller: 'UiController'
 //            })
             .state("header", {
-                url: "/header/:tabId",
+                url: "/header/:dashboardId",
                 templateUrl: "static/views/dashboard/dashboardTabs.html", 
                 controller: 'HeaderController'
             })
             .state("dashboard.widget", {
-                url: "/widget/:widgetId",
+                url: "/widget/:tabId",
                 templateUrl: "static/views/dashboard/widgets.html",
                 controller: 'WidgetController'
             })
             .state("report", {
-                url: "/report/:tabId/:reportId",
+                url: "/report/:dashboardId/:reportId",
                 templateUrl: "static/views/reports/createNewReports.html",
                 controller: 'ReportController'
             });
