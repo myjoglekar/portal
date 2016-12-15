@@ -85,6 +85,95 @@ public class PaidTabController {
     @Autowired
     private AdwordsService adwordsService;
 
+    @RequestMapping(value = "dayOfWeekClickImpressions", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getDayOfWeekClickImpressions(HttpServletRequest request, HttpServletResponse response) {
+        Map returnMap = new HashMap();
+        try {
+            Date startDate = DateUtils.get12WeeksBack();
+            Date endDate = DateUtils.getToday();
+            String fieldsOnly = request.getParameter("fieldsOnly");
+            List<ColumnDef> columnDefs = new ArrayList<>();
+            columnDefs.add(new ColumnDef("weekDay", "String", "Week Day"));
+            columnDefs.add(new ColumnDef("clicks", "number", "Clicks"));
+            columnDefs.add(new ColumnDef("impressions", "number", "Impressions"));
+            columnDefs.add(new ColumnDef("cost", "number", "Cost"));
+            columnDefs.add(new ColumnDef("conversions", "number", "Conversions"));
+            columnDefs.add(new ColumnDef("cpc", "number", "CPC"));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPA"));
+            returnMap.put("columnDefs", columnDefs);
+            if (fieldsOnly != null) {
+                return returnMap;
+            }
+            List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
+            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "dayOfWeek");
+            AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, "dayOfWeek");
+            List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
+            List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
+            //returnMap.put("bing", bingAccountPerformanceRows);
+            //returnMap.put("adwords", adwordsAccountReportRows);
+            Map<String, ClicksImpressionsGraphBean> dataMap = new HashMap<>();
+            for (Iterator<AccountReportRow> iterator = adwordsAccountReportRows.iterator(); iterator.hasNext();) {
+                AccountReportRow accountReportRow = iterator.next();
+                String day = accountReportRow.getDayOfWeek();
+                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
+                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
+                Double cost = Double.parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
+                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+
+                String adwordsStartDayOfWeek = day;
+                ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
+                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                if (oldBean != null) {
+                    clicks += oldBean.getClicks();
+                    impressions += oldBean.getImpressions();
+                    cost += oldBean.getCost();
+                    conversions += oldBean.getConversions();
+                }
+                bean.setClicks(clicks);
+                bean.setImpressions(impressions);
+                bean.setCost(cost);
+                bean.setConversions(conversions);
+                bean.setWeekDay(adwordsStartDayOfWeek);
+                dataMap.put(adwordsStartDayOfWeek, bean);
+            }
+
+            for (Iterator<AccountPerformanceRow> iterator = bingAccountPerformanceRows.iterator(); iterator.hasNext();) {
+                AccountPerformanceRow accountReportRow = iterator.next();
+                String day = accountReportRow.getDayOfWeek().getValue();
+                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
+                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
+                Double cost = Double.parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
+                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+
+                String bingStartDayOfWeek = DateUtils.getDayOfWeek(Integer.parseInt(day));
+                ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
+                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                if (oldBean != null) {
+                    clicks += oldBean.getClicks();
+                    impressions += oldBean.getImpressions();
+                    cost += oldBean.getCost();
+                    conversions += oldBean.getConversions();
+                }
+                bean.setClicks(clicks);
+                bean.setImpressions(impressions);
+                bean.setCost(cost);
+                bean.setConversions(conversions);
+                bean.setWeekDay(bingStartDayOfWeek);
+                dataMap.put(bingStartDayOfWeek, bean);
+            }
+            returnMap.put("data", dataMap.values());
+
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnMap;
+    }
+    
     @RequestMapping(value = "clicksImpressionsGraph", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getClicksImpressionsGraph(HttpServletRequest request, HttpServletResponse response) {

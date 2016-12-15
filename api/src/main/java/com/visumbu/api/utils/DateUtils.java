@@ -21,6 +21,11 @@ import java.util.logging.Logger;
  * @author varghees
  */
 public class DateUtils {
+    
+    public static String getDayOfWeek(Integer day) {
+        String[] days = {"Sunday", "Monday", "Tuesday", "Wednessday", "Thursday", "Friday", "Saturday"};
+        return days[day - 1];
+    }
 
     public static String getStartDayOfWeek(Date date) {
         // Get calendar set to current date and time

@@ -32,7 +32,17 @@ public class AccountPerformanceRow {
     private Data impressionLostToRankPercent;
     private Data averagePosition;
     private Data phoneCalls;
+    private Data dayOfWeek;
 
+    public Data getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    @XmlElement(name = "DayOfWeek")
+    public void setDayOfWeek(Data dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+    
     public Data getGregorianDate() {
         return gregorianDate;
     }
@@ -188,7 +198,7 @@ public class AccountPerformanceRow {
 
     @Override
     public String toString() {
-        return "AccountPerformanceRow{" + "gregorianDate=" + gregorianDate + ", accountId=" + accountId + ", accountName=" + accountName + ", clicks=" + clicks + ", impressions=" + impressions + ", ctr=" + ctr + ", averageCpc=" + averageCpc + ", conversions=" + conversions + ", costPerConversion=" + costPerConversion + ", conversionRate=" + conversionRate + ", spend=" + spend + ", qualityScore=" + qualityScore + ", impressionSharePercent=" + impressionSharePercent + ", impressionLostToBudgetPercent=" + impressionLostToBudgetPercent + ", impressionLostToRankPercent=" + impressionLostToRankPercent + ", averagePosition=" + averagePosition + ", phoneCalls=" + phoneCalls + '}';
+        return "AccountPerformanceRow{" + "gregorianDate=" + gregorianDate + ", accountId=" + accountId + ", accountName=" + accountName + ", clicks=" + clicks + ", impressions=" + impressions + ", ctr=" + ctr + ", averageCpc=" + averageCpc + ", conversions=" + conversions + ", costPerConversion=" + costPerConversion + ", conversionRate=" + conversionRate + ", spend=" + spend + ", qualityScore=" + qualityScore + ", impressionSharePercent=" + impressionSharePercent + ", impressionLostToBudgetPercent=" + impressionLostToBudgetPercent + ", impressionLostToRankPercent=" + impressionLostToRankPercent + ", averagePosition=" + averagePosition + ", phoneCalls=" + phoneCalls + ", dayOfWeek=" + dayOfWeek + '}';
     }
 
 }

@@ -691,6 +691,8 @@ public class BingService {
         report.setReturnOnlyCompleteData(false);
         if (aggregation.equalsIgnoreCase("weekly")) {
             report.setAggregation(ReportAggregation.WEEKLY);
+        } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
+            report.setAggregation(ReportAggregation.DAY_OF_WEEK);
         } else {
             report.setAggregation(ReportAggregation.DAILY);
         }
@@ -732,11 +734,13 @@ public class BingService {
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.CONVERSION_RATE);
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.COST_PER_CONVERSION);
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.ACCOUNT_NAME);
-        accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.IMPRESSION_SHARE_PERCENT);
-        accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.IMPRESSION_LOST_TO_BUDGET_PERCENT);
-        accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.IMPRESSION_LOST_TO_RANK_PERCENT);
-        accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.AVERAGE_POSITION);
+        if (!aggregation.equalsIgnoreCase("dayOfWeek")) {
+            accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.IMPRESSION_SHARE_PERCENT);
+            accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.IMPRESSION_LOST_TO_BUDGET_PERCENT);
+            accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.IMPRESSION_LOST_TO_RANK_PERCENT);
+        }
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.TIME_PERIOD);
+        accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.AVERAGE_POSITION);
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.PHONE_CALLS);
         report.setColumns(accountPerformanceReportColumn);
         return report;

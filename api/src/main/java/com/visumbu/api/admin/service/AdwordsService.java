@@ -166,8 +166,10 @@ public class AdwordsService {
     public AccountReport getAccountReport(Date startDate, Date endDate, String accountId, String aggregation) {
         AdWordsSession session = getSession(accountId);
         String aggregationDuration = "Date";
-        if(aggregation.equalsIgnoreCase("weekly")) {
+        if (aggregation.equalsIgnoreCase("weekly")) {
             aggregationDuration = "Week";
+        } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
+            aggregationDuration = "DayOfWeek";
         }
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
@@ -182,9 +184,9 @@ public class AdwordsService {
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
         reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
         DateRange dateRange = new DateRange();
-            dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
-            dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
-            selector.setDateRange(dateRange);
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -420,7 +422,7 @@ public class AdwordsService {
         }
         return null;
     }
-    
+
     public CampaignDeviceReport getCampaignDeviceReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
