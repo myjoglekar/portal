@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class DateUtils {
     
     public static String getDayOfWeek(Integer day) {
-        String[] days = {"Sunday", "Monday", "Tuesday", "Wednessday", "Thursday", "Friday", "Saturday"};
+        String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         return days[day - 1];
     }
 
