@@ -31,6 +31,47 @@ public class GeoReportRow {
     private String SearchBudgetLostImpressionShare;
     private String convRate;
 
+    
+    public String getAvgCPC() {
+        try {
+            return Integer.toString(Integer.parseInt(avgCPC) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @XmlAttribute
+    public void setAvgCPC(String avgCPC) {
+        this.avgCPC = avgCPC;
+    }
+
+    public String getCtr() {
+        try {
+            return Integer.toString(Integer.parseInt(ctr) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @XmlAttribute
+    public void setCtr(String ctr) {
+        this.ctr = ctr;
+    }
+
+    public String getCost() {
+        try {
+            return Integer.toString(Integer.parseInt(cost) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @XmlAttribute
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
+    
     public String getVideoViews() {
         return videoViews;
     }
@@ -128,33 +169,6 @@ public class GeoReportRow {
     @XmlAttribute
     public void setAllConv(String allConv) {
         this.allConv = allConv;
-    }
-
-    public String getAvgCPC() {
-        return avgCPC;
-    }
-
-    @XmlAttribute
-    public void setAvgCPC(String avgCPC) {
-        this.avgCPC = avgCPC;
-    }
-
-    public String getCtr() {
-        return ctr;
-    }
-
-    @XmlAttribute
-    public void setCtr(String ctr) {
-        this.ctr = ctr;
-    }
-
-    public String getCost() {
-        return cost;
-    }
-
-    @XmlAttribute
-    public void setCost(String cost) {
-        this.cost = cost;
     }
 
     public String getCostConv() {

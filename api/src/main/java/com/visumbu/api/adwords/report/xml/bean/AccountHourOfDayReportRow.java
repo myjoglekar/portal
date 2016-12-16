@@ -35,6 +35,46 @@ public class AccountHourOfDayReportRow {
     private String convRate;
     private String hourOfDay;
 
+    
+    public String getAvgCPC() {
+        try {
+            return Integer.toString(Integer.parseInt(avgCPC) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @XmlAttribute
+    public void setAvgCPC(String avgCPC) {
+        this.avgCPC = avgCPC;
+    }
+
+    public String getCtr() {
+        try {
+            return Integer.toString(Integer.parseInt(ctr) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @XmlAttribute
+    public void setCtr(String ctr) {
+        this.ctr = ctr;
+    }
+
+    public String getCost() {
+        try {
+            return Integer.toString(Integer.parseInt(cost) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @XmlAttribute
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
     public String getVideoViews() {
         return videoViews;
     }
@@ -141,33 +181,6 @@ public class AccountHourOfDayReportRow {
     @XmlAttribute
     public void setAvgPosition(String avgPosition) {
         this.avgPosition = avgPosition;
-    }
-
-    public String getAvgCPC() {
-        return avgCPC;
-    }
-
-    @XmlAttribute
-    public void setAvgCPC(String avgCPC) {
-        this.avgCPC = avgCPC;
-    }
-
-    public String getCtr() {
-        return ctr;
-    }
-
-    @XmlAttribute
-    public void setCtr(String ctr) {
-        this.ctr = ctr;
-    }
-
-    public String getCost() {
-        return cost;
-    }
-
-    @XmlAttribute
-    public void setCost(String cost) {
-        this.cost = cost;
     }
 
     public String getCostConv() {

@@ -37,6 +37,45 @@ public class AccountReportRow {
     private String dayOfWeek;
     private String hourOfDay;
 
+    public String getAvgCPC() {
+        try {
+            return Integer.toString(Integer.parseInt(avgCPC) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @XmlAttribute
+    public void setAvgCPC(String avgCPC) {
+        this.avgCPC = avgCPC;
+    }
+
+    public String getCtr() {
+        try {
+            return Integer.toString(Integer.parseInt(ctr) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @XmlAttribute
+    public void setCtr(String ctr) {
+        this.ctr = ctr;
+    }
+
+    public String getCost() {
+        try {
+            return Integer.toString(Integer.parseInt(cost) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
+    }
+
+    @XmlAttribute
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
     public String getHourOfDay() {
         return hourOfDay;
     }
@@ -45,7 +84,7 @@ public class AccountReportRow {
     public void setHourOfDay(String hourOfDay) {
         this.hourOfDay = hourOfDay;
     }
-    
+
     public String getDayOfWeek() {
         return dayOfWeek;
     }
@@ -54,7 +93,7 @@ public class AccountReportRow {
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
-    
+
     public String getVideoViews() {
         return videoViews;
     }
@@ -172,33 +211,6 @@ public class AccountReportRow {
         this.allConv = allConv;
     }
 
-    public String getAvgCPC() {
-        return avgCPC;
-    }
-
-    @XmlAttribute
-    public void setAvgCPC(String avgCPC) {
-        this.avgCPC = avgCPC;
-    }
-
-    public String getCtr() {
-        return ctr;
-    }
-
-    @XmlAttribute
-    public void setCtr(String ctr) {
-        this.ctr = ctr;
-    }
-
-    public String getCost() {
-        return cost;
-    }
-
-    @XmlAttribute
-    public void setCost(String cost) {
-        this.cost = cost;
-    }
-
     public String getCostConv() {
         return costConv;
     }
@@ -215,7 +227,7 @@ public class AccountReportRow {
     @XmlAttribute
     public void setSearchBudgetLostImpressionShare(String SearchBudgetLostImpressionShare) {
         this.SearchBudgetLostImpressionShare = SearchBudgetLostImpressionShare;
-    }    
+    }
 
     public String getConvRate() {
         return convRate;
@@ -230,5 +242,5 @@ public class AccountReportRow {
     public String toString() {
         return "AccountReportRow{" + "videoViews=" + videoViews + ", videoViewRate=" + videoViewRate + ", account=" + account + ", impressions=" + impressions + ", clicks=" + clicks + ", day=" + day + ", searchExactMatchIS=" + searchExactMatchIS + ", searchLostISBudget=" + searchLostISBudget + ", searchLostISRank=" + searchLostISRank + ", conversions=" + conversions + ", searchImprShare=" + searchImprShare + ", avgPosition=" + avgPosition + ", allConv=" + allConv + ", avgCPC=" + avgCPC + ", ctr=" + ctr + ", cost=" + cost + ", costConv=" + costConv + ", SearchBudgetLostImpressionShare=" + SearchBudgetLostImpressionShare + ", convRate=" + convRate + ", dayOfWeek=" + dayOfWeek + '}';
     }
-    
+
 }

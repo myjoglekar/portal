@@ -663,12 +663,12 @@ public class PaidTabController {
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
             performanceBean.setCtr(row.getCtr());
-            String cost = Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+            String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
             performanceBean.setCost(cost);
-            String cpc = Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+            String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
 
             performanceBean.setAverageCpc(cpc);
-            String cpa = Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+            String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
 
             performanceBean.setCpa(cpa);
 
