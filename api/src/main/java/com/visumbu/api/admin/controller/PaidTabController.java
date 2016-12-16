@@ -35,6 +35,7 @@ import com.visumbu.api.bing.report.xml.bean.CampaignPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.CampaignPerformanceRow;
 import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceRow;
+import com.visumbu.api.dashboard.bean.AccountPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.AdGroupPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignDevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.DevicePerformanceReportBean;
@@ -85,6 +86,93 @@ public class PaidTabController {
 
     @Autowired
     private AdwordsService adwordsService;
+
+    @RequestMapping(value = "accountPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Map returnMap = new HashMap();
+        try {
+            Date startDate = DateUtils.get12WeeksBack();
+            Date endDate = DateUtils.getToday();
+            String fieldsOnly = request.getParameter("fieldsOnly");
+            List<ColumnDef> columnDefs = new ArrayList<>();
+            columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+            columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impressions Share", ColumnDef.Aggregation.AVG));
+            returnMap.put("columnDefs", columnDefs);
+            if (fieldsOnly != null) {
+                return returnMap;
+            }
+
+            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily");
+            AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, "daily");
+            List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
+            List<AccountPerformanceRow> bingAccountRows = bingAccountReport.getAccountPerformanceRows();
+
+            List<AccountPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+            for (Iterator<AccountReportRow> reportRow = adwordsAccountRow.iterator(); reportRow.hasNext();) {
+                AccountReportRow row = reportRow.next();
+                AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                performanceBean.setSource("Google");
+//            performanceBean.setDevice(row.getDevice());
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                performanceBean.setCost(cost);
+                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                performanceBean.setAverageCpc(cpc);
+                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                performanceBean.setCpa(cpa);
+
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceBean.setConversions(row.getConversions());
+                performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
+                performanceBean.setSearchBudgetLostImpressionShare(row.getSearchBudgetLostImpressionShare());
+                performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
+                performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
+
+                performanceReportBeans.add(performanceBean);
+            }
+
+            for (Iterator<AccountPerformanceRow> reportRow = bingAccountRows.iterator(); reportRow.hasNext();) {
+                AccountPerformanceRow row = reportRow.next();
+                AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                performanceBean.setSource("Bing");
+                performanceBean.setImpressions(row.getImpressions().getValue());
+                performanceBean.setClicks(row.getClicks().getValue());
+                performanceBean.setCtr(row.getCtr().getValue());
+                performanceBean.setCost(row.getSpend().getValue());
+                performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+                performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setCpa(row.getCostPerConversion().getValue());
+                performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
+                performanceBean.setSearchBudgetLostImpressionShare("-");
+                performanceBean.setSearchImpressionsShareLostDueToRank(row.getImpressionLostToRankPercent().getValue());
+                performanceBean.setSearchImpressionsShareLostDueToBudget(row.getImpressionLostToBudgetPercent().getValue());
+                performanceReportBeans.add(performanceBean);
+
+            }
+
+            returnMap.put("data", performanceReportBeans);
+
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnMap;
+    }
 
     @RequestMapping(value = "hourOfDayClickImpressions", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -174,7 +262,7 @@ public class PaidTabController {
         }
         return returnMap;
     }
-    
+
     @RequestMapping(value = "dayOfWeekClickImpressions", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getDayOfWeekClickImpressions(HttpServletRequest request, HttpServletResponse response) {
@@ -263,7 +351,7 @@ public class PaidTabController {
         }
         return returnMap;
     }
-    
+
     @RequestMapping(value = "clicksImpressionsGraph", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getClicksImpressionsGraph(HttpServletRequest request, HttpServletResponse response) {
