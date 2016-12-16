@@ -111,7 +111,7 @@ public class PaidTabController {
                 return returnMap;
             }
 
-            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily");
+            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily", "SEARCH");
             AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, "daily");
             List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountRows = bingAccountReport.getAccountPerformanceRows();
@@ -195,7 +195,7 @@ public class PaidTabController {
                 return returnMap;
             }
             List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
-            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "hourOfDay");
+            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "hourOfDay", "SEARCH");
             AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, "hourOfDay");
             List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
@@ -284,7 +284,7 @@ public class PaidTabController {
                 return returnMap;
             }
             List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
-            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "dayOfWeek");
+            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "dayOfWeek", "SEARCH");
             AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, "dayOfWeek");
             List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
@@ -373,7 +373,7 @@ public class PaidTabController {
                 return returnMap;
             }
             List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
-            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily");
+            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily", "SEARCH");
             AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, "daily");
             List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();

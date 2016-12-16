@@ -48,7 +48,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getAccountReport(startDate, endDate, accountId, "daily");
+        return adwordsService.getAccountReport(startDate, endDate, accountId, "daily", "SEARCH");
     }
     @RequestMapping(value = "getAdGroup", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -88,7 +88,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getAdReport(startDate, endDate, accountId);
+        return adwordsService.getAdReport(startDate, endDate, accountId, "SEARCH");
     }
     @RequestMapping(value = "getAccountHourOfDayReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -96,7 +96,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getAccountHourOfDayReport(startDate, endDate, accountId);
+        return adwordsService.getAccountHourOfDayReport(startDate, endDate, accountId, "SEARCH");
     }
     @RequestMapping(value = "getAccountDayOfWeekReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -104,7 +104,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getAccountDayOfWeekReport(startDate, endDate, accountId);
+        return adwordsService.getAccountDayOfWeekReport(startDate, endDate, accountId, "SEARCH");
     }
     @RequestMapping(value = "getGeoReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody

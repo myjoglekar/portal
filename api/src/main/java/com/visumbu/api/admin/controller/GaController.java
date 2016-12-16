@@ -57,7 +57,7 @@ public class GaController {
     Object getSeoPerformance(HttpServletRequest request, HttpServletResponse response) throws IOException, GeneralSecurityException {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return gaService.getSeoPerformance(startDate, endDate, null, null);
+        return gaService.getSeoPerformance("82176546", startDate, endDate, null, null);
     }
     
     

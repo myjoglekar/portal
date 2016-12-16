@@ -10,6 +10,7 @@ package com.visumbu.api.dashboard.bean;
  * @author user
  */
 public class CampaignPerformanceReportBean {
+
     private String campaignName;
     private String impressions;
     private String clicks;
@@ -23,7 +24,72 @@ public class CampaignPerformanceReportBean {
     private String searchImpressionsShareLostByBudget;
     private String searchImpressionsShareLostByRank;
     private String source;
+    private String day;
+    private String directionsPageView; // goal1
+    private String inventoryPageViews; // goal2
+    private String leadSubmission; //goal 3
+    private String specialsPageView; //goal 4
+    private String timeOnSiteGt2Mins; // goal5
+    private String vdpViews; // goal 6
 
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getDirectionsPageView() {
+        return directionsPageView;
+    }
+
+    public void setDirectionsPageView(String directionsPageView) {
+        this.directionsPageView = directionsPageView;
+    }
+
+    public String getInventoryPageViews() {
+        return inventoryPageViews;
+    }
+
+    public void setInventoryPageViews(String inventoryPageViews) {
+        this.inventoryPageViews = inventoryPageViews;
+    }
+
+    public String getLeadSubmission() {
+        return leadSubmission;
+    }
+
+    public void setLeadSubmission(String leadSubmission) {
+        this.leadSubmission = leadSubmission;
+    }
+
+    public String getSpecialsPageView() {
+        return specialsPageView;
+    }
+
+    public void setSpecialsPageView(String specialsPageView) {
+        this.specialsPageView = specialsPageView;
+    }
+
+    public String getTimeOnSiteGt2Mins() {
+        return timeOnSiteGt2Mins;
+    }
+
+    public void setTimeOnSiteGt2Mins(String timeOnSiteGt2Mins) {
+        this.timeOnSiteGt2Mins = timeOnSiteGt2Mins;
+    }
+
+    public String getVdpViews() {
+        return vdpViews;
+    }
+
+    public void setVdpViews(String vdpViews) {
+        this.vdpViews = vdpViews;
+    }
+
+    
+    
     public String getSource() {
         return source;
     }
@@ -31,7 +97,7 @@ public class CampaignPerformanceReportBean {
     public void setSource(String source) {
         this.source = source;
     }
-    
+
     public String getCampaignName() {
         return campaignName;
     }
@@ -127,7 +193,5 @@ public class CampaignPerformanceReportBean {
     public void setSearchImpressionsShareLostByRank(String searchImpressionsShareLostByRank) {
         this.searchImpressionsShareLostByRank = searchImpressionsShareLostByRank;
     }
-    
-    
-    
+
 }
