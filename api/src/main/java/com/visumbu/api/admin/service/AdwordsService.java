@@ -163,7 +163,7 @@ public class AdwordsService {
         return null;
     }
 
-    public AccountReport getAccountReport(Date startDate, Date endDate, String accountId, String aggregation) {
+    public AccountReport getAccountReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         String aggregationDuration = "Date";
         if (aggregation.equalsIgnoreCase("weekly")) {
@@ -189,6 +189,18 @@ public class AdwordsService {
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         }
+
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
+
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -500,7 +512,7 @@ public class AdwordsService {
         return null;
     }
 
-    public AdReport getAdReport(Date startDate, Date endDate, String accountId) {
+    public AdReport getAdReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
@@ -509,7 +521,16 @@ public class AdwordsService {
                 "AdType", "Description", "Description1", "Description2", "DisplayUrl", "CreativeFinalUrls", "CreativeDestinationUrl",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
         ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
 
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -558,7 +579,7 @@ public class AdwordsService {
         return null;
     }
 
-    public AccountHourOfDayReport getAccountHourOfDayReport(Date startDate, Date endDate, String accountId) {
+    public AccountHourOfDayReport getAccountHourOfDayReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
@@ -567,7 +588,16 @@ public class AdwordsService {
                 "Conversions", "SearchImpressionShare", "AveragePosition",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate", "HourOfDay"
         ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
 
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -616,7 +646,7 @@ public class AdwordsService {
         return null;
     }
 
-    public AccountDayOfWeekReport getAccountDayOfWeekReport(Date startDate, Date endDate, String accountId) {
+    public AccountDayOfWeekReport getAccountDayOfWeekReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
@@ -625,7 +655,16 @@ public class AdwordsService {
                 "Conversions", "SearchImpressionShare", "AveragePosition",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
         ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
 
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -682,7 +721,16 @@ public class AdwordsService {
                 "Conversions", "AveragePosition", "AllConversions",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
         ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
 
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
