@@ -183,7 +183,7 @@ public class PaidTabController {
             Date endDate = DateUtils.getToday();
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
-            columnDefs.add(new ColumnDef("weekDay", "String", "Week Day"));
+            columnDefs.add(new ColumnDef("hourOfDay", "String", "Hour of day"));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks"));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions"));
             columnDefs.add(new ColumnDef("cost", "number", "Cost"));
@@ -859,9 +859,8 @@ public class PaidTabController {
             performanceReportBeans.add(performanceBean);
 
         }
-
-        return performanceReportBeans;
-
+        returnMap.put("data", performanceReportBeans);
+        return returnMap;
     }
 
     @RequestMapping(value = "campaign", method = RequestMethod.GET, produces = "application/json")
