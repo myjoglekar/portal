@@ -16,6 +16,8 @@ import com.visumbu.api.adwords.report.xml.bean.AccountDeviceReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AccountReport;
 import com.visumbu.api.adwords.report.xml.bean.AccountReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AdGroupReportRow;
+import com.visumbu.api.adwords.report.xml.bean.AdReport;
+import com.visumbu.api.adwords.report.xml.bean.AdReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AddGroupReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReportRow;
@@ -40,6 +42,7 @@ import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceRow;
 import com.visumbu.api.dashboard.bean.AccountPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.AdGroupPerformanceReportBean;
+import com.visumbu.api.dashboard.bean.AdPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignDevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.DevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
@@ -92,6 +95,162 @@ public class DisplayTabController {
 
     @Autowired
     private GaService gaService;
+
+     // TO DO CHECK
+    @RequestMapping(value = "accountDevice", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAccountDevice(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+        columnDefs.add(new ColumnDef("device", "string", "Device"));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("day", "string", "Day", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.AVG));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "391-089-0213", "CONTENT");
+        List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
+        List<DevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        GetReportsResponse goals = gaService.getDeviceGoals("123125706", startDate, endDate);
+        List<Map<String, String>> gaData = (List) gaService.getResponseAsMap(goals).get("data");
+
+        for (Iterator<AccountDeviceReportRow> reportRow = adwordsAccountDeviceReportRow.iterator(); reportRow.hasNext();) {
+            AccountDeviceReportRow row = reportRow.next();
+            DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
+            performanceBean.setSource("Google");
+            if (row.getDevice().contains("Tablet")) {
+                performanceBean.setDevice("Tablet");
+            }
+            if (row.getDevice().contains("Mobile")) {
+                performanceBean.setDevice("Smartphone");
+            }
+            if (row.getDevice().contains("Computer")) {
+                performanceBean.setDevice("Computer");
+            }
+//            performanceBean.setDevice(row.getDevice());
+            performanceBean.setImpressions(row.getImpressions());
+            performanceBean.setClicks(row.getClicks());
+            performanceBean.setCtr(row.getCtr());
+            String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+            performanceBean.setCost(cost);
+            String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+
+            performanceBean.setAverageCpc(cpc);
+            String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+
+            performanceBean.setCpa(cpa);
+
+            performanceBean.setAveragePosition(row.getAvgPosition());
+            performanceBean.setConversions(row.getConversions());
+            performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
+            performanceBean.setDirectionsPageView(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal1Completions"));
+            performanceBean.setInventoryPageViews(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal2Completions"));
+            performanceBean.setLeadSubmission(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal3Completions"));
+            performanceBean.setSpecialsPageView(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal4Completions"));
+            performanceBean.setTimeOnSiteGt2Mins(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal5Completions"));
+            performanceBean.setVdpViews(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal6Completions"));
+
+            performanceReportBeans.add(performanceBean);
+        }
+
+        returnMap.put("data", performanceReportBeans);
+        return returnMap;
+    }
+
+    // TODO FIX THIS
+    @RequestMapping(value = "ad", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAd(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+        columnDefs.add(new ColumnDef("campaignName", "string", "Campaign Name"));
+        columnDefs.add(new ColumnDef("adGroupName", "string", "Ad Group Name", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("clicks", "string", "Clicks", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.SUM));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impressions Share", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("day", "string", "Day", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.AVG));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        AdReport adwordsAdGroupReport = adwordsService.getAdReport(startDate, endDate, "391-089-0213", "CONTENT");
+        GetReportsResponse goals = gaService.getAdGoals("123125706", startDate, endDate);
+        List<Map<String, String>> gaData = (List) gaService.getResponseAsMap(goals).get("data");
+
+        List<AdReportRow> adwordsAdReportRow = adwordsAdGroupReport.getAdReportRow();
+
+        List<AdPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+
+        for (Iterator<AdReportRow> reportRow = adwordsAdReportRow.iterator(); reportRow.hasNext();) {
+            AdReportRow row = reportRow.next();
+            AdPerformanceReportBean performanceBean = new AdPerformanceReportBean();
+            performanceBean.setSource("Google");
+            performanceBean.setAdType(row.getAdType());
+            performanceBean.setCampaignName(row.getCampaign());
+            performanceBean.setAdGroupName(row.getAdGroupName());
+            performanceBean.setAccountDescriptiveName(row.getAccount());
+            performanceBean.setImpressions(row.getImpressions());
+            performanceBean.setClicks(row.getClicks());
+            performanceBean.setCtr(row.getCtr());
+            performanceBean.setDescription(row.getDescription());
+            performanceBean.setDescription1(row.getDescription1());
+            performanceBean.setDescription2(row.getDescription2());
+            performanceBean.setCost(row.getCost());
+            performanceBean.setAverageCpc(row.getAverageCpc());
+            performanceBean.setCostPerConversion(row.getCostPerConversion());
+            performanceBean.setAveragePosition(row.getAveragePosition());
+            performanceBean.setConversions(row.getConversions());
+            performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
+            performanceBean.setHeadline(row.getHeadline());
+            performanceBean.setDay(row.getDay());
+            performanceBean.setDirectionsPageView(getGaDataForDateAdType(gaData, row.getDay(), "ga:adContent", row.getHeadline(), "Goal1Completions"));
+            performanceBean.setInventoryPageViews(getGaDataForDateAdType(gaData, row.getDay(), "ga:adContent", row.getHeadline(), "Goal2Completions"));
+            performanceBean.setLeadSubmission(getGaDataForDateAdType(gaData, row.getDay(), "ga:adContent", row.getHeadline(), "Goal3Completions"));
+            performanceBean.setSpecialsPageView(getGaDataForDateAdType(gaData, row.getDay(), "ga:adContent", row.getHeadline(), "Goal4Completions"));
+            performanceBean.setTimeOnSiteGt2Mins(getGaDataForDateAdType(gaData, row.getDay(), "ga:adContent", row.getHeadline(), "Goal5Completions"));
+            performanceBean.setVdpViews(getGaDataForDateAdType(gaData, row.getDay(), "ga:adContent", row.getHeadline(), "Goal6Completions"));
+            performanceReportBeans.add(performanceBean);
+        }
+
+        return performanceReportBeans;
+
+    }
 
     @RequestMapping(value = "campaignPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -156,7 +315,6 @@ public class DisplayTabController {
             performanceBean.setTimeOnSiteGt2Mins(getGaDataForDateType(gaData, row.getDay(), "ga:campaign", row.getCampaign(), "Goal5Completions"));
             performanceBean.setVdpViews(getGaDataForDateType(gaData, row.getDay(), "ga:campaign", row.getCampaign(), "Goal6Completions"));
             performanceReportBeans.add(performanceBean);
-            performanceReportBeans.add(performanceBean);
         }
 
         returnMap.put("data", performanceReportBeans);
@@ -188,7 +346,7 @@ public class DisplayTabController {
                 return returnMap;
             }
 
-            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily", "CONTENT");
+            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "391-089-0213", "daily", "CONTENT");
             List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
 
             List<AccountPerformanceReportBean> performanceReportBeans = new ArrayList<>();
@@ -314,10 +472,30 @@ public class DisplayTabController {
         return "";
     }
 
+    private String getGaDataForType(List<Map<String, String>> gaData, String field, String value, String metric) {
+        for (Iterator<Map<String, String>> iterator = gaData.iterator(); iterator.hasNext();) {
+            Map<String, String> data = iterator.next();
+            if (data.get(field).equalsIgnoreCase(value)) {
+                return data.get(metric);
+            }
+        }
+        return "";
+    }
+
     private String getGaDataForDateType(List<Map<String, String>> gaData, String date, String field, String value, String metric) {
         for (Iterator<Map<String, String>> iterator = gaData.iterator(); iterator.hasNext();) {
             Map<String, String> data = iterator.next();
             if (data.get("ga:date").equalsIgnoreCase(date.replaceAll("-", "")) && data.get(field).equalsIgnoreCase(value)) {
+                return data.get(metric);
+            }
+        }
+        return "";
+    }
+
+    private String getGaDataForDateAdType(List<Map<String, String>> gaData, String date, String field, String value, String metric) {
+        for (Iterator<Map<String, String>> iterator = gaData.iterator(); iterator.hasNext();) {
+            Map<String, String> data = iterator.next();
+            if (data.get("ga:date").equalsIgnoreCase(date.replaceAll("-", "")) && data.get(field).equalsIgnoreCase("Ad name: " + value)) {
                 return data.get(metric);
             }
         }

@@ -10,6 +10,7 @@ package com.visumbu.api.dashboard.bean;
  * @author user
  */
 public class DevicePerformanceReportBean {
+
     private String device;
     private String impressions;
     private String clicks;
@@ -21,6 +22,60 @@ public class DevicePerformanceReportBean {
     private String cpa;
     private String searchImpressionsShare;
     private String source;
+    private String directionsPageView; // goal1
+    private String inventoryPageViews; // goal2
+    private String leadSubmission; //goal 3
+    private String specialsPageView; //goal 4
+    private String timeOnSiteGt2Mins; // goal5
+    private String vdpViews; // goal 6
+
+    public String getDirectionsPageView() {
+        return directionsPageView;
+    }
+
+    public void setDirectionsPageView(String directionsPageView) {
+        this.directionsPageView = directionsPageView;
+    }
+
+    public String getInventoryPageViews() {
+        return inventoryPageViews;
+    }
+
+    public void setInventoryPageViews(String inventoryPageViews) {
+        this.inventoryPageViews = inventoryPageViews;
+    }
+
+    public String getLeadSubmission() {
+        return leadSubmission;
+    }
+
+    public void setLeadSubmission(String leadSubmission) {
+        this.leadSubmission = leadSubmission;
+    }
+
+    public String getSpecialsPageView() {
+        return specialsPageView;
+    }
+
+    public void setSpecialsPageView(String specialsPageView) {
+        this.specialsPageView = specialsPageView;
+    }
+
+    public String getTimeOnSiteGt2Mins() {
+        return timeOnSiteGt2Mins;
+    }
+
+    public void setTimeOnSiteGt2Mins(String timeOnSiteGt2Mins) {
+        this.timeOnSiteGt2Mins = timeOnSiteGt2Mins;
+    }
+
+    public String getVdpViews() {
+        return vdpViews;
+    }
+
+    public void setVdpViews(String vdpViews) {
+        this.vdpViews = vdpViews;
+    }
 
     public String getDevice() {
         return device;
@@ -29,7 +84,7 @@ public class DevicePerformanceReportBean {
     public void setDevice(String device) {
         this.device = device;
     }
-    
+
     public String getSource() {
         return source;
     }
@@ -109,6 +164,5 @@ public class DevicePerformanceReportBean {
     public void setSearchImpressionsShare(String searchImpressionsShare) {
         this.searchImpressionsShare = searchImpressionsShare;
     }
-    
-    
+
 }

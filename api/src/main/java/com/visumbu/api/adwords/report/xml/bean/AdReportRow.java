@@ -15,8 +15,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "row")
 public class AdReportRow {
     private String campaignId;
-    private String accountDescriptiveName;
-    private String campaignName;
+    private String account;
+    private String campaign;
     private String videoViews;
     private String videoViewRate;
     private String videoQuartile100Rate;
@@ -54,22 +54,22 @@ public class AdReportRow {
         this.campaignId = campaignId;
     }
 
-    public String getAccountDescriptiveName() {
-        return accountDescriptiveName;
+    public String getAccount() {
+        return account;
     }
 
     @XmlAttribute
-    public void setAccountDescriptiveName(String accountDescriptiveName) {
-        this.accountDescriptiveName = accountDescriptiveName;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public String getCampaignName() {
-        return campaignName;
+    public String getCampaign() {
+        return campaign;
     }
 
     @XmlAttribute
-    public void setCampaignName(String campaignName) {
-        this.campaignName = campaignName;
+    public void setCampaign(String campaign) {
+        this.campaign = campaign;
     }
 
     public String getVideoViews() {
@@ -184,7 +184,7 @@ public class AdReportRow {
         return adGroupName;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "adGroup")
     public void setAdGroupName(String adGroupName) {
         this.adGroupName = adGroupName;
     }
@@ -202,7 +202,7 @@ public class AdReportRow {
         return headline;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "Ad")
     public void setHeadline(String headline) {
         this.headline = headline;
     }
@@ -254,7 +254,7 @@ public class AdReportRow {
         return creativeFinalUrls;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "finalURL")
     public void setCreativeFinalUrls(String creativeFinalUrls) {
         this.creativeFinalUrls = creativeFinalUrls;
     }
@@ -314,6 +314,6 @@ public class AdReportRow {
 
     @Override
     public String toString() {
-        return "AdReportRow{" + "campaignId=" + campaignId + ", accountDescriptiveName=" + accountDescriptiveName + ", campaignName=" + campaignName + ", videoViews=" + videoViews + ", videoViewRate=" + videoViewRate + ", videoQuartile100Rate=" + videoQuartile100Rate + ", videoQuartile25Rate=" + videoQuartile25Rate + ", videoQuartile50Rate=" + videoQuartile50Rate + ", videoQuartile75Rate=" + videoQuartile75Rate + ", impressions=" + impressions + ", clicks=" + clicks + ", day=" + day + ", conversions=" + conversions + ", averagePosition=" + averagePosition + ", allConversions=" + allConversions + ", adGroupName=" + adGroupName + ", adGroupId=" + adGroupId + ", headline=" + headline + ", adType=" + adType + ", description=" + description + ", description1=" + description1 + ", description2=" + description2 + ", displayUrl=" + displayUrl + ", creativeFinalUrls=" + creativeFinalUrls + ", creativeDestinationUrl=" + creativeDestinationUrl + ", averageCpc=" + averageCpc + ", ctr=" + ctr + ", cost=" + cost + ", costPerConversion=" + costPerConversion + ", conversionRate=" + conversionRate + '}';
+        return "AdReportRow{" + "campaignId=" + campaignId + ", accountDescriptiveName=" + account + ", campaignName=" + campaign + ", videoViews=" + videoViews + ", videoViewRate=" + videoViewRate + ", videoQuartile100Rate=" + videoQuartile100Rate + ", videoQuartile25Rate=" + videoQuartile25Rate + ", videoQuartile50Rate=" + videoQuartile50Rate + ", videoQuartile75Rate=" + videoQuartile75Rate + ", impressions=" + impressions + ", clicks=" + clicks + ", day=" + day + ", conversions=" + conversions + ", averagePosition=" + averagePosition + ", allConversions=" + allConversions + ", adGroupName=" + adGroupName + ", adGroupId=" + adGroupId + ", headline=" + headline + ", adType=" + adType + ", description=" + description + ", description1=" + description1 + ", description2=" + description2 + ", displayUrl=" + displayUrl + ", creativeFinalUrls=" + creativeFinalUrls + ", creativeDestinationUrl=" + creativeDestinationUrl + ", averageCpc=" + averageCpc + ", ctr=" + ctr + ", cost=" + cost + ", costPerConversion=" + costPerConversion + ", conversionRate=" + conversionRate + '}';
     }
 }
