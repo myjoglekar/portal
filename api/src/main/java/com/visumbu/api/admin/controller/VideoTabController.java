@@ -430,76 +430,76 @@ public class VideoTabController {
         return performanceReportBeans;
 
     }
-
-    @RequestMapping(value = "campaignPerformance", method = RequestMethod.GET, produces = "application/json")
+    
+    
+    @RequestMapping(value = "adPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    Object getCampaignPerformance(HttpServletRequest request, HttpServletResponse response) {
-        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
-        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        String fieldsOnly = request.getParameter("fieldsOnly");
+    Object getAdPerformance(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
-        List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("campaignName", "string", "Campaign Name"));
-        columnDefs.add(new ColumnDef("impressions", "string", "Impressions"));
-        columnDefs.add(new ColumnDef("clicks", "string", "Clicks"));
-        columnDefs.add(new ColumnDef("ctr", "string", "CTR"));
-        columnDefs.add(new ColumnDef("averagePosition", "string", "Average Position"));
-        columnDefs.add(new ColumnDef("cost", "string", "Cost"));
-        columnDefs.add(new ColumnDef("averageCpc", "string", "Average CPC"));
-        columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
-        columnDefs.add(new ColumnDef("cpa", "string", "CPA"));
-        columnDefs.add(new ColumnDef("impressionShare", "string", "Impression Share"));
-        columnDefs.add(new ColumnDef("searchImpressionsShareLostByBudget", "string", "Search Impressions Share Lost By Budget"));
-        columnDefs.add(new ColumnDef("searchImpressionsShareLostByRank", "string", "Search Impressions Share Lost By Rank"));
-        columnDefs.add(new ColumnDef("source", "string", "Source"));
-        columnDefs.add(new ColumnDef("day", "string", "Day", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.AVG));
-        returnMap.put("columnDefs", columnDefs);
-        if (fieldsOnly != null) {
-            return returnMap;
+        try {
+            Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+            String fieldsOnly = request.getParameter("fieldsOnly");
+            List<ColumnDef> columnDefs = new ArrayList<>();
+            columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+            columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("day", "string", "Day", ColumnDef.Aggregation.AVG));
+
+            columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo75", "string", "VideoPlayedTo75", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoTitle", "string", "Video Title", ColumnDef.Aggregation.AVG));
+            returnMap.put("columnDefs", columnDefs);
+            if (fieldsOnly != null) {
+                return returnMap;
+            }
+
+            VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
+            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+            List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                VideoReportRow row = reportRow.next();
+                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                performanceBean.setSource("Google");
+                performanceBean.setDay(row.getDay());
+//            performanceBean.setDevice(row.getDevice());
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                performanceBean.setCost(cost);
+                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                performanceBean.setAverageCpc(cpc);
+                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                performanceBean.setCpa(cpa);
+                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                performanceBean.setVideoTitle(row.getVideoTitle());
+                performanceBean.setViews(row.getViews());
+                performanceBean.setViewRate(row.getViewRate());
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceBean.setConversions(row.getConversions());
+                performanceReportBeans.add(performanceBean);
+            }
+
+            returnMap.put("data", performanceReportBeans);
+
+        } catch (Exception ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, "391-089-0213", "CONTENT");
-        List<CampaignPerformanceReportRow> adwordsCampaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
-        List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-        GetReportsResponse goals = gaService.getCampaignGoals("123125706", startDate, endDate);
-        List<Map<String, String>> gaData = (List) gaService.getResponseAsMap(goals).get("data");
-        //returnMap.put("gaData", gaData);
-        for (Iterator<CampaignPerformanceReportRow> reportRow = adwordsCampaignPerformanceReportRow.iterator(); reportRow.hasNext();) {
-            CampaignPerformanceReportRow row = reportRow.next();
-            CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
-            performanceBean.setSource("Google");
-            performanceBean.setImpressions(row.getImpressions());
-            performanceBean.setCampaignName(row.getCampaign());
-            performanceBean.setClicks(row.getClicks());
-            performanceBean.setCtr(row.getCtr());
-            performanceBean.setAveragePosition(row.getAvgPosition());
-            performanceBean.setCost(row.getCost());
-            performanceBean.setAverageCpc(row.getAvgCPC());
-            performanceBean.setConversions(row.getConversions());
-            performanceBean.setCpa("--");
-            performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());
-            performanceBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
-            performanceBean.setSearchImpressionsShareLostByRank(row.getSearchLostISRank());
-            performanceBean.setDay(row.getDay());
-
-            performanceBean.setDirectionsPageView(getGaDataForDateType(gaData, row.getDay(), "ga:campaign", row.getCampaign(), "Goal1Completions"));
-            performanceBean.setInventoryPageViews(getGaDataForDateType(gaData, row.getDay(), "ga:campaign", row.getCampaign(), "Goal2Completions"));
-            performanceBean.setLeadSubmission(getGaDataForDateType(gaData, row.getDay(), "ga:campaign", row.getCampaign(), "Goal3Completions"));
-            performanceBean.setSpecialsPageView(getGaDataForDateType(gaData, row.getDay(), "ga:campaign", row.getCampaign(), "Goal4Completions"));
-            performanceBean.setTimeOnSiteGt2Mins(getGaDataForDateType(gaData, row.getDay(), "ga:campaign", row.getCampaign(), "Goal5Completions"));
-            performanceBean.setVdpViews(getGaDataForDateType(gaData, row.getDay(), "ga:campaign", row.getCampaign(), "Goal6Completions"));
-            performanceReportBeans.add(performanceBean);
-        }
-
-        returnMap.put("data", performanceReportBeans);
-
         return returnMap;
     }
+
 
     @RequestMapping(value = "accountPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -693,6 +693,241 @@ public class VideoTabController {
                 performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
                 performanceBean.setVideoTitle(row.getVideoTitle());
                 performanceBean.setViews(row.getViews());
+                performanceBean.setDayOfWeek(row.getDayOfWeek());
+
+                performanceBean.setViewRate(row.getViewRate());
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceBean.setConversions(row.getConversions());
+                performanceReportBeans.add(performanceBean);
+            }
+
+            returnMap.put("data", performanceReportBeans);
+
+        } catch (Exception ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnMap;
+    }
+
+    @RequestMapping(value = "campaignPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getCampaignPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Map returnMap = new HashMap();
+        try {
+            Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+            String fieldsOnly = request.getParameter("fieldsOnly");
+            List<ColumnDef> columnDefs = new ArrayList<>();
+            columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+            columnDefs.add(new ColumnDef("campaignName", "string", "Campaign Name"));
+            columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day", ColumnDef.Aggregation.AVG));
+
+            columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo75", "string", "VideoPlayedTo75", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoTitle", "string", "Video Title", ColumnDef.Aggregation.AVG));
+            returnMap.put("columnDefs", columnDefs);
+            if (fieldsOnly != null) {
+                return returnMap;
+            }
+
+            VideoReport adwordsVideoReport = adwordsService.getVideoCampaignReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
+            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+            List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                VideoReportRow row = reportRow.next();
+                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                performanceBean.setSource("Google");
+                performanceBean.setDay(row.getDay());
+//            performanceBean.setDevice(row.getDevice());
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                performanceBean.setCost(cost);
+                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                performanceBean.setAverageCpc(cpc);
+                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                performanceBean.setCpa(cpa);
+                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                performanceBean.setVideoTitle(row.getVideoTitle());
+                performanceBean.setViews(row.getViews());
+                performanceBean.setCampaign(row.getCampaign());
+                performanceBean.setDayOfWeek(row.getDayOfWeek());
+
+                performanceBean.setViewRate(row.getViewRate());
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceBean.setConversions(row.getConversions());
+                performanceReportBeans.add(performanceBean);
+            }
+
+            returnMap.put("data", performanceReportBeans);
+
+        } catch (Exception ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnMap;
+    }
+
+    @RequestMapping(value = "campaignDevicePerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getCampaignDevicePerformance(HttpServletRequest request, HttpServletResponse response) {
+        Map returnMap = new HashMap();
+        try {
+            Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+            String fieldsOnly = request.getParameter("fieldsOnly");
+            List<ColumnDef> columnDefs = new ArrayList<>();
+            columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+            columnDefs.add(new ColumnDef("campaignName", "string", "Campaign Name"));
+            columnDefs.add(new ColumnDef("device", "string", "Device"));
+            columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day", ColumnDef.Aggregation.AVG));
+
+            columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo75", "string", "VideoPlayedTo75", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoTitle", "string", "Video Title", ColumnDef.Aggregation.AVG));
+            returnMap.put("columnDefs", columnDefs);
+            if (fieldsOnly != null) {
+                return returnMap;
+            }
+
+            VideoReport adwordsVideoReport = adwordsService.getVideoCampaignDeviceReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
+            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+            List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                VideoReportRow row = reportRow.next();
+                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                performanceBean.setSource("Google");
+                performanceBean.setDay(row.getDay());
+//            performanceBean.setDevice(row.getDevice());
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                performanceBean.setCost(cost);
+                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                performanceBean.setAverageCpc(cpc);
+                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                performanceBean.setCpa(cpa);
+                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                performanceBean.setVideoTitle(row.getVideoTitle());
+                performanceBean.setViews(row.getViews());
+                performanceBean.setCampaign(row.getCampaign());
+                if (row.getDevice().contains("Tablet")) {
+                    performanceBean.setDevice("tablet");
+                } else if (row.getDevice().contains("Mobile")) {
+                    performanceBean.setDevice("mobile");
+                } else if (row.getDevice().contains("Computer")) {
+                    performanceBean.setDevice("desktop");
+                } else {
+                    performanceBean.setDevice(row.getDevice());
+                }
+                performanceBean.setDayOfWeek(row.getDayOfWeek());
+
+                performanceBean.setViewRate(row.getViewRate());
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceBean.setConversions(row.getConversions());
+                performanceReportBeans.add(performanceBean);
+            }
+
+            returnMap.put("data", performanceReportBeans);
+
+        } catch (Exception ex) {
+            Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return returnMap;
+    }
+
+    @RequestMapping(value = "devicePerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getDevicePerformance(HttpServletRequest request, HttpServletResponse response) {
+        Map returnMap = new HashMap();
+        try {
+            Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+            String fieldsOnly = request.getParameter("fieldsOnly");
+            List<ColumnDef> columnDefs = new ArrayList<>();
+            columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+            columnDefs.add(new ColumnDef("account", "string", "Account"));
+            columnDefs.add(new ColumnDef("device", "string", "Device"));
+            columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day", ColumnDef.Aggregation.AVG));
+
+            columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoPlayedTo75", "string", "VideoPlayedTo75", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("videoTitle", "string", "Video Title", ColumnDef.Aggregation.AVG));
+            returnMap.put("columnDefs", columnDefs);
+            if (fieldsOnly != null) {
+                return returnMap;
+            }
+
+            VideoReport adwordsVideoReport = adwordsService.getVideoDeviceReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
+            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+            List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                VideoReportRow row = reportRow.next();
+                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                performanceBean.setSource("Google");
+                performanceBean.setDay(row.getDay());
+//            performanceBean.setDevice(row.getDevice());
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                performanceBean.setCost(cost);
+                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                performanceBean.setAverageCpc(cpc);
+                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                performanceBean.setCpa(cpa);
+                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                performanceBean.setVideoTitle(row.getVideoTitle());
+                performanceBean.setViews(row.getViews());
+                if (row.getDevice().contains("Tablet")) {
+                    performanceBean.setDevice("tablet");
+                } else if (row.getDevice().contains("Mobile")) {
+                    performanceBean.setDevice("mobile");
+                } else if (row.getDevice().contains("Computer")) {
+                    performanceBean.setDevice("desktop");
+                } else {
+                    performanceBean.setDevice(row.getDevice());
+                }
                 performanceBean.setDayOfWeek(row.getDayOfWeek());
 
                 performanceBean.setViewRate(row.getViewRate());

@@ -16,6 +16,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class VideoReportRow {
 
     private String account;
+    private String campaign;
+    private String device;
     private String impressions;
     private String clicks;
     private String day;
@@ -163,6 +165,15 @@ public class VideoReportRow {
         this.dayOfWeek = dayOfWeek;
     }
 
+    public String getDevice() {
+        return device;
+    }
+
+    @XmlAttribute
+    public void setDevice(String device) {
+        this.device = device;
+    }
+    
     public String getAccount() {
         return account;
     }
@@ -170,6 +181,15 @@ public class VideoReportRow {
     @XmlAttribute
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getCampaign() {
+        return campaign;
+    }
+
+    @XmlAttribute
+    public void setCampaign(String campaign) {
+        this.campaign = campaign;
     }
 
     public String getImpressions() {

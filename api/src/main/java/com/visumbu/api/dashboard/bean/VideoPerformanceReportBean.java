@@ -19,6 +19,8 @@ public class VideoPerformanceReportBean {
     private String conversions;
     private String cpa;
     private String source;
+    private String campaign;
+    private String device;
     private String day;
     private String week;
     private String dayOfWeek;
@@ -118,6 +120,22 @@ public class VideoPerformanceReportBean {
         this.source = source;
     }
 
+    public String getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(String campaign) {
+        this.campaign = campaign;
+    }    
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
+    
     public String getImpressions() {
         return impressions;
     }
