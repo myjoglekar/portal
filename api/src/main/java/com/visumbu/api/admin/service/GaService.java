@@ -59,8 +59,7 @@ public class GaService {
     private static final String VIEW_ID = "82176546";
 
     // The directory where the user's credentials will be stored.
-    private static final File DATA_STORE_DIR = new File(
-            System.getProperty("user.home"), "store/hello_analytics");
+    private static final File DATA_STORE_DIR = new File("/tmp/");
 
     private static final String APPLICATION_NAME = "Hello Analytics Reporting";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();

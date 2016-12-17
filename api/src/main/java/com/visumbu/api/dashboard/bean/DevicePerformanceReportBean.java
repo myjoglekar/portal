@@ -12,6 +12,7 @@ package com.visumbu.api.dashboard.bean;
 public class DevicePerformanceReportBean {
 
     private String device;
+    private String campaign;
     private String impressions;
     private String clicks;
     private String ctr;
@@ -28,7 +29,24 @@ public class DevicePerformanceReportBean {
     private String specialsPageView; //goal 4
     private String timeOnSiteGt2Mins; // goal5
     private String vdpViews; // goal 6
+    private String engagements; 
 
+    public String getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(String campaign) {
+        this.campaign = campaign;
+    }
+    
+    public String getEngagements() {
+        return engagements;
+    }
+
+    public void setEngagements(String engagements) {
+        this.engagements = engagements;
+    }
+    
     public String getDirectionsPageView() {
         return directionsPageView;
     }

@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "report")
 public class GeoReport {
+
     private List<GeoReportRow> geoReportRow;
 
     public List<GeoReportRow> getGeoReportRow() {
@@ -32,5 +33,5 @@ public class GeoReport {
     public String toString() {
         return "GeoReport{" + "geoReportRow=" + geoReportRow + '}';
     }
-    
+
 }
