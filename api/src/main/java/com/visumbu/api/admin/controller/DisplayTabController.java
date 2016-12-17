@@ -509,6 +509,7 @@ public class DisplayTabController {
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+            columnDefs.add(new ColumnDef("week", "string", "Week", 1));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM));
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.SUM));
