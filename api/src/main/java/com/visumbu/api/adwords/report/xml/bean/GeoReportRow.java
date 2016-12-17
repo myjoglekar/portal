@@ -139,7 +139,7 @@ public class GeoReportRow {
         return cityCriteriaId;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "city")
     public void setCityCriteriaId(String cityCriteriaId) {
         this.cityCriteriaId = cityCriteriaId;
     }
