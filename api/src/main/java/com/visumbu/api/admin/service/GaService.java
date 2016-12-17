@@ -24,6 +24,7 @@ import com.google.api.services.analyticsreporting.v4.model.GetReportsRequest;
 import com.google.api.services.analyticsreporting.v4.model.GetReportsResponse;
 import com.google.api.services.analyticsreporting.v4.model.Metric;
 import com.google.api.services.analyticsreporting.v4.model.MetricHeaderEntry;
+import com.google.api.services.analyticsreporting.v4.model.OrderBy;
 import com.google.api.services.analyticsreporting.v4.model.Report;
 import com.google.api.services.analyticsreporting.v4.model.ReportRequest;
 import com.google.api.services.analyticsreporting.v4.model.ReportRow;
@@ -252,6 +253,88 @@ public class GaService {
         return null;
     }
 
+    public GetReportsResponse getGenericData(String viewId, Date startDate1, Date endDate1, Date startDate2, Date endDate2, 
+            String metrics, String dimentions, String filter, String orderBy, Integer maxResults) {
+        try {
+            List<DateRange> dateRangeList = new ArrayList<>();
+            DateRange dateRange = new DateRange();
+            dateRange.setStartDate(DateUtils.getGaStartDate(startDate1));
+            dateRange.setEndDate(DateUtils.getGaEndDate(endDate1));
+            dateRangeList.add(dateRange);
+
+            if (startDate2 != null) {
+                DateRange dateRange1 = new DateRange();
+                dateRange1.setStartDate(DateUtils.getGaStartDate(startDate2));
+                if (endDate2 != null) {
+                    dateRange1.setEndDate(DateUtils.getGaEndDate(endDate2));
+                } else {
+                    dateRange1.setEndDate(DateUtils.getGaEndDate(startDate1));
+                }
+                dateRangeList.add(dateRange1);
+            }
+            String[] metricsArray = metrics.split(";");
+            List<Metric> metricList = new ArrayList<>();
+            for (int i = 0; i < metricsArray.length; i++) {
+                String metricStr = metricsArray[i];
+                String[] nameAliasArray = metricStr.split(",");
+                if (nameAliasArray.length >= 2) {
+                    Metric metric = new Metric()
+                            .setExpression(nameAliasArray[0])
+                            .setAlias(nameAliasArray[1]);
+                    metricList.add(metric);
+                } else if (nameAliasArray.length >= 1) {
+                    Metric metric = new Metric()
+                            .setExpression(nameAliasArray[0]);
+                    metricList.add(metric);
+                }
+            }
+
+            String[] dimensionArray = dimentions.split(";");
+            List<Dimension> dimensionList = new ArrayList<>();
+            for (int i = 0; i < dimensionArray.length; i++) {
+                String dimensionStr = dimensionArray[i];
+                Dimension dimension = new Dimension()
+                        .setName(dimensionStr);
+                dimensionList.add(dimension);
+
+            }
+            List<OrderBy> orderByList = new ArrayList<>();
+            String[] orderByArr =  orderBy.split(";");
+            for (int i = 0; i < orderByArr.length; i++) {
+                String orderByStr = orderByArr[i];
+                OrderBy orderByVal = new OrderBy();
+                orderByVal.setFieldName(orderByStr);
+                orderByVal.setSortOrder("DESCENDING");
+                orderByList.add(orderByVal);
+            }
+            
+            ReportRequest request = new ReportRequest()
+                    .setViewId(viewId)
+                    .setDateRanges(dateRangeList)
+                    .setDimensions(dimensionList)
+                    .setPageSize(maxResults)
+                    .setFiltersExpression(filter)
+                    .setOrderBys(orderByList)
+                    .setMetrics(metricList);
+            ArrayList<ReportRequest> requests = new ArrayList<ReportRequest>();
+            requests.add(request);
+            // Create the GetReportsRequest object.
+            GetReportsRequest getReport = new GetReportsRequest()
+                    .setReportRequests(requests);
+
+            // Call the batchGet method.
+            GetReportsResponse response = analyticsReporting.reports().batchGet(getReport).execute();
+
+            // Return the response.
+            return response;
+        } catch (IOException ex) {
+            Logger.getLogger(GaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    
+    
     public GetReportsResponse getGenericData(Date startDate1, Date endDate1, Date startDate2, Date endDate2, String metrics, String dimentions) {
         try {
             List<DateRange> dateRangeList = new ArrayList<>();
@@ -379,6 +462,16 @@ public class GaService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public GetReportsResponse getSeoOverallPerformanceGoals(String viewId, Date startDate, Date endDate) {
+        String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
+                + "ga:bounceRate,BounceRate;"
+                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
+                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+        String dimensions = "ga:channelGrouping;ga:date";
+        String filter = "ga:channelGrouping==Display";
+        return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
 
     public static Map getResponseAsMap(GetReportsResponse response) {
