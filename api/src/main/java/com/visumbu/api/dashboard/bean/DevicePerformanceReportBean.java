@@ -28,7 +28,16 @@ public class DevicePerformanceReportBean {
     private String specialsPageView; //goal 4
     private String timeOnSiteGt2Mins; // goal5
     private String vdpViews; // goal 6
+    private String engagements; 
 
+    public String getEngagements() {
+        return engagements;
+    }
+
+    public void setEngagements(String engagements) {
+        this.engagements = engagements;
+    }
+    
     public String getDirectionsPageView() {
         return directionsPageView;
     }

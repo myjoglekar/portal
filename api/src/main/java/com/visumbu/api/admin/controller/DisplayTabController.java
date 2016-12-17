@@ -96,7 +96,7 @@ public class DisplayTabController {
     @Autowired
     private GaService gaService;
 
-     // TO DO CHECK
+    // Checked - Working
     @RequestMapping(value = "accountDevice", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getAccountDevice(HttpServletRequest request, HttpServletResponse response) {
@@ -132,21 +132,20 @@ public class DisplayTabController {
         List<DevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
         GetReportsResponse goals = gaService.getDeviceGoals("123125706", startDate, endDate);
         List<Map<String, String>> gaData = (List) gaService.getResponseAsMap(goals).get("data");
-
         for (Iterator<AccountDeviceReportRow> reportRow = adwordsAccountDeviceReportRow.iterator(); reportRow.hasNext();) {
             AccountDeviceReportRow row = reportRow.next();
             DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
             performanceBean.setSource("Google");
             if (row.getDevice().contains("Tablet")) {
-                performanceBean.setDevice("Tablet");
+                performanceBean.setDevice("tablet");
+            } else if (row.getDevice().contains("Mobile")) {
+                performanceBean.setDevice("mobile");
+            } else if (row.getDevice().contains("Computer")) {
+                performanceBean.setDevice("desktop");
+            } else {
+                performanceBean.setDevice(row.getDevice());
             }
-            if (row.getDevice().contains("Mobile")) {
-                performanceBean.setDevice("Smartphone");
-            }
-            if (row.getDevice().contains("Computer")) {
-                performanceBean.setDevice("Computer");
-            }
-//            performanceBean.setDevice(row.getDevice());
+            //performanceBean.setDevice(row.getDevice());
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
             performanceBean.setCtr(row.getCtr());
@@ -162,13 +161,20 @@ public class DisplayTabController {
             performanceBean.setAveragePosition(row.getAvgPosition());
             performanceBean.setConversions(row.getConversions());
             performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
-            performanceBean.setDirectionsPageView(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal1Completions"));
-            performanceBean.setInventoryPageViews(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal2Completions"));
-            performanceBean.setLeadSubmission(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal3Completions"));
-            performanceBean.setSpecialsPageView(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal4Completions"));
-            performanceBean.setTimeOnSiteGt2Mins(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal5Completions"));
-            performanceBean.setVdpViews(getGaDataForType(gaData, "ga:deviceCategory", row.getDevice(), "Goal6Completions"));
-
+            performanceBean.setDirectionsPageView(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal1Completions"));
+            performanceBean.setInventoryPageViews(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal2Completions"));
+            performanceBean.setLeadSubmission(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal3Completions"));
+            performanceBean.setSpecialsPageView(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal4Completions"));
+            performanceBean.setTimeOnSiteGt2Mins(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal5Completions"));
+            performanceBean.setVdpViews(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal6Completions"));
+            Integer engagements = 0;
+            engagements += (parseInt(performanceBean.getDirectionsPageView() == null ? "0" : performanceBean.getDirectionsPageView())
+                    + parseInt(performanceBean.getInventoryPageViews() == null ? "0" : performanceBean.getInventoryPageViews())
+                    + parseInt(performanceBean.getLeadSubmission() == null ? "0" : performanceBean.getLeadSubmission())
+                    + parseInt(performanceBean.getSpecialsPageView() == null ? "0" : performanceBean.getSpecialsPageView())
+                    + parseInt(performanceBean.getTimeOnSiteGt2Mins() == null ? "0" : performanceBean.getTimeOnSiteGt2Mins())
+                    + parseInt(performanceBean.getVdpViews() == null ? "0" : performanceBean.getVdpViews()));
+            performanceBean.setEngagements(engagements + "");
             performanceReportBeans.add(performanceBean);
         }
 
@@ -176,6 +182,13 @@ public class DisplayTabController {
         return returnMap;
     }
 
+    
+    private Integer parseInt(String string) {
+        if(string == null || string.isEmpty()) {
+            return 0;
+        }
+        return Integer.parseInt(string);
+    }
     // TODO FIX THIS
     @RequestMapping(value = "ad", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
