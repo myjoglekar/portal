@@ -137,7 +137,7 @@ public class DisplayTabController {
             GeoReportRow row = reportRow.next();
             GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
             performanceBean.setSource("Google");
-           
+
             performanceBean.setCity(getCityById(row.getCityCriteriaId()));
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
@@ -153,12 +153,12 @@ public class DisplayTabController {
 
             performanceBean.setAveragePosition(row.getAvgPosition());
             performanceBean.setConversions(row.getConversions());
-            performanceBean.setDirectionsPageView(getGaDataForType(gaData, "ga:city", performanceBean.getCity(),  "Goal1Completions"));
-            performanceBean.setInventoryPageViews(getGaDataForType(gaData, "ga:city",  performanceBean.getCity(), "Goal2Completions"));
-            performanceBean.setLeadSubmission(getGaDataForType(gaData,  "ga:city",  performanceBean.getCity(), "Goal3Completions"));
+            performanceBean.setDirectionsPageView(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal1Completions"));
+            performanceBean.setInventoryPageViews(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal2Completions"));
+            performanceBean.setLeadSubmission(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal3Completions"));
             performanceBean.setSpecialsPageView(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal4Completions"));
-            performanceBean.setTimeOnSiteGt2Mins(getGaDataForType(gaData, "ga:city",  performanceBean.getCity(), "Goal5Completions"));
-            performanceBean.setVdpViews(getGaDataForType(gaData, "ga:city",  performanceBean.getCity(), "Goal6Completions"));
+            performanceBean.setTimeOnSiteGt2Mins(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal5Completions"));
+            performanceBean.setVdpViews(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal6Completions"));
             Integer engagements = 0;
             engagements += (parseInt(performanceBean.getDirectionsPageView() == null ? "0" : performanceBean.getDirectionsPageView())
                     + parseInt(performanceBean.getInventoryPageViews() == null ? "0" : performanceBean.getInventoryPageViews())
@@ -173,7 +173,7 @@ public class DisplayTabController {
         returnMap.put("data", performanceReportBeans);
         return returnMap;
     }
-    
+
     @RequestMapping(value = "campaignDevice", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getCampaignDevice(HttpServletRequest request, HttpServletResponse response) {
@@ -239,12 +239,12 @@ public class DisplayTabController {
             performanceBean.setAveragePosition(row.getAvgPosition());
             performanceBean.setConversions(row.getConversions());
             performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
-            performanceBean.setDirectionsPageView(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(),  "Goal1Completions"));
-            performanceBean.setInventoryPageViews(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(),  "ga:campaign", row.getCampaign(), "Goal2Completions"));
-            performanceBean.setLeadSubmission(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(),  "ga:campaign", row.getCampaign(), "Goal3Completions"));
-            performanceBean.setSpecialsPageView(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(),  "ga:campaign", row.getCampaign(), "Goal4Completions"));
-            performanceBean.setTimeOnSiteGt2Mins(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(),  "ga:campaign", row.getCampaign(), "Goal5Completions"));
-            performanceBean.setVdpViews(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(),  "ga:campaign", row.getCampaign(), "Goal6Completions"));
+            performanceBean.setDirectionsPageView(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal1Completions"));
+            performanceBean.setInventoryPageViews(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal2Completions"));
+            performanceBean.setLeadSubmission(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal3Completions"));
+            performanceBean.setSpecialsPageView(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal4Completions"));
+            performanceBean.setTimeOnSiteGt2Mins(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal5Completions"));
+            performanceBean.setVdpViews(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal6Completions"));
             Integer engagements = 0;
             engagements += (parseInt(performanceBean.getDirectionsPageView() == null ? "0" : performanceBean.getDirectionsPageView())
                     + parseInt(performanceBean.getInventoryPageViews() == null ? "0" : performanceBean.getInventoryPageViews())
@@ -260,7 +260,6 @@ public class DisplayTabController {
         return returnMap;
     }
 
-    
     @RequestMapping(value = "accountDevice", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getAccountDevice(HttpServletRequest request, HttpServletResponse response) {
@@ -346,13 +345,13 @@ public class DisplayTabController {
         return returnMap;
     }
 
-    
     private Integer parseInt(String string) {
-        if(string == null || string.isEmpty()) {
+        if (string == null || string.isEmpty()) {
             return 0;
         }
         return Integer.parseInt(string);
     }
+
     // TODO FIX THIS
     @RequestMapping(value = "ad", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -424,8 +423,8 @@ public class DisplayTabController {
             performanceBean.setVdpViews(getGaDataForDateAdType(gaData, row.getDay(), "ga:adContent", row.getHeadline(), "Goal6Completions"));
             performanceReportBeans.add(performanceBean);
         }
-
-        return performanceReportBeans;
+        returnMap.put("data", performanceReportBeans);
+        return returnMap;
 
     }
 
@@ -659,6 +658,7 @@ public class DisplayTabController {
         }
         return "0";
     }
+
     private String getGaDataFor2Types(List<Map<String, String>> gaData, String field1, String value1, String field2, String value2, String metric) {
         for (Iterator<Map<String, String>> iterator = gaData.iterator(); iterator.hasNext();) {
             Map<String, String> data = iterator.next();
@@ -689,7 +689,7 @@ public class DisplayTabController {
         return "";
     }
 
-    private String getCityById(String cityId) { 
+    private String getCityById(String cityId) {
         String csvFile = "/tmp/AdWordsCity.csv";
         String line = "";
         String cvsSplitBy = ",";
@@ -698,7 +698,7 @@ public class DisplayTabController {
 
             while ((line = br.readLine()) != null) {
                 String[] city = line.split(cvsSplitBy);
-                if(cityId.equalsIgnoreCase(city[0])) {
+                if (cityId.equalsIgnoreCase(city[0])) {
                     return city[1];
                 }
             }
@@ -708,7 +708,7 @@ public class DisplayTabController {
         }
         return "";
     }
-    
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
