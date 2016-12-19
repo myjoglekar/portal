@@ -1,7 +1,8 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
     $scope.widgets = [];
     $scope.selectAggregations = [{name: 'sum'}, {name: 'avg'}, {name: 'count'}, {name: 'min'}, {name: 'max'}];   //Aggregation Type-Popup
-
+    $scope.selectDateDurations = [{duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
+    
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
         if (widget.directUrl) {
             $http.get(widget.directUrl + "?fieldsOnly=true").success(function (response) {

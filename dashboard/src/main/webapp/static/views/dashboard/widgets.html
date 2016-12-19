@@ -10,25 +10,27 @@
     .previewChart{
         border-radius: 5px;
         border: none;
-        font-size: 10px;
-        padding: 5px;
+        font-size: 50px;
+        padding: 20px;
+        color: #298793;
+        line-height: 1px;
     }
-    .selected{
+    .selected {
         color: rgb(240, 173, 78);
         border-radius: 5px;
-        border: 1px solid rgb(240, 173, 78);
-        font-size: 10px;
-        padding: 5px;
+        border: 2px solid rgb(240, 173, 78);
+        font-size: 50px;
+        padding: 10px;
     }
 </style>
 
 <div>
-    <div class="container-fluid light-blue" style="margin-bottom: 5px;padding: 0 0 5px 0;">
+    <div class="col-md-12">
         <div class="pull-right l2t-tab">
             <!--<a class="btn btn-warning" data-toggle="modal" data-target="#addNew"><i class="fa fa-plus"></i> Add New</a>-->
             <span class="dropdown">
-                <a class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                    <i class="fa fa-plus"></i> Add Widget <span class="caret"></span>
+                <a class="dropdown-toggle" type="button" data-toggle="dropdown">
+                    <i class="fa fa-plus"></i> Add Widget
                 </a>
                 <ul class="dropdown-menu">
                     <li  ng-repeat="newWidget in newWidgets">
@@ -36,8 +38,8 @@
                     </li>
                 </ul>
             </span>
-            <a class="btn btn-warning" ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full Screen</a>
-            <a class="btn btn-warning" ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh</a>
+            &nbsp;<a ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full Screen</a>&nbsp;
+            <a ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh</a>
         </div>
     </div> 
     <div ng-repeat="widget in widgets">
@@ -229,7 +231,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <strong>CHART</strong>
+                            <strong>Chart</strong>
                             <strong><button class="close" data-dismiss="modal">&times;</button></strong>
                         </div>
                         <div class="modal-body">
@@ -255,7 +257,18 @@
                                         </ui-select> 
                                     </div>
                                 </div>
-
+                                <div class="form-group">
+                                    <label class="col-sm-2">Widget Title</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" ng-model="widget.previewTitle">
+                                    </div>
+                                    <label class="col-sm-2">Date Duration</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control">
+                                            <option ng-repeat="selectDateDuration in selectDateDurations" value="{{selectDateDuration.duration}}">{{selectDateDuration.duration}}</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-2">Url</label>
                                     <div class="col-sm-10">
@@ -267,36 +280,34 @@
 
                                 <div class="form-group">
                                     <label class="col-sm-2">Type</label>
-                                    <div class="col-sm-4">
-                                        <span ng-repeat="chartType in chartTypes track by chartType.id">
+                                    <div class="col-sm-10 row">
+                                        <div class="col-sm-2" ng-repeat="chartType in chartTypes track by chartType.id">
                                             <span ng-click="previewChart(chartType, widget, $index);" class="previewChart" title="{{chartType.name}}">
                                                 <!--<img src="{{chartType.url}}" class="charttype">-->
                                                 <i style="cursor: pointer" class="fa {{chartType.icon}}" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i>
                                             </span>
-                                        </span>
+                                        </div>
                                     </div>
-                                    <label class="col-sm-2">Widget Title</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" ng-model="widget.previewTitle">
-                                    </div>
+
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-sm-6">Columns
+                                    <label class="col-sm-2">Columns</label>
+                                    <div class="col-sm-10">
                                         <button ng-hide="showAddButton" 
                                                 ng-disabled="(widget.previewUrl && (widget.widgetChartType ? widget.widgetChartType : widget.chartType)) ? false : true;" 
-                                                class="btn btn-warning btn-xs" ng-click="showFieldTable = true; showAddButton = true;">
+                                                class="btn btn-info" ng-click="showFieldTable = true; showAddButton = true;">
                                             <i class="fa fa-plus"></i> Add / Edit
                                         </button>
                                         <button ng-show="showAddButton" 
-                                                class="btn btn-warning btn-xs" 
+                                                class="btn btn-info" 
                                                 ng-click="showFieldTable = false; showAddButton = false;">
                                             <i class="fa fa-close"></i> Close
                                         </button>
-                                    </label>                                    
+                                    </div>                            
                                     <div class="col-sm-12">
-                                        <div ng-show="showFieldTable">                                               
-                                            <table class="table table table-bordered table-responsive table-hover">
+                                        <div ng-show="showFieldTable" class="box table-responsive">                                               
+                                            <table class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
                                                         <td>Field Name</td>
@@ -306,26 +317,18 @@
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">X-Axis</td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">Y-Axis</td>
                                                         <td>Sort</td>
-                                                        <td><button class="btn btn-warning btn-xs" ng-click="addColumns(widget)">Add Column</button></td>
+                                                        <td><button class="btn btn-info" ng-click="addColumns(widget)">Add Column</button></td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 <!--                                                    <tr ng-if="widget.columns.length <= 0" ng-repeat="collectionField in collectionFields">
                                                         <td>{{collectionField.name}}</td> 
                                                         <td>{{collectionField.displayName}}</td> 
-                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">
-                                                            {{}}
-                                                        </td> 
-                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">
-                                                            {{}}
-                                                        </td> 
-                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
-                                                            {{}}
-                                                        </td> 
-                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
-                                                            {{}}
-                                                        </td> 
-                                                    </tr>-->
+                                                        <!--                                                        <td>{{}}</td> 
+                                                                                                                <td>{{}}</td> 
+                                                                                                                <td>{{}}</td> 
+                                                                                                                <td>{{}}</td> -->
+                                                    <!--</tr>-->
 
 
                                                     <tr ng-repeat="column in widget.columns">
@@ -430,7 +433,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-10">
-                                        <button class="btn btn-warning btn-xs" ng-click="showPreview(widget); showPreviewChart = !showPreviewChart">
+                                        <button class="btn btn-info" ng-click="showPreview(widget); showPreviewChart = !showPreviewChart">
                                             <i class="fa" ng-class="{'fa-angle-down': !showPreviewChart, 'fa-angle-up': showPreviewChart}"></i> Preview
                                         </button>
                                     </div>                                    
@@ -463,8 +466,8 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button data-dismiss="modal" class="btn btn-warning" ng-click="save(widget)"><span class="fa fa-save"></span> Save</button>
-                            <button data-dismiss="modal" class="btn btn-warning"><span class="fa fa-times"></span> Cancel</button>
+                            <button data-dismiss="modal" class="btn btn-info" ng-click="save(widget)"><span class="fa fa-save"></span> Save</button>
+                            <button data-dismiss="modal" class="btn btn-danger"><span class="fa fa-times"></span> Cancel</button>
                         </div>
                     </div>
                 </div>
