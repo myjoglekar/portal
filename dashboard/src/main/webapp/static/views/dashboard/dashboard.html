@@ -14,7 +14,7 @@
                 <i class="glyphicon glyphicon-remove" ng-show="tab.tabClose" ng-click="removeTab($event, $index)"></i>
             </tab-heading>
         </tab>
-        <button class="btn btn-default" data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus"></i></button>
+        <button class="btn btns btn-default" data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus"></i></button>
         <!--        <button class="btn btn-default" ng-click="addTab()"><i class="fa fa-plus"></i></button>-->
 
 
@@ -74,9 +74,9 @@
                     </div>
 
                     <div class="modal-footer">
-                        <div class="col-sm-12">
-                            <button type="button" class="btn btn-primary btn-xs" ng-click="addTab(tab)"><span class="fa fa-save"></span> Save</button>  
-                            <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> Cancel
+                        <div>
+                            <button type="button" class="btn btn-warning" ng-click="addTab(tab)"><span class="fa fa-save"></span> Save</button>  
+                            <button type="button" class="btn btn-warning" data-dismiss="modal"><span class="fa fa-times"></span> Cancel
                             </button>
                         </div>
                     </div>

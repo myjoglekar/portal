@@ -127,7 +127,7 @@ public class TabWidget implements Serializable {
     private String widthClass;
     @Column(name = "widget_order")
     private Integer widgetOrder;
-    @Size(max = 45)
+    @Size(max = 4096)
     @Column(name = "direct_url")
     private String directUrl;
     @JoinColumn(name = "created_by", referencedColumnName = "id")

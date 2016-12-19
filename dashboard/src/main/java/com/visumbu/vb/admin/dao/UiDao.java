@@ -85,6 +85,11 @@ public class UiDao extends BaseDao {
     }
 
     public TabWidget deleteTabWidget(Integer id) {
+        String queryStr = "delete from WidgetColumn d where d.widgetId.id = :widgetId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("widgetId", id);
+        query.executeUpdate();
+        
         delete(getTabWidgetById(id));
         return null;
     }

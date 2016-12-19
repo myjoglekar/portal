@@ -4404,7 +4404,7 @@ ui-grid-header-cell-label ng-binding {
 }
 
 .ui-grid-header-canvas {
-    height: 40px;
+    height: 60px !important;
 }
 .ui-grid-viewport{
     /*overflow: auto !important;*/
