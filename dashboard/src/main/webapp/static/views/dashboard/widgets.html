@@ -317,17 +317,18 @@
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">X-Axis</td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">Y-Axis</td>
                                                         <td>Sort</td>
+                                                        <td>Format</td>
                                                         <td><button class="btn btn-info" ng-click="addColumns(widget)">Add Column</button></td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-<!--                                                    <tr ng-if="widget.columns.length <= 0" ng-repeat="collectionField in collectionFields">
-                                                        <td>{{collectionField.name}}</td> 
-                                                        <td>{{collectionField.displayName}}</td> 
-                                                        <!--                                                        <td>{{}}</td> 
-                                                                                                                <td>{{}}</td> 
-                                                                                                                <td>{{}}</td> 
-                                                                                                                <td>{{}}</td> -->
+                                                    <!--                                                    <tr ng-if="widget.columns.length <= 0" ng-repeat="collectionField in collectionFields">
+                                                                                                            <td>{{collectionField.name}}</td> 
+                                                                                                            <td>{{collectionField.displayName}}</td> 
+                                                    <!--                                                        <td>{{}}</td> 
+                                                                                                            <td>{{}}</td> 
+                                                                                                            <td>{{}}</td> 
+                                                                                                            <td>{{}}</td> -->
                                                     <!--</tr>-->
 
 
@@ -383,6 +384,14 @@
                                                             </div>
                                                             <div ng-show="column.isEdit">
                                                                 <input type="text" class="form-control" ng-model="column.sortOrder">
+                                                            </div>                                                            
+                                                        </td>
+                                                        <td>
+                                                            <div ng-hide="column.isEdit">
+                                                                {{column.displayFormat}}
+                                                            </div>
+                                                            <div ng-show="column.isEdit">
+                                                                <input type="text" class="form-control" ng-model="column.displayFormat">
                                                             </div>                                                            
                                                         </td>
                                                         <td>

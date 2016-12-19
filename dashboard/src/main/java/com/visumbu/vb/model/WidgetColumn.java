@@ -104,6 +104,9 @@ public class WidgetColumn implements Serializable {
     @JoinColumn(name = "widget_id", referencedColumnName = "id")
     @ManyToOne
     private TabWidget widgetId;
+    @Size(max = 32)
+    @Column(name = "display_format")
+    private String displayFormat;
 
     public WidgetColumn() {
     }
@@ -246,6 +249,14 @@ public class WidgetColumn implements Serializable {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getDisplayFormat() {
+        return displayFormat;
+    }
+
+    public void setDisplayFormat(String displayFormat) {
+        this.displayFormat = displayFormat;
     }
 
     @XmlTransient
