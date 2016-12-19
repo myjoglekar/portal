@@ -12,6 +12,7 @@ package com.visumbu.api.dashboard.bean;
 public class ClicksImpressionsGraphBean {
 
     private String weekDay;
+    private String weekId;
     private Integer impressions;
     private Integer clicks;
     private Double cost;
@@ -19,6 +20,14 @@ public class ClicksImpressionsGraphBean {
     private Double conversions;
     private Double cpa;
 
+    public String getWeekId() {
+        return weekId;
+    }
+
+    public void setWeekId(String weekId) {
+        this.weekId = weekId;
+    }
+    
     public Double getCost() {
         return cost;
     }

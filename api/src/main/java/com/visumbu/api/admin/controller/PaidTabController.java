@@ -272,6 +272,7 @@ public class PaidTabController {
             Date endDate = DateUtils.getToday();
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
+            columnDefs.add(new ColumnDef("weekId", "number", "Week Id"));
             columnDefs.add(new ColumnDef("weekDay", "String", "Week Day"));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks"));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions"));
@@ -313,6 +314,7 @@ public class PaidTabController {
                 bean.setCost(cost);
                 bean.setConversions(conversions);
                 bean.setWeekDay(adwordsStartDayOfWeek);
+                bean.setWeekId(DateUtils.getWeekDayByDay(adwordsStartDayOfWeek) + "");
                 dataMap.put(adwordsStartDayOfWeek, bean);
             }
 
@@ -338,6 +340,7 @@ public class PaidTabController {
                 bean.setCost(cost);
                 bean.setConversions(conversions);
                 bean.setWeekDay(bingStartDayOfWeek);
+                bean.setWeekId(day);
                 dataMap.put(bingStartDayOfWeek, bean);
             }
             returnMap.put("data", dataMap.values());
@@ -613,7 +616,15 @@ public class PaidTabController {
             AccountDeviceReportRow row = reportRow.next();
             DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
             performanceBean.setSource("Google");
-            performanceBean.setDevice(row.getDevice());
+            if (row.getDevice().contains("Tablet")) {
+                performanceBean.setDevice("Tablet");
+            }
+            if (row.getDevice().contains("Mobile")) {
+                performanceBean.setDevice("Smartphone");
+            }
+            if (row.getDevice().contains("Computer")) {
+                performanceBean.setDevice("Computer");
+            }
             performanceBean.setConversions(row.getConversions());
             performanceReportBeans.add(performanceBean);
         }
