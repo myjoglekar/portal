@@ -309,7 +309,17 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr ng-repeat="column in widget.columns">
+                                                    <tr ng-if="widget.columns.length <= 0" ng-repeat="collectionField in collectionFields">
+                                                        <td>{{collectionField.name}}</td> 
+                                                        <td>{{collectionField.displayName}}</td> 
+<!--                                                        <td>{{}}</td> 
+                                                        <td>{{}}</td> 
+                                                        <td>{{}}</td> 
+                                                        <td>{{}}</td> -->
+                                                    </tr>
+
+
+                                                    <tr ng-if="widget.columns.length > 0" ng-repeat="column in widget.columns">
                                                         <td>
                                                             <div ng-hide="column.isEdit"> {{column.fieldName}}</div>
                                                             <div ng-show="column.isEdit">

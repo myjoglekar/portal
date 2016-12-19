@@ -234,6 +234,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 multiSelect: false,
                 enableColumnResize: true,
                 showColumnFooter: true,
+                cellTooltip: true,
                 enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
                 enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
             }
