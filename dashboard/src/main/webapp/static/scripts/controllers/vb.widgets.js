@@ -139,9 +139,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         // }, 500);
     };
 
-    $scope.showPreview = function () {
-        $scope.previewChartType = $scope.setPreviewChartType;
-        $scope.previewColumn = $scope.setPreviewColumn;
+    $scope.showPreview = function (widget) {
+        $scope.previewChartType = $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType;
+        $scope.previewColumn = $scope.setPreviewColumn ? $scope.setPreviewColumn : widget;
     };
 
     $scope.editWidget = function (widget) {
