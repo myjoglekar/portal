@@ -104,7 +104,7 @@
                                             <span>Want to delete ? </span>
                                         </div>
                                         <div class="modal-footer">
-                                            <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget)" data-dismiss="modal">Ok</button>
+                                            <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal">Ok</button>
                                         </div>
                                     </div>
                                 </div>
@@ -151,7 +151,8 @@
                                                 </center>-->
                     </div> 
                     <div class="box-body" ng-if="widget.chartType === 'table'">
-                        <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}"  widget-Columns="{{widget.columns}}"></div>
+                        <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}"  widget-Columns="{{widget.columns}}"></div>                        
+
                         <!--<div dynamic-Table style="height: 100%;" class="ag-fresh"></div>-->
                         <!--                                <div set-Table-Fn="setTableFn(tableFn)"
                                                              dynamic-Table-Url='{{widget.directUrl}}'
@@ -258,7 +259,9 @@
                                 <div class="form-group">
                                     <label class="col-sm-2">Url</label>
                                     <div class="col-sm-10">
-                                        <input type="text" ng-model="widget.previewUrl" class="form-control" placeholder="Url">
+                                        <input type="text" ng-model="widget.previewUrl" class="form-control" 
+                                               ng-model-options='{ debounce: 1000 }' ng-change='changeUrl(widget.previewUrl)' 
+                                               placeholder="Url">
                                     </div>
                                 </div>
 
@@ -268,7 +271,7 @@
                                         <span ng-repeat="chartType in chartTypes track by chartType.id">
                                             <span ng-click="previewChart(chartType, widget, $index);" class="previewChart" title="{{chartType.name}}">
                                                 <!--<img src="{{chartType.url}}" class="charttype">-->
-                                                <i class="fa {{chartType.icon}}" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i>
+                                                <i style="cursor: pointer" class="fa {{chartType.icon}}" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i>
                                             </span>
                                         </span>
                                     </div>
@@ -292,8 +295,8 @@
                                         </button>
                                     </label>                                    
                                     <div class="col-sm-12">
-                                        <div ng-show="showFieldTable" class="table-responsive">                                               
-                                            <table class="table table table-bordered table-hover">
+                                        <div ng-show="showFieldTable">                                               
+                                            <table class="table table table-bordered table-responsive table-hover">
                                                 <thead>
                                                     <tr>
                                                         <td>Field Name</td>
@@ -400,7 +403,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-10">
-                                        <button class="btn btn-warning btn-xs" ng-click="showPreviewChart = !showPreviewChart">
+                                        <button class="btn btn-warning btn-xs" ng-click="showPreview(); showPreviewChart = !showPreviewChart">
                                             <i class="fa" ng-class="{'fa-angle-down': !showPreviewChart, 'fa-angle-up': showPreviewChart}"></i> Preview
                                         </button>
                                     </div>                                    
@@ -433,7 +436,8 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-primary" ng-click="save(widget)" data-dismiss="modal"><span class="fa fa-save"></span> SAVE</button>
+                            <button data-dismiss="modal" class="btn btn-warning" ng-click="save(widget)"><span class="fa fa-save"></span> Save</button>
+                            <button data-dismiss="modal" class="btn btn-warning"><span class="fa fa-times"></span> Cancel</button>
                         </div>
                     </div>
                 </div>

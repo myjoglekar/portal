@@ -7,6 +7,7 @@ package com.visumbu.api.adwords.report.xml.bean;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
+
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,23 +16,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author duc-dev-04
  */
 @XmlRootElement(name = "report")
-public class GeoReport {
+public class VideoReport {
 
-    private List<GeoReportRow> geoReportRow;
+    private List<VideoReportRow> videoReportRow;
 
-    public List<GeoReportRow> getGeoReportRow() {
-        return geoReportRow;
+    public List<VideoReportRow> getVideoReportRow() {
+        return videoReportRow;
     }
 
     @XmlElementWrapper(name = "table")
     @XmlElement(name = "row")
-    public void setGeoReportRow(List<GeoReportRow> geoReportRow) {
-        this.geoReportRow = geoReportRow;
+    public void setVideoReportRow(List<VideoReportRow> videoReportRow) {
+        this.videoReportRow = videoReportRow;
     }
 
     @Override
     public String toString() {
-        return "GeoReport{" + "geoReportRow=" + geoReportRow + '}';
+        return "VideoReport{" + "videoReportRow=" + videoReportRow + '}';
     }
-
 }

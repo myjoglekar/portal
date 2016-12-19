@@ -38,6 +38,7 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
+import com.visumbu.api.adwords.report.xml.bean.VideoReport;
 import com.visumbu.api.bing.report.xml.bean.KeywordPerformanceReport;
 import com.visumbu.api.utils.DateUtils;
 import com.visumbu.api.utils.FileReader;
@@ -163,7 +164,7 @@ public class AdwordsService {
         return null;
     }
 
-    public AccountReport getAccountReport(Date startDate, Date endDate, String accountId, String aggregation) {
+    public AccountReport getAccountReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         String aggregationDuration = "Date";
         if (aggregation.equalsIgnoreCase("weekly")) {
@@ -189,6 +190,18 @@ public class AdwordsService {
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         }
+
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
+
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -228,6 +241,390 @@ public class AdwordsService {
             response.saveToFile(filename);
 
             AccountReport report = (AccountReport) FileReader.readXML(filename, AccountReport.class);
+            System.out.println(report);
+            System.out.printf("Report successfully downloaded to: %s%n", filename);
+            return report;
+        } catch (ReportDownloadResponseException e) {
+            System.out.printf("Report was not downloaded due to: %s%n", e);
+        } catch (ReportException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public VideoReport getVideoCampaignReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
+        AdWordsSession session = getSession(accountId);
+
+        com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
+        if (aggregation.equalsIgnoreCase("weekly")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Week", "CampaignName",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("daily")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Date", "CampaignName",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "DayOfWeek", "CampaignName",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle", "Campaign",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "CampaignName",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
+
+        // Create report definition.
+        ReportDefinition reportDefinition = new ReportDefinition();
+        reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
+        reportDefinition.setReportType(ReportDefinitionReportType.VIDEO_PERFORMANCE_REPORT);
+        reportDefinition.setDownloadFormat(DownloadFormat.XML);
+
+        // Optional: Set the reporting configuration of the session to suppress header, column name, or
+        // summary rows in the report output. You can also configure this via your ads.properties
+        // configuration file. See AdWordsSession.Builder.from(Configuration) for details.
+        // In addition, you can set whether you want to explicitly include or exclude zero impression
+        // rows.
+        ReportingConfiguration reportingConfiguration
+                = new ReportingConfiguration.Builder()
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
+        session.setReportingConfiguration(reportingConfiguration);
+
+        reportDefinition.setSelector(selector);
+
+        try {
+            String filename = XML_FILE_DIR + "adwords-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            // Set the property api.adwords.reportDownloadTimeout or call
+            // ReportDownloader.setReportDownloadTimeout to set a timeout (in milliseconds)
+            // for CONNECT and READ in report downloads.
+            ReportDownloadResponse response
+                    = new ReportDownloader(session).downloadReport(reportDefinition);
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(response.getInputStream(), Charsets.UTF_8));
+            response.saveToFile(filename);
+
+            VideoReport report = (VideoReport) FileReader.readXML(filename, VideoReport.class);
+            System.out.println(report);
+            System.out.printf("Report successfully downloaded to: %s%n", filename);
+            return report;
+        } catch (ReportDownloadResponseException e) {
+            System.out.printf("Report was not downloaded due to: %s%n", e);
+        } catch (ReportException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public VideoReport getVideoCampaignDeviceReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
+        AdWordsSession session = getSession(accountId);
+
+        com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
+        if (aggregation.equalsIgnoreCase("weekly")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Week", "CampaignName", "Device",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("daily")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Date", "CampaignName", "Device",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "DayOfWeek", "CampaignName", "Device",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle", "Campaign",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "CampaignName", "Device",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
+
+        // Create report definition.
+        ReportDefinition reportDefinition = new ReportDefinition();
+        reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
+        reportDefinition.setReportType(ReportDefinitionReportType.VIDEO_PERFORMANCE_REPORT);
+        reportDefinition.setDownloadFormat(DownloadFormat.XML);
+
+        // Optional: Set the reporting configuration of the session to suppress header, column name, or
+        // summary rows in the report output. You can also configure this via your ads.properties
+        // configuration file. See AdWordsSession.Builder.from(Configuration) for details.
+        // In addition, you can set whether you want to explicitly include or exclude zero impression
+        // rows.
+        ReportingConfiguration reportingConfiguration
+                = new ReportingConfiguration.Builder()
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
+        session.setReportingConfiguration(reportingConfiguration);
+
+        reportDefinition.setSelector(selector);
+
+        try {
+            String filename = XML_FILE_DIR + "adwords-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            // Set the property api.adwords.reportDownloadTimeout or call
+            // ReportDownloader.setReportDownloadTimeout to set a timeout (in milliseconds)
+            // for CONNECT and READ in report downloads.
+            ReportDownloadResponse response
+                    = new ReportDownloader(session).downloadReport(reportDefinition);
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(response.getInputStream(), Charsets.UTF_8));
+            response.saveToFile(filename);
+
+            VideoReport report = (VideoReport) FileReader.readXML(filename, VideoReport.class);
+            System.out.println(report);
+            System.out.printf("Report successfully downloaded to: %s%n", filename);
+            return report;
+        } catch (ReportDownloadResponseException e) {
+            System.out.printf("Report was not downloaded due to: %s%n", e);
+        } catch (ReportException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public VideoReport getVideoDeviceReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
+        AdWordsSession session = getSession(accountId);
+
+        com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
+        if (aggregation.equalsIgnoreCase("weekly")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Week", "Device",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("daily")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Date", "Device",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "DayOfWeek", "Device",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle", "Campaign",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Device",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
+
+        // Create report definition.
+        ReportDefinition reportDefinition = new ReportDefinition();
+        reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
+        reportDefinition.setReportType(ReportDefinitionReportType.VIDEO_PERFORMANCE_REPORT);
+        reportDefinition.setDownloadFormat(DownloadFormat.XML);
+
+        // Optional: Set the reporting configuration of the session to suppress header, column name, or
+        // summary rows in the report output. You can also configure this via your ads.properties
+        // configuration file. See AdWordsSession.Builder.from(Configuration) for details.
+        // In addition, you can set whether you want to explicitly include or exclude zero impression
+        // rows.
+        ReportingConfiguration reportingConfiguration
+                = new ReportingConfiguration.Builder()
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
+        session.setReportingConfiguration(reportingConfiguration);
+
+        reportDefinition.setSelector(selector);
+
+        try {
+            String filename = XML_FILE_DIR + "adwords-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            // Set the property api.adwords.reportDownloadTimeout or call
+            // ReportDownloader.setReportDownloadTimeout to set a timeout (in milliseconds)
+            // for CONNECT and READ in report downloads.
+            ReportDownloadResponse response
+                    = new ReportDownloader(session).downloadReport(reportDefinition);
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(response.getInputStream(), Charsets.UTF_8));
+            response.saveToFile(filename);
+
+            VideoReport report = (VideoReport) FileReader.readXML(filename, VideoReport.class);
+            System.out.println(report);
+            System.out.printf("Report successfully downloaded to: %s%n", filename);
+            return report;
+        } catch (ReportDownloadResponseException e) {
+            System.out.printf("Report was not downloaded due to: %s%n", e);
+        } catch (ReportException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public VideoReport getVideoReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
+        AdWordsSession session = getSession(accountId);
+
+        com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
+        if (aggregation.equalsIgnoreCase("weekly")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Week",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("daily")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Date",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "DayOfWeek",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
+
+        // Create report definition.
+        ReportDefinition reportDefinition = new ReportDefinition();
+        reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
+        reportDefinition.setReportType(ReportDefinitionReportType.VIDEO_PERFORMANCE_REPORT);
+        reportDefinition.setDownloadFormat(DownloadFormat.XML);
+
+        // Optional: Set the reporting configuration of the session to suppress header, column name, or
+        // summary rows in the report output. You can also configure this via your ads.properties
+        // configuration file. See AdWordsSession.Builder.from(Configuration) for details.
+        // In addition, you can set whether you want to explicitly include or exclude zero impression
+        // rows.
+        ReportingConfiguration reportingConfiguration
+                = new ReportingConfiguration.Builder()
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
+        session.setReportingConfiguration(reportingConfiguration);
+
+        reportDefinition.setSelector(selector);
+
+        try {
+            String filename = XML_FILE_DIR + "adwords-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            // Set the property api.adwords.reportDownloadTimeout or call
+            // ReportDownloader.setReportDownloadTimeout to set a timeout (in milliseconds)
+            // for CONNECT and READ in report downloads.
+            ReportDownloadResponse response
+                    = new ReportDownloader(session).downloadReport(reportDefinition);
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(response.getInputStream(), Charsets.UTF_8));
+            response.saveToFile(filename);
+
+            VideoReport report = (VideoReport) FileReader.readXML(filename, VideoReport.class);
             System.out.println(report);
             System.out.printf("Report successfully downloaded to: %s%n", filename);
             return report;
@@ -500,7 +897,7 @@ public class AdwordsService {
         return null;
     }
 
-    public AdReport getAdReport(Date startDate, Date endDate, String accountId) {
+    public AdReport getAdReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
@@ -509,7 +906,16 @@ public class AdwordsService {
                 "AdType", "Description", "Description1", "Description2", "DisplayUrl", "CreativeFinalUrls", "CreativeDestinationUrl",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
         ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
 
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -558,7 +964,7 @@ public class AdwordsService {
         return null;
     }
 
-    public AccountHourOfDayReport getAccountHourOfDayReport(Date startDate, Date endDate, String accountId) {
+    public AccountHourOfDayReport getAccountHourOfDayReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
@@ -567,7 +973,16 @@ public class AdwordsService {
                 "Conversions", "SearchImpressionShare", "AveragePosition",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate", "HourOfDay"
         ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
 
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -616,7 +1031,7 @@ public class AdwordsService {
         return null;
     }
 
-    public AccountDayOfWeekReport getAccountDayOfWeekReport(Date startDate, Date endDate, String accountId) {
+    public AccountDayOfWeekReport getAccountDayOfWeekReport(Date startDate, Date endDate, String accountId, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
@@ -625,7 +1040,16 @@ public class AdwordsService {
                 "Conversions", "SearchImpressionShare", "AveragePosition",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
         ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
 
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -682,7 +1106,16 @@ public class AdwordsService {
                 "Conversions", "AveragePosition", "AllConversions",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
         ));
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
 
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());

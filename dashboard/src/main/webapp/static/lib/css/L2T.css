@@ -4407,7 +4407,7 @@ a.mail-to {
 }
 
 .ui-grid-header-canvas {
-    height: 40px;
+    height: 60px !important;
 }
 .ui-grid-viewport{
     overflow: auto !important;
