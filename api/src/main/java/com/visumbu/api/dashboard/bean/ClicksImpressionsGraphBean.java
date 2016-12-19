@@ -13,6 +13,7 @@ public class ClicksImpressionsGraphBean {
 
     private String weekDay;
     private String weekId;
+    private String hourOfDay;
     private Integer impressions;
     private Integer clicks;
     private Double cost;
@@ -67,6 +68,14 @@ public class ClicksImpressionsGraphBean {
     public void setWeekDay(String weekDay) {
         this.weekDay = weekDay;
     }
+
+    public String getHourOfDay() {
+        return hourOfDay;
+    }
+
+    public void setHourOfDay(String hourOfDay) {
+        this.hourOfDay = hourOfDay;
+    }      
     
     public Integer getImpressions() {
         return impressions;

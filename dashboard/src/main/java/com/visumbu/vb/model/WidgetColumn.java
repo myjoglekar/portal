@@ -52,7 +52,7 @@ public class WidgetColumn implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 32)
+    @Size(max = 1024)
     @Column(name = "field_name")
     private String fieldName;
     

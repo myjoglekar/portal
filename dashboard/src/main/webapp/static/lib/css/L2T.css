@@ -44,8 +44,9 @@ body {
     z-index: 820
 }
 .layout-top-nav .content-wrapper, .layout-top-nav .right-side, .layout-top-nav .main-footer {
-    margin-left: 0
+    margin-left: 0px;
 }
+
 
 @media (max-width:767px) {
     .content-wrapper, .right-side, .main-footer {
@@ -115,7 +116,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: 'proxima_nova_rgregular', Helvetica, Arial, sans-serif;
 }
 a {
-    color: #3c8dbc
+    color: #3d464d
 }
 a:hover, a:active, a:focus {
     outline: none;
@@ -141,9 +142,9 @@ a:hover, a:active, a:focus {
     -o-transition: margin-left .3s ease-in-out;
     transition: margin-left .3s ease-in-out;
     margin-bottom: 0;
-    margin-left: 230px;
+    //margin-left: 230px;
     border: none;
-    min-height: 50px;
+    min-height: 75px;
     border-radius: 0
 }
 .layout-top-nav .main-header .navbar {
@@ -246,7 +247,7 @@ a:hover, a:active, a:focus {
     display: none
 }
 .main-header .navbar-brand {
-    color: #fff
+    color: #fff;
 }
 .content-header {
     position: relative;
@@ -1338,28 +1339,28 @@ a:hover, a:active, a:focus {
     position: relative;
     border-radius: 3px;
     background: #ffffff;
-    /*border-top: 3px solid #d2d6de;*/
+    border: 1px solid #ddd;
     margin-bottom: 20px;
     width: 100%;
     /*box-shadow: 0 1px 1px rgba(0,0,0,0.1)*/
 }
 .box.box-primary {
-    border-top-color: #3c8dbc
+/*    border-top-color: #3c8dbc*/
 }
 .box.box-info {
-    border-top-color: #00c0ef
+/*    border-top-color: #00c0ef*/
 }
 .box.box-danger {
-    border-top-color: #dd4b39
+/*    border-top-color: #dd4b39*/
 }
 .box.box-warning {
-    border-top-color: #f39c12
+/*    border-top-color: #f39c12*/
 }
 .box.box-success {
-    border-top-color: #00a65a
+/*    border-top-color: #00a65a*/
 }
 .box.box-default {
-    border-top-color: #d2d6de
+/*    border-top-color: #d2d6de*/
 }
 .box.collapsed-box .box-body, .box.collapsed-box .box-footer {
     display: none
@@ -1513,7 +1514,7 @@ a:hover, a:active, a:focus {
 }
 .box-header.with-border {
     border-bottom: 1px solid #f4f4f4;
-    background: rgba(116, 196, 198, 0.7);
+   background: rgba(116, 196, 198, 0.36);
 }
 .collapsed-box .box-header.with-border {
     border-bottom: none
@@ -1557,8 +1558,8 @@ a:hover, a:active, a:focus {
     border-top-right-radius: 0;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
-    padding: 10px;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+/*    padding: 10px;*/
+/*    box-shadow: 0 1px 1px rgba(0,0,0,0.2);*/
 }
 .no-header .box-body {
     border-top-right-radius: 3px;
@@ -4282,8 +4283,9 @@ table.text-center, table.text-center td, table.text-center th {
     border-radius: 2px;
     display: block;
     width: 100%;
-    height: 34px;
+    height: 40px;
     padding: 6px 12px;
+    font-size: 18px;
 }
 
 .panel-heading {
@@ -4373,14 +4375,15 @@ a.mail-to {
 
 #daterange-btn {
     background-color: #3d464d;
-    color: #9dd5d7;
+    color: #fff;
     border: 1px solid #565d64;
 }
 
 .dropdown-toggle-btn {
     background-color: #3d464d;
-    color: #9dd5d7;
+    color: #fff;
     border-color: #565d64;
+    font-size:18px;
 }
 .skin-blue .main-header .navbar .sidebar-toggle {
     color: #9dd5d7 !important;
@@ -4393,7 +4396,7 @@ a.mail-to {
     word-wrap: break-word;
     height:40px;*/
 }
-ui-grid-header-cell-label ng-binding {
+/*ui-grid-header-cell-label ng-binding {
     z-index: 999999;
     position: relative;
     height: 40px;
@@ -4404,8 +4407,12 @@ ui-grid-header-cell-label ng-binding {
 }
 
 .ui-grid-header-canvas {
-    height: 40px;
+    height: 60px !important;
 }
 .ui-grid-viewport{
-    /*overflow: auto !important;*/
+    overflow: auto !important;
+}*/
+
+.mar-top {
+    margin-top: 16px !important;
 }
