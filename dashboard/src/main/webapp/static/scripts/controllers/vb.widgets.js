@@ -204,7 +204,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
 //scope.rowData = []ui-if="gridData.data.length>0"
             scope.loadingTable = true;
             scope.gridOptions = {
-//                rowHeight: 30,
+                rowHeight: 50,
                 enableColumnMenus: false,
                 enableGridMenu: false,
                 enableRowSelection: false,
