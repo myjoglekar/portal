@@ -305,21 +305,30 @@
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Group Priority</td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">X-Axis</td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">Y-Axis</td>
+                                                        <td>Sort</td>
                                                         <td><button class="btn btn-warning btn-xs" ng-click="addColumns(widget)">Add Column</button></td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr ng-if="widget.columns.length <= 0" ng-repeat="collectionField in collectionFields">
+<!--                                                    <tr ng-if="widget.columns.length <= 0" ng-repeat="collectionField in collectionFields">
                                                         <td>{{collectionField.name}}</td> 
                                                         <td>{{collectionField.displayName}}</td> 
-<!--                                                        <td>{{}}</td> 
-                                                        <td>{{}}</td> 
-                                                        <td>{{}}</td> 
-                                                        <td>{{}}</td> -->
-                                                    </tr>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">
+                                                            {{}}
+                                                        </td> 
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">
+                                                            {{}}
+                                                        </td> 
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
+                                                            {{}}
+                                                        </td> 
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
+                                                            {{}}
+                                                        </td> 
+                                                    </tr>-->
 
 
-                                                    <tr ng-if="widget.columns.length > 0" ng-repeat="column in widget.columns">
+                                                    <tr ng-repeat="column in widget.columns">
                                                         <td>
                                                             <div ng-hide="column.isEdit"> {{column.fieldName}}</div>
                                                             <div ng-show="column.isEdit">
@@ -363,6 +372,14 @@
                                                             </div>
                                                             <div ng-show="column.isEdit">
                                                                 <input type="text" class="form-control" ng-model="column.yAxis">
+                                                            </div>                                                            
+                                                        </td>
+                                                        <td>
+                                                            <div ng-hide="column.isEdit">
+                                                                {{column.sortOrder}}
+                                                            </div>
+                                                            <div ng-show="column.isEdit">
+                                                                <input type="text" class="form-control" ng-model="column.sortOrder">
                                                             </div>                                                            
                                                         </td>
                                                         <td>

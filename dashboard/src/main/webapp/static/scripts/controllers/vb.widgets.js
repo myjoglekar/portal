@@ -237,11 +237,15 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 cellTooltip: true,
                 enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
                 enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
-            }
+            };
             var startDate = "";
             var endDate = "";
             var columnDefs = [];
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                var sortField = "";
+                if(value.sortOrder) {
+                    sortField = value.fieldName;
+                }
                 columnDef = {
                     field: value.fieldName,
                     displayName: value.displayName,
