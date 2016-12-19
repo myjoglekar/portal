@@ -66,20 +66,7 @@
                     </ul>
                 </div>
             </div>
-        </li>
-        <li class="pull-right">
-            <div class="mar-top">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">Select Dealer
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="dealer in dealers">
-                            <a ui-sref="dashboard.tab({dealerId: dealer.id})">{{dealer.dealerName}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </li>
+        </li>        
          <li class="pull-right">
             <div class="mar-top">
                 <div class="dropdown">
@@ -90,6 +77,19 @@
                             <a data-ui-sref="dashboard({dashboardId:product.id})" ng-click="change(product)">
                                 {{product.productName}}
                             </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li class="pull-right">
+            <div class="mar-top">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">Select Dealer
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="dealer in dealers">
+                            <a ui-sref="dashboard.tab({dealerId: dealer.id})">{{dealer.dealerName}}</a>
                         </li>
                     </ul>
                 </div>
