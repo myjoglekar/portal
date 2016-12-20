@@ -6,12 +6,15 @@
 package com.visumbu.vb.admin.service;
 
 import com.visumbu.vb.admin.dao.UiDao;
+import com.visumbu.vb.bean.TabWidgetBean;
+import com.visumbu.vb.bean.WidgetColumnBean;
 import com.visumbu.vb.model.Dashboard;
 import com.visumbu.vb.model.DashboardTabs;
 import com.visumbu.vb.model.Product;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.model.WidgetColumn;
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,5 +89,40 @@ public class UiService {
 
     public WidgetColumn deleteWidgetColumn(Integer id) {
         return uiDao.deleteWidgetColumn(id);
+    }
+
+    public TabWidget saveTabWidget(Integer tabId, TabWidgetBean tabWidgetBean) {
+        TabWidget tabWidget = null;
+        if (tabWidgetBean.getId() != null) {
+            tabWidget = uiDao.getTabWidgetById(tabWidgetBean.getId());
+
+        } else {
+            tabWidget = new TabWidget();
+        }
+        tabWidget.setChartType(tabWidgetBean.getChartType());
+        tabWidget.setDirectUrl(tabWidgetBean.getDirectUrl());
+        tabWidget.setWidgetTitle(tabWidgetBean.getWidgetTitle());
+        TabWidget savedTabWidget = uiDao.saveTabWidget(tabWidget);
+        List<WidgetColumnBean> widgetColumns = tabWidgetBean.getWidgetColumns();
+        for (Iterator<WidgetColumnBean> iterator = widgetColumns.iterator(); iterator.hasNext();) {
+            WidgetColumnBean widgetColumnBean = iterator.next();
+            WidgetColumn widgetColumn = null;
+            if (widgetColumnBean.getId() != null) {
+                widgetColumn = uiDao.getWidgetColunmById(widgetColumnBean.getId());
+            } else {
+                widgetColumn = new WidgetColumn();
+            }
+            widgetColumn.setFieldName(widgetColumnBean.getName());
+            widgetColumn.setDisplayFormat(widgetColumnBean.getFormat());
+            widgetColumn.setDisplayName(widgetColumnBean.getDisplayName());
+            widgetColumn.setSortOrder(widgetColumnBean.getSortDirection());
+            widgetColumn.setGroupPriority(widgetColumnBean.getGroupOrder());
+            widgetColumn.setAgregationFunction(widgetColumnBean.getAggregationType());
+            widgetColumn.setxAxis(widgetColumnBean.getxAxis());
+            widgetColumn.setyAxis(widgetColumnBean.getyAxis());
+            widgetColumn.setWidgetId(savedTabWidget);
+            uiDao.create(widgetColumn);
+        }
+        return savedTabWidget;
     }
 }

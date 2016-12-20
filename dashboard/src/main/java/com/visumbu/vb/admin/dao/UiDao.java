@@ -109,4 +109,14 @@ public class UiDao extends BaseDao {
         return dashboardTab;
     }
 
+    public TabWidget saveTabWidget(TabWidget tabWidget) {
+        sessionFactory.getCurrentSession().save(tabWidget);
+        return tabWidget;
+    }
+
+    public WidgetColumn getWidgetColunmById(Integer id) {
+        WidgetColumn widgetColumn = (WidgetColumn) sessionFactory.getCurrentSession().get(WidgetColumn.class, id);
+        return widgetColumn;
+    }
+
 }
