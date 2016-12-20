@@ -133,7 +133,7 @@ public class SocialImpactTabController {
         return returnMap;
     }
 
-
+    
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {

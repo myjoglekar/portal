@@ -695,6 +695,8 @@ public class BingService {
             report.setAggregation(ReportAggregation.DAY_OF_WEEK);
         } else if (aggregation.equalsIgnoreCase("hourOfDay")) {
             report.setAggregation(ReportAggregation.HOUR_OF_DAY);
+        } else if(aggregation.isEmpty()) {
+            // report.setAggregation(ReportAggregation.DAILY);
         } else {
             report.setAggregation(ReportAggregation.DAILY);
         }

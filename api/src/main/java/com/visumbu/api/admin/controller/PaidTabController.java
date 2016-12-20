@@ -111,7 +111,7 @@ public class PaidTabController {
                 return returnMap;
             }
 
-            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily", "SEARCH");
+            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "", "SEARCH");
             AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, "daily");
             List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountRows = bingAccountReport.getAccountPerformanceRows();
