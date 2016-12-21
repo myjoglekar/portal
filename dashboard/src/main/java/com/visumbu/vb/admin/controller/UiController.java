@@ -7,6 +7,7 @@ package com.visumbu.vb.admin.controller;
 
 import com.visumbu.vb.admin.service.UiService;
 import com.visumbu.vb.admin.service.UserService;
+import com.visumbu.vb.bean.TabWidgetBean;
 import com.visumbu.vb.controller.BaseController;
 import com.visumbu.vb.model.DashboardTabs;
 import com.visumbu.vb.model.TabWidget;
@@ -16,12 +17,16 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
@@ -74,10 +79,14 @@ public class UiController extends BaseController {
     
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
-    TabWidget updateTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId, @RequestBody TabWidget tabWidget) {
-        return uiService.createTabWidget(tabId, tabWidget);
+    TabWidget updateTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId, @RequestBody TabWidgetBean tabWidget) {
+        System.out.println(tabWidget);
+        return uiService.saveTabWidget(tabId, tabWidget);
+        //return null; //uiService.createTabWidget(tabId, tabWidget);
     }
 
+    
+    
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
@@ -106,6 +115,14 @@ public class UiController extends BaseController {
     public @ResponseBody
     WidgetColumn deleteWidgetColumn(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
         return uiService.deleteWidgetColumn(id);
+    }
+    
+    
+    
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void handle(HttpMessageNotReadableException e) {
+        e.printStackTrace();
     }
 
 }

@@ -306,8 +306,89 @@
                                         </button>
                                     </div>                            
                                     <div class="col-sm-12">
-                                        <div ng-show="showFieldTable" class="table-responsive">                                               
-                                            <table class="table table-bordered table-hover">
+                                        <div ng-show="showFieldTable" class="table-responsive">  
+
+                                            <!--List All Widget Columns-->
+
+                                            <table class="table table-bordered table-hover" ng-if="widget.columns.length <= 0">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Field Name</td>
+                                                        <td>Display Name</td>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Aggregation Function</td>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Group Priority</td>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">X-Axis</td>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">Y-Axis</td>
+                                                        <td>Sort</td>
+                                                        <td>Format</td>
+                                                        <td>Alignment</td>
+                                                        <td><button class="btn btn-info" ng-click="addSelectColumn()">Add Column</button></td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="collectionField in collectionFields">
+                                                        <td>
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">{{collectionField.name}}</div>
+                                                            <div ng-show="collectionField.isEditPreviewColumn">
+                                                                <select ng-model="collectionField.name" class="form-control">
+                                                                    <option ng-repeat="previewField in previewFields" value="{{previewField.name}}">{{previewField.name}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </td> 
+                                                        <td>
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">{{collectionField.displayName}}</div>
+                                                            <div ng-show="collectionField.isEditPreviewColumn"><input class="form-control" ng-model="collectionField.displayName"></div>
+                                                        </td> 
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">{{collectionField.aggregation}}</div>
+                                                            <div ng-show="collectionField.isEditPreviewColumn"><input class="form-control" ng-model="collectionField.aggregation"></div>
+                                                        </td>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">{{collectionField.groupPriority}}</div>
+                                                            <div ng-show="collectionField.isEditPreviewColumn"><input class="form-control" ng-model="collectionField.groupPriority"></div>
+                                                        </td>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">{{collectionField.xAxis}}</div>
+                                                            <div ng-show="collectionField.isEditPreviewColumn"><input class="form-control" ng-model="collectionField.xAxis"></div>
+                                                        </td>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">{{collectionField.yAxis}}</div>
+                                                            <div ng-show="collectionField.isEditPreviewColumn"><input class="form-control" ng-model="collectionField.yAxis"></div>
+                                                        </td>
+                                                        <td>
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">{{collectionField.sortOrder}}</div>
+                                                            <div ng-show="collectionField.isEditPreviewColumn"><input class="form-control" ng-model="collectionField.sortOrder"></div>
+                                                        </td>
+                                                        <td>
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">{{collectionField.displayFormat}}</div>
+                                                            <div ng-show="collectionField.isEditPreviewColumn"><input class="form-control" ng-model="collectionField.displayFormat"></div>
+                                                        </td>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">{{collectionField.align}}</div>
+                                                            <div ng-show="collectionField.isEditPreviewColumn">
+                                                                <select ng-model="collectionField.align" class="form-control">
+                                                                    <option ng-repeat="alignment in alignments" value="{{alignment.name}}">{{alignment.displayName}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div ng-show="collectionField.isEditPreviewColumn">
+                                                                <button class="btn btn-default btn-xs" ng-click="collectionField.isEditPreviewColumn = false;"><i class="fa fa-save"></i></button>
+                                                                <!--<button class="btn btn-default btn-xs" ng-click="column.isEdit = false"><i class="fa fa-close"></i></button>-->
+                                                                <button class="btn btn-default btn-xs" ng-click="deleteUnSelectColumn($index, widget, collectionField)"><i class="fa fa-trash"></i></button>
+                                                            </div>
+                                                            <div ng-hide="collectionField.isEditPreviewColumn">
+                                                                <button class="btn btn-default btn-xs" ng-click="collectionField.isEditPreviewColumn = true;"><i class="fa fa-pencil"></i></button>
+                                                                <button class="btn btn-default btn-xs" ng-click="deleteUnSelectColumn($index, widget, collectionField)"><i class="fa fa-trash"></i></button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <!--Display Selected Widget Columns-->
+
+                                            <table class="table table-bordered table-hover" ng-if="widget.columns.length > 0">
                                                 <thead> 
                                                     <tr>
                                                         <td>Field Name</td>
@@ -316,21 +397,14 @@
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Group Priority</td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">X-Axis</td>
                                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table'">Y-Axis</td>
+                                                        <td>Sort</td>
+                                                        <td>Format</td>
+                                                        <td>Alignment</td>
                                                         <td><button class="btn btn-info" ng-click="addColumns(widget)">Add Column</button></td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr ng-if="widget.columns.length <= 0" ng-repeat="collectionField in collectionFields">
-                                                        <td>{{collectionField.name}}</td> 
-                                                        <td>{{collectionField.displayName}}</td> 
-                                                        <!--                                                        <td>{{}}</td> 
-                                                                                                                <td>{{}}</td> 
-                                                                                                                <td>{{}}</td> 
-                                                                                                                <td>{{}}</td> -->
-                                                    </tr>
-
-
-                                                    <tr ng-if="widget.columns.length > 0" ng-repeat="column in widget.columns">
+                                                    <tr ng-repeat="column in widget.columns">
                                                         <td>
                                                             <div ng-hide="column.isEdit"> {{column.fieldName}}</div>
                                                             <div ng-show="column.isEdit">
@@ -375,6 +449,30 @@
                                                             <div ng-show="column.isEdit">
                                                                 <input type="text" class="form-control" ng-model="column.yAxis">
                                                             </div>                                                            
+                                                        </td>
+                                                        <td>
+                                                            <div ng-hide="column.isEdit">
+                                                                {{column.sortOrder}}
+                                                            </div>
+                                                            <div ng-show="column.isEdit">
+                                                                <input type="text" class="form-control" ng-model="column.sortOrder">
+                                                            </div>                                                            
+                                                        </td>
+                                                        <td>
+                                                            <div ng-hide="column.isEdit">
+                                                                {{column.displayFormat}}
+                                                            </div>
+                                                            <div ng-show="column.isEdit">
+                                                                <input type="text" class="form-control" ng-model="column.displayFormat">
+                                                            </div>                                                            
+                                                        </td>
+                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">
+                                                            <div ng-hide="column.isEdit">{{collectionField.align}}</div>
+                                                            <div ng-show="column.isEdit">
+                                                                <select ng-model="column.align" class="form-control">
+                                                                    <option ng-repeat="alignment in alignments" value="{{alignment.name}}">{{alignment.displayName}}</option>
+                                                                </select>
+                                                            </div>
                                                         </td>
                                                         <td>
                                                             <div ng-show="column.isEdit">

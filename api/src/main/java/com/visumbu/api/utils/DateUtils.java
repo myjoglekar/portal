@@ -5,10 +5,12 @@
  */
 package com.visumbu.api.utils;
 
+import com.visumbu.api.dashboard.bean.DbDateRange;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -21,10 +23,109 @@ import java.util.logging.Logger;
  * @author varghees
  */
 public class DateUtils {
-    
+
+    public static DbDateRange getLastMonth() {
+        DbDateRange dateRange = new DbDateRange();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        cal.set(Calendar.DATE, 1);
+        Date firstDateOfPreviousMonth = cal.getTime();
+        System.out.println(firstDateOfPreviousMonth);
+        dateRange.setStartDate(firstDateOfPreviousMonth);
+        cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
+        Date lastDateOfPreviousMonth = cal.getTime();
+        System.out.println(lastDateOfPreviousMonth);
+        dateRange.setEndDate(lastDateOfPreviousMonth);
+        dateRange.setRangeName("Last Month");
+        return dateRange;
+    }
+
+    public static DbDateRange getCurrentMonth() {
+        DbDateRange dateRange = new DbDateRange();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DATE, 1);
+        Date firstDateOfPreviousMonth = cal.getTime();
+        System.out.println(firstDateOfPreviousMonth);
+        dateRange.setStartDate(firstDateOfPreviousMonth);
+        Date lastDateOfPreviousMonth = new Date();
+        System.out.println(lastDateOfPreviousMonth);
+        dateRange.setEndDate(lastDateOfPreviousMonth);
+        dateRange.setRangeName("Last Month");
+        return dateRange;
+    }
+
+    private static Date getFirstDayOfQuarter(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) / 3 * 3);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        return cal.getTime();
+    }
+
+    private static Date getLastDayOfQuarter(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) / 3 * 3 + 2);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return cal.getTime();
+    }
+
+    public static DbDateRange getLastQuarter() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -3);
+        cal.set(Calendar.DATE, 1);
+        Date lastQuearter = cal.getTime();
+        DbDateRange dateRange = new DbDateRange();
+        dateRange.setStartDate(getFirstDayOfQuarter(lastQuearter));
+        dateRange.setEndDate(getLastDayOfQuarter(lastQuearter));
+        dateRange.setRangeName("Last Quarter");
+        return dateRange;
+    }
+
+    public static DbDateRange getCurrentQuarter() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DATE, 1);
+        Date lastQuearter = cal.getTime();
+        DbDateRange dateRange = new DbDateRange();
+        dateRange.setStartDate(getFirstDayOfQuarter(lastQuearter));
+        dateRange.setEndDate(getLastDayOfQuarter(lastQuearter));
+        dateRange.setRangeName("Current Quarter");
+        return dateRange;
+    }
+
+    public static DbDateRange getLastYear() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_YEAR, 1);
+        cal.add(Calendar.YEAR, -1);
+        Date firstDay = cal.getTime();
+        DbDateRange dateRange = new DbDateRange();
+        dateRange.setStartDate(getFirstDayOfQuarter(firstDay));
+        cal.set(Calendar.MONTH, 11);
+        cal.set(Calendar.DATE, 31);
+        dateRange.setEndDate(getLastDayOfQuarter(cal.getTime()));
+        dateRange.setRangeName("Last Year");
+        return dateRange;
+    }
+
+    public static DbDateRange getCurrentYear() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_YEAR, 1);
+        Date firstDay = cal.getTime();
+        DbDateRange dateRange = new DbDateRange();
+        dateRange.setStartDate(getFirstDayOfQuarter(firstDay));
+        dateRange.setEndDate(getLastDayOfQuarter(new Date()));
+        dateRange.setRangeName("Current Year");
+        return dateRange;
+    }
+
     public static String getDayOfWeek(Integer day) {
         String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         return days[day - 1];
+    }
+    public static Integer getWeekDayByDay(String day) {
+        String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+         List<String> list = Arrays.asList(days);
+         return list.indexOf(day) ;
     }
 
     public static String getStartDayOfWeek(Date date) {
