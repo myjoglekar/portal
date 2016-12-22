@@ -7,12 +7,12 @@
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
         <link href="static/lib/fonts/proxima/stylesheet.css" rel="stylesheet" type="text/css"/>
-<!--        <link rel="stylesheet" href="static/css/areaChart.css">
-        <link rel="stylesheet" href="static/css/lineChart.css">
-        <link rel="stylesheet" href="static/css/barChart.css">
-        <link rel="stylesheet" href="static/css/pieChart.css">
-        <link rel="stylesheet" href="static/css/donutChart.css">
-        <link rel="stylesheet" href="static/css/groupedBarChart.css">-->
+        <!--        <link rel="stylesheet" href="static/css/areaChart.css">
+                <link rel="stylesheet" href="static/css/lineChart.css">
+                <link rel="stylesheet" href="static/css/barChart.css">
+                <link rel="stylesheet" href="static/css/pieChart.css">
+                <link rel="stylesheet" href="static/css/donutChart.css">
+                <link rel="stylesheet" href="static/css/groupedBarChart.css">-->
 
         <!--<link rel="stylesheet" href="static/css/report.css">-->   
         <!--<link rel="stylesheet" href="static/css/leftSideMenu.css">-->
@@ -47,25 +47,8 @@
 
     <body ng-app="VizBoardApp" class="hold-transition skin-blue layout-top-nav">
         <div class="wrapper"> 
-            <!-- Main Header -->
-            <header class="main-header">
-                <div ng-include="'static/views/vb.header.html'"></div>
-            </header>
-            <!-- Left Side Menu -->
-<!--            <aside class="main-sidebar">
-                <span ng-include="'static/views/vb.leftSideMenu.html'"></span>
-            </aside>-->
-            <!--Content-->
-            <div class="content-wrapper">
-                <div ui-view=""></div>
-            </div>
-
-            <!-- Main Footer -->
-            <footer class="main-footer">
-                <span ng-include="'static/views/vb.footer.html'"></span>
-            </footer>
-
-<!--                        <div class="control-sidebar-bg"></div>-->
+            <div ui-view=""></div>
+            <!--                        <div class="control-sidebar-bg"></div>-->
         </div>
         <!-- ./wrapper --> 
 
@@ -73,7 +56,7 @@
 
         <!-- jQuery 2.2.3 --> 
         <!--    <script src="static/lib/js/jquery/jquery.min.js"></script>-->
-                <link href="static/lib/js/c3/c3.css" rel="stylesheet" type="text/css"/>
+        <link href="static/lib/js/c3/c3.css" rel="stylesheet" type="text/css"/>
 
         <script src="static/lib/js/d3/d3.v3.js" type="text/javascript"></script>
         <!--<script src="static/lib/js/d3/d3.v3.min.js"></script>-->
@@ -102,16 +85,16 @@
         <script src="static/lib/js/angular/angular-cookie.min.js"></script>
         <script src="static/lib/js/angular/angular-sanitize.min.js" type="text/javascript"></script>
         <script src="static/lib/js/angular/ui-bootstrap-tpls.min.js"></script>
-        
-<!--        <script src="static/lib/js/wijmo/wijmo.min.js" type="text/javascript"></script>
-        <script src="static/lib/js/wijmo/wijmo.grid.js" type="text/javascript"></script>-->
-        
+
+        <!--        <script src="static/lib/js/wijmo/wijmo.min.js" type="text/javascript"></script>
+                <script src="static/lib/js/wijmo/wijmo.grid.js" type="text/javascript"></script>-->
+
         <!--<script src="static/lib/js/ui-table/ag-grid-enterprise.js" type="text/javascript"></script>-->
         <!--<script src="static/lib/js/ui-table/csv.js" type="text/javascript"></script>-->
         <!--<script src="static/lib/js/ui-table/pdfmake.js" type="text/javascript"></script>-->
         <!--<script src="static/lib/js/ui-table/vfs_fonts.js" type="text/javascript"></script>-->
         <script src="static/lib/js/ui-table/ui-grid.js" type="text/javascript"></script>
-        
+
         <script src="static/lib/js/angular/select.js" type="text/javascript"></script>
         <script src="static/lib/js/angular/angular-filter.min.js"></script>
         <script src="static/lib/js/angular/smart-table.debug.js"></script>

@@ -11,7 +11,7 @@ package com.visumbu.vb.bean;
  */
 public class WidgetColumnBean {
     private Integer id;
-    private String name;
+    private String fieldName;
     private String type;
     private String xAxis;
     private String yAxis;
@@ -19,17 +19,18 @@ public class WidgetColumnBean {
     private String xAxisLabel;
     private String displayName;
     private Integer sortPriority;
-    private String sortDirection;
-    private Integer groupOrder;
-    private String aggregationType;
+    private String sortOrder;
+    private Integer groupPriority;
+    private String agregationFunction;
     private String functionParameters;
     private String fieldType;
     private String baseFieldName;
     private String fieldGenerationFunction;
     private String fieldGenerationFields;
     private String remarks;
-    private String format;
-
+    private String displayFormat;
+    private String alignment;
+    
     public Integer getId() {
         return id;
     }
@@ -38,13 +39,13 @@ public class WidgetColumnBean {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }    
 
     public String getType() {
         return type;
@@ -102,30 +103,30 @@ public class WidgetColumnBean {
         this.sortPriority = sortPriority;
     }
 
-    public String getSortDirection() {
-        return sortDirection;
+    public String getSortOrder() {
+        return sortOrder;
     }
 
-    public void setSortDirection(String sortDirection) {
-        this.sortDirection = sortDirection;
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }    
+
+    public Integer getGroupPriority() {
+        return groupPriority;
     }
 
-    public Integer getGroupOrder() {
-        return groupOrder;
+    public void setGroupPriority(Integer groupPriority) {
+        this.groupPriority = groupPriority;
     }
 
-    public void setGroupOrder(Integer groupOrder) {
-        this.groupOrder = groupOrder;
-    }
-   
-    public String getAggregationType() {
-        return aggregationType;
+    public String getAgregationFunction() {
+        return agregationFunction;
     }
 
-    public void setAggregationType(String aggregationType) {
-        this.aggregationType = aggregationType;
+    public void setAgregationFunction(String agregationFunction) {
+        this.agregationFunction = agregationFunction;
     }
-
+        
     public String getFunctionParameters() {
         return functionParameters;
     }
@@ -174,17 +175,25 @@ public class WidgetColumnBean {
         this.remarks = remarks;
     }
 
-    public String getFormat() {
-        return format;
+    public String getDisplayFormat() {
+        return displayFormat;
     }
 
-    public void setFormat(String format) {
-        this.format = format;
+    public void setDisplayFormat(String displayFormat) {
+        this.displayFormat = displayFormat;
+    }
+        
+    public String getAlignment() {
+        return alignment;
+    }
+
+    public void setAlignment(String alignment) {
+        this.alignment = alignment;
     }
 
     @Override
     public String toString() {
-        return "WidgetColumnBean{" + "id=" + id + ", name=" + name + ", type=" + type + ", xAxis=" + xAxis + ", yAxis=" + yAxis + ", yAxisLabel=" + yAxisLabel + ", xAxisLabel=" + xAxisLabel + ", displayName=" + displayName + ", sortPriority=" + sortPriority + ", sortDirection=" + sortDirection + ", groupOrder=" + groupOrder + ", aggregationType=" + aggregationType + ", functionParameters=" + functionParameters + ", fieldType=" + fieldType + ", baseFieldName=" + baseFieldName + ", fieldGenerationFunction=" + fieldGenerationFunction + ", fieldGenerationFields=" + fieldGenerationFields + ", remarks=" + remarks + ", format=" + format + '}';
+        return "WidgetColumnBean{" + "id=" + id + ", fieldName=" + fieldName + ", type=" + type + ", xAxis=" + xAxis + ", yAxis=" + yAxis + ", yAxisLabel=" + yAxisLabel + ", xAxisLabel=" + xAxisLabel + ", displayName=" + displayName + ", sortPriority=" + sortPriority + ", sortOrder=" + sortOrder + ", groupPriority=" + groupPriority + ", agregationFunction=" + agregationFunction + ", functionParameters=" + functionParameters + ", fieldType=" + fieldType + ", baseFieldName=" + baseFieldName + ", fieldGenerationFunction=" + fieldGenerationFunction + ", fieldGenerationFields=" + fieldGenerationFields + ", remarks=" + remarks + ", displayFormat=" + displayFormat + ", alignment=" + alignment + '}';
     }
-       
+    
 }

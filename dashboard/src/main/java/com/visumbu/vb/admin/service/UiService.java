@@ -104,24 +104,21 @@ public class UiService {
         tabWidget.setWidgetTitle(tabWidgetBean.getWidgetTitle());
         TabWidget savedTabWidget = uiDao.saveTabWidget(tabWidget);
         List<WidgetColumnBean> widgetColumns = tabWidgetBean.getWidgetColumns();
+        uiDao.deleteWidgetColumns(tabWidget.getId());
         for (Iterator<WidgetColumnBean> iterator = widgetColumns.iterator(); iterator.hasNext();) {
             WidgetColumnBean widgetColumnBean = iterator.next();
-            WidgetColumn widgetColumn = null;
-            if (widgetColumnBean.getId() != null) {
-                widgetColumn = uiDao.getWidgetColunmById(widgetColumnBean.getId());
-            } else {
-                widgetColumn = new WidgetColumn();
-            }
-            widgetColumn.setFieldName(widgetColumnBean.getName());
-            widgetColumn.setDisplayFormat(widgetColumnBean.getFormat());
+            WidgetColumn widgetColumn = new WidgetColumn();
+            widgetColumn.setFieldName(widgetColumnBean.getFieldName());
+            widgetColumn.setDisplayFormat(widgetColumnBean.getDisplayFormat());
             widgetColumn.setDisplayName(widgetColumnBean.getDisplayName());
-            widgetColumn.setSortOrder(widgetColumnBean.getSortDirection());
-            widgetColumn.setGroupPriority(widgetColumnBean.getGroupOrder());
-            widgetColumn.setAgregationFunction(widgetColumnBean.getAggregationType());
+            widgetColumn.setSortOrder(widgetColumnBean.getSortOrder());
+            widgetColumn.setGroupPriority(widgetColumnBean.getGroupPriority());
+            widgetColumn.setAgregationFunction(widgetColumnBean.getAgregationFunction());
             widgetColumn.setxAxis(widgetColumnBean.getxAxis());
             widgetColumn.setyAxis(widgetColumnBean.getyAxis());
+            widgetColumn.setAlignment(widgetColumnBean.getAlignment());
             widgetColumn.setWidgetId(savedTabWidget);
-            uiDao.create(widgetColumn);
+            uiDao.saveOrUpdate(widgetColumn);
         }
         return savedTabWidget;
     }

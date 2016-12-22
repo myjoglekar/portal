@@ -1514,8 +1514,8 @@ a:hover, a:active, a:focus {
 }
 .box-header.with-border {
     border-bottom: 1px solid #f4f4f4;
-/*    background: rgba(116, 196, 198, 0.36);*/
-background: rgb(117, 194, 197);
+    background: rgba(116, 196, 198, 0.36);
+/*background: rgb(117, 194, 197);*/
 }
 .collapsed-box .box-header.with-border {
     border-bottom: none

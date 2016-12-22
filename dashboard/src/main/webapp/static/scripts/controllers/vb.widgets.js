@@ -2,21 +2,39 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.widgets = [];
     $scope.selectAggregations = [{name: 'sum'}, {name: 'avg'}, {name: 'count'}, {name: 'min'}, {name: 'max'}];   //Aggregation Type-Popup
     $scope.selectDateDurations = [{duration: "None"}, {duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
-    $scope.alignments = [{name: "left", displayName: "Left"}, {name: "right", displayName: "Right"}, {name: "center", displayName: "Center"}]
+    $scope.alignments = [{name: "left", displayName: "Left"}, {name: "right", displayName: "Right"}, {name: "center", displayName: "Center"}];
+    $scope.sorting = [{name: 'asc', value: 1}, {name: 'dec', value: 0}, {name: 'None', value: ''}];
     $scope.isEditPreviewColumn = false;
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
-        if (widget.directUrl) {
-            $http.get(widget.directUrl + "?fieldsOnly=true").success(function (response) {
-                $scope.collectionFields = [];
-                $scope.collectionFields = response.columnDefs;
-                $scope.previewFields = response.columnDefs;
-            });
+
+        if (widget.columns) {
+            widget.columns = widget.columns;
+            if (widget.directUrl) {
+                $http.get(widget.directUrl + "?fieldsOnly=true").success(function (response) {
+                    $scope.collectionFields = [];
+                    $scope.collectionFields = response.columnDefs;
+                });
+            }
+        } else {
+            if (widget.directUrl) {
+                $http.get(widget.directUrl + "?fieldsOnly=true").success(function (response) {
+                    $scope.collectionFields = [];
+                    widget.columns = response.columnDefs;
+                    $scope.collectionFields = response.columnDefs;
+                });
+            }
         }
     };
 
-    $scope.changeUrl = function (url) {
+    $scope.changeUrl = function (widget, url) {
+        widget.columns = [];
         $http.get(url + "?fieldsOnly=true").success(function (response) {
             $scope.collectionFields = [];
+            angular.forEach(response.columnDefs, function (value, key) {
+                widget.columns.push({fieldName: value.fieldName, displayName: value.displayName,
+                    agregationFunction: value.agregationFunction, displayFormat: value.displayFormat,
+                    groupPriority: value.groupPriority, sortOrder: value.sortOrder, sortPriority: value.sortPriority});
+            })
             $scope.previewFields = response.columnDefs;
             angular.forEach(response, function (value, key) {
                 angular.forEach(value, function (value, key) {
@@ -26,14 +44,13 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         });
     };
 
-    $scope.deleteUnSelectColumn = function (index, widget, collectionField) {
-        $scope.collectionFields.splice(index, 1);
-        console.log($scope.collectionFields)
-    }
-
-    $scope.addSelectColumn = function () {
-        $scope.collectionFields.unshift({isEditPreviewColumn: true, isDelete: true})
-    }
+//    $scope.deleteUnSelectColumn = function (index, widget, collectionField) {
+//        $scope.collectionFields.splice(index, 1);
+//    }
+//
+//    $scope.addSelectColumn = function () {
+//        $scope.collectionFields.unshift({isDelete: true})
+//    };
 
     function getWidgetItem() {      //Default Loading Items
         if (!$stateParams.tabId) {
@@ -54,11 +71,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
     $scope.addWidget = function (newWidget) {       //Add Widget
         var data = {
-            width: newWidget.panelWidth, 'minHeight': 25, columns: []
+            width: newWidget, 'minHeight': 25, columns: []
         };
         $http({method: 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
-            console.log(response.id)
-            $scope.widgets.push({id: response.id, width: newWidget.panelWidth, 'minHeight': 25, columns: []});
+            $scope.widgets.push({id: response.id, width: newWidget, 'minHeight': 25, columns: []});
             $scope.newWidgetId = response.id;
             // getWidgetItem();
         });
@@ -72,11 +88,12 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.addColumns = function (widget) {      //Add Columns - Popup
-        widget.columns.unshift({isEdit: true, isDelete: true})
+        //$scope.isEdit = true;
+        widget.columns.unshift({});
     };
 
     $scope.saveColumn = function (widget, column) {     //Delete Columns-Popup
-        console.log($scope.newWidgetId)
+        console.log($scope.newWidgetId);
         var data = {
             id: column.id,
             agregationFunction: column.agregationFunction,
@@ -88,15 +105,21 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             sortOrder: column.sortOrder,
             displayFormat: column.displayFormat
         };
-        $http({method: column.id ? 'PUT' : 'POST', url: 'admin/ui/widgetColumn/' + widget.id, data: data}).success(function (response) {
-            column.id = response.id;
-        });
+//        $http({method: column.id ? 'PUT' : 'POST', url: 'admin/ui/widgetColumn/' + widget.id, data: data}).success(function (response) {
+//            column.id = response.id;
+//        });
     };
 
-    $scope.deleteColumn = function (index, widget, column) {        //Delete Columns - Popup
-        $http({method: 'DELETE', url: 'admin/ui/widgetColumn/' + column.id}).success(function () {
-        });
-        widget.columns.splice(index, 1);
+    $scope.deleteColumn = function (widgetColumns, index) {        //Delete Columns - Popup
+        widgetColumns.splice(index, 1);
+        // widget = [];
+//       widget.splice(index, 1);
+//        $scope.widget.splice(index, 1);
+//        console.log(widget.id)
+
+////        console.log(widget.columns.id)
+//        $http({method: 'DELETE', url: 'admin/ui/widgetColumn/' + widget.id}).success(function () {
+//        });
     };
 
     $http.get('static/datas/imageUrl.json').success(function (response) {       //Popup- Select Chart-Type Json
@@ -149,18 +172,8 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.selectedRow = chartType.type;
 
         widget.widgetChartType = chartType.type;
-        //$scope.widgetPreviewChart = widget.widgetChartType;
-
         $scope.setPreviewChartType = chartType.type;
         $scope.setPreviewColumn = widget;
-        //$scope.previewChartType = chartType.type;
-        //$scope.previewColumn = widget;
-
-//        $scope.previewChartType = "";
-//        $scope.columns = [];
-        //$timeout(function () {
-//        $scope.widgetPreviewChartUrl = widget.previewUrl;
-        // }, 500);
     };
 
     $scope.showPreview = function (widget) {        //Show Preview Chart - Popup
@@ -174,17 +187,20 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         widget.previewUrl = widget.directUrl;
         widget.previewType = widget.chartType;
         widget.previewTitle = widget.widgetTitle;
+        $scope.editChartType = widget.chartType;
     };
 
     $scope.save = function (widget) {
-        console.log($scope.collectionFields)
-        console.log($scope.newWidgetId)
+        console.log(widget);
+        console.log(widget.columns);
+//        console.log($scope.collectionFields);
+//        console.log($scope.newWidgetId);
         var data = {
             id: widget.id,
-            chartType: $scope.previewChartType ? $scope.previewChartType : widget.chartType,
+            chartType: $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType,
             directUrl: widget.previewUrl,
             widgetTitle: widget.previewTitle,
-            widgetColumns: $scope.collectionFields
+            widgetColumns: widget.columns
         };
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
         });
@@ -270,8 +286,16 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.displayFormat) {
                     cellFormat = value.displayFormat;
                 }
-                columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD | gridDisplayFormat : "' + cellFormat + '"}}</span></div>';
-                columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | gridDisplayFormat:"' + cellFormat + '"}}</div>';
+                var cellAlignment = "";
+                if (value.alignment === 'left') {
+                    cellAlignment = 'text-left';
+                } else if (value.alignment === 'right') {
+                    cellAlignment = 'text-right';
+                } else {
+                    cellAlignment = 'text-center';
+                }
+                columnDef.cellTemplate = '<div  class="ui-grid-cell-contents ' + cellAlignment + '"><span>{{COL_FIELD | gridDisplayFormat : "' + cellFormat + '"}}</span></div>';
+                columnDef.footerCellTemplate = '<div class="' + cellAlignment + '" >{{col.getAggregationValue() | gridDisplayFormat:"' + cellFormat + '"}}</div>';
 
                 if (value.agregationFunction == "sum") {
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
@@ -389,16 +413,24 @@ app.directive('lineChartDirective', function ($http) {
             var ySeriesOrder = 1;
             var sortField = "";
             var displayDataFormat = {};
-            angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
 
+            angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                if (!labels["format"]) {
+                    labels = {format: {}};
+                }
                 if (value.displayFormat) {
                     var format = value.displayFormat;
                     var displayName = value.displayName;
-                    if (!labels["format"]) {
-                        labels = {format: {}};
-                    }
                     labels["format"][displayName] = function (value) {
+                        if (format.indexOf("%")) {
+                            return d3.format(format)(value / 100);
+                        }
                         return d3.format(format)(value);
+                    };
+                } else {
+                    var displayName = value.displayName;
+                    labels["format"][displayName] = function (value) {
+                        return value;
                     };
                 }
                 if (value.sortOrder) {
@@ -411,7 +443,6 @@ app.directive('lineChartDirective', function ($http) {
                     yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
                 }
             });
-            console.log(labels);
             var xData = [];
             var xTicks = [];
 
@@ -439,7 +470,10 @@ app.directive('lineChartDirective', function ($http) {
                         loopCount++;
                         return a[xAxis.fieldName];
                     });
+
                     columns.push(xTicks);
+
+
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
                             return a[value.fieldName];
@@ -447,9 +481,8 @@ app.directive('lineChartDirective', function ($http) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-                    displayFormat = {'Cost': function (value) {
-                            return "X"
-                        }};
+                    console.log(columns)
+
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
@@ -463,7 +496,6 @@ app.directive('lineChartDirective', function ($http) {
                                 tick: {
                                     format: function (x) {
                                         return xData[x];
-
                                     }
                                 }
                             }
@@ -504,14 +536,22 @@ app.directive('barChartDirective', function ($http) {
             var displayDataFormat = {};
 
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                if (!labels["format"]) {
+                    labels = {format: {}};
+                }
                 if (value.displayFormat) {
                     var format = value.displayFormat;
                     var displayName = value.displayName;
-                    if (!labels["format"]) {
-                        labels = {format: {}};
-                    }
                     labels["format"][displayName] = function (value) {
+                        if (format.indexOf("%")) {
+                            return d3.format(format)(value / 100);
+                        }
                         return d3.format(format)(value);
+                    };
+                } else {
+                    var displayName = value.displayName;
+                    labels["format"][displayName] = function (value) {
+                        return value;
                     };
                 }
                 if (value.sortOrder) {
@@ -524,7 +564,6 @@ app.directive('barChartDirective', function ($http) {
                     yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
                 }
             });
-            console.log(labels);
             var xData = [];
             var xTicks = [];
 
@@ -577,10 +616,6 @@ app.directive('barChartDirective', function ($http) {
                             x: {
                                 tick: {
                                     format: function (x) {
-//                                    console.log("TESTING");
-//                                    console.log(x);
-//                                    console.log(xData[x]);
-//                                    console.log(xData);
                                         return xData[x];
                                     }
                                 }
@@ -622,14 +657,22 @@ app.directive('pieChartDirective', function ($http) {
             var displayDataFormat = {};
 
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                if (!labels["format"]) {
+                    labels = {format: {}};
+                }
                 if (value.displayFormat) {
                     var format = value.displayFormat;
                     var displayName = value.displayName;
-                    if (!labels["format"]) {
-                        labels = {format: {}};
-                    }
                     labels["format"][displayName] = function (value) {
+                        if (format.indexOf("%")) {
+                            return d3.format(format)(value / 100);
+                        }
                         return d3.format(format)(value);
+                    };
+                } else {
+                    var displayName = value.displayName;
+                    labels["format"][displayName] = function (value) {
+                        return value;
                     };
                 }
                 if (value.sortOrder) {
@@ -733,14 +776,22 @@ app.directive('areaChartDirective', function ($http) {
             var displayDataFormat = {};
 
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                if (!labels["format"]) {
+                    labels = {format: {}};
+                }
                 if (value.displayFormat) {
                     var format = value.displayFormat;
                     var displayName = value.displayName;
-                    if (!labels["format"]) {
-                        labels = {format: {}};
-                    }
                     labels["format"][displayName] = function (value) {
+                        if (format.indexOf("%")) {
+                            return d3.format(format)(value / 100);
+                        }
                         return d3.format(format)(value);
+                    };
+                } else {
+                    var displayName = value.displayName;
+                    labels["format"][displayName] = function (value) {
+                        return value;
                     };
                 }
                 if (value.sortOrder) {
@@ -753,7 +804,6 @@ app.directive('areaChartDirective', function ($http) {
                     yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
                 }
             });
-            console.log(labels);
             var xData = [];
             var xTicks = [];
 
