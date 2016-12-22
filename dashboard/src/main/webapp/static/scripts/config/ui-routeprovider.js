@@ -30,5 +30,5 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'ReportController'
             });
 
-    $urlRouterProvider.otherwise('index/dashboard/dashboard/widget/1');
+    $urlRouterProvider.otherwise('index/dashboard/dashboard/widget/2');
 })

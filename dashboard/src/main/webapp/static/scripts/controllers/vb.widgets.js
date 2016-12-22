@@ -412,8 +412,11 @@ app.directive('lineChartDirective', function ($http) {
             var xAxis;
             var ySeriesOrder = 1;
             var sortField = "";
+            var sortOrder = 0;
+            var sortDataType = "number";
             var displayDataFormat = {};
-
+            var y2 = {show: false, label: ''};
+            var axes = {};
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 if (!labels["format"]) {
                     labels = {format: {}};
@@ -422,7 +425,7 @@ app.directive('lineChartDirective', function ($http) {
                     var format = value.displayFormat;
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
-                        if (format.indexOf("%")) {
+                        if (format.indexOf("%") > -1) {
                             return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
@@ -435,12 +438,17 @@ app.directive('lineChartDirective', function ($http) {
                 }
                 if (value.sortOrder) {
                     sortField = value.fieldName;
+                    sortOrder = value.sortOrder;
                 }
                 if (value.xAxis) {
                     xAxis = {fieldName: value.fieldName, displayName: value.displayName};
                 }
                 if (value.yAxis) {
                     yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
+                    axes[value.displayName] = 'y' + (value.yAxis > 1 ? 2 : '');
+                }
+                if (value.yAxis > 1) {
+                    y2 = {show: true, label: ''};
                 }
             });
             var xData = [];
@@ -449,9 +457,18 @@ app.directive('lineChartDirective', function ($http) {
             function sortResults(unsortedData, prop, asc) {
                 sortedData = unsortedData.sort(function (a, b) {
                     if (asc) {
-                        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+                        if(isNaN(a[prop])) {
+                            return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+                        } else {
+                            return (parseInt(a[prop]) > parseInt(b[prop])) ? 1 : ((parseInt(a[prop]) < parseInt(b[prop])) ? -1 : 0);
+                        }
                     } else {
-                        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+                        if(isNaN(a[prop])) {
+                            return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+                        }
+                        else {
+                            return (parseInt(b[prop]) > parseInt(a[prop])) ? 1 : ((parseInt(b[prop]) < parseInt(a[prop])) ? -1 : 0);
+                        }
                     }
                 });
                 return sortedData;
@@ -463,7 +480,9 @@ app.directive('lineChartDirective', function ($http) {
                     scope.xAxis = [];
                     var loopCount = 0;
                     var chartData = response.data;
-                    chartData = sortResults(chartData, sortField, 1);
+                    if (sortField != "") {
+                        chartData = sortResults(chartData, sortField, sortOrder);
+                    }
                     xTicks = [xAxis.fieldName];
                     xData = chartData.map(function (a) {
                         xTicks.push(loopCount);
@@ -488,7 +507,8 @@ app.directive('lineChartDirective', function ($http) {
                         data: {
                             x: xAxis.fieldName,
                             columns: columns,
-                            labels: labels
+                            labels: labels,
+                            axes: axes
                         },
                         tooltip: {show: false},
                         axis: {
@@ -498,7 +518,15 @@ app.directive('lineChartDirective', function ($http) {
                                         return xData[x];
                                     }
                                 }
-                            }
+                            },
+                            y2: { show:true }
+//                            y: {
+//                                label: 'Impressions'
+//                            },
+//                            y2: {
+//                                show: true,
+//                                label: 'Clicks'
+//                            }
                         },
                         grid: {
                             x: {
@@ -533,8 +561,10 @@ app.directive('barChartDirective', function ($http) {
             var xAxis;
             var ySeriesOrder = 1;
             var sortField = "";
+            var sortOrder = 0;
             var displayDataFormat = {};
-
+            var y2 = {show: false, label: ''};
+            var axes = {};
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 if (!labels["format"]) {
                     labels = {format: {}};
@@ -543,7 +573,7 @@ app.directive('barChartDirective', function ($http) {
                     var format = value.displayFormat;
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
-                        if (format.indexOf("%")) {
+                        if (format.indexOf("%") > -1) {
                             return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
@@ -556,12 +586,17 @@ app.directive('barChartDirective', function ($http) {
                 }
                 if (value.sortOrder) {
                     sortField = value.fieldName;
+                    sortOrder = value.sortOrder;
                 }
                 if (value.xAxis) {
                     xAxis = {fieldName: value.fieldName, displayName: value.displayName};
                 }
                 if (value.yAxis) {
                     yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
+                    axes[value.displayName] = 'y' + (value.yAxis > 1 ? 2 : '');
+                }
+                if (value.yAxis > 1) {
+                    y2 = {show: true, label: ''};
                 }
             });
             var xData = [];
@@ -570,9 +605,18 @@ app.directive('barChartDirective', function ($http) {
             function sortResults(unsortedData, prop, asc) {
                 sortedData = unsortedData.sort(function (a, b) {
                     if (asc) {
-                        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+                        if(isNaN(a[prop])) {
+                            return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+                        } else {
+                            return (parseInt(a[prop]) > parseInt(b[prop])) ? 1 : ((parseInt(a[prop]) < parseInt(b[prop])) ? -1 : 0);
+                        }
                     } else {
-                        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+                        if(isNaN(a[prop])) {
+                            return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+                        }
+                        else {
+                            return (parseInt(b[prop]) > parseInt(a[prop])) ? 1 : ((parseInt(b[prop]) < parseInt(a[prop])) ? -1 : 0);
+                        }
                     }
                 });
                 return sortedData;
@@ -584,7 +628,7 @@ app.directive('barChartDirective', function ($http) {
                     scope.xAxis = [];
                     var loopCount = 0;
                     var chartData = response.data;
-                    chartData = sortResults(chartData, sortField, 1);
+                    chartData = sortResults(chartData, sortField, sortOrder);
                     xTicks = [xAxis.fieldName];
                     xData = chartData.map(function (a) {
                         xTicks.push(loopCount);
@@ -609,7 +653,8 @@ app.directive('barChartDirective', function ($http) {
                             x: xAxis.fieldName,
                             columns: columns,
                             labels: labels,
-                            type: 'bar'
+                            type: 'bar',
+                            axes: axes
                         },
                         tooltip: {show: false},
                         axis: {
@@ -619,7 +664,8 @@ app.directive('barChartDirective', function ($http) {
                                         return xData[x];
                                     }
                                 }
-                            }
+                            },
+                            y2: y2
                         },
                         grid: {
                             x: {
@@ -654,6 +700,7 @@ app.directive('pieChartDirective', function ($http) {
             var xAxis;
             var ySeriesOrder = 1;
             var sortField = "";
+            var sortOrder = 0;
             var displayDataFormat = {};
 
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
@@ -664,7 +711,7 @@ app.directive('pieChartDirective', function ($http) {
                     var format = value.displayFormat;
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
-                        if (format.indexOf("%")) {
+                        if (format.indexOf("%") > -1) {
                             return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
@@ -677,12 +724,17 @@ app.directive('pieChartDirective', function ($http) {
                 }
                 if (value.sortOrder) {
                     sortField = value.fieldName;
+                    sortOrder = value.sortOrder;
                 }
                 if (value.xAxis) {
                     xAxis = {fieldName: value.fieldName, displayName: value.displayName};
                 }
                 if (value.yAxis) {
                     yAxis.push({fieldName: value.fieldName, displayName: value.displayName});
+                    axes[value.displayName] = 'y' + (value.yAxis > 1 ? 2 : '');
+                }
+                if (value.yAxis > 1) {
+                    y2 = {show: true, label: ''};
                 }
             });
             console.log(labels);
@@ -692,9 +744,18 @@ app.directive('pieChartDirective', function ($http) {
             function sortResults(unsortedData, prop, asc) {
                 sortedData = unsortedData.sort(function (a, b) {
                     if (asc) {
-                        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+                        if(isNaN(a[prop])) {
+                            return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+                        } else {
+                            return (parseInt(a[prop]) > parseInt(b[prop])) ? 1 : ((parseInt(a[prop]) < parseInt(b[prop])) ? -1 : 0);
+                        }
                     } else {
-                        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+                        if(isNaN(a[prop])) {
+                            return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+                        }
+                        else {
+                            return (parseInt(b[prop]) > parseInt(a[prop])) ? 1 : ((parseInt(b[prop]) < parseInt(a[prop])) ? -1 : 0);
+                        }
                     }
                 });
                 return sortedData;
@@ -706,7 +767,7 @@ app.directive('pieChartDirective', function ($http) {
                     scope.xAxis = [];
                     var loopCount = 0;
                     var chartData = response.data;
-                    chartData = sortResults(chartData, sortField, 1);
+                    chartData = sortResults(chartData, sortField, sortOrder);
                     xTicks = [xAxis.fieldName];
                     xData = chartData.map(function (a) {
                         xTicks.push(loopCount);
@@ -773,8 +834,10 @@ app.directive('areaChartDirective', function ($http) {
             var xAxis;
             var ySeriesOrder = 1;
             var sortField = "";
+            var sortOrder = 0;
             var displayDataFormat = {};
-
+            var y2 = {show: false, label: ''};
+            var axes = {};
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 if (!labels["format"]) {
                     labels = {format: {}};
@@ -783,7 +846,7 @@ app.directive('areaChartDirective', function ($http) {
                     var format = value.displayFormat;
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
-                        if (format.indexOf("%")) {
+                        if (format.indexOf("%") > -1) {
                             return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
@@ -796,6 +859,7 @@ app.directive('areaChartDirective', function ($http) {
                 }
                 if (value.sortOrder) {
                     sortField = value.fieldName;
+                    sortOrder = value.sortOrder;
                 }
                 if (value.xAxis) {
                     xAxis = {fieldName: value.fieldName, displayName: value.displayName};
@@ -810,9 +874,18 @@ app.directive('areaChartDirective', function ($http) {
             function sortResults(unsortedData, prop, asc) {
                 sortedData = unsortedData.sort(function (a, b) {
                     if (asc) {
-                        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+                        if(isNaN(a[prop])) {
+                            return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+                        } else {
+                            return (parseInt(a[prop]) > parseInt(b[prop])) ? 1 : ((parseInt(a[prop]) < parseInt(b[prop])) ? -1 : 0);
+                        }
                     } else {
-                        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+                        if(isNaN(a[prop])) {
+                            return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+                        }
+                        else {
+                            return (parseInt(b[prop]) > parseInt(a[prop])) ? 1 : ((parseInt(b[prop]) < parseInt(a[prop])) ? -1 : 0);
+                        }
                     }
                 });
                 return sortedData;
@@ -824,7 +897,7 @@ app.directive('areaChartDirective', function ($http) {
                     scope.xAxis = [];
                     var loopCount = 0;
                     var chartData = response.data;
-                    chartData = sortResults(chartData, sortField, 1);
+                    chartData = sortResults(chartData, sortField, sortOrder);
                     xTicks = [xAxis.fieldName];
                     xData = chartData.map(function (a) {
                         xTicks.push(loopCount);
@@ -839,14 +912,15 @@ app.directive('areaChartDirective', function ($http) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-
+                    console.log('Line : ', columns)
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
                             x: xAxis.fieldName,
                             columns: columns,
                             labels: labels,
-                            type: 'area'
+                            type: 'area',
+                            axes: axes
                         },
                         tooltip: {show: false},
                         axis: {
@@ -883,6 +957,9 @@ app.directive('areaChartDirective', function ($http) {
         .filter('gridDisplayFormat', function () {
             return function (input, formatString) {
                 if (formatString) {
+                    if (formatString.indexOf("%") > -1) {
+                        return d3.format(formatString)(input / 100);
+                    }
                     return d3.format(formatString)(input);
                 }
                 return input;

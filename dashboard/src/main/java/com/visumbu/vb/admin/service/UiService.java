@@ -14,6 +14,7 @@ import com.visumbu.vb.model.Product;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.model.WidgetColumn;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,14 @@ public class UiService {
 
     public List<Product> getProduct() {
         List<Product> product = uiDao.read(Product.class);
-        return product;
+        List<Product> returnList = new ArrayList<>();
+        for (Iterator<Product> iterator = product.iterator(); iterator.hasNext();) {
+            Product product1 = iterator.next();
+            if(!product1.getProductName().equalsIgnoreCase("overall")) {
+                returnList.add(product1);
+            }
+        }
+        return returnList;
     }
 
     public List<Dashboard> getDashboards(VbUser user) {

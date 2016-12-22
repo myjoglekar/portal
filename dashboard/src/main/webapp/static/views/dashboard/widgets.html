@@ -213,7 +213,7 @@
                                                         </div>
                                                     </td>
                                                     <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
-                                                        <div ng-hide="isEdit"> {{widget.agregationFunction}}</div>
+                                                        <div ng-hide="isEdit"> {{currentColumn.agregationFunction}}</div>
                                                         <div ng-show="isEdit">
                                                             <!--<input type="text" class="form-control" ng-model="column.agregationFunction">-->
                                                             <select ng-model="currentColumn.agregationFunction" class="form-control">
@@ -317,7 +317,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button data-dismiss="modal" class="btn btn-info" ng-click="save(widget); showFieldTable = false; showPreviewChart = false;"><span class="fa fa-save"></span> Save</button>
+                        <button data-dismiss="modal" class="btn btn-info" ng-click="save(widget); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-save"></span> Save</button>
                         <button data-dismiss="modal" class="btn btn-danger"><span class="fa fa-times"></span> Cancel</button>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $stateParams, $state) {
+    
     console.log($stateParams.dashboardId)
     $scope.userName = $cookies.getObject("username");
 
