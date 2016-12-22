@@ -15,127 +15,127 @@ public class ColumnDefUtils {
 
     public static ColumnDef getCtrColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("ctr");
+        columnDef.setFieldName("ctr");
         columnDef.setDisplayName("CTR");
-        columnDef.setAggregationType("sum");
+        columnDef.setAgregationFunction("sum");
         return columnDef;
     }
 
     public static ColumnDef getImpressionsColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("impressions");
+        columnDef.setFieldName("impressions");
         columnDef.setDisplayName("Impressions");
-        columnDef.setAggregationType("sum");
+        columnDef.setAgregationFunction("sum");
         return columnDef;
     }
 
     public static ColumnDef getClicksColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("clicks");
+        columnDef.setFieldName("clicks");
         columnDef.setDisplayName("Clicks");
-        columnDef.setAggregationType("sum");
+        columnDef.setAgregationFunction("sum");
         return columnDef;
     }
 
     public static ColumnDef getDeviceColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("device");
+        columnDef.setFieldName("device");
         columnDef.setDisplayName("Device Name");
-        columnDef.setGroupOrder(1);
+        columnDef.setGroupPriority(1);
         return columnDef;
     }
 
     public static ColumnDef getCostColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("cost");
+        columnDef.setFieldName("cost");
         columnDef.setDisplayName("Cost");
-        columnDef.setAggregationType("sum");
+        columnDef.setAgregationFunction("sum");
         return columnDef;
     }
 
     public static ColumnDef getAverageCpcColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("averageCpc");
+        columnDef.setFieldName("averageCpc");
         columnDef.setDisplayName("Average Cpc");
-        columnDef.setAggregationType("avg");
+        columnDef.setAgregationFunction("avg");
         return columnDef;
     }
 
     public static ColumnDef getAveragePositionColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("averagePosition");
+        columnDef.setFieldName("averagePosition");
         columnDef.setDisplayName("Average Position");
-        columnDef.setAggregationType("avg");
+        columnDef.setAgregationFunction("avg");
         return columnDef;
     }
 
     public static ColumnDef getConversionsColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("conversions");
+        columnDef.setFieldName("conversions");
         columnDef.setDisplayName("Conversions");
-        columnDef.setAggregationType("avg");
+        columnDef.setAgregationFunction("avg");
         return columnDef;
     }
 
     public static ColumnDef getSearchImpressionsShare() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("searchImpressionsShare");
+        columnDef.setFieldName("searchImpressionsShare");
         columnDef.setDisplayName("Search Impressions Share");
-        columnDef.setAggregationType("avg");
+        columnDef.setAgregationFunction("avg");
         return columnDef;
     }
 
     public static ColumnDef getCpaColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("cpa");
+        columnDef.setFieldName("cpa");
         columnDef.setDisplayName("CPA");
-        columnDef.setAggregationType("avg");
+        columnDef.setAgregationFunction("avg");
         return columnDef;
     }
 
     public static ColumnDef getCampaignDeviceColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("device");
+        columnDef.setFieldName("device");
         columnDef.setDisplayName("Device Name");
-        columnDef.setGroupOrder(2);
+        columnDef.setGroupPriority(2);
         return columnDef;
     }
 
     public static ColumnDef getSourceColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("source");
+        columnDef.setFieldName("source");
         columnDef.setDisplayName("Source");
         return columnDef;
     }
 
     public static ColumnDef getCampaignNameColumnDef() {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName("campaignName");
+        columnDef.setFieldName("campaignName");
         columnDef.setDisplayName("Campaign Name");
-        columnDef.setGroupOrder(1);
+        columnDef.setGroupPriority(1);
         return columnDef;
     }
 
     public static ColumnDef getGenericColumnDef(String name, String displayName) {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName(name);
+        columnDef.setFieldName(name);
         columnDef.setDisplayName(displayName);
         return columnDef;
     }
 
     public static ColumnDef getGenericColumnDef(String name, String displayName, String agreegationType) {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName(name);
+        columnDef.setFieldName(name);
         columnDef.setDisplayName(displayName);
-        columnDef.setAggregationType(agreegationType);
+        columnDef.setAgregationFunction(agreegationType);
         return columnDef;
     }
 
     public static ColumnDef getGenericColumnDef(String name, String displayName, Integer groupOrder) {
         ColumnDef columnDef = new ColumnDef();
-        columnDef.setName(name);
+        columnDef.setFieldName(name);
         columnDef.setDisplayName(displayName);
-        columnDef.setGroupOrder(groupOrder);
+        columnDef.setGroupPriority(groupOrder);
         return columnDef;
     }
 

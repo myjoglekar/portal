@@ -92,8 +92,8 @@ public class PaidTabController {
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
         try {
-            Date startDate = DateUtils.get12WeeksBack();
-            Date endDate = DateUtils.getToday();
+            Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
@@ -111,8 +111,8 @@ public class PaidTabController {
                 return returnMap;
             }
 
-            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily", "SEARCH");
-            AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, "daily");
+            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "", "SEARCH");
+            AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, "");
             List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountRows = bingAccountReport.getAccountPerformanceRows();
 

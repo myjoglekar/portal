@@ -11,14 +11,14 @@ package com.visumbu.api.bean;
  */
 public class ColumnDef {
 
-    private String name;
+    private String fieldName;
     private String type;
     private String sortPriority;
-    private String sortDirection;
-    private String aggregationType;
+    private String sortOrder;
+    private String agregationFunction;
     private String displayName;
-    private Integer groupOrder;
-    private String format;
+    private Integer groupPriority;
+    private String displayFormat;
 
     public static class Aggregation {
 
@@ -29,44 +29,48 @@ public class ColumnDef {
         public static final String COUNT = "count";
     }
     public static class Format {
-        public static final String CURRENCY = "currency";
+        public static final String CURRENCY = "$,.2F";
+        public static final String PERCENTAGE = "%";
+        public static final String DECIMAL1 = ",.1F";
+        public static final String DECIMAL2 = ",.2F";
+        public static final String INTEGER = ",.0F";
     }
 
-    public ColumnDef(String name, String type, String displayName) {
-        this.name = name;
+    public ColumnDef(String fieldName, String type, String displayName) {
+        this.fieldName = fieldName;
         this.type = type;
         this.displayName = displayName;
     }
-    public ColumnDef(String name, String type, String displayName, Integer groupOrder) {
-        this.name = name;
+    public ColumnDef(String fieldName, String type, String displayName, Integer groupPriority) {
+        this.fieldName = fieldName;
         this.type = type;
         this.displayName = displayName;
-        this.groupOrder = groupOrder;
+        this.groupPriority = groupPriority;
     }
 
-    public ColumnDef(String name, String type, String displayName, String aggregationType, String format) {
-        this.name = name;
+    public ColumnDef(String fieldName, String type, String displayName, String agregationFunction, String displayFormat) {
+        this.fieldName = fieldName;
         this.type = type;
-        this.aggregationType = aggregationType;
+        this.agregationFunction = agregationFunction;
         this.displayName = displayName;
-        this.format = format;
+        this.displayFormat = displayFormat;
     }
 
-    public ColumnDef(String name,String type, String displayName, String aggregationType) {
-        this.name = name;
-        this.aggregationType = aggregationType;
+    public ColumnDef(String fieldName,String type, String displayName, String agregationFunction) {
+        this.fieldName = fieldName;
+        this.agregationFunction = agregationFunction;
         this.displayName = displayName;
     }
 
-    public ColumnDef(String name, String sortPriority, String sortDirection, String aggregationType, String displayName, Integer groupOrder, String format) {
-        this.name = name;
+    public ColumnDef(String fieldName, String sortPriority, String sortOrder, String agregationFunction, String displayName, Integer groupPriority, String displayFormat) {
+        this.fieldName = fieldName;
         this.type = type;
         this.sortPriority = sortPriority;
-        this.sortDirection = sortDirection;
-        this.aggregationType = aggregationType;
+        this.sortOrder = sortOrder;
+        this.agregationFunction = agregationFunction;
         this.displayName = displayName;
-        this.groupOrder = groupOrder;
-        this.format = format;
+        this.groupPriority = groupPriority;
+        this.displayFormat = displayFormat;
     }
 
     public ColumnDef() {
@@ -79,21 +83,21 @@ public class ColumnDef {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getDisplayFormat() {
+        return displayFormat;
+    }
+
+    public void setDisplayFormat(String displayFormat) {
+        this.displayFormat = displayFormat;
+    }
     
-    public String getFormat() {
-        return format;
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
     public String getSortPriority() {
@@ -104,20 +108,20 @@ public class ColumnDef {
         this.sortPriority = sortPriority;
     }
 
-    public String getSortDirection() {
-        return sortDirection;
+    public String getSortOrder() {
+        return sortOrder;
     }
 
-    public void setSortDirection(String sortDirection) {
-        this.sortDirection = sortDirection;
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
-    public String getAggregationType() {
-        return aggregationType;
+    public String getAgregationFunction() {
+        return agregationFunction;
     }
 
-    public void setAggregationType(String aggregationType) {
-        this.aggregationType = aggregationType;
+    public void setAgregationFunction(String agregationFunction) {
+        this.agregationFunction = agregationFunction;
     }
 
     public String getDisplayName() {
@@ -128,12 +132,12 @@ public class ColumnDef {
         this.displayName = displayName;
     }
 
-    public Integer getGroupOrder() {
-        return groupOrder;
+    public Integer getGroupPriority() {
+        return groupPriority;
     }
 
-    public void setGroupOrder(Integer groupOrder) {
-        this.groupOrder = groupOrder;
+    public void setGroupPriority(Integer groupPriority) {
+        this.groupPriority = groupPriority;
     }
-
+    
 }

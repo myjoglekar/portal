@@ -182,6 +182,13 @@ public class AdwordsService {
                     "Conversions", "SearchImpressionShare", "AveragePosition",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
+        } else if(aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
         } else {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", aggregationDuration,
@@ -190,6 +197,7 @@ public class AdwordsService {
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         }
+        
 
         if (filter != null) {
             final Predicate predicate = new Predicate();
