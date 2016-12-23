@@ -84,12 +84,19 @@ public class UiDao extends BaseDao {
         return widgetColumn;
     }
 
+    public void deleteWidgetColumns(Integer widgetId) {
+        String queryStr = "delete from WidgetColumn d where d.widgetId.id = :widgetId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("widgetId", widgetId);
+        query.executeUpdate();
+    }
+
     public TabWidget deleteTabWidget(Integer id) {
         String queryStr = "delete from WidgetColumn d where d.widgetId.id = :widgetId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("widgetId", id);
         query.executeUpdate();
-        
+
         delete(getTabWidgetById(id));
         return null;
     }
@@ -110,13 +117,17 @@ public class UiDao extends BaseDao {
     }
 
     public TabWidget saveTabWidget(TabWidget tabWidget) {
-        sessionFactory.getCurrentSession().save(tabWidget);
+        sessionFactory.getCurrentSession().saveOrUpdate(tabWidget);
         return tabWidget;
     }
 
     public WidgetColumn getWidgetColunmById(Integer id) {
         WidgetColumn widgetColumn = (WidgetColumn) sessionFactory.getCurrentSession().get(WidgetColumn.class, id);
         return widgetColumn;
+    }
+
+    public void saveOrUpdate(Object object) {
+        sessionFactory.getCurrentSession().saveOrUpdate(object);
     }
 
 }

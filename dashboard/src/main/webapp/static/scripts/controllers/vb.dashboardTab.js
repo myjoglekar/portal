@@ -61,7 +61,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state) {
         angular.forEach(response, function (value, key) {
             $scope.dashboardName = value.dashboardId.dashboardTitle;
         })
-        $state.go("dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : response[0].id});
+        $state.go("index.dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : response[0].id});
     });
 
 //    $http.get("admin/ui/dbWidget/1").success(function (response) {

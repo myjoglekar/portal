@@ -92,8 +92,8 @@ public class PaidTabController {
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
         try {
-            Date startDate = DateUtils.get12WeeksBack();
-            Date endDate = DateUtils.getToday();
+            Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
@@ -111,8 +111,8 @@ public class PaidTabController {
                 return returnMap;
             }
 
-            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily", "SEARCH");
-            AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, "daily");
+            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "", "SEARCH");
+            AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, "");
             List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountRows = bingAccountReport.getAccountPerformanceRows();
 
@@ -207,8 +207,8 @@ public class PaidTabController {
                 String day = accountReportRow.getHourOfDay();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
-                Double cost = Double.parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
-                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+                Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
+                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
 
                 String adwordsStartDayOfWeek = day;
                 ClicksImpressionsHourOfDayBean oldBean = dataMap.get(adwordsStartDayOfWeek);
@@ -232,8 +232,8 @@ public class PaidTabController {
                 String day = accountReportRow.getHourOfDay().getValue();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
-                Double cost = Double.parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
+                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
 
                 String bingStartDayOfWeek = day;
                 ClicksImpressionsHourOfDayBean oldBean = dataMap.get(bingStartDayOfWeek);
@@ -297,8 +297,8 @@ public class PaidTabController {
                 String day = accountReportRow.getDayOfWeek();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
-                Double cost = Double.parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
-                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+                Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
+                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
 
                 String adwordsStartDayOfWeek = day;
                 ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
@@ -323,8 +323,8 @@ public class PaidTabController {
                 String day = accountReportRow.getDayOfWeek().getValue();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
-                Double cost = Double.parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
+                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
 
                 String bingStartDayOfWeek = DateUtils.getDayOfWeek(Integer.parseInt(day));
                 ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
@@ -388,8 +388,10 @@ public class PaidTabController {
                 String day = accountReportRow.getDay();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
-                Double cost = Double.parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
-                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+                Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
+//                Double cpc = parseDouble(accountReportRow.getAvgCPC() == null ? "0" : accountReportRow.getAvgCPC());
+//                Double cpa = parseDouble(accountReportRow.getCostConv() == null ? "0" : accountReportRow.getCostConv());
+                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
 
                 String adwordsStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "yyyy-MM-dd"));
                 ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
@@ -403,6 +405,8 @@ public class PaidTabController {
                 bean.setClicks(clicks);
                 bean.setImpressions(impressions);
                 bean.setCost(cost);
+                bean.setCpc(cost / clicks);
+                bean.setCpa(cost / conversions);
                 bean.setConversions(conversions);
                 bean.setWeekDay(adwordsStartDayOfWeek);
                 dataMap.put(adwordsStartDayOfWeek, bean);
@@ -413,8 +417,10 @@ public class PaidTabController {
                 String day = accountReportRow.getGregorianDate().getValue();
                 Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                 Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
-                Double cost = Double.parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                Double conversions = Double.parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
+                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                Double cpc = parseDouble(accountReportRow.getAverageCpc() == null ? "0" : accountReportRow.getAverageCpc().getValue());
+                Double cpa = parseDouble(accountReportRow.getCostPerConversion() == null ? "0" : accountReportRow.getCostPerConversion().getValue());
 
                 String bingStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "MM/dd/yyyy"));
                 ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
@@ -424,12 +430,17 @@ public class PaidTabController {
                     impressions += oldBean.getImpressions();
                     cost += oldBean.getCost();
                     conversions += oldBean.getConversions();
+                    cpc += oldBean.getCpc();
+                    cpa += oldBean.getCpa();
                 }
                 bean.setClicks(clicks);
                 bean.setImpressions(impressions);
                 bean.setCost(cost);
                 bean.setConversions(conversions);
+                bean.setCpc(cost / clicks);
+                bean.setCpa(cost / conversions);
                 bean.setWeekDay(bingStartDayOfWeek);
+
                 dataMap.put(bingStartDayOfWeek, bean);
             }
             returnMap.put("data", dataMap.values());
@@ -945,6 +956,17 @@ public class PaidTabController {
         }
 
         return performanceReportBeans;
+    }
+
+    private Double parseDouble(String value) {
+        if (value == null || value.isEmpty()) {
+            return 0.0;
+        }
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+        }
+        return 0.0;
     }
 
     @ExceptionHandler

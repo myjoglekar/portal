@@ -54,8 +54,7 @@ public class WidgetColumn implements Serializable {
     private Integer id;
     @Size(max = 1024)
     @Column(name = "field_name")
-    private String fieldName;
-    
+    private String fieldName;    
     @Size(max = 128)
     @Column(name = "x_axis")
     private String xAxis;
@@ -67,8 +66,7 @@ public class WidgetColumn implements Serializable {
     private String yAxisLabel;
     @Size(max = 128)
     @Column(name = "x_axis_label")
-    private String xAxisLabel;
-    
+    private String xAxisLabel;    
     @Size(max = 1024)
     @Column(name = "display_name")
     private String displayName;
@@ -107,6 +105,9 @@ public class WidgetColumn implements Serializable {
     @Size(max = 32)
     @Column(name = "display_format")
     private String displayFormat;
+    @Size(max = 32)
+    @Column(name = "alignment")
+    private String alignment;
 
     public WidgetColumn() {
     }
@@ -259,6 +260,14 @@ public class WidgetColumn implements Serializable {
         this.displayFormat = displayFormat;
     }
 
+    public String getAlignment() {
+        return alignment;
+    }
+
+    public void setAlignment(String alignment) {
+        this.alignment = alignment;
+    }  
+    
     @XmlTransient
     @JsonIgnore
     public TabWidget getWidgetId() {

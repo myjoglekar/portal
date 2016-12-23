@@ -7,9 +7,13 @@ package com.visumbu.vb.admin.controller;
 
 import com.visumbu.vb.admin.service.UserService;
 import com.visumbu.vb.bean.LoginUserBean;
+import com.visumbu.vb.bean.UrlBean;
 import com.visumbu.vb.model.VbUser;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -75,8 +79,7 @@ public class UserController {
         session.setAttribute("username", userBean.getUsername());
         return userBean;
     }
-    
-    
+
     @RequestMapping(value = "logout", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -84,8 +87,51 @@ public class UserController {
         session.invalidate();
         response.sendRedirect("../../login.html");
     }
-    
-    
+
+    @RequestMapping(value = "datasets", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Map getDataSets(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map returnMap = new HashMap();
+        returnMap.put("paid", getPaidDataSets());
+        returnMap.put("display", getDisplayDataSets());
+
+        return returnMap;
+    }
+
+    private List<UrlBean> getPaidDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/paid/accountPerformance;Account Performance",
+            "../api/admin/paid/campaignPerformance;Campaign Performance",};
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+
+        }
+
+        return returnList;
+
+    }
+
+    private List<UrlBean> getDisplayDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/paid/accountPerformance;Account Performance",
+            "../api/admin/paid/campaignPerformance;Campaign Performance",};
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+
+        }
+
+        return returnList;
+
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
