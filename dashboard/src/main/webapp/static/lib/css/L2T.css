@@ -1514,8 +1514,8 @@ a:hover, a:active, a:focus {
 }
 .box-header.with-border {
     border-bottom: 1px solid #f4f4f4;
-/*    background: rgba(116, 196, 198, 0.36);*/
-background: rgb(117, 194, 197);
+    background: rgba(116, 196, 198, 0.36);
+/*background: rgb(117, 194, 197);*/
 }
 .collapsed-box .box-header.with-border {
     border-bottom: none
@@ -4386,6 +4386,11 @@ a.mail-to {
     color: #fff;
     border-color: #565d64;
     font-size:18px;
+}
+
+.dropdown-toggle-btn:hover, .dropdown-toggle-btn:active, .dropdown-toggle-btn:focus {
+    background-color: #3d464d;
+    color:#fff;
 }
 .skin-blue .main-header .navbar .sidebar-toggle {
     color: #9dd5d7 !important;
