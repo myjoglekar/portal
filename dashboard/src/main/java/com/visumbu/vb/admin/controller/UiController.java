@@ -83,9 +83,7 @@ public class UiController extends BaseController {
         System.out.println(tabWidget);
         return uiService.saveTabWidget(tabId, tabWidget);
         //return null; //uiService.createTabWidget(tabId, tabWidget);
-    }
-
-    
+    }    
     
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody

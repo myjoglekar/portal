@@ -11,13 +11,13 @@ package com.visumbu.vb.bean;
  */
 public class UrlBean {
     private String url;
-    private String displayName;
+    private String productDisplayName;
     
     private String proxy;
 
-    public UrlBean(String url, String displayName) {
+    public UrlBean(String url, String productDisplayName) {
         this.url = url;
-        this.displayName = displayName;
+        this.productDisplayName = productDisplayName;
     }
     
     public String getUrl() {
@@ -28,14 +28,14 @@ public class UrlBean {
         this.url = url;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getProductDisplayName() {
+        return productDisplayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setProductDisplayName(String productDisplayName) {
+        this.productDisplayName = productDisplayName;
     }
-
+    
     public String getProxy() {
         return proxy;
     }

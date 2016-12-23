@@ -1,15 +1,43 @@
-app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
+app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter) {
     $scope.widgets = [];
     $scope.selectAggregations = [{name: 'sum'}, {name: 'avg'}, {name: 'count'}, {name: 'min'}, {name: 'max'}];   //Aggregation Type-Popup
     $scope.selectDateDurations = [{duration: "None"}, {duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
     $scope.alignments = [{name: "left", displayName: "Left"}, {name: "right", displayName: "Right"}, {name: "center", displayName: "Center"}];
     $scope.sorting = [{name: 'asc', value: 1}, {name: 'dec', value: 0}, {name: 'None', value: ''}];
-    $scope.isEditPreviewColumn = false
-    
-    $http.get("admin/user/datasets").success(function(response){
-        
-    })
-    
+    $scope.isEditPreviewColumn = false;
+
+    $http.get("admin/user/datasets").success(function (response) {                //User Based Products and Urls
+        $scope.userProducts = [];
+        angular.forEach(response, function (value, key) {
+            $scope.userProducts.push(key);
+        })
+        $scope.productFields = response;
+        console.log($scope.productFields)
+    });
+
+    $scope.selectProduct = function (product, widget) {                                   //SselectBox-select product name
+        if (product === null) {
+            return;
+        }
+        if (product.url) {
+            widget.columns = [];
+            $http.get(product.url + "?fieldsOnly=true").success(function (response) {
+                $scope.collectionFields = [];
+                angular.forEach(response.columnDefs, function (value, key) {
+                    widget.columns.push({fieldName: value.fieldName, displayName: value.displayName,
+                        agregationFunction: value.agregationFunction, displayFormat: value.displayFormat,
+                        groupPriority: value.groupPriority, sortOrder: value.sortOrder, sortPriority: value.sortPriority});
+                });
+                $scope.previewFields = response.columnDefs;
+                angular.forEach(response, function (value, key) {
+                    angular.forEach(value, function (value, key) {
+                        $scope.collectionFields.push(value);
+                    });
+                });
+            });
+        }
+    };
+
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
         if (widget.columns) {
             widget.columns = widget.columns;
@@ -28,24 +56,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 });
             }
         }
-    };
-
-    $scope.changeUrl = function (widget, url) {
-        widget.columns = [];
-        $http.get(url + "?fieldsOnly=true").success(function (response) {
-            $scope.collectionFields = [];
-            angular.forEach(response.columnDefs, function (value, key) {
-                widget.columns.push({fieldName: value.fieldName, displayName: value.displayName,
-                    agregationFunction: value.agregationFunction, displayFormat: value.displayFormat,
-                    groupPriority: value.groupPriority, sortOrder: value.sortOrder, sortPriority: value.sortPriority});
-            })
-            $scope.previewFields = response.columnDefs;
-            angular.forEach(response, function (value, key) {
-                angular.forEach(value, function (value, key) {
-                    $scope.collectionFields.push(value);
-                });
-            });
-        });
     };
 
 //    $scope.deleteUnSelectColumn = function (index, widget, collectionField) {
@@ -116,14 +126,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
     $scope.deleteColumn = function (widgetColumns, index) {        //Delete Columns - Popup
         widgetColumns.splice(index, 1);
-        // widget = [];
-//       widget.splice(index, 1);
-//        $scope.widget.splice(index, 1);
-//        console.log(widget.id)
-
-////        console.log(widget.columns.id)
-//        $http({method: 'DELETE', url: 'admin/ui/widgetColumn/' + widget.id}).success(function () {
-//        });
     };
 
     $http.get('static/datas/imageUrl.json').success(function (response) {       //Popup- Select Chart-Type Json
@@ -177,13 +179,15 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
         widget.widgetChartType = chartType.type;
         $scope.setPreviewChartType = chartType.type;
-        $scope.setPreviewColumn = widget;
+        //$scope.setPreviewColumn = widget;
         $scope.showPreview(widget);
     };
 
     $scope.showPreview = function (widget) {                                    //Show Preview Chart - Popup
+        console.log(widget.productDisplayName.productDisplayName);
         $scope.previewChartType = $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType;
-        $scope.previewColumn = $scope.setPreviewColumn ? $scope.setPreviewColumn : widget;
+        $scope.previewColumn = widget;
+        $scope.previewColumnUrl = widget.productDisplayName.url;
         $scope.showPreviewChart = !$scope.showPreviewChart;                     //Hide & Show Preview Chart
     };
 
@@ -199,19 +203,21 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.save = function (widget) {
         console.log(widget);
         console.log(widget.columns);
-//        console.log($scope.collectionFields);
+        console.log($scope.previewColumnUrl);
 //        console.log($scope.newWidgetId);
         var data = {
             id: widget.id,
             chartType: $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType,
-            directUrl: widget.previewUrl,
+            directUrl: $scope.previewColumnUrl? $scope.previewColumnUrl:widget.previewUrl,
             widgetTitle: widget.previewTitle,
-            widgetColumns: widget.columns
+            widgetColumns: widget.columns,
+            productName: widget.productName,
+            productDisplayName: widget.productDisplayName.productDisplayName
         };
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
         });
         widget.chartType = $scope.previewChartType ? $scope.previewChartType : widget.chartType;
-        widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
+        widget.directUrl = $scope.previewColumnUrl ? $scope.previewColumnUrl : widget.directUrl;
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
     };
 
@@ -1003,4 +1009,9 @@ app.directive('areaChartDirective', function ($http) {
                 return input;
             }
         })
+        .filter('capitalize', function () {
+            return function (input) {
+                return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+            }
+        });
 

@@ -102,7 +102,8 @@ public class UserController {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/paid/accountPerformance;Account Performance",
-            "../api/admin/paid/campaignPerformance;Campaign Performance",};
+            "../api/admin/paid/campaignPerformance;Campaign Performance",
+        };
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -118,8 +119,8 @@ public class UserController {
     private List<UrlBean> getDisplayDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
-            "../api/admin/paid/accountPerformance;Account Performance",
-            "../api/admin/paid/campaignPerformance;Campaign Performance",};
+            "../api/admin/display/ad;Ad",
+        };
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];

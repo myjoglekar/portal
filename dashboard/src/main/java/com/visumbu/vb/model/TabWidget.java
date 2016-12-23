@@ -130,6 +130,12 @@ public class TabWidget implements Serializable {
     @Size(max = 4096)
     @Column(name = "direct_url")
     private String directUrl;
+    @Size(max = 255)
+    @Column(name = "productName")
+    private String productName;
+    @Size(max = 255)
+    @Column(name = "product_display_name")
+    private String productDisplayName;
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     @ManyToOne
     private VbUser createdBy;
@@ -141,7 +147,7 @@ public class TabWidget implements Serializable {
 
     @Transient
     private List<WidgetColumn> columns;
-    
+
     public TabWidget() {
     }
 
@@ -332,13 +338,29 @@ public class TabWidget implements Serializable {
     public void setWidgetOrder(Integer widgetOrder) {
         this.widgetOrder = widgetOrder;
     }
-    
+
     public String getDirectUrl() {
         return directUrl;
     }
 
     public void setDirectUrl(String directUrl) {
         this.directUrl = directUrl;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductDisplayName() {
+        return productDisplayName;
+    }
+
+    public void setProductDisplayName(String productDisplayName) {
+        this.productDisplayName = productDisplayName;
     }
 
     public VbUser getCreatedBy() {
@@ -399,5 +421,5 @@ public class TabWidget implements Serializable {
     public String toString() {
         return "com.visumbu.vb.model.TabWidget[ id=" + id + " ]";
     }
-    
+
 }

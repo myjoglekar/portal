@@ -110,6 +110,8 @@ public class UiService {
         tabWidget.setChartType(tabWidgetBean.getChartType());
         tabWidget.setDirectUrl(tabWidgetBean.getDirectUrl());
         tabWidget.setWidgetTitle(tabWidgetBean.getWidgetTitle());
+        tabWidget.setProductName(tabWidgetBean.getProductName());
+        tabWidget.setProductDisplayName(tabWidgetBean.getProductDisplayName());
         TabWidget savedTabWidget = uiDao.saveTabWidget(tabWidget);
         List<WidgetColumnBean> widgetColumns = tabWidgetBean.getWidgetColumns();
         uiDao.deleteWidgetColumns(tabWidget.getId());
