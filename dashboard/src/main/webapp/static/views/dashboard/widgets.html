@@ -163,7 +163,7 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
 
                             <div class="form-group">
                                 <label class="col-sm-2">Columns</label>
@@ -178,7 +178,7 @@
                                             ng-click="showFieldTable = false; showAddButton = false;">
                                         <i class="fa fa-close"></i> Close
                                     </button>
-                                </div>     
+                                </div>
                                 <div class="col-sm-12">
                                     <div ng-show="showFieldTable" class="table-responsive">  
                                         <table class="table table-bordered table-hover" >
@@ -224,19 +224,19 @@
                                                     <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
                                                         <div ng-hide="isEdit"> {{currentColumn.groupPriority}}</div>
                                                         <div ng-show="isEdit">
-                                                            <input type="text" class="form-control" ng-model="widget.groupPriority">
+                                                            <input type="text" class="form-control" ng-model="currentColumn.groupPriority">
                                                         </div>
                                                     </td>
                                                     <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table'">
                                                         <div ng-hide="isEdit"> {{currentColumn.xAxis}}</div>
                                                         <div ng-show="isEdit">
-                                                            <input type="text" class="form-control" ng-model="widget.xAxis">
+                                                            <input type="text" class="form-control" ng-model="currentColumn.xAxis">
                                                         </div>
                                                     </td>
                                                     <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table'">
                                                         <div ng-hide="isEdit"> {{currentColumn.yAxis}}</div>
                                                         <div ng-show="isEdit">
-                                                            <input type="text" class="form-control" ng-model="widget.yAxis">
+                                                            <input type="text" class="form-control" ng-model="currentColumn.yAxis">
                                                         </div>  
                                                     </td>
                                                     <td>
@@ -280,11 +280,11 @@
                                     </div>
                                 </div>
                             </div>
-
+                                    
                             <div class="form-group">
                                 <div class="col-sm-10">
-                                    <button class="btn btn-info" ng-click="showPreview(widget); showPreviewChart = !showPreviewChart">
-                                        <i class="fa" ng-class="{'fa-angle-down': !showPreviewChart, 'fa-angle-up': showPreviewChart}"></i> Preview
+                                    <button class="btn btn-info" ng-click="showPreview(widget)">
+                                        <i class="fa" ng-class="{'fa-angle-down': !showPreviewChart, 'fa-angle-up': showPreviewChart}"></i> Preview {{showPreviewChart}}
                                     </button>
                                 </div>                                    
                                 <div ng-show="showPreviewChart">
