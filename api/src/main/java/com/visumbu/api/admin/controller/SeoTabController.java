@@ -137,8 +137,6 @@ public class SeoTabController {
         GetReportsResponse gaData = gaService.getGenericData("123125706", startDate, endDate, null, null, metricsList, dimensions, filter);
         List<Map<String, String>> gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
 
-        
-        
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
@@ -146,7 +144,7 @@ public class SeoTabController {
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getGeoPerformance12Weeks(HttpServletRequest request, HttpServletResponse response) {
-        Date startDate = DateUtils.get12WeeksBack();
+        Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
 
         String fieldsOnly = request.getParameter("fieldsOnly");
@@ -185,8 +183,7 @@ public class SeoTabController {
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
-    
-    
+
     @RequestMapping(value = "accountPerformanceDayOfWeek", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getGeoPerformanceDayOfWeek(HttpServletRequest request, HttpServletResponse response) {
@@ -229,7 +226,7 @@ public class SeoTabController {
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
-    
+
     @RequestMapping(value = "accountPerformanceTop10Page", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getGeoPerformanceTop10Page(HttpServletRequest request, HttpServletResponse response) {
@@ -266,15 +263,13 @@ public class SeoTabController {
         String dimensions = "ga:pagePath";
         String filter = "ga:channelGrouping==Organic Search";
         String orderBy = "ga:sessions";
-        
+
         GetReportsResponse gaData = gaService.getGenericData("123125706", startDate, endDate, null, null, metricsList, dimensions, filter, orderBy, 10);
         List<Map<String, String>> gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
 
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
-    
-    
 
     @RequestMapping(value = "accountDevicePerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody

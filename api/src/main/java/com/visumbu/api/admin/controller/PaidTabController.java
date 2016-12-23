@@ -95,9 +95,14 @@ public class PaidTabController {
             Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
             Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
+
+            System.out.println("-------------------------");
+            System.out.println(startDate);
+            System.out.println(endDate);
+            System.out.println("-------------------------");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
-            columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM));
+            columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM));
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.SUM));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
@@ -179,8 +184,8 @@ public class PaidTabController {
     Object getHourOfDayClickImpressions(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
         try {
-            Date startDate = DateUtils.get12WeeksBack();
-            Date endDate = DateUtils.getToday();
+            Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("hourOfDay", "String", "Hour of day"));
@@ -268,8 +273,8 @@ public class PaidTabController {
     Object getDayOfWeekClickImpressions(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
         try {
-            Date startDate = DateUtils.get12WeeksBack();
-            Date endDate = DateUtils.getToday();
+            Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("weekId", "number", "Week Id"));
@@ -360,8 +365,8 @@ public class PaidTabController {
     Object getClicksImpressionsGraph(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
         try {
-            Date startDate = DateUtils.get12WeeksBack();
-            Date endDate = DateUtils.getToday();
+            Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("weekDay", "String", "Week Day"));
@@ -480,8 +485,9 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, "581-484-4675", "SEARCH");
-        CampaignPerformanceReport bingCampaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate);
+        String aggregation = "";
+        com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, "581-484-4675", aggregation, "SEARCH");
+        CampaignPerformanceReport bingCampaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate, "");
         List<CampaignPerformanceReportRow> adwordsCampaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
         List<CampaignPerformanceRow> bingCampaignPerformanceRows = bingCampaignPerformanceReport.getCampaignPerformanceRows();
         List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
@@ -491,13 +497,14 @@ public class PaidTabController {
             CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
             performanceBean.setSource("Google");
             performanceBean.setImpressions(row.getImpressions());
+            performanceBean.setCampaignName(row.getCampaign());
             performanceBean.setClicks(row.getClicks());
             performanceBean.setCtr(row.getCtr());
             performanceBean.setAveragePosition(row.getAvgPosition());
             performanceBean.setCost(row.getCost());
             performanceBean.setAverageCpc(row.getAvgCPC());
             performanceBean.setConversions(row.getConversions());
-            performanceBean.setCpa("--");
+            performanceBean.setCpa(row.getCostConv());
             performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());
             performanceBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
             performanceBean.setSearchImpressionsShareLostByRank(row.getSearchLostISRank());
@@ -509,6 +516,7 @@ public class PaidTabController {
             CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
             performanceBean.setSource("Bing");
             performanceBean.setImpressions(row.getImpressions().getValue());
+            performanceBean.setCampaignName(row.getCampaignName().getValue());
             performanceBean.setClicks(row.getClicks().getValue());
             performanceBean.setCtr(row.getCtr().getValue());
             performanceBean.setAveragePosition(row.getAveragePosition().getValue());
@@ -517,7 +525,7 @@ public class PaidTabController {
             performanceBean.setCtr(row.getCtr().getValue());
             performanceBean.setAverageCpc(row.getAverageCpc().getValue());
             performanceBean.setConversions(row.getConversions().getValue());
-            performanceBean.setCpa("--");
+            performanceBean.setCpa(row.getCostPerConversion().getValue());
             performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
             performanceBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
             performanceBean.setSearchImpressionsShareLostByRank("--");
@@ -910,7 +918,7 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        CampaignPerformanceReport campaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate);
+        CampaignPerformanceReport campaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate, "");
         CampaignReport campaignReport = adwordsService.getCampaignReport(startDate, endDate, "581-484-4675", "SEARCH");
         List<CampaignPerformanceRow> bingCampaignPerformanceRows = campaignPerformanceReport.getCampaignPerformanceRows();
         List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
@@ -921,6 +929,7 @@ public class PaidTabController {
             CampaignPerformanceReportBean campaignBean = new CampaignPerformanceReportBean();
             campaignBean.setSource("Google");
             campaignBean.setCampaignName(row.getCampaign());
+            System.out.println(row.getCampaign());
             campaignBean.setImpressions(row.getImpressions());
             campaignBean.setClicks(row.getClicks());
             campaignBean.setCtr(row.getCtr());

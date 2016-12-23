@@ -163,7 +163,6 @@ public class VideoTabController {
         return returnMap;
     }
 
-
     @RequestMapping(value = "accountPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
@@ -237,8 +236,8 @@ public class VideoTabController {
     Object getAccountPerformance12Weeks(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
         try {
-            Date startDate = DateUtils.get12WeeksBack();
-            Date endDate = DateUtils.getToday();
+            Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));

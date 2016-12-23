@@ -135,7 +135,7 @@ public class BingController {
     CampaignPerformanceReport getCampaignPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getCampaignPerformanceReport(startDate, endDate);
+        return bingService.getCampaignPerformanceReport(startDate, endDate, "");
     }
 
     @RequestMapping(value = "getCampaignDevicePerformanceReport", method = RequestMethod.GET, produces = "application/json")

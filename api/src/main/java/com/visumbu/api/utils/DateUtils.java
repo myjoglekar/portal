@@ -139,8 +139,18 @@ public class DateUtils {
         return toGaDate(c.getTime());
     }
 
-    public static Date get12WeeksBack() {
+    public static Date get12WeeksBack(String strStart) {
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Date startDate = null;
+        try {
+            startDate = (Date) formatter.parse(strStart);
+        } catch (Exception ex) {
+            System.out.println("Exception Start ");
+            startDate = new Date();
+        }
+        // return startDate;
         Calendar calReturn = Calendar.getInstance();
+        calReturn.setTime(startDate);
         calReturn.add(Calendar.DATE, -84);
         return calReturn.getTime();
     }

@@ -233,14 +233,14 @@ public class BingService {
         return null;
     }
 
-    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate) {
+    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate, String aggregation) {
         try {
             initAuthentication();
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
-                    = getCampaignPerformaceReportRequest(startDate, endDate);
+                    = getCampaignPerformaceReportRequest(startDate, endDate, aggregation);
 
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
@@ -916,14 +916,18 @@ public class BingService {
         return report;
     }
 
-    private ReportRequest getCampaignPerformaceReportRequest(Date startDate, Date endDate) {
+    private ReportRequest getCampaignPerformaceReportRequest(Date startDate, Date endDate, String aggregation) {
         CampaignPerformanceReportRequest report = new CampaignPerformanceReportRequest();
         ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
-        report.setAggregation(ReportAggregation.DAILY);
+        if (aggregation == null || aggregation.isEmpty()) {
+            report.setAggregation(ReportAggregation.SUMMARY);
 
+        } else {
+            report.setAggregation(ReportAggregation.DAILY);
+        }
         ArrayOflong accountIds = new ArrayOflong();
         accountIds.getLongs().add(authorizationData.getAccountId());
 
@@ -966,7 +970,9 @@ public class BingService {
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.IMPRESSION_LOST_TO_BUDGET_PERCENT);
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.IMPRESSION_LOST_TO_RANK_PERCENT);
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.AVERAGE_POSITION);
-        campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.TIME_PERIOD);
+        if (aggregation != null && !aggregation.isEmpty()) {
+            campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.TIME_PERIOD);
+        }
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.CAMPAIGN_NAME);
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.CAMPAIGN_ID);
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.PHONE_CALLS);

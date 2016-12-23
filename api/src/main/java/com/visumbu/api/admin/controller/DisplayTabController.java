@@ -460,7 +460,7 @@ public class DisplayTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, "391-089-0213", "CONTENT");
+        com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, "391-089-0213","", "CONTENT");
         List<CampaignPerformanceReportRow> adwordsCampaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
         List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
         GetReportsResponse goals = gaService.getCampaignGoals("123125706", startDate, endDate);
@@ -503,8 +503,8 @@ public class DisplayTabController {
     Object getAccountPerformance12Weeks(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
         try {
-            Date startDate = DateUtils.get12WeeksBack();
-            Date endDate = DateUtils.getToday();
+            Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
@@ -565,8 +565,8 @@ public class DisplayTabController {
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
         try {
-            Date startDate = DateUtils.get12WeeksBack();
-            Date endDate = DateUtils.getToday();
+            Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
+            Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
