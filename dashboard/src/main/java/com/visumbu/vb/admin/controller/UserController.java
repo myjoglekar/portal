@@ -94,6 +94,8 @@ public class UserController {
         Map returnMap = new HashMap();
         returnMap.put("paid", getPaidDataSets());
         returnMap.put("display", getDisplayDataSets());
+        returnMap.put("paidSocial", getPaidSocialDataSets());
+        returnMap.put("seo", getSeoDataSets());
 
         return returnMap;
     }
@@ -102,33 +104,92 @@ public class UserController {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/paid/accountPerformance;Account Performance",
+            "../api/admin/paid/hourOfDayClickImpressions;Hour Of Day Click Impressions",
+            "../api/admin/paid/dayOfWeekClickImpressions;Day Of Week Click Impressions",
+            "../api/admin/paid/clicksImpressionsGraph;Clicks Impressions Graph",
             "../api/admin/paid/campaignPerformance;Campaign Performance",
+            "../api/admin/paid/geoPerformance;Geo Performance",
+            "../api/admin/paid/deviceConversion;Device Conversion",
+            "../api/admin/paid/campaignDevice;Campaign Device",
+            "../api/admin/paid/accountDevice;Account Device",
+            "../api/admin/paid/adGroups;AdGroups",
         };
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
-
         }
-
         return returnList;
-
     }
 
     private List<UrlBean> getDisplayDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
+            "../api/admin/display/geoPerformance;Geo Performance",
+            "../api/admin/display/campaignDevice;Campaign Device",
+            "../api/admin/display/accountDevice;Account Device",
             "../api/admin/display/ad;Ad",
+            "../api/admin/display/campaignPerformance;Campaign Performance",
+            "../api/admin/display/accountPerformance12Weeks;Account Performance 12 Weeks",
+            "../api/admin/display/accountPerformance;Account Performance",
         };
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
-
         }
+        return returnList;
 
+    }
+    
+    private List<UrlBean> getPaidSocialDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/paidSocial/accountPerformance;Account Performance",
+        };
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
+        return returnList;
+
+    }
+    
+    private List<UrlBean> getSeoDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/seo/accountPerformance;Account Performance",
+            "../api/admin/seo/accountPerformance12Weeks;Account Performance 12 Weeks",
+            "../api/admin/seo/accountPerformanceDayOfWeek;Account Performance Day Of Week",
+            "../api/admin/seo/accountPerformanceTop10Page;Account Performance Top 10 Page",
+            "../api/admin/seo/accountDevicePerformance;Account Device Performance",
+            "../api/admin/seo/accountGeoPerformance;Account Geo Performance",
+        };
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
+        return returnList;
+
+    }
+    
+    private List<UrlBean> getSocialImpactDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/socialImpact/accountPerformance;Account Performance"
+        };
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
         return returnList;
 
     }

@@ -144,30 +144,20 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="col-sm-2">Product</label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" ng-model="widget.productName" ng-options="(userProduct |  capitalize) for userProduct in userProducts">
+                                    <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |      capitalize) for userProduct in userProducts">
                                     </select>                                    
                                 </div>
                                 <label class="col-sm-2">Name</label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" ng-model="widget.productDisplayName" 
-                                            ng-options="productField as productField.productDisplayName for productField in productFields[widget.productName]" 
-                                            ng-change="selectProduct(widget.productDisplayName, widget)">
+                                    <select class="form-control" ng-model="widget.productDisplayName" ng-change="changeUrl(widget.productDisplayName, widget)">
+                                        <option ng-repeat="productField in productFields" value="{{productField}}">{{productField.productDisplayName}}</option>
                                     </select>
                                 </div>
                             </div>
-                            
-<!--                            <div class="form-group">
-                                <label class="col-sm-2">Url</label>
-                                <div class="col-sm-10">
-                                    <input type="text" ng-model="widget.previewUrl" class="form-control" 
-                                           ng-model-options='{ debounce: 1000 }' ng-change='changeUrl(widget, widget.previewUrl)' 
-                                           placeholder="Url">
-                                </div>
-                            </div>-->
 
                             <div class="form-group">
                                 <label class="col-sm-2">Type</label>
@@ -185,7 +175,7 @@
                                 <label class="col-sm-2">Columns</label>
                                 <div class="col-sm-10">
                                     <button ng-hide="showAddButton" 
-                                            ng-disabled="(widget.previewUrl && (widget.widgetChartType ? widget.widgetChartType : widget.chartType)) ? false : true;" 
+                                            ng-disabled="(widget.productName && widget.productDisplayName && (widget.widgetChartType ? widget.widgetChartType : widget.chartType)) ? false : true;" 
                                             class="btn btn-info" ng-click="showFieldTable = true; showAddButton = true;">
                                         <i class="fa fa-plus"></i> Add / Edit
                                     </button>
@@ -286,17 +276,18 @@
                                                             <button class="btn btn-default btn-xs" ng-click="deleteColumn(widget.columns, $index)"><i class="fa fa-trash"></i></button>
                                                         </div>
                                                         <div ng-hide="isEdit">
-    <button class="btn btn-default btn-xs" ng-click="isEdit = true"><i class="fa fa-pencil"></i></button>
-    <button class="btn btn-default btn-xs" ng-click="deleteColumn(widget.columns, $index)"><i class="fa fa-trash"></i></button>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-                                    
+                                                            <button class="btn btn-default btn-xs" ng-click="isEdit = true"><i class="fa fa-pencil"></i></button>
+                                                            <button class="btn btn-default btn-xs" ng-click="deleteColumn(widget.columns, $index)"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <div class="col-sm-10">
                                     <button class="btn btn-info" ng-click="showPreview(widget)">
@@ -306,16 +297,16 @@
                                 <div ng-show="showPreviewChart">
                                     <div class="col-md-12">
                                         <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
-                                            <div line-Chart-Url='{{previewColumn.previewUrl}}' widget-Columns="{{previewColumn.columns}}" line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                            <div line-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                         </div> 
                                         <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
-                                            <div area-Chart-Url='{{previewColumn.previewUrl}}' widget-Columns="{{previewColumn.columns}}" area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                            <div area-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                         </div> 
                                         <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
-                                            <div bar-Chart-Url='{{previewColumn.previewUrl}}' widget-Columns="{{previewColumn.columns}}" bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                            <div bar-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                         </div> 
                                         <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
-                                            <div pie-Chart-Url='{{previewColumn.previewUrl}}' widget-Columns="{{previewColumn.columns}}" pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                            <div pie-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                         </div> 
                                         <div class="box-body chart-responsive" ng-if="previewChartType === 'donut'">
                                             <div donut-Chart-Url='{{previewChartUrl}}' donut-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
@@ -324,7 +315,7 @@
                                             <div grouped-Bar-Chart-Url='{{previewChartUrl}}' grouped-Bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                         </div> 
                                         <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
-                                            <div dynamic-Table dynamic-Table-Url="{{previewColumn.previewUrl}}" widget-Id="{{previewColumn.id}}" widget-Columns="{{previewColumn.columns}}"></div>
+                                            <div dynamic-Table dynamic-Table-Url="{{previewChartUrl}}" widget-Id="{{previewColumn.id}}" widget-Columns="{{previewColumn.columns}}"></div>
                                         </div> 
                                     </div>
                                 </div>
