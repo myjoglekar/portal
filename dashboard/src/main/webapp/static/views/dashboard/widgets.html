@@ -23,30 +23,58 @@
         padding: 10px;
     }
 </style>
+<div class="pull-right-container pull-right">
+    <div class="btn-group">
+         <a class="refresh" ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh Data</a>
+       
+    </div>
+    <div class="btn-group">
+        <a class="dropdown-toggle" type="button" data-toggle="dropdown">
+           <button type="button" class="btn btn-block btn-info btn-flat"><i class="fa fa-plus-circle"></i> Add Widget</button>
+        </a>
+        <ul class="dropdown-menu">
+                <li>
+                    <a href="" ng-click="addWidget('2')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
+                </li>
+                <li>
+                    <a href="" ng-click="addWidget('4')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
+                </li>
+                <li>
+                    <a href="" ng-click="addWidget('6')"><i class="fa fa-square-o"></i></a>
+                </li>
+            </ul>
+        
+    </div>
 
-<div>
-    <div class="col-md-12">
-        <div class="pull-right l2t-tab">
-            <span class="dropdown">
-                <a class="dropdown-toggle" type="button" data-toggle="dropdown">
-                    <i class="fa fa-plus"></i> Add Widget
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="" ng-click="addWidget('2')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
-                    </li>
-                    <li>
-                        <a href="" ng-click="addWidget('4')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
-                    </li>
-                    <li>
-                        <a href="" ng-click="addWidget('6')"><i class="fa fa-square-o"></i></a>
-                    </li>
-                </ul>
-            </span>
-            &nbsp;<a ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full Screen</a>&nbsp;
+    
+</div>
+
+
+<!--    <div class="pull-right l2t-tab">
+
+        <div class="dropdown btn btn-block btn-info col-md-4">
+            <a class="dropdown-toggle" type="button" data-toggle="dropdown">
+                <i class="fa fa-plus"></i> Add Widget
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="" ng-click="addWidget('2')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
+                </li>
+                <li>
+                    <a href="" ng-click="addWidget('4')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
+                </li>
+                <li>
+                    <a href="" ng-click="addWidget('6')"><i class="fa fa-square-o"></i></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6">
+                        &nbsp;<a ng-click="fullscreenCtrl.toggleFullscreen()"><i class="fa fa-arrows-alt"></i> Full Screen</a>&nbsp;
             <a ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh</a>
         </div>
-    </div> 
+    </div>-->
+
     <div ng-repeat="widget in widgets">
         <div ng-if="widget.chartType != 'tickers'">
             <div class="col-md-{{2 * widget.width}} ">
@@ -280,7 +308,7 @@
                                     </div>
                                 </div>
                             </div>
-                                    
+
                             <div class="form-group">
                                 <div class="col-sm-10">
                                     <button class="btn btn-info" ng-click="showPreview(widget)">

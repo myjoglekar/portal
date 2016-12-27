@@ -2,54 +2,81 @@
 
     <!-- Sidebar Menu -->
     <ul class="sidebar-menu">
-        <li class="active">
+<!--        <li class="active">
             <a ui-sref="dashboard">
                 <i class="glyphicon glyphicon-dashboard"></i> 
                 <span>Dashboard</span>
             </a>
-        </li>
-<!--        <li class="treeview"> 
-            <a><i class="glyphicon glyphicon-list-alt"></i> 
-                <span>Reports</span> 
-                <span class="pull-right-container"> 
-                    <i class="fa fa-angle-left pull-right"></i> 
-                </span> 
-            </a>
-            <ul class="treeview-menu">
-                <li ng-repeat="report in reports">
-                    <span ng-show="report.isEdit" class="parentEdit">
-                        <input type="text" ng-model="report.parentName" class="textbox">
-                        <span class="fa fa-save" ng-click="report.isEdit = false;" style="color:white;"></span>
-                    </span>
-
-                    <a href="" ng-hide="report.isEdit" class="parentActions" style="color:white;">
-                        <i class="fa fa-circle-o"></i>{{report.parentName}}
-
-                        <span class="pull-right-container">
-                            <i class="fa fa-plus-circle" ng-click="addChild(report)" aria-hidden="true" style="color:white;"></i>
-                            <i class="fa fa-pencil" ng-click="report.isEdit = true" style="color:white;"></i>
-                            <i class="fa fa-remove" style="color:white;"></i>
-                        </span>
+        </li>-->
+        <!--        <li class="treeview"> 
+                    <a><i class="glyphicon glyphicon-list-alt"></i> 
+                        <span>Reports</span> 
+                        <span class="pull-right-container"> 
+                            <i class="fa fa-angle-left pull-right"></i> 
+                        </span> 
                     </a>
-
                     <ul class="treeview-menu">
-                        <li  ng-repeat="child in report.childItems">                       
-                            <span ng-show="child.isEdit" class="childEdit">
-                                <input type="text" ng-model="child.childName" class="textbox">
-                                <span class="fa fa-save" ng-click="child.isEdit = false;" style="color:white;"></span>
+                        <li ng-repeat="report in reports">
+                            <span ng-show="report.isEdit" class="parentEdit">
+                                <input type="text" ng-model="report.parentName" class="textbox">
+                                <span class="fa fa-save" ng-click="report.isEdit = false;" style="color:white;"></span>
                             </span>
-                            <a class="childActions" ng-hide="child.isEdit" ui-sref="report({reportId: child.id})" style="color:white;">
-                                <i class="fa fa-circle-o"></i>{{child.childName}}
-                                <span class='pull-right-container'>
-                                    <i class="fa fa-pencil" ng-click="child.isEdit = true" style="color:white;"></i>
+        
+                            <a href="" ng-hide="report.isEdit" class="parentActions" style="color:white;">
+                                <i class="fa fa-circle-o"></i>{{report.parentName}}
+        
+                                <span class="pull-right-container">
+                                    <i class="fa fa-plus-circle" ng-click="addChild(report)" aria-hidden="true" style="color:white;"></i>
+                                    <i class="fa fa-pencil" ng-click="report.isEdit = true" style="color:white;"></i>
                                     <i class="fa fa-remove" style="color:white;"></i>
                                 </span>
                             </a>
+        
+                            <ul class="treeview-menu">
+                                <li  ng-repeat="child in report.childItems">                       
+                                    <span ng-show="child.isEdit" class="childEdit">
+                                        <input type="text" ng-model="child.childName" class="textbox">
+                                        <span class="fa fa-save" ng-click="child.isEdit = false;" style="color:white;"></span>
+                                    </span>
+                                    <a class="childActions" ng-hide="child.isEdit" ui-sref="report({reportId: child.id})" style="color:white;">
+                                        <i class="fa fa-circle-o"></i>{{child.childName}}
+                                        <span class='pull-right-container'>
+                                            <i class="fa fa-pencil" ng-click="child.isEdit = true" style="color:white;"></i>
+                                            <i class="fa fa-remove" style="color:white;"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
+                </li>-->
 
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-th"></i>
+                <span>Dashboard</span>
+
+            </a>
+            <ul class="treeview-menu">
+                <li ng-repeat="product in products" class="active">
+                    <a data-ui-sref="index.dashboard({dashboardId:  product.id})" ng-click="changeProduct(product)">
+                        {{product.productName}}
+                    </a>
                 </li>
+                <!--                <li> <a href="#"> <span>Overall</span> </a> </li>
+                                <li> <a href="#"> <span>Paid Search</span> </a> </li>
+                                <li> <a href="#"> <span>Display</span> </a> </li>
+                                <li> <a href="#"> <span>Dynamic Display</span> </a> </li>
+                                <li> <a href="#"> <span>Youtube - Video</span> </a> </li>
+                                <li> <a href="#"> <span>SEO</span> </a> </li>
+                                <li> <a href="#"> <span>Paid Social</span> </a> </li>
+                                <li> <a href="#"> <span>Reputation Management</span> </a> </li>
+                                <li> <a href="#"> <span>Social Impact</span> </a> </li>-->
             </ul>
-        </li>-->
+        </li>
+
+
+
+
     </ul>
 </section>
