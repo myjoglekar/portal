@@ -6,11 +6,17 @@
 package com.visumbu.vb.admin.service;
 
 import com.visumbu.vb.admin.dao.UiDao;
+import com.visumbu.vb.bean.ReportColumnBean;
+import com.visumbu.vb.bean.ReportWidgetBean;
 import com.visumbu.vb.bean.TabWidgetBean;
 import com.visumbu.vb.bean.WidgetColumnBean;
 import com.visumbu.vb.model.Dashboard;
 import com.visumbu.vb.model.DashboardTabs;
 import com.visumbu.vb.model.Product;
+import com.visumbu.vb.model.Report;
+import com.visumbu.vb.model.ReportColumn;
+import com.visumbu.vb.model.ReportType;
+import com.visumbu.vb.model.ReportWidget;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.model.WidgetColumn;
@@ -38,7 +44,7 @@ public class UiService {
         List<Product> returnList = new ArrayList<>();
         for (Iterator<Product> iterator = product.iterator(); iterator.hasNext();) {
             Product product1 = iterator.next();
-            if(!product1.getProductName().equalsIgnoreCase("overall")) {
+            if (!product1.getProductName().equalsIgnoreCase("overall")) {
                 returnList.add(product1);
             }
         }
@@ -131,5 +137,97 @@ public class UiService {
             uiDao.saveOrUpdate(widgetColumn);
         }
         return savedTabWidget;
+    }
+
+    public ReportType addReportType(ReportType reportTypes) {
+        return (ReportType) uiDao.create(reportTypes);
+    }
+
+    public ReportType updateReportType(ReportType reportTypes) {
+        return (ReportType) uiDao.update(reportTypes);
+    }
+
+    public ReportType deleteReportType(Integer reportTypeId) {
+        return (ReportType) uiDao.delete(reportTypeId);
+    }
+
+    public List getReportType(Integer reportTypeId) {
+        return uiDao.readReportType(reportTypeId);
+    }
+
+    public Report addReport(Report report, Integer reportTypeId) {
+        return uiDao.addReport(report, reportTypeId);
+    }
+
+    public Report updateReport(Report report) {
+        return (Report) uiDao.update(report);
+    }
+
+    public Report deleteReport(Integer reportId) {
+        return (Report) uiDao.delete(reportId);
+    }
+
+    public List getReport(Integer reportId) {
+        return uiDao.readReport(reportId);
+    }
+
+    public ReportWidget createReportWidget(Integer reportId, ReportWidget reportWidget) {
+        reportWidget.setReportId(uiDao.getReportById(reportId));
+        if (reportWidget.getId() != null) {
+            ReportWidget reportWidgetDb = uiDao.getReportWidgetById(reportWidget.getId());
+            if (reportWidget.getWidgetTitle() != null) {
+                reportWidgetDb.setWidgetTitle(reportWidget.getWidgetTitle());
+            }
+            if (reportWidget.getDirectUrl() != null) {
+                reportWidgetDb.setDirectUrl(reportWidget.getDirectUrl());
+            }
+            if (reportWidget.getChartType() != null) {
+                reportWidgetDb.setChartType(reportWidget.getChartType());
+            }
+            return (ReportWidget) uiDao.update(reportWidgetDb);
+        }
+        return (ReportWidget) uiDao.create(reportWidget);
+    }
+
+    public ReportWidget saveReportWidget(Integer reportId, ReportWidgetBean reportWidgetBean) {
+        ReportWidget reportWidget = null;
+        if (reportWidgetBean.getId() != null) {
+            reportWidget = uiDao.getReportWidgetById(reportWidgetBean.getId());
+
+        } else {
+            reportWidget = new ReportWidget();
+        }
+        reportWidget.setChartType(reportWidgetBean.getChartType());
+        reportWidget.setDirectUrl(reportWidgetBean.getDirectUrl());
+        reportWidget.setWidgetTitle(reportWidgetBean.getWidgetTitle());
+        reportWidget.setProductName(reportWidgetBean.getProductName());
+        reportWidget.setProductDisplayName(reportWidgetBean.getProductDisplayName());
+        ReportWidget savedReportWidget = uiDao.saveReportWidget(reportWidget);
+        List<ReportColumnBean> reportColumns = reportWidgetBean.getReportColumns();
+        uiDao.deleteReportColumns(reportWidget.getId());
+        for (Iterator<ReportColumnBean> iterator = reportColumns.iterator(); iterator.hasNext();) {
+            ReportColumnBean reportColumnBean = iterator.next();
+            ReportColumn reportColumn = new ReportColumn();
+            reportColumn.setFieldName(reportColumnBean.getFieldName());
+            reportColumn.setDisplayFormat(reportColumnBean.getDisplayFormat());
+            reportColumn.setDisplayName(reportColumnBean.getDisplayName());
+            reportColumn.setSortOrder(reportColumnBean.getSortOrder());
+            reportColumn.setGroupPriority(reportColumnBean.getGroupPriority());
+            reportColumn.setAgregationFunction(reportColumnBean.getAgregationFunction());
+            reportColumn.setXAxis(reportColumnBean.getxAxis());
+            reportColumn.setYAxis(reportColumnBean.getyAxis());
+            reportColumn.setAlignment(reportColumnBean.getAlignment());
+            reportColumn.setReportId(savedReportWidget);
+            uiDao.saveOrUpdate(reportColumn);
+        }
+        return savedReportWidget;
+    }
+
+    public List getReportWidget(Integer reportId) {
+        return uiDao.getReportWidget(reportId);
+    }
+
+    public TabWidget deleteReportWidget(Integer reportId) {
+        return uiDao.deleteTabWidget(reportId);
     }
 }

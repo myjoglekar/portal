@@ -57,9 +57,9 @@ public class VbUser implements Serializable {
     @OneToMany(mappedBy = "createdBy")
     private Collection<Report> reportCollection;
     @OneToMany(mappedBy = "userId")
-    private Collection<ReportTypes> reportTypesCollection;
+    private Collection<ReportType> reportTypesCollection;
     @OneToMany(mappedBy = "createdBy")
-    private Collection<ReportTypes> reportTypesCollection1;
+    private Collection<ReportType> reportTypesCollection1;
     @OneToMany(mappedBy = "userId")
     private Collection<Dashboard> dashboardCollection;
     private static final long serialVersionUID = 1L;
@@ -306,21 +306,21 @@ public class VbUser implements Serializable {
 
     @XmlTransient
     @JsonIgnore
-    public Collection<ReportTypes> getReportTypesCollection() {
+    public Collection<ReportType> getReportTypesCollection() {
         return reportTypesCollection;
     }
 
-    public void setReportTypesCollection(Collection<ReportTypes> reportTypesCollection) {
+    public void setReportTypesCollection(Collection<ReportType> reportTypesCollection) {
         this.reportTypesCollection = reportTypesCollection;
     }
 
     @XmlTransient
     @JsonIgnore
-    public Collection<ReportTypes> getReportTypesCollection1() {
+    public Collection<ReportType> getReportTypesCollection1() {
         return reportTypesCollection1;
     }
 
-    public void setReportTypesCollection1(Collection<ReportTypes> reportTypesCollection1) {
+    public void setReportTypesCollection1(Collection<ReportType> reportTypesCollection1) {
         this.reportTypesCollection1 = reportTypesCollection1;
     }
 
@@ -333,5 +333,5 @@ public class VbUser implements Serializable {
     public void setDashboardCollection(Collection<Dashboard> dashboardCollection) {
         this.dashboardCollection = dashboardCollection;
     }
-    
-}
+
+    }

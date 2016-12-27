@@ -32,16 +32,16 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  * @author user
  */
 @Entity
-@Table(name = "report_types")
+@Table(name = "report_type")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ReportTypes.findAll", query = "SELECT r FROM ReportTypes r"),
-    @NamedQuery(name = "ReportTypes.findById", query = "SELECT r FROM ReportTypes r WHERE r.id = :id"),
-    @NamedQuery(name = "ReportTypes.findByReportTypeName", query = "SELECT r FROM ReportTypes r WHERE r.reportTypeName = :reportTypeName"),
-    @NamedQuery(name = "ReportTypes.findByOrder", query = "SELECT r FROM ReportTypes r WHERE r.order = :order"),
-    @NamedQuery(name = "ReportTypes.findByRemarks", query = "SELECT r FROM ReportTypes r WHERE r.remarks = :remarks"),
-    @NamedQuery(name = "ReportTypes.findByCreatedTime", query = "SELECT r FROM ReportTypes r WHERE r.createdTime = :createdTime")})
-public class ReportTypes implements Serializable {
+    @NamedQuery(name = "ReportType.findAll", query = "SELECT r FROM ReportType r"),
+    @NamedQuery(name = "ReportType.findById", query = "SELECT r FROM ReportType r WHERE r.id = :id"),
+    @NamedQuery(name = "ReportType.findByReportTypeName", query = "SELECT r FROM ReportType r WHERE r.reportTypeName = :reportTypeName"),
+    @NamedQuery(name = "ReportType.findByOrder", query = "SELECT r FROM ReportType r WHERE r.order = :order"),
+    @NamedQuery(name = "ReportType.findByRemarks", query = "SELECT r FROM ReportType r WHERE r.remarks = :remarks"),
+    @NamedQuery(name = "ReportType.findByCreatedTime", query = "SELECT r FROM ReportType r WHERE r.createdTime = :createdTime")})
+public class ReportType implements Serializable {
     @Size(max = 256)
     @Column(name = "icon")
     private String icon;
@@ -71,10 +71,10 @@ public class ReportTypes implements Serializable {
     @ManyToOne
     private VbUser createdBy;
 
-    public ReportTypes() {
+    public ReportType() {
     }
 
-    public ReportTypes(Integer id) {
+    public ReportType(Integer id) {
         this.id = id;
     }
 
@@ -154,10 +154,10 @@ public class ReportTypes implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ReportTypes)) {
+        if (!(object instanceof ReportType)) {
             return false;
         }
-        ReportTypes other = (ReportTypes) object;
+        ReportType other = (ReportType) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -166,7 +166,7 @@ public class ReportTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.visumbu.vb.model.ReportTypes[ id=" + id + " ]";
+        return "com.visumbu.vb.model.ReportType[ id=" + id + " ]";
     }
 
     public String getIcon() {

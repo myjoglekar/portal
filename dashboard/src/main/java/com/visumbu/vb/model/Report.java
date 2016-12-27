@@ -96,7 +96,7 @@ public class Report implements Serializable {
     private Integer defaultCount;
     @JoinColumn(name = "report_type_id", referencedColumnName = "id")
     @ManyToOne
-    private ReportTypes reportTypeId;
+    private ReportType reportTypeId;
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     @ManyToOne
     private VbUser createdBy;
@@ -220,11 +220,11 @@ public class Report implements Serializable {
         this.defaultCount = defaultCount;
     }
 
-    public ReportTypes getReportTypeId() {
+    public ReportType getReportTypeId() {
         return reportTypeId;
     }
 
-    public void setReportTypeId(ReportTypes reportTypeId) {
+    public void setReportTypeId(ReportType reportTypeId) {
         this.reportTypeId = reportTypeId;
     }
 

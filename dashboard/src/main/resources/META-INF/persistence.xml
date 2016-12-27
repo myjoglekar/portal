@@ -19,9 +19,9 @@
     <class>com.visumbu.vb.model.DashboardTabs</class>
     <class>com.visumbu.vb.model.Dashboard</class>
     <class>com.visumbu.vb.model.TabWidget</class>
-    <class>com.visumbu.vb.model.ReportTypes</class>
     <class>com.visumbu.vb.model.Product</class>
     <class>com.visumbu.vb.model.WidgetColumn</class>
+    <class>com.visumbu.vb.model.ReportType</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/wa?zeroDateTimeBehavior=convertToNull"/>

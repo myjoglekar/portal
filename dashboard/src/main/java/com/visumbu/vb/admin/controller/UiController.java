@@ -7,9 +7,13 @@ package com.visumbu.vb.admin.controller;
 
 import com.visumbu.vb.admin.service.UiService;
 import com.visumbu.vb.admin.service.UserService;
+import com.visumbu.vb.bean.ReportWidgetBean;
 import com.visumbu.vb.bean.TabWidgetBean;
 import com.visumbu.vb.controller.BaseController;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.Report;
+import com.visumbu.vb.model.ReportType;
+import com.visumbu.vb.model.ReportWidget;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.model.WidgetColumn;
@@ -76,21 +80,21 @@ public class UiController extends BaseController {
     TabWidget createTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId, @RequestBody TabWidget tabWidget) {
         return uiService.createTabWidget(tabId, tabWidget);
     }
-    
+
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     TabWidget updateTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId, @RequestBody TabWidgetBean tabWidget) {
         System.out.println(tabWidget);
         return uiService.saveTabWidget(tabId, tabWidget);
         //return null; //uiService.createTabWidget(tabId, tabWidget);
-    }    
-    
+    }
+
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
         return uiService.getTabWidget(tabId);
     }
-    
+
     @RequestMapping(value = "dbWidget/{widgetId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     TabWidget deleteTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer widgetId) {
@@ -114,8 +118,81 @@ public class UiController extends BaseController {
     WidgetColumn deleteWidgetColumn(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
         return uiService.deleteWidgetColumn(id);
     }
-    
-    
+
+    @RequestMapping(value = "reportType", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    ReportType addReportType(HttpServletRequest request, HttpServletResponse response, @RequestBody ReportType reportTypes) {
+        return uiService.addReportType(reportTypes);
+    }
+
+    @RequestMapping(value = "reportType", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    ReportType update(HttpServletRequest request, HttpServletResponse response, @RequestBody ReportType reportTypes) {
+        return uiService.updateReportType(reportTypes);
+    }
+
+    @RequestMapping(value = "reportTypes/{reportTypeId}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    ReportType deleteReportType(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportTypeId) {
+        return uiService.deleteReportType(reportTypeId);
+    }
+
+    @RequestMapping(value = "reportTypes/{reportTypeId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getReportType(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportTypeId) {
+        return uiService.getReportType(reportTypeId);
+    }
+
+    @RequestMapping(value = "report", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    Report addReport(HttpServletRequest request, HttpServletResponse response, @RequestBody Report report) {
+        Integer getReportTypeId = 1;
+        return uiService.addReport(report, getReportTypeId);
+    }
+
+    @RequestMapping(value = "report", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    Report update(HttpServletRequest request, HttpServletResponse response, @RequestBody Report report) {
+        return uiService.updateReport(report);
+    }
+
+    @RequestMapping(value = "report/{reportId}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    Report deleteReport(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
+        return uiService.deleteReport(reportId);
+    }
+
+    @RequestMapping(value = "report/{reportId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getReport(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
+        return uiService.getReport(reportId);
+    }
+
+    @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    ReportWidget createReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId, @RequestBody ReportWidget reportWidget) {
+        return uiService.createReportWidget(reportId, reportWidget);
+    }
+
+    @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    ReportWidget updateReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId, @RequestBody ReportWidgetBean reportWidgetBean) {
+        System.out.println(reportWidgetBean);
+        return uiService.saveReportWidget(reportId, reportWidgetBean);
+        //return null; //uiService.createTabWidget(tabId, tabWidget);
+    }
+
+    @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
+        return uiService.getReportWidget(reportId);
+    }
+
+    @RequestMapping(value = "reportWidget/{reeportId}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    TabWidget deleteReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
+        return uiService.deleteReportWidget(reportId);
+    }
     
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

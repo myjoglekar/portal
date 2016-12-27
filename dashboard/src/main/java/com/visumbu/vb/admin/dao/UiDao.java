@@ -8,6 +8,10 @@ package com.visumbu.vb.admin.dao;
 import com.visumbu.vb.dao.BaseDao;
 import com.visumbu.vb.model.Dashboard;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.Report;
+import com.visumbu.vb.model.ReportColumn;
+import com.visumbu.vb.model.ReportType;
+import com.visumbu.vb.model.ReportWidget;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.model.WidgetColumn;
@@ -128,6 +132,81 @@ public class UiDao extends BaseDao {
 
     public void saveOrUpdate(Object object) {
         sessionFactory.getCurrentSession().saveOrUpdate(object);
+    }
+
+    public List readReportType(Integer reportTypeId) {
+        ReportType reportTypes = (ReportType) sessionFactory.getCurrentSession().get(ReportType.class, reportTypeId);
+        return (List) reportTypes;
+    }
+
+    public Report addReport(Report report, Integer reportTypeId) {
+        report.setReportTypeId(getReportTypeById(reportTypeId));
+        create(report);
+        return report;
+    }
+
+    private ReportType getReportTypeById(Integer reportTypeId) {
+        ReportType reportType = (ReportType) sessionFactory.getCurrentSession().get(ReportType.class, reportTypeId);
+        return reportType;
+    }
+
+    public List readReport(Integer reportId) {
+        Report report = (Report) sessionFactory.getCurrentSession().get(Report.class, reportId);
+        return (List) report;
+    }
+
+    public Report getReportById(Integer reportId) {
+        Report report = (Report) sessionFactory.getCurrentSession().get(Report.class, reportId);
+        return report;
+    }
+
+    public ReportWidget getReportWidgetById(Integer reportId) {
+        ReportWidget reportWidget = (ReportWidget) sessionFactory.getCurrentSession().get(ReportWidget.class, reportId);
+        return reportWidget;
+    }
+    
+    public ReportWidget saveReportWidget(ReportWidget reportWidget) {
+        sessionFactory.getCurrentSession().saveOrUpdate(reportWidget);
+        return reportWidget;
+    }
+    
+    public void deleteReportColumns(Integer reportId) {
+        String queryStr = "delete from ReportColumn d where d.reportId.id = :reportId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("reportId", reportId);
+        query.executeUpdate();
+    }
+    
+    public List<ReportWidget> getReportWidget(Integer reportId) {
+        String queryStr = "select d from reportWidget d where d.reportId.id = :reportId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("reportId", reportId);
+
+        List<ReportWidget> reportWidgets = query.list();
+        for (Iterator<ReportWidget> iterator = reportWidgets.iterator(); iterator.hasNext();) {
+            ReportWidget widget = iterator.next();
+            widget.setColumns(getColumns(widget));
+        }
+
+        return reportWidgets;
+    }
+    
+    private List<ReportColumn> getColumns(ReportWidget widget) {
+        String queryStr = "select d from ReportColumn d where d.reportId = :reportId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("reportId", widget);
+
+        return query.list();
+    }
+    
+    public ReportWidget deleteReportWidget(Integer id) {
+        String queryStr = "delete from ReportColumn d where d.reportId.id = :reportId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("reportId", id);
+        query.executeUpdate();
+
+        delete(getTabWidgetById(id));
+        return null;
     }
 
 }
