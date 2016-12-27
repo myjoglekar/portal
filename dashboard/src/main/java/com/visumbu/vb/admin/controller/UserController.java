@@ -7,6 +7,7 @@ package com.visumbu.vb.admin.controller;
 
 import com.visumbu.vb.admin.service.UserService;
 import com.visumbu.vb.bean.LoginUserBean;
+import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
 import com.visumbu.vb.model.VbUser;
 import java.io.IOException;
 import java.util.List;
@@ -68,12 +69,14 @@ public class UserController {
 
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    LoginUserBean login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
-        LoginUserBean userBean = userService.authenicate(loginUserBean);
+    SecurityAuthBean login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
+        SecurityAuthBean permissions = userService.getPermissions(loginUserBean);
+        //LoginUserBean userBean = userService.authenicate(loginUserBean);
         HttpSession session = request.getSession();
-        session.setAttribute("isAuthenticated", userBean.getAuthenticated());
-        session.setAttribute("username", userBean.getUsername());
-        return userBean;
+        session.setAttribute("isAuthenticated", permissions != null);
+        session.setAttribute("username", permissions.getUserName());
+        session.setAttribute("accessToken", permissions.getAccessToken());
+        return permissions;
     }
     
     

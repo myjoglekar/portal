@@ -5,11 +5,18 @@
  */
 package com.visumbu.vb.utils;
 
+import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
+import com.visumbu.vb.bean.map.auth.SecurityTokenBean;
+import static com.visumbu.vb.utils.Rest.getData;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  *
@@ -55,7 +62,7 @@ public class VbUtils {
         }
         return returnValue;
     }
-    
+
     public static String getDomainName(String url) {
         // Alternative Solution
         // http://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
@@ -65,6 +72,45 @@ public class VbUtils {
             return domain.startsWith("www.") ? domain.substring(4) : domain;
         } catch (URISyntaxException ex) {
             Logger.getLogger(VbUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public static SecurityAuthBean getAuthData(String username, String password) {
+        try {
+            String output = Rest.postRawForm(Settings.getSecurityTokenUrl(), "client_id=f8f06d06436f4104ade219fd7d535654&client_secret=ba082149c90f41c49e86f4862e22e980&grant_type=password&scope=FullControl&username=" + username + "&password=" + password);
+            ObjectMapper mapper = new ObjectMapper();
+            SecurityTokenBean token = mapper.readValue(output, SecurityTokenBean.class);
+
+            Map<String, String> accessHeader = new HashMap<>();
+            accessHeader.put("Authorization", token.getAccessToken());
+            String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=00959ecd-41c5-4b92-8bd9-78c26d10486c", null, accessHeader);
+            ObjectMapper authMapper = new ObjectMapper();
+
+            SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
+
+            System.out.println(authData);
+            return authData;
+        } catch (IOException ex) {
+            Logger.getLogger(Rest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public static SecurityAuthBean getAuthData(String accessToken) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, String> accessHeader = new HashMap<>();
+            accessHeader.put("Authorization", accessToken);
+            String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=00959ecd-41c5-4b92-8bd9-78c26d10486c", null, accessHeader);
+            ObjectMapper authMapper = new ObjectMapper();
+
+            SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
+
+            System.out.println(authData);
+            return authData;
+        } catch (IOException ex) {
+            Logger.getLogger(Rest.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
