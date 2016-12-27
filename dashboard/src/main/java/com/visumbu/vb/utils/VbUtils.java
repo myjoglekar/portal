@@ -5,13 +5,18 @@
  */
 package com.visumbu.vb.utils;
 
+import com.visumbu.vb.bean.Permission;
 import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
+import com.visumbu.vb.bean.map.auth.SecurityAuthPermission;
+import com.visumbu.vb.bean.map.auth.SecurityAuthRoleBean;
 import com.visumbu.vb.bean.map.auth.SecurityTokenBean;
 import static com.visumbu.vb.utils.Rest.getData;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,11 +90,11 @@ public class VbUtils {
             Map<String, String> accessHeader = new HashMap<>();
             accessHeader.put("Authorization", token.getAccessToken());
             String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=00959ecd-41c5-4b92-8bd9-78c26d10486c", null, accessHeader);
-            ObjectMapper authMapper = new ObjectMapper();
-
             SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
 
             System.out.println(authData);
+            Permission permission = getPermissions(authData);
+            authData.setPermission(permission);
             return authData;
         } catch (IOException ex) {
             Logger.getLogger(Rest.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,15 +108,29 @@ public class VbUtils {
             Map<String, String> accessHeader = new HashMap<>();
             accessHeader.put("Authorization", accessToken);
             String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=00959ecd-41c5-4b92-8bd9-78c26d10486c", null, accessHeader);
-            ObjectMapper authMapper = new ObjectMapper();
-
             SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
 
             System.out.println(authData);
+            Permission permission = getPermissions(authData);
+            authData.setPermission(permission);
             return authData;
         } catch (IOException ex) {
             Logger.getLogger(Rest.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    private static Permission getPermissions(SecurityAuthBean authData) {
+        List<SecurityAuthRoleBean> roles = authData.getRoles();
+        Permission permission = new Permission();
+        for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
+            SecurityAuthRoleBean role = iterator.next();
+            List<SecurityAuthPermission> permissions = role.getPermissions();
+            for (Iterator<SecurityAuthPermission> iterator1 = permissions.iterator(); iterator1.hasNext();) {
+                SecurityAuthPermission authPermission = iterator1.next();
+                permission.setPermission(authPermission.getName(), Boolean.TRUE);
+            }
+        }
+        return permission;
     }
 }

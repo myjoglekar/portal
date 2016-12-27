@@ -70,13 +70,31 @@ public class UserController {
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     SecurityAuthBean login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
-        SecurityAuthBean permissions = userService.getPermissions(loginUserBean);
+        SecurityAuthBean authData = userService.getPermissions(loginUserBean);
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
         HttpSession session = request.getSession();
-        session.setAttribute("isAuthenticated", permissions != null);
-        session.setAttribute("username", permissions.getUserName());
-        session.setAttribute("accessToken", permissions.getAccessToken());
-        return permissions;
+        session.setAttribute("isAuthenticated", authData != null);
+        session.setAttribute("username", authData.getUserName());
+        session.setAttribute("accessToken", authData.getAccessToken());
+        session.setAttribute("permission", authData.getPermission());
+        return authData;
+    }
+    
+    
+    @RequestMapping(value = "authData", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    SecurityAuthBean getAuthData(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
+        HttpSession session = request.getSession();
+        if(!((Boolean)session.getAttribute("isAuthenticated"))) {
+            return null;
+        }
+        SecurityAuthBean authData = userService.getPermissions((String)session.getAttribute("accessToken"));
+        //LoginUserBean userBean = userService.authenicate(loginUserBean);
+        session.setAttribute("isAuthenticated", authData != null);
+        session.setAttribute("username", authData.getUserName());
+        session.setAttribute("accessToken", authData.getAccessToken());
+        session.setAttribute("permission", authData.getPermission());
+        return authData;
     }
     
     

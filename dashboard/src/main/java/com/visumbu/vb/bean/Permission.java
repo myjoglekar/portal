@@ -80,7 +80,7 @@ public class Permission {
         this.allowScheduleReport = allowScheduleReport;
     }
     
-    public String setPermission(String permissionName, String permission) {
+    public String setPermission(String permissionName, Boolean permission) {
         try {
             System.out.println("Permission Name " + permissionName + " Permission Value " + permission);
             PropertyUtils.setProperty(this, permissionName, permission);
@@ -91,7 +91,7 @@ public class Permission {
         } catch (NoSuchMethodException ex) {
             Logger.getLogger(Permission.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return permission;
+        return permissionName;
     }
 
     

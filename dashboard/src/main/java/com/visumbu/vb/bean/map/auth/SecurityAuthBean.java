@@ -5,6 +5,7 @@
  */
 package com.visumbu.vb.bean.map.auth;
 
+import com.visumbu.vb.bean.Permission;
 import java.util.List;
 
 /**
@@ -16,7 +17,16 @@ public class SecurityAuthBean {
     private String userName;
     private String accessToken;
     private List<SecurityAuthRoleBean> roles;
+    private Permission permission;
 
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
+    }
+    
     public String getUserId() {
         return userId;
     }
