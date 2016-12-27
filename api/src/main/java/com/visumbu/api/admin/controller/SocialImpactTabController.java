@@ -116,13 +116,13 @@ public class SocialImpactTabController {
         columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", 1));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", 1));
         columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", 1));
-        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.AVG));
-        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {

@@ -30,7 +30,7 @@ public class ColumnDef {
     }
     public static class Format {
         public static final String CURRENCY = "$,.2F";
-        public static final String PERCENTAGE = "%";
+        public static final String PERCENTAGE = "%,.2f";
         public static final String DECIMAL1 = ",.1F";
         public static final String DECIMAL2 = ",.2F";
         public static final String INTEGER = ",.0F";
