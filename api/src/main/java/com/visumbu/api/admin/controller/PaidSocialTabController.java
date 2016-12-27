@@ -108,21 +108,21 @@ public class PaidSocialTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("visits", "string", "Visits", 1));
-        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", 1));
-        columnDefs.add(new ColumnDef("newSessions", "string", "New Sessions Percentage", 1));
-        columnDefs.add(new ColumnDef("newUsers", "string", "New Users", 1));
-        columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", 1));
-        columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", 1));
-        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", 1));
-        columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", 1));
-        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("newSessions", "string", "New Sessions Percentage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("newUsers", "string", "New Users", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
+        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.SUM, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
