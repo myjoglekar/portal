@@ -4,7 +4,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.selectDateDurations = [{duration: "None"}, {duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
     $scope.alignments = [{name: "left", displayName: "Left"}, {name: "right", displayName: "Right"}, {name: "center", displayName: "Center"}];
     $scope.sorting = [{name: 'asc', value: 1}, {name: 'dec', value: 0}, {name: 'None', value: ''}];
-    $scope.isEditPreviewColumn = false
+    $scope.isEditPreviewColumn = false;
 //
 //    $http.get("admin/user/datasets").success(function (response) {
 //

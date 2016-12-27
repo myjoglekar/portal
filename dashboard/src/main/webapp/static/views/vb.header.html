@@ -34,9 +34,8 @@
                     <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{selectDashboardType}}
                         <span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="dashboardType in dashboardTypes" ng-click="changeDashboardType(dashboardType)">
-                            <a>{{dashboardType.name}}</a>
-                        </li>
+                        <li ng-click="selectDashboard('Dashboard')"> <a data-ui-sref="index.dashboard.widget({dashboardTypeId: 1, productId: productId, tabId: tabId,})">Dashboard</a> </li>
+                        <li ng-click="selectDashboard('Report')"> <a data-ui-sref="index.report.reports({dashboardTypeId: 2, productId: productId})"> Report</a></li>
                     </ul>
                 </div>
             </div>
@@ -48,7 +47,7 @@
                         <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li ng-repeat="product in products">
-                            <a data-ui-sref="index.dashboard({dashboardId:  product.id})" ng-click="changeProduct(product)">
+                            <a data-ui-sref="index.dashboard({productId:  product.id})" data-ui-sref-opts="{reload: true}" ng-click="changeProduct(product)">
                                 {{product.productName}}
                             </a>
                         </li>

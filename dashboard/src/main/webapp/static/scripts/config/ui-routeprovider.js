@@ -6,7 +6,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/vb.index.html"
             })
             .state("index.dashboard", {
-                url: "/dashboard/:dashboardId",
+                url: "/dashboard/:dashboardTypeId/:productId",
                 templateUrl: "static/views/dashboard/dashboard.html",
             })
 //            .state("dashboard.tab", {
@@ -15,20 +15,38 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 //                controller: 'UiController'
 //            })
             .state("header", {
-                url: "/header/:dashboardId",
+                url: "/header/:productId",
                 templateUrl: "static/views/dashboard/dashboardTabs.html",
                 controller: 'HeaderController'
             })
             .state("index.dashboard.widget", {
-                url: "/widget/:tabId",
+                url: "/widget/:productId/:tabId",
                 templateUrl: "static/views/dashboard/widgets.html",
                 controller: 'WidgetController'
             })
-            .state("report", {
-                url: "/report/:dashboardId/:reportId",
-                templateUrl: "static/views/reports/createNewReports.html",
-                controller: 'ReportController'
+            .state("index.report", {
+                url: "/reportIndex/:dashboardTypeId/:productId",
+                templateUrl: "static/views/reports/reportIndex.html",
+                controller: 'ReportIndexController'
+            })
+            .state("index.report.template", {
+                url: "/template/:productId",
+                templateUrl: "static/views/reports/reportTemplate.html",
+                controller: 'TemplateController',
+                activetab: 'template'
+            })
+            .state("index.report.reports", {
+                url: "/report/:productId",
+                templateUrl: "static/views/reports/reports.html",
+                controller: 'ReportController',
+                activetab: 'report'
+            })
+            .state("index.report.newOrEdit", {
+                url: "/newOrEdit/:productId/:reportId",
+                templateUrl: "static/views/reports/newOrEditReports.html",
+                controller: 'ReportController',
+                activetab: 'report'
             });
 
-    $urlRouterProvider.otherwise('index/dashboard/dashboard/widget/2');
-})
+    $urlRouterProvider.otherwise('index/dashboard/1/dashboard/widget/2/2');
+});

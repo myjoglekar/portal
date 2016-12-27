@@ -1,25 +1,35 @@
 app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $stateParams, $state) {
-    
-    console.log($stateParams.dashboardId)
     $scope.userName = $cookies.getObject("username");
+    $scope.productId = $stateParams.productId;
+    $scope.tabId = $stateParams.tabId;
 
+
+    console.log($stateParams.productId);
+    console.log($stateParams.tabId);
+    console.log($stateParams.dashboardTypeId);
+
+    // $scope.selectDashboardName = [];
     $scope.selectDashboardType = "Select Type";
-    $scope.dashboardTypes = [{id: 1, name: "Dashboard"}, {id: 2, name: "Reports"}];
-    $scope.changeDashboardType = function (dashboardType) {
-        $scope.selectDashboardType = dashboardType.name;
+    $scope.dashboardTypes = [{dashboardType: 1, name: "Dashboard"}, {dashboardType: 2, name: "Reports"}];
+    // $scope.selectDashboardType = dashboardName;
+    $scope.selectDashboardName = $filter('filter')($scope.dashboardTypes, {dashboardType: $stateParams.dashboardTypeId})[0];
+    $scope.selectDashboardType = $scope.selectDashboardName.name;
+    $scope.selectDashboard = function (name) {
+        $scope.selectDashboardType = name;
+//    console.log($scope.selectDashboardName)
     };
 
     $scope.selectProductName = "Select Product";
     $scope.changeProduct = function (product) {
         $scope.selectProductName = product.productName;
-        $scope.dashboardId = product.id;
+        $scope.productId = product.id;
     };
     $http.get('admin/ui/product').success(function (response) {
         $scope.products = response;
         // $scope.searchProduct.unshift({"id": 0, "productName": "All Product"});
-        $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
+        $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
         $scope.selectProductName = $scope.name.productName;
-        console.log($scope.selectProductName)
+        console.log($scope.selectProductName);
     });
 
     $http.get('admin/dealer').success(function (response) {

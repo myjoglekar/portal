@@ -1,0 +1,27 @@
+<div class="content-report">
+    <div class="pull-right row">
+        <span ui-sref="index.report.newOrEdit({reportId: 0})"><i class="fa fa-plus"></i> Add Reports</span>
+    </div>
+    <div>
+        <table class="table table-bordered table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Report Name</th>
+                    <th>Created Time</th>
+                    <th>User</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="report in reports" ui-sref="index.report.newOrEdit({reportId: report.id})">
+                    <td>{{$index + 1}}</td>
+                    <td>{{report.title}}</td>
+                    <td>{{report.time}}</td>
+                    <td>{{report.user}}</td>
+                    <td><button class="btn btn-info btn-xs"><i class="fa fa-download"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</div>
