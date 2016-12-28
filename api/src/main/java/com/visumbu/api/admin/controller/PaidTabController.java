@@ -13,6 +13,8 @@ import com.visumbu.api.adwords.report.xml.bean.AccountDeviceReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AccountReport;
 import com.visumbu.api.adwords.report.xml.bean.AccountReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AdGroupReportRow;
+import com.visumbu.api.adwords.report.xml.bean.AdReport;
+import com.visumbu.api.adwords.report.xml.bean.AdReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AddGroupReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReportRow;
@@ -29,6 +31,8 @@ import com.visumbu.api.bing.report.xml.bean.AccountPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountPerformanceRow;
 import com.visumbu.api.bing.report.xml.bean.AdGroupPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AdGroupPerformanceRow;
+import com.visumbu.api.bing.report.xml.bean.AdPerformanceReport;
+import com.visumbu.api.bing.report.xml.bean.AdPerformanceRow;
 import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.CampaignDevicePerformanceRow;
 import com.visumbu.api.bing.report.xml.bean.CampaignPerformanceReport;
@@ -37,6 +41,7 @@ import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.GeoCityLocationPerformanceRow;
 import com.visumbu.api.dashboard.bean.AccountPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.AdGroupPerformanceReportBean;
+import com.visumbu.api.dashboard.bean.AdPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignDevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.DevicePerformanceReportBean;
 import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
@@ -886,6 +891,102 @@ public class PaidTabController {
             performanceBean.setConversions(row.getConversions().getValue());
             performanceBean.setCpa(row.getCostPerConversion().getValue());
             performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
+            performanceReportBeans.add(performanceBean);
+
+        }
+        returnMap.put("data", performanceReportBeans);
+        return returnMap;
+    }
+
+    @RequestMapping(value = "adPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAdPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+        columnDefs.add(new ColumnDef("campaignName", "string", "Campaign Name"));
+        columnDefs.add(new ColumnDef("adGroupName", "string", "Ad Group Name", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("clicks", "string", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("AdType", "string", "Ad Type"));
+        columnDefs.add(new ColumnDef("description", "string", "Description"));
+        columnDefs.add(new ColumnDef("description1", "string", "Description1"));
+        columnDefs.add(new ColumnDef("description2", "string", "Description2"));
+        columnDefs.add(new ColumnDef("displayUrl", "string", "Display Url"));
+        columnDefs.add(new ColumnDef("creativeFinalUrl", "string", "Final Url"));
+        columnDefs.add(new ColumnDef("creativeDestinationUrl", "string", "Destination Url"));
+        
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        AdReport adwordsAdReport = adwordsService.getAdReport(startDate, endDate, "142-465-1427", "SEARCH");
+        AdPerformanceReport bingAdPerformanceReport = bingService.getAdPerformanceReport(startDate, endDate);
+
+        List<AdReportRow> adwordsAdReportRow = adwordsAdReport.getAdReportRow();
+        List<AdPerformanceRow> bingAdPerformanceRows = bingAdPerformanceReport.getAdPerformanceRows();
+
+        List<AdPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+
+        for (Iterator<AdReportRow> reportRow = adwordsAdReportRow.iterator(); reportRow.hasNext();) {
+            AdReportRow row = reportRow.next();
+            AdPerformanceReportBean performanceBean = new AdPerformanceReportBean();
+            performanceBean.setSource("Google");
+            performanceBean.setCampaignName(row.getCampaign());
+            performanceBean.setAdGroupName(row.getAdGroupName());
+            performanceBean.setImpressions(row.getImpressions());
+            performanceBean.setClicks(row.getClicks());
+            performanceBean.setCtr(row.getCtr());
+
+            performanceBean.setCost(row.getCost());
+            performanceBean.setAverageCpc(row.getAverageCpc());
+            performanceBean.setCpa(row.getCostPerConversion());
+            performanceBean.setDescription(row.getDescription());
+            performanceBean.setDescription1(row.getDescription1());
+            performanceBean.setDescription2(row.getDescription2());
+            performanceBean.setAdType(row.getAdType());
+            performanceBean.setCreativeDestinationUrl(row.getCreativeDestinationUrl());
+            performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
+            performanceBean.setDisplayUrl(row.getDisplayUrl());
+
+            performanceBean.setAveragePosition(row.getAveragePosition());
+            performanceBean.setConversions(row.getConversions());
+            performanceReportBeans.add(performanceBean);
+        }
+
+        for (Iterator<AdPerformanceRow> reportRow = bingAdPerformanceRows.iterator(); reportRow.hasNext();) {
+            AdPerformanceRow row = reportRow.next();
+            AdPerformanceReportBean performanceBean = new AdPerformanceReportBean();
+            performanceBean.setSource("Bing");
+            performanceBean.setCampaignName(row.getCampaignName().getValue());
+            performanceBean.setAdGroupName(row.getAdGroupName().getValue());
+            performanceBean.setImpressions(row.getImpressions().getValue());
+            performanceBean.setClicks(row.getClicks().getValue());
+            performanceBean.setCtr(row.getCtr().getValue());
+            performanceBean.setCost(row.getSpend().getValue());
+            performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+            performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+            performanceBean.setConversions(row.getConversions().getValue());
+            performanceBean.setCpa(row.getCostPerConversion().getValue());
+            
+            performanceBean.setDescription(row.getAdTitle().getValue());
+            performanceBean.setDescription1(row.getAdDescription().getValue());
+            performanceBean.setDescription2("-");
+            performanceBean.setAdType("-");
+            performanceBean.setCreativeDestinationUrl(row.getDestinationUrl().getValue());
+            performanceBean.setCreativeFinalUrls(row.getFinalUrl().getValue());
+            performanceBean.setDisplayUrl(row.getDisplayUrl().getValue());
+            
             performanceReportBeans.add(performanceBean);
 
         }

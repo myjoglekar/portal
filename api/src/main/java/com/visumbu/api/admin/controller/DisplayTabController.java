@@ -413,7 +413,7 @@ public class DisplayTabController {
             performanceBean.setDescription2(row.getDescription2());
             performanceBean.setCost(row.getCost());
             performanceBean.setAverageCpc(row.getAverageCpc());
-            performanceBean.setCostPerConversion(row.getCostPerConversion());
+            performanceBean.setCpa(row.getCostPerConversion());
             performanceBean.setAveragePosition(row.getAveragePosition());
             performanceBean.setConversions(row.getConversions());
             performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
