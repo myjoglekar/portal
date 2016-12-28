@@ -1,4 +1,8 @@
-<div>   
+<section class="content-header">
+    <h1 class="text-capitalize">Dashboard Reports</h1>        
+</section>
+<section class="content">  
+   
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li ng-class="{active: $state.current.activetab == 'template'}">
@@ -13,8 +17,9 @@
             </li>
         </ul>
     </div>
-
-    <div>
+ <div class="row">
+    <div class="tab-content">
         <div ui-view></div>
     </div>
-</div>
+    </div>
+</section>

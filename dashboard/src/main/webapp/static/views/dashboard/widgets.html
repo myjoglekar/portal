@@ -23,6 +23,7 @@
         padding: 10px;
     }
 </style>
+<div class="col-md-12 add-widget">
 <div class="pull-right-container pull-right">
     <div class="btn-group">
         <a class="refresh" ng-click="pageRefresh()"><i class="fa fa-refresh"></i> Refresh Data</a>
@@ -44,7 +45,7 @@
         </ul>
     </div>
 </div>
-
+</div>
 <div ng-repeat="widget in widgets">
     <div ng-if="widget.chartType != 'tickers'">
         <div class="col-md-{{2 * widget.width}} ">
