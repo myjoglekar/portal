@@ -112,7 +112,7 @@ body.hold-transition .content-wrapper, body.hold-transition .right-side, body.ho
     transition: none
 }
 .content {
-    min-height: 250px;
+    min-height: 650px;
     /*padding: 15px;*/
     margin-right: auto;
     margin-left: auto;
@@ -1533,7 +1533,9 @@ a:hover, a:active, a:focus {
     font-weight: bold;
     font-size: 18px;
     margin: 0;
-    line-height: 1
+    line-height: 1;
+    float: left;
+    width: 75%;
 }
 .box-header>.fa, .box-header>.glyphicon, .box-header>.ion {
     margin-right: 5px
@@ -4460,4 +4462,13 @@ padding-left: 15px;
 
 .refresh {
     color:#228995;
+}
+
+.table>thead>tr>th {
+    background: rgba(90, 113, 122, 0.28);
+}
+
+.add-widget {
+    padding-left:0px;
+    padding-right:0px;
 }
