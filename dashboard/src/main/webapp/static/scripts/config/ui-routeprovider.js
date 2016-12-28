@@ -6,7 +6,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/vb.index.html"
             })
             .state("index.dashboard", {
-                url: "/dashboard/:dashboardTypeId/:productId",
+                url: "/dashboard/:productId",
                 templateUrl: "static/views/dashboard/dashboard.html",
             })
 //            .state("dashboard.tab", {
@@ -25,7 +25,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'WidgetController'
             })
             .state("index.report", {
-                url: "/reportIndex/:dashboardTypeId/:productId",
+                url: "/reportIndex/:productId",
                 templateUrl: "static/views/reports/reportIndex.html",
                 controller: 'ReportIndexController'
             })
@@ -48,5 +48,5 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 activetab: 'report'
             });
 
-    $urlRouterProvider.otherwise('index/dashboard/1/dashboard/widget/2/2');
+    $urlRouterProvider.otherwise('index/dashboard/dashboard/widget/2/2');
 });

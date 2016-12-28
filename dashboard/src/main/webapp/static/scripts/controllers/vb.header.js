@@ -8,16 +8,13 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     console.log($stateParams.tabId);
     console.log($stateParams.dashboardTypeId);
 
-    // $scope.selectDashboardName = [];
-    $scope.selectDashboardType = "Select Type";
-    $scope.dashboardTypes = [{dashboardType: 1, name: "Dashboard"}, {dashboardType: 2, name: "Reports"}];
-    // $scope.selectDashboardType = dashboardName;
-    $scope.selectDashboardName = $filter('filter')($scope.dashboardTypes, {dashboardType: $stateParams.dashboardTypeId})[0];
-    $scope.selectDashboardType = $scope.selectDashboardName.name;
-    $scope.selectDashboard = function (name) {
-        $scope.selectDashboardType = name;
-//    console.log($scope.selectDashboardName)
-    };
+//    $scope.selectDashboardType = "Select Type";
+//    $scope.dashboardTypes = [{dashboardType: 1, name: "Dashboard"}, {dashboardType: 2, name: "Reports"}];
+//    $scope.selectDashboardName = $filter('filter')($scope.dashboardTypes, {dashboardType: $stateParams.dashboardTypeId})[0];
+//    $scope.selectDashboardType = $scope.selectDashboardName.name;
+//    $scope.selectDashboard = function (name) {
+//        $scope.selectDashboardType = name;
+//    };
 
     $scope.selectProductName = "Select Product";
     $scope.changeProduct = function (product) {

@@ -12,14 +12,13 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
 
     $scope.editWidget = function (widget) {     //Edit widget
-        console.log(widget.productName)
         $scope.tableDef(widget);
         $scope.selectedRow = widget.chartType;
         widget.previewUrl = widget.directUrl;
         widget.previewType = widget.chartType;
         widget.previewTitle = widget.widgetTitle;
         $scope.editChartType = widget.chartType;
-        $scope.selectProductName(widget.productName, widget)
+        $scope.selectProductName(widget.productName, widget);
     };
 
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
@@ -213,7 +212,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         var data = JSON.parse(widget.productDisplayName);
         $scope.previewChartType = $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType;
         $scope.previewColumn = $scope.setPreviewColumn ? $scope.setPreviewColumn : widget;
-        $scope.showPreviewChart = !$scope.showPreviewChart;                     //Hide & Show Preview Chart
+        //$scope.showPreviewChart = !$scope.showPreviewChart;                     //Hide & Show Preview Chart
         $scope.previewChartUrl = data.url;
     };
 
@@ -990,7 +989,8 @@ app.directive('areaChartDirective', function ($http) {
                                         return xData[x];
                                     }
                                 }
-                            }
+                            },
+                           y2: {show: true}
                         },
                         grid: {
                             x: {

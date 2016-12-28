@@ -1,4 +1,6 @@
 app.controller("MenuController", function ($scope, $http, $stateParams, $filter) {
+    console.log($stateParams.tabId)
+    $scope.productId = $stateParams.productId;
     $scope.reports = [];
     $scope.addParent = function () {
         $scope.reports.push({isEdit: true, childItems: []});
@@ -14,11 +16,11 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter)
         $scope.reports = response;
     });
 
-    $scope.selectProductName = "Select Product";
-    $scope.changeProduct = function (product) {
-        $scope.selectProductName = product.productName;
-        $scope.dashboardId = product.id;
-    };
+//    $scope.selectProductName = "Select Product";
+//    $scope.changeProduct = function (product) {
+//        $scope.selectProductName = product.productName;
+//        $scope.dashboardId = product.id;
+//    };
     $http.get('admin/ui/product').success(function (response) {
         $scope.products = response;
         // $scope.searchProduct.unshift({"id": 0, "productName": "All Product"});
