@@ -113,6 +113,7 @@ public class UserController {
             "../api/admin/paid/campaignDevice;Campaign Device",
             "../api/admin/paid/accountDevice;Account Device",
             "../api/admin/paid/adGroups;AdGroups",
+            "../api/admin/paid/adPerformance;Ad Performance",
         };
 
         for (int i = 0; i < urlList.length; i++) {
