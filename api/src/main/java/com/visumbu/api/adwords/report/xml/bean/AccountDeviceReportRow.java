@@ -50,11 +50,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getCtr() {
-        try {
-            return Integer.toString(Integer.parseInt(ctr) / 1000000);
-        } catch (Exception e) {
-            return "0";
-        }
+        return ctr.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -202,7 +198,11 @@ public class AccountDeviceReportRow {
     }
 
     public String getCostConv() {
-        return costConv;
+        try {
+            return Integer.toString(Integer.parseInt(costConv) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
     @XmlAttribute

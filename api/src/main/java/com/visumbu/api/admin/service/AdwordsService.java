@@ -722,15 +722,24 @@ public class AdwordsService {
         return null;
     }
 
-    public AccountDeviceReport getAccountDevicePerformanceReport(Date startDate, Date endDate, String accountId, String filter) {
+    public AccountDeviceReport getAccountDevicePerformanceReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
-        selector.getFields().addAll(Lists.newArrayList("Device", "VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                "Impressions", "Clicks", "Date",
-                "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
-        ));
+        if (aggregation == null || aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("Device", "VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("Device", "VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Date",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
 
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
@@ -860,15 +869,24 @@ public class AdwordsService {
         return null;
     }
 
-    public CampaignDeviceReport getCampaignDeviceReport(Date startDate, Date endDate, String accountId, String filter) {
+    public CampaignDeviceReport getCampaignDeviceReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
-        selector.getFields().addAll(Lists.newArrayList("Device", "CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
-                "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks", "Date",
-                "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
-        ));
+        if (aggregation == null || aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("Device", "CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("Device", "CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks", "Date",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
+            ));
+        }
         if (filter != null) {
             final Predicate predicate = new Predicate();
 

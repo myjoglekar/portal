@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "row")
 public class AdReportRow {
+
     private String campaignId;
     private String account;
     private String campaign;
@@ -166,7 +167,7 @@ public class AdReportRow {
         return averagePosition;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "avgPosition")
     public void setAveragePosition(String averagePosition) {
         this.averagePosition = averagePosition;
     }
@@ -211,7 +212,7 @@ public class AdReportRow {
         return adType;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "adType")
     public void setAdType(String adType) {
         this.adType = adType;
     }
@@ -220,7 +221,7 @@ public class AdReportRow {
         return description;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "description")
     public void setDescription(String description) {
         this.description = description;
     }
@@ -229,6 +230,7 @@ public class AdReportRow {
         return description1;
     }
 
+    @XmlAttribute(name = "descriptionLine1")
     public void setDescription1(String description1) {
         this.description1 = description1;
     }
@@ -237,9 +239,10 @@ public class AdReportRow {
         return description2;
     }
 
+    @XmlAttribute(name = "descriptionLine2")
     public void setDescription2(String description2) {
         this.description2 = description2;
-    }    
+    }
 
     public String getDisplayUrl() {
         return displayUrl;
@@ -268,16 +271,21 @@ public class AdReportRow {
     }
 
     public String getAverageCpc() {
-        return averageCpc;
+        try {
+            return Long.toString(Long.parseLong(averageCpc) / 1000000L);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "avgCPC")
     public void setAverageCpc(String averageCpc) {
         this.averageCpc = averageCpc;
     }
 
     public String getCtr() {
-        return ctr;
+        return ctr.replaceAll("%", "");
+        //return ctr;
     }
 
     @XmlAttribute
@@ -286,7 +294,11 @@ public class AdReportRow {
     }
 
     public String getCost() {
-        return cost;
+        try {
+            return Long.toString(Long.parseLong(cost) / 1000000L);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
     @XmlAttribute
@@ -295,10 +307,14 @@ public class AdReportRow {
     }
 
     public String getCostPerConversion() {
-        return costPerConversion;
+        try {
+            return Long.toString(Long.parseLong(costPerConversion) / 1000000L);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "costConv")
     public void setCostPerConversion(String costPerConversion) {
         this.costPerConversion = costPerConversion;
     }

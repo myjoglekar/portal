@@ -43,7 +43,6 @@ public class CampaignDeviceReportRow {
     private String convRate;
     private String device;
 
-    
     public String getAvgCPC() {
         try {
             return Integer.toString(Integer.parseInt(avgCPC) / 1000000);
@@ -83,7 +82,6 @@ public class CampaignDeviceReportRow {
         this.cost = cost;
     }
 
-    
     public String getDevice() {
         return device;
     }
@@ -274,7 +272,11 @@ public class CampaignDeviceReportRow {
     }
 
     public String getCostConv() {
-        return costConv;
+        try {
+            return Integer.toString(Integer.parseInt(costConv) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
     @XmlAttribute

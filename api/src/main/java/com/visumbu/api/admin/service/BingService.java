@@ -265,14 +265,14 @@ public class BingService {
         return null;
     }
 
-    public CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(Date startDate, Date endDate) {
+    public CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(Date startDate, Date endDate, String aggregation) {
         try {
             initAuthentication();
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
-                    = getCampaignDevicePerformaceReportRequest(startDate, endDate);
+                    = getCampaignDevicePerformaceReportRequest(startDate, endDate, aggregation);
 
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
@@ -337,13 +337,13 @@ public class BingService {
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
                     = getAdPerformaceReportRequest(startDate, endDate);
-            
+
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
             reportingDownloadParameters.setResultFileDirectory(new File(tmpDir));
             reportingDownloadParameters.setResultFileName(filename);
             reportingDownloadParameters.setOverwriteResultFile(true);
-            
+
             // You may optionally cancel the downloadFileAsync operation after a specified time interval.
             File resultFile = reportingServiceManager.downloadFileAsync(
                     reportingDownloadParameters,
@@ -685,6 +685,7 @@ public class BingService {
         adPerformanceReportColumn.getAdPerformanceReportColumns().add(AdPerformanceReportColumn.CAMPAIGN_ID);
         adPerformanceReportColumn.getAdPerformanceReportColumns().add(AdPerformanceReportColumn.AD_GROUP_ID);
         adPerformanceReportColumn.getAdPerformanceReportColumns().add(AdPerformanceReportColumn.DISPLAY_URL);
+        adPerformanceReportColumn.getAdPerformanceReportColumns().add(AdPerformanceReportColumn.AVERAGE_POSITION);
         adPerformanceReportColumn.getAdPerformanceReportColumns().add(AdPerformanceReportColumn.DESTINATION_URL);
 
         report.setColumns(adPerformanceReportColumn);
@@ -881,26 +882,25 @@ public class BingService {
         report.setScope(new AccountReportScope());
         report.getScope().setAccountIds(accountIds);
         report.setTime(new ReportTime());
-        //report.setTime(new ReportTime());
-        report.getTime().setPredefinedTime(ReportTimePeriod.YESTERDAY);
+        // report.getTime().setPredefinedTime(ReportTimePeriod.YESTERDAY);
         /* Start Date */
-//        Calendar startCal = Calendar.getInstance();
-//        startCal.setTime(startDate);
-//        report.getTime().setCustomDateRangeStart(new com.microsoft.bingads.reporting.Date());
-//        report.getTime().getCustomDateRangeStart().setDay(startCal.get(Calendar.DAY_OF_MONTH));
-//        report.getTime().getCustomDateRangeStart().setMonth(startCal.get(Calendar.MONTH) + 1);
-//        report.getTime().getCustomDateRangeStart().setYear(startCal.get(Calendar.YEAR));
-//
-//        // End Date 
-//        Calendar endCal = Calendar.getInstance();
-//        endCal.setTime(endDate);
-//        report.getTime().setCustomDateRangeEnd(new com.microsoft.bingads.reporting.Date());
-//        System.out.println(endCal.get(Calendar.DAY_OF_MONTH));
-//        System.out.println(endCal.get(Calendar.MONTH) + 1);
-//        System.out.println(endCal.get(Calendar.YEAR));
-//        report.getTime().getCustomDateRangeEnd().setDay(endCal.get(Calendar.DAY_OF_MONTH));
-//        report.getTime().getCustomDateRangeEnd().setMonth(endCal.get(Calendar.MONTH) + 1);
-//        report.getTime().getCustomDateRangeEnd().setYear(endCal.get(Calendar.YEAR));
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTime(startDate);
+        report.getTime().setCustomDateRangeStart(new com.microsoft.bingads.reporting.Date());
+        report.getTime().getCustomDateRangeStart().setDay(startCal.get(Calendar.DAY_OF_MONTH));
+        report.getTime().getCustomDateRangeStart().setMonth(startCal.get(Calendar.MONTH) + 1);
+        report.getTime().getCustomDateRangeStart().setYear(startCal.get(Calendar.YEAR));
+
+        // End Date 
+        Calendar endCal = Calendar.getInstance();
+        endCal.setTime(endDate);
+        report.getTime().setCustomDateRangeEnd(new com.microsoft.bingads.reporting.Date());
+        System.out.println(endCal.get(Calendar.DAY_OF_MONTH));
+        System.out.println(endCal.get(Calendar.MONTH) + 1);
+        System.out.println(endCal.get(Calendar.YEAR));
+        report.getTime().getCustomDateRangeEnd().setDay(endCal.get(Calendar.DAY_OF_MONTH));
+        report.getTime().getCustomDateRangeEnd().setMonth(endCal.get(Calendar.MONTH) + 1);
+        report.getTime().getCustomDateRangeEnd().setYear(endCal.get(Calendar.YEAR));
 
         ArrayOfAccountPerformanceReportColumn accountPerformanceReportColumn = new ArrayOfAccountPerformanceReportColumn();
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.IMPRESSIONS);
@@ -987,13 +987,17 @@ public class BingService {
         return report;
     }
 
-    private ReportRequest getCampaignDevicePerformaceReportRequest(Date startDate, Date endDate) {
+    private ReportRequest getCampaignDevicePerformaceReportRequest(Date startDate, Date endDate, String aggregation) {
         CampaignPerformanceReportRequest report = new CampaignPerformanceReportRequest();
         ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
-        report.setAggregation(ReportAggregation.DAILY);
+        if (aggregation == null || aggregation.isEmpty()) {
+            report.setAggregation(ReportAggregation.SUMMARY);
+        } else {
+            report.setAggregation(ReportAggregation.DAILY);
+        }
 
         ArrayOflong accountIds = new ArrayOflong();
         accountIds.getLongs().add(authorizationData.getAccountId());
@@ -1037,7 +1041,11 @@ public class BingService {
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.IMPRESSION_LOST_TO_BUDGET_PERCENT);
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.IMPRESSION_LOST_TO_RANK_PERCENT);
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.AVERAGE_POSITION);
-        campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.TIME_PERIOD);
+        if (aggregation == null || aggregation.isEmpty()) {
+
+        } else {
+            campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.TIME_PERIOD);
+        }
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.CAMPAIGN_NAME);
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.CAMPAIGN_ID);
         campaignPerformanceReportColumn.getCampaignPerformanceReportColumns().add(CampaignPerformanceReportColumn.DEVICE_TYPE);
