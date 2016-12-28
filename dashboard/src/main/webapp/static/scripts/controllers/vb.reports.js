@@ -23,8 +23,18 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
         });
     };
 
-    $scope.saveReport = function () {
+    $scope.saveReportData = function (report) {
+        var data = {
+            reportTitle: report.title,
+            description: report.description,
+            logo: $scope.uploadLogo
+        }
+        
+        $http({method: 'POST',url:'admin/ui/report', data: data}).success(function(reponse){
+            console.log(reponse)
+        });
         console.log($scope.uploadLogo);
+        console.log(report)
     }
 
 
