@@ -223,7 +223,11 @@ public class AdGroupReportRow {
     }
 
     public String getCostConv() {
-        return costConv;
+         try {
+            return Integer.toString(Integer.parseInt(costConv) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
     @XmlAttribute

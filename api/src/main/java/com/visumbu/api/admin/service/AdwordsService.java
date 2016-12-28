@@ -119,7 +119,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.CAMPAIGN_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -669,7 +673,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ADGROUP_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -727,7 +735,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -772,7 +784,7 @@ public class AdwordsService {
         return null;
     }
 
-    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate,  String accountId, String aggregation, String filter) {
+    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         if (aggregation == null || aggregation.isEmpty()) {
@@ -799,7 +811,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.CAMPAIGN_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -866,7 +882,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.CAMPAIGN_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -933,7 +953,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.AD_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -1000,7 +1024,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -1067,7 +1095,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -1133,7 +1165,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.GEO_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 

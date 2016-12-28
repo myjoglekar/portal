@@ -934,7 +934,6 @@ public class BingService {
         report.setScope(new AccountThroughCampaignReportScope());
         report.getScope().setAccountIds(accountIds);
         report.setTime(new ReportTime());
-        report.setTime(new ReportTime());
         // report.getTime().setPredefinedTime(ReportTimePeriod.YESTERDAY);
         /* Start Date */
         Calendar startCal = Calendar.getInstance();

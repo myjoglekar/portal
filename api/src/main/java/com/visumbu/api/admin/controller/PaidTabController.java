@@ -200,7 +200,7 @@ public class PaidTabController {
                 return returnMap;
             }
             List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
-            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "hourOfDay", "SEARCH");
+            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "hourOfDay", "SEARCH");
             AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, "hourOfDay");
             List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
@@ -290,7 +290,7 @@ public class PaidTabController {
                 return returnMap;
             }
             List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
-            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "dayOfWeek", "SEARCH");
+            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "dayOfWeek", "SEARCH");
             AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, "dayOfWeek");
             List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
@@ -381,7 +381,7 @@ public class PaidTabController {
                 return returnMap;
             }
             List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
-            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "581-484-4675", "daily", "SEARCH");
+            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "daily", "SEARCH");
             AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, "daily");
             List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
             List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
@@ -486,7 +486,7 @@ public class PaidTabController {
             return returnMap;
         }
         String aggregation = "";
-        com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, "581-484-4675", aggregation, "SEARCH");
+        com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, "142-465-1427", aggregation, "SEARCH");
         CampaignPerformanceReport bingCampaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate, "");
         List<CampaignPerformanceReportRow> adwordsCampaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
         List<CampaignPerformanceRow> bingCampaignPerformanceRows = bingCampaignPerformanceReport.getCampaignPerformanceRows();
@@ -520,7 +520,7 @@ public class PaidTabController {
             performanceBean.setClicks(row.getClicks().getValue());
             performanceBean.setCtr(row.getCtr().getValue());
             performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-            performanceBean.setCost(row.getCostPerConversion().getValue());
+            performanceBean.setCost(row.getSpend().getValue());
             performanceBean.setAverageCpc(row.getClicks().getValue());
             performanceBean.setCtr(row.getCtr().getValue());
             performanceBean.setAverageCpc(row.getAverageCpc().getValue());
@@ -562,7 +562,7 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        GeoReport adWordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "581-484-4675", "SEARCH");
+        GeoReport adWordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "142-465-1427", "SEARCH");
         GeoCityLocationPerformanceReport bingGeoReport = bingService.getGeoCityLocationPerformanceReport(startDate, endDate);
         List<GeoReportRow> adWordsGeoPerformanceRow = adWordsGeoReport.getGeoReportRow();
         List<GeoCityLocationPerformanceRow> bingGeoPerformanceRows = bingGeoReport.getGeoCityLocationPerformanceRows();
@@ -625,7 +625,7 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "581-484-4675", "SEARCH");
+        AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "142-465-1427", "SEARCH");
         AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate);
         List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
         List<AccountDevicePerformanceRow> bingAccountDevicePerformanceRows = bingAccountDevicePerformanceReport.getAccountDevicePerformanceRows();
@@ -685,7 +685,7 @@ public class PaidTabController {
             return returnMap;
         }
 
-        CampaignDeviceReport adwordsCampaignDeviceReport = adwordsService.getCampaignDeviceReport(startDate, endDate, "581-484-4675", "SEARCH");
+        CampaignDeviceReport adwordsCampaignDeviceReport = adwordsService.getCampaignDeviceReport(startDate, endDate, "142-465-1427", "SEARCH");
         CampaignDevicePerformanceReport bingCampaignDevicePerformanceReport = bingService.getCampaignDevicePerformanceReport(startDate, endDate);
         List<CampaignDeviceReportRow> adwordsCampaignDeviceReportRow = adwordsCampaignDeviceReport.getCampaignDeviceReportRow();
         List<CampaignDevicePerformanceRow> bingCampaignDevicePerformanceRows = bingCampaignDevicePerformanceReport.getCampaignDevicePerformanceRows();
@@ -758,7 +758,7 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "581-484-4675", "SEARCH");
+        AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "142-465-1427", "SEARCH");
         AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate);
         List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
         List<AccountDevicePerformanceRow> bingAccountDevicePerformanceRows = bingAccountDevicePerformanceReport.getAccountDevicePerformanceRows();
@@ -843,7 +843,7 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AddGroupReport adwordsAdGroupReport = adwordsService.getAdGroupReport(startDate, endDate, "581-484-4675", "SEARCH");
+        AddGroupReport adwordsAdGroupReport = adwordsService.getAdGroupReport(startDate, endDate, "142-465-1427", "SEARCH");
         AdGroupPerformanceReport bingAdGroupPerformanceReport = bingService.getAdGroupPerformanceReport(startDate, endDate);
 
         List<AdGroupReportRow> adwordsAdGroupReportRow = adwordsAdGroupReport.getAdGroupReportRow();
@@ -919,7 +919,7 @@ public class PaidTabController {
             return returnMap;
         }
         CampaignPerformanceReport campaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate, "");
-        CampaignReport campaignReport = adwordsService.getCampaignReport(startDate, endDate, "581-484-4675", "SEARCH");
+        CampaignReport campaignReport = adwordsService.getCampaignReport(startDate, endDate, "142-465-1427", "SEARCH");
         List<CampaignPerformanceRow> bingCampaignPerformanceRows = campaignPerformanceReport.getCampaignPerformanceRows();
         List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
 
