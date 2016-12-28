@@ -21,7 +21,10 @@
     -moz-transform:translateZ(0);
     -o-transform:translateZ(0);
     -ms-transform:translateZ(0);
-    transform:translateZ(0)
+    transform:translateZ(0);
+    max-height:119px;
+    height:100% !important;
+    min-height: auto !important;
 }
 .ui-grid-vertical-bar {
     position:absolute;
@@ -85,7 +88,7 @@
 .ui-grid-top-panel {
     position:relative;
     overflow:hidden;
-    font-weight:bold;
+/*    font-weight:bold;*/
     background:#f3f3f3;
     background:-webkit-gradient(linear, left bottom, left top, color-stop(0, #eee), color-stop(1, #fff));
     background:-ms-linear-gradient(bottom, #eee, #fff);
@@ -989,7 +992,7 @@ div.ui-grid-cell input.ng-valid {
     border:1px solid #d4d4d4
 }
 .ui-grid-tree-header-row {
-    font-weight:bold !important
+/*    font-weight:bold !important*/
 }
 .movingColumn {
     position:absolute;
@@ -1437,7 +1440,7 @@ textarea.ui-grid-pager-row-count-picker select,select[multiple].ui-grid-pager-ro
     opacity:1
 }
 .ui-grid-tree-header-row {
-    font-weight:bold !important
+/*    font-weight:bold !important*/
 }
 .ui-grid-tree-header-row .ui-grid-cell.ui-grid-disable-selection.ui-grid-row-header-cell {
     pointer-events:all

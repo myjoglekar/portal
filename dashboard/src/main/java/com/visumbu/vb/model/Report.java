@@ -26,30 +26,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author user
+ * @author duc-dev-04
  */
 @Entity
 @Table(name = "report")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Report.findAll", query = "SELECT r FROM Report r"),
-    @NamedQuery(name = "Report.findById", query = "SELECT r FROM Report r WHERE r.id = :id"),
-    @NamedQuery(name = "Report.findByReportName", query = "SELECT r FROM Report r WHERE r.reportName = :reportName"),
-    @NamedQuery(name = "Report.findByReportTitle", query = "SELECT r FROM Report r WHERE r.reportTitle = :reportTitle"),
-    @NamedQuery(name = "Report.findByCreatedTime", query = "SELECT r FROM Report r WHERE r.createdTime = :createdTime"),
-    @NamedQuery(name = "Report.findByStatus", query = "SELECT r FROM Report r WHERE r.status = :status"),
-    @NamedQuery(name = "Report.findByDatasource", query = "SELECT r FROM Report r WHERE r.datasource = :datasource"),
-    @NamedQuery(name = "Report.findByDataset", query = "SELECT r FROM Report r WHERE r.dataset = :dataset"),
-    @NamedQuery(name = "Report.findByDimension", query = "SELECT r FROM Report r WHERE r.dimension = :dimension"),
-    @NamedQuery(name = "Report.findByFilter", query = "SELECT r FROM Report r WHERE r.filter = :filter"),
-    @NamedQuery(name = "Report.findBySort", query = "SELECT r FROM Report r WHERE r.sort = :sort"),
-    @NamedQuery(name = "Report.findByOrder", query = "SELECT r FROM Report r WHERE r.order = :order"),
-    @NamedQuery(name = "Report.findByRemarks", query = "SELECT r FROM Report r WHERE r.remarks = :remarks"),
-    @NamedQuery(name = "Report.findByDefaultCount", query = "SELECT r FROM Report r WHERE r.defaultCount = :defaultCount")})
+    @NamedQuery(name = "Report.findAll", query = "SELECT r FROM Report r")
+    , @NamedQuery(name = "Report.findById", query = "SELECT r FROM Report r WHERE r.id = :id")
+    , @NamedQuery(name = "Report.findByReportName", query = "SELECT r FROM Report r WHERE r.reportName = :reportName")
+    , @NamedQuery(name = "Report.findByReportTitle", query = "SELECT r FROM Report r WHERE r.reportTitle = :reportTitle")
+    , @NamedQuery(name = "Report.findByCreatedTime", query = "SELECT r FROM Report r WHERE r.createdTime = :createdTime")
+    , @NamedQuery(name = "Report.findByStatus", query = "SELECT r FROM Report r WHERE r.status = :status")
+    , @NamedQuery(name = "Report.findByDatasource", query = "SELECT r FROM Report r WHERE r.datasource = :datasource")
+    , @NamedQuery(name = "Report.findByDataset", query = "SELECT r FROM Report r WHERE r.dataset = :dataset")
+    , @NamedQuery(name = "Report.findByDimension", query = "SELECT r FROM Report r WHERE r.dimension = :dimension")
+    , @NamedQuery(name = "Report.findByFilter", query = "SELECT r FROM Report r WHERE r.filter = :filter")
+    , @NamedQuery(name = "Report.findBySort", query = "SELECT r FROM Report r WHERE r.sort = :sort")
+    , @NamedQuery(name = "Report.findByOrder", query = "SELECT r FROM Report r WHERE r.order = :order")
+    , @NamedQuery(name = "Report.findByRemarks", query = "SELECT r FROM Report r WHERE r.remarks = :remarks")
+    , @NamedQuery(name = "Report.findByDefaultCount", query = "SELECT r FROM Report r WHERE r.defaultCount = :defaultCount")
+    , @NamedQuery(name = "Report.findByIcon", query = "SELECT r FROM Report r WHERE r.icon = :icon")
+    , @NamedQuery(name = "Report.findByDescription", query = "SELECT r FROM Report r WHERE r.description = :description")})
 public class Report implements Serializable {
-    @Size(max = 256)
-    @Column(name = "icon")
-    private String icon;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,6 +94,15 @@ public class Report implements Serializable {
     private String remarks;
     @Column(name = "default_count")
     private Integer defaultCount;
+    @Size(max = 256)
+    @Column(name = "icon")
+    private String icon;
+    @Size(max = 4096)
+    @Column(name = "description")
+    private String description;
+    @Lob
+    @Column(name = "logo")
+    private byte[] logo;
     @JoinColumn(name = "report_type_id", referencedColumnName = "id")
     @ManyToOne
     private ReportType reportTypeId;
@@ -220,6 +229,30 @@ public class Report implements Serializable {
         this.defaultCount = defaultCount;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public byte[] getLogo() {
+        return logo;
+    }
+
+    public void setLogo(byte[] logo) {
+        this.logo = logo;
+    }
+
     public ReportType getReportTypeId() {
         return reportTypeId;
     }
@@ -259,14 +292,6 @@ public class Report implements Serializable {
     @Override
     public String toString() {
         return "com.visumbu.vb.model.Report[ id=" + id + " ]";
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
     }
     
 }

@@ -1,11 +1,16 @@
+<a href="" class="logo"> 
+    <span class="logo-mini"><img src="static/img/logo-mobile.png" width="30" /></span> 
+    <span class="logo-lg"><img src="static/img/logos/l2tmedia.png" width="150" /></span> 
+</a>
+
 <nav class="navbar navbar-static-top" role="navigation" ng-controller="HeaderController"> 
-    <div class="navbar-header">
-        <a href="#" class="navbar-brand"><img src="static/img/Logo-l2t.png" width="180" /></a>
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-            <i class="fa fa-bars"></i>
-        </button>
-    </div>
-    <div class="dropdown pull-right" style="margin-top: 16px;">
+    <!--        <div class="navbar-header">
+              <a href="#" class="navbar-brand"><img src="static/img/Logo-l2t.png" width="180" /></a>
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                <i class="fa fa-bars"></i>
+              </button>
+            </div>-->
+    <div class="dropdown pull-right" style="margin-top: 8px;">
         <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{userName}}
             <span class="caret"></span></button>
         <ul class="dropdown-menu">
@@ -28,45 +33,73 @@
                 </div>
             </div>
         </li>
-        <li class="pull-right">
-            <div class="mar-top">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{selectDashboardType}}
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li ng-click="selectDashboard('Dashboard')"> <a data-ui-sref="index.dashboard.widget({dashboardTypeId: 1, productId: productId, tabId: tabId,})">Dashboard</a> </li>
-                        <li ng-click="selectDashboard('Report')"> <a data-ui-sref="index.report.reports({dashboardTypeId: 2, productId: productId})"> Report</a></li>
-                    </ul>
-                </div>
-            </div>
-        </li>        
-        <li class="pull-right">
-            <div class="mar-top">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{selectProductName}}
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="product in products">
-                            <a data-ui-sref="index.dashboard({productId:  product.id})" data-ui-sref-opts="{reload: true}" ng-click="changeProduct(product)">
-                                {{product.productName}}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </li>
-        <li class="pull-right">
-            <div class="mar-top">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">Select Dealer
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="dealer in dealers">
-                            <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </li>
     </ul>
+    <!--        <li class="pull-right">
+                <div class="mar-top">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{selectDashboardType}}
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="dashboardType in dashboardTypes" ng-click="changeDashboardType(dashboardType)">
+                                <a>{{dashboardType.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>        -->
+    <!--        <li class="pull-right">
+                <div class="mar-top">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{selectProductName}}
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="product in products">
+                                <a data-ui-sref="index.dashboard({productId:  product.id})" data-ui-sref-opts="{reload: true}" ng-click="changeProduct(product)">
+                                    {{product.productName}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>-->
+    <!--        <li class="pull-right">
+                <div class="mar-top">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">Dealer 
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="dealer in dealers">
+                                <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>-->
+    <!--</ul>-->
+
+    <div class="navbar-collapse pull-left">
+        <div class="nav navbar-nav">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">Dealer Name
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="dealer in dealers">
+                        <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>
+                    </li>
+                </ul>
+            </div>            
+        </div>
+    </div>
+    <div class="navbar-collapse pull-left">
+        <div class="nav navbar-nav">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{selectDashboardType}}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-click="selectDashboard('Dashboard')"> <a data-ui-sref="index.dashboard.widget({dashboardTypeId: 1, productId: productId, tabId: tabId,})">Dashboard</a> </li>
+                    <li ng-click="selectDashboard('Report')"> <a data-ui-sref="index.report.reports({dashboardTypeId: 2, productId: productId})"> Report</a></li>
+                </ul>
+            </div>           
+        </div>
+    </div>
 </nav>
