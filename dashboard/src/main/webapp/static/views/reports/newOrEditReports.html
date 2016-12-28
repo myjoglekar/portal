@@ -14,6 +14,26 @@
     }
 </style>
 <div>
+    <div class="pull-right">
+        <span class="dropdown" style="cursor: pointer;">
+            <a class="dropdown-toggle" type="button" data-toggle="dropdown">
+                <i class="fa fa-plus"></i> Add Widget
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="" ng-click="addReportWidget('2')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
+                </li>
+                <li>
+                    <a href="" ng-click="addReportWidget('4')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
+                </li>
+                <li>
+                    <a href="" ng-click="addReportWidget('6')"><i class="fa fa-square-o"></i></a>
+                </li>
+            </ul>
+        </span> | 
+        <span style="cursor: pointer;">Print</span> |
+        <span ui-sref="index.report.reports" style="cursor: pointer;">Back</span>
+    </div>
     <div class="row"> 
         <div class="col-md-12">
             <div class="col-sm-2">
@@ -27,32 +47,14 @@
             </div>
             <div class="col-sm-10">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Title">
+                    <input type="text" ng-model="report.title" class="form-control" placeholder="Title">
                 </div>
                 <div class="form-group">
-                    <textarea placeholder="Description" class="form-control"></textarea>
-                </div>
-                <div class="form-group">
-                    <div class="pull-right">
-                        <span class="dropdown">
-                            <a class="dropdown-toggle" type="button" data-toggle="dropdown">
-                                <i class="fa fa-plus"></i> Add Widget
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="" ng-click="addReportWidget('2')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
-                                </li>
-                                <li>
-                                    <a href="" ng-click="addReportWidget('4')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
-                                </li>
-                                <li>
-                                    <a href="" ng-click="addReportWidget('6')"><i class="fa fa-square-o"></i></a>
-                                </li>
-                            </ul>
-                        </span> | 
-                        <span>Print</span>
-                    </div>
-                </div>
+                    <textarea placeholder="Description" ng-model="report.description" class="form-control"></textarea>
+                </div>                
+            </div>
+            <div class="col-sm-12">
+                <button class="btn btn-info" ng-click="saveReport(report)"></button>
             </div>
         </div>
     </div>
@@ -134,7 +136,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2">Product</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control" ng-model="reportWidget.productName" ng-change="selectProductName(reportWidget.productName, reportWidget)" ng-options="(userProduct |             capitalize) for userProduct in userProducts">
+                                        <select class="form-control" ng-model="reportWidget.productName" ng-change="selectProductName(reportWidget.productName, reportWidget)" ng-options="(userProduct |              capitalize) for userProduct in userProducts">
                                         </select>                                    
                                     </div>
                                     <label class="col-sm-2">Name</label>

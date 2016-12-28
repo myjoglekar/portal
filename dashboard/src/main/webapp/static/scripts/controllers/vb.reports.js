@@ -21,8 +21,15 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
         $scope.$apply(function () {
             $scope.uploadLogo = e.target.result;
         });
-        console.log($scope.uploadLogo);
     };
+
+    $scope.saveReport = function () {
+        console.log($scope.uploadLogo);
+    }
+
+
+
+
     var uid = 10;
     $scope.addReportWidget = function (newWidget) {                                     //Add new Report Widget
         $scope.id = uid++;
@@ -33,8 +40,8 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
     };
     $scope.deleteReportWidget = function (reportWidget, index) {                            //Delete Widget
         //$http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {
-            $scope.reportWidgets.splice(index, 1);
-          //  $('.modal-backdrop').remove();
+        $scope.reportWidgets.splice(index, 1);
+        //  $('.modal-backdrop').remove();
         //});
     };
     $scope.dynamicLoadingUrl = function (reportWidget) {                                //Dynamic Url from columns Type data - Popup
@@ -138,8 +145,8 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
         console.log(reportWidget.directUrl, data.url)
         console.log(reportWidget.widgetTitle)
     };
-    
-    $scope.bindData = function(reportWidget){
-     console.log(reportWidget)   
+
+    $scope.bindData = function (reportWidget) {
+        console.log(reportWidget)
     }
 });

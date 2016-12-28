@@ -4,7 +4,7 @@
 </a>
 
 <nav class="navbar navbar-static-top" role="navigation" ng-controller="HeaderController">
-    
+
     <div class="dropdown pull-right" style="margin-top: 8px;">
         <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{userName}}
             <span class="caret"></span></button>
@@ -20,7 +20,7 @@
                     <div class="input-group">
                         <button type="button" class="btn btn-default pull-right" id="daterange-btn">
                             <span>
-                                <i class="fa fa-calendar" id="date"></i> September 7, 2016 - October 5, 2016
+                                <i class="fa fa-calendar" id="date"></i> {{startDate + " - " + endDate}}
                             </span>
                             <i class="fa fa-caret-down"></i>
                         </button>
@@ -43,16 +43,16 @@
             </div>            
         </div>
     </div>    
-<!--    <div class="navbar-collapse pull-left">
-        <div class="nav navbar-nav">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{selectDashboardType}}
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li ng-click="selectDashboard('Dashboard')"> <a data-ui-sref="index.dashboard.widget({dashboardTypeId: 1, productId: productId, tabId: tabId,})">Dashboard</a> </li>
-                    <li ng-click="selectDashboard('Report')"> <a data-ui-sref="index.report.reports({dashboardTypeId: 2, productId: productId})"> Report</a></li>
-                </ul>
-            </div>           
-        </div>
-    </div>-->
+    <!--    <div class="navbar-collapse pull-left">
+            <div class="nav navbar-nav">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{selectDashboardType}}
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li ng-click="selectDashboard('Dashboard')"> <a data-ui-sref="index.dashboard.widget({dashboardTypeId: 1, productId: productId, tabId: tabId,})">Dashboard</a> </li>
+                        <li ng-click="selectDashboard('Report')"> <a data-ui-sref="index.report.reports({dashboardTypeId: 2, productId: productId})"> Report</a></li>
+                    </ul>
+                </div>           
+            </div>
+        </div>-->
 </nav>

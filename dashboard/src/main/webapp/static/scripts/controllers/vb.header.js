@@ -2,6 +2,12 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
+    
+    try {
+                $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
+                $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY')?moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY'):new Date();
+            } catch (e) {
+            }
 
 
     console.log($stateParams.productId);
