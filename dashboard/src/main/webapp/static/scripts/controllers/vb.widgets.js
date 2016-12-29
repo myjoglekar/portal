@@ -378,10 +378,8 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.groupPriority) {
                     columnDef.grouping = {groupPriority: value.groupPriority};
                 }
-                //console.log(columnDef);
                 columnDefs.push(columnDef);
             });
-            //console.log(columnDefs);
             try {
                 startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
                 endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
@@ -433,6 +431,7 @@ app.directive('lineChartDirective', function ($http) {
         template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             lineChartUrl: '@',
+            widgetId: '@',
             setLineChartFn: '&',
             control: "=",
             collection: '@',
@@ -590,6 +589,7 @@ app.directive('barChartDirective', function ($http) {
         template: '<div ng-show="loadingBar" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             barChartUrl: '@',
+            widgetId: '@',
             setBarChartFn: '&',
             barChartId: '@',
             widgetColumns: '@'
@@ -734,6 +734,7 @@ app.directive('pieChartDirective', function ($http) {
         template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             pieChartUrl: '@',
+            widgetId: '@',
             widgetColumns: '@',
             setPieChartFn: '&',
             pieChartId: '@',
@@ -875,6 +876,7 @@ app.directive('areaChartDirective', function ($http) {
         template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             setPieChartFn: '&',
+            widgetId: '@',
             areaChartUrl: '@',
             widgetColumns: '@',
             pieChartId: '@'

@@ -82,17 +82,17 @@
                     </div>
                 </div>
                 <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">
-                    <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" widget-Columns="{{widget.columns}}"></div>
+                    <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                 </div> 
                 <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
-                    <div bar-Chart-Directive bar-Chart-Url="{{widget.directUrl}}" widget-Columns="{{widget.columns}}"></div>
+                    <div bar-Chart-Directive bar-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                 </div> 
                 <div class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
 
-                    <div pie-Chart-Directive pie-Chart-Url='{{widget.directUrl}}' widget-Columns="{{widget.columns}}"></div>
+                    <div pie-Chart-Directive pie-Chart-Url='{{widget.directUrl}}' widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                 </div> 
                 <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
-                    <div area-Chart-Directive area-Chart-Url="{{widget.directUrl}}" widget-Columns="{{widget.columns}}"></div>
+                    <div area-Chart-Directive area-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                 </div> 
                 <div class="box-body" ng-if="widget.chartType === 'table'">
                     <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}"  widget-Columns="{{widget.columns}}"></div> 
