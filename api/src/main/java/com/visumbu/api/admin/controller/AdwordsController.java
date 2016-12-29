@@ -88,7 +88,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getAdReport(startDate, endDate, accountId, "SEARCH");
+        return adwordsService.getAdReport(startDate, endDate, accountId,"", "SEARCH");
     }
     @RequestMapping(value = "getAccountHourOfDayReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody

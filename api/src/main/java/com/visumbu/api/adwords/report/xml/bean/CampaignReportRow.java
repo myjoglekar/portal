@@ -36,10 +36,9 @@ public class CampaignReportRow {
     private String budget;
     private String convRate;
 
-    
     public String getAvgCPC() {
         try {
-            return Integer.toString(Integer.parseInt(avgCPC) / 1000000);
+            return Double.toString(Double.parseDouble(avgCPC) / 1000000);
         } catch (Exception e) {
             return "0";
         }
@@ -51,11 +50,7 @@ public class CampaignReportRow {
     }
 
     public String getCtr() {
-        try {
-            return Integer.toString(Integer.parseInt(ctr) / 1000000);
-        } catch (Exception e) {
-            return "0";
-        }
+        return ctr.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -65,7 +60,7 @@ public class CampaignReportRow {
 
     public String getCost() {
         try {
-            return Integer.toString(Integer.parseInt(cost) / 1000000);
+            return Double.toString(Double.parseDouble(cost) / 1000000);
         } catch (Exception e) {
             return "0";
         }
@@ -76,7 +71,6 @@ public class CampaignReportRow {
         this.cost = cost;
     }
 
-    
     public String getCampaignID() {
         return campaignID;
     }
@@ -204,7 +198,11 @@ public class CampaignReportRow {
     }
 
     public String getCostConv() {
-        return costConv;
+        try {
+            return Double.toString(Double.parseDouble(costConv) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
     @XmlAttribute

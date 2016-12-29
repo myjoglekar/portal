@@ -203,7 +203,7 @@ public class AdReportRow {
         return headline;
     }
 
-    @XmlAttribute(name = "Ad")
+    @XmlAttribute(name = "ad")
     public void setHeadline(String headline) {
         this.headline = headline;
     }
@@ -272,7 +272,7 @@ public class AdReportRow {
 
     public String getAverageCpc() {
         try {
-            return Long.toString(Long.parseLong(averageCpc) / 1000000L);
+            return Double.toString(Double.parseDouble(averageCpc) / 1000000L);
         } catch (Exception e) {
             return "0";
         }
@@ -295,7 +295,7 @@ public class AdReportRow {
 
     public String getCost() {
         try {
-            return Long.toString(Long.parseLong(cost) / 1000000L);
+            return Double.toString(Double.parseDouble(cost) / 1000000L);
         } catch (Exception e) {
             return "0";
         }
@@ -308,7 +308,7 @@ public class AdReportRow {
 
     public String getCostPerConversion() {
         try {
-            return Long.toString(Long.parseLong(costPerConversion) / 1000000L);
+            return Double.toString(Double.parseDouble(costPerConversion) / 1000000L);
         } catch (Exception e) {
             return "0";
         }

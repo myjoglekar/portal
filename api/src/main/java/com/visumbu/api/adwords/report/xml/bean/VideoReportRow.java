@@ -39,8 +39,8 @@ public class VideoReportRow {
     private String hourOfDay;
     private String viewRate;
     private String views;
-    private String videoPlayedTo100; 
-    private String videoPlayedTo25; 
+    private String videoPlayedTo100;
+    private String videoPlayedTo25;
     private String videoPlayedTo50;
     private String videoPlayedTo75;
     private String videoTitle;
@@ -53,7 +53,7 @@ public class VideoReportRow {
     public void setVideoTitle(String videoTitle) {
         this.videoTitle = videoTitle;
     }
-    
+
     public String getViewRate() {
         return viewRate;
     }
@@ -107,10 +107,10 @@ public class VideoReportRow {
     public void setVideoPlayedTo75(String videoPlayedTo75) {
         this.videoPlayedTo75 = videoPlayedTo75;
     }
-    
+
     public String getAvgCPC() {
         try {
-            return Integer.toString(Integer.parseInt(avgCPC) / 1000000);
+            return Double.toString(Double.parseDouble(avgCPC) / 1000000);
         } catch (Exception e) {
             return "0";
         }
@@ -122,11 +122,7 @@ public class VideoReportRow {
     }
 
     public String getCtr() {
-        try {
-            return Integer.toString(Integer.parseInt(ctr) / 1000000);
-        } catch (Exception e) {
-            return "0";
-        }
+        return ctr.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -136,7 +132,7 @@ public class VideoReportRow {
 
     public String getCost() {
         try {
-            return Integer.toString(Integer.parseInt(cost) / 1000000);
+            return Double.toString(Double.parseDouble(cost) / 1000000);
         } catch (Exception e) {
             return "0";
         }
@@ -173,7 +169,7 @@ public class VideoReportRow {
     public void setDevice(String device) {
         this.device = device;
     }
-    
+
     public String getAccount() {
         return account;
     }
@@ -227,7 +223,7 @@ public class VideoReportRow {
     public void setWeek(String week) {
         this.week = week;
     }
-    
+
     public String getSearchExactMatchIS() {
         return searchExactMatchIS;
     }
@@ -292,7 +288,11 @@ public class VideoReportRow {
     }
 
     public String getCostConv() {
-        return costConv;
+        try {
+            return Double.toString(Double.parseDouble(costConv) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
     @XmlAttribute
