@@ -201,14 +201,14 @@ public class BingService {
         return report;
     }
 
-    public AccountDevicePerformanceReport getAccountDevicePerformanceReport(Date startDate, Date endDate) {
+    public AccountDevicePerformanceReport getAccountDevicePerformanceReport(Date startDate, Date endDate, String aggregation) {
         try {
             initAuthentication();
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
-                    = getAccountDevicePerformaceReportRequest(startDate, endDate);
+                    = getAccountDevicePerformaceReportRequest(startDate, endDate, aggregation);
 
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
@@ -361,14 +361,14 @@ public class BingService {
         return null;
     }
 
-    public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate) {
+    public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate, String aggregation) {
         try {
             initAuthentication();
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
-                    = getGeoCityLocationPerformanceReportRequest(startDate, endDate);
+                    = getGeoCityLocationPerformanceReportRequest(startDate, endDate, aggregation);
 
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
@@ -523,13 +523,18 @@ public class BingService {
         return report;
     }
 
-    private ReportRequest getGeoCityLocationPerformanceReportRequest(Date startDate, Date endDate) {
+    private ReportRequest getGeoCityLocationPerformanceReportRequest(Date startDate, Date endDate, String aggregation) {
         GeoLocationPerformanceReportRequest report = new GeoLocationPerformanceReportRequest();
         ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
-        report.setAggregation(NonHourlyReportAggregation.DAILY);
+        if (aggregation == null || aggregation.isEmpty()) {
+
+            report.setAggregation(NonHourlyReportAggregation.SUMMARY);
+        } else {
+            report.setAggregation(NonHourlyReportAggregation.DAILY);
+        }
 
         ArrayOflong accountIds = new ArrayOflong();
         accountIds.getLongs().add(authorizationData.getAccountId());
@@ -566,7 +571,10 @@ public class BingService {
         geoLocationPerformanceReportColumn.getGeoLocationPerformanceReportColumns().add(GeoLocationPerformanceReportColumn.CONVERSIONS);
         geoLocationPerformanceReportColumn.getGeoLocationPerformanceReportColumns().add(GeoLocationPerformanceReportColumn.COST_PER_CONVERSION);
         geoLocationPerformanceReportColumn.getGeoLocationPerformanceReportColumns().add(GeoLocationPerformanceReportColumn.CONVERSION_RATE);
-        geoLocationPerformanceReportColumn.getGeoLocationPerformanceReportColumns().add(GeoLocationPerformanceReportColumn.TIME_PERIOD);
+        if (aggregation == null || aggregation.isEmpty()) {
+        } else {
+            geoLocationPerformanceReportColumn.getGeoLocationPerformanceReportColumns().add(GeoLocationPerformanceReportColumn.TIME_PERIOD);
+        }
         geoLocationPerformanceReportColumn.getGeoLocationPerformanceReportColumns().add(GeoLocationPerformanceReportColumn.CITY);
         geoLocationPerformanceReportColumn.getGeoLocationPerformanceReportColumns().add(GeoLocationPerformanceReportColumn.COUNTRY);
         geoLocationPerformanceReportColumn.getGeoLocationPerformanceReportColumns().add(GeoLocationPerformanceReportColumn.ACCOUNT_NAME);
@@ -868,14 +876,17 @@ public class BingService {
         return report;
     }
 
-    private ReportRequest getAccountDevicePerformaceReportRequest(Date startDate, Date endDate) {
+    private ReportRequest getAccountDevicePerformaceReportRequest(Date startDate, Date endDate, String aggregation) {
         AccountPerformanceReportRequest report = new AccountPerformanceReportRequest();
         ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
         report.setReportName("My Keyword Performance Report");
         report.setReturnOnlyCompleteData(false);
-        report.setAggregation(ReportAggregation.DAILY); // TODO need to remove
-
+        if (aggregation == null || aggregation.isEmpty()) {
+            report.setAggregation(ReportAggregation.SUMMARY);
+        } else {
+            report.setAggregation(ReportAggregation.DAILY);
+        }
         ArrayOflong accountIds = new ArrayOflong();
         accountIds.getLongs().add(authorizationData.getAccountId());
 
@@ -918,7 +929,10 @@ public class BingService {
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.IMPRESSION_LOST_TO_RANK_PERCENT);
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.AVERAGE_POSITION);
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.DEVICE_TYPE);
-        accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.TIME_PERIOD);
+        if (aggregation == null || aggregation.isEmpty()) {
+        } else {
+            accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.TIME_PERIOD);
+        }
         accountPerformanceReportColumn.getAccountPerformanceReportColumns().add(AccountPerformanceReportColumn.PHONE_CALLS);
         report.setColumns(accountPerformanceReportColumn);
         return report;

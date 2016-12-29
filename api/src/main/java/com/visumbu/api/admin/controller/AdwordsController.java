@@ -112,7 +112,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getGeoReport(startDate, endDate, accountId, "SEARCH");
+        return adwordsService.getGeoReport(startDate, endDate, accountId, "", "SEARCH");
     }
 
     @ExceptionHandler

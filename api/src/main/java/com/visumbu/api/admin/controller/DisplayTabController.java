@@ -49,6 +49,7 @@ import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -129,7 +130,7 @@ public class DisplayTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        GeoReport adwordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "391-089-0213", "CONTENT");
+        GeoReport adwordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "391-089-0213", "", "CONTENT");
         List<GeoReportRow> adwordsGeoReportRow = adwordsGeoReport.getGeoReportRow();
         List<GeoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
         GetReportsResponse goals = gaService.getGeoGoals("123125706", startDate, endDate);
@@ -139,7 +140,7 @@ public class DisplayTabController {
             GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
             performanceBean.setSource("Google");
 
-            performanceBean.setCity(getCityById(row.getCityCriteriaId()));
+            performanceBean.setCity(ApiUtils.getCityById(row.getCityCriteriaId()));
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
             performanceBean.setCtr(row.getCtr());
@@ -550,7 +551,6 @@ public class DisplayTabController {
                 performanceBean.setAveragePosition(row.getAvgPosition());
                 performanceBean.setConversions(row.getConversions());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
-                performanceBean.setSearchBudgetLostImpressionShare(row.getSearchBudgetLostImpressionShare());
                 performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                 performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
 
@@ -584,7 +584,6 @@ public class DisplayTabController {
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impressions Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("searchBudgetLostImpressionShare", "number", "Search Budget Lost Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("searchImpressionsShareLostDueToBudget", "number", "Search Impressions Share Lost Due To Budget", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             
             columnDefs.add(new ColumnDef("searchImpressionsShareLostDueToRank", "number", "Search Impressions Share Lost Due To Rank", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
@@ -625,7 +624,6 @@ public class DisplayTabController {
                 performanceBean.setAveragePosition(row.getAvgPosition());
                 performanceBean.setConversions(row.getConversions());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
-                performanceBean.setSearchBudgetLostImpressionShare(row.getSearchBudgetLostImpressionShare());
                 performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                 performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
                 performanceBean.setDirectionsPageView(getGaDataFor(gaData, row.getDay(), "Goal1Completions"));
@@ -691,26 +689,6 @@ public class DisplayTabController {
             if (data.get("ga:date").equalsIgnoreCase(date.replaceAll("-", "")) && data.get(field).equalsIgnoreCase("Ad name: " + value)) {
                 return data.get(metric);
             }
-        }
-        return "";
-    }
-
-    private String getCityById(String cityId) {
-        String csvFile = "/tmp/AdWordsCity.csv";
-        String line = "";
-        String cvsSplitBy = ",";
-
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-
-            while ((line = br.readLine()) != null) {
-                String[] city = line.split(cvsSplitBy);
-                if (cityId.equalsIgnoreCase(city[0])) {
-                    return city[1];
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return "";
     }

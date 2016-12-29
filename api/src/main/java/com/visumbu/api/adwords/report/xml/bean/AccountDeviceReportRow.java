@@ -171,7 +171,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare;
+        return searchImprShare.replaceAll("%", "");
     }
 
     @XmlAttribute

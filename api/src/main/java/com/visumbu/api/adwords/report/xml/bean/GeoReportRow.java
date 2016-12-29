@@ -31,7 +31,6 @@ public class GeoReportRow {
     private String SearchBudgetLostImpressionShare;
     private String convRate;
 
-    
     public String getAvgCPC() {
         try {
             return Integer.toString(Integer.parseInt(avgCPC) / 1000000);
@@ -46,11 +45,7 @@ public class GeoReportRow {
     }
 
     public String getCtr() {
-        try {
-            return Integer.toString(Integer.parseInt(ctr) / 1000000);
-        } catch (Exception e) {
-            return "0";
-        }
+        return ctr.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -71,7 +66,6 @@ public class GeoReportRow {
         this.cost = cost;
     }
 
-    
     public String getVideoViews() {
         return videoViews;
     }
@@ -172,7 +166,11 @@ public class GeoReportRow {
     }
 
     public String getCostConv() {
-        return costConv;
+        try {
+            return Integer.toString(Integer.parseInt(costConv) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
     @XmlAttribute
@@ -181,6 +179,7 @@ public class GeoReportRow {
     }
 
     public String getSearchBudgetLostImpressionShare() {
+
         return SearchBudgetLostImpressionShare;
     }
 
@@ -202,5 +201,5 @@ public class GeoReportRow {
     public String toString() {
         return "GeoReportRow{" + "videoViews=" + videoViews + ", videoViewRate=" + videoViewRate + ", account=" + account + ", impressions=" + impressions + ", clicks=" + clicks + ", day=" + day + ", countryCriteriaId=" + countryCriteriaId + ", cityCriteriaId=" + cityCriteriaId + ", conversions=" + conversions + ", avgPosition=" + avgPosition + ", allConv=" + allConv + ", avgCPC=" + avgCPC + ", ctr=" + ctr + ", cost=" + cost + ", costConv=" + costConv + ", SearchBudgetLostImpressionShare=" + SearchBudgetLostImpressionShare + ", convRate=" + convRate + '}';
     }
-    
+
 }

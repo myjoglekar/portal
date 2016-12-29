@@ -126,7 +126,7 @@ public class BingController {
     AccountDevicePerformanceReport getAccountDevicePerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getAccountDevicePerformanceReport(startDate, endDate);
+        return bingService.getAccountDevicePerformanceReport(startDate, endDate, "");
 
     }
 
@@ -168,7 +168,7 @@ public class BingController {
     GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getGeoCityLocationPerformanceReport(startDate, endDate);
+        return bingService.getGeoCityLocationPerformanceReport(startDate, endDate, "");
     }
 
     @RequestMapping(value = "getGeoZipLocationPerformanceReport", method = RequestMethod.GET, produces = "application/json")

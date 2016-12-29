@@ -48,6 +48,7 @@ import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -145,7 +146,6 @@ public class PaidTabController {
                 performanceBean.setAveragePosition(row.getAvgPosition());
                 performanceBean.setConversions(row.getConversions());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
-                performanceBean.setSearchBudgetLostImpressionShare(row.getSearchBudgetLostImpressionShare());
                 performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                 performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
 
@@ -558,17 +558,17 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("impressions", "string", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("clicks", "string", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("ctr", "string", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("cpc", "string", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("averageCpc", "string", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "string", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("impressionShare", "string", "Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("avgPosition", "string", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "string", "Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("averagePosition", "string", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
-        GeoReport adWordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "142-465-1427", "SEARCH");
-        GeoCityLocationPerformanceReport bingGeoReport = bingService.getGeoCityLocationPerformanceReport(startDate, endDate);
+        GeoReport adWordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "142-465-1427", "", "SEARCH");
+        GeoCityLocationPerformanceReport bingGeoReport = bingService.getGeoCityLocationPerformanceReport(startDate, endDate, "");
         List<GeoReportRow> adWordsGeoPerformanceRow = adWordsGeoReport.getGeoReportRow();
         List<GeoCityLocationPerformanceRow> bingGeoPerformanceRows = bingGeoReport.getGeoCityLocationPerformanceRows();
         List<GeoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
@@ -579,14 +579,14 @@ public class PaidTabController {
             performanceBean.setSource("Google");
             performanceBean.setCountry(row.getCountryCriteriaId());
             performanceBean.setState("--");
-            performanceBean.setCity(row.getCityCriteriaId());
+            performanceBean.setCity(ApiUtils.getCityById(row.getCityCriteriaId()));
             performanceBean.setZip("--");
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
             performanceBean.setCtr(row.getCtr());
             performanceBean.setAverageCpc(row.getAvgCPC());
             performanceBean.setConversions(row.getConversions());
-            performanceBean.setCpa("--");
+            performanceBean.setCpa(row.getCostConv());
             performanceBean.setSearchImpressionsShare(row.getSearchBudgetLostImpressionShare());
             performanceBean.setAveragePosition(row.getAvgPosition());
             performanceReportBeans.add(performanceBean);
@@ -631,7 +631,7 @@ public class PaidTabController {
             return returnMap;
         }
         AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "142-465-1427", "", "SEARCH");
-        AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate);
+        AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate, "");
         List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
         List<AccountDevicePerformanceRow> bingAccountDevicePerformanceRows = bingAccountDevicePerformanceReport.getAccountDevicePerformanceRows();
         List<DevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
@@ -700,7 +700,15 @@ public class PaidTabController {
             CampaignDeviceReportRow row = reportRow.next();
             CampaignDevicePerformanceReportBean performanceBean = new CampaignDevicePerformanceReportBean();
             performanceBean.setSource("Google");
-            performanceBean.setDevice(row.getDevice());
+            if (row.getDevice().contains("Tablet")) {
+                performanceBean.setDevice("Tablet");
+            }
+            if (row.getDevice().contains("Mobile")) {
+                performanceBean.setDevice("Smartphone");
+            }
+            if (row.getDevice().contains("Computer")) {
+                performanceBean.setDevice("Computer");
+            }
             performanceBean.setCampaignName(row.getCampaign());
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
@@ -722,7 +730,15 @@ public class PaidTabController {
             performanceBean.setSource("Bing");
 
             performanceBean.setCampaignName(row.getCampaignName().getValue());
-            performanceBean.setDevice(row.getDeviceType().getValue());
+            if (row.getDeviceType().getValue().contains("Tablet")) {
+                performanceBean.setDevice("Tablet");
+            }
+            if (row.getDeviceType().getValue().contains("Smartphone")) {
+                performanceBean.setDevice("Smartphone");
+            }
+            if (row.getDeviceType().getValue().contains("Computer")) {
+                performanceBean.setDevice("Computer");
+            }
             performanceBean.setImpressions(row.getImpressions().getValue());
             performanceBean.setClicks(row.getClicks().getValue());
             performanceBean.setCtr(row.getCtr().getValue());
@@ -749,7 +765,7 @@ public class PaidTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("source", "string", "Source", 1));
-        columnDefs.add(new ColumnDef("device", "string", "Device"));
+        columnDefs.add(new ColumnDef("device", "string", "Device Type"));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -764,7 +780,7 @@ public class PaidTabController {
             return returnMap;
         }
         AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "142-465-1427", "", "SEARCH");
-        AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate);
+        AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate, "");
         List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
         List<AccountDevicePerformanceRow> bingAccountDevicePerformanceRows = bingAccountDevicePerformanceReport.getAccountDevicePerformanceRows();
         List<DevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
@@ -805,7 +821,16 @@ public class PaidTabController {
             AccountDevicePerformanceRow row = reportRow.next();
             DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
             performanceBean.setSource("Bing");
-            performanceBean.setDevice(row.getDeviceType().getValue());
+            //performanceBean.setDevice(row.getDeviceType().getValue());
+            if (row.getDeviceType().getValue().contains("Tablet")) {
+                performanceBean.setDevice("Tablet");
+            }
+            if (row.getDeviceType().getValue().contains("Smartphone")) {
+                performanceBean.setDevice("Smartphone");
+            }
+            if (row.getDeviceType().getValue().contains("Computer")) {
+                performanceBean.setDevice("Computer");
+            }
             performanceBean.setImpressions(row.getImpressions().getValue());
             performanceBean.setClicks(row.getClicks().getValue());
             performanceBean.setCtr(row.getCtr().getValue());
