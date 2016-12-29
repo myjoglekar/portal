@@ -14,6 +14,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         widget.previewTitle = widget.widgetTitle;
         $scope.editChartType = widget.chartType;
         $scope.selectProductName(widget.productName, widget);
+        // widget.chartType = "";
     };
 
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
@@ -214,6 +215,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.save = function (widget) {
         var data = JSON.parse(widget.productDisplayName);
         widget.directUrl = data.url ? data.url : widget.directUrl;
+        widget.widgetColumns = widget.columns;
         var data = {
             id: widget.id,
             chartType: $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType,
@@ -223,13 +225,13 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             productName: widget.productName,
             productDisplayName: widget.productDisplayName
         };
+        widget.chartType = "";
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
-            $scope.responseData = response;
+            widget.chartType = data.chartType;
         });
         // $scope.widgets = $scope.responseData;
         widget.chartType = $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType;
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
-        widget.widgetColumns = widget.columns;
         console.log(widget.directUrl, data.url);
         console.log(widget.widgetTitle);
     };
