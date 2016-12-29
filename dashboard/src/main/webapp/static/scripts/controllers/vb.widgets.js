@@ -5,11 +5,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.alignments = [{name: "left", displayName: "Left"}, {name: "right", displayName: "Right"}, {name: "center", displayName: "Center"}];
     $scope.sorting = [{name: 'asc', value: 1}, {name: 'dec', value: 0}, {name: 'None', value: ''}];
     $scope.isEditPreviewColumn = false;
-//
-//    $http.get("admin/user/datasets").success(function (response) {
-//
-//    })
-
 
     $scope.editWidget = function (widget) {     //Edit widget
         $scope.tableDef(widget);
@@ -229,11 +224,14 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             productDisplayName: widget.productDisplayName
         };
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
+            $scope.responseData = response;
         });
-        widget.chartType = $scope.previewChartType ? $scope.previewChartType : widget.chartType;
+        // $scope.widgets = $scope.responseData;
+        widget.chartType = $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType;
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
-        console.log(widget.directUrl,  data.url)
-        console.log(widget.widgetTitle)
+        widget.widgetColumns = widget.columns;
+        console.log(widget.directUrl, data.url);
+        console.log(widget.widgetTitle);
     };
 
     $scope.onDropComplete = function (index, widget, evt) {
@@ -990,7 +988,7 @@ app.directive('areaChartDirective', function ($http) {
                                     }
                                 }
                             },
-                           y2: {show: true}
+                            y2: {show: true}
                         },
                         grid: {
                             x: {
