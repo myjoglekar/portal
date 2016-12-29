@@ -207,7 +207,7 @@ public class DisplayTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        CampaignDeviceReport adwordsCampaignDeviceReport = adwordsService.getCampaignDeviceReport(startDate, endDate, "391-089-0213", "CONTENT");
+        CampaignDeviceReport adwordsCampaignDeviceReport = adwordsService.getCampaignDeviceReport(startDate, endDate, "391-089-0213", "",  "CONTENT");
         List<CampaignDeviceReportRow> adwordsCampaignDeviceReportRow = adwordsCampaignDeviceReport.getCampaignDeviceReportRow();
         List<DevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
         GetReportsResponse goals = gaService.getCampaignDeviceGoals("123125706", startDate, endDate);
@@ -293,7 +293,7 @@ public class DisplayTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "391-089-0213", "CONTENT");
+        AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "391-089-0213", "", "CONTENT");
         List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
         List<DevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
         GetReportsResponse goals = gaService.getDeviceGoals("123125706", startDate, endDate);

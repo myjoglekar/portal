@@ -143,7 +143,7 @@ public class BingController {
     CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getCampaignDevicePerformanceReport(startDate, endDate);
+        return bingService.getCampaignDevicePerformanceReport(startDate, endDate, "daily");
     }
 
     @RequestMapping(value = "getAdGroupPerformanceReport", method = RequestMethod.GET, produces = "application/json")
@@ -158,18 +158,9 @@ public class BingController {
     @RequestMapping(value = "getAdPerformanceReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     AdPerformanceReport getAdPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Date startDate = DateUtils.get30DaysBack();
-            Date endDate = new Date();
-            return bingService.getAdPerformanceReport(startDate, endDate);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExecutionException ex) {
-            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TimeoutException ex) {
-            Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        Date startDate = DateUtils.get30DaysBack();
+        Date endDate = new Date();
+        return bingService.getAdPerformanceReport(startDate, endDate);
     }
 
     @RequestMapping(value = "getGeoCityLocationPerformanceReport", method = RequestMethod.GET, produces = "application/json")
