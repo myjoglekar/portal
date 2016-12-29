@@ -1,6 +1,32 @@
 <div ng-controller="UiController">
     <section class="content-header">
-        <h1 class="text-capitalize"> {{dashboardName}}</h1>        
+        <h1 class="text-capitalize"> {{dashboardName}}</h1>   
+        <ol class="breadcrumb">
+            <li>
+                <div class="border-btn">
+                <i class="fa fa-home" style="font-size:20px;" data-toggle="dropdown"></i>&nbsp;Dealer Name
+                <ul class="dropdown-menu">
+                    <li ng-repeat="dealer in dealers">
+                        <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>
+                    </li>
+                </ul>
+                </div>
+            </li>
+            <li>
+                <a id="daterange-btn">
+                    <i class="fa fa-calendar" id="date"></i> {{startDate + endDate}}
+                </a>
+            </li>
+            <li>
+                <div class="border-btn">
+                <i class="fa fa-user" style="font-size:20px;" data-toggle="dropdown"></i>&nbsp;{{userName}}
+                <ul class="dropdown-menu">
+                    <li><a href="admin/user/logout">Logout</a></li>
+                </ul>
+                </div>
+            </li>
+        </ol>
+
     </section>
     <!--    <tabset class="tab-container">
             <tab ng-repeat="tab in tabs" 
