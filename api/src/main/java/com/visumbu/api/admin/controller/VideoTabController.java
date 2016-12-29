@@ -525,7 +525,7 @@ public class VideoTabController {
         return returnMap;
     }
 
-    @RequestMapping(value = "devicePerformance", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "accountDevice", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getDevicePerformance(HttpServletRequest request, HttpServletResponse response) {
         Map returnMap = new HashMap();
