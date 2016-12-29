@@ -740,7 +740,15 @@ public class AdwordsService {
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         }
-
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
@@ -949,15 +957,24 @@ public class AdwordsService {
         return null;
     }
 
-    public AdReport getAdReport(Date startDate, Date endDate, String accountId, String filter) {
+    public AdReport getAdReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
-        selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
-                "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks", "Date",
-                "Conversions", "AveragePosition", "AllConversions", "AdGroupName", "AdGroupId", "Headline",
-                "AdType", "Description", "Description1", "Description2", "DisplayUrl", "CreativeFinalUrls", "CreativeDestinationUrl",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
-        ));
+        if (aggregation == null || aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks",
+                    "Conversions", "AveragePosition", "AllConversions", "AdGroupName", "AdGroupId", "Headline",
+                    "AdType", "Description", "Description1", "Description2", "DisplayUrl", "CreativeFinalUrls", "CreativeDestinationUrl",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks", "Date",
+                    "Conversions", "AveragePosition", "AllConversions", "AdGroupName", "AdGroupId", "Headline",
+                    "AdType", "Description", "Description1", "Description2", "DisplayUrl", "CreativeFinalUrls", "CreativeDestinationUrl",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
         if (filter != null) {
             final Predicate predicate = new Predicate();
 

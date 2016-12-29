@@ -38,7 +38,7 @@ public class AccountReportRow {
 
     public String getAvgCPC() {
         try {
-            return Long.toString(Long.parseLong(avgCPC) / 1000000);
+            return Double.toString(Double.parseDouble(avgCPC) / 1000000);
         } catch (Exception e) {
             return "0";
         }
@@ -61,7 +61,7 @@ public class AccountReportRow {
 
     public String getCost() {
         try {
-            return Long.toString(Long.parseLong(cost) / 1000000L);
+            return Double.toString(Double.parseDouble(cost) / 1000000L);
         } catch (Exception e) {
             return "0";
         }
@@ -209,7 +209,7 @@ public class AccountReportRow {
 
     public String getCostConv() {
         try {
-            return Integer.toString(Integer.parseInt(costConv) / 1000000);
+            return Double.toString(Double.parseDouble(costConv) / 1000000);
         } catch (Exception e) {
             return "0";
         }

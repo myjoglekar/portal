@@ -555,6 +555,7 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("state", "string", "State"));
         columnDefs.add(new ColumnDef("city", "string", "City"));
         columnDefs.add(new ColumnDef("zip", "string", "Zip"));
+        columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "string", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("clicks", "string", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("ctr", "string", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -583,6 +584,7 @@ public class PaidTabController {
             performanceBean.setZip("--");
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
+            performanceBean.setCost(row.getCost());
             performanceBean.setCtr(row.getCtr());
             performanceBean.setAverageCpc(row.getAvgCPC());
             performanceBean.setConversions(row.getConversions());
@@ -600,6 +602,7 @@ public class PaidTabController {
             performanceBean.setState(row.getState().getValue());
             performanceBean.setCity(row.getCity().getValue());
             performanceBean.setZip("--");
+            performanceBean.setCost(row.getSpend().getValue());
             performanceBean.setImpressions(row.getImpressions().getValue());
             performanceBean.setClicks(row.getClicks().getValue());
             performanceBean.setCtr(row.getCtr().getValue());
@@ -955,7 +958,7 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AdReport adwordsAdReport = adwordsService.getAdReport(startDate, endDate, "142-465-1427", "SEARCH");
+        AdReport adwordsAdReport = adwordsService.getAdReport(startDate, endDate, "142-465-1427", "",  "SEARCH");
         AdPerformanceReport bingAdPerformanceReport = bingService.getAdPerformanceReport(startDate, endDate);
 
         List<AdReportRow> adwordsAdReportRow = adwordsAdReport.getAdReportRow();
