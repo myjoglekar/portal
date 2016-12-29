@@ -417,7 +417,7 @@ select.ui-grid-filter-select:hover {
     text-overflow:ellipsis;
     overflow:hidden;
     height:100%;
-    font-size: 14px;
+    font-size: 12px;
 }
 .ui-grid-cell-contents-hidden {
     visibility:hidden;
@@ -467,7 +467,7 @@ select.ui-grid-filter-select:hover {
     font-weight: normal;
     font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
     font-style: normal;
-    font-size: 14px;
+    font-size: 12px;
 }
 .ui-grid-grid-footer {
     float:left;
@@ -1510,3 +1510,11 @@ div.ui-grid-cell-contents.invalid {
 .scrollbar-inner > .scroll-element:hover .scroll-bar { background-color: #919191; }
 .scrollbar-inner > .scroll-element.scroll-draggable .scroll-bar { background-color: #919191; }
 
+
+.ui-grid {
+    height: auto !important;
+}
+
+.ui-grid-render-container-body .ui-grid-canvas {
+     height: auto !important;
+}

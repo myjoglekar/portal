@@ -232,12 +232,12 @@ a:hover, a:active, a:focus {
     transition: width .3s ease-in-out;
     display: block;
     float: left;
-    height: 70px;
+    height: 77px;
     font-size: 20px;
     line-height: 50px;
     text-align: left;
     width: 250px;
-    padding: 6px 25px;
+    padding: 10px 25px;
     font-weight: 300;
     overflow: hidden
 }
@@ -1530,8 +1530,8 @@ a:hover, a:active, a:focus {
     font-size: 14px;
     margin: 0;
     line-height: 1;
-    float: left;
-    width: 75%;
+/*    float: left;
+    width: 75%;*/
 }
 .box-header>.fa, .box-header>.glyphicon, .box-header>.ion {
     margin-right: 5px
@@ -4298,7 +4298,7 @@ table.text-center, table.text-center td, table.text-center th {
     display: block;
     width: 100%;
     height: 34px;
-    padding: 6px 12px;
+    padding: 2px 0px;
     /*    font-size: 18px;*/
 }
 
@@ -4390,7 +4390,7 @@ a.mail-to {
 #daterange-btn {
     background-color: #fff;
     color: #adb8bd;
-/*    border: 1px solid #565d64;*/
+    /*    border: 1px solid #565d64;*/
 }
 
 .dropdown-toggle-btn {
@@ -4441,7 +4441,7 @@ a.mail-to {
     padding-right:0px;
     padding-top: 10px;
     padding-bottom: 10px;
-    overflow:hidden;
+    height:60px;
 }
 
 .row {
@@ -4456,10 +4456,31 @@ a.mail-to {
     color:#99a5aa;
     font-weight: normal;
     padding: 0px 5px;
+    float: left;
 }
 
 .border-btn {
-/*    border:1px solid #cdcdcd;
-    border-radius:5px;
-    padding:10px;*/
+    /*    border:1px solid #cdcdcd;
+        border-radius:5px;
+        padding:10px;*/
+}
+
+.label-info {
+    background-color: #99a5aa !important;
+    border-color: #99a5aa !important;
+    margin: 0;
+    padding: 2px 8px;
+}
+
+.logout {
+    color:#99a5aa !important;
+}
+
+.ui-grid-render-container-body .ui-grid-viewport {
+    height: auto !important;
+    overflow: auto !important;
+}
+
+.ui-grid-render-container-left .ui-grid-viewport {
+    height: auto !important;
 }

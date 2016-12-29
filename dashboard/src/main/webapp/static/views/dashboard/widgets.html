@@ -22,29 +22,55 @@
         font-size: 50px;
         padding: 10px;
     }
+
+    .full-height {
+        /*height: 100%;*/
+    }
+
+    #changes-height {
+        /*height: 400px;*/
+        /*background-color: #88ddaa;*/
+    }
+    .wid{
+        border : 1px solid #ddd;
+        border-radius: 5px;
+        padding: 5px;
+        margin:0;
+    }
+    a .wid:hover {
+        background:none;
+    }
 </style>
 <div class="add-widget">
-<div class="pull-right-container pull-right">
-    <div class="btn-group">
-        <a class="refresh" ng-click="pageRefresh()"><i class="fa fa-repeat"></i> Refresh Data</a>
+    <div class="pull-right-container pull-right">
+        <div class="btn-group">
+            <a class="refresh" ng-click="pageRefresh()"><i class="fa fa-repeat"></i> Refresh Data</a>
+        </div>
+        <div class="btn-group">
+            <a class="dropdown-toggle" type="button" data-toggle="dropdown">
+                <button type="button" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Add Widget</button>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="" ng-click="addWidget('2')">
+                        <div class="col-sm-4 wid"></div>
+                        <div class="col-sm-4 wid"></div>
+                        <div class="col-sm-4 wid"></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="" ng-click="addWidget('4')">
+                        <div class="col-sm-6 wid"></div>
+                        <div class="col-sm-6 wid"></div>
+                </li>
+                <li>
+                    <a href="" ng-click="addWidget('6')">
+                        <div class="col-sm-12 wid"></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="btn-group">
-        <a class="dropdown-toggle" type="button" data-toggle="dropdown">
-            <button type="button" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Add Widget</button>
-        </a>
-        <ul class="dropdown-menu">
-            <li>
-                <a href="" ng-click="addWidget('2')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
-            </li>
-            <li>
-                <a href="" ng-click="addWidget('4')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
-            </li>
-            <li>
-                <a href="" ng-click="addWidget('6')"><i class="fa fa-square-o"></i></a>
-            </li>
-        </ul>
-    </div>
-</div>
 </div>
 <div ng-repeat="widget in widgets">
     <div ng-if="widget.chartType != 'tickers'">
@@ -94,8 +120,10 @@
                 <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
                     <div area-Chart-Directive area-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                 </div> 
-                <div class="box-body" ng-if="widget.chartType === 'table'">
-                    <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}"  widget-Columns="{{widget.columns}}"></div> 
+                <div class="box-body full-height" ng-if="widget.chartType === 'table'" adjust-height>
+                    <div id="changes-height">
+                        <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}"  widget-Columns="{{widget.columns}}"></div> 
+                    </div>
                 </div> 
             </div>
         </div>            
@@ -126,7 +154,7 @@
                         <div class="form-group">
                             <label class="col-sm-2">Product</label>
                             <div class="col-sm-4">
-                                <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |   capitalize) for userProduct in userProducts">
+                                <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |      capitalize) for userProduct in userProducts">
                                 </select>                                    
                             </div>
                             <label class="col-sm-2">Name</label>

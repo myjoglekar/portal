@@ -277,8 +277,8 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
             setTableFn: '&'
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
-                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" ui-grid-grouping></div>',
-//                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" style="height: 850px;" ui-grid-grouping></div>',
+                '<div id="grid1" class="grid full-height" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" ui-grid-grouping></div>',
+//                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" style="height: 850px;" ui-grid-grouping  ng-style="getTableHeight()"></div>',
         link: function (scope, element, attr) {
 //scope.rowData = []ui-if="gridData.data.length>0"
             scope.loadingTable = true;
@@ -410,15 +410,23 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     return this.name + ' of ' + this.parent;
                 }
 
-                scope.getTableHeight = function () {
-                    var rowHeight = 30; // your row height
-                    var headerHeight = 30; // your header height
-                    var minWidth = 150;
-                    return {
-                        height: (scope.gridOptions.data.length * rowHeight + headerHeight) + "px",
-                        'min-width': minWidth + "px"
-                    };
-                };
+                function setHeight(extra) {
+                    scope.height = ((scope.gridOptions.data.length * 30) + 30);
+                    if (extra) {
+                        scope.height += extra;
+                    }
+                    scope.api.grid.gridHeight = scope.height;
+                }
+
+//                scope.getTableHeight = function () {
+//                    var rowHeight = 30; // your row height
+//                    var headerHeight = 30; // your header height
+//                    var minWidth = 150;
+//                    return {
+//                        height: (scope.gridOptions.data.length * rowHeight + headerHeight) + "px",
+//                        //'min-width': minWidth + "px"
+//                    };
+//                };
 
             });
         }
@@ -836,7 +844,7 @@ app.directive('pieChartDirective', function ($http) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-
+                    console.log(columns)
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
