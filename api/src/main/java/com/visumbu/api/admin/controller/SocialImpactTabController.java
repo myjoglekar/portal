@@ -99,37 +99,30 @@ public class SocialImpactTabController {
     @Autowired
     private FacebookService facebookService;
 
-    @RequestMapping(value = "accountPerformance", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "postPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
-        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+    Object getPostPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
 
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("newSessions", "string", "New Sessions Percentage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("newUsers", "string", "New Users", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
-        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("message", "string", "Type"));
+        columnDefs.add(new ColumnDef("type", "string", "type"));
+        columnDefs.add(new ColumnDef("shares", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("comments", "number", "Cost Post Reaction", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("likes", "number", "Cost Post Reaction", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("reactions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("created_time", "string", "Created Time"));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
-        String fbPublishedPosts = facebookService.getFbPublishedPosts();
-        returnMap.put("data", fbPublishedPosts);
+        Object accountPerformance = facebookService.getPostPerformance(startDate, endDate);
+        returnMap.put("data", accountPerformance);
         return returnMap;
     }
 
