@@ -447,17 +447,40 @@ public class FacebookService {
         return null;
     }
 
-    public Object getLast12WeeksData(Date startDate, Date endDate) {
+    public Object getLast12WeeksPerformanceData(Date startDate, Date endDate) {
         try {
+            String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
+            String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
             String url = BASE_URL + ACCOUNT_ID + "/insights?"
-                    //+ "fields=campaigns{insights{campaign_name,clicks,impressions,ctr,cpc,actions,cost_per_action_type,spend,account_name}}"
-                    + "fields=impressions%2Cclicks%2Cctr%2Ccpc%2Cspend%2Cactions%2Caccount_name%2Ccost_per_action_type"
+                    + "fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&time_increment=7&time_range[since]=" + startDateStr
+                    + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
+            //https://graph.facebook.com/v2.8/act_10153963646170050/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&time_range[since]=2016-10-01&time_range[until]=2016-10-31&time_increment=7&access_token=EAANFRJpxZBZC0BAAqAeGjVgawF8X58ZCYRU824xzKpDcCN49s3wMGqie9MRdUZBnSK8pTsFw3KSOvfof88Oib6CCIOZBlnYQkkeYJrYdyOTJoELEZAmFAFKMoBg5cWvgbdnXdHmZAcYwsJQ6xL1XnMd8m6Hz4C7SAESJQLb36Qh0VSR3gIhiJOw
+
+ 
             String fbData = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(fbData);
             JSONObject array = (JSONObject) jsonObj;
-            return array.get("data");
+            
+            JSONArray dataArr = (JSONArray) array.get("data");
+            List dataValueList = new ArrayList();
+            for (int i = 0; i < dataArr.size(); i++) {
+                JSONObject data = (JSONObject) dataArr.get(i);
+                JSONArray actionsArr = (JSONArray) data.get("actions");
+                //JSONObject actions = (JSONObject) actionsArr.get(0);
+                List<Map<String, String>> returnList = new ArrayList<>();
+                JSONArray costPerActionTypeArr = (JSONArray) data.get("cost_per_action_type");
+                Map<String, String> dataList = getDataValue(data);
+                if (actionsArr != null) {
+                    dataList.putAll(getActionsData(actionsArr, "actions_"));
+                }
+                if (costPerActionTypeArr != null) {
+                    dataList.putAll(getActionsData(costPerActionTypeArr, "cost_"));
+                }
+                dataValueList.add(dataList);
+            }
+            return dataValueList;
         } catch (ParseException ex) {
             Logger.getLogger(FacebookService.class.getName()).log(Level.SEVERE, null, ex);
         }
