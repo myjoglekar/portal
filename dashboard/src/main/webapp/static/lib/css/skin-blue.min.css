@@ -49,6 +49,10 @@
 }
 .skin-blue .wrapper, .skin-blue .main-sidebar, .skin-blue .left-side {
     background-color: #3D464D;
+    border-top: 5px solid #3D464D;
+    border-left:10px solid #3D464D;
+    border-right:10px solid #3D464D;
+    border-bottom:5px solid #3D464D;
 }
 .skin-blue .user-panel>.info, .skin-blue .user-panel>.info>a {
     color: #fff
