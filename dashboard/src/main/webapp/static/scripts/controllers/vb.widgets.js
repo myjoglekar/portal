@@ -1,4 +1,7 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
+    console.log($stateParams.startDate)
+    console.log($stateParams.endDate)
+
     $scope.widgets = [];
     $scope.selectAggregations = [{name: 'sum'}, {name: 'avg'}, {name: 'count'}, {name: 'min'}, {name: 'max'}];   //Aggregation Type-Popup
     $scope.selectDateDurations = [{duration: "None"}, {duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
@@ -433,7 +436,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
     };
 });
 
-app.directive('lineChartDirective', function ($http) {
+app.directive('lineChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
         template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif"></div>',
@@ -523,7 +526,7 @@ app.directive('lineChartDirective', function ($http) {
                     endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
                 } catch (e) {
                 }
-                $http.get(scope.lineChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + startDate + "&endDate=" + endDate).success(function (response) {
+                $http.get(scope.lineChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" +  $stateParams.startDate + "&endDate=" +  $stateParams.startDate).success(function (response) {
                     scope.loadingLine = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -591,7 +594,7 @@ app.directive('lineChartDirective', function ($http) {
     };
 });
 
-app.directive('barChartDirective', function ($http) {
+app.directive('barChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
         template: '<div ng-show="loadingBar" class="text-center"><img src="static/img/logos/loader.gif"></div>',
@@ -673,12 +676,12 @@ app.directive('barChartDirective', function ($http) {
             }
 
             if (scope.barChartUrl) {
-                try {
-                    startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
-                    endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
-                } catch (e) {
-                }
-                $http.get(scope.barChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + startDate + "&endDate=" + endDate).success(function (response) {
+//                try {
+//                    startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
+//                    endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
+//                } catch (e) {
+//                }
+                $http.get(scope.barChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                     scope.loadingBar = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -701,7 +704,8 @@ app.directive('barChartDirective', function ($http) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-
+                    console.log(columns)
+                    console.log(labels)
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
@@ -736,7 +740,7 @@ app.directive('barChartDirective', function ($http) {
         }
     };
 });
-app.directive('pieChartDirective', function ($http) {
+app.directive('pieChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'AC',
         template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>',
@@ -824,7 +828,7 @@ app.directive('pieChartDirective', function ($http) {
                     endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
                 } catch (e) {
                 }
-                $http.get(scope.pieChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + startDate + "&endDate=" + endDate).success(function (response) {
+                $http.get(scope.pieChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                     scope.loadingPie = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -836,6 +840,7 @@ app.directive('pieChartDirective', function ($http) {
                         loopCount++;
                         return a[xAxis.fieldName];
                     });
+                    console.log(xData);
                     columns.push(xTicks);
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
@@ -845,6 +850,8 @@ app.directive('pieChartDirective', function ($http) {
                         columns.push(ySeriesData);
                     });
                     console.log(columns)
+                    console.log(labels)
+
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
@@ -853,11 +860,19 @@ app.directive('pieChartDirective', function ($http) {
                             labels: labels,
                             type: 'pie'
                         },
+//                        data: {
+//                            json: [data],
+//                            keys: {
+//                                value: xData,
+//                            },
+//                            type: 'pie'
+//                        },
                         tooltip: {show: false},
                         axis: {
                             x: {
                                 tick: {
                                     format: function (x) {
+                                        console.log(xData[x])
                                         return xData[x];
                                     }
                                 }
