@@ -3,37 +3,29 @@
         <h1 class="text-capitalize"> {{dashboardName}}</h1>   
         <ol class="breadcrumb">
             <li>
-                <div class="border-btn">
-                    <i class="fa fa-home" style="font-size:20px;" data-toggle="dropdown"></i>&nbsp;Dealer Name
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="dealer in dealers">
-                            <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>
-                        </li>
-                    </ul>
-                </div>
+                <a class="border-btn" data-toggle="dropdown"><i class="fa fa-home" style="font-size:20px;"></i>Dealer Name</a> <i class="fa fa-caret-down"></i> 
+                <ul class="dropdown-menu">
+                    <li ng-repeat="dealer in dealers">
+                        <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>  
+                    </li>
+                </ul>
             </li>
-            <li>
+            <li>              
                 <a class="pull-right" id="daterange-btn">
+                    <i class="fa fa-calendar" id="date"></i>
                     <span>
-                        <i class="fa fa-calendar" id="date"></i> {{startDate| date: "MM/dd/yyyy"}} - {{endDate| date: "MM/dd/yyyy"}}
+                        {{startDate| date: "MM/dd/yyyy"}} - {{endDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
                     </span>
-                    <i class="fa fa-caret-down"></i> 
-                </a>
 
-
-                <!--                <a id="daterange-btn">
-                                    <i class="fa fa-calendar" id="date"></i> {{startDate + endDate}}
-                                </a>-->
-
+                </a>                   
             </li>
             <li> <span class="label label-info" ng-click="loadNewUrl()">Go</span></li>
             <li class="pull-right user user-menu">
                 <a data-toggle="dropdown" class="logout">
-                    <i class="fa fa-user" style="font-size:20px;"></i>&nbsp;{{userName}}
-                    <ul class="dropdown-menu pull-left">
-                        <li><a href="admin/user/logout">Logout</a></li>
-                    </ul>
-                </a>
+                    <i class="fa fa-user" style="font-size:20px;"></i> {{userName}}</a>
+                <ul class="dropdown-menu pull-left">
+                    <li><a href="admin/user/logout">Logout</a></li>
+                </ul>
             </li>
         </ol>
     </section>
