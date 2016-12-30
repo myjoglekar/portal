@@ -1,6 +1,9 @@
 app.controller("MenuController", function ($scope, $http, $stateParams, $filter) {
-    console.log($stateParams.tabId)
+    console.log($stateParams.tabId);
+    $scope.startDate = $stateParams.startDate;
+    $scope.endDate = $stateParams.endDate;
     $scope.productId = $stateParams.productId;
+    //$scope.tabId = $stateParams.tabId;
     $scope.reports = [];
     $scope.addParent = function () {
         $scope.reports.push({isEdit: true, childItems: []});

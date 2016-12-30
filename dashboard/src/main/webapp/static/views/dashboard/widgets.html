@@ -233,26 +233,35 @@
                                                     <div ng-show="isEdit">
                                                         <!--<input type="text" class="form-control" ng-model="column.agregationFunction">-->
                                                         <select ng-model="currentColumn.agregationFunction" class="form-control">
-                                                            <option ng-repeat="selectAggregation in selectAggregations" value="{{selectAggregation.name}}">{{selectAggregation.name}}</option>
+                                                            <option ng-repeat="selectAggregation in selectAggregations" value="{{selectAggregation.value}}">{{selectAggregation.name}}</option>
                                                         </select>
                                                     </div>
                                                 </td>
                                                 <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
                                                     <div ng-hide="isEdit"> {{currentColumn.groupPriority}}</div>
                                                     <div ng-show="isEdit">
-                                                        <input type="text" class="form-control" ng-model="currentColumn.groupPriority">
+                                                        <select ng-model="currentColumn.groupPriority" class="form-control">
+                                                            <option ng-repeat="selectGroupPriority in selectGroupPriorities" value="{{selectGroupPriority.value}}">{{selectGroupPriority.num}}</option>
+                                                        </select>
+                                                        <!--<input type="text" class="form-control" ng-model="currentColumn.groupPriority">-->
                                                     </div>
                                                 </td>
                                                 <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table'">
-                                                    <div ng-hide="isEdit"> {{currentColumn.xAxis}}</div>
+                                                    <div ng-hide="isEdit"> {{currentColumn.xAxis | xAxis}}</div>
                                                     <div ng-show="isEdit">
-                                                        <input type="text" class="form-control" ng-model="currentColumn.xAxis">
+                                                        <select ng-model="currentColumn.xAxis" class="form-control">
+                                                            <option ng-repeat="selectxAxis in selectXAxis" value="{{selectxAxis.value}}">{{selectxAxis.label}}</option>
+                                                        </select>
+                                                        <!--<input type="text" class="form-control" ng-model="currentColumn.xAxis">-->
                                                     </div>
                                                 </td>
                                                 <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table'">
-                                                    <div ng-hide="isEdit"> {{currentColumn.yAxis}}</div>
+                                                    <div ng-hide="isEdit"> {{currentColumn.yAxis | yAxis}}</div>
                                                     <div ng-show="isEdit">
-                                                        <input type="text" class="form-control" ng-model="currentColumn.yAxis">
+                                                        <select ng-model="currentColumn.yAxis" class="form-control">
+                                                            <option ng-repeat="selectyAxis in selectYAxis" value="{{selectyAxis.value}}">{{selectyAxis.label}}</option>
+                                                        </select>
+                                                        <!--<input type="text" class="form-control" ng-model="currentColumn.yAxis">-->
                                                     </div>  
                                                 </td>
                                                 <td>

@@ -37,14 +37,22 @@ public class UiDao extends BaseDao {
     }
 
     public List<DashboardTabs> getDashboardTabs(Integer dbId) {
-        String queryStr = "select d from DashboardTabs d where d.dashboardId.id = :dashboardId";
+        String queryStr = "select d from DashboardTabs d where (d.status is null or d.status != 'Deleted') and d.dashboardId.id = :dashboardId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("dashboardId", dbId);
         return query.list();
     }
+    
+    public DashboardTabs deleteDashboardTab(Integer id) {
+        String queryStr = "update DashboardTabs d set status = 'Deleted'  where d.id = :dashboardTabId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("dashboardTabId", id);
+        query.executeUpdate();
+        return null;
+    }
 
     public List<TabWidget> getTabWidget(Integer tabId) {
-        String queryStr = "select d from TabWidget d where d.tabId.id = :tabId";
+        String queryStr = "select d from TabWidget d where d.tabId.id = :tabId and (status is null or status != 'Deleted')";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("tabId", tabId);
 
