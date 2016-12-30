@@ -40,11 +40,11 @@
                             <a class="active" ui-sref="index.dashboard.widget({productId: productId, tabId: tab.id?tab.id:0})">
                                 {{tab.tabName}}
                             </a>
-                            <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">
-                                <i class="glyphicon glyphicon-remove" ng-click="deleteTab($index, tab)"></i>
-                            </sup>
+                            
+                           <button class="close closeTab" type="button" ng-click="deleteTab($index, tab)">×</button>
+                            
                         </li> 
-                        <li class="pull-left"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
+                        <li class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
 
                         <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
                             <div class="modal-dialog modal-md">
