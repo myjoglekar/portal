@@ -38,7 +38,7 @@ public class AccountDeviceReportRow {
 
     public String getAvgCPC() {
         try {
-            return Integer.toString(Integer.parseInt(avgCPC) / 1000000);
+            return Double.toString(Double.parseDouble(avgCPC) / 1000000);
         } catch (Exception e) {
             return "0";
         }
@@ -50,11 +50,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getCtr() {
-        try {
-            return Integer.toString(Integer.parseInt(ctr) / 1000000);
-        } catch (Exception e) {
-            return "0";
-        }
+        return ctr.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -64,7 +60,7 @@ public class AccountDeviceReportRow {
 
     public String getCost() {
         try {
-            return Integer.toString(Integer.parseInt(cost) / 1000000);
+            return Double.toString(Double.parseDouble(cost) / 1000000);
         } catch (Exception e) {
             return "0";
         }
@@ -175,7 +171,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare;
+        return searchImprShare.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -202,7 +198,11 @@ public class AccountDeviceReportRow {
     }
 
     public String getCostConv() {
-        return costConv;
+        try {
+            return Double.toString(Double.parseDouble(costConv) / 1000000);
+        } catch (Exception e) {
+            return "0";
+        }
     }
 
     @XmlAttribute

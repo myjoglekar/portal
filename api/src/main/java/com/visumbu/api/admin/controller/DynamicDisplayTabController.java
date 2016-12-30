@@ -51,10 +51,13 @@ import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
 import com.visumbu.api.utils.DateUtils;
+import com.visumbu.api.utils.Rest;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -71,6 +74,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -84,8 +89,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Varghees
  */
 @Controller
-@RequestMapping("socialImpact")
-public class SocialImpactTabController {
+@RequestMapping("dynamicDisplay")
+public class DynamicDisplayTabController {
 
     @Autowired
     private UserService userService;
@@ -98,34 +103,46 @@ public class SocialImpactTabController {
 
     @Autowired
     private FacebookService facebookService;
-
-    @RequestMapping(value = "postPerformance", method = RequestMethod.GET, produces = "application/json")
+    private final static String DYNAMIC_DISPLAY_URL = "";
+    
+    @RequestMapping(value = "overallPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    Object getPostPerformance(HttpServletRequest request, HttpServletResponse response) {
-        Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
-        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-
-        String fieldsOnly = request.getParameter("fieldsOnly");
-        Map returnMap = new HashMap();
-        List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("message", "string", "Type"));
-        columnDefs.add(new ColumnDef("type", "string", "type"));
-        columnDefs.add(new ColumnDef("shares", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("comments", "number", "Cost Post Reaction", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("likes", "number", "Cost Post Reaction", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("reactions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("created_time", "string", "Created Time"));
-
-        returnMap.put("columnDefs", columnDefs);
-        if (fieldsOnly != null) {
-            return returnMap;
+    void getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String url = DYNAMIC_DISPLAY_URL;
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            forwardRequest(url, response.getOutputStream(), parameterMap);
+        } catch (IOException ex) {
+            Logger.getLogger(DynamicDisplayTabController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Object accountPerformance = facebookService.getPostPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
-        return returnMap;
+    }
+    
+    @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    void getLast12Weeks(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String url = DYNAMIC_DISPLAY_URL;
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            forwardRequest(url, response.getOutputStream(), parameterMap);
+        } catch (IOException ex) {
+            Logger.getLogger(DynamicDisplayTabController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    private void forwardRequest(String url, OutputStream out, Map<String, String[]> parameterMap) {
+        for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
+            try {
+                String key = entrySet.getKey();
+                String[] value = entrySet.getValue();
+                MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
+                valueMap.put(key, Arrays.asList(value));
+                String data = Rest.getData(url, valueMap);
+                out.write(data.getBytes());
+            } catch (IOException ex) {
+                Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

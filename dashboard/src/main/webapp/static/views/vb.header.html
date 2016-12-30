@@ -20,10 +20,11 @@
                     <div class="input-group">
                         <button type="button" class="btn btn-default pull-right" id="daterange-btn">
                             <span>
-                                <i class="fa fa-calendar" id="date"></i> {{startDate + " - " + endDate}}
+                                <i class="fa fa-calendar" id="date"></i> {{startDate| date: "MMMM/dd/yyyy"}} - {{endDate| date: "MMMM/dd/yyyy"}}
                             </span>
                             <i class="fa fa-caret-down"></i>
                         </button>
+                        <span class="btn btn-default" ng-click="loadNewUrl()">Go</span>
                     </div>
                 </div>
             </div>

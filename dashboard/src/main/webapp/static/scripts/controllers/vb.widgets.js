@@ -1,15 +1,13 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
+    console.log($stateParams.startDate)
+    console.log($stateParams.endDate)
+
     $scope.widgets = [];
     $scope.selectAggregations = [{name: 'sum'}, {name: 'avg'}, {name: 'count'}, {name: 'min'}, {name: 'max'}];   //Aggregation Type-Popup
     $scope.selectDateDurations = [{duration: "None"}, {duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
     $scope.alignments = [{name: "left", displayName: "Left"}, {name: "right", displayName: "Right"}, {name: "center", displayName: "Center"}];
     $scope.sorting = [{name: 'asc', value: 1}, {name: 'dec', value: 0}, {name: 'None', value: ''}];
     $scope.isEditPreviewColumn = false;
-//
-//    $http.get("admin/user/datasets").success(function (response) {
-//
-//    })
-
 
     $scope.editWidget = function (widget) {     //Edit widget
         $scope.tableDef(widget);
@@ -19,6 +17,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         widget.previewTitle = widget.widgetTitle;
         $scope.editChartType = widget.chartType;
         $scope.selectProductName(widget.productName, widget);
+        // widget.chartType = "";
     };
 
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
@@ -219,6 +218,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.save = function (widget) {
         var data = JSON.parse(widget.productDisplayName);
         widget.directUrl = data.url ? data.url : widget.directUrl;
+        widget.widgetColumns = widget.columns;
         var data = {
             id: widget.id,
             chartType: $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType,
@@ -228,12 +228,15 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             productName: widget.productName,
             productDisplayName: widget.productDisplayName
         };
+        widget.chartType = "";
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
+            widget.chartType = data.chartType;
         });
-        widget.chartType = $scope.previewChartType ? $scope.previewChartType : widget.chartType;
+        // $scope.widgets = $scope.responseData;
+        widget.chartType = $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType;
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
-        console.log(widget.directUrl,  data.url)
-        console.log(widget.widgetTitle)
+        console.log(widget.directUrl, data.url);
+        console.log(widget.widgetTitle);
     };
 
     $scope.onDropComplete = function (index, widget, evt) {
@@ -277,8 +280,8 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
             setTableFn: '&'
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
-                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" ui-grid-grouping></div>',
-//                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" style="height: 850px;" ui-grid-grouping></div>',
+                '<div id="grid1" class="grid full-height" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" ui-grid-grouping></div>',
+//                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" style="height: 850px;" ui-grid-grouping  ng-style="getTableHeight()"></div>',
         link: function (scope, element, attr) {
 //scope.rowData = []ui-if="gridData.data.length>0"
             scope.loadingTable = true;
@@ -378,10 +381,8 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.groupPriority) {
                     columnDef.grouping = {groupPriority: value.groupPriority};
                 }
-                //console.log(columnDef);
                 columnDefs.push(columnDef);
             });
-            //console.log(columnDefs);
             try {
                 startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
                 endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
@@ -412,27 +413,36 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     return this.name + ' of ' + this.parent;
                 }
 
-                scope.getTableHeight = function () {
-                    var rowHeight = 30; // your row height
-                    var headerHeight = 30; // your header height
-                    var minWidth = 150;
-                    return {
-                        height: (scope.gridOptions.data.length * rowHeight + headerHeight) + "px",
-                        'min-width': minWidth + "px"
-                    };
-                };
+                function setHeight(extra) {
+                    scope.height = ((scope.gridOptions.data.length * 30) + 30);
+                    if (extra) {
+                        scope.height += extra;
+                    }
+                    scope.api.grid.gridHeight = scope.height;
+                }
+
+//                scope.getTableHeight = function () {
+//                    var rowHeight = 30; // your row height
+//                    var headerHeight = 30; // your header height
+//                    var minWidth = 150;
+//                    return {
+//                        height: (scope.gridOptions.data.length * rowHeight + headerHeight) + "px",
+//                        //'min-width': minWidth + "px"
+//                    };
+//                };
 
             });
         }
     };
 });
 
-app.directive('lineChartDirective', function ($http) {
+app.directive('lineChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
         template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             lineChartUrl: '@',
+            widgetId: '@',
             setLineChartFn: '&',
             control: "=",
             collection: '@',
@@ -516,7 +526,7 @@ app.directive('lineChartDirective', function ($http) {
                     endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
                 } catch (e) {
                 }
-                $http.get(scope.lineChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + startDate + "&endDate=" + endDate).success(function (response) {
+                $http.get(scope.lineChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" +  $stateParams.startDate + "&endDate=" +  $stateParams.startDate).success(function (response) {
                     scope.loadingLine = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -584,12 +594,13 @@ app.directive('lineChartDirective', function ($http) {
     };
 });
 
-app.directive('barChartDirective', function ($http) {
+app.directive('barChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
         template: '<div ng-show="loadingBar" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             barChartUrl: '@',
+            widgetId: '@',
             setBarChartFn: '&',
             barChartId: '@',
             widgetColumns: '@'
@@ -665,12 +676,12 @@ app.directive('barChartDirective', function ($http) {
             }
 
             if (scope.barChartUrl) {
-                try {
-                    startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
-                    endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
-                } catch (e) {
-                }
-                $http.get(scope.barChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + startDate + "&endDate=" + endDate).success(function (response) {
+//                try {
+//                    startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
+//                    endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
+//                } catch (e) {
+//                }
+                $http.get(scope.barChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                     scope.loadingBar = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -693,7 +704,8 @@ app.directive('barChartDirective', function ($http) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-
+                    console.log(columns)
+                    console.log(labels)
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
@@ -728,12 +740,13 @@ app.directive('barChartDirective', function ($http) {
         }
     };
 });
-app.directive('pieChartDirective', function ($http) {
+app.directive('pieChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'AC',
         template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             pieChartUrl: '@',
+            widgetId: '@',
             widgetColumns: '@',
             setPieChartFn: '&',
             pieChartId: '@',
@@ -815,7 +828,7 @@ app.directive('pieChartDirective', function ($http) {
                     endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
                 } catch (e) {
                 }
-                $http.get(scope.pieChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + startDate + "&endDate=" + endDate).success(function (response) {
+                $http.get(scope.pieChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                     scope.loadingPie = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -827,6 +840,7 @@ app.directive('pieChartDirective', function ($http) {
                         loopCount++;
                         return a[xAxis.fieldName];
                     });
+                    console.log(xData);
                     columns.push(xTicks);
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
@@ -835,6 +849,8 @@ app.directive('pieChartDirective', function ($http) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
+                    console.log(columns)
+                    console.log(labels)
 
                     var chart = c3.generate({
                         bindto: element[0],
@@ -844,11 +860,19 @@ app.directive('pieChartDirective', function ($http) {
                             labels: labels,
                             type: 'pie'
                         },
+//                        data: {
+//                            json: [data],
+//                            keys: {
+//                                value: xData,
+//                            },
+//                            type: 'pie'
+//                        },
                         tooltip: {show: false},
                         axis: {
                             x: {
                                 tick: {
                                     format: function (x) {
+                                        console.log(xData[x])
                                         return xData[x];
                                     }
                                 }
@@ -875,6 +899,7 @@ app.directive('areaChartDirective', function ($http) {
         template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>',
         scope: {
             setPieChartFn: '&',
+            widgetId: '@',
             areaChartUrl: '@',
             widgetColumns: '@',
             pieChartId: '@'
@@ -990,7 +1015,7 @@ app.directive('areaChartDirective', function ($http) {
                                     }
                                 }
                             },
-                           y2: {show: true}
+                            y2: {show: true}
                         },
                         grid: {
                             x: {

@@ -64,7 +64,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getAccountDevicePerformanceReport(startDate, endDate, accountId, "SEARCH");
+        return adwordsService.getAccountDevicePerformanceReport(startDate, endDate, accountId, "", "SEARCH");
     }
     @RequestMapping(value = "getCampaignDevice", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -72,7 +72,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getCampaignDeviceReport(startDate, endDate, accountId, "SEARCH");
+        return adwordsService.getCampaignDeviceReport(startDate, endDate, accountId, "", "SEARCH");
     }
     @RequestMapping(value = "getCampaignPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -88,7 +88,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getAdReport(startDate, endDate, accountId, "SEARCH");
+        return adwordsService.getAdReport(startDate, endDate, accountId,"", "SEARCH");
     }
     @RequestMapping(value = "getAccountHourOfDayReport", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -112,7 +112,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getGeoReport(startDate, endDate, accountId, "SEARCH");
+        return adwordsService.getGeoReport(startDate, endDate, accountId, "", "SEARCH");
     }
 
     @ExceptionHandler

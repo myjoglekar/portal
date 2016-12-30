@@ -29,11 +29,11 @@ public class ColumnDef {
         public static final String COUNT = "count";
     }
     public static class Format {
-        public static final String CURRENCY = "$,.2F";
+        public static final String CURRENCY = "$,.2f";
         public static final String PERCENTAGE = "%,.2f";
-        public static final String DECIMAL1 = ",.1F";
-        public static final String DECIMAL2 = ",.2F";
-        public static final String INTEGER = ",.0F";
+        public static final String DECIMAL1 = ",.1f";
+        public static final String DECIMAL2 = ",.2f";
+        public static final String INTEGER = ",.0f";
     }
 
     public ColumnDef(String fieldName, String type, String displayName) {

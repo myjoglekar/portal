@@ -119,7 +119,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.CAMPAIGN_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -130,12 +134,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -227,12 +231,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -323,12 +327,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -419,12 +423,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -515,12 +519,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -611,12 +615,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -669,7 +673,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ADGROUP_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -680,12 +688,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -714,20 +722,41 @@ public class AdwordsService {
         return null;
     }
 
-    public AccountDeviceReport getAccountDevicePerformanceReport(Date startDate, Date endDate, String accountId, String filter) {
+    public AccountDeviceReport getAccountDevicePerformanceReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
-        selector.getFields().addAll(Lists.newArrayList("Device", "VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                "Impressions", "Clicks", "Date",
-                "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
-        ));
-
+        if (aggregation == null || aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("Device", "VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("Device", "VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Date",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
+        if (filter != null) {
+            final Predicate predicate = new Predicate();
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            final Collection<Predicate> predicates = new ArrayList<>();
+            predicates.add(predicate);
+            selector.getPredicates().add(predicate);
+        }
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -738,12 +767,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -772,7 +801,7 @@ public class AdwordsService {
         return null;
     }
 
-    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate,  String accountId, String aggregation, String filter) {
+    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         if (aggregation == null || aggregation.isEmpty()) {
@@ -799,7 +828,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.CAMPAIGN_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -810,12 +843,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -844,15 +877,24 @@ public class AdwordsService {
         return null;
     }
 
-    public CampaignDeviceReport getCampaignDeviceReport(Date startDate, Date endDate, String accountId, String filter) {
+    public CampaignDeviceReport getCampaignDeviceReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
-        selector.getFields().addAll(Lists.newArrayList("Device", "CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
-                "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks", "Date",
-                "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
-        ));
+        if (aggregation == null || aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("Device", "CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("Device", "CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks", "Date",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
+            ));
+        }
         if (filter != null) {
             final Predicate predicate = new Predicate();
 
@@ -866,7 +908,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.CAMPAIGN_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -877,12 +923,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -911,15 +957,24 @@ public class AdwordsService {
         return null;
     }
 
-    public AdReport getAdReport(Date startDate, Date endDate, String accountId, String filter) {
+    public AdReport getAdReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
-        selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
-                "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks", "Date",
-                "Conversions", "AveragePosition", "AllConversions", "AdGroupName", "AdGroupId", "Headline",
-                "AdType", "Description", "Description1", "Description2", "DisplayUrl", "CreativeFinalUrls", "CreativeDestinationUrl",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
-        ));
+        if (aggregation == null || aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks",
+                    "Conversions", "AveragePosition", "AllConversions", "AdGroupName", "AdGroupId", "Headline",
+                    "AdType", "Description", "Description1", "Description2", "DisplayUrl", "CreativeFinalUrls", "CreativeDestinationUrl",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "VideoViews", "VideoViewRate",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate", "Impressions", "Clicks", "Date",
+                    "Conversions", "AveragePosition", "AllConversions", "AdGroupName", "AdGroupId", "Headline",
+                    "AdType", "Description", "Description1", "Description2", "DisplayUrl", "CreativeFinalUrls", "CreativeDestinationUrl",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
         if (filter != null) {
             final Predicate predicate = new Predicate();
 
@@ -933,7 +988,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.AD_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -944,12 +1003,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -1000,7 +1059,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -1011,12 +1074,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -1067,7 +1130,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -1078,12 +1145,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);
@@ -1112,14 +1179,22 @@ public class AdwordsService {
         return null;
     }
 
-    public GeoReport getGeoReport(Date startDate, Date endDate, String accountId, String filter) {
+    public GeoReport getGeoReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
-        selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                "Impressions", "Clicks", "Date", "CountryCriteriaId", "CityCriteriaId",
-                "Conversions", "AveragePosition", "AllConversions",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
-        ));
+        if (aggregation == null || aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "CountryCriteriaId", "CityCriteriaId",
+                    "Conversions", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks", "Date", "CountryCriteriaId", "CityCriteriaId",
+                    "Conversions", "AveragePosition", "AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
         if (filter != null) {
             final Predicate predicate = new Predicate();
 
@@ -1133,7 +1208,11 @@ public class AdwordsService {
         // Create report definition.
         ReportDefinition reportDefinition = new ReportDefinition();
         reportDefinition.setReportName("Criteria performance report #" + System.currentTimeMillis());
-        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.YESTERDAY);
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
         reportDefinition.setReportType(ReportDefinitionReportType.GEO_PERFORMANCE_REPORT);
         reportDefinition.setDownloadFormat(DownloadFormat.XML);
 
@@ -1144,12 +1223,12 @@ public class AdwordsService {
         // rows.
         ReportingConfiguration reportingConfiguration
                 = new ReportingConfiguration.Builder()
-                        .skipReportHeader(true)
-                        .skipColumnHeader(true)
-                        .skipReportSummary(true)
-                        // Enable to allow rows with zero impressions to show.
-                        .includeZeroImpressions(false)
-                        .build();
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
         session.setReportingConfiguration(reportingConfiguration);
 
         reportDefinition.setSelector(selector);

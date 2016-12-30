@@ -32,14 +32,13 @@ public class AccountReportRow {
     private String ctr;
     private String cost;
     private String costConv;
-    private String SearchBudgetLostImpressionShare;
     private String convRate;
     private String dayOfWeek;
     private String hourOfDay;
 
     public String getAvgCPC() {
         try {
-            return Long.toString(Long.parseLong(avgCPC) / 1000000);
+            return Double.toString(Double.parseDouble(avgCPC) / 1000000);
         } catch (Exception e) {
             return "0";
         }
@@ -62,7 +61,7 @@ public class AccountReportRow {
 
     public String getCost() {
         try {
-            return Long.toString(Long.parseLong(cost) / 1000000L);
+            return Double.toString(Double.parseDouble(cost) / 1000000L);
         } catch (Exception e) {
             return "0";
         }
@@ -146,7 +145,7 @@ public class AccountReportRow {
     }
 
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS;
+        return searchExactMatchIS.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -155,7 +154,7 @@ public class AccountReportRow {
     }
 
     public String getSearchLostISBudget() {
-        return searchLostISBudget;
+        return searchLostISBudget.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -164,7 +163,7 @@ public class AccountReportRow {
     }
 
     public String getSearchLostISRank() {
-        return searchLostISRank;
+        return searchLostISRank.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -182,7 +181,7 @@ public class AccountReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare;
+        return searchImprShare.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -210,7 +209,7 @@ public class AccountReportRow {
 
     public String getCostConv() {
         try {
-            return Integer.toString(Integer.parseInt(costConv) / 1000000);
+            return Double.toString(Double.parseDouble(costConv) / 1000000);
         } catch (Exception e) {
             return "0";
         }
@@ -219,15 +218,6 @@ public class AccountReportRow {
     @XmlAttribute
     public void setCostConv(String costConv) {
         this.costConv = costConv;
-    }
-
-    public String getSearchBudgetLostImpressionShare() {
-        return SearchBudgetLostImpressionShare;
-    }
-
-    @XmlAttribute
-    public void setSearchBudgetLostImpressionShare(String SearchBudgetLostImpressionShare) {
-        this.SearchBudgetLostImpressionShare = SearchBudgetLostImpressionShare;
     }
 
     public String getConvRate() {
@@ -241,7 +231,7 @@ public class AccountReportRow {
 
     @Override
     public String toString() {
-        return "AccountReportRow{" + "videoViews=" + videoViews + ", videoViewRate=" + videoViewRate + ", account=" + account + ", impressions=" + impressions + ", clicks=" + clicks + ", day=" + day + ", searchExactMatchIS=" + searchExactMatchIS + ", searchLostISBudget=" + searchLostISBudget + ", searchLostISRank=" + searchLostISRank + ", conversions=" + conversions + ", searchImprShare=" + searchImprShare + ", avgPosition=" + avgPosition + ", allConv=" + allConv + ", avgCPC=" + avgCPC + ", ctr=" + ctr + ", cost=" + cost + ", costConv=" + costConv + ", SearchBudgetLostImpressionShare=" + SearchBudgetLostImpressionShare + ", convRate=" + convRate + ", dayOfWeek=" + dayOfWeek + '}';
+        return "AccountReportRow{" + "videoViews=" + videoViews + ", videoViewRate=" + videoViewRate + ", account=" + account + ", impressions=" + impressions + ", clicks=" + clicks + ", day=" + day + ", searchExactMatchIS=" + searchExactMatchIS + ", searchLostISBudget=" + searchLostISBudget + ", searchLostISRank=" + searchLostISRank + ", conversions=" + conversions + ", searchImprShare=" + searchImprShare + ", avgPosition=" + avgPosition + ", allConv=" + allConv + ", avgCPC=" + avgCPC + ", ctr=" + ctr + ", cost=" + cost + ", costConv=" + costConv + ", convRate=" + convRate + ", dayOfWeek=" + dayOfWeek + ", hourOfDay=" + hourOfDay + '}';
     }
-
+    
 }

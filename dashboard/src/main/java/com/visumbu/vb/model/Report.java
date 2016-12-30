@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Report.findByDimension", query = "SELECT r FROM Report r WHERE r.dimension = :dimension")
     , @NamedQuery(name = "Report.findByFilter", query = "SELECT r FROM Report r WHERE r.filter = :filter")
     , @NamedQuery(name = "Report.findBySort", query = "SELECT r FROM Report r WHERE r.sort = :sort")
-    , @NamedQuery(name = "Report.findByOrder", query = "SELECT r FROM Report r WHERE r.order = :order")
+    , @NamedQuery(name = "Report.findByDisplayOrder", query = "SELECT r FROM Report r WHERE r.displayOrder = :displayOrder")
     , @NamedQuery(name = "Report.findByRemarks", query = "SELECT r FROM Report r WHERE r.remarks = :remarks")
     , @NamedQuery(name = "Report.findByDefaultCount", query = "SELECT r FROM Report r WHERE r.defaultCount = :defaultCount")
     , @NamedQuery(name = "Report.findByIcon", query = "SELECT r FROM Report r WHERE r.icon = :icon")
@@ -87,8 +87,8 @@ public class Report implements Serializable {
     @Size(max = 65535)
     @Column(name = "display_columns")
     private String displayColumns;
-    @Column(name = "order")
-    private Integer order;
+    @Column(name = "display_order")
+    private Integer displayOrder;
     @Size(max = 1024)
     @Column(name = "remarks")
     private String remarks;
@@ -205,12 +205,12 @@ public class Report implements Serializable {
         this.displayColumns = displayColumns;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getDisplayOrder() {
+        return displayOrder;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setDisplayOrder(Integer displayOrder) {
+        this.displayOrder = displayOrder;
     }
 
     public String getRemarks() {
@@ -291,7 +291,7 @@ public class Report implements Serializable {
 
     @Override
     public String toString() {
-        return "com.visumbu.vb.model.Report[ id=" + id + " ]";
+        return "Report{" + "id=" + id + ", reportName=" + reportName + ", reportTitle=" + reportTitle + ", createdTime=" + createdTime + ", status=" + status + ", datasource=" + datasource + ", dataset=" + dataset + ", dimension=" + dimension + ", filter=" + filter + ", sort=" + sort + ", displayColumns=" + displayColumns + ", displayOrder=" + displayOrder + ", remarks=" + remarks + ", defaultCount=" + defaultCount + ", icon=" + icon + ", description=" + description + ", logo=" + logo + ", reportTypeId=" + reportTypeId + ", createdBy=" + createdBy + '}';
     }
-    
+
 }

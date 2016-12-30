@@ -108,31 +108,289 @@ public class PaidSocialTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("newSessions", "string", "New Sessions Percentage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("newUsers", "string", "New Users", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
-        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.SUM, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_comment", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_reaction", "number", "Post Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post", "number", "Posts", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_link_click", "number", "Link Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        columnDefs.add(new ColumnDef("cost_comment", "number", "Cost/Comment", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_link_click", "number", "Cost/Link Click", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post_engagement", "number", "Cost/Post Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object fbPublishedPosts = facebookService.getAccountPerformance();
-        returnMap.put("data", fbPublishedPosts);
+        Object accountPerformance = facebookService.getAccountPerformance(startDate, endDate);
+        returnMap.put("data", accountPerformance);
         return returnMap;
     }
 
+    @RequestMapping(value = "campaignPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getCampaignPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("campaign_name", "string", "Campaign Name"));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_comment", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_reaction", "number", "Post Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post", "number", "Posts", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_link_click", "number", "Link Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        columnDefs.add(new ColumnDef("cost_comment", "number", "Cost/Comment", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_link_click", "number", "Cost/Link Click", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post_engagement", "number", "Cost/Post Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        Object accountPerformance = facebookService.getCampaignPerformance(startDate, endDate);
+        returnMap.put("data", accountPerformance);
+        return returnMap;
+    }
+
+    @RequestMapping(value = "adPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAdPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("adset_name", "string", "Adset Name"));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_comment", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_reaction", "number", "Post Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post", "number", "Posts", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_link_click", "number", "Link Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        columnDefs.add(new ColumnDef("cost_comment", "number", "Cost/Comment", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_link_click", "number", "Cost/Link Click", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post_engagement", "number", "Cost/Post Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        Object accountPerformance = facebookService.getAdPerformance(startDate, endDate);
+        returnMap.put("data", accountPerformance);
+        return returnMap;
+    }
+
+    @RequestMapping(value = "devicePerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getDevicePerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("impression_device", "string", "Device"));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_comment", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_reaction", "number", "Post Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post", "number", "Posts", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_link_click", "number", "Link Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        columnDefs.add(new ColumnDef("cost_comment", "number", "Cost/Comment", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_link_click", "number", "Cost/Link Click", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post_engagement", "number", "Cost/Post Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        Object accountPerformance = facebookService.getDevicePerformance(startDate, endDate);
+        returnMap.put("data", accountPerformance);
+        return returnMap;
+    }
+
+    @RequestMapping(value = "agePerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getAgePerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("age", "string", "Age"));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_comment", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_reaction", "number", "Post Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post", "number", "Posts", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_link_click", "number", "Link Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        columnDefs.add(new ColumnDef("cost_comment", "number", "Cost/Comment", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_link_click", "number", "Cost/Link Click", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post_engagement", "number", "Cost/Post Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        Object accountPerformance = facebookService.getAgePerformance(startDate, endDate);
+        returnMap.put("data", accountPerformance);
+        return returnMap;
+    }
+
+    @RequestMapping(value = "genderPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getGenderPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("gender", "string", "Gender"));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_comment", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_reaction", "number", "Post Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post", "number", "Posts", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_link_click", "number", "Link Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        columnDefs.add(new ColumnDef("cost_comment", "number", "Cost/Comment", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_link_click", "number", "Cost/Link Click", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post_engagement", "number", "Cost/Post Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        Object accountPerformance = facebookService.getGenderPerformance(startDate, endDate);
+        returnMap.put("data", accountPerformance);
+        return returnMap;
+    }
+
+    @RequestMapping(value = "last12WeeksPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getLast12WeeksPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("gender", "string", "Gender"));
+        columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_comment", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_reaction", "number", "Post Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post", "number", "Posts", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_link_click", "number", "Link Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        columnDefs.add(new ColumnDef("cost_comment", "number", "Cost/Comment", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_link_click", "number", "Cost/Link Click", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post_engagement", "number", "Cost/Post Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        Object accountPerformance = facebookService.getLast12WeeksPerformance(startDate, endDate);
+        returnMap.put("data", accountPerformance);
+        return returnMap;
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

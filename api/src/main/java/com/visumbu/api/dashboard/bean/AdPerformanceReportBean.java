@@ -30,7 +30,7 @@ public class AdPerformanceReportBean {
     private String averageCpc;
     private String ctr;
     private String cost;
-    private String costPerConversion;
+    private String cpa;
     private String conversionRate;
     private String directionsPageView; // goal1
     private String inventoryPageViews; // goal2
@@ -247,14 +247,15 @@ public class AdPerformanceReportBean {
         this.cost = cost;
     }
 
-    public String getCostPerConversion() {
-        return costPerConversion;
+    public String getCpa() {
+        return cpa;
     }
 
-    public void setCostPerConversion(String costPerConversion) {
-        this.costPerConversion = costPerConversion;
+    public void setCpa(String cpa) {
+        this.cpa = cpa;
     }
 
+    
     public String getConversionRate() {
         return conversionRate;
     }

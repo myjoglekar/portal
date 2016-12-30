@@ -20,12 +20,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'HeaderController'
             })
             .state("index.dashboard.widget", {
-                url: "/widget/:productId/:tabId",
+                url: "/widget/:productId/:tabId?:startDate/:endDate",
                 templateUrl: "static/views/dashboard/widgets.html",
                 controller: 'WidgetController'
             })
             .state("index.report", {
-                url: "/reportIndex/:productId",
+                url: "/reportIndex/:productId?:startDate/:endDate",
                 templateUrl: "static/views/reports/reportIndex.html",
                 controller: 'ReportIndexController'
             })
@@ -36,7 +36,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 activetab: 'template'
             })
             .state("index.report.reports", {
-                url: "/report/:productId",
+                url: "/report/:productId?:startDate/:endDates",
                 templateUrl: "static/views/reports/reports.html",
                 controller: 'ReportController',
                 activetab: 'report'
@@ -48,5 +48,5 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 activetab: 'report'
             });
 
-    $urlRouterProvider.otherwise('index/dashboard/dashboard/widget/2/2');
+    $urlRouterProvider.otherwise('index/dashboard/dashboard/widget/2/2?29/23');
 });

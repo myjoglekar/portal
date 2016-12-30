@@ -125,46 +125,56 @@ public class GaService {
         return getGenericData(viewId, startDate1, endDate1, startDate2, endDate2, metricsList, dimensions, filter);
     }
 
-    public GetReportsResponse getGoals(String viewId, Date startDate, Date endDate) {
+    public GetReportsResponse getGoals(String viewId, Date startDate, Date endDate, String aggregation) {
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+
         String dimensions = "ga:channelGrouping;ga:date";
-        String filter = "ga:channelGrouping==Display";
+        if (aggregation == null || aggregation.isEmpty()) {
+            dimensions = "ga:channelGrouping";
+        }
+        String filter = "ga:channelGrouping==Display;ga:medium==cpc";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
-    
-    public GetReportsResponse getCampaignGoals(String viewId, Date startDate, Date endDate) {
+
+    public GetReportsResponse getCampaignGoals(String viewId, Date startDate, Date endDate, String aggregation) {
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
         String dimensions = "ga:channelGrouping;ga:date;ga:campaign";
+        if (aggregation == null || aggregation.isEmpty()) {
+            dimensions = "ga:channelGrouping;ga:campaign";
+        }
         String filter = "ga:channelGrouping==Display";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
-    
-    public GetReportsResponse getAdGoals(String viewId, Date startDate, Date endDate) {
+
+    public GetReportsResponse getAdGoals(String viewId, Date startDate, Date endDate, String aggregation) {
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
         String dimensions = "ga:channelGrouping;ga:date;ga:adContent";
+        if (aggregation == null || aggregation.isEmpty()) {
+            dimensions = "ga:channelGrouping;ga:adContent";
+        }
         String filter = "ga:channelGrouping==Display";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
-    
+
     public GetReportsResponse getDeviceGoals(String viewId, Date startDate, Date endDate) {
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
         String dimensions = "ga:channelGrouping;ga:deviceCategory";
-        String filter = "ga:channelGrouping==Display";
+        String filter = "ga:channelGrouping==Display;ga:medium==cpc";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
-    
+
     public GetReportsResponse getCampaignDeviceGoals(String viewId, Date startDate, Date endDate) {
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
@@ -174,14 +184,14 @@ public class GaService {
         String filter = "ga:channelGrouping==Display";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
-    
+
     public GetReportsResponse getGeoGoals(String viewId, Date startDate, Date endDate) {
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
         String dimensions = "ga:channelGrouping;ga:city";
-        String filter = "ga:channelGrouping==Display";
+        String filter = "ga:channelGrouping==Display;ga:medium==cpc";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
 
@@ -253,7 +263,7 @@ public class GaService {
         return null;
     }
 
-    public GetReportsResponse getGenericData(String viewId, Date startDate1, Date endDate1, Date startDate2, Date endDate2, 
+    public GetReportsResponse getGenericData(String viewId, Date startDate1, Date endDate1, Date startDate2, Date endDate2,
             String metrics, String dimentions, String filter, String orderBy, Integer maxResults) {
         try {
             List<DateRange> dateRangeList = new ArrayList<>();
@@ -299,7 +309,7 @@ public class GaService {
 
             }
             List<OrderBy> orderByList = new ArrayList<>();
-            String[] orderByArr =  orderBy.split(";");
+            String[] orderByArr = orderBy.split(";");
             for (int i = 0; i < orderByArr.length; i++) {
                 String orderByStr = orderByArr[i];
                 OrderBy orderByVal = new OrderBy();
@@ -307,7 +317,7 @@ public class GaService {
                 orderByVal.setSortOrder("DESCENDING");
                 orderByList.add(orderByVal);
             }
-            
+
             ReportRequest request = new ReportRequest()
                     .setViewId(viewId)
                     .setDateRanges(dateRangeList)
@@ -333,8 +343,6 @@ public class GaService {
         return null;
     }
 
-    
-    
     public GetReportsResponse getGenericData(Date startDate1, Date endDate1, Date startDate2, Date endDate2, String metrics, String dimentions) {
         try {
             List<DateRange> dateRangeList = new ArrayList<>();
@@ -463,13 +471,16 @@ public class GaService {
             e.printStackTrace();
         }
     }
-    
-    public GetReportsResponse getSeoOverallPerformanceGoals(String viewId, Date startDate, Date endDate) {
+
+    public GetReportsResponse getSeoOverallPerformanceGoals(String viewId, Date startDate, Date endDate, String aggregation) {
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
         String dimensions = "ga:channelGrouping;ga:date";
+        if (aggregation == null || aggregation.isEmpty()) {
+            dimensions = "ga:channelGrouping";
+        }
         String filter = "ga:channelGrouping==Display";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }

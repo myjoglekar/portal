@@ -146,7 +146,13 @@ public class UiController extends BaseController {
     @RequestMapping(value = "report", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     Report addReport(HttpServletRequest request, HttpServletResponse response, @RequestBody Report report) {
+//        Report report = new Report();
+//        report.setReportTitle(request.getParameter("reportTitle"));
+//        report.setDescription(request.getParameter("description"));
+//        request.getParameter("logo");
+//        
         Integer getReportTypeId = 1;
+        System.out.println(report);
         return uiService.addReport(report, getReportTypeId);
     }
 

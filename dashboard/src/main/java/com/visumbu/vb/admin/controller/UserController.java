@@ -95,7 +95,10 @@ public class UserController {
         returnMap.put("paid", getPaidDataSets());
         returnMap.put("display", getDisplayDataSets());
         returnMap.put("paidSocial", getPaidSocialDataSets());
+        returnMap.put("video", getVideoDataSets());
         returnMap.put("seo", getSeoDataSets());
+        returnMap.put("dynamicDisplay", getDynamicDisplayDataSets());
+        returnMap.put("socialImpact", getSocialImpactDataSets());
 
         return returnMap;
     }
@@ -113,6 +116,7 @@ public class UserController {
             "../api/admin/paid/campaignDevice;Campaign Device",
             "../api/admin/paid/accountDevice;Account Device",
             "../api/admin/paid/adGroups;AdGroups",
+            "../api/admin/paid/adPerformance;Ad Performance",
         };
 
         for (int i = 0; i < urlList.length; i++) {
@@ -144,10 +148,51 @@ public class UserController {
 
     }
     
+    private List<UrlBean> getVideoDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/video/campaignDevicePerformance;Campaign Device Performance",
+            "../api/admin/video/accountDevice;Account Device",
+            "../api/admin/video/adPerformance;Ad Performance",
+            "../api/admin/video/campaignPerformance;Campaign Performance",
+            "../api/admin/video/accountPerformanceDayOfWeek;Account Performance Day Of Week",
+            "../api/admin/video/accountPerformance12Weeks;Account Performance 12 Weeks",
+            "../api/admin/video/accountPerformance;Account Performance",
+        };
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
+        return returnList;
+
+    }
+    
     private List<UrlBean> getPaidSocialDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/paidSocial/accountPerformance;Account Performance",
+            "../api/admin/paidSocial/last12WeeksPerformance;Last 12 Weeks Performance",
+            "../api/admin/paidSocial/genderPerformance;Gender Performance",
+            "../api/admin/paidSocial/agePerformance;Age Performance",
+            "../api/admin/paidSocial/devicePerformance;Device Performance",
+            "../api/admin/paidSocial/adPerformance;Ad Performance",
+            "../api/admin/paidSocial/campaignPerformance;Campaign Performance",
+        };
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
+        return returnList;
+
+    }
+    private List<UrlBean> getSocialImpactDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/socialImpact/postPerformance;Post Performance",
         };
 
         for (int i = 0; i < urlList.length; i++) {
@@ -176,13 +221,12 @@ public class UserController {
             returnList.add(new UrlBean(url[0], url[1]));
         }
         return returnList;
-
     }
-    
-    private List<UrlBean> getSocialImpactDataSets() {
+    private List<UrlBean> getDynamicDisplayDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
-            "../api/admin/socialImpact/accountPerformance;Account Performance"
+            "../api/admin/dynamicDisplay/overallPerformance;Overall Performance",
+            "../api/admin/dynamicDisplay/accountPerformance12Weeks;Account Performance 12 Weeks",
         };
 
         for (int i = 0; i < urlList.length; i++) {
@@ -191,7 +235,6 @@ public class UserController {
             returnList.add(new UrlBean(url[0], url[1]));
         }
         return returnList;
-
     }
 
     @ExceptionHandler

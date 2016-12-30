@@ -12,6 +12,7 @@ package com.visumbu.api.dashboard.bean;
 public class DevicePerformanceReportBean {
 
     private String device;
+    private String deviceType;
     private String campaign;
     private String impressions;
     private String clicks;
@@ -102,7 +103,15 @@ public class DevicePerformanceReportBean {
     public void setDevice(String device) {
         this.device = device;
     }
+    
+    public String getDeviceType() {
+        return deviceType;
+    }
 
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+    
     public String getSource() {
         return source;
     }
