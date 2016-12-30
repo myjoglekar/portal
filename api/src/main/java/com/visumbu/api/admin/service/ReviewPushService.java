@@ -83,6 +83,20 @@ public class ReviewPushService {
         returnList.add(dataMap);
         return dataMap;
     }
+    private Map<String, String> getDataAsMap(JSONObject data, String prefix) {
+        List<Map<String, String>> returnList = new ArrayList<>();
+        Set<String> keySet = data.keySet();
+        Map<String, String> dataMap = new HashMap<>();
+        for (Iterator<String> iterator = keySet.iterator(); iterator.hasNext();) {
+            String key = iterator.next();
+            if (!(data.get(key) instanceof JSONArray || data.get(key) instanceof JSONObject)) {
+                String value = data.get(key) + "";
+                dataMap.put(prefix + key, value);
+            }
+        }
+        returnList.add(dataMap);
+        return dataMap;
+    }
 
     public Object getRatingSummaryByDealer(Date startDate, Date endDate, String reviewPushId) {
         try {
@@ -131,6 +145,7 @@ public class ReviewPushService {
                 JSONObject dataArr1 = (JSONObject) dataArr.get(i);
                 Map dataMap = getDataAsMap(dataArr1);
                 dataMap.putAll(getDataAsMap((JSONObject) dataArr1.get("attributes")));
+                dataMap.putAll(getDataAsMap((JSONObject) ((JSONObject) dataArr1.get("attributes")).get("site"), "site_"));
                 dataMap.putAll(getDataAsMap((JSONObject) ((JSONObject) dataArr1.get("attributes")).get("aggregate")));
                 returnAll.add(dataMap);
             }

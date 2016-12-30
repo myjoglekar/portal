@@ -52,8 +52,8 @@ public class ReviewPushController extends BaseController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("rating", "number", "Posts", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
-        columnDefs.add(new ColumnDef("review_url", "string", "Type"));
+        columnDefs.add(new ColumnDef("rating", "number", "Rating", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
+        columnDefs.add(new ColumnDef("review_url", "string", "Review URL"));
         columnDefs.add(new ColumnDef("reviewer", "string", "Reviewer"));
         columnDefs.add(new ColumnDef("type", "string", "Type"));
         columnDefs.add(new ColumnDef("respond_url", "string", "Respond Url"));
@@ -117,6 +117,7 @@ public class ReviewPushController extends BaseController {
         columnDefs.add(new ColumnDef("created", "string", "Created Time"));
         columnDefs.add(new ColumnDef("type", "string", "Type"));
         columnDefs.add(new ColumnDef("name", "string", "Name"));
+        columnDefs.add(new ColumnDef("site_name", "string", "Site Name"));
         
 
         returnMap.put("columnDefs", columnDefs);
