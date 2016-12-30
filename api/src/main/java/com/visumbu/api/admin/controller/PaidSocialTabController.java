@@ -359,27 +359,21 @@ public class PaidSocialTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("gender", "string", "Gender"));
+        columnDefs.add(new ColumnDef("date_start", "string", "Date Start"));
+        columnDefs.add(new ColumnDef("date_stop", "string", "Date Stop"));
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_comment", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_post_reaction", "number", "Post Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("actions_post", "number", "Posts", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_link_click", "number", "Link Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
         columnDefs.add(new ColumnDef("cost_comment", "number", "Cost/Comment", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("cost_link_click", "number", "Cost/Link Click", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("cost_post_engagement", "number", "Cost/Post Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
-        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
@@ -387,7 +381,7 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getLast12WeeksPerformance(startDate, endDate);
+        Object accountPerformance = facebookService.getLast12WeeksPerformanceData(startDate, endDate);
         returnMap.put("data", accountPerformance);
         return returnMap;
     }

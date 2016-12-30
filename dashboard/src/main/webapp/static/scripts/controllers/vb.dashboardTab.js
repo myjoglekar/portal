@@ -1,19 +1,27 @@
 app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies) {
     $scope.selectTabID = $state;
-
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
 
-    $scope.endDate = new Date();
-    $scope.startDate = new Date();
-    try {
-        $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $scope.startDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
+    $scope.toDate = function (strDate) {
+        if (!strDate) {
+            return new Date();
+        }
+        var from = strDate.split("/");
+        var f = new Date(from[2], from[0] - 1, from[1]);
+        return f;
+    };
 
-        $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $scope.endDate;
-    } catch (e) {
+    $scope.getDay = function () {
+        var today = new Date();
+        var yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 29);
+        return yesterday;
     }
 
+    $scope.startDate = $stateParams.startDate ? $scope.toDate(decodeURIComponent($stateParams.startDate)) : $scope.getDay();
+    $scope.endDate = $stateParams.endDate ? $scope.toDate(decodeURIComponent($stateParams.endDate)) : new Date();
 
     $scope.loadNewUrl = function () {
         try {
@@ -52,18 +60,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         return "widget";
     };
 
-    console.log($stateParams.productId);
-    console.log($stateParams.tabId);
-    console.log($stateParams.dashboardTypeId);
-
-//    $scope.selectDashboardType = "Select Type";
-//    $scope.dashboardTypes = [{dashboardType: 1, name: "Dashboard"}, {dashboardType: 2, name: "Reports"}];
-//    $scope.selectDashboardName = $filter('filter')($scope.dashboardTypes, {dashboardType: $stateParams.dashboardTypeId})[0];
-//    $scope.selectDashboardType = $scope.selectDashboardName.name;
-//    $scope.selectDashboard = function (name) {
-//        $scope.selectDashboardType = name;
-//    };
-
     $scope.selectProductName = "Select Product";
     $scope.changeProduct = function (product) {
         $scope.selectProductName = product.productName;
@@ -81,40 +77,20 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $scope.dealers = response;
     });
 
-$scope.loadTab = true;
+    $scope.loadTab = true;
     $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
+        console.log(response)
         $scope.loadTab = false;
         $scope.tabs = response;
         console.log(response)
         angular.forEach(response, function (value, key) {
             $scope.dashboardName = value.dashboardId.dashboardTitle;
         });
-        $state.go("index.dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : response[0].id, reload: true});
-//        $stateParams.tabId = $stateParams.tabId ? $stateParams.tabId : response[0].id
+        $scope.startId = response[0].id ? response[0].id : 0;
+        $state.go("index.dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, reload: true});
     });
 
     var dates = $(".pull-right i").text();
-
-
-    //$scope.match = $stateParams.tabId
-    //console.log($scope.s.params.tabId)
-    //console.log("Dashboard : "+sessionStorage);
-    $scope.setActiveTab = function (activeTab) {
-        sessionStorage.setItem("activeTab", activeTab);
-    };
-
-    // Get active tab from localStorage
-    $scope.getActiveTab = function () {
-        return sessionStorage.getItem("activeTab");
-    };
-
-    // Check if current tab is active
-    $scope.isActiveTab = function (tabName, index) {
-        var activeTab = $scope.getActiveTab();
-        return (activeTab === tabName || (activeTab === null && index === 0));
-    }
-
-
 
     var counter = 1;
     $scope.tabs = [];
@@ -128,61 +104,12 @@ $scope.loadTab = true;
         })
     };
 
-    var removeTab = function (event, index) {
-        event.preventDefault();
-        event.stopPropagation();
+    $scope.deleteTab = function (index, tab) {
+        $http({method: 'DELETE', url: 'admin/ui/dbTab/' + tab.id}).success(function (response) {
+        })
+        console.log(tab)
         $scope.tabs.splice(index, 1);
     };
-
-    //$scope.addTab = addTab;
-    $scope.removeTab = removeTab;
-
-    for (var i = 0; i < 5; i++) {
-        // addTab();
-    }
-
-
-//    $http.get("admin/ui/dashboard").success(function () {
-//
-//    })
-//    console.log($stateParams.tabId)
-    if ($stateParams.productId == 'dashboard') {
-        $stateParams.productId = 2;
-    }
-    //$scope.currentTabId = $stateParams.tabId
-
-    console.log("productId : " + $stateParams.productId)
-    $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
-        $scope.tabs = response;
-        console.log(response)
-        angular.forEach(response, function (value, key) {
-            $scope.dashboardName = value.dashboardId.dashboardTitle;
-        });
-        $state.go("index.dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : response[0].id, reload: true});
-//        $stateParams.tabId = $stateParams.tabId ? $stateParams.tabId : response[0].id
-    });
-
-//    $http.get("admin/ui/dbWidget/1").success(function (response) {
-//        $scope.widgets = response;
-//        //$scope.defaultWidget = response[0];
-//    });
-
-//    $scope.tabs = [];
-//    var uid = 7;
-//    $scope.addTab = function () {
-//        $scope.tabs.push({tabId: $scope.id, tabName: "New Tab", tabClose: "isClose"});
-//        var tabData = {
-//            tabName: 'New Tab'
-//        }
-//        $http({method: 'POST', url: 'admin/ui/dbTabs', data: tabData}).success(function (response) {
-//
-//        });
-//    };
-//    console.log($scope.tabs);
-//
-//    $scope.deleteTab = function (index, tab) {
-//        tab.tabItems.splice(index, 1);
-//    };
 
     $scope.reports = [];
     $scope.addParent = function () {
@@ -219,7 +146,7 @@ $scope.loadTab = true;
                     ranges: {
                         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                     },
-                    startDate: moment().subtract(new Date(), 'days'),
+                    startDate: moment().subtract(29, 'days'),
                     endDate: moment()
                 },
                 function (start, end) {
@@ -257,48 +184,3 @@ $scope.loadTab = true;
 
 
 })
-//        .directive('tabHighlight', [function () {
-//                return {
-//                    restrict: 'A',
-//                    link: function (scope, element) {
-//                        var x, y, initial_background = '#c3d5e6';
-//
-//                        element
-//                                .removeAttr('style')
-//                                .mousemove(function (e) {
-//                                    // Add highlight effect on inactive tabs
-//                                    if (!element.hasClass('active'))
-//                                    {
-//                                        x = e.pageX - this.offsetLeft;
-//                                        y = e.pageY - this.offsetTop;
-//
-//                                        element
-//                                                .css({background: '-moz-radial-gradient(circle at ' + x + 'px ' + y + 'px, rgba(255,255,255,0.4) 0px, rgba(255,255,255,0.0) 45px), ' + initial_background})
-//                                                .css({background: '-webkit-radial-gradient(circle at ' + x + 'px ' + y + 'px, rgba(255,255,255,0.4) 0px, rgba(255,255,255,0.0) 45px), ' + initial_background})
-//                                                .css({background: 'radial-gradient(circle at ' + x + 'px ' + y + 'px, rgba(255,255,255,0.4) 0px, rgba(255,255,255,0.0) 45px), ' + initial_background});
-//                                    }
-//                                })
-//                                .mouseout(function () {
-//                                    element.removeAttr('style');
-//                                });
-//                    }
-//                };
-//            }]);
-//        .directive('activeLink', ['$location', function (location) {
-//                return {
-//                    restrict: 'A',
-//                    link: function (scope, element, attrs, controller) {
-//                        var clazz = attrs.activeLink;
-//                        var path = attrs.href;
-//                        path = path.substring(1); //hack because path does not return including hashbang
-//                        scope.location = location;
-//                        scope.$watch('location.path()', function (newPath) {
-//                            if (path === newPath) {
-//                                element.addClass(clazz);
-//                            } else {
-//                                element.removeClass(clazz);
-//                            }
-//                        });
-//                    }
-//                };
-//            }]);

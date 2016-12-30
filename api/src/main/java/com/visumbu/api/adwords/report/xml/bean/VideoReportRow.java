@@ -55,7 +55,7 @@ public class VideoReportRow {
     }
 
     public String getViewRate() {
-        return viewRate;
+        return viewRate.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -73,7 +73,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo100() {
-        return videoPlayedTo100;
+        return videoPlayedTo100.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -82,7 +82,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo25() {
-        return videoPlayedTo25;
+        return videoPlayedTo25.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -91,7 +91,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo50() {
-        return videoPlayedTo50;
+        return videoPlayedTo50.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -100,7 +100,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo75() {
-        return videoPlayedTo75;
+        return videoPlayedTo75.replaceAll("%", "");
     }
 
     @XmlAttribute

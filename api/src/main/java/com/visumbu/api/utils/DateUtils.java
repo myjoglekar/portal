@@ -118,6 +118,13 @@ public class DateUtils {
         return dateRange;
     }
 
+    public static Date getNextWeek(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, 7);
+        return cal.getTime();
+    }
+    
     public static String getDayOfWeek(Integer day) {
         String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         return days[day - 1];
@@ -126,6 +133,17 @@ public class DateUtils {
         String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
          List<String> list = Arrays.asList(days);
          return list.indexOf(day) ;
+    }
+
+    public static Date getStartDateOfWeek(Date date) {
+        // Get calendar set to current date and time
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+// Set the calendar to sunday of the current week
+        c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+
+// Print dates of the current week starting on Monday
+        return c.getTime();
     }
 
     public static String getStartDayOfWeek(Date date) {

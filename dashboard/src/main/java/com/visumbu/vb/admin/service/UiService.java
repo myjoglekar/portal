@@ -62,6 +62,10 @@ public class UiService {
     public List<DashboardTabs> getDashboardTabs(Integer dbId) {
         return uiDao.getDashboardTabs(dbId);
     }
+    
+    public DashboardTabs deleteDashboardTab(Integer id) {
+        return uiDao.deleteDashboardTab(id);
+    }
 
     public TabWidget createTabWidget(Integer tabId, TabWidget tabWidget) {
         tabWidget.setTabId(uiDao.getTabById(tabId));
