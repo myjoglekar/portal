@@ -99,6 +99,7 @@ public class UserController {
         returnMap.put("seo", getSeoDataSets());
         returnMap.put("dynamicDisplay", getDynamicDisplayDataSets());
         returnMap.put("socialImpact", getSocialImpactDataSets());
+        returnMap.put("reviewPush", getReviewPushDataSets());
 
         return returnMap;
     }
@@ -193,6 +194,7 @@ public class UserController {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/socialImpact/postPerformance;Post Performance",
+            "../api/admin/socialImpact/last12WeeksPerformance;Last 12 Weeks",
         };
 
         for (int i = 0; i < urlList.length; i++) {
@@ -222,11 +224,27 @@ public class UserController {
         }
         return returnList;
     }
+    
     private List<UrlBean> getDynamicDisplayDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/dynamicDisplay/overallPerformance;Overall Performance",
             "../api/admin/dynamicDisplay/accountPerformance12Weeks;Account Performance 12 Weeks",
+        };
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
+        return returnList;
+    }
+    private List<UrlBean> getReviewPushDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/reviewPush/reviews;Reviews",
+            "../api/admin/reviewPush/ratingSummary;Summary",
+            "../api/admin/reviewPush/bySources;By Source",
         };
 
         for (int i = 0; i < urlList.length; i++) {
