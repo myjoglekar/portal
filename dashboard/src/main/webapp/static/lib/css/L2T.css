@@ -4510,3 +4510,29 @@ a.mail-to {
 .breadcrumb>li+li:before {
     display:none;
 }
+
+button.close {
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}
+
+.close {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 20px;
+    color: #000;
+    text-shadow: 0 1px 0 #99a5aa;
+    opacity: .2;
+    filter: alpha(opacity=20);
+    margin-top: -28px;
+    font-size: 13px;
+}
+
+.pull-left.add-tab {
+    margin-left: 18px;
+    margin-top: 6px;
+}
