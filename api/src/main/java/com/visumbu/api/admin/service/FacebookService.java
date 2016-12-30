@@ -33,12 +33,12 @@ import org.json.simple.parser.ParseException;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class FacebookService {
 
-    public static final String ACCESS_TOKEN = ExampleConfig.ACCESS_TOKEN;
-    public static final Long ACCOUNT_ID = ExampleConfig.ACCOUNT_ID;
-    public static final String APP_SECRET = ExampleConfig.APP_SECRET;
-    public static final String BASE_URL = "https://graph.facebook.com/v2.8/act_";
-    public static final String BASE_URL_FEED = "https://graph.facebook.com/v2.8/";
-    //public static final APIContext context = new APIContext(ACCESS_TOKEN).enableDebug(true);
+    public final String ACCESS_TOKEN = ExampleConfig.ACCESS_TOKEN;
+    public final Long ACCOUNT_ID = ExampleConfig.ACCOUNT_ID;
+    public final String APP_SECRET = ExampleConfig.APP_SECRET;
+    public final String BASE_URL = "https://graph.facebook.com/v2.8/act_";
+    public final String BASE_URL_FEED = "https://graph.facebook.com/v2.8/";
+    //public final APIContext context = new APIContext(ACCESS_TOKEN).enableDebug(true);
 
     public String getFbPublishedPosts() {
         String url = BASE_URL + ACCOUNT_ID + "/insights?fields=adset_name%2Cclicks%2Cimpressions&date_preset=today&access_token=" + ACCESS_TOKEN;
@@ -275,7 +275,7 @@ public class FacebookService {
         return null;
     }
 
-    public Object getLast12WeeksPerformance(Date startDate, Date endDate) {
+    public Object getLast12WeeksPerformance1(Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
@@ -316,7 +316,7 @@ public class FacebookService {
         return null;
     }
     
-    public Object getPostPerformance(Date startDate, Date endDate) {
+    public List getPostPerformance(Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
@@ -337,6 +337,7 @@ public class FacebookService {
             for (int i = 0; i < dataArr.size(); i++) {
                 JSONObject data = (JSONObject) dataArr.get(i);
                 Map<String, String> dataList = getDataValue(data);
+                dataList.put("date", startDateStr);
                 dataList.put("reactions", getActionsCount((JSONObject) data.get("reactions")) + "");
                 dataList.put("likes", getActionsCount((JSONObject) data.get("likes")) + "");
                 dataList.put("comments", getActionsCount((JSONObject) data.get("comments")) + "");
@@ -352,6 +353,29 @@ public class FacebookService {
         return null;
     }
 
+    public Object getLast12WeeksPerformance(Date startDate, Date endDate) {
+        try {
+            Date currentStart = startDate;
+            List returnAll = new ArrayList();
+            while(DateUtils.dateDiff(endDate, currentStart) > 0) {
+                System.out.println("Getting data for week " + currentStart);
+                Date weekStart = DateUtils.getStartDateOfWeek(currentStart);
+                returnAll.addAll(getPostPerformance(weekStart, DateUtils.getNextWeek(weekStart)));
+                currentStart = DateUtils.getNextWeek(currentStart);
+            }
+            return returnAll;
+        } catch(Exception e) {
+            
+        }
+        return null;
+    }
+//
+//    public void main(String[] argv) {
+//        Date startDate = DateUtils.get12WeeksBack("");
+//        Date endDate = new Date();
+//        getLast12WeeksPerformance(startDate, endDate);
+//    }
+//    
     private Map<String, String> getDataValue(JSONObject data) {
         List<Map<String, String>> returnList = new ArrayList<>();
         Set<String> keySet = data.keySet();
