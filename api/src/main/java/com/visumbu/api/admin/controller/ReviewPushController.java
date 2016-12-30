@@ -117,6 +117,7 @@ public class ReviewPushController extends BaseController {
         columnDefs.add(new ColumnDef("created", "string", "Created Time"));
         columnDefs.add(new ColumnDef("type", "string", "Type"));
         columnDefs.add(new ColumnDef("name", "string", "Name"));
+        columnDefs.add(new ColumnDef("site_name", "string", "Site Name"));
         
 
         returnMap.put("columnDefs", columnDefs);
