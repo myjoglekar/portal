@@ -393,7 +393,7 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("creativeFinalUrls", "string", "Creative Final Urls"));
         columnDefs.add(new ColumnDef("adType", "string", "Ad Type"));
         columnDefs.add(new ColumnDef("ad", "string", "Ad"));
-        
+
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
@@ -427,12 +427,12 @@ public class DisplayTabController {
             performanceBean.setConversions(row.getConversions());
             performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
             performanceBean.setHeadline(row.getHeadline());
-            performanceBean.setDirectionsPageView(getGaDataForDateAdType(gaData,  "ga:adContent", row.getHeadline(), "Goal1Completions"));
+            performanceBean.setDirectionsPageView(getGaDataForDateAdType(gaData, "ga:adContent", row.getHeadline(), "Goal1Completions"));
             performanceBean.setInventoryPageViews(getGaDataForDateAdType(gaData, "ga:adContent", row.getHeadline(), "Goal2Completions"));
             performanceBean.setLeadSubmission(getGaDataForDateAdType(gaData, "ga:adContent", row.getHeadline(), "Goal3Completions"));
-            performanceBean.setSpecialsPageView(getGaDataForDateAdType(gaData,  "ga:adContent", row.getHeadline(), "Goal4Completions"));
-            performanceBean.setTimeOnSiteGt2Mins(getGaDataForDateAdType(gaData,"ga:adContent", row.getHeadline(), "Goal5Completions"));
-            performanceBean.setVdpViews(getGaDataForDateAdType(gaData,  "ga:adContent", row.getHeadline(), "Goal6Completions"));
+            performanceBean.setSpecialsPageView(getGaDataForDateAdType(gaData, "ga:adContent", row.getHeadline(), "Goal4Completions"));
+            performanceBean.setTimeOnSiteGt2Mins(getGaDataForDateAdType(gaData, "ga:adContent", row.getHeadline(), "Goal5Completions"));
+            performanceBean.setVdpViews(getGaDataForDateAdType(gaData, "ga:adContent", row.getHeadline(), "Goal6Completions"));
             performanceReportBeans.add(performanceBean);
         }
         returnMap.put("data", performanceReportBeans);
@@ -696,7 +696,11 @@ public class DisplayTabController {
     private String getGaDataForDateAdType(List<Map<String, String>> gaData, String field, String value, String metric) {
         for (Iterator<Map<String, String>> iterator = gaData.iterator(); iterator.hasNext();) {
             Map<String, String> data = iterator.next();
-            if (data.get(field).equalsIgnoreCase("Ad name: " + value)) {
+            System.out.println("Matching value ---> " +  value);
+            System.out.println("Matching field ---> " + "Ad name: " + data.get(field));
+            if (value.startsWith("Ad name: " + data.get(field))) {
+            //if (data.get(field).indexOf(value) > 0) {
+                System.out.println("Matching =====" + data.get(metric));
                 return data.get(metric);
             }
         }

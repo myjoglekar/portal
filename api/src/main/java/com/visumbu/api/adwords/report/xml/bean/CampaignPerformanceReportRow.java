@@ -36,7 +36,6 @@ public class CampaignPerformanceReportRow {
     private String budget;
     private String convRate;
 
-    
     public String getAvgCPC() {
         try {
             return Double.toString(Double.parseDouble(avgCPC) / 1000000);
@@ -99,7 +98,6 @@ public class CampaignPerformanceReportRow {
         this.campaign = campaign;
     }
 
-
     public String getImpressions() {
         return impressions;
     }
@@ -128,7 +126,7 @@ public class CampaignPerformanceReportRow {
     }
 
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS;
+        return searchExactMatchIS.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -137,7 +135,7 @@ public class CampaignPerformanceReportRow {
     }
 
     public String getSearchLostISBudget() {
-        return searchLostISBudget;
+        return searchLostISBudget.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -146,7 +144,7 @@ public class CampaignPerformanceReportRow {
     }
 
     public String getSearchLostISRank() {
-        return searchLostISRank;
+        return searchLostISRank.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -164,7 +162,7 @@ public class CampaignPerformanceReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare;
+        return searchImprShare.replaceAll("%", "");
     }
 
     @XmlAttribute
@@ -200,7 +198,7 @@ public class CampaignPerformanceReportRow {
     }
 
     public String getCostConv() {
-         try {
+        try {
             return Double.toString(Double.parseDouble(costConv) / 1000000);
         } catch (Exception e) {
             return "0";
