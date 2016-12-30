@@ -7,13 +7,17 @@ package com.visumbu.api.admin.controller;
 
 import com.visumbu.api.admin.service.ReviewPushService;
 import com.visumbu.api.admin.service.UserService;
+import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bean.ReportPage;
 import com.visumbu.api.controller.BaseController;
 import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,8 +49,25 @@ public class ReviewPushController extends BaseController {
     Object getReviews(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get12WeeksBack(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        ReportPage page = getPage(request);
-        return reviewPushService.getReviews(startDate, endDate, "11415");
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("rating", "number", "Posts", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
+        columnDefs.add(new ColumnDef("review_url", "string", "Type"));
+        columnDefs.add(new ColumnDef("reviewer", "string", "Reviewer"));
+        columnDefs.add(new ColumnDef("type", "string", "Type"));
+        columnDefs.add(new ColumnDef("respond_url", "string", "Respond Url"));
+        columnDefs.add(new ColumnDef("review_date", "string", "Review Date"));
+        columnDefs.add(new ColumnDef("review", "string", "Review"));
+        columnDefs.add(new ColumnDef("review_time", "string", "Review Time"));
+        columnDefs.add(new ColumnDef("created_time", "string", "Created Time"));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        returnMap.put("data", reviewPushService.getReviews(startDate, endDate, "11415"));
+        return returnMap;
     }
 
     @RequestMapping(value = "ratingSummary", method = RequestMethod.GET, produces = "application/json")
@@ -54,8 +75,31 @@ public class ReviewPushController extends BaseController {
     Object getRatingSummaryByDealer(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get12WeeksBack(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        ReportPage page = getPage(request);
-        return reviewPushService.getRatingSummaryByDealer(startDate, endDate, "11415");
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("rating_weighted", "number", "Rating Weighted", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
+        columnDefs.add(new ColumnDef("rating", "number", "Rating", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
+        columnDefs.add(new ColumnDef("reviews", "number", "Reviews", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("zip", "string", "Zip"));
+        columnDefs.add(new ColumnDef("city", "string", "City"));
+        columnDefs.add(new ColumnDef("state", "string", "State"));
+        columnDefs.add(new ColumnDef("display_name", "string", "Display Name"));
+        columnDefs.add(new ColumnDef("address_1", "string", "Address1"));
+        columnDefs.add(new ColumnDef("address_2", "string", "Address2"));
+        columnDefs.add(new ColumnDef("created", "string", "Created Time"));
+        columnDefs.add(new ColumnDef("type", "string", "Type"));
+        columnDefs.add(new ColumnDef("name", "string", "Name"));
+        columnDefs.add(new ColumnDef("email", "string", "Email"));
+        columnDefs.add(new ColumnDef("phone", "string", "Phone"));
+        
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        returnMap.put("data", reviewPushService.getRatingSummaryByDealer(startDate, endDate, "11415"));
+        return returnMap;
     }
 
     @RequestMapping(value = "bySources", method = RequestMethod.GET, produces = "application/json")
@@ -63,8 +107,24 @@ public class ReviewPushController extends BaseController {
     Object getBySources(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get12WeeksBack(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        ReportPage page = getPage(request);
-        return reviewPushService.getBySources(startDate, endDate, "11415");
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("rating_weighted", "number", "Rating Weighted", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
+        columnDefs.add(new ColumnDef("rating", "number", "Rating", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
+        columnDefs.add(new ColumnDef("reviews", "number", "Reviews", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("url", "string", "Url"));
+        columnDefs.add(new ColumnDef("created", "string", "Created Time"));
+        columnDefs.add(new ColumnDef("type", "string", "Type"));
+        columnDefs.add(new ColumnDef("name", "string", "Name"));
+        
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        returnMap.put("data", reviewPushService.getBySources(startDate, endDate, "11415"));
+        return returnMap;
     }
 
     @ExceptionHandler

@@ -67,9 +67,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -103,30 +105,45 @@ public class DynamicDisplayTabController {
 
     @Autowired
     private FacebookService facebookService;
-    private final static String DYNAMIC_DISPLAY_URL = "";
-    
+    private final static String DYNAMIC_DISPLAY_URL = "http://192.168.225.216:5002/vizboard/";
+    private final static String DEALER_ID = "8125";
+
     @RequestMapping(value = "overallPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    void getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
+    Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
         try {
-            String url = DYNAMIC_DISPLAY_URL;
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            forwardRequest(url, response.getOutputStream(), parameterMap);
-        } catch (IOException ex) {
+            String url = DYNAMIC_DISPLAY_URL + "all?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
+            String data = Rest.getData(url);
+            JSONParser parser = new JSONParser();
+            Object jsonObj = parser.parse(data);
+            return jsonObj;
+//            OutputStream out = response.getOutputStream();
+//            out.write(data.getBytes());
+//            Map<String, String[]> parameterMap = request.getParameterMap();
+//            forwardRequest(url, response.getOutputStream(), parameterMap);
+        } catch (Exception ex) {
             Logger.getLogger(DynamicDisplayTabController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "";
     }
-    
+
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    void getLast12Weeks(HttpServletRequest request, HttpServletResponse response) {
+    Object getLast12Weeks(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
         try {
-            String url = DYNAMIC_DISPLAY_URL;
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            forwardRequest(url, response.getOutputStream(), parameterMap);
-        } catch (IOException ex) {
+            String url = DYNAMIC_DISPLAY_URL + "allByWeek?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
+            String data = Rest.getData(url);
+            JSONParser parser = new JSONParser();
+            Object jsonObj = parser.parse(data);
+            return jsonObj;
+        } catch (Exception ex) {
             Logger.getLogger(DynamicDisplayTabController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     private void forwardRequest(String url, OutputStream out, Map<String, String[]> parameterMap) {
