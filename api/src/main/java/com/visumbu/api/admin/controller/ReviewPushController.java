@@ -10,7 +10,9 @@ import com.visumbu.api.admin.service.UserService;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bean.ReportPage;
 import com.visumbu.api.controller.BaseController;
+import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,15 +40,33 @@ public class ReviewPushController extends BaseController {
     @Autowired
     private ReviewPushService reviewPushService;
 
-
-    @RequestMapping(value = "reviews", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "reviews", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getReviews(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get12WeeksBack(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
         ReportPage page = getPage(request);
-        return reviewPushService.getReviews(page);
+        return reviewPushService.getReviews(startDate, endDate, "11415");
     }
-    
-    
+
+    @RequestMapping(value = "ratingSummary", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getRatingSummaryByDealer(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get12WeeksBack(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        ReportPage page = getPage(request);
+        return reviewPushService.getRatingSummaryByDealer(startDate, endDate, "11415");
+    }
+
+    @RequestMapping(value = "bySources", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getBySources(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get12WeeksBack(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        ReportPage page = getPage(request);
+        return reviewPushService.getBySources(startDate, endDate, "11415");
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
