@@ -174,10 +174,10 @@ public class UiController extends BaseController {
         return uiService.deleteReport(reportId);
     }
 
-    @RequestMapping(value = "report/{reportId}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "report", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    List getReport(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
-        return uiService.getReport(reportId);
+    List getReport(HttpServletRequest request, HttpServletResponse response) {
+        return uiService.getReport();
     }
 
     @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.POST, produces = "application/json")

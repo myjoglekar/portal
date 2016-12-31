@@ -158,10 +158,10 @@ public class UiDao extends BaseDao {
         return reportType;
     }
 
-    public List readReport(Integer reportId) {
-        Report report = (Report) sessionFactory.getCurrentSession().get(Report.class, reportId);
-        return (List) report;
-    }
+//    public List readReport(Integer reportId) {
+//        Report report = (Report) sessionFactory.getCurrentSession().get(Report.class, reportId);
+//        return (List) report;
+//    }
 
     public Report getReportById(Integer reportId) {
         Report report = (Report) sessionFactory.getCurrentSession().get(Report.class, reportId);
