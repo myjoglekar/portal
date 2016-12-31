@@ -126,6 +126,9 @@ public class CampaignPerformanceReportRow {
     }
 
     public String getSearchExactMatchIS() {
+        if (searchExactMatchIS == null || searchExactMatchIS.isEmpty()) {
+            return "0.0";
+        }
         return searchExactMatchIS.replaceAll("%", "");
     }
 
@@ -135,6 +138,9 @@ public class CampaignPerformanceReportRow {
     }
 
     public String getSearchLostISBudget() {
+        if (searchLostISBudget == null || searchLostISBudget.isEmpty()) {
+            return "0.0";
+        }
         return searchLostISBudget.replaceAll("%", "");
     }
 
@@ -144,6 +150,9 @@ public class CampaignPerformanceReportRow {
     }
 
     public String getSearchLostISRank() {
+        if (searchLostISRank == null || searchLostISRank.isEmpty()) {
+            return "0.0";
+        }
         return searchLostISRank.replaceAll("%", "");
     }
 
@@ -162,6 +171,9 @@ public class CampaignPerformanceReportRow {
     }
 
     public String getSearchImprShare() {
+        if (searchImprShare == null || searchImprShare.isEmpty()) {
+            return "0.0";
+        }
         return searchImprShare.replaceAll("%", "");
     }
 
