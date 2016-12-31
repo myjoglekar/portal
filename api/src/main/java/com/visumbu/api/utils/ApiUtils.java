@@ -15,7 +15,26 @@ import java.io.IOException;
  */
 public class ApiUtils {
 
+    public static Integer toInteger(String string) {
+        try {
+            return Integer.parseInt(string);
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+
+    public static Double toDouble(String string) {
+        try {
+            return Double.parseDouble(string);
+        } catch (Exception e) {
+
+        }
+        return 0.0;
+    }
+
     public static String getCityById(String cityId) {
+        System.out.println("For City Id " + cityId);
         String line = "";
         String cvsSplitBy = ",";
         ClassLoader classLoader = ApiUtils.class.getClassLoader();
@@ -24,6 +43,7 @@ public class ApiUtils {
             while ((line = br.readLine()) != null) {
                 String[] city = line.split(cvsSplitBy);
                 if (cityId.equalsIgnoreCase(city[0])) {
+                    System.out.println("For City Id " + cityId + " --- " + city[1]);
                     return city[1];
                 }
             }
@@ -32,7 +52,7 @@ public class ApiUtils {
         }
         return "";
     }
-    
+
     public static void main(String[] argv) {
         System.out.println(getCityById("1000002"));
     }
