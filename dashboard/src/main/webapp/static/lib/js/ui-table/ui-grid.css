@@ -22,9 +22,9 @@
     -o-transform:translateZ(0);
     -ms-transform:translateZ(0);
     transform:translateZ(0);
-    max-height:119px;
-    height:100% !important;
-    min-height: auto !important;
+    /*    max-height:119px;
+        height:100% !important;
+        min-height: auto !important;*/
 }
 .ui-grid-vertical-bar {
     position:absolute;
@@ -88,7 +88,7 @@
 .ui-grid-top-panel {
     position:relative;
     overflow:hidden;
-/*    font-weight:bold;*/
+    /*    font-weight:bold;*/
     background:#f3f3f3;
     background:-webkit-gradient(linear, left bottom, left top, color-stop(0, #eee), color-stop(1, #fff));
     background:-ms-linear-gradient(bottom, #eee, #fff);
@@ -416,7 +416,8 @@ select.ui-grid-filter-select:hover {
     -o-text-overflow:ellipsis;
     text-overflow:ellipsis;
     overflow:hidden;
-    height:100%
+    height:100%;
+    font-size: 12px;
 }
 .ui-grid-cell-contents-hidden {
     visibility:hidden;
@@ -462,7 +463,11 @@ select.ui-grid-filter-select:hover {
     border-top-left-radius:-1px;
     -moz-background-clip:padding-box;
     -webkit-background-clip:padding-box;
-    background-clip:padding-box
+    background-clip:padding-box;
+    font-weight: normal;
+    font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-size: 12px;
 }
 .ui-grid-grid-footer {
     float:left;
@@ -992,7 +997,7 @@ div.ui-grid-cell input.ng-valid {
     border:1px solid #d4d4d4
 }
 .ui-grid-tree-header-row {
-/*    font-weight:bold !important*/
+    /*    font-weight:bold !important*/
 }
 .movingColumn {
     position:absolute;
@@ -1440,7 +1445,7 @@ textarea.ui-grid-pager-row-count-picker select,select[multiple].ui-grid-pager-ro
     opacity:1
 }
 .ui-grid-tree-header-row {
-/*    font-weight:bold !important*/
+    /*    font-weight:bold !important*/
 }
 .ui-grid-tree-header-row .ui-grid-cell.ui-grid-disable-selection.ui-grid-row-header-cell {
     pointer-events:all
@@ -1458,7 +1463,7 @@ div.ui-grid-cell-contents.invalid {
     position: absolute;
     z-index: 10;
 }
- 
+
 .scrollbar-inner > .scroll-element div {
     display: block;
     height: 100%;
@@ -1466,25 +1471,25 @@ div.ui-grid-cell-contents.invalid {
     top: 0;
     width: 100%;
 }
- 
+
 .scrollbar-inner > .scroll-element.scroll-x {
     bottom: 2px;
     height: 8px;
     left: 0;
     width: 100%;
 }
- 
+
 .scrollbar-inner > .scroll-element.scroll-y {
     height: 100%;
     right: 2px;
     top: 0;
     width: 8px;
 }
- 
+
 .scrollbar-inner > .scroll-element .scroll-element_outer {
     overflow: hidden;
 }
- 
+
 .scrollbar-inner > .scroll-element .scroll-element_outer,
 .scrollbar-inner > .scroll-element .scroll-element_track,
 .scrollbar-inner > .scroll-element .scroll-bar {
@@ -1492,16 +1497,24 @@ div.ui-grid-cell-contents.invalid {
     -moz-border-radius: 8px;
     border-radius: 8px;
 }
- 
+
 .scrollbar-inner > .scroll-element .scroll-element_track,
 .scrollbar-inner > .scroll-element .scroll-bar {
     -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
     filter: alpha(opacity=40);
     opacity: 0.4;
 }
- 
+
 .scrollbar-inner > .scroll-element .scroll-element_track { background-color: #e0e0e0; }
 .scrollbar-inner > .scroll-element .scroll-bar { background-color: #c2c2c2; }
 .scrollbar-inner > .scroll-element:hover .scroll-bar { background-color: #919191; }
 .scrollbar-inner > .scroll-element.scroll-draggable .scroll-bar { background-color: #919191; }
- 
+
+
+.ui-grid {
+    height: auto !important;
+}
+
+.ui-grid-render-container-body .ui-grid-canvas {
+     height: auto !important;
+}

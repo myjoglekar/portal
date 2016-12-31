@@ -1,99 +1,93 @@
 <div ng-controller="UiController">
     <section class="content-header">
-        <h1 class="text-capitalize"> {{dashboardName}}</h1>        
+        <h1 class="text-capitalize"> {{dashboardName}}</h1>   
+        <ol class="breadcrumb">
+            <li>
+                <a class="border-btn" data-toggle="dropdown"><i class="fa fa-home" style="font-size:20px;"></i>Dealer Name</a> <i class="fa fa-caret-down"></i> 
+                <ul class="dropdown-menu">
+                    <li ng-repeat="dealer in dealers">
+                        <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>  
+                    </li>
+                </ul>
+            </li>
+            <li>              
+                <a class="pull-right" id="daterange-btn">
+                    <i class="fa fa-calendar" id="date"></i>
+                    <span>
+                        {{startDate| date: "MM/dd/yyyy"}} - {{endDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
+                    </span>
+
+                </a>                   
+            </li>
+            <li> <span class="label label-info" ng-click="loadNewUrl()">Go</span></li>
+            <li class="pull-right user user-menu">
+                <a data-toggle="dropdown" class="logout">
+                    <i class="fa fa-user" style="font-size:20px;"></i> {{userName}}</a>
+                <ul class="dropdown-menu pull-left">
+                    <li><a href="admin/user/logout">Logout</a></li>
+                </ul>
+            </li>
+        </ol>
     </section>
-    <!--    <tabset class="tab-container">
-            <tab ng-repeat="tab in tabs" 
-                 tab-highlight 
-                 ui-sref="index.dashboard.widget({tabId: tab.id?tab.id:0})"
-                 ng-init="isActive = isActiveTab(tab.tabName, $index)"
-                 active="isActive"
-                 select="setActiveTab(tab.tabName)">
-                <tab-heading>
-                    <span>{{tab.tabName}}</span> 
-                    <i class="glyphicon glyphicon-remove" ng-show="tab.tabClose" ng-click="removeTab($event, $index)"></i>
-                </tab-heading>
-            </tab>
-            <button class="btn btns btn-default" data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus"></i></button>
-            <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
-                <div class="modal-dialog modal-md">
-                     Modal content
-                    <div class="modal-content">
-    
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">TAB</h4>
-                        </div>
-                        <div class="modal-body ">
-                            <form class="form-horizontal" role="form">
-    
-                                <div class="form-group">
-                                    <div class="col-sm-12  col-md-12">
-                                        <div class="col-sm-3 col-md-3">
-                                            <label>Tab Name </label>
-                                        </div>
-                                        <div class="col-sm-9 col-md-9">
-                                            <input type="text" ng-model="tab.tabName" class="form-control "/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <div>
-                                <button type="button" class="btn btn-warning" ng-click="addTab(tab)"><span class="fa fa-save"></span> Save</button>  
-                                <button type="button" class="btn btn-warning" data-dismiss="modal"><span class="fa fa-times"></span> Cancel
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </tabset>-->
 
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-
-
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
                         <li ng-repeat="tab in tabs" ui-sref-active="active">
-                            <a class="active" ui-sref="index.dashboard.widget({tabId: tab.id?tab.id:0})"
-                               ng-init="isActive = isActiveTab(tab.tabName, $index)"
-                               active="isActive"
-                               select="setActiveTab(tab.tabName)">
+                            <a class="active" ui-sref="index.dashboard.widget({productId: productId, tabId: tab.id?tab.id:0})">
                                 {{tab.tabName}}
                             </a>
                             <sup style="top:-1.5em;left:-0.6em;cursor: pointer;">
-                                <i class="glyphicon glyphicon-remove" ng-if="tabItem.tabClose" ng-click="deleteTab($index, tab)"></i>
+                                <i class="glyphicon glyphicon-remove" ng-click="deleteTab($index, tab)"></i>
                             </sup>
                         </li> 
+                        <li class="pull-left"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
 
-                        <li class="pull-left"> <a ng-click="addTab()" style="cursor: pointer"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
+                        <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
+                            <div class="modal-dialog modal-md">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">TAB</h4>
+                                    </div>
+
+                                    <div class="modal-body ">
+                                        <form class="form-horizontal" role="form">
+
+                                            <div class="form-group">
+                                                <div class="col-sm-12  col-md-12">
+                                                    <div class="col-sm-3 col-md-3">
+                                                        <label>Tab Name </label>
+                                                    </div>
+                                                    <div class="col-sm-9 col-md-9">
+                                                        <input type="text" ng-model="tab.tabName" class="form-control "/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="col-sm-12">
+                                            <button type="button" class="btn btn-primary btn-xs" ng-click="addTab(tab)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>  
+                                            <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </ul>
                 </div>
-
-
-
                 <div class="tab-content">
                     <div class="row" ngsf-fullscreen="fullscreenCtrl">
                         <ui-view></ui-view>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </section>
-
-    <!--    <section class="content"> 
-            <div class="row">
-                <div class="col-md-12">                
-                    <div class="row" ngsf-fullscreen="fullscreenCtrl">
-                        <ui-view></ui-view>
-                    </div>
-                </div>
-            </div>
-        </section>-->
 </div>
