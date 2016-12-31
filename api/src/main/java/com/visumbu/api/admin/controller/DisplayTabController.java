@@ -492,7 +492,7 @@ public class DisplayTabController {
             performanceBean.setCost(row.getCost());
             performanceBean.setAverageCpc(row.getAvgCPC());
             performanceBean.setConversions(row.getConversions());
-            performanceBean.setCpa("0.0");
+            performanceBean.setCpa(row.getCostConv());
             performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());
             performanceBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
             performanceBean.setSearchImpressionsShareLostByRank(row.getSearchLostISRank());
