@@ -49,6 +49,7 @@ import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -113,7 +114,7 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("newUsers", "string", "New Users", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
-        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("BounceRate", "number", "Bounce Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -122,21 +123,35 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("channelGrouping", "string", "Channel Grouping"));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
-        String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
-                + "ga:bounceRate,BounceRate;ga:percentNewSessions,percentNewSessions;"
-                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
-                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+        String metricsList = "ga:visits,Visits;ga:sessions,sessions;"
+                + "ga:bounceRate,BounceRate;ga:percentNewSessions,newSessions;"
+                + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
+                + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
         String dimensions = "ga:channelGrouping";
         String filter = "ga:channelGrouping==Organic Search";
 
         GetReportsResponse gaData = gaService.getGenericData("123125706", startDate, endDate, null, null, metricsList, dimensions, filter);
         List<Map<String, String>> gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
 
+        for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
+            Map<String, String> map = iterator.next();
+            map.put("channelGrouping", map.get("ga:channelGrouping"));
+            Integer engagements = 0;
+            engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
+                    + ApiUtils.toInteger(map.get("inventoryPageViews"))
+                    + ApiUtils.toInteger(map.get("leadSubmission"))
+                    + ApiUtils.toInteger(map.get("specialsPageView"))
+                    + ApiUtils.toInteger(map.get("timeOnSiteGt2Mins"))
+                    + ApiUtils.toInteger(map.get("vdpViews")));
+            map.put("engagements", engagements + "");
+
+        }
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
@@ -156,7 +171,7 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("newUsers", "string", "New Users", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL2));
-        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -165,21 +180,34 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("yearWeek", "string", "Year Of Week"));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
-                + "ga:bounceRate,BounceRate;"
-                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
-                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+                + "ga:bounceRate,bounceRate;"
+                + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
+                + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
         String dimensions = "ga:yearWeek";
         String filter = "ga:channelGrouping==Organic Search";
 
         GetReportsResponse gaData = gaService.getGenericData("123125706", startDate, endDate, null, null, metricsList, dimensions, filter);
         List<Map<String, String>> gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
+        for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
+            Map<String, String> map = iterator.next();
+            map.put("yearWeek", map.get("ga:yearWeek"));
+            Integer engagements = 0;
+            engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
+                    + ApiUtils.toInteger(map.get("inventoryPageViews"))
+                    + ApiUtils.toInteger(map.get("leadSubmission"))
+                    + ApiUtils.toInteger(map.get("specialsPageView"))
+                    + ApiUtils.toInteger(map.get("timeOnSiteGt2Mins"))
+                    + ApiUtils.toInteger(map.get("vdpViews")));
+            map.put("engagements", engagements + "");
 
+        }
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
@@ -208,6 +236,7 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("dayOfWeekName", "string", "Day Of Week"));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
@@ -215,14 +244,26 @@ public class SeoTabController {
         }
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
-                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
-                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+                + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
+                + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
         String dimensions = "ga:dayOfWeekName";
         String filter = "ga:channelGrouping==Organic Search";
 
         GetReportsResponse gaData = gaService.getGenericData("123125706", startDate, endDate, null, null, metricsList, dimensions, filter);
         List<Map<String, String>> gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
+        for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
+            Map<String, String> map = iterator.next();
+            map.put("dayOfWeekName", map.get("ga:dayOfWeekName"));
+            Integer engagements = 0;
+            engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
+                    + ApiUtils.toInteger(map.get("inventoryPageViews"))
+                    + ApiUtils.toInteger(map.get("leadSubmission"))
+                    + ApiUtils.toInteger(map.get("specialsPageView"))
+                    + ApiUtils.toInteger(map.get("timeOnSiteGt2Mins"))
+                    + ApiUtils.toInteger(map.get("vdpViews")));
+            map.put("engagements", engagements + "");
 
+        }
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
@@ -251,6 +292,7 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("pagePath", "string", "Page"));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
@@ -258,15 +300,27 @@ public class SeoTabController {
         }
         String metricsList = "ga:newUsers,newUsers;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
-                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
-                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+                + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
+                + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
         String dimensions = "ga:pagePath";
         String filter = "ga:channelGrouping==Organic Search";
         String orderBy = "ga:sessions";
 
         GetReportsResponse gaData = gaService.getGenericData("123125706", startDate, endDate, null, null, metricsList, dimensions, filter, orderBy, 10);
         List<Map<String, String>> gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
+        for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
+            Map<String, String> map = iterator.next();
+            map.put("pagePath", map.get("ga:pagePath"));
+            Integer engagements = 0;
+            engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
+                    + ApiUtils.toInteger(map.get("inventoryPageViews"))
+                    + ApiUtils.toInteger(map.get("leadSubmission"))
+                    + ApiUtils.toInteger(map.get("specialsPageView"))
+                    + ApiUtils.toInteger(map.get("timeOnSiteGt2Mins"))
+                    + ApiUtils.toInteger(map.get("vdpViews")));
+            map.put("engagements", engagements + "");
 
+        }
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
@@ -295,6 +349,7 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("deviceCategory", "string", "Device"));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
@@ -302,13 +357,26 @@ public class SeoTabController {
         }
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;ga:percentNewSessions,percentNewSessions;"
-                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
-                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+                + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
+                + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
         String dimensions = "ga:deviceCategory";
         String filter = "ga:channelGrouping==Organic Search";
 
         GetReportsResponse gaData = gaService.getGenericData("123125706", startDate, endDate, null, null, metricsList, dimensions, filter);
         List<Map<String, String>> gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
+        for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
+            Map<String, String> map = iterator.next();
+            map.put("deviceCategory", map.get("ga:deviceCategory"));
+            Integer engagements = 0;
+            engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
+                    + ApiUtils.toInteger(map.get("inventoryPageViews"))
+                    + ApiUtils.toInteger(map.get("leadSubmission"))
+                    + ApiUtils.toInteger(map.get("specialsPageView"))
+                    + ApiUtils.toInteger(map.get("timeOnSiteGt2Mins"))
+                    + ApiUtils.toInteger(map.get("vdpViews")));
+            map.put("engagements", engagements + "");
+
+        }
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
@@ -337,6 +405,7 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("city", "String", "City"));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
@@ -344,13 +413,26 @@ public class SeoTabController {
         }
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;ga:percentNewSessions,percentNewSessions;"
-                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
-                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+                + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
+                + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
         String dimensions = "ga:city";
         String filter = "ga:channelGrouping==Organic Search";
 
         GetReportsResponse gaData = gaService.getGenericData("123125706", startDate, endDate, null, null, metricsList, dimensions, filter);
         List<Map<String, String>> gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
+        for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
+            Map<String, String> map = iterator.next();
+            map.put("city", map.get("ga:city"));
+            Integer engagements = 0;
+            engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
+                    + ApiUtils.toInteger(map.get("inventoryPageViews"))
+                    + ApiUtils.toInteger(map.get("leadSubmission"))
+                    + ApiUtils.toInteger(map.get("specialsPageView"))
+                    + ApiUtils.toInteger(map.get("timeOnSiteGt2Mins"))
+                    + ApiUtils.toInteger(map.get("vdpViews")));
+            map.put("engagements", engagements + "");
+
+        }
         returnMap.put("data", gaDataMap);
         return returnMap;
     }

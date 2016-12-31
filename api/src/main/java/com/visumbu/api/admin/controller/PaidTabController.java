@@ -862,11 +862,11 @@ public class PaidTabController {
             }
             sum.setDevice(name);
             sum.setImpressions((ApiUtils.toInteger(p.getImpressions()) + ApiUtils.toInteger(sum.getImpressions())) + "");
-            sum.setClicks((ApiUtils.toInteger(p.getImpressions()) + ApiUtils.toInteger(sum.getClicks())) + "");
+            sum.setClicks((ApiUtils.toInteger(p.getClicks()) + ApiUtils.toInteger(sum.getClicks())) + "");
             sum.setCost((ApiUtils.toDouble(p.getCost()) + ApiUtils.toDouble(sum.getCost())) + "");
 
             sum.setAveragePosition((ApiUtils.toDouble(p.getAveragePosition()) + ApiUtils.toDouble(sum.getAveragePosition())) / 2 + "");
-            sum.setConversions((ApiUtils.toInteger(p.getConversions()) + ApiUtils.toInteger(sum.getConversions())) + "");
+            sum.setConversions((ApiUtils.toDouble(p.getConversions()) + ApiUtils.toDouble(sum.getConversions())) + "");
 
             sum.setSearchImpressionsShare((ApiUtils.toDouble(p.getSearchImpressionsShare()) + ApiUtils.toDouble(sum.getSearchImpressionsShare())) / 2 + "");
 
