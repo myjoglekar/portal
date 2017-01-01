@@ -94,15 +94,15 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         $scope.dealers = response;
     });
 
-//    $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
-//        $scope.tabs = response;
-//        console.log(response)
-//        angular.forEach(response, function (value, key) {
-//            $scope.dashboardName = value.dashboardId.dashboardTitle;
-//        });
-//       // $state.go("index.dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : response[0].id, reload: true});
-////        $stateParams.tabId = $stateParams.tabId ? $stateParams.tabId : response[0].id
-//    });
+    $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
+        $scope.tabs = response;
+        console.log(response)
+        angular.forEach(response, function (value, key) {
+            $scope.dashboardName = value.dashboardId.dashboardTitle;
+        });
+        $state.go("index.dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : response[0].id, reload: true});
+//        $stateParams.tabId = $stateParams.tabId ? $stateParams.tabId : response[0].id
+    });
 
     var dates = $(".pull-right i").text();
     $(function () {

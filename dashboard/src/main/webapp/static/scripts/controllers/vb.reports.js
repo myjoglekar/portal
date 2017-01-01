@@ -2,6 +2,8 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
     $scope.reportWidgets = [];
     $scope.selectDurations = [{duration: "None"}, {duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
 
+    console.log($stateParams.reportId)
+
 //Temp Collection
 //    $scope.reports = [{id: 1, title: 'Display', time: '12/24/2016', user: 'user 1'},
 //        {id: 2, title: 'Paid', time: '12/25/2016', user: 'user 2'},
@@ -29,16 +31,20 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
             description: report.description,
             logo: window.btoa($scope.uploadLogo)
         }
-        
-        $http({method: 'POST',url:'admin/ui/report', data: data}).success(function(response){
-             //$scope.reports = response
+
+        $http({method: 'POST', url: 'admin/ui/report', data: data}).success(function (response) {
+            //$scope.reports = response
         });
         console.log($scope.uploadLogo);
         console.log(report)
-    }
-        $http.get("admin/ui/report").success(function(response){
-             $scope.reports = response
-        });
+    };
+    $http.get("admin/ui/report").success(function (response) {
+        $scope.reports = response;
+        angular.forEach($scope.report, function (value, key) {
+            $scope.logo = window.atob(value.logo);
+            console.log($scope.logo)
+        })
+    });
 
 
 

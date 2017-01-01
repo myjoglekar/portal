@@ -12,6 +12,7 @@
                     <th>Report Name</th>
                     <th>Created Time</th>
                     <th>User</th>
+                    <th>Logo</th>
                     <th></th>
                 </tr>
             </thead>
@@ -21,6 +22,7 @@
                     <td>{{report.reportTitle}}</td>
                     <td>{{report.time}}</td>
                     <td>{{report.user}}</td>
+                    <td><img class="img-responsive img-thumbnail" ng-src="{{logo}}"/></td>
                     <td><button class="btn btn-info btn-xs"><i class="fa fa-download"></i></button></td>
                 </tr>
             </tbody>

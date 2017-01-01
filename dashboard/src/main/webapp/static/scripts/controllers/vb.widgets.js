@@ -20,7 +20,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         widget.previewTitle = widget.widgetTitle;
         $scope.editChartType = widget.chartType;
         $scope.selectProductName(widget.productName, widget);
-//         widget.chartType = "";
+        console.log(widget.previewType)
     };
 
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
@@ -60,7 +60,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.selectProductName();
 
     $scope.changeUrl = function (url, widget) {
-//       $scope.selectedUrl = $scope.productFields[url]
         var data = JSON.parse(url);
         console.log(data)
         widget.columns = [];
@@ -79,15 +78,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             });
         });
     };
-
-//    $scope.deleteUnSelectColumn = function (index, widget, collectionField) {
-//        $scope.collectionFields.splice(index, 1);
-//    }
-//
-//    $scope.addSelectColumn = function () {
-//        $scope.collectionFields.unshift({isDelete: true})
-//    };
-
+    
     function getWidgetItem() {      //Default Loading Items
         if (!$stateParams.tabId) {
             $stateParams.tabId = 1;
@@ -105,21 +96,21 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.newWidgets = response;
     });
 
-    $scope.openPopup = function (newWidgetId) {
-        console.log(newWidgetId)
+    $scope.openPopup = function (response) {
+        console.log(response.id)
         $timeout(function () {
-            $('#preview' + newWidgetId).modal('show');
+            $scope.editWidget(response)
+            $('#preview' + response.id).modal('show');
         }, 100);
-        console.log(newWidgetId)
     }
     $scope.addWidget = function (newWidget) {       //Add Widget
         var data = {
-            width: newWidget, 'minHeight': 25, columns: []
+            width: newWidget, 'minHeight': 25, columns: [], chartType: ""
         };
         $http({method: 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
             $scope.widgets.push({id: response.id, width: newWidget, 'minHeight': 25, columns: []});
             $scope.newWidgetId = response.id;
-            $scope.openPopup($scope.newWidgetId)
+            $scope.openPopup(response)
         });
 
         console.log($scope.newWidgetId)
@@ -151,21 +142,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             sortOrder: column.sortOrder,
             displayFormat: column.displayFormat
         };
-//        $http({method: column.id ? 'PUT' : 'POST', url: 'admin/ui/widgetColumn/' + widget.id, data: data}).success(function (response) {
-//            column.id = response.id;
-//        });
     };
 
     $scope.deleteColumn = function (widgetColumns, index) {        //Delete Columns - Popup
         widgetColumns.splice(index, 1);
-        // widget = [];
-//       widget.splice(index, 1);
-//        $scope.widget.splice(index, 1);
-//        console.log(widget.id)
-
-////        console.log(widget.columns.id)
-//        $http({method: 'DELETE', url: 'admin/ui/widgetColumn/' + widget.id}).success(function () {
-//        });
     };
 
     $http.get('static/datas/imageUrl.json').success(function (response) {       //Popup- Select Chart-Type Json
@@ -196,22 +176,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         });
     }
 
-    $scope.dataSetName = [];
-//    $scope.selectedDataSet = function (dataSet) {
-//        angular.forEach(dataSet, function (value, key) {
-//            // console.log(value.name)
-//            $scope.dataSetName.push(value.name);
-//            dataSet = '';
-//        });
-//    };
-//    $scope.selectedDimensions = function (dimension, dataSet) {
-//        angular.forEach(dimension, function (value, key) {
-//            $scope.dimensionName = value.name;
-//        });
-//        $http.get('admin/datasources/dataDimensions/' + $scope.selectItem + '?' + 'dimensions=' + $scope.dimensionName + '&dataSet=' + $scope.dataSetName + '&sort=ga:sessions').success(function () {
-//
-//        });
-//    };
     $scope.objectHeader = [];
     $scope.previewChart = function (chartType, widget, index) {                 //Selected Chart type - Bind chart-type to showPreview()
         $scope.selectedRow = chartType.type;
@@ -560,7 +524,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
 
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
-                            return a[value.fieldName];
+                            return a[value.fieldName] || "0";
                         });
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
@@ -713,7 +677,7 @@ app.directive('barChartDirective', function ($http, $stateParams) {
 
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
-                            return a[value.fieldName];
+                            return a[value.fieldName] || "0";
                         });
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
@@ -858,7 +822,7 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                     columns.push(xTicks);
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
-                            return a[value.fieldName];
+                            return a[value.fieldName] || "0";
                         });
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
@@ -1019,7 +983,7 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                     columns.push(xTicks);
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
-                            return a[value.fieldName];
+                            return a[value.fieldName] || "0";
                         });
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);

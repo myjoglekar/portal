@@ -171,8 +171,9 @@ public class UiService {
         return (Report) uiDao.delete(reportId);
     }
 
-    public List getReport(Integer reportId) {
-        return uiDao.readReport(reportId);
+    public List getReport() {
+        List<Report> report = uiDao.read(Report.class);
+        return report;
     }
 
     public ReportWidget createReportWidget(Integer reportId, ReportWidget reportWidget) {
