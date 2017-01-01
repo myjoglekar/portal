@@ -100,8 +100,8 @@
                                         <span>Want to delete ? </span>
                                     </div>
                                     <div class="modal-footer">
-                                        <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal">Ok</button>
-                                        <button class="btn btn-danger btn-xs" data-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
+                                        <button class="btn btn-danger btn-xs" data-dismiss="modal"> No</button>
                                     </div>
                                 </div>
                             </div>
@@ -208,8 +208,8 @@
                                         <td><button class="btn btn-info" ng-click="addColumns(widget)"><i class="fa fa-plus"></i></button></td>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr ng-repeat="currentColumn in widget.columns">
+                                <tbody ui:sortable ng:model="widget.columns">
+                                    <tr ng-repeat="currentColumn in widget.columns" style="cursor: move;">
                                         <td>
                                             <div ng-hide="isEdit"> {{currentColumn.fieldName}}</div>
                                             <div ng-show="isEdit">

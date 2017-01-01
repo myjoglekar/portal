@@ -106,9 +106,9 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
 
     $scope.deleteTab = function (index, tab) {
         $http({method: 'DELETE', url: 'admin/ui/dbTab/' + tab.id}).success(function (response) {
+            $scope.tabs.splice(index, 1);
         })
         console.log(tab)
-        $scope.tabs.splice(index, 1);
     };
 
     $scope.reports = [];

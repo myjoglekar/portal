@@ -1,7 +1,4 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
-    console.log($stateParams.startDate)
-    console.log($stateParams.endDate)
-
     $scope.widgets = [];
     $scope.selectAggregations = [{name: 'None', value: ""}, {name: 'Sum', value: "sum"}, {name: 'Avg', value: "avg"}, {name: 'Count', value: "count"}, {name: 'Min', value: "min"}, {name: 'Max', value: "max"}];   //Aggregation Type-Popup
     $scope.selectGroupPriorities = [{num: 'None', value: ""}, {num: 1, value: 1}, {num: 2, value: 2}]
@@ -20,7 +17,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         widget.previewTitle = widget.widgetTitle;
         $scope.editChartType = widget.chartType;
         $scope.selectProductName(widget.productName, widget);
-        console.log(widget.previewType)
+        console.log($scope.editChartType)
     };
 
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
@@ -47,7 +44,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         if (productName === null) {
             return;
         }
-        console.log(productName);
         $http.get("admin/user/datasets").success(function (response) {                //User Based Products and Urls
             $scope.userProducts = [];
             angular.forEach(response, function (value, key) {
@@ -61,7 +57,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
     $scope.changeUrl = function (url, widget) {
         var data = JSON.parse(url);
-        console.log(data)
         widget.columns = [];
         $http.get(data.url + "?fieldsOnly=true").success(function (response) {
             $scope.collectionFields = [];
@@ -78,7 +73,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             });
         });
     };
-    
+
     function getWidgetItem() {      //Default Loading Items
         if (!$stateParams.tabId) {
             $stateParams.tabId = 1;
@@ -97,12 +92,11 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     });
 
     $scope.openPopup = function (response) {
-        console.log(response.id)
         $timeout(function () {
-            $scope.editWidget(response)
+            $scope.editWidget(response);
             $('#preview' + response.id).modal('show');
         }, 100);
-    }
+    };
     $scope.addWidget = function (newWidget) {       //Add Widget
         var data = {
             width: newWidget, 'minHeight': 25, columns: [], chartType: ""
@@ -110,10 +104,8 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $http({method: 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
             $scope.widgets.push({id: response.id, width: newWidget, 'minHeight': 25, columns: []});
             $scope.newWidgetId = response.id;
-            $scope.openPopup(response)
+            $scope.openPopup(response);
         });
-
-        console.log($scope.newWidgetId)
     };
 
 
@@ -125,12 +117,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.addColumns = function (widget) {                                     //Add Columns - Popup
-        //$scope.isEdit = true;
         widget.columns.unshift({});
     };
 
     $scope.saveColumn = function (widget, column) {                              //Delete Columns-Popup
-        console.log($scope.newWidgetId);
         var data = {
             id: column.id,
             agregationFunction: column.agregationFunction,
@@ -180,25 +170,27 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.previewChart = function (chartType, widget, index) {                 //Selected Chart type - Bind chart-type to showPreview()
         $scope.selectedRow = chartType.type;
         widget.widgetChartType = chartType.type;
+        $scope.editChartType = chartType.type;
         $scope.setPreviewChartType = chartType.type;
         $scope.setPreviewColumn = widget;
     };
 
     $scope.showPreview = function (widget) {                                    //Show Preview Chart - Popup
         var data = JSON.parse(widget.productDisplayName);
-        $scope.previewChartType = $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType;
+        $scope.previewChartType = $scope.editChartType ? $scope.$scope.editChartType : widget.chartType;
         $scope.previewColumn = $scope.setPreviewColumn ? $scope.setPreviewColumn : widget;
-        //$scope.showPreviewChart = !$scope.showPreviewChart;                     //Hide & Show Preview Chart
         $scope.previewChartUrl = data.url;
+        console.log($scope.editChartType)
     };
 
     $scope.save = function (widget) {
+        console.log($scope.editChartType)
         var data = JSON.parse(widget.productDisplayName);
         widget.directUrl = data.url ? data.url : widget.directUrl;
-        widget.widgetColumns = widget.columns;
+
         var data = {
             id: widget.id,
-            chartType: $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType,
+            chartType: $scope.editChartType ? $scope.editChartType : widget.chartType,
             directUrl: data.url,
             widgetTitle: widget.previewTitle,
             widgetColumns: widget.columns,
@@ -206,14 +198,16 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             productDisplayName: widget.productDisplayName
         };
         widget.chartType = "";
+        console.log($scope.editChartType)
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
             widget.chartType = data.chartType;
         });
-        // $scope.widgets = $scope.responseData;
-        widget.chartType = $scope.setPreviewChartType ? $scope.setPreviewChartType : widget.chartType;
+        console.log(widget.chartType)
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
-        console.log(widget.directUrl, data.url);
-        console.log(widget.widgetTitle);
+        //widget.chartType = $scope.editChartType ? $scope.editChartType : widget.chartType;
+        widget.widgetColumns = widget.columns;
+        console.log($scope.editChartType)
+
     };
 
 
@@ -223,29 +217,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.widgets[index] = widget;
         $scope.widgets[otherIndex] = otherObj;
     };
-    //widget refresh
-//    $scope.setLineFn = function (lineFn) {
-//        $scope.directiveLineFn = lineFn;
-//    };
-//    $scope.setAreaFn = function (areaFn) {
-//        $scope.directiveAreaFn = areaFn;
-//    };
-//    $scope.setBarFn = function (barFn) {
-//        $scope.directiveBarFn = barFn;
-//    };
-//    $scope.setPieFn = function (pieFn) {
-//        $scope.directivePieFn = pieFn;
-//    };
-//    $scope.setDonutFn = function (donutFn) {
-//        $scope.directiveDonutFn = donutFn;
-//    };
-//    $scope.setGroupedBarFn = function (groupedBarFn) {
-//        $scope.directiveGroupedBarFn = groupedBarFn;
-//    };
-//    $scope.setTableFn = function (tableFn) {
-//        $scope.directiveTableFn = tableFn;
-//    };
-
 });
 
 app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams) {
@@ -290,6 +261,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     field: value.fieldName,
                     displayName: value.displayName,
 //                        cellClass: 'space-numbers',
+                    //width: "100%",
                     cellTooltip: true,
                     headerTooltip: true
                 }
@@ -548,7 +520,12 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                                     }
                                 }
                             },
-                            y2: {show: true}
+                            y2: {
+                                show: true,
+                                tick: {
+                                    format: d3.format(".2f")
+                                }
+                            }
 //                            y: {
 //                                label: 'Impressions'
 //                            },
@@ -830,14 +807,14 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                     console.log(columns)
                     console.log(ySeriesData)
                     console.log(columns)
-                    console.log(labels)
+                    console.log(yAxis)
 
                     var data = {};
                     var legends = [];
                     var yAxisField = yAxis[0];
                     chartData.forEach(function (e) {
                         legends.push(e[xAxis.fieldName]);
-                        data[e[xAxis.fieldName]] = e[yAxisField];
+                        data[e[xAxis.fieldName]] = data[e[xAxis.fieldName]]?data[e[xAxis.fieldName]]:0 + e[yAxisField.fieldName]?e[yAxisField.fieldName]:0;
                     })
 
                     console.log("...........................");
@@ -846,19 +823,19 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
 
                     var chart = c3.generate({
                         bindto: element[0],
-                        data: {
-                            x: xAxis.fieldName,
-                            columns: columns,
-                            labels: labels,
-                            type: 'pie'
-                        },
 //                        data: {
-//                            json: [data],
-//                            keys: {
-//                                value: xData,
-//                            },
+//                            x: xAxis.fieldName,
+//                            columns: data,
+//                            labels: labels,
 //                            type: 'pie'
 //                        },
+                        data: {
+                            json: [data],
+                            keys: {
+                                value: xData,
+                            },
+                            type: 'pie'
+                        },
                         tooltip: {show: false},
                         axis: {
                             x: {
