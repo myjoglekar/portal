@@ -50,6 +50,7 @@ import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -125,6 +126,53 @@ public class SocialImpactTabController {
         returnMap.put("data", accountPerformance);
         return returnMap;
     }
+    
+    @RequestMapping(value = "postPerformanceByType", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getPostPerformanceByType(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("message", "string", "Posts"));
+        columnDefs.add(new ColumnDef("type", "string", "Type"));
+        columnDefs.add(new ColumnDef("shares", "number", "Shares", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("comments", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("likes", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("reactions", "number", "Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        List<Map<String, String>> accountPerformance = facebookService.getPostPerformance(startDate, endDate);
+        returnMap.put("data", sumByType(accountPerformance));
+        return returnMap;
+    }
+    
+     public static List<Map<String, String>> sumByType(List<Map<String, String>> list) {
+
+        Map<String, Map<String, String>> map = new HashMap<>();
+        for (Map<String, String> p : list) {
+            String name = p.get("type");
+            Map<String, String> sum = map.get(name);
+            if (sum == null) {
+                sum = new HashMap<String, String>();
+                map.put(name, sum);
+            }
+            sum.put("type", name);
+            sum.put("shares",(ApiUtils.toInteger(p.get("shares")) + ApiUtils.toInteger(sum.get("shares"))) + "");
+            sum.put("comments", (ApiUtils.toInteger(p.get("comments")) + ApiUtils.toInteger(sum.get("comments"))) + "");
+            sum.put("likes",(ApiUtils.toDouble(p.get("likes")) + ApiUtils.toDouble(sum.get("likes"))) + "");
+            sum.put("reactions",(ApiUtils.toDouble(p.get("reactions")) + ApiUtils.toDouble(sum.get("reactions"))) + "");
+            sum.put("engagements",(ApiUtils.toDouble(p.get("engagements")) + ApiUtils.toDouble(sum.get("engagements"))) + "");
+
+        }
+        return new ArrayList<Map<String, String>>(map.values());
+    }
+    
     @RequestMapping(value = "last12WeeksPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getLast12WeeksPerformance(HttpServletRequest request, HttpServletResponse response) {
