@@ -151,7 +151,7 @@ public class SeoTabController {
         returnMap.put("data", gaDataMap);
         return returnMap;
     }
-
+    
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getGeoPerformance12Weeks(HttpServletRequest request, HttpServletResponse response) {

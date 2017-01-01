@@ -272,7 +272,7 @@ public class FacebookService {
         return null;
     }
 
-    public List getPostPerformance(Date startDate, Date endDate) {
+    public List<Map<String, String>> getPostPerformance(Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
@@ -287,7 +287,7 @@ public class FacebookService {
             Object jsonObj = parser.parse(fbData);
             JSONObject array = (JSONObject) jsonObj;
             JSONArray dataArr = (JSONArray) array.get("data");
-            List dataValueList = new ArrayList();
+            List<Map<String, String>> dataValueList = new ArrayList();
             for (int i = 0; i < dataArr.size(); i++) {
                 JSONObject data = (JSONObject) dataArr.get(i);
                 Map<String, String> dataList = getDataValue(data);
