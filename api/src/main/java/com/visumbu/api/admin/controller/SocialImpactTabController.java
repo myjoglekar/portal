@@ -103,7 +103,7 @@ public class SocialImpactTabController {
     @RequestMapping(value = "postPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getPostPerformance(HttpServletRequest request, HttpServletResponse response) {
-        Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
 
         String fieldsOnly = request.getParameter("fieldsOnly");
@@ -130,7 +130,7 @@ public class SocialImpactTabController {
     @RequestMapping(value = "postPerformanceByType", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getPostPerformanceByType(HttpServletRequest request, HttpServletResponse response) {
-        Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
 
         String fieldsOnly = request.getParameter("fieldsOnly");
