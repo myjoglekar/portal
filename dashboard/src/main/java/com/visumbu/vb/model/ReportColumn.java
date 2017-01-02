@@ -109,6 +109,9 @@ public class ReportColumn implements Serializable {
     @Column(name = "width")
     private Integer width;
     @Size(max = 25)
+    @Column(name = "wrap_text")
+    private String wrapText;
+    @Size(max = 25)
     @Column(name = "alignment")
     private String alignment;
     @JoinColumn(name = "reportId", referencedColumnName = "id")
@@ -272,6 +275,14 @@ public class ReportColumn implements Serializable {
 
     public void setWidth(Integer width) {
         this.width = width;
+    }
+
+    public String getWrapText() {
+        return wrapText;
+    }
+
+    public void setWrapText(String wrapText) {
+        this.wrapText = wrapText;
     }
 
     public String getAlignment() {

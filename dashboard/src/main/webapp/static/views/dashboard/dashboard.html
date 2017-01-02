@@ -35,11 +35,13 @@
             <div class="col-md-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li ng-repeat="tab in tabs" ui-sref-active="active">
-                            <a class="active" ui-sref="index.dashboard.widget({productId: productId, tabId: tab.id?tab.id:0})">
-                                {{tab.tabName}}
-                            </a>
-                            <button class="close closeTab" data-toggle="modal" data-target="#deleteTabModal{{tab.id}}" type="button">×</button>
+                        <li ng-repeat="tab in tabs" ui-sref-active="active" ng-drop="true" ng-drop-success="onDropTabComplete($index, $data,$event)">
+                            <!--<div ng-drag="true" ng-drag-data="tab">-->
+                                <a class="active" ng-drag="true" ng-drag-data="tab" ui-sref="index.dashboard.widget({productId: productId, tabId: tab.id?tab.id:0})">
+                                    {{tab.tabName}}
+                                </a>
+                                <button class="close closeTab" data-toggle="modal" data-target="#deleteTabModal{{tab.id}}" type="button">×</button>
+                            <!--</div>-->
                             <div class="modal fade bd-example-modal-md" id="deleteTabModal{{tab.id}}">
                                 <div class="modal-dialog modal-md">
                                     <div class="modal-content">

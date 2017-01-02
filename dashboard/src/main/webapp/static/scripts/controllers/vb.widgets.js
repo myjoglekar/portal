@@ -1,8 +1,7 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
     console.log($stateParams.startDate)
     console.log($stateParams.endDate)
-    
-    $scope.widgets = [];
+
     $scope.selectAggregations = [{name: 'None', value: ""}, {name: 'Sum', value: "sum"}, {name: 'Avg', value: "avg"}, {name: 'Count', value: "count"}, {name: 'Min', value: "min"}, {name: 'Max', value: "max"}];   //Aggregation Type-Popup
     $scope.selectGroupPriorities = [{num: 'None', value: ""}, {num: 1, value: 1}, {num: 2, value: 2}]
     $scope.selectDateDurations = [{duration: "None"}, {duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
@@ -10,7 +9,23 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.selectYAxis = [{label: 'None', value: ""}, {label: "Y-1", value: 1}, {label: "Y-2", value: 2}];
     $scope.alignments = [{name: '', displayName: 'None'}, {name: "left", displayName: "Left"}, {name: "right", displayName: "Right"}, {name: "center", displayName: "Center"}];
     $scope.sorting = [{name: 'None', value: ''}, {name: 'asc', value: 1}, {name: 'dec', value: 0}];
+    $scope.tableWrapText = [{name: 'None', value: ''}, {name: 'Yes', value: "yes"}, {name: 'No', value: "no"}];
     $scope.isEditPreviewColumn = false;
+
+    $scope.moveWidget = function (drag) {
+        console.log(drag);
+    }
+
+    $scope.widgets = [];
+    function getWidgetItem() {      //Default Loading Items
+        if (!$stateParams.tabId) {
+            $stateParams.tabId = 1;
+        }
+        $http.get("admin/ui/dbWidget/" + $stateParams.tabId).success(function (response) {
+            $scope.widgets = response;
+        });
+    }
+    getWidgetItem();
 
     $scope.editWidget = function (widget) {     //Edit widget
         $scope.tableDef(widget);
@@ -76,16 +91,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             });
         });
     };
-
-    function getWidgetItem() {      //Default Loading Items
-        if (!$stateParams.tabId) {
-            $stateParams.tabId = 1;
-        }
-        $http.get("admin/ui/dbWidget/" + $stateParams.tabId).success(function (response) {
-            $scope.widgets = response;
-        });
-    }
-    getWidgetItem();
 
     $scope.pageRefresh = function () {          //Page Refresh
         getWidgetItem();
@@ -219,6 +224,12 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         var otherIndex = $scope.widgets.indexOf(widget);
         $scope.widgets[index] = widget;
         $scope.widgets[otherIndex] = otherObj;
+        console.log($scope.widgets);
+        var widgetOrder = $scope.widgets.map(function (value, key) {
+            return value.id;
+        }).join(',');
+        var data = {widgetOrder: widgetOrder};
+        $http({method: 'GET', url: 'admin/ui/dbWidgetUpdateOrder/' + $stateParams.tabId + "?widgetOrder=" + widgetOrder});
     };
 });
 
@@ -268,6 +279,9 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     cellTooltip: true,
                     headerTooltip: true
                 }
+                if (value.width) {
+                    columnDef.width = value.width + "%";
+                }
                 var cellFormat = "";
                 if (value.displayFormat) {
                     cellFormat = value.displayFormat;
@@ -279,6 +293,9 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     cellAlignment = 'text-right';
                 } else {
                     cellAlignment = 'text-center';
+                }
+                if (value.wrapText) {
+                    cellAlignment += " wrap";
                 }
                 columnDef.cellTemplate = '<div  class="ui-grid-cell-contents ' + cellAlignment + '"><span>{{COL_FIELD | gridDisplayFormat : "' + cellFormat + '"}}</span></div>';
                 columnDef.footerCellTemplate = '<div class="' + cellAlignment + '" >{{col.getAggregationValue() | gridDisplayFormat:"' + cellFormat + '"}}</div>';

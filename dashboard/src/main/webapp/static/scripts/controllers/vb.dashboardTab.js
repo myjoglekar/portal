@@ -1,4 +1,5 @@
 app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies) {
+    
     $scope.selectTabID = $state;
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
@@ -74,7 +75,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     };
     $http.get('admin/ui/product').success(function (response) {
         $scope.products = response;
-        // $scope.searchProduct.unshift({"id": 0, "productName": "All Product"});
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
         $scope.selectProductName = $scope.name.productName;
         console.log($scope.selectProductName);
@@ -139,6 +139,20 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
     });
+    
+    $scope.onDropTabComplete = function (index, tab, evt) {
+        var otherObj = $scope.tabs[index];
+        var otherIndex = $scope.tabs.indexOf(tab);
+        $scope.tabs[index] = tab;
+        $scope.tabs[otherIndex] = otherObj;
+        console.log($scope.tabs);
+        var tabOrder = $scope.tabs.map(function (value, key) {
+            return value.id;
+        }).join(',');
+        console.log(tabOrder);
+        var data = {tabOrder: tabOrder};
+        //$http({method: 'GET', url: 'admin/ui/dbWidgetUpdateOrder/' + $stateParams.tabId + "?widgetOrder=" + widgetOrder});
+    };
 
 
     $(function () {
