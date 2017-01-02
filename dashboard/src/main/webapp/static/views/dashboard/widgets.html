@@ -156,7 +156,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Product</label>
-                                        <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |                  capitalize) for userProduct in userProducts">
+                                        <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |                   capitalize) for userProduct in userProducts">
                                         </select>
                                     </div>
                                 </div>
@@ -205,6 +205,7 @@
                                         <td>Sort</td>
                                         <td>Format</td>
                                         <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Alignment</td>
+                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Width</td>
                                         <td><button class="btn btn-info" ng-click="addColumns(widget)"><i class="fa fa-plus"></i></button></td>
                                     </tr>
                                 </thead>
@@ -283,6 +284,12 @@
                                                 </select>
                                             </div>
                                         </td>
+                                        <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
+                                            <div ng-hide="isEdit"> {{currentColumn.width}}</div>
+                                            <div ng-show="isEdit">
+                                                <input type="text" class="form-control" ng-model="currentColumn.width">
+                                            </div>
+                                        </td>
                                         <td>
                                             <div ng-show="isEdit">
                                                 <button class="btn btn-default btn-xs" ng-click="isEdit = false"><i class="fa fa-save"></i></button>
@@ -295,7 +302,6 @@
                                                 <button class="btn btn-default btn-xs" ng-click="deleteColumn(widget.columns, $index)"><i class="fa fa-trash"></i></button>
                                             </div>
                                         </td>
-
                                     </tr>
                                 </tbody>
                             </table>                            

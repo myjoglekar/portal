@@ -20,14 +20,21 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         return yesterday;
     }
 
-    $scope.startDate = $stateParams.startDate ? $scope.toDate(decodeURIComponent($stateParams.startDate)) : $scope.getDay();
-    $scope.endDate = $stateParams.endDate ? $scope.toDate(decodeURIComponent($stateParams.endDate)) : new Date();
+    $scope.firstDate = $stateParams.startDate ? $scope.toDate(decodeURIComponent($stateParams.startDate)) : $scope.getDay().toLocaleDateString("en-US");
+    $scope.lastDate = $stateParams.endDate ? $scope.toDate(decodeURIComponent($stateParams.endDate)) : new Date().toLocaleDateString("en-US");
+    console.log("Day : " + $scope.getDay().toLocaleDateString("en-US"))
+    if (!$stateParams.startDate) {
+        $stateParams.startDate = $scope.firstDate;
+    }
+    if (!$stateParams.endDate) {
+        $stateParams.endDate = $scope.lastDate;
+    }
 
     $scope.loadNewUrl = function () {
         try {
-            $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $scope.startDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
+            $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $scope.firstDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
 
-            $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $scope.endDate;
+            $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $scope.lastDate;
         } catch (e) {
         }
         console.log($stateParams);
@@ -59,7 +66,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         }
         return "widget";
     };
-
+    //$scope.loadNewUrl();
     $scope.selectProductName = "Select Product";
     $scope.changeProduct = function (product) {
         $scope.selectProductName = product.productName;
@@ -95,19 +102,26 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     var counter = 1;
     $scope.tabs = [];
     $scope.addTab = function (tab) {
-        $scope.tabs.push({tabName: tab.tabName, tabClose: true});
+        //$scope.tabs.push({tabName: tab.tabName, tabClose: true});
         var data = {
             tabName: tab.tabName
         };
         $http({method: 'POST', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data}).success(function (response) {
-            tab.tabClose = false;
-        })
+            $scope.tabs.push({id: response.id, tabName: tab.tabName, tabClose: true});
+        });
     };
 
     $scope.deleteTab = function (index, tab) {
         $http({method: 'DELETE', url: 'admin/ui/dbTab/' + tab.id}).success(function (response) {
-            $scope.tabs.splice(index, 1);
-        })
+        });
+//        $("#deleteTabModal" + tab.id).on('hidden.bs.modal', function () {
+//            console.log("Tab : " + $scope.tabs)
+//            $(this).data('bs.modal', null);
+//        });
+        // $("#deleteTabModal" + tab.id).remove();
+        //$('.modal-backdrop').remove();
+        //$('body').removeClass("modal-open");
+        $scope.tabs.splice(index, 1);
         console.log(tab)
     };
 
@@ -150,7 +164,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
                     endDate: moment()
                 },
                 function (start, end) {
-                    $('#daterange-btn span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+                    $('#daterange-btn span').html(start.format('MM-DD-YYYY') + ' - ' + end.format('MM-DD-YYYY'));
                 }
         );
         //Date picker

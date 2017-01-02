@@ -136,6 +136,7 @@ public class UiService {
             widgetColumn.setAgregationFunction(widgetColumnBean.getAgregationFunction());
             widgetColumn.setxAxis(widgetColumnBean.getxAxis());
             widgetColumn.setyAxis(widgetColumnBean.getyAxis());
+            widgetColumn.setWidth(widgetColumnBean.getWidth());
             widgetColumn.setAlignment(widgetColumnBean.getAlignment());
             widgetColumn.setWidgetId(savedTabWidget);
             uiDao.saveOrUpdate(widgetColumn);
@@ -219,8 +220,9 @@ public class UiService {
             reportColumn.setSortOrder(reportColumnBean.getSortOrder());
             reportColumn.setGroupPriority(reportColumnBean.getGroupPriority());
             reportColumn.setAgregationFunction(reportColumnBean.getAgregationFunction());
-            reportColumn.setXAxis(reportColumnBean.getxAxis());
-            reportColumn.setYAxis(reportColumnBean.getyAxis());
+            reportColumn.setxAxis(reportColumnBean.getxAxis());
+            reportColumn.setyAxis(reportColumnBean.getyAxis());
+            reportColumn.setWidth(reportColumnBean.getWidth());
             reportColumn.setAlignment(reportColumnBean.getAlignment());
             reportColumn.setReportId(savedReportWidget);
             uiDao.saveOrUpdate(reportColumn);

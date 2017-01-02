@@ -105,6 +105,8 @@ public class WidgetColumn implements Serializable {
     @Size(max = 32)
     @Column(name = "display_format")
     private String displayFormat;
+    @Column(name = "width")
+    private Integer width;
     @Size(max = 32)
     @Column(name = "alignment")
     private String alignment;
@@ -260,6 +262,14 @@ public class WidgetColumn implements Serializable {
         this.displayFormat = displayFormat;
     }
 
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+    
     public String getAlignment() {
         return alignment;
     }

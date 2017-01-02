@@ -1,8 +1,24 @@
-app.controller("MenuController", function ($scope, $http, $stateParams, $filter) {
+app.controller("MenuController", function ($scope, $http, $stateParams, $filter, $state) {
     console.log($stateParams.tabId);
-    $scope.startDate = $stateParams.startDate;
-    $scope.endDate = $stateParams.endDate;
+
     $scope.productId = $stateParams.productId;
+
+    $scope.setParamsDate = function () {
+       // alert($stateParams.startDate + " - " + $stateParams.endDate)
+        console.log($stateParams.startDate + " - " + $stateParams.endDate)
+        $scope.startDate = $stateParams.startDate;
+        $scope.endDate = $stateParams.endDate;
+    }
+
+    //try {
+    //alert("Test : " + $stateParams.startDate + " - " + $stateParams.endDate);
+    //$scope.startDate = $stateParams.startDate //? $stateParams.startDate : moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');//$scope.startDate.setDate($scope.startDate.getDate() - 1);
+//        $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $stateParams.startDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
+    //$scope.endDate = $stateParams.endDate //? $stateParams.endDate : moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
+//        $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $stateParams.endDate;
+    // } catch (e) {
+    //}
+
     //$scope.tabId = $stateParams.tabId;
     $scope.reports = [];
     $scope.addParent = function () {

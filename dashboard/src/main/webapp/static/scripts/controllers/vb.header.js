@@ -55,27 +55,9 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         return "widget";
     };
 
-
-    //$scope.startDate = new Date();
-    //$scope.startDate.setDate($scope.startDate.getDate() - 1);
-    //$scope.endDate = new Date();
-
-//    $scope.defaultDate = new Date();
-//    $scope.defaultDate.setDate($scope.defaultDate.getDate() - 1);
-
-
-
     console.log($stateParams.productId);
     console.log($stateParams.tabId);
     console.log($stateParams.dashboardTypeId);
-
-//    $scope.selectDashboardType = "Select Type";
-//    $scope.dashboardTypes = [{dashboardType: 1, name: "Dashboard"}, {dashboardType: 2, name: "Reports"}];
-//    $scope.selectDashboardName = $filter('filter')($scope.dashboardTypes, {dashboardType: $stateParams.dashboardTypeId})[0];
-//    $scope.selectDashboardType = $scope.selectDashboardName.name;
-//    $scope.selectDashboard = function (name) {
-//        $scope.selectDashboardType = name;
-//    };
 
     $scope.selectProductName = "Select Product";
     $scope.changeProduct = function (product) {

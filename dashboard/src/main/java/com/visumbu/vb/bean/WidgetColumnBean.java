@@ -29,6 +29,7 @@ public class WidgetColumnBean {
     private String fieldGenerationFields;
     private String remarks;
     private String displayFormat;
+    private Integer width;
     private String alignment;
     
     public Integer getId() {
@@ -182,6 +183,14 @@ public class WidgetColumnBean {
     public void setDisplayFormat(String displayFormat) {
         this.displayFormat = displayFormat;
     }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
         
     public String getAlignment() {
         return alignment;
@@ -193,7 +202,7 @@ public class WidgetColumnBean {
 
     @Override
     public String toString() {
-        return "WidgetColumnBean{" + "id=" + id + ", fieldName=" + fieldName + ", type=" + type + ", xAxis=" + xAxis + ", yAxis=" + yAxis + ", yAxisLabel=" + yAxisLabel + ", xAxisLabel=" + xAxisLabel + ", displayName=" + displayName + ", sortPriority=" + sortPriority + ", sortOrder=" + sortOrder + ", groupPriority=" + groupPriority + ", agregationFunction=" + agregationFunction + ", functionParameters=" + functionParameters + ", fieldType=" + fieldType + ", baseFieldName=" + baseFieldName + ", fieldGenerationFunction=" + fieldGenerationFunction + ", fieldGenerationFields=" + fieldGenerationFields + ", remarks=" + remarks + ", displayFormat=" + displayFormat + ", alignment=" + alignment + '}';
+        return "WidgetColumnBean{" + "id=" + id + ", fieldName=" + fieldName + ", type=" + type + ", xAxis=" + xAxis + ", yAxis=" + yAxis + ", yAxisLabel=" + yAxisLabel + ", xAxisLabel=" + xAxisLabel + ", displayName=" + displayName + ", sortPriority=" + sortPriority + ", sortOrder=" + sortOrder + ", groupPriority=" + groupPriority + ", agregationFunction=" + agregationFunction + ", functionParameters=" + functionParameters + ", fieldType=" + fieldType + ", baseFieldName=" + baseFieldName + ", fieldGenerationFunction=" + fieldGenerationFunction + ", fieldGenerationFields=" + fieldGenerationFields + ", remarks=" + remarks + ", displayFormat=" + displayFormat + ", width=" + width + ", alignment=" + alignment + '}';
     }
     
 }

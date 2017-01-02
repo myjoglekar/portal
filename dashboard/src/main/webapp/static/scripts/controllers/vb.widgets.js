@@ -1,4 +1,7 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
+    console.log($stateParams.startDate)
+    console.log($stateParams.endDate)
+    
     $scope.widgets = [];
     $scope.selectAggregations = [{name: 'None', value: ""}, {name: 'Sum', value: "sum"}, {name: 'Avg', value: "avg"}, {name: 'Count', value: "count"}, {name: 'Min', value: "min"}, {name: 'Max', value: "max"}];   //Aggregation Type-Popup
     $scope.selectGroupPriorities = [{num: 'None', value: ""}, {num: 1, value: 1}, {num: 2, value: 2}]
@@ -241,7 +244,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 enableRowSelection: false,
                 enableGroupHeaderSelection: false,
                 enableRowHeaderSelection: false,
-                enableSorting: false,
+                enableSorting: true,
                 multiSelect: false,
                 enableColumnResize: true,
                 showColumnFooter: true,
@@ -333,11 +336,6 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 }
                 columnDefs.push(columnDef);
             });
-            try {
-                startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
-                endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
-            } catch (e) {
-            }
             $http.get(scope.dynamicTableUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
@@ -348,7 +346,8 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     enableRowSelection: false,
                     enableGroupHeaderSelection: false,
                     enableRowHeaderSelection: false,
-                    enableSorting: false,
+                    enableSorting: true,
+                    enableGroup: false,
                     multiSelect: false,
                     enableColumnResize: true,
                     data: response.data,
@@ -471,11 +470,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.lineChartUrl) {
-                try {
-                    startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
-                    endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
-                } catch (e) {
-                }
+
                 $http.get(scope.lineChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                     scope.loadingLine = false;
                     scope.xAxis = [];
@@ -631,11 +626,6 @@ app.directive('barChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.barChartUrl) {
-//                try {
-//                    startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
-//                    endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
-//                } catch (e) {
-//                }
                 $http.get(scope.barChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                     scope.loadingBar = false;
                     scope.xAxis = [];
@@ -778,11 +768,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.pieChartUrl) {
-                try {
-                    startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
-                    endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
-                } catch (e) {
-                }
                 $http.get(scope.pieChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                     scope.loadingPie = false;
                     scope.xAxis = [];
@@ -814,7 +799,7 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                     var yAxisField = yAxis[0];
                     chartData.forEach(function (e) {
                         legends.push(e[xAxis.fieldName]);
-                        data[e[xAxis.fieldName]] = data[e[xAxis.fieldName]]?data[e[xAxis.fieldName]]:0 + e[yAxisField.fieldName]?e[yAxisField.fieldName]:0;
+                        data[e[xAxis.fieldName]] = data[e[xAxis.fieldName]] ? data[e[xAxis.fieldName]] : 0 + e[yAxisField.fieldName] ? e[yAxisField.fieldName] : 0;
                     })
 
                     console.log("...........................");
@@ -940,11 +925,6 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.areaChartUrl) {
-                try {
-                    startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY');
-                    endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY');
-                } catch (e) {
-                }
                 $http.get(scope.areaChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                     scope.loadingArea = false;
                     scope.xAxis = [];
