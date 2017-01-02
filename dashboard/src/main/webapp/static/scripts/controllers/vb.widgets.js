@@ -2,14 +2,52 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     console.log($stateParams.startDate)
     console.log($stateParams.endDate)
 
-    $scope.selectAggregations = [{name: 'None', value: ""}, {name: 'Sum', value: "sum"}, {name: 'Avg', value: "avg"}, {name: 'Count', value: "count"}, {name: 'Min', value: "min"}, {name: 'Max', value: "max"}];   //Aggregation Type-Popup
-    $scope.selectGroupPriorities = [{num: 'None', value: ""}, {num: 1, value: 1}, {num: 2, value: 2}]
-    $scope.selectDateDurations = [{duration: "None"}, {duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
-    $scope.selectXAxis = [{label: 'None', value: ""}, {label: "X-1", value: 1}];
-    $scope.selectYAxis = [{label: 'None', value: ""}, {label: "Y-1", value: 1}, {label: "Y-2", value: 2}];
-    $scope.alignments = [{name: '', displayName: 'None'}, {name: "left", displayName: "Left"}, {name: "right", displayName: "Right"}, {name: "center", displayName: "Center"}];
-    $scope.sorting = [{name: 'None', value: ''}, {name: 'asc', value: 1}, {name: 'dec', value: 0}];
-    $scope.tableWrapText = [{name: 'None', value: ''}, {name: 'Yes', value: "yes"}, {name: 'No', value: "no"}];
+    $scope.selectAggregations = [
+        {name: 'None', value: ""}, 
+        {name: 'Sum', value: "sum"}, 
+        {name: 'Ctr', value: "ctr"}, 
+        {name: 'Avg', value: "avg"}, 
+        {name: 'Count', value: "count"}, 
+        {name: 'Min', value: "min"}, 
+        {name: 'Max', value: "max"}
+    ];   //Aggregation Type-Popup
+    $scope.selectGroupPriorities = [
+        {num: 'None', value: ""}, 
+        {num: 1, value: 1}, 
+        {num: 2, value: 2}
+    ];
+    $scope.selectDateDurations = [
+        {duration: "None"}, 
+        {duration: "Last Week"}, 
+        {duration: "Last Three Months"}, 
+        {duration: "Last Six Months"}, 
+        {duration: "Last Six Months"}
+    ]; // Month Durations-Popup
+    $scope.selectXAxis = [
+        {label: 'None', value: ""}, 
+        {label: "X-1", value: 1}
+    ];
+    $scope.selectYAxis = [
+        {label: 'None', value: ""}, 
+        {label: "Y-1", value: 1}, 
+        {label: "Y-2", value: 2}
+    ];
+    $scope.alignments = [
+        {name: '', displayName: 'None'}, 
+        {name: "left", displayName: "Left"}, 
+        {name: "right", displayName: "Right"}, 
+        {name: "center", displayName: "Center"}
+    ];
+    $scope.sorting = [
+        {name: 'None', value: ''}, 
+        {name: 'asc', value: 1}, 
+        {name: 'dec', value: 0}
+    ];
+    $scope.tableWrapText = [
+        {name: 'None', value: ''}, 
+        {name: 'Yes', value: "yes"}, 
+        {name: 'No', value: "no"}
+    ];
     $scope.isEditPreviewColumn = false;
 
     $scope.moveWidget = function (drag) {
@@ -233,7 +271,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 });
 
-app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams) {
+app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams, stats) {
     return{
         restrict: 'A',
         scope: {
@@ -300,6 +338,16 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 columnDef.cellTemplate = '<div  class="ui-grid-cell-contents ' + cellAlignment + '"><span>{{COL_FIELD | gridDisplayFormat : "' + cellFormat + '"}}</span></div>';
                 columnDef.footerCellTemplate = '<div class="' + cellAlignment + '" >{{col.getAggregationValue() | gridDisplayFormat:"' + cellFormat + '"}}</div>';
 
+                if (value.agregationFunction == "ctr") {
+                    columnDef.aggregationType =  stats.aggregator.ctrFooter,
+                    columnDef.treeAggregation = { type: uiGridGroupingConstants.aggregation.CUSTOM }, 
+                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                    columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
+                            columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
+//                                columnDef.cellClass = 'space-numbers',
+                            columnDef.cellTooltip = true,
+                            columnDef.headerTooltip = true
+                }
                 if (value.agregationFunction == "sum") {
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
@@ -1034,3 +1082,117 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                 }
             }]);
 
+app.service('stats', function ($filter) {
+    var coreAccumulate = function (aggregation, value) {
+        initAggregation(aggregation);
+        if (angular.isUndefined(aggregation.stats.accumulator)) {
+            aggregation.stats.accumulator = [];
+        }
+        aggregation.stats.accumulator.push(value);
+    };
+
+    var initAggregation = function (aggregation) {
+        /* To be used in conjunction with the cleanup finalizer */
+        if (angular.isUndefined(aggregation.stats)) {
+            aggregation.stats = {sum: 0, balanceSum: 0, ageSum: 0};
+        }
+    };
+    var initProperty = function (obj, prop) {
+        /* To be used in conjunction with the cleanup finalizer */
+        if (angular.isUndefined(obj[prop])) {
+            obj[prop] = 0;
+        }
+    };
+
+    var increment = function (obj, prop) {
+        /* if the property on obj is undefined, sets to 1, otherwise increments by one */
+        if (angular.isUndefined(obj[prop])) {
+            obj[prop] = 1;
+        }
+        else {
+            obj[prop]++;
+        }
+    };
+
+    var service = {
+        aggregator: {
+            accumulate: {
+                /* This is to be used with the uiGrid customTreeAggregationFn definition,
+                 * to accumulate all of the data into an array for sorting or other operations by customTreeAggregationFinalizerFn
+                 * In general this strategy is not the most efficient way to generate grouped statistics, but
+                 * sometime is the only way.
+                 */
+                numValue: function (aggregation, fieldValue, numValue) {
+                    return coreAccumulate(aggregation, numValue);
+                },
+                fieldValue: function (aggregation, fieldValue) {
+                    return coreAccumulate(aggregation, fieldValue);
+                }
+            },
+            ctr: function (aggregation, fieldValue, numValue, row) {
+
+                initAggregation(aggregation);
+                increment(aggregation.stats, 'count');
+                aggregation.stats.clicksSum += row.entity.clicks;
+                aggregation.stats.impressionsSum += row.entity.impressions;
+                //aggregation.stats.sum += row.entity.clicks * row.entity.age;
+
+                aggregation.value = aggregation.stats.impressionsSum / aggregation.stats.clicksSum; //row.entity.balance;
+                //aggregation.col.aggregationValue=400;
+                //aggregation.col.aggregationType=function(x, y){y.aggregationValue=100};
+                //console.log("NUM " + numValue);
+                //console.log("FIELD " + fieldValue);
+                //console.log(row);
+                //console.log(aggregation);
+            },
+            ctrFooter: function (x, y, z) {
+                // Need Sum of balance/sum of age
+                console.log("XXX")
+                console.log(x);
+                console.log("YYY")
+                console.log(y);
+                console.log("ZZZ")
+                console.log(z);
+                console.log("THIS");
+                console.log(this.grid);
+                var ageColumn = $filter('filter')(this.grid.columns, {displayName: 'Clicks'})[0];
+                var balanceColumn = $filter('filter')(this.grid.columns, {displayName: 'Impressions'})[0];
+                ageColumn.updateAggregationValue();
+                balanceColumn.updateAggregationValue();
+                var aggregatedAge = ageColumn.aggregationValue;
+                var aggregatedBalance = balanceColumn.aggregationValue;
+
+                console.log(ageColumn.aggregationValue);
+                console.log(ageColumn.displayName);
+                console.log(ageColumn);
+                //console.log(this.grid.columns);
+                //console.log(this.grid.getVisibleRows());
+                if (aggregatedAge && aggregatedBalance) {
+                    if (isNaN(aggregatedAge)) {
+                        aggregatedAge = Number(aggregatedAge.replace(/[^0-9.]/g, ""));
+                    }
+                    if (isNaN(aggregatedBalance)) {
+                        aggregatedBalance = Number(aggregatedBalance.replace(/[^0-9.]/g, ""));
+                    }
+                    return aggregatedBalance / aggregatedAge;
+                }
+                return "";
+            }
+        },
+        finalizer: {
+            cleanup: function (aggregation) {
+                delete aggregation.stats;
+                if (angular.isUndefined(aggregation.rendered)) {
+                    aggregation.rendered = aggregation.value;
+                }
+            },
+            ctr: function (aggregation) {
+                //service.finalizer.variance(aggregation);
+                aggregation.value = 20000;
+                //aggregation.rendered = 30000;
+            }
+        },
+    };
+
+    return service;
+});
