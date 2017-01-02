@@ -105,7 +105,12 @@ public class ReportColumn implements Serializable {
     private String yAxisLabel;
     @Size(max = 25)
     @Column(name = "display_format")
-    private String displayFormat;
+    private String displayFormat;    
+    @Column(name = "width")
+    private Integer width;
+    @Size(max = 25)
+    @Column(name = "wrap_text")
+    private String wrapText;
     @Size(max = 25)
     @Column(name = "alignment")
     private String alignment;
@@ -224,35 +229,35 @@ public class ReportColumn implements Serializable {
         this.remarks = remarks;
     }
 
-    public String getXAxis() {
+    public String getxAxis() {
         return xAxis;
     }
 
-    public void setXAxis(String xAxis) {
+    public void setxAxis(String xAxis) {
         this.xAxis = xAxis;
     }
 
-    public String getXAxisLabel() {
+    public String getxAxisLabel() {
         return xAxisLabel;
     }
 
-    public void setXAxisLabel(String xAxisLabel) {
+    public void setxAxisLabel(String xAxisLabel) {
         this.xAxisLabel = xAxisLabel;
     }
 
-    public String getYAxis() {
+    public String getyAxis() {
         return yAxis;
     }
 
-    public void setYAxis(String yAxis) {
+    public void setyAxis(String yAxis) {
         this.yAxis = yAxis;
     }
 
-    public String getYAxisLabel() {
+    public String getyAxisLabel() {
         return yAxisLabel;
     }
 
-    public void setYAxisLabel(String yAxisLabel) {
+    public void setyAxisLabel(String yAxisLabel) {
         this.yAxisLabel = yAxisLabel;
     }
 
@@ -262,6 +267,22 @@ public class ReportColumn implements Serializable {
 
     public void setDisplayFormat(String displayFormat) {
         this.displayFormat = displayFormat;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public String getWrapText() {
+        return wrapText;
+    }
+
+    public void setWrapText(String wrapText) {
+        this.wrapText = wrapText;
     }
 
     public String getAlignment() {
@@ -279,6 +300,8 @@ public class ReportColumn implements Serializable {
     public void setReportId(ReportWidget reportId) {
         this.reportId = reportId;
     }
+    
+    
 
     @Override
     public int hashCode() {

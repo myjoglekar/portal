@@ -1,15 +1,14 @@
 <section class="sidebar" ng-controller="MenuController"> 
-
     <!-- Sidebar Menu -->
     <ul class="sidebar-menu">
         <li class="treeview active">
-            <a data-ui-sref="index.dashboard.widget({productId:  productId, tabId: tabId})">
+            <a data-ui-sref="index.dashboard.widget({productId:  productId, tabId: tabId, startDate: startDate, endDate: endDate})">
                 <i class="fa fa-th"></i>
                 <span>Products</span>
             </a>
             <ul class="treeview-menu">
-                <li ng-repeat="product in products">
-                    <a data-ui-sref="index.dashboard.widget({productId: product.id?product.id:0, tabId: tabId, startDate: startDate, endDate: endDate})">
+                <li ng-repeat="product in products" ng-click="setParamsDate()">
+                    <a class="active" data-ui-sref="index.dashboard.widget({productId: product.id?product.id:0, tabId: tabId, startDate: startDate, endDate: endDate})">
                         {{product.productName}}
                     </a>
                 </li>

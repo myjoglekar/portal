@@ -4,29 +4,28 @@
         <ol class="breadcrumb">
             <li>
                 <a class="border-btn" data-toggle="dropdown"><i class="fa fa-home" style="font-size:20px;"></i>Dealer Name</a> <i class="fa fa-caret-down"></i> 
-                  <ul class="dropdown-menu">
-                        <li ng-repeat="dealer in dealers">
-                            <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>  
-                        </li>
-                    </ul>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="dealer in dealers">
+                        <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>  
+                    </li>
+                </ul>
             </li>
 
             <li>              
                 <a class="pull-right" id="daterange-btn">
                     <i class="fa fa-calendar" id="date"></i>
                     <span>
-                        {{startDate| date: "MM/dd/yyyy"}} - {{endDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
+                        {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
                     </span>
-
                 </a>                   
             </li>
             <li> <span class="label label-info" ng-click="loadNewUrl()">Go</span></li>
             <li class="pull-right user user-menu">
                 <a data-toggle="dropdown" class="logout">
                     <i class="fa fa-user" style="font-size:20px;"></i> {{userName}}</a>
-                    <ul class="dropdown-menu pull-left">
-                        <li><a href="admin/user/logout">Logout</a></li>
-                    </ul>
+                <ul class="dropdown-menu pull-left">
+                    <li><a href="admin/user/logout">Logout</a></li>
+                </ul>
             </li>
         </ol>
     </section>
@@ -36,21 +35,39 @@
             <div class="col-md-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li ng-repeat="tab in tabs" ui-sref-active="active">
-                            <a class="active" ui-sref="index.dashboard.widget({productId: productId, tabId: tab.id?tab.id:0})">
-                                {{tab.tabName}}
-                            </a>
-                            
-                           <button class="close closeTab" type="button" ng-click="deleteTab($index, tab)">×</button>
-                            
+                        <li ng-repeat="tab in tabs" ui-sref-active="active" ng-drop="true" ng-drop-success="onDropTabComplete($index, $data,$event)">
+                            <!--<div ng-drag="true" ng-drag-data="tab">-->
+                                <a class="active" ng-drag="true" ng-drag-data="tab" ui-sref="index.dashboard.widget({productId: productId, tabId: tab.id?tab.id:0})">
+                                    {{tab.tabName}}
+                                </a>
+                                <button class="close closeTab" data-toggle="modal" data-target="#deleteTabModal{{tab.id}}" type="button">×</button>
+                            <!--</div>-->
+                            <div class="modal fade bd-example-modal-md" id="deleteTabModal{{tab.id}}">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">{{tab.id}}
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Delete</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span>Want to delete ? {{tab.id}}</span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="col-sm-12">
+                                                <button type="button" class="btn btn-primary btn-xs" ng-click="deleteTab($index, tab)" data-dismiss="modal"><span class="fa fa-save"></span> Yes</button>  
+                                                <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> No
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </li> 
                         <li class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
 
                         <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
                             <div class="modal-dialog modal-md">
-                                <!-- Modal content-->
                                 <div class="modal-content">
-
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         <h4 class="modal-title">TAB</h4>

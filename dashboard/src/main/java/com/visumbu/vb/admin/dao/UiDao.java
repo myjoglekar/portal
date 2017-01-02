@@ -52,7 +52,7 @@ public class UiDao extends BaseDao {
     }
 
     public List<TabWidget> getTabWidget(Integer tabId) {
-        String queryStr = "select d from TabWidget d where d.tabId.id = :tabId and (status is null or status != 'Deleted')";
+        String queryStr = "select d from TabWidget d where d.tabId.id = :tabId and (status is null or status != 'Deleted') order by widgetOrder";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("tabId", tabId);
 
@@ -215,6 +215,17 @@ public class UiDao extends BaseDao {
 
         delete(getTabWidgetById(id));
         return null;
+    }
+
+    public String updateWidgetUpdateOrder(Integer tabId, String widgetOrder) {
+        String[] widgetOrderArray = widgetOrder.split(",");
+        for (int i = 0; i < widgetOrderArray.length; i++) {
+            Integer widgetId = Integer.parseInt(widgetOrderArray[i]);
+            TabWidget tabWidget = getTabWidgetById(widgetId);
+            tabWidget.setWidgetOrder(i);
+            update(tabWidget);
+        }
+        return "Success";
     }
 
 }

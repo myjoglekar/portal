@@ -29,6 +29,8 @@ public class ReportColumnBean {
     private String fieldGenerationFields;
     private String remarks;
     private String displayFormat;
+    private Integer width;
+    private String wrapText;
     private String alignment;
 
     public Integer getId() {
@@ -183,6 +185,22 @@ public class ReportColumnBean {
         this.displayFormat = displayFormat;
     }
 
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public String getWrapText() {
+        return wrapText;
+    }
+
+    public void setWrapText(String wrapText) {
+        this.wrapText = wrapText;
+    }
+
     public String getAlignment() {
         return alignment;
     }
@@ -193,7 +211,7 @@ public class ReportColumnBean {
 
     @Override
     public String toString() {
-        return "ReportColumnBean{" + "id=" + id + ", fieldName=" + fieldName + ", type=" + type + ", xAxis=" + xAxis + ", yAxis=" + yAxis + ", yAxisLabel=" + yAxisLabel + ", xAxisLabel=" + xAxisLabel + ", displayName=" + displayName + ", sortPriority=" + sortPriority + ", sortOrder=" + sortOrder + ", groupPriority=" + groupPriority + ", agregationFunction=" + agregationFunction + ", functionParameters=" + functionParameters + ", fieldType=" + fieldType + ", baseFieldName=" + baseFieldName + ", fieldGenerationFunction=" + fieldGenerationFunction + ", fieldGenerationFields=" + fieldGenerationFields + ", remarks=" + remarks + ", displayFormat=" + displayFormat + ", alignment=" + alignment + '}';
+        return "ReportColumnBean{" + "id=" + id + ", fieldName=" + fieldName + ", type=" + type + ", xAxis=" + xAxis + ", yAxis=" + yAxis + ", yAxisLabel=" + yAxisLabel + ", xAxisLabel=" + xAxisLabel + ", displayName=" + displayName + ", sortPriority=" + sortPriority + ", sortOrder=" + sortOrder + ", groupPriority=" + groupPriority + ", agregationFunction=" + agregationFunction + ", functionParameters=" + functionParameters + ", fieldType=" + fieldType + ", baseFieldName=" + baseFieldName + ", fieldGenerationFunction=" + fieldGenerationFunction + ", fieldGenerationFields=" + fieldGenerationFields + ", remarks=" + remarks + ", displayFormat=" + displayFormat + ", width=" + width + ", wrapText=" + wrapText + ", alignment=" + alignment + '}';
     }
-        
+    
 }

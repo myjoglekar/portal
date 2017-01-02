@@ -95,6 +95,14 @@ public class UiController extends BaseController {
         //return null; //uiService.createTabWidget(tabId, tabWidget);
     }
 
+    @RequestMapping(value = "dbWidgetUpdateOrder/{tabId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object updateWidgetUpdateOrder(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
+        String widgetOrder = request.getParameter("widgetOrder");
+        uiService.updateWidgetUpdateOrder(tabId, widgetOrder);
+        return null;
+    }
+    
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
