@@ -109,7 +109,7 @@ public class SeoTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("bounceRate", "number", "Bounce Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -125,7 +125,7 @@ public class SeoTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        String metricsList = "ga:visits,visits;ga:sessions,sessions;"
+        String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                 + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
                 + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
                 + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
@@ -162,7 +162,7 @@ public class SeoTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -178,7 +178,7 @@ public class SeoTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        String metricsList = "ga:visits,visits;ga:sessions,sessions;"
+        String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                 + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
                 + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
                 + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
@@ -214,7 +214,7 @@ public class SeoTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -230,7 +230,7 @@ public class SeoTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        String metricsList = "ga:visits,visits;ga:sessions,sessions;"
+        String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                 + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
                 + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
                 + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
@@ -266,7 +266,7 @@ public class SeoTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -282,7 +282,7 @@ public class SeoTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        String metricsList = "ga:visits,visits;ga:sessions,sessions;"
+        String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                 + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
                 + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
                 + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
@@ -319,7 +319,7 @@ public class SeoTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -335,7 +335,7 @@ public class SeoTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        String metricsList = "ga:visits,visits;ga:sessions,sessions;"
+        String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                 + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
                 + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
                 + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
@@ -371,7 +371,7 @@ public class SeoTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -387,7 +387,7 @@ public class SeoTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        String metricsList = "ga:visits,visits;ga:sessions,sessions;"
+        String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                 + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
                 + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
                 + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
