@@ -219,10 +219,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.showPreview = function (widget) {                                    //Show Preview Chart - Popup
-        var data = JSON.parse(widget.productDisplayName);
-        $scope.previewChartType = $scope.editChartType ? $scope.$scope.editChartType : widget.chartType;
+//        var data = JSON.parse(widget.productDisplayName);
+        $scope.previewChartType = $scope.editChartType ? $scope.editChartType : widget.chartType;
         $scope.previewColumn = $scope.setPreviewColumn ? $scope.setPreviewColumn : widget;
-        $scope.previewChartUrl = data.url;
+        $scope.previewChartUrl = widget.previewUrl;
     };
 
     $scope.save = function (widget) {
@@ -435,6 +435,53 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
 //                };
 
             });
+        }
+    };
+});
+
+app.directive('tickerDirective', function ($http, $stateParams) {
+    return{
+        restrict: 'AE',
+        template: '<div class="panel panel-default relative pnl-aln">' +
+                '<div class="m-b-10">' +
+                '<i class="fa fa-circle" style="color: #86c0ba"></i>' +
+                '<span>{{tickerTitle}}</span>' +
+                '<span class="text-lg pull-right" style="color: #86c0ba">{{totalValue}}</span>' +
+                '</div>' +
+                '</div>',
+        scope: {
+            tickerUrl: '@',
+            tickerId: '@',
+            tickerColumns: '@'
+        },
+        link: function (scope, element, attr) {
+            var tickerName;
+            console.log(scope.tickerUrl);
+            console.log(scope.tickerId);
+            console.log(scope.tickerColumns);
+            angular.forEach(JSON.parse(scope.tickerColumns), function (value, key) {
+                scope.tickerTitle = value.displayName;
+                tickerName = {fieldName: value.fieldName, displayName: value.displayName}
+            })
+
+            var setData = []
+            var data = []
+            $http.get(scope.tickerUrl + "?widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+                console.log(response)
+                var tickerData = response.data
+                var loopCount = 0
+                data = [tickerName.fieldName];
+                setData = tickerData.map(function (a) {
+                    data.push(loopCount);
+                    loopCount++;
+                    return a[tickerName.fieldName];
+                });
+                var total = 0;
+                for (var i = 0; i < setData.length; i++) {
+                    total += parseFloat(setData[i]);
+                }
+                scope.totalValue = total;
+            })
         }
     };
 });
