@@ -194,7 +194,8 @@ public class UserController {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/socialImpact/postPerformance;Post Performance",
-            "../api/admin/socialImpact/last12WeeksPerformance;Last 12 Weeks",
+            "../api/admin/socialImpact/postPerformanceByType;Post Performance By Type",
+            "../api/admin/socialImpact/postSummary;Post Performance Summary",
         };
 
         for (int i = 0; i < urlList.length; i++) {
