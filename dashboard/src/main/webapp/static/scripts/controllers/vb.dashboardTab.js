@@ -1,5 +1,5 @@
-app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies) {
-    
+app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout) {
+
     $scope.selectTabID = $state;
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
@@ -67,7 +67,18 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         }
         return "widget";
     };
-    //$scope.loadNewUrl();
+
+    $scope.editDashboardTab = function (tab) {
+        var data = {
+            tabNames: tab.tabName
+        }
+        $scope.tab = data;
+        $timeout(function () {
+            $('#editTab' + tab.id).modal('show');
+        }, 100);
+
+    };
+
     $scope.selectProductName = "Select Product";
     $scope.changeProduct = function (product) {
         $scope.selectProductName = product.productName;
@@ -102,7 +113,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     var counter = 1;
     $scope.tabs = [];
     $scope.addTab = function (tab) {
-        //$scope.tabs.push({tabName: tab.tabName, tabClose: true});
         var data = {
             tabName: tab.tabName
         };
@@ -114,14 +124,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     $scope.deleteTab = function (index, tab) {
         $http({method: 'DELETE', url: 'admin/ui/dbTab/' + tab.id}).success(function (response) {
         });
-//        $("#deleteTabModal" + tab.id).on('hidden.bs.modal', function () {
-//            console.log("Tab : " + $scope.tabs)
-//            $(this).data('bs.modal', null);
-//        });
-        // $("#deleteTabModal" + tab.id).remove();
-        //$('.modal-backdrop').remove();
-        //$('body').removeClass("modal-open");
-        $scope.tabs.splice(index, 1);
+        //$scope.tabs.splice(index, 1);
         console.log(tab)
     };
 
@@ -135,11 +138,10 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     $scope.save = function (item) {
         console.log("Item Name : " + item);
     };
-    //console.log($stateParams.reportId);
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
     });
-    
+
     $scope.onDropTabComplete = function (index, tab, evt) {
         var otherObj = $scope.tabs[index];
         var otherIndex = $scope.tabs.indexOf(tab);
@@ -151,7 +153,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         }).join(',');
         console.log(tabOrder);
         var data = {tabOrder: tabOrder};
-        //$http({method: 'GET', url: 'admin/ui/dbWidgetUpdateOrder/' + $stateParams.tabId + "?widgetOrder=" + widgetOrder});
+        $http({method: 'GET', url: 'admin/ui/dbTabUpdateOrder/' + $stateParams.productId + "?tabOrder=" + tabOrder});
     };
 
 

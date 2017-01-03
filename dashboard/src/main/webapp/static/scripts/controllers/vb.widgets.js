@@ -1,58 +1,53 @@
-app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout) {
+app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter) {
     console.log($stateParams.startDate)
-    console.log($stateParams.endDate)
-
+    console.log($stateParams.endDate)    
     $scope.selectAggregations = [
-        {name: 'None', value: ""}, 
-        {name: 'Sum', value: "sum"}, 
-        {name: 'Ctr', value: "ctr"}, 
-        {name: 'Avg', value: "avg"}, 
-        {name: 'Count', value: "count"}, 
-        {name: 'Min', value: "min"}, 
+        {name: 'None', value: ""},
+        {name: 'Sum', value: "sum"},
+        {name: 'Ctr', value: "ctr"},
+        {name: 'Avg', value: "avg"},
+        {name: 'Count', value: "count"},
+        {name: 'Min', value: "min"},
         {name: 'Max', value: "max"}
     ];   //Aggregation Type-Popup
     $scope.selectGroupPriorities = [
-        {num: 'None', value: ""}, 
-        {num: 1, value: 1}, 
+        {num: 'None', value: ""},
+        {num: 1, value: 1},
         {num: 2, value: 2}
     ];
     $scope.selectDateDurations = [
-        {duration: "None"}, 
-        {duration: "Last Week"}, 
-        {duration: "Last Three Months"}, 
-        {duration: "Last Six Months"}, 
+        {duration: "None"},
+        {duration: "Last Week"},
+        {duration: "Last Three Months"},
+        {duration: "Last Six Months"},
         {duration: "Last Six Months"}
     ]; // Month Durations-Popup
     $scope.selectXAxis = [
-        {label: 'None', value: ""}, 
+        {label: 'None', value: ""},
         {label: "X-1", value: 1}
     ];
     $scope.selectYAxis = [
-        {label: 'None', value: ""}, 
-        {label: "Y-1", value: 1}, 
+        {label: 'None', value: ""},
+        {label: "Y-1", value: 1},
         {label: "Y-2", value: 2}
     ];
     $scope.alignments = [
-        {name: '', displayName: 'None'}, 
-        {name: "left", displayName: "Left"}, 
-        {name: "right", displayName: "Right"}, 
+        {name: '', displayName: 'None'},
+        {name: "left", displayName: "Left"},
+        {name: "right", displayName: "Right"},
         {name: "center", displayName: "Center"}
     ];
     $scope.sorting = [
-        {name: 'None', value: ''}, 
-        {name: 'asc', value: 1}, 
+        {name: 'None', value: ''},
+        {name: 'asc', value: 1},
         {name: 'dec', value: 0}
     ];
     $scope.tableWrapText = [
-        {name: 'None', value: ''}, 
-        {name: 'Yes', value: "yes"}, 
+        {name: 'None', value: ''},
+        {name: 'Yes', value: "yes"},
         {name: 'No', value: "no"}
     ];
     $scope.isEditPreviewColumn = false;
-
-    $scope.moveWidget = function (drag) {
-        console.log(drag);
-    }
 
     $scope.widgets = [];
     function getWidgetItem() {      //Default Loading Items
@@ -73,7 +68,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         widget.previewTitle = widget.widgetTitle;
         $scope.editChartType = widget.chartType;
         $scope.selectProductName(widget.productName, widget);
-        console.log($scope.editChartType)
     };
 
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
@@ -112,9 +106,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.selectProductName();
 
     $scope.changeUrl = function (url, widget) {
-        var data = JSON.parse(url);
+        var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: url})[0];
+        widget.previewUrl = searchUrl.url;
         widget.columns = [];
-        $http.get(data.url + "?fieldsOnly=true").success(function (response) {
+        $http.get(searchUrl.url + "?fieldsOnly=true").success(function (response) {
             $scope.collectionFields = [];
             angular.forEach(response.columnDefs, function (value, key) {
                 widget.columns.push({fieldName: value.fieldName, displayName: value.displayName,
@@ -226,34 +221,27 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.previewChartType = $scope.editChartType ? $scope.$scope.editChartType : widget.chartType;
         $scope.previewColumn = $scope.setPreviewColumn ? $scope.setPreviewColumn : widget;
         $scope.previewChartUrl = data.url;
-        console.log($scope.editChartType)
     };
 
     $scope.save = function (widget) {
-        console.log($scope.editChartType)
-        var data = JSON.parse(widget.productDisplayName);
-        widget.directUrl = data.url ? data.url : widget.directUrl;
+        widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
 
         var data = {
             id: widget.id,
             chartType: $scope.editChartType ? $scope.editChartType : widget.chartType,
-            directUrl: data.url,
+            directUrl: widget.previewUrl,
             widgetTitle: widget.previewTitle,
             widgetColumns: widget.columns,
             productName: widget.productName,
             productDisplayName: widget.productDisplayName
         };
         widget.chartType = "";
-        console.log($scope.editChartType)
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
             widget.chartType = data.chartType;
         });
-        console.log(widget.chartType)
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
         //widget.chartType = $scope.editChartType ? $scope.editChartType : widget.chartType;
         widget.widgetColumns = widget.columns;
-        console.log($scope.editChartType)
-
     };
 
 
@@ -262,7 +250,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         var otherIndex = $scope.widgets.indexOf(widget);
         $scope.widgets[index] = widget;
         $scope.widgets[otherIndex] = otherObj;
-        console.log($scope.widgets);
         var widgetOrder = $scope.widgets.map(function (value, key) {
             return value.id;
         }).join(',');
@@ -339,10 +326,10 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 columnDef.footerCellTemplate = '<div class="' + cellAlignment + '" >{{col.getAggregationValue() | gridDisplayFormat:"' + cellFormat + '"}}</div>';
 
                 if (value.agregationFunction == "ctr") {
-                    columnDef.aggregationType =  stats.aggregator.ctrFooter,
-                    columnDef.treeAggregation = { type: uiGridGroupingConstants.aggregation.CUSTOM }, 
-                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
-                    columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
+                    columnDef.aggregationType = stats.aggregator.ctrFooter,
+                            columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
+                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                            columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
 //                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
@@ -1108,8 +1095,7 @@ app.service('stats', function ($filter) {
         /* if the property on obj is undefined, sets to 1, otherwise increments by one */
         if (angular.isUndefined(obj[prop])) {
             obj[prop] = 1;
-        }
-        else {
+        } else {
             obj[prop]++;
         }
     };

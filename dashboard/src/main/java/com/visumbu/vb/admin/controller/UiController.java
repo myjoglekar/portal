@@ -69,12 +69,20 @@ public class UiController extends BaseController {
         return uiService.createDashboardTabs(dashboardTabs);
     }
 
+    @RequestMapping(value = "dbTabUpdateOrder/{dashboardId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object updateDashboardTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId) {
+        String tabOrder = request.getParameter("tabOrder");
+        uiService.updateDashboardTab(dashboardId, tabOrder);
+        return null;
+    }
+
     @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDashboardTabs(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId) {
         return uiService.getDashboardTabs(dashboardId);
     }
-    
+
     @RequestMapping(value = "dbTab/{tabId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     DashboardTabs deleteDashboardTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
@@ -102,7 +110,7 @@ public class UiController extends BaseController {
         uiService.updateWidgetUpdateOrder(tabId, widgetOrder);
         return null;
     }
-    
+
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
@@ -213,7 +221,7 @@ public class UiController extends BaseController {
     TabWidget deleteReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
         return uiService.deleteReportWidget(reportId);
     }
-    
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {

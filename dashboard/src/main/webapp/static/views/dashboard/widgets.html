@@ -75,7 +75,20 @@
 </div>
 <div>
     <div ng-repeat="widget in widgets">
-        <div ng-if="widget.chartType != 'tickers'">
+        
+        <div class="row row-padding" ng-if="widget.chartType == 'ticker'">
+            <div class="col-sm-{{2 * widget.width}}">
+                <div class="panel panel-default relative pnl-aln">
+                    <div class="m-b-10">
+                        <i class="fa fa-circle" style="color: #86c0ba"></i> 
+                        {{widget.widgetTitle}}
+                        <span class="text-lg pull-right" style="color: #86c0ba">{{totalSiteVisit}}</span>
+                    </div>                          
+                </div>
+            </div>
+        </div>
+        
+        <div ng-if="widget.chartType != 'ticker'">
             <div class="col-md-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
                 <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl" ng-drag="true" ng-drag-data="widget"> 
                     <div class="box-header with-border">
@@ -145,7 +158,6 @@
 
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-
                                 </div>
                             </div>
                             <div class="box-body popup-head">
@@ -157,7 +169,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Product</label>
-                                            <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |        capitalize) for userProduct in userProducts">
+                                            <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |               capitalize) for userProduct in userProducts">
                                             </select>
                                         </div>
                                     </div>
@@ -170,8 +182,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Name</label>
-                                            <select class="form-control" ng-model="widget.productDisplayName" ng-change="changeUrl(widget.productDisplayName, widget)" ng-options="productField.productDisplayName for productField in productFields" value="{{productField}}">
-                                                <!--<option ng-repeat="productField in productFields" value="{{productField}}">{{productField.productDisplayName}}</option>-->
+                                            <select class="form-control" ng-model="widget.productDisplayName" ng-change="changeUrl(widget.productDisplayName, widget)">
+                                                <option ng-repeat="productField in productFields">{{productField.productDisplayName}}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -192,7 +204,6 @@
                                 <div class="box-tools">
                                 </div>
                             </div>
-
                             <div class="box-body table-responsive no-padding">
                                 <table class="table table-bordered table-hover" >
                                     <thead>
@@ -217,14 +228,14 @@
                                                 <div ng-hide="isEdit"> {{currentColumn.fieldName}}</div>
                                                 <div ng-show="isEdit">
                                                     <select ng-model="currentColumn.fieldName" class="form-control">
-                                                        <option ng-repeat="collectionField in collectionFields" value="{{collectionField.fieldName}}">{{collectionField.displayName}}</option>
-                                                    </select>
+                                                            <option ng-repeat="collectionField in collectionFields" value="{{collectionField.fieldName}}">{{collectionField.displayName}}</option>
+                                                        </select>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div ng-hide="isEdit"> {{currentColumn.displayName}}</div>
                                                 <div ng-show="isEdit">
-                                                    <input type="text" class="form-control" ng-model="currentColumn.displayName">
+                                                        <input type="text" class="form-control" ng-model="currentColumn.displayName">
                                                 </div>
                                             </td>
                                             <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
