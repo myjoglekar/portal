@@ -288,7 +288,7 @@ public class SeoTabController {
                 + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
         String dimensions = "ga:pagePath";
         String filter = "ga:channelGrouping==Organic Search";
-        String orderBy = "ga:sessions";
+        String orderBy = "ga:visits";
 
         GetReportsResponse gaData = gaService.getGenericData("123125706", startDate, endDate, null, null, metricsList, dimensions, filter, orderBy, 10);
         List<Map<String, String>> gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
