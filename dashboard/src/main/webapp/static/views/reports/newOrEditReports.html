@@ -9,9 +9,6 @@
     {
         display: none;
     }
-    .content-report {
-        /*padding-top:30px;*/
-    }
     .ui-select-bootstrap .ui-select-toggle > .caret {
         position: absolute;
         height: 10px;
@@ -44,15 +41,64 @@
         /*height: 400px;*/
         /*background-color: #88ddaa;*/
     }
-    .wid{
-        border : 1px solid #ddd;
-        border-radius: 5px;
-        padding: 5px;
+    .wid i{
+        font-size:30px;
+        color: #99a5aa !important;
+    }
+
+    .dropdown-item:focus, .dropdown-item:hover {
+        color: #2b2d2f;
+        text-decoration: none;
         margin:0;
+        padding:0;
+        border:1px solid #cdcdcd;
     }
-    a .wid:hover {
-        background:none;
+
+    .dropdown-content {
+        position: absolute;
+        float: left;
+        width:280px;
+        margin-left: -151px;
+        text-align: center;
     }
+    .dropdown-item {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .firstrow {
+        margin: 5px 11px;
+    }
+
+    .secondrow {
+        margin: 5px 11px;
+        width: 126px;
+    }
+
+    .thirdrow {
+        margin: 5px 11px;
+        width: 260px;
+    }
+
+    .btn-apps {
+        border-radius: 3px;
+        position: relative;
+        padding: 15px 5px;
+        margin: 5px 0px 5px 10px;
+        min-width: 80px;
+        /*        height: 40px;*/
+        text-align: center;
+        color: #666;
+        border: 1px solid #ddd;
+        background-color: #fcfcfc;
+        font-size: 12px;
+    }
+
+    .lay-wid {
+        text-align:left;
+    }
+
 </style>
 
 <div class="pull-right-container pull-right">
@@ -62,22 +108,27 @@
     <div class="btn-group"> 
         <a style="cursor: pointer;"><i class="fa fa-print"></i> Print</a> 
     </div>
-    <div class="btn-group">
+
+    <div class="btn-group dropdown">
         <a class="dropdown-toggle" type="button" data-toggle="dropdown">
-            <button type="button" class="btn btn-block btn-info btn-flat"><i class="fa fa-plus-circle"></i> Add Widget</button>
+            <button type="button" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Add Widget</button>
         </a>
-        <ul class="dropdown-menu">
-            <li>
-                <a href="" ng-click="addReportWidget('2')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
-            </li>
-            <li>
-                <a href="" ng-click="addReportWidget('4')"><i class="fa fa-square-o"></i><i class="fa fa-square-o"></i></a>
-            </li>
-            <li>
-                <a href="" ng-click="addReportWidget('6')"><i class="fa fa-square-o"></i></a>
-            </li>
-        </ul>
-    </div>
+        <div class="dropdown-menu dropdown-content">
+            <span class="lay-wid">Select the Layout</span>
+            <a href="" class="dropdown-item" ng-click="addReportWidget('2')">
+                <div class="col-md-2 btn-apps wid firstrow"><i class="fa fa-line-chart"></i></div>
+                <div class="col-md-2 btn-apps wid firstrow"><i class="fa fa-pie-chart"></i></div>
+                <div class="col-md-2 btn-apps wid firstrow"><i class="fa fa-table"></i></div>
+            </a>
+            <a href="" class="dropdown-item" ng-click="addReportWidget('4')">
+                <div class="col-md-5 btn-apps wid secondrow"><i class="fa fa-table"></i></div>
+                <div class="col-md-5 btn-apps wid secondrow"><i class="fa fa-area-chart"></i></div>
+            </a>
+            <a href="" class="dropdown-item" ng-click="addReportWidget('6')">
+                <div class="col-md-10 btn-apps wid thirdrow"><i class="fa fa-table"></i></div>
+            </a>
+        </div>
+    </div> 
 </div>
 <div class="row"> 
     <div class="col-md-12">
@@ -180,7 +231,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Product</label>
-                                            <select class="form-control" ng-model="reportWidget.productName" ng-change="selectProductName(reportWidget.productName, widget)" ng-options="(userProduct |  capitalize) for userProduct in userProducts">
+                                            <select class="form-control" ng-model="reportWidget.productName" ng-change="selectProductName(reportWidget.productName, widget)" ng-options="(userProduct |    capitalize) for userProduct in userProducts">
                                             </select>
                                         </div>
                                     </div>
