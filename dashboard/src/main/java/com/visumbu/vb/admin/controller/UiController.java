@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping("ui")
 public class UiController extends BaseController {
 
-    @Autowired
+        @Autowired
     private UiService uiService;
 
     @Autowired
@@ -175,11 +175,6 @@ public class UiController extends BaseController {
     @RequestMapping(value = "report", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     Report addReport(HttpServletRequest request, HttpServletResponse response, @RequestBody Report report) {
-//        Report report = new Report();
-//        report.setReportTitle(request.getParameter("reportTitle"));
-//        report.setDescription(request.getParameter("description"));
-//        request.getParameter("logo");
-//        
         Integer getReportTypeId = 1;
         System.out.println(report);
         return uiService.addReport(report, getReportTypeId);
@@ -189,6 +184,14 @@ public class UiController extends BaseController {
     public @ResponseBody
     Report update(HttpServletRequest request, HttpServletResponse response, @RequestBody Report report) {
         return uiService.updateReport(report);
+    }
+    
+    @RequestMapping(value = "dbReportUpdateOrder/{reportId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object updateReportUpdateOrder(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
+        String widgetOrder = request.getParameter("widgetOrder");
+        uiService.updateReportOrder(reportId, widgetOrder);
+        return null;
     }
 
     @RequestMapping(value = "report/{reportId}", method = RequestMethod.DELETE, produces = "application/json")
@@ -201,6 +204,12 @@ public class UiController extends BaseController {
     public @ResponseBody
     List getReport(HttpServletRequest request, HttpServletResponse response) {
         return uiService.getReport();
+    }
+    
+    @RequestMapping(value = "report/{reportId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Report getReportById(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
+        return uiService.getReportById(reportId);
     }
 
     @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.POST, produces = "application/json")
@@ -223,7 +232,7 @@ public class UiController extends BaseController {
         return uiService.getReportWidget(reportId);
     }
 
-    @RequestMapping(value = "reportWidget/{reeportId}", method = RequestMethod.DELETE, produces = "application/json")
+    @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     TabWidget deleteReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
         return uiService.deleteReportWidget(reportId);

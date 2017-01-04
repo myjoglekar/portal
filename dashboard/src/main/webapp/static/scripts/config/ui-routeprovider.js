@@ -44,7 +44,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             .state("index.report.newOrEdit", {
                 url: "/newOrEdit/:reportId?:startDate/:endDate",
                 templateUrl: "static/views/reports/newOrEditReports.html",
-                controller: 'ReportController',
+                controller: 'NewOrEditReportController',
                 activetab: 'report'
             });
 

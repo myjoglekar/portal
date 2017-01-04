@@ -4,7 +4,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.selectAggregations = [
         {name: 'None', value: ""},
         {name: 'Sum', value: "sum"},
-        {name: 'Ctr', value: "ctr"},
+        {name: 'CTR', value: "ctr"},
+        {name: 'CPC', value: "cpc"},
+        {name: 'CPA', value: "cpa"},
         {name: 'Avg', value: "avg"},
         {name: 'Count', value: "count"},
         {name: 'Min', value: "min"},
@@ -153,7 +155,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.deleteWidget = function (widget, index) {                            //Delete Widget
         $http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {
             $scope.widgets.splice(index, 1);
-            $('.modal-backdrop').remove();
+            $('.modal-backdrop').on("hide")
         });
     };
 
@@ -246,11 +248,16 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
 
     $scope.onDropComplete = function (index, widget, evt) {
+        console.log(widget)
+        console.log($scope.widgets)
         var otherObj = $scope.widgets[index];
         var otherIndex = $scope.widgets.indexOf(widget);
         $scope.widgets[index] = widget;
         $scope.widgets[otherIndex] = otherObj;
         var widgetOrder = $scope.widgets.map(function (value, key) {
+            if(!value) {
+                return;
+            }
             return value.id;
         }).join(',');
         var data = {widgetOrder: widgetOrder};
@@ -328,7 +335,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
 //                                columnDef.cellClass = 'space-numbers',
@@ -459,14 +466,17 @@ app.directive('tickerDirective', function ($http, $stateParams) {
             angular.forEach(JSON.parse(scope.tickerColumns), function (value, key) {
                 scope.tickerTitle = value.displayName;
                 tickerName = {fieldName: value.fieldName, displayName: value.displayName}
-            })
+            });
 
-            var setData = []
-            var data = []
+            var setData = [];
+            var data = [];
             $http.get(scope.tickerUrl + "?widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
-                console.log(response)
-                var tickerData = response.data
-                var loopCount = 0
+                console.log(response);
+                if(!response){
+                    return;
+                }
+                var tickerData = response.data;
+                var loopCount = 0;
                 data = [tickerName.fieldName];
                 setData = tickerData.map(function (a) {
                     data.push(loopCount);
@@ -1127,7 +1137,7 @@ app.service('stats', function ($filter) {
     var initAggregation = function (aggregation) {
         /* To be used in conjunction with the cleanup finalizer */
         if (angular.isUndefined(aggregation.stats)) {
-            aggregation.stats = {sum: 0, balanceSum: 0, ageSum: 0};
+            aggregation.stats = {sum: 0, impressionsSum: 0, clicksSum: 0, costSum: 0, conversionsSum: 0 };
         }
     };
     var initProperty = function (obj, prop) {
@@ -1167,46 +1177,81 @@ app.service('stats', function ($filter) {
                 increment(aggregation.stats, 'count');
                 aggregation.stats.clicksSum += row.entity.clicks;
                 aggregation.stats.impressionsSum += row.entity.impressions;
-                //aggregation.stats.sum += row.entity.clicks * row.entity.age;
 
-                aggregation.value = aggregation.stats.impressionsSum / aggregation.stats.clicksSum; //row.entity.balance;
-                //aggregation.col.aggregationValue=400;
-                //aggregation.col.aggregationType=function(x, y){y.aggregationValue=100};
-                //console.log("NUM " + numValue);
-                //console.log("FIELD " + fieldValue);
-                //console.log(row);
-                //console.log(aggregation);
+                aggregation.value = (aggregation.stats.clicksSum * 100) / aggregation.stats.impressionsSum; //row.entity.balance;
             },
             ctrFooter: function (x, y, z) {
                 // Need Sum of balance/sum of age
-                console.log("XXX")
-                console.log(x);
-                console.log("YYY")
-                console.log(y);
-                console.log("ZZZ")
-                console.log(z);
-                console.log("THIS");
-                console.log(this.grid);
-                var ageColumn = $filter('filter')(this.grid.columns, {displayName: 'Clicks'})[0];
-                var balanceColumn = $filter('filter')(this.grid.columns, {displayName: 'Impressions'})[0];
-                ageColumn.updateAggregationValue();
-                balanceColumn.updateAggregationValue();
-                var aggregatedAge = ageColumn.aggregationValue;
-                var aggregatedBalance = balanceColumn.aggregationValue;
+                var clicksColumn = $filter('filter')(this.grid.columns, {displayName: 'Clicks'})[0];
+                var impressionsColumn = $filter('filter')(this.grid.columns, {displayName: 'Impressions'})[0];
+                clicksColumn.updateAggregationValue();
+                impressionsColumn.updateAggregationValue();
+                var aggregatedClicks = clicksColumn.aggregationValue;
+                var aggregatedImpressions = impressionsColumn.aggregationValue;
+                if (aggregatedClicks && aggregatedImpressions) {
+                    if (isNaN(aggregatedClicks)) {
+                        aggregatedClicks = Number(aggregatedClicks.replace(/[^0-9.]/g, ""));
+                    }
+                    if (isNaN(aggregatedImpressions)) {
+                        aggregatedImpressions = Number(aggregatedImpressions.replace(/[^0-9.]/g, ""));
+                    }
+                    return (aggregatedClicks * 100) / aggregatedImpressions;
+                }
+                return "";
+            },
+            cpc: function (aggregation, fieldValue, numValue, row) {
 
-                console.log(ageColumn.aggregationValue);
-                console.log(ageColumn.displayName);
-                console.log(ageColumn);
-                //console.log(this.grid.columns);
-                //console.log(this.grid.getVisibleRows());
-                if (aggregatedAge && aggregatedBalance) {
-                    if (isNaN(aggregatedAge)) {
-                        aggregatedAge = Number(aggregatedAge.replace(/[^0-9.]/g, ""));
+                initAggregation(aggregation);
+                increment(aggregation.stats, 'count');
+                aggregation.stats.clicksSum += row.entity.clicks;
+                aggregation.stats.costSum += row.entity.cost;
+                //aggregation.stats.sum += row.entity.clicks * row.entity.age;
+
+                aggregation.value = aggregation.stats.costSum / aggregation.stats.clicksSum; //row.entity.balance;
+            },
+            cpcFooter: function (x, y, z) {
+                // Need Sum of balance/sum of age
+                var clicksColumn = $filter('filter')(this.grid.columns, {displayName: 'Clicks'})[0];
+                var costColumn = $filter('filter')(this.grid.columns, {displayName: 'Cost'})[0];
+                clicksColumn.updateAggregationValue();
+                costColumn.updateAggregationValue();
+                var aggregatedClicks = clicksColumn.aggregationValue;
+                var aggregatedCost = costColumn.aggregationValue;
+                if (aggregatedClicks && aggregatedCost) {
+                    if (isNaN(aggregatedClicks)) {
+                        aggregatedClicks = Number(aggregatedClicks.replace(/[^0-9.]/g, ""));
                     }
-                    if (isNaN(aggregatedBalance)) {
-                        aggregatedBalance = Number(aggregatedBalance.replace(/[^0-9.]/g, ""));
+                    if (isNaN(aggregatedCost)) {
+                        aggregatedCost = Number(aggregatedCost.replace(/[^0-9.]/g, ""));
                     }
-                    return aggregatedBalance / aggregatedAge;
+                    return aggregatedCost/aggregatedClicks ;
+                }
+                return "";
+            },
+            cpa: function (aggregation, fieldValue, numValue, row) {
+
+                initAggregation(aggregation);
+                increment(aggregation.stats, 'count');
+                aggregation.stats.conversionsSum += row.entity.conversions;
+                aggregation.stats.costSum += row.entity.cost;
+                aggregation.value = aggregation.stats.costSum / aggregation.stats.conversionsSum; //row.entity.balance;
+            },
+            cpaFooter: function (x, y, z) {
+                // Need Sum of balance/sum of age
+                var conversionsColumn = $filter('filter')(this.grid.columns, {displayName: 'Conversions'})[0];
+                var costColumn = $filter('filter')(this.grid.columns, {displayName: 'Cost'})[0];
+                conversionsColumn.updateAggregationValue();
+                costColumn.updateAggregationValue();
+                var aggregatedConversions = conversionsColumn.aggregationValue;
+                var aggregatedCost = costColumn.aggregationValue;
+                if (aggregatedConversions && aggregatedCost) {
+                    if (isNaN(aggregatedConversions)) {
+                        aggregatedConversions = Number(aggregatedConversions.replace(/[^0-9.]/g, ""));
+                    }
+                    if (isNaN(aggregatedCost)) {
+                        aggregatedCost = Number(aggregatedCost.replace(/[^0-9.]/g, ""));
+                    }
+                    return aggregatedCost/aggregatedConversions ;
                 }
                 return "";
             }
