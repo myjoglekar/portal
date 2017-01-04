@@ -85,6 +85,9 @@ public class VbUtils {
     public static SecurityAuthBean getAuthData(String username, String password) {
         try {
             String output = Rest.postRawForm(Settings.getSecurityTokenUrl(), "client_id=f8f06d06436f4104ade219fd7d535654&client_secret=ba082149c90f41c49e86f4862e22e980&grant_type=password&scope=FullControl&username=" + username + "&password=" + password);
+            if(output == null) {
+                return null;
+            }
             ObjectMapper mapper = new ObjectMapper();
             SecurityTokenBean token = mapper.readValue(output, SecurityTokenBean.class);
 
@@ -97,7 +100,7 @@ public class VbUtils {
             Permission permission = getPermissions(authData);
             authData.setPermission(permission);
             return authData;
-        } catch (IOException ex) {
+        } catch (IOException | NullPointerException ex) {
             Logger.getLogger(Rest.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

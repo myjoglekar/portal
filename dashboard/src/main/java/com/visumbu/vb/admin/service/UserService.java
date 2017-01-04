@@ -132,4 +132,8 @@ public class UserService {
     public List <Dealer> getAllowedDealerByOemRegionId(String oemRegionId) {
         return dealerDao.getAllowedDealerByOemRegionId(oemRegionId);
     }
+
+    public List<Dealer> getSampleDealers() {
+        return dealerDao.getSampleDealers();
+    }
 }

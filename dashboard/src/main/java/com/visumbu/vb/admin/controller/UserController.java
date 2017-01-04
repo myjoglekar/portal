@@ -80,7 +80,14 @@ public class UserController {
         SecurityAuthBean authData = userService.getPermissions(loginUserBean);
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
         HttpSession session = request.getSession();
+
         session.setAttribute("isAuthenticated", authData != null);
+        if (authData == null) {
+            Map returnMap = new HashMap();
+            returnMap.put("authData", null);
+            returnMap.put("errorMessage", "Login Failed");
+            return returnMap;
+        }
         session.setAttribute("username", authData.getUserName());
         session.setAttribute("accessToken", authData.getAccessToken());
         session.setAttribute("permission", authData.getPermission());
@@ -89,58 +96,77 @@ public class UserController {
         returnMap.put("dealers", getDealerBySecuityBean(authData));
         return returnMap;
     }
-    
-    
-    @RequestMapping(value = "allowedDealers", method = RequestMethod.POST, produces = "application/json")
+
+    @RequestMapping(value = "allowedDealers", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    List<Dealer> allowedDealers(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
+    List<Dealer> allowedDealers(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        if(!((Boolean)session.getAttribute("isAuthenticated"))) {
+        if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
         }
-        SecurityAuthBean authData = userService.getPermissions((String)session.getAttribute("accessToken"));
+        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"));
         return getDealerBySecuityBean(authData);
     }
-    
+
+    @RequestMapping(value = "sampleDealers", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<Dealer> sampleDealers(HttpServletRequest request, HttpServletResponse response) {
+        return userService.getSampleDealers();
+    }
+
     private List<Dealer> getDealerBySecuityBean(SecurityAuthBean authData) {
         List<Dealer> returnList = new ArrayList<>();
         List<SecurityAuthRoleBean> roles = authData.getRoles();
         for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
             SecurityAuthRoleBean role = iterator.next();
-            if(role.getDealer() != null && !role.getDealer().getId().isEmpty() && role.getDealer().getId() != "0") {
-                returnList.addAll(userService.getAllowedDealerByMapId(role.getDealer().getId()));
+            if (role.getDealer() != null && !role.getDealer().getId().isEmpty() && !role.getDealer().getId().equalsIgnoreCase("0")) {
+                System.out.println("DEALER ID " + role.getDealer().getId());
+                //returnList.addAll(userService.getAllowedDealerByMapId(role.getDealer().getId()));
+                returnList.addAll(userService.getAllowedDealerByMapId("1505"));
             }
-            if(role.getGroup() != null && !role.getGroup().getId().isEmpty() && role.getGroup().getId() != "0") {
+            if (role.getGroup() != null && !role.getGroup().getId().isEmpty() && !role.getGroup().getId().equalsIgnoreCase("0")) {
+                System.out.println("GROUP ID " + role.getGroup().getId());
                 List<Dealer> dealers = userService.getAllowedDealerByGroupId(role.getGroup().getId());
-                if(dealers == null || dealers.isEmpty()) {
+                if (dealers == null || dealers.isEmpty()) {
                     dealers = userService.getAllowedDealerByGroupName(role.getGroup().getName());
                 }
                 returnList.addAll(dealers);
             }
-            if(role.getOem() != null && role.getOem().getRegion() != null 
-                    &&  role.getOem().getRegion().getId() != null && !role.getOem().getRegion().getId().isEmpty() 
-                    && role.getOem().getRegion().getId() != "0") {
+            if (role.getOem() != null && role.getOem().getRegion() != null
+                    && role.getOem().getRegion().getId() != null && !role.getOem().getRegion().getId().isEmpty()
+                    && !role.getOem().getRegion().getId().equalsIgnoreCase("0")) {
+                System.out.println("OEM REGION ID " + role.getOem().getRegion().getId());
                 returnList.addAll(userService.getAllowedDealerByOemRegionId(role.getOem().getRegion().getId()));
             }
         }
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
         return returnList;
     }
-    
-    @RequestMapping(value = "authData", method = RequestMethod.POST, produces = "application/json")
+
+    @RequestMapping(value = "authData", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    SecurityAuthBean getAuthData(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
+    Map getAuthData(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        if(!((Boolean)session.getAttribute("isAuthenticated"))) {
+        if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
         }
-        SecurityAuthBean authData = userService.getPermissions((String)session.getAttribute("accessToken"));
+        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"));
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
         session.setAttribute("isAuthenticated", authData != null);
+        session.setAttribute("isAuthenticated", authData != null);
+        if (authData == null) {
+            Map returnMap = new HashMap();
+            returnMap.put("authData", null);
+            returnMap.put("errorMessage", "Login Failed");
+            return returnMap;
+        }
         session.setAttribute("username", authData.getUserName());
         session.setAttribute("accessToken", authData.getAccessToken());
         session.setAttribute("permission", authData.getPermission());
-        return authData;
+        Map returnMap = new HashMap();
+        returnMap.put("authData", authData);
+        //returnMap.put("dealers", getDealerBySecuityBean(authData));
+        return returnMap;
     }
 
     @RequestMapping(value = "logout", method = RequestMethod.GET, produces = "application/json")
@@ -180,8 +206,7 @@ public class UserController {
             "../api/admin/paid/campaignDevice;Campaign Device",
             "../api/admin/paid/accountDevice;Account Device",
             "../api/admin/paid/adGroups;AdGroups",
-            "../api/admin/paid/adPerformance;Ad Performance",
-        };
+            "../api/admin/paid/adPerformance;Ad Performance",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -200,8 +225,7 @@ public class UserController {
             "../api/admin/display/ad;Ad",
             "../api/admin/display/campaignPerformance;Campaign Performance",
             "../api/admin/display/accountPerformance12Weeks;Account Performance 12 Weeks",
-            "../api/admin/display/accountPerformance;Account Performance",
-        };
+            "../api/admin/display/accountPerformance;Account Performance",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -211,7 +235,7 @@ public class UserController {
         return returnList;
 
     }
-    
+
     private List<UrlBean> getVideoDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
@@ -221,8 +245,7 @@ public class UserController {
             "../api/admin/video/campaignPerformance;Campaign Performance",
             "../api/admin/video/accountPerformanceDayOfWeek;Account Performance Day Of Week",
             "../api/admin/video/accountPerformance12Weeks;Account Performance 12 Weeks",
-            "../api/admin/video/accountPerformance;Account Performance",
-        };
+            "../api/admin/video/accountPerformance;Account Performance",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -232,7 +255,7 @@ public class UserController {
         return returnList;
 
     }
-    
+
     private List<UrlBean> getPaidSocialDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
@@ -242,8 +265,7 @@ public class UserController {
             "../api/admin/paidSocial/agePerformance;Age Performance",
             "../api/admin/paidSocial/devicePerformance;Device Performance",
             "../api/admin/paidSocial/adPerformance;Ad Performance",
-            "../api/admin/paidSocial/campaignPerformance;Campaign Performance",
-        };
+            "../api/admin/paidSocial/campaignPerformance;Campaign Performance",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -253,13 +275,13 @@ public class UserController {
         return returnList;
 
     }
+
     private List<UrlBean> getSocialImpactDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/socialImpact/postPerformance;Post Performance",
             "../api/admin/socialImpact/postPerformanceByType;Post Performance By Type",
-            "../api/admin/socialImpact/postSummary;Post Performance Summary",
-        };
+            "../api/admin/socialImpact/postSummary;Post Performance Summary",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -269,7 +291,7 @@ public class UserController {
         return returnList;
 
     }
-    
+
     private List<UrlBean> getSeoDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
@@ -278,8 +300,7 @@ public class UserController {
             "../api/admin/seo/accountPerformanceDayOfWeek;Account Performance Day Of Week",
             "../api/admin/seo/accountPerformanceTop10Page;Account Performance Top 10 Page",
             "../api/admin/seo/accountDevicePerformance;Account Device Performance",
-            "../api/admin/seo/accountGeoPerformance;Account Geo Performance",
-        };
+            "../api/admin/seo/accountGeoPerformance;Account Geo Performance",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -288,13 +309,12 @@ public class UserController {
         }
         return returnList;
     }
-    
+
     private List<UrlBean> getDynamicDisplayDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/dynamicDisplay/overallPerformance;Overall Performance",
-            "../api/admin/dynamicDisplay/accountPerformance12Weeks;Account Performance 12 Weeks",
-        };
+            "../api/admin/dynamicDisplay/accountPerformance12Weeks;Account Performance 12 Weeks",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -303,13 +323,13 @@ public class UserController {
         }
         return returnList;
     }
+
     private List<UrlBean> getReviewPushDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/reviewPush/reviews;Reviews",
             "../api/admin/reviewPush/ratingSummary;Summary",
-            "../api/admin/reviewPush/bySources;By Source",
-        };
+            "../api/admin/reviewPush/bySources;By Source",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];

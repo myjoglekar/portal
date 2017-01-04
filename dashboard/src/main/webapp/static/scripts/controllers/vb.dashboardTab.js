@@ -91,7 +91,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         console.log($scope.selectProductName);
     });
 
-    $http.get('admin/dealer').success(function (response) {
+    $http.get('admin/user/sampleDealers').success(function (response) {
         $scope.dealers = response;
     });
 

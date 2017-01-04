@@ -8,6 +8,7 @@ package com.visumbu.vb.admin.dao;
 import com.visumbu.vb.dao.BaseDao;
 import com.visumbu.vb.model.Dealer;
 import java.util.List;
+import java.util.Random;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,14 @@ public class DealerDao extends BaseDao {
     public List<Dealer> getAllowedDealerByOemRegionId(String oemRegionId) {
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where oemRegionId = :oemRegionId");
         query.setParameter("oemRegionId", oemRegionId);
+        List<Dealer> dealers = query.list();
+        return dealers;
+    }
+
+    public List<Dealer> getSampleDealers() {
+        Query query = sessionFactory.getCurrentSession().createQuery("from Dealer");
+        query.setFirstResult(new Random().nextInt(1000));
+        query.setMaxResults(100);
         List<Dealer> dealers = query.list();
         return dealers;
     }
