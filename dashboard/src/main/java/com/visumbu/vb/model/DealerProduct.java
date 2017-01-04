@@ -42,6 +42,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "DealerProduct.findByStartDate", query = "SELECT d FROM DealerProduct d WHERE d.startDate = :startDate"),
     @NamedQuery(name = "DealerProduct.findByEndDate", query = "SELECT d FROM DealerProduct d WHERE d.endDate = :endDate")})
 public class DealerProduct implements Serializable {
+    @Size(max = 255)
+    @Column(name = "map_status")
+    private String mapStatus;
     @Size(max = 8)
     @Column(name = "status")
     private String status;
@@ -177,6 +180,14 @@ public class DealerProduct implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getMapStatus() {
+        return mapStatus;
+    }
+
+    public void setMapStatus(String mapStatus) {
+        this.mapStatus = mapStatus;
     }
     
 }

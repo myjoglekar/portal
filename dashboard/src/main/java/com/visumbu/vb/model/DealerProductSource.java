@@ -34,6 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "DealerProductSource.findByProfileId", query = "SELECT d FROM DealerProductSource d WHERE d.profileId = :profileId"),
     @NamedQuery(name = "DealerProductSource.findBySourceName", query = "SELECT d FROM DealerProductSource d WHERE d.sourceName = :sourceName")})
 public class DealerProductSource implements Serializable {
+    @Size(max = 255)
+    @Column(name = "map_status")
+    private String mapStatus;
     @Size(max = 8)
     @Column(name = "status")
     private String status;
@@ -134,6 +137,14 @@ public class DealerProductSource implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getMapStatus() {
+        return mapStatus;
+    }
+
+    public void setMapStatus(String mapStatus) {
+        this.mapStatus = mapStatus;
     }
     
 }

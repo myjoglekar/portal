@@ -45,6 +45,18 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Dealer.findByLastSiteVisit", query = "SELECT w FROM Dealer w WHERE w.lastSiteVisit = :lastSiteVisit"),
     @NamedQuery(name = "Dealer.findByStatus", query = "SELECT w FROM Dealer w WHERE w.status = :status")})
 public class Dealer implements Serializable {
+    @Size(max = 255)
+    @Column(name = "accountmanager_email")
+    private String accountmanagerEmail;
+    @Size(max = 255)
+    @Column(name = "accountmanager_name")
+    private String accountmanagerName;
+    @Size(max = 255)
+    @Column(name = "accountmanager_title")
+    private String accountmanagerTitle;
+    @Column(name = "dealer_create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dealerCreateDate;
 
     @Size(max = 256)
     @Column(name = "dealer_group")
@@ -450,6 +462,38 @@ public class Dealer implements Serializable {
 
     public void setDealerProductCollection(Collection<DealerProduct> dealerProductCollection) {
         this.dealerProductCollection = dealerProductCollection;
+    }
+
+    public String getAccountmanagerEmail() {
+        return accountmanagerEmail;
+    }
+
+    public void setAccountmanagerEmail(String accountmanagerEmail) {
+        this.accountmanagerEmail = accountmanagerEmail;
+    }
+
+    public String getAccountmanagerName() {
+        return accountmanagerName;
+    }
+
+    public void setAccountmanagerName(String accountmanagerName) {
+        this.accountmanagerName = accountmanagerName;
+    }
+
+    public String getAccountmanagerTitle() {
+        return accountmanagerTitle;
+    }
+
+    public void setAccountmanagerTitle(String accountmanagerTitle) {
+        this.accountmanagerTitle = accountmanagerTitle;
+    }
+
+    public Date getDealerCreateDate() {
+        return dealerCreateDate;
+    }
+
+    public void setDealerCreateDate(Date dealerCreateDate) {
+        this.dealerCreateDate = dealerCreateDate;
     }
 
 }
