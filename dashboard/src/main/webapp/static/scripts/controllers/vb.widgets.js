@@ -155,7 +155,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.deleteWidget = function (widget, index) {                            //Delete Widget
         $http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {
             $scope.widgets.splice(index, 1);
-            $('.modal-backdrop').remove();
+            $('.modal-backdrop').on("hide")
         });
     };
 
@@ -248,11 +248,16 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
 
     $scope.onDropComplete = function (index, widget, evt) {
+        console.log(widget)
+        console.log($scope.widgets)
         var otherObj = $scope.widgets[index];
         var otherIndex = $scope.widgets.indexOf(widget);
         $scope.widgets[index] = widget;
         $scope.widgets[otherIndex] = otherObj;
         var widgetOrder = $scope.widgets.map(function (value, key) {
+            if(!value) {
+                return;
+            }
             return value.id;
         }).join(',');
         var data = {widgetOrder: widgetOrder};
@@ -462,14 +467,17 @@ app.directive('tickerDirective', function ($http, $stateParams) {
             angular.forEach(JSON.parse(scope.tickerColumns), function (value, key) {
                 scope.tickerTitle = value.displayName;
                 tickerName = {fieldName: value.fieldName, displayName: value.displayName}
-            })
+            });
 
-            var setData = []
-            var data = []
+            var setData = [];
+            var data = [];
             $http.get(scope.tickerUrl + "?widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
-                console.log(response)
-                var tickerData = response.data
-                var loopCount = 0
+                console.log(response);
+                if(!response){
+                    return;
+                }
+                var tickerData = response.data;
+                var loopCount = 0;
                 data = [tickerName.fieldName];
                 setData = tickerData.map(function (a) {
                     data.push(loopCount);

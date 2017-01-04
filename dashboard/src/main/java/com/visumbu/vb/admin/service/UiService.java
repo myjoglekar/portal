@@ -190,6 +190,8 @@ public class UiService {
         List<Report> report = uiDao.read(Report.class);
         return report;
     }
+    
+    
 
     public ReportWidget createReportWidget(Integer reportId, ReportWidget reportWidget) {
         reportWidget.setReportId(uiDao.getReportById(reportId));
@@ -251,4 +253,8 @@ public class UiService {
     public TabWidget deleteReportWidget(Integer reportId) {
         return uiDao.deleteTabWidget(reportId);
     } 
+
+    public Report getReportById(Integer reportId) {
+        return uiDao.getReportById(reportId);
+    }
 }
