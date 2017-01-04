@@ -39,6 +39,6 @@
         "url": "static/img/table.png",
         "type": "ticker",
         "name": "Tickers",
-        "icon": ""
+        "icon": "fa-check"
     }
 ]

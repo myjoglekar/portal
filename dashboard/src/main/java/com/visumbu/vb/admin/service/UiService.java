@@ -58,19 +58,19 @@ public class UiService {
     public DashboardTabs createDashboardTabs(DashboardTabs dashboardTabs) {
         return (DashboardTabs) uiDao.create(dashboardTabs);
     }
-    
+
     public DashboardTabs updateTab(DashboardTabs dashboardTab) {
         return (DashboardTabs) uiDao.update(dashboardTab);
-    }    
-    
-    public DashboardTabs updateDashboardTab(Integer dashboardId, String tabOrder) {
+    }
+
+    public String updateDashboardTab(Integer dashboardId, String tabOrder) {
         return uiDao.updateTabOrder(dashboardId, tabOrder);
     }
 
     public List<DashboardTabs> getDashboardTabs(Integer dbId) {
         return uiDao.getDashboardTabs(dbId);
     }
-    
+
     public DashboardTabs deleteDashboardTab(Integer id) {
         return uiDao.deleteDashboardTab(id);
     }
@@ -92,8 +92,7 @@ public class UiService {
         }
         return (TabWidget) uiDao.create(tabWidget);
     }
-    
-    
+
     public String updateWidgetUpdateOrder(Integer tabId, String widgetOrder) {
         return uiDao.updateWidgetUpdateOrder(tabId, widgetOrder);
     }
@@ -182,6 +181,10 @@ public class UiService {
         return (Report) uiDao.update(report);
     }
 
+    public String updateReportOrder(Integer reportId, String widgetOrder) {
+        return uiDao.updateReportOrder(reportId, widgetOrder);
+    }
+
     public Report deleteReport(Integer reportId) {
         return (Report) uiDao.delete(reportId);
     }
@@ -190,8 +193,6 @@ public class UiService {
         List<Report> report = uiDao.read(Report.class);
         return report;
     }
-    
-    
 
     public ReportWidget createReportWidget(Integer reportId, ReportWidget reportWidget) {
         reportWidget.setReportId(uiDao.getReportById(reportId));
@@ -252,7 +253,7 @@ public class UiService {
 
     public TabWidget deleteReportWidget(Integer reportId) {
         return uiDao.deleteTabWidget(reportId);
-    } 
+    }
 
     public Report getReportById(Integer reportId) {
         return uiDao.getReportById(reportId);

@@ -449,9 +449,8 @@ app.directive('tickerDirective', function ($http, $stateParams) {
         restrict: 'AE',
         template: '<div class="panel panel-default relative pnl-aln">' +
                 '<div class="m-b-10">' +
-                '<i class="fa fa-circle" style="color: #86c0ba"></i>' +
                 '<span>{{tickerTitle}}</span>' +
-                '<span class="text-lg pull-right" style="color: #86c0ba">{{totalValue}}</span>' +
+                '<span class="text-lg pull-right tickers">{{totalValue}}</span>' +
                 '</div>' +
                 '</div>',
         scope: {

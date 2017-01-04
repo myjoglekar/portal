@@ -84,6 +84,7 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
             reader.readAsDataURL(file);
         }
     };
+
     $scope.imageIsLoaded = function (e) {
         $scope.$apply(function () {
             $scope.uploadLogo = e.target.result;
@@ -92,22 +93,21 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
 
     $scope.saveReportData = function () {
         var data = {
+            id: $stateParams.reportId,
             reportTitle: $scope.reportTitle,
             description: $scope.description,
             logo: window.btoa($scope.uploadLogo)
-        }
-        $http({method: 'POST', url: 'admin/ui/report', data: data})
+        };
+        $http({method: $stateParams.reportId ? 'PUT' : 'POST', url: 'admin/ui/report', data: data});
     };
 
-    var uid = 10;
     $scope.addReportWidget = function (newWidget) {                                     //Add new Report Widget
-        $scope.id = uid++;
         var data = {
             width: newWidget, 'minHeight': 25, columns: []
         };
         $http({method: 'POST', url: 'admin/ui/reportWidget/' + $stateParams.reportId, data: data}).success(function (response) {
-            $scope.reportWidgets.push({id: $scope.id, width: newWidget, 'minHeight': 25, columns: []});
-        })
+            $scope.reportWidgets.push({id: response.id, width: newWidget, 'minHeight': 25, columns: []});
+        });
     };
 
     $scope.deleteReportWidget = function (reportWidget, index) {                            //Delete Widget
@@ -201,6 +201,7 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
     };
 
     $scope.saveReport = function (reportWidget) {
+        console.log(reportWidget.id)
         console.log($scope.editChartTypes)
         reportWidget.directUrl = reportWidget.previewUrl ? reportWidget.previewUrl : reportWidget.directUrl;
         var data = {
@@ -221,7 +222,20 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         reportWidget.reportColumns = reportWidget.columns;
     };
 
-    $scope.bindData = function (reportWidget) {
+    $scope.onDropComplete = function (index, reportWidget, evt) {
         console.log(reportWidget)
-    }
+        console.log($scope.reportWidgets)
+        var otherObj = $scope.reportWidgets[index];
+        var otherIndex = $scope.reportWidgets.indexOf(reportWidget);
+        $scope.reportWidgets[index] = reportWidget;
+        $scope.reportWidgets[otherIndex] = otherObj;
+        var widgetOrder = $scope.reportWidgets.map(function (value, key) {
+            if(!value) {
+                return;
+            }
+            return value.id;
+        }).join(',');
+       // var data = {widgetOrder: widgetOrder};
+        $http({method: 'GET', url: 'admin/ui/dbReportUpdateOrder/' + $stateParams.reportId + "?widgetOrder=" + widgetOrder});
+    };
 });
