@@ -2,86 +2,31 @@
     <span class="logo-mini"><img src="static/img/logo-mobile.png" width="30" /></span> 
     <span class="logo-lg"><img src="static/img/logos/l2tmedia.png" width="150" /></span> 
 </a>
-
-
-    <section class="content-header header-menu" ng-controller="HeaderController">
-          
-        <ol class="breadcrumb">
-            <li>
-                <a class="border-btn" data-toggle="dropdown"><i class="fa fa-home" style="font-size:20px;"></i>Dealer Name <i class="fa fa-caret-down"></i> </a> 
-                <ul class="dropdown-menu">
-                    <li ng-repeat="dealer in dealers">
-                        <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>  
-                    </li>
-                </ul>
-            </li>
-
-            <li>              
-                <a class="pull-right" id="daterange-btn">
-                    <i class="fa fa-calendar" id="date"></i>
-                    <span class="date-border">
-                        {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
-                    </span>
-                </a>                   
-            </li>
-            <li> <span class="label label-info" ng-click="loadNewUrl()">Go</span></li>
-            <li class="user user-menu">
-                <a data-toggle="dropdown" class="logout">
-                    <i class="fa fa-user" style="font-size:20px;"></i> {{userName}}</a>
-                <ul class="dropdown-menu pull-left">
-                    <li><a href="admin/user/logout">Logout</a></li>
-                </ul>
-            </li>
-        </ol>
-    </section>
-
-
-
-<!--<nav class="navbar navbar-static-top" role="navigation" ng-controller="HeaderController">
-    <div class="dropdown pull-right" style="margin-top: 8px;">
-        <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">{{userName}}
-            <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li><a href="admin/user/logout">Logout</a></li>
-        </ul>
-    </div>
-
-    <ul class="list-inline">
-        <li class="pull-right">
-            <div class="mar-top">
-                <div class="form-group">
-                    <div class="input-group">
-                        <button type="button" class="btn btn-default pull-right" id="daterange-btn">
-                            <span>
-                                <i class="fa fa-calendar" id="date"></i> {{startDate| date: "MMMM/dd/yyyy"}} - {{endDate| date: "MMMM/dd/yyyy"}}
-                                {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
-                            </span>
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <span class="btn btn-default" ng-click="loadNewUrl()">Go</span>
-                    </div>
-                </div>
-            </div>
+<section class="content-header header-menu" ng-controller="HeaderController">
+    <ol class="breadcrumb">
+        <li>
+            <a class="border-btn" data-toggle="dropdown"><i class="fa fa-home" style="font-size:20px;"></i>Dealer Name <i class="fa fa-caret-down"></i> </a> 
+            <ul class="dropdown-menu">
+                <li ng-repeat="dealer in dealers">
+                    <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>  
+                </li>
+            </ul>
         </li>
-    </ul>
-
-    <div class="navbar-collapse pull-right">
-        <div class="nav navbar-nav">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle-btn" type="button" data-toggle="dropdown">Dealer Name
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li ng-repeat="dealer in dealers">
-                        <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>
-                    </li>
-                </ul>
-            </div>            
-        </div>
-    </div> 
-</nav>-->
-
-<!--<div ng-controller="HeaderController"></div>-->
-<!--<section class="content-header" ng-controller="HeaderController">
-    <h1 class="text-capitalize"> {{dashboardName}}</h1> 
-
-</section>-->
+        <li>              
+            <a class="pull-right" id="daterange-btn">
+                <i class="fa fa-calendar" id="date"></i>
+                <span class="date-border">
+                    {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
+                </span>
+            </a>                   
+        </li>
+        <li> <span class="label label-info" ng-click="loadNewUrl()">Go</span></li>
+        <li class="user user-menu">
+            <a data-toggle="dropdown" class="logout">
+                <i class="fa fa-user" style="font-size:20px;"></i> {{userName}}</a>
+            <ul class="dropdown-menu pull-left">
+                <li><a href="admin/user/logout">Logout</a></li>
+            </ul>
+        </li>
+    </ol>
+</section>
