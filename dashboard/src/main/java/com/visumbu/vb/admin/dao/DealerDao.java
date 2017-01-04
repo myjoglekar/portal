@@ -5,11 +5,15 @@
  */
 package com.visumbu.vb.admin.dao;
 
+import com.visumbu.vb.admin.dao.bean.DealerAccountBean;
 import com.visumbu.vb.dao.BaseDao;
 import com.visumbu.vb.model.Dealer;
 import java.util.List;
 import java.util.Random;
 import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,5 +69,20 @@ public class DealerDao extends BaseDao {
         query.setMaxResults(100);
         List<Dealer> dealers = query.list();
         return dealers;
+    }
+
+    public List<DealerAccountBean> getDealerAccountDetails(String dealerId) {
+        String queryStr = "SELECT account_id accountId, profile_id profileId, source_name sourceName, ps.service_name serviceName"
+                + " FROM dealer_product_source dps, dealer_product dp, dealer d, dealer_product_service  ps "
+                + " where dp.id = dps.dealer_product_id and ps.dealer_product_id = dp.id and dp.dealer_id = d.id"
+                + " and d.dealer_ref_id = :dealerId";
+        Query query = sessionFactory.getCurrentSession().createSQLQuery(queryStr)
+                .addScalar("accountId", StringType.INSTANCE)
+                .addScalar("profileId", StringType.INSTANCE)
+                .addScalar("sourceName", StringType.INSTANCE)
+                .addScalar("serviceName", StringType.INSTANCE)
+                .setResultTransformer(Transformers.aliasToBean(DealerAccountBean.class));
+        query.setParameter("dealerId", dealerId);
+        return query.list();
     }
 }
