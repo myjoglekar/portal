@@ -14,35 +14,35 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 //                templateUrl: "static/views/dashboard/dashboardTabs.html", 
 //                controller: 'UiController'
 //            })
-            .state("header", {
-                url: "/header/:productId",
-                templateUrl: "static/views/dashboard/dashboardTabs.html",
-                controller: 'HeaderController'
-            })
+//            .state("header", {
+//                url: "/header/:productId",
+//                templateUrl: "static/views/dashboard/dashboardTabs.html",
+//                controller: 'HeaderController'
+//            })
             .state("index.dashboard.widget", {
                 url: "/widget/:productId/:tabId?:startDate/:endDate",
                 templateUrl: "static/views/dashboard/widgets.html",
                 controller: 'WidgetController'
             })
             .state("index.report", {
-                url: "/reportIndex/:productId?:startDate/:endDate",
+                url: "/reportIndex/:reportId?:startDate/:endDate",
                 templateUrl: "static/views/reports/reportIndex.html",
                 controller: 'ReportIndexController'
             })
             .state("index.report.template", {
-                url: "/template/:productId",
+                url: "/template/:reportId?:startDate/:endDate",
                 templateUrl: "static/views/reports/reportTemplate.html",
                 controller: 'TemplateController',
                 activetab: 'template'
             })
             .state("index.report.reports", {
-                url: "/report/:productId?:startDate/:endDates",
+                url: "/report/:reportId?:startDate/:endDate",
                 templateUrl: "static/views/reports/reports.html",
                 controller: 'ReportController',
                 activetab: 'report'
             })
             .state("index.report.newOrEdit", {
-                url: "/newOrEdit/:productId/:reportId",
+                url: "/newOrEdit/:reportId?:startDate/:endDate",
                 templateUrl: "static/views/reports/newOrEditReports.html",
                 controller: 'ReportController',
                 activetab: 'report'

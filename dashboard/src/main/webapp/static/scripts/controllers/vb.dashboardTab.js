@@ -156,6 +156,31 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $http({method: 'GET', url: 'admin/ui/dbTabUpdateOrder/' + $stateParams.productId + "?tabOrder=" + tabOrder});
     };
 
+    $scope.editedItem = null;
+    $scope.startEditing = function (tab) {
+        tab.editing = true;
+        $scope.editedItem = tab;
+    }
+
+    $scope.doneEditing = function (tab) {
+        console.log(tab)
+        console.log(tab.tabName)
+        var data = {
+            id : tab.id,
+            createdTime: tab.createdTime,
+            dashboardId: tab.dashboardId,
+            modifiedTime: tab.modifiedTime,
+            remarks: tab.remarks,
+            status: tab.status,
+            tabName: tab.tabName,
+            tabOrder: tab.tabOrder
+        }
+        $http({method: 'PUT', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data})
+        tab.editing = false;
+        $scope.editedItem = null;
+
+    }
+
 
     $(function () {
         //Initialize Select2 Elements
@@ -211,6 +236,23 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
             showInputs: false
         });
     });
-
-
 })
+        .directive('ngBlur', function () {
+            return function (scope, elem, attrs) {
+                elem.bind('blur', function () {
+                    scope.$apply(attrs.ngBlur);
+                });
+            };
+        })
+
+        .directive('ngFocus', function ($timeout) {
+            return function (scope, elem, attrs) {
+                scope.$watch(attrs.ngFocus, function (newval) {
+                    if (newval) {
+                        $timeout(function () {
+                            elem[0].focus();
+                        }, 0, false);
+                    }
+                });
+            };
+        });

@@ -4536,3 +4536,13 @@ button.close {
     margin-left: 18px;
     margin-top: 6px;
 }
+
+.pnl-aln {
+    padding: 10px;
+     font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
+}
+
+.tickers {
+    color: #298793;
+    font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
+}

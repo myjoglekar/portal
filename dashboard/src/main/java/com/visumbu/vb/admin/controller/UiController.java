@@ -68,6 +68,13 @@ public class UiController extends BaseController {
         dashboardTabs.setDashboardId(uiService.getDashboardById(dashboardId));
         return uiService.createDashboardTabs(dashboardTabs);
     }
+    
+     @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    DashboardTabs updateTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId, @RequestBody DashboardTabs dashboardTab) {
+        return uiService.updateTab(dashboardTab);
+    }
+
 
     @RequestMapping(value = "dbTabUpdateOrder/{dashboardId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody

@@ -1,15 +1,14 @@
 app.controller("ReportController", function ($scope, $http, $stateParams) {
+    console.log($stateParams.startDate)
+    console.log($stateParams.endDate)
     $scope.reportWidgets = [];
-    $scope.selectDurations = [{duration: "None"}, {duration: "Last Week"}, {duration: "Last Three Months"}, {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
+    $scope.selectDurations = [{duration: "None"},
+        {duration: "Last Week"}, {duration: "Last Three Months"},
+        {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
 
     console.log($stateParams.reportId)
 
-//Temp Collection
-//    $scope.reports = [{id: 1, title: 'Display', time: '12/24/2016', user: 'user 1'},
-//        {id: 2, title: 'Paid', time: '12/25/2016', user: 'user 2'},
-//        {id: 3, title: 'SEO', time: '12/26/2016', user: 'user 3'}];
-
-    $scope.uploadLogo = "static/img/logos/digital1.png";//"http://goo.gl/pB9rpQ";       //Logo Upload
+    $scope.uploadLogo = "static/img/logos/digital1.png";       //Logo Upload
     $scope.imageUpload = function (event) {
         var files = event.target.files;
         for (var i = 0; i < files.length; i++) {

@@ -59,6 +59,10 @@ public class UiService {
         return (DashboardTabs) uiDao.create(dashboardTabs);
     }
     
+    public DashboardTabs updateTab(DashboardTabs dashboardTab) {
+        return (DashboardTabs) uiDao.update(dashboardTab);
+    }    
+    
     public DashboardTabs updateDashboardTab(Integer dashboardId, String tabOrder) {
         return uiDao.updateTabOrder(dashboardId, tabOrder);
     }
@@ -246,5 +250,5 @@ public class UiService {
 
     public TabWidget deleteReportWidget(Integer reportId) {
         return uiDao.deleteTabWidget(reportId);
-    }    
+    } 
 }

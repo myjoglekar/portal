@@ -37,8 +37,8 @@
     {
         "id": 8,
         "url": "static/img/table.png",
-        "type": "tickers",
+        "type": "ticker",
         "name": "Tickers",
-        "icon": ""
+        "icon": "fa-check"
     }
 ]

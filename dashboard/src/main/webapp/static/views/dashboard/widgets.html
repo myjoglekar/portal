@@ -32,8 +32,8 @@
         /*background-color: #88ddaa;*/
     }
     .wid i{
-     font-size:30px;
-     color: #99a5aa !important;
+        font-size:30px;
+        color: #99a5aa !important;
     }
 
     .dropdown-item:focus, .dropdown-item:hover {
@@ -77,14 +77,14 @@
         padding: 15px 5px;
         margin: 5px 0px 5px 10px;
         min-width: 80px;
-/*        height: 40px;*/
+        /*        height: 40px;*/
         text-align: center;
         color: #666;
         border: 1px solid #ddd;
         background-color: #fcfcfc;
         font-size: 12px;
     }
-    
+
     .lay-wid {
         text-align:left;
     }
@@ -130,14 +130,10 @@
 <div>
     <div ng-repeat="widget in widgets">
 
-        <div class="row row-padding" ng-if="widget.chartType == 'ticker'">
-            <div class="col-sm-{{2 * widget.width}}">
-                <div class="panel panel-default relative pnl-aln">
-                    <div class="m-b-10">
-                        <i class="fa fa-circle" style="color: #86c0ba"></i> 
-                        {{widget.widgetTitle}}
-                        <span class="text-lg pull-right" style="color: #86c0ba">{{totalSiteVisit}}</span>
-                    </div>                          
+        <div ng-if="widget.chartType == 'ticker'">
+            <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+                <div class="box-body chart-responsive" ng-drag="true" ng-drag-data="widget">
+                    <div ticker-Directive ticker-Url="{{widget.directUrl}}" ticker-Id="{{widget.id}}" ticker-Columns="{{widget.columns}}"></div>
                 </div>
             </div>
         </div>
@@ -176,6 +172,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">
                         <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                     </div> 
@@ -223,7 +220,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Product</label>
-                                            <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |                         capitalize) for userProduct in userProducts">
+                                            <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |                    capitalize) for userProduct in userProducts">
                                             </select>
                                         </div>
                                     </div>
@@ -381,19 +378,17 @@
                                     </tbody>
                                 </table>                            
                             </div>
-                            <!-- /.box-body -->
                         </div>
-                        <!-- /.box -->
-
-
 
                         <button class="btn btn-info" ng-click="showPreview(widget); showPreviewChart = !showPreviewChart">
                             <i class="fa" ng-class="{'fa-angle-down': !showPreviewChart, 'fa-angle-up': showPreviewChart}"></i> Preview 
                         </button>
 
-
                         <div ng-show="showPreviewChart">
                             <div class="col-md-12">
+                                <div class="box-body chart-responsive" ng-if="previewChartType === 'ticker'">
+                                    <div ticker-Directive ticker-Url="{{previewChartUrl}}" ticker-Id="{{widget.id}}" ticker-Columns="{{previewColumn.columns}}"></div>
+                                </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
                                     <div line-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
                                 </div> 
@@ -418,8 +413,6 @@
                             </div>
                         </div>
                     </div>
-
-
                     <div class="modal-footer">
                         <button data-dismiss="modal" class="btn btn-info" ng-click="save(widget); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-save"></span> Save</button>
                         <button data-dismiss="modal" class="btn btn-danger" ng-click="showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-times"></span> Cancel</button>
