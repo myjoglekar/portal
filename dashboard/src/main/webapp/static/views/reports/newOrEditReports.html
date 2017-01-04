@@ -12,6 +12,47 @@
     .content-report {
         /*padding-top:30px;*/
     }
+    .ui-select-bootstrap .ui-select-toggle > .caret {
+        position: absolute;
+        height: 10px;
+        top: 50%;
+        right: 10px;
+        margin-top: -2px;
+        padding: 0px;
+    }
+    .previewChart {
+        border-radius: 5px;
+        border: none;
+        font-size: 30px;
+        padding: 20px;
+        color: #99a5aa;
+        line-height: 1px;
+    }
+    .selected {
+        color: rgb(240, 173, 78);
+        font-size: 30px;
+        line-height: 1px;
+        border-radius: 5px;
+        border: none;
+        padding: 1vw;
+    }
+    .full-height {
+        /*height: 100%;*/
+    }
+
+    #changes-height {
+        /*height: 400px;*/
+        /*background-color: #88ddaa;*/
+    }
+    .wid{
+        border : 1px solid #ddd;
+        border-radius: 5px;
+        padding: 5px;
+        margin:0;
+    }
+    a .wid:hover {
+        background:none;
+    }
 </style>
 
 <div class="pull-right-container pull-right">
@@ -64,8 +105,8 @@
 </div>
 <div class="row">
     <div ng-repeat="reportWidget in reportWidgets">
-        <div class="col-md-{{2 * reportWidget.width}}">
-            <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl">
+        <div class="col-md-{{2 * reportWidget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+            <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl" ng-drag="true" ng-drag-data="reportWidget">
                 <div class="box-header with-border">
                     <h3 class="box-title">
                         <span class="{{reportWidget.icon}}"></span> 

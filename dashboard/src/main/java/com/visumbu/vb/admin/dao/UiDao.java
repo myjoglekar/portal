@@ -186,7 +186,7 @@ public class UiDao extends BaseDao {
     }
 
     public List<ReportWidget> getReportWidget(Integer reportId) {
-        String queryStr = "select d from ReportWidget d where d.reportId.id = :reportId";
+        String queryStr = "select d from ReportWidget d where d.reportId.id = :reportId order by widgetOrder";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", reportId);
 
@@ -228,13 +228,24 @@ public class UiDao extends BaseDao {
         return "Success";
     }
 
-    public DashboardTabs updateTabOrder(Integer dashboardId, String tabOrder) {
+    public String updateTabOrder(Integer dashboardId, String tabOrder) {
         String[] tabOrderArray = tabOrder.split(",");
         for (int i = 0; i < tabOrderArray.length; i++) {
             Integer tabId = Integer.parseInt(tabOrderArray[i]);
             DashboardTabs dashboardTabs = getDashboardTabById(tabId);
             dashboardTabs.setTabOrder(i);
             update(dashboardTabs);
+        }
+        return null;
+    }
+
+    public String updateReportOrder(Integer reportId, String widgetOrder) {
+        String[] reportOrderArray = widgetOrder.split(",");
+        for (int i = 0; i < reportOrderArray.length; i++) {
+            Integer reportWidgetId = Integer.parseInt(reportOrderArray[i]);
+            ReportWidget reportWidget = getReportWidgetById(reportWidgetId);
+            reportWidget.setWidgetOrder(i);
+            update(reportWidget);
         }
         return null;
     }
