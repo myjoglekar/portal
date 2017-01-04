@@ -76,7 +76,7 @@ public class UserController {
 
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    SecurityAuthBean login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
+    Map login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
         SecurityAuthBean authData = userService.getPermissions(loginUserBean);
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
         HttpSession session = request.getSession();
@@ -84,7 +84,10 @@ public class UserController {
         session.setAttribute("username", authData.getUserName());
         session.setAttribute("accessToken", authData.getAccessToken());
         session.setAttribute("permission", authData.getPermission());
-        return authData;
+        Map returnMap = new HashMap();
+        returnMap.put("authData", authData);
+        returnMap.put("dealers", getDealerBySecuityBean(authData));
+        return returnMap;
     }
     
     
@@ -96,6 +99,10 @@ public class UserController {
             return null;
         }
         SecurityAuthBean authData = userService.getPermissions((String)session.getAttribute("accessToken"));
+        return getDealerBySecuityBean(authData);
+    }
+    
+    private List<Dealer> getDealerBySecuityBean(SecurityAuthBean authData) {
         List<Dealer> returnList = new ArrayList<>();
         List<SecurityAuthRoleBean> roles = authData.getRoles();
         for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
