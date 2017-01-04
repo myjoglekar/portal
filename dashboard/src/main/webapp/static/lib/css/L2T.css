@@ -256,7 +256,7 @@ a:hover, a:active, a:focus {
     /*    height:90px;*/
 }
 .content-header>h1 {
-    margin: 20px;
+    margin: 0px 20px;
     font-size: 24px;
     color: #3d464d;
     font-family: 'proxima_nova_ltmedium', Helvetica, Arial, sans-serif;
@@ -4296,9 +4296,9 @@ table.text-center, table.text-center td, table.text-center th {
     display: block;
     width: 100%;
     height: 20px;
-    padding: 0px 4px;
+    padding: 0px 0px;
     font-size: 12px;
-    margin-top: 1px;
+    margin-top: 2px;
 }
 
 .panel-heading {
@@ -4468,8 +4468,8 @@ a.mail-to {
 .label-info {
     background-color: #99a5aa !important;
     border-color: #99a5aa !important;
-    margin: 0;
-    padding: 2px 4px;
+    margin: 0px;
+    padding: 1px 4px;
     cursor: pointer;
 }
 
@@ -4539,10 +4539,20 @@ button.close {
 
 .pnl-aln {
     padding: 10px;
-     font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
+    font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
 }
 
 .tickers {
     color: #298793;
     font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
+}
+
+.header-menu {
+    height:40px;
+}
+
+.date-border {
+    border: 1px solid #cdcdcd;
+    padding: 0px 5px;
+    border-radius:2px;
 }
