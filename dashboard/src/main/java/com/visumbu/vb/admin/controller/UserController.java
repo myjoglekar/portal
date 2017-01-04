@@ -8,6 +8,7 @@ package com.visumbu.vb.admin.controller;
 import com.visumbu.vb.admin.service.UserService;
 import com.visumbu.vb.bean.LoginUserBean;
 import com.visumbu.vb.bean.UrlBean;
+import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
 import com.visumbu.vb.model.VbUser;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,12 +73,32 @@ public class UserController {
 
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    LoginUserBean login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
-        LoginUserBean userBean = userService.authenicate(loginUserBean);
+    SecurityAuthBean login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
+        SecurityAuthBean authData = userService.getPermissions(loginUserBean);
+        //LoginUserBean userBean = userService.authenicate(loginUserBean);
         HttpSession session = request.getSession();
-        session.setAttribute("isAuthenticated", userBean.getAuthenticated());
-        session.setAttribute("username", userBean.getUsername());
-        return userBean;
+        session.setAttribute("isAuthenticated", authData != null);
+        session.setAttribute("username", authData.getUserName());
+        session.setAttribute("accessToken", authData.getAccessToken());
+        session.setAttribute("permission", authData.getPermission());
+        return authData;
+    }
+    
+    
+    @RequestMapping(value = "authData", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    SecurityAuthBean getAuthData(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
+        HttpSession session = request.getSession();
+        if(!((Boolean)session.getAttribute("isAuthenticated"))) {
+            return null;
+        }
+        SecurityAuthBean authData = userService.getPermissions((String)session.getAttribute("accessToken"));
+        //LoginUserBean userBean = userService.authenicate(loginUserBean);
+        session.setAttribute("isAuthenticated", authData != null);
+        session.setAttribute("username", authData.getUserName());
+        session.setAttribute("accessToken", authData.getAccessToken());
+        session.setAttribute("permission", authData.getPermission());
+        return authData;
     }
 
     @RequestMapping(value = "logout", method = RequestMethod.GET, produces = "application/json")

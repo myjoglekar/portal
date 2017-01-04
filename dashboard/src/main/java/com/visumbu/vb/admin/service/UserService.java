@@ -7,7 +7,9 @@ package com.visumbu.vb.admin.service;
 
 import com.visumbu.vb.admin.dao.UserDao;
 import com.visumbu.vb.bean.LoginUserBean;
+import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
 import com.visumbu.vb.model.VbUser;
+import com.visumbu.vb.utils.VbUtils;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +64,20 @@ public class UserService {
 
     public VbUser findByUsername(String username) {
         List<VbUser> vbUsers = userDao.findByUserName(username);
-        if(!vbUsers.isEmpty()) {
+        if (!vbUsers.isEmpty()) {
             return vbUsers.get(0);
         }
         return null;
     }
-    
+
+    public SecurityAuthBean getPermissions(LoginUserBean userBean) {
+        return VbUtils.getAuthData(userBean.getUsername(), userBean.getPassword());
+    }
+
+    public SecurityAuthBean getPermissions(String accessToken) {
+        return VbUtils.getAuthData(accessToken);
+    }
+
     public LoginUserBean authenicate(LoginUserBean userBean) {
         List<VbUser> users = userDao.findByUserName(userBean.getUsername());
         LoginUserBean loginUserBean = null;
@@ -96,7 +106,7 @@ public class UserService {
         LoginUserBean userBean = new LoginUserBean();
         userBean.setUsername(teUser.getUserName());
         userBean.setFailLoginCount(teUser.getFailedLoginCount());
-        userBean.setIsAdmin(teUser.getIsAdmin() != null && teUser.getIsAdmin() == true? "admin" : "");
+        userBean.setIsAdmin(teUser.getIsAdmin() != null && teUser.getIsAdmin() == true ? "admin" : "");
         return userBean;
     }
 }
