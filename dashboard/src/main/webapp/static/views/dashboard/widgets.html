@@ -121,7 +121,7 @@
     <div ng-repeat="widget in widgets">
 
         <div ng-if="widget.chartType == 'ticker'">
-            <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+            <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data, $event)">
                 <div class="box-body chart-responsive" ng-drag="true" ng-drag-data="widget">
                     <div ticker-Directive ticker-Url="{{widget.directUrl}}" ticker-Id="{{widget.id}}" ticker-Columns="{{widget.columns}}"></div>
                 </div>
@@ -143,7 +143,7 @@
                             <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
                             <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
-                            <div id="delete{{widget.id}}" class="modal fade">
+                            <div id="delete{{widget.id}}" class="modal">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header" style="background-color:#9DD6D7;color:black;">

@@ -155,7 +155,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.deleteWidget = function (widget, index) {                            //Delete Widget
         $http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {
             $scope.widgets.splice(index, 1);
-            $('.modal-backdrop').on("hide")
         });
     };
 
@@ -248,20 +247,23 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
 
     $scope.onDropComplete = function (index, widget, evt) {
-        console.log(widget)
-        console.log($scope.widgets)
-        var otherObj = $scope.widgets[index];
-        var otherIndex = $scope.widgets.indexOf(widget);
-        $scope.widgets[index] = widget;
-        $scope.widgets[otherIndex] = otherObj;
-        var widgetOrder = $scope.widgets.map(function (value, key) {
-            if(!value) {
-                return;
+        if (widget !== "" && widget !== null) {
+            var otherObj = $scope.widgets[index];
+            var otherIndex = $scope.widgets.indexOf(widget);
+            $scope.widgets[index] = widget;
+            $scope.widgets[otherIndex] = otherObj;
+            var widgetOrder = $scope.widgets.map(function (value, key) {
+                console.log(value)
+                if (value) {
+                    return value.id;
+                }
+                //return value.id;
+            }).join(',');
+            var data = {widgetOrder: widgetOrder};
+            if (widgetOrder) {
+                $http({method: 'GET', url: 'admin/ui/dbWidgetUpdateOrder/' + $stateParams.tabId + "?widgetOrder=" + widgetOrder});
             }
-            return value.id;
-        }).join(',');
-        var data = {widgetOrder: widgetOrder};
-        $http({method: 'GET', url: 'admin/ui/dbWidgetUpdateOrder/' + $stateParams.tabId + "?widgetOrder=" + widgetOrder});
+        }
     };
 });
 
@@ -335,7 +337,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
 //                                columnDef.cellClass = 'space-numbers',
@@ -472,7 +474,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
             var data = [];
             $http.get(scope.tickerUrl + "?widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
                 console.log(response);
-                if(!response){
+                if (!response) {
                     return;
                 }
                 var tickerData = response.data;
@@ -1137,7 +1139,7 @@ app.service('stats', function ($filter) {
     var initAggregation = function (aggregation) {
         /* To be used in conjunction with the cleanup finalizer */
         if (angular.isUndefined(aggregation.stats)) {
-            aggregation.stats = {sum: 0, impressionsSum: 0, clicksSum: 0, costSum: 0, conversionsSum: 0 };
+            aggregation.stats = {sum: 0, impressionsSum: 0, clicksSum: 0, costSum: 0, conversionsSum: 0};
         }
     };
     var initProperty = function (obj, prop) {
@@ -1224,7 +1226,7 @@ app.service('stats', function ($filter) {
                     if (isNaN(aggregatedCost)) {
                         aggregatedCost = Number(aggregatedCost.replace(/[^0-9.]/g, ""));
                     }
-                    return aggregatedCost/aggregatedClicks ;
+                    return aggregatedCost / aggregatedClicks;
                 }
                 return "";
             },
@@ -1251,7 +1253,7 @@ app.service('stats', function ($filter) {
                     if (isNaN(aggregatedCost)) {
                         aggregatedCost = Number(aggregatedCost.replace(/[^0-9.]/g, ""));
                     }
-                    return aggregatedCost/aggregatedConversions ;
+                    return aggregatedCost / aggregatedConversions;
                 }
                 return "";
             }
