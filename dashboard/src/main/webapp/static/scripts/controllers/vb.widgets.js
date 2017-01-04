@@ -1,6 +1,6 @@
-app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter) {
-    console.log($stateParams.startDate)
-    console.log($stateParams.endDate)
+app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
+    console.log("Permission");
+    $scope.permission = localStorageService.get("permission");
     $scope.selectAggregations = [
         {name: 'None', value: ""},
         {name: 'Sum', value: "sum"},
