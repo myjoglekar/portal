@@ -84,12 +84,8 @@ public class Permission {
         try {
             System.out.println("Permission Name " + permissionName + " Permission Value " + permission);
             PropertyUtils.setProperty(this, permissionName, permission);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(Permission.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(Permission.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(Permission.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+            // Logger.getLogger(Permission.class.getName()).log(Level.SEVERE, null, ex);
         }
         return permissionName;
     }

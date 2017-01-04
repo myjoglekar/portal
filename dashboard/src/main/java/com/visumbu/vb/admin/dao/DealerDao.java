@@ -29,4 +29,32 @@ public class DealerDao extends BaseDao {
         }
         return dealers.get(0);
     }
+
+    public List<Dealer> getAllowedDealerByMapId(String dealerRefId) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where dealerRefId = :dealerRefId");
+        query.setParameter("dealerRefId", dealerRefId);
+        List<Dealer> dealers = query.list();
+        return dealers;
+    }
+
+    public List<Dealer> getAllowedDealerByGroupId(String dealerGroupId) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where dealerGroup = :dealerGroupId");
+        query.setParameter("dealerGroupId", dealerGroupId);
+        List<Dealer> dealers = query.list();
+        return dealers;
+    }
+
+    public List<Dealer> getAllowedDealerByGroupName(String groupName) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where dealerGroup = :groupName");
+        query.setParameter("groupName", groupName);
+        List<Dealer> dealers = query.list();
+        return dealers;
+    }
+
+    public List<Dealer> getAllowedDealerByOemRegionId(String oemRegionId) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where oemRegionId = :oemRegionId");
+        query.setParameter("oemRegionId", oemRegionId);
+        List<Dealer> dealers = query.list();
+        return dealers;
+    }
 }

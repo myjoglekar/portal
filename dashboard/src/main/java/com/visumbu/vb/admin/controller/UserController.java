@@ -9,10 +9,13 @@ import com.visumbu.vb.admin.service.UserService;
 import com.visumbu.vb.bean.LoginUserBean;
 import com.visumbu.vb.bean.UrlBean;
 import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
+import com.visumbu.vb.bean.map.auth.SecurityAuthRoleBean;
+import com.visumbu.vb.model.Dealer;
 import com.visumbu.vb.model.VbUser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -84,6 +87,38 @@ public class UserController {
         return authData;
     }
     
+    
+    @RequestMapping(value = "allowedDealers", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    List<Dealer> allowedDealers(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
+        HttpSession session = request.getSession();
+        if(!((Boolean)session.getAttribute("isAuthenticated"))) {
+            return null;
+        }
+        SecurityAuthBean authData = userService.getPermissions((String)session.getAttribute("accessToken"));
+        List<Dealer> returnList = new ArrayList<>();
+        List<SecurityAuthRoleBean> roles = authData.getRoles();
+        for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
+            SecurityAuthRoleBean role = iterator.next();
+            if(role.getDealer() != null && !role.getDealer().getId().isEmpty() && role.getDealer().getId() != "0") {
+                returnList.addAll(userService.getAllowedDealerByMapId(role.getDealer().getId()));
+            }
+            if(role.getGroup() != null && !role.getGroup().getId().isEmpty() && role.getGroup().getId() != "0") {
+                List<Dealer> dealers = userService.getAllowedDealerByGroupId(role.getGroup().getId());
+                if(dealers == null || dealers.isEmpty()) {
+                    dealers = userService.getAllowedDealerByGroupName(role.getGroup().getName());
+                }
+                returnList.addAll(dealers);
+            }
+            if(role.getOem() != null && role.getOem().getRegion() != null 
+                    &&  role.getOem().getRegion().getId() != null && !role.getOem().getRegion().getId().isEmpty() 
+                    && role.getOem().getRegion().getId() != "0") {
+                returnList.addAll(userService.getAllowedDealerByOemRegionId(role.getOem().getRegion().getId()));
+            }
+        }
+        //LoginUserBean userBean = userService.authenicate(loginUserBean);
+        return returnList;
+    }
     
     @RequestMapping(value = "authData", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody

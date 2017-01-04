@@ -5,11 +5,14 @@
  */
 package com.visumbu.vb.admin.service;
 
+import com.visumbu.vb.admin.dao.DealerDao;
 import com.visumbu.vb.admin.dao.UserDao;
 import com.visumbu.vb.bean.LoginUserBean;
 import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
+import com.visumbu.vb.model.Dealer;
 import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.utils.VbUtils;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class UserService {
 
     @Autowired
     private UserDao userDao;
+    
+    @Autowired
+    private DealerDao dealerDao;
 
     public VbUser create(VbUser teUser) {
         List<VbUser> users = userDao.findByUserName(teUser.getUserName());
@@ -108,5 +114,22 @@ public class UserService {
         userBean.setFailLoginCount(teUser.getFailedLoginCount());
         userBean.setIsAdmin(teUser.getIsAdmin() != null && teUser.getIsAdmin() == true ? "admin" : "");
         return userBean;
+    }
+
+    public List<Dealer> getAllowedDealerByMapId(String delaerRefId) {
+        return dealerDao.getAllowedDealerByMapId(delaerRefId);
+    }
+
+    public List<Dealer> getAllowedDealerByGroupId(String groupId) {
+        return dealerDao.getAllowedDealerByGroupId(groupId);
+    }
+    
+    
+    public List<Dealer> getAllowedDealerByGroupName(String groupName) {
+        return dealerDao.getAllowedDealerByGroupName(groupName);
+    }
+
+    public List <Dealer> getAllowedDealerByOemRegionId(String oemRegionId) {
+        return dealerDao.getAllowedDealerByOemRegionId(oemRegionId);
     }
 }

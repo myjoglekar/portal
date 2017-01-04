@@ -5,6 +5,7 @@
  */
 package com.visumbu.vb.utils;
 
+import com.google.common.base.CaseFormat;
 import com.visumbu.vb.bean.Permission;
 import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
 import com.visumbu.vb.bean.map.auth.SecurityAuthPermission;
@@ -91,7 +92,7 @@ public class VbUtils {
             accessHeader.put("Authorization", token.getAccessToken());
             String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=00959ecd-41c5-4b92-8bd9-78c26d10486c", null, accessHeader);
             SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
-
+            authData.setAccessToken(token.getAccessToken());
             System.out.println(authData);
             Permission permission = getPermissions(authData);
             authData.setPermission(permission);
@@ -109,7 +110,7 @@ public class VbUtils {
             accessHeader.put("Authorization", accessToken);
             String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=00959ecd-41c5-4b92-8bd9-78c26d10486c", null, accessHeader);
             SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
-
+            authData.setAccessToken(accessToken);
             System.out.println(authData);
             Permission permission = getPermissions(authData);
             authData.setPermission(permission);
@@ -128,7 +129,7 @@ public class VbUtils {
             List<SecurityAuthPermission> permissions = role.getPermissions();
             for (Iterator<SecurityAuthPermission> iterator1 = permissions.iterator(); iterator1.hasNext();) {
                 SecurityAuthPermission authPermission = iterator1.next();
-                permission.setPermission(authPermission.getName(), Boolean.TRUE);
+                permission.setPermission(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, authPermission.getName()), Boolean.TRUE);
             }
         }
         return permission;

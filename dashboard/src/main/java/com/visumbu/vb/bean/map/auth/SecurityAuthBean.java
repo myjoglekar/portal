@@ -61,9 +61,8 @@ public class SecurityAuthBean {
 
     @Override
     public String toString() {
-        return "SecurityAuthBean{" + "userId=" + userId + ", userName=" + userName + ", roles=" + roles + '}';
+        return "SecurityAuthBean{" + "userId=" + userId + ", userName=" + userName + ", accessToken=" + accessToken + ", roles=" + roles + ", permission=" + permission + '}';
     }
-
     
     
 }
