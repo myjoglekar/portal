@@ -163,10 +163,6 @@ public class UiDao extends BaseDao {
         return reportType;
     }
 
-//    public List readReport(Integer reportId) {
-//        Report report = (Report) sessionFactory.getCurrentSession().get(Report.class, reportId);
-//        return (List) report;
-//    }
     public Report getReportById(Integer reportId) {
         Report report = (Report) sessionFactory.getCurrentSession().get(Report.class, reportId);
         return report;
@@ -190,7 +186,7 @@ public class UiDao extends BaseDao {
     }
 
     public List<ReportWidget> getReportWidget(Integer reportId) {
-        String queryStr = "select d from reportWidget d where d.reportId.id = :reportId";
+        String queryStr = "select d from ReportWidget d where d.reportId.id = :reportId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", reportId);
 
