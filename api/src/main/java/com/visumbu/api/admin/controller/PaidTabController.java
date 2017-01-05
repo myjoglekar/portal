@@ -1043,7 +1043,6 @@ public class PaidTabController {
             performanceBean.setImpressions(row.getImpressions());
             performanceBean.setClicks(row.getClicks());
             performanceBean.setCtr(row.getCtr());
-
             performanceBean.setCost(row.getCost());
             performanceBean.setAverageCpc(row.getAverageCpc());
             performanceBean.setCpa(row.getCostPerConversion());
@@ -1054,12 +1053,11 @@ public class PaidTabController {
             performanceBean.setCreativeDestinationUrl(row.getCreativeDestinationUrl());
             performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
             performanceBean.setDisplayUrl(row.getDisplayUrl());
-
             performanceBean.setAveragePosition(row.getAveragePosition());
             performanceBean.setConversions(row.getConversions());
+            performanceBean.setAdDescription(ApiUtils.getPaidAdDescription(performanceBean));
             performanceReportBeans.add(performanceBean);
         }
-
         for (Iterator<AdPerformanceRow> reportRow = bingAdPerformanceRows.iterator(); reportRow.hasNext();) {
             AdPerformanceRow row = reportRow.next();
             AdPerformanceReportBean performanceBean = new AdPerformanceReportBean();
@@ -1074,7 +1072,6 @@ public class PaidTabController {
             performanceBean.setAveragePosition(row.getAveragePosition().getValue());
             performanceBean.setConversions(row.getConversions().getValue());
             performanceBean.setCpa(row.getCostPerConversion().getValue());
-
             performanceBean.setDescription(row.getAdTitle().getValue());
             performanceBean.setDescription1(row.getAdDescription().getValue());
             performanceBean.setDescription2("-");
@@ -1082,7 +1079,7 @@ public class PaidTabController {
             performanceBean.setCreativeDestinationUrl(row.getDestinationUrl().getValue());
             performanceBean.setCreativeFinalUrls(row.getFinalUrl().getValue());
             performanceBean.setDisplayUrl(row.getDisplayUrl().getValue());
-
+            performanceBean.setAdDescription(ApiUtils.getPaidAdDescription(performanceBean));
             performanceReportBeans.add(performanceBean);
 
         }

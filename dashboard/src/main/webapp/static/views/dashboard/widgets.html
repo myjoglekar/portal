@@ -88,6 +88,13 @@
     .lay-wid {
         text-align:left;
     }
+    
+    .wrap{
+        white-space: normal;
+    }
+    .ui-grid-cell{
+        height: auto !important;
+    }
 
 </style>
 <div class="add-widget">
@@ -121,7 +128,7 @@
     <div ng-repeat="widget in widgets">
 
         <div ng-if="widget.chartType == 'ticker'">
-            <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+            <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data, $event)">
                 <div class="box-body chart-responsive" ng-drag="true" ng-drag-data="widget">
                     <div ticker-Directive ticker-Url="{{widget.directUrl}}" ticker-Id="{{widget.id}}" ticker-Columns="{{widget.columns}}"></div>
                 </div>
@@ -142,8 +149,9 @@
                             </button>
                             <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
-                            <button  ng-if="permission.allowDeleteWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
-                            <div id="delete{{widget.id}}" class="modal fade">
+
+                            <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                            <div id="delete{{widget.id}}" class="modal">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header" style="background-color:#9DD6D7;color:black;">
@@ -210,7 +218,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Product</label>
-                                            <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |                    capitalize) for userProduct in userProducts">
+                                            <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |                     capitalize) for userProduct in userProducts">
                                             </select>
                                         </div>
                                     </div>
@@ -268,7 +276,7 @@
                                             <td>
                                                 <div ng-hide="isEdit"> {{currentColumn.fieldName}}</div>
                                                 <div ng-show="isEdit">
-                                                    <select ng-model="currentColumn.fieldName" class="form-control">
+                                                    <select ng-model="currentColumn.fieldName" class="form-control" ng-change="dispName(currentColumn)">
                                                         <option ng-repeat="collectionField in collectionFields" value="{{collectionField.fieldName}}">{{collectionField.displayName}}</option>
                                                     </select>
                                                 </div>
@@ -345,7 +353,7 @@
                                                 </div>
                                             </td>
                                             <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
-                                                <div ng-hide="isEdit"> {{currentColumn.wrapText}}</div>
+                                                <div ng-hide="isEdit"> {{currentColumn.wrapText| capitalize}}</div>
                                                 <div ng-show="isEdit">                                                
                                                     <select ng-model="currentColumn.wrapText" class="form-control">
                                                         <option ng-repeat="tableWrap in tableWrapText" value="{{tableWrap.value}}">{{tableWrap.name}}</option>
@@ -405,7 +413,7 @@
                     </div>
                     <div class="modal-footer">
                         <button data-dismiss="modal" class="btn btn-info" ng-click="save(widget); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-save"></span> Save</button>
-                        <button data-dismiss="modal" class="btn btn-danger" ng-click="showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-times"></span> Cancel</button>
+                        <button data-dismiss="modal" class="btn btn-danger" ng-click="closeWidget(widget); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-times"></span> Cancel</button>
                     </div>
                 </div>
             </div>

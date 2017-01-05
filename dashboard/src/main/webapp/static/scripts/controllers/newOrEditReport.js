@@ -3,6 +3,10 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
     console.log($stateParams.startDate);
     console.log($stateParams.endDate);
 
+    $scope.reportId = $stateParams.reportId;
+    $scope.startDate = $stateParams.startDate;
+    $scope.endDate = $stateParams.endDate;
+
     $scope.reportWidgets = [];
     $scope.selectDurations = [
         {duration: "None"},
@@ -60,7 +64,7 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         {name: 'No', value: "no"}
     ];
 
-    $http.get("admin/ui/report/" + $stateParams.reportId).success(function (response) {
+    $http.get("admin/ui/report/" + $stateParams.reportId + "?dealerId=" + $stateParams.dealerId).success(function (response) {
         $scope.reports = response;
         $scope.reportTitle = response.reportTitle;
         $scope.description = response.description;
@@ -70,7 +74,7 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         })
     });
 
-    $http.get('admin/ui/reportWidget/' + $stateParams.reportId).success(function (response) {
+    $http.get('admin/ui/reportWidget/' + $stateParams.reportId + "?dealerId=" + $stateParams.dealerId).success(function (response) {
         $scope.reportWidgets = response;
     })
 
@@ -230,12 +234,12 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         $scope.reportWidgets[index] = reportWidget;
         $scope.reportWidgets[otherIndex] = otherObj;
         var widgetOrder = $scope.reportWidgets.map(function (value, key) {
-            if(!value) {
+            if (!value) {
                 return;
             }
             return value.id;
         }).join(',');
-       // var data = {widgetOrder: widgetOrder};
+        // var data = {widgetOrder: widgetOrder};
         $http({method: 'GET', url: 'admin/ui/dbReportUpdateOrder/' + $stateParams.reportId + "?widgetOrder=" + widgetOrder});
     };
 });

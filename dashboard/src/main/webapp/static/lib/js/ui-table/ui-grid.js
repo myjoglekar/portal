@@ -3563,7 +3563,7 @@ function uiGridDirective($compile, $templateCache, $timeout, $window, gridUtil, 
           function gridResize($event) {
             grid.gridWidth = $scope.gridWidth = gridUtil.elementWidth($elm);
             grid.gridHeight = $scope.gridHeight = gridUtil.elementHeight($elm);
-
+autoAdjustHeight();
             grid.refreshCanvas(true);
           }
         }
