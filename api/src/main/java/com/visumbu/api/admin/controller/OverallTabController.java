@@ -238,7 +238,7 @@ public class OverallTabController {
             }
 
             // Paid Social
-            List<AccountPerformanceReportBean> paidSocialPerformanceReportBeans = new ArrayList<>();
+           // List<AccountPerformanceReportBean> paidSocialPerformanceReportBeans = new ArrayList<>();
             List<Map<String, String>> accountPerformance = (List<Map<String, String>>) facebookService.getAccountPerformance(startDate, endDate);
             for (Iterator<Map<String, String>> iterator = accountPerformance.iterator(); iterator.hasNext();) {
                 Map<String, String> paidSocialPerformance = iterator.next();
@@ -252,20 +252,24 @@ public class OverallTabController {
                 performanceBean.setCpa(paidSocialPerformance.get("cost_page_engagement"));
                 performanceBean.setAveragePosition("0");
                 performanceBean.setConversions(paidSocialPerformance.get("actions_page_engagement"));
-                paidSocialPerformanceReportBeans.add(performanceBean);
+                performanceReportBeans.add(performanceBean);
             }
             // Dynamic Display
-            String url = DYNAMIC_DISPLAY_URL + "all?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
-            String data = Rest.getData(url);
-            JSONParser parser = new JSONParser();
-            Object jsonObj = parser.parse(data);
+            try {
+                String url = DYNAMIC_DISPLAY_URL + "all?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
+                String data = Rest.getData(url);
+                JSONParser parser = new JSONParser();
+                Object jsonObj = parser.parse(data);
+
+            } catch (Exception ex) {
+
+            }
             if (frequency.equalsIgnoreCase("summary")) {
                 returnMap.put("data", sumPerSource(performanceReportBeans, ""));
             } else {
                 returnMap.put("data", sumPerSource(performanceReportBeans, "source"));
 
             }
-
         } catch (Exception ex) {
             Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
         }
