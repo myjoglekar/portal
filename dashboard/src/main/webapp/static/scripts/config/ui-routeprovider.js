@@ -6,7 +6,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/vb.index.html"
             })
             .state("index.dashboard", {
-                url: "/dashboard",
+                url: "/dashboard/:dealerId/:productId",
                 templateUrl: "static/views/dashboard/dashboard.html",
             })
 //            .state("dashboard.tab", {
@@ -48,5 +48,5 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 activetab: 'report'
             });
 
-    $urlRouterProvider.otherwise('index/dashboard/widget/dealerId/2/2?29/23');
+    $urlRouterProvider.otherwise('index/dashboard/dashboard/1/widget/1/2/2?29/23');
 });
