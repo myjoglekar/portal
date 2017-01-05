@@ -2,6 +2,10 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
     console.log($stateParams.reportId);
     console.log($stateParams.startDate);
     console.log($stateParams.endDate);
+    
+    $scope.reportId = $stateParams.reportId;
+    $scope.startDate = $stateParams.startDate;
+    $scope.endDate = $stateParams.endDate;
 
     $scope.reportWidgets = [];
     $scope.selectDurations = [

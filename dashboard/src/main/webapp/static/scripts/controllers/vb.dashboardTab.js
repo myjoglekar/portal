@@ -8,8 +8,31 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         console.log($stateParams.startDate + " - " + $stateParams.endDate);
     }
 
-    $scope.startDate = $stateParams.startDate;
-    $scope.endDate = $stateParams.endDate;
+    $scope.toDate = function (strDate) {
+        if (!strDate) {
+            return new Date();
+        }
+        var from = strDate.split("/");
+        var f = new Date(from[2], from[0] - 1, from[1]);
+        return f;
+    };
+
+    $scope.getDay = function () {
+        var today = new Date();
+        var yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 29);
+        return yesterday;
+    }
+
+    $scope.firstDate = $stateParams.startDate ? $scope.toDate(decodeURIComponent($stateParams.startDate)) : $scope.getDay().toLocaleDateString("en-US");
+    $scope.lastDate = $stateParams.endDate ? $scope.toDate(decodeURIComponent($stateParams.endDate)) : new Date().toLocaleDateString("en-US");
+
+    if (!$stateParams.startDate) {
+        $stateParams.startDate = $scope.firstDate;
+    }
+    if (!$stateParams.endDate) {
+        $stateParams.endDate = $scope.lastDate;
+    }
 
     try {
         $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $scope.firstDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
@@ -66,6 +89,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $http({method: 'POST', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data}).success(function (response) {
             $scope.tabs.push({id: response.id, tabName: tab.tabName, tabClose: true});
         });
+        tab.tabName = "";
     };
 
     $scope.deleteTab = function (index, tab) {
@@ -81,9 +105,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     $scope.addChild = function (report) {
         report.childItems.push({isEdit: true});
     };
-    $scope.save = function (item) {
-        console.log("Item Name : " + item);
-    };
+
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
     });
@@ -124,11 +146,11 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
             status: tab.status,
             tabName: tab.tabName,
             tabOrder: tab.tabOrder
-        }
+        };
         $http({method: 'PUT', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data})
         tab.editing = false;
         $scope.editedItem = null;
-
+        //tab.tabName = "";
     };
 })
         .directive('ngBlur', function () {

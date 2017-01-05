@@ -7,6 +7,7 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
     $scope.startDate = $stateParams.startDate;
     $scope.endDate = $stateParams.endDate;
     $scope.productId = $stateParams.productId;
+    $scope.reportId = $stateParams.reportId;
     // $scope.tabId = $stateParams.tabId;
 
 
@@ -32,7 +33,7 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
     });
-    
+
     $http.get('admin/ui/product').success(function (response) {
         $scope.products = response;
         console.log(response)

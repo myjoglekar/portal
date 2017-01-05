@@ -5,13 +5,13 @@
    
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li ng-class="{active: $state.current.activetab == 'template'}">
-                <a ui-sref="index.report.template({productId: productId})" style="padding:3px 15px;display: inline-block;">
+<!--            <li ng-class="{active: $state.current.activetab == 'template'}">
+                <a ui-sref="index.report.template({reportId: reportId, startDate: startDate, endDate: endDate})" style="padding:3px 15px;display: inline-block;">
                     Template
                 </a>
-            </li>
+            </li>-->
             <li ng-class="{active: $state.current.activetab == 'report'}">
-                <a ui-sref="index.report.reports({productId: productId})" style="padding:3px 15px;display: inline-block;">
+                <a ui-sref="index.report.reports({reportId: reportId, startDate: startDate, endDate: endDate})" style="padding:3px 15px;display: inline-block;">
                     Reports
                 </a>
             </li>

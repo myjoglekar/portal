@@ -25,7 +25,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'WidgetController'
             })
             .state("index.report", {
-                url: "/reportIndex/:reportId?:startDate/:endDate",
+                url: "/reportIndex",
                 templateUrl: "static/views/reports/reportIndex.html",
                 controller: 'ReportIndexController'
             })
