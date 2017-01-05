@@ -62,11 +62,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
         $scope.selectProductName = $scope.name.productName;
         console.log($scope.selectProductName);
-    });
-
-    $http.get('admin/dealer').success(function (response) {
-        $scope.dealers = response;
-    });
+    });    
 
     $scope.loadTab = true;
     $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {

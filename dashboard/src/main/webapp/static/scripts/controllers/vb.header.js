@@ -1,4 +1,4 @@
-app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $stateParams, $state) {
+app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $stateParams, $state, $location) {
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
@@ -7,6 +7,13 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
+
+    $scope.selectDealer = {};
+    $scope.selectDealer.selected = {dealerName: 'Acura of Pembroke Pines'};
+
+    $http.get('admin/dealer').success(function (response) {
+        $scope.dealers = response;
+    });
 
     $scope.toDate = function (strDate) {
         if (!strDate) {
@@ -34,7 +41,14 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         $stateParams.endDate = $scope.lastDate;
     }
 
+    $scope.getDealerId = function (dealer) {
+        console.log(dealer);
+        $stateParams.dealerId = dealer.id;
+    };
+
+    console.log($stateParams.dealerId);
     $scope.loadNewUrl = function () {
+        console.log($stateParams.dealerId);
         try {
             $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $scope.firstDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
 
@@ -45,21 +59,26 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         console.log($scope.getCurrentTab());
         console.log($scope.getCurrentPage());
         if ($scope.getCurrentPage() === "dashboard") {
-            $state.go("index.dashboard." + $scope.getCurrentTab(), {productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
-        } else if ($scope.getCurrentPage() === "report") {
-            //alert("GO");
-            $state.go("index.report.reports", {productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
+            $state.go("index.dashboard." + $scope.getCurrentTab(), {dealerId: $stateParams.dealerId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "reports") {
+            $state.go("index.report.reports", {dealerId: $stateParams.dealerId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "newOrEdit") {
+            $state.go("index.report.newOrEdit", {dealerId: $stateParams.dealerId, productId: $stateParams.productId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else {
             $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
         }
     };
     $scope.getCurrentPage = function () {
         var url = window.location.href;
+        console.log(url)
         if (url.indexOf("widget") > 0) {
             return "dashboard";
         }
+        if (url.indexOf("newOrEdit") > 0) {
+            return "newOrEdit";
+        }
         if (url.indexOf("report") > 0) {
-            return "report";
+            return "reports";
         }
         return "dashboard";
     };
