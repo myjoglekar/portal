@@ -24,8 +24,7 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignReportRow;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
 import com.visumbu.api.bean.ColumnDef;
-import com.visumbu.api.bean.LoginUserBean;
-import com.visumbu.api.bean.PaidAccountDetails;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceRow;
 import com.visumbu.api.bing.report.xml.bean.AccountPerformanceReport;
@@ -51,7 +50,6 @@ import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
 import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -64,14 +62,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -94,42 +89,10 @@ public class PaidTabController {
     @Autowired
     private AdwordsService adwordsService;
 
-    public static final Long bingAccountId = 2610614L;
-    
-    private PaidAccountDetails toPaidAccountDetails(HttpServletRequest request) {
-        String ppcBingAccountId = request.getParameter("ppcBingAccountId");
-        System.out.println("BING ACCOUNT ID " + ppcBingAccountId);
-        Long bingAccountId = null;
-        try {
-            bingAccountId = Long.parseLong(ppcBingAccountId);
-        } catch (Exception e) {
-
-        }
-        String ppcGoogleAdwordsAccountId = request.getParameter("ppcGoogleAdwordsAccountId");
-        String gaAccountId = null;
-        try {
-            gaAccountId = ApiUtils.toGaAccountId(ppcGoogleAdwordsAccountId);
-        } catch (Exception e) {
-
-        }
-        String ppcCenturyAccountId = request.getParameter("ppcCenturyAccountId");
-        Long centuryAccountId = null;
-        try {
-            centuryAccountId = Long.parseLong(ppcCenturyAccountId);
-        } catch (Exception e) {
-
-        }
-        PaidAccountDetails accountDetails = new PaidAccountDetails();
-        accountDetails.setBingAccountId(bingAccountId);
-        accountDetails.setGaAccountId(gaAccountId);
-        accountDetails.setCenturyAccountId(centuryAccountId);
-        return accountDetails;
-    }
-    
+    // public static final Long bingAccountId = 2610614L;
     @RequestMapping(value = "accountPerformance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
-        PaidAccountDetails paidAccountDetails = toPaidAccountDetails(request);
         Map returnMap = new HashMap();
         try {
             Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
@@ -155,11 +118,12 @@ public class PaidTabController {
             if (fieldsOnly != null) {
                 return returnMap;
             }
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
             List<AccountPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            if (paidAccountDetails.getGaAccountId() != null) {
-                System.out.println(paidAccountDetails.getGaAccountId());
+            if (accountDetails.getAdwordsAccountId() != null) {
+                System.out.println(accountDetails.getAdwordsAccountId());
                 //AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "", "SEARCH");
-                AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, paidAccountDetails.getGaAccountId(), "", "SEARCH");
+                AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
                 List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
 
                 for (Iterator<AccountReportRow> reportRow = adwordsAccountRow.iterator(); reportRow.hasNext();) {
@@ -187,9 +151,9 @@ public class PaidTabController {
                 }
             }
 
-            if (paidAccountDetails.getBingAccountId() != null) {
-                System.out.println("Getting BING ACCOUNT ID Long " + paidAccountDetails.getBingAccountId());
-                AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, paidAccountDetails.getBingAccountId(), "");
+            if (accountDetails.getBingAccountId() != null) {
+                System.out.println("Getting BING ACCOUNT ID Long " + accountDetails.getBingAccountId());
+                AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "");
                 List<AccountPerformanceRow> bingAccountRows = bingAccountReport.getAccountPerformanceRows();
 
                 for (Iterator<AccountPerformanceRow> reportRow = bingAccountRows.iterator(); reportRow.hasNext();) {
@@ -245,62 +209,65 @@ public class PaidTabController {
             if (fieldsOnly != null) {
                 return returnMap;
             }
-            List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
-            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "hourOfDay", "SEARCH");
-            AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, bingAccountId, "hourOfDay");
-            List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
-            List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
-            //returnMap.put("bing", bingAccountPerformanceRows);
-            //returnMap.put("adwords", adwordsAccountReportRows);
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
             Map<String, ClicksImpressionsHourOfDayBean> dataMap = new HashMap<>();
-            for (Iterator<AccountReportRow> iterator = adwordsAccountReportRows.iterator(); iterator.hasNext();) {
-                AccountReportRow accountReportRow = iterator.next();
-                String day = accountReportRow.getHourOfDay();
-                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
-                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
-                Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
-                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+            if (accountDetails.getAdwordsAccountId() != null) {
+                AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "hourOfDay", "SEARCH");
+                List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
+                //returnMap.put("bing", bingAccountPerformanceRows);
+                //returnMap.put("adwords", adwordsAccountReportRows);
+                for (Iterator<AccountReportRow> iterator = adwordsAccountReportRows.iterator(); iterator.hasNext();) {
+                    AccountReportRow accountReportRow = iterator.next();
+                    String day = accountReportRow.getHourOfDay();
+                    Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
+                    Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
+                    Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
+                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
 
-                String adwordsStartDayOfWeek = day;
-                ClicksImpressionsHourOfDayBean oldBean = dataMap.get(adwordsStartDayOfWeek);
-                ClicksImpressionsHourOfDayBean bean = new ClicksImpressionsHourOfDayBean();
-                if (oldBean != null) {
-                    clicks += oldBean.getClicks();
-                    impressions += oldBean.getImpressions();
-                    cost += oldBean.getCost();
-                    conversions += oldBean.getConversions();
+                    String adwordsStartDayOfWeek = day;
+                    ClicksImpressionsHourOfDayBean oldBean = dataMap.get(adwordsStartDayOfWeek);
+                    ClicksImpressionsHourOfDayBean bean = new ClicksImpressionsHourOfDayBean();
+                    if (oldBean != null) {
+                        clicks += oldBean.getClicks();
+                        impressions += oldBean.getImpressions();
+                        cost += oldBean.getCost();
+                        conversions += oldBean.getConversions();
+                    }
+                    bean.setClicks(clicks);
+                    bean.setImpressions(impressions);
+                    bean.setCost(cost);
+                    bean.setConversions(conversions);
+                    bean.setHourOfDay(adwordsStartDayOfWeek);
+                    dataMap.put(adwordsStartDayOfWeek, bean);
                 }
-                bean.setClicks(clicks);
-                bean.setImpressions(impressions);
-                bean.setCost(cost);
-                bean.setConversions(conversions);
-                bean.setHourOfDay(adwordsStartDayOfWeek);
-                dataMap.put(adwordsStartDayOfWeek, bean);
             }
+            if (accountDetails.getBingAccountId() != null) {
+                AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "hourOfDay");
+                List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
+                for (Iterator<AccountPerformanceRow> iterator = bingAccountPerformanceRows.iterator(); iterator.hasNext();) {
+                    AccountPerformanceRow accountReportRow = iterator.next();
+                    String day = accountReportRow.getHourOfDay().getValue();
+                    Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
+                    Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
+                    Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
+                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
 
-            for (Iterator<AccountPerformanceRow> iterator = bingAccountPerformanceRows.iterator(); iterator.hasNext();) {
-                AccountPerformanceRow accountReportRow = iterator.next();
-                String day = accountReportRow.getHourOfDay().getValue();
-                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
-                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
-                Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
-
-                String bingStartDayOfWeek = day;
-                ClicksImpressionsHourOfDayBean oldBean = dataMap.get(bingStartDayOfWeek);
-                ClicksImpressionsHourOfDayBean bean = new ClicksImpressionsHourOfDayBean();
-                if (oldBean != null) {
-                    clicks += oldBean.getClicks();
-                    impressions += oldBean.getImpressions();
-                    cost += oldBean.getCost();
-                    conversions += oldBean.getConversions();
+                    String bingStartDayOfWeek = day;
+                    ClicksImpressionsHourOfDayBean oldBean = dataMap.get(bingStartDayOfWeek);
+                    ClicksImpressionsHourOfDayBean bean = new ClicksImpressionsHourOfDayBean();
+                    if (oldBean != null) {
+                        clicks += oldBean.getClicks();
+                        impressions += oldBean.getImpressions();
+                        cost += oldBean.getCost();
+                        conversions += oldBean.getConversions();
+                    }
+                    bean.setClicks(clicks);
+                    bean.setImpressions(impressions);
+                    bean.setCost(cost);
+                    bean.setConversions(conversions);
+                    bean.setHourOfDay(bingStartDayOfWeek);
+                    dataMap.put(bingStartDayOfWeek, bean);
                 }
-                bean.setClicks(clicks);
-                bean.setImpressions(impressions);
-                bean.setCost(cost);
-                bean.setConversions(conversions);
-                bean.setHourOfDay(bingStartDayOfWeek);
-                dataMap.put(bingStartDayOfWeek, bean);
             }
             returnMap.put("data", dataMap.values());
 
@@ -335,64 +302,69 @@ public class PaidTabController {
             if (fieldsOnly != null) {
                 return returnMap;
             }
-            List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
-            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "dayOfWeek", "SEARCH");
-            AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, bingAccountId, "dayOfWeek");
-            List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
-            List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
-            //returnMap.put("bing", bingAccountPerformanceRows);
-            //returnMap.put("adwords", adwordsAccountReportRows);
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
             Map<String, ClicksImpressionsGraphBean> dataMap = new HashMap<>();
-            for (Iterator<AccountReportRow> iterator = adwordsAccountReportRows.iterator(); iterator.hasNext();) {
-                AccountReportRow accountReportRow = iterator.next();
-                String day = accountReportRow.getDayOfWeek();
-                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
-                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
-                Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
-                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+            if (accountDetails.getAdwordsAccountId() != null) {
+                List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
+                AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "dayOfWeek", "SEARCH");
+                List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
+                //returnMap.put("bing", bingAccountPerformanceRows);
+                //returnMap.put("adwords", adwordsAccountReportRows);
+                for (Iterator<AccountReportRow> iterator = adwordsAccountReportRows.iterator(); iterator.hasNext();) {
+                    AccountReportRow accountReportRow = iterator.next();
+                    String day = accountReportRow.getDayOfWeek();
+                    Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
+                    Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
+                    Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
+                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
 
-                String adwordsStartDayOfWeek = day;
-                ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
-                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
-                if (oldBean != null) {
-                    clicks += oldBean.getClicks();
-                    impressions += oldBean.getImpressions();
-                    cost += oldBean.getCost();
-                    conversions += oldBean.getConversions();
+                    String adwordsStartDayOfWeek = day;
+                    ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
+                    ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                    if (oldBean != null) {
+                        clicks += oldBean.getClicks();
+                        impressions += oldBean.getImpressions();
+                        cost += oldBean.getCost();
+                        conversions += oldBean.getConversions();
+                    }
+                    bean.setClicks(clicks);
+                    bean.setImpressions(impressions);
+                    bean.setCost(cost);
+                    bean.setConversions(conversions);
+                    bean.setWeekDay(adwordsStartDayOfWeek);
+                    bean.setWeekId(DateUtils.getWeekDayByDay(adwordsStartDayOfWeek) + "");
+                    dataMap.put(adwordsStartDayOfWeek, bean);
                 }
-                bean.setClicks(clicks);
-                bean.setImpressions(impressions);
-                bean.setCost(cost);
-                bean.setConversions(conversions);
-                bean.setWeekDay(adwordsStartDayOfWeek);
-                bean.setWeekId(DateUtils.getWeekDayByDay(adwordsStartDayOfWeek) + "");
-                dataMap.put(adwordsStartDayOfWeek, bean);
             }
+            if (accountDetails.getBingAccountId() != null) {
 
-            for (Iterator<AccountPerformanceRow> iterator = bingAccountPerformanceRows.iterator(); iterator.hasNext();) {
-                AccountPerformanceRow accountReportRow = iterator.next();
-                String day = accountReportRow.getDayOfWeek().getValue();
-                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
-                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
-                Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "dayOfWeek");
+                List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
+                for (Iterator<AccountPerformanceRow> iterator = bingAccountPerformanceRows.iterator(); iterator.hasNext();) {
+                    AccountPerformanceRow accountReportRow = iterator.next();
+                    String day = accountReportRow.getDayOfWeek().getValue();
+                    Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
+                    Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
+                    Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
+                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
 
-                String bingStartDayOfWeek = DateUtils.getDayOfWeek(Integer.parseInt(day));
-                ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
-                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
-                if (oldBean != null) {
-                    clicks += oldBean.getClicks();
-                    impressions += oldBean.getImpressions();
-                    cost += oldBean.getCost();
-                    conversions += oldBean.getConversions();
+                    String bingStartDayOfWeek = DateUtils.getDayOfWeek(Integer.parseInt(day));
+                    ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
+                    ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                    if (oldBean != null) {
+                        clicks += oldBean.getClicks();
+                        impressions += oldBean.getImpressions();
+                        cost += oldBean.getCost();
+                        conversions += oldBean.getConversions();
+                    }
+                    bean.setClicks(clicks);
+                    bean.setImpressions(impressions);
+                    bean.setCost(cost);
+                    bean.setConversions(conversions);
+                    bean.setWeekDay(bingStartDayOfWeek);
+                    bean.setWeekId(day);
+                    dataMap.put(bingStartDayOfWeek, bean);
                 }
-                bean.setClicks(clicks);
-                bean.setImpressions(impressions);
-                bean.setCost(cost);
-                bean.setConversions(conversions);
-                bean.setWeekDay(bingStartDayOfWeek);
-                bean.setWeekId(day);
-                dataMap.put(bingStartDayOfWeek, bean);
             }
             returnMap.put("data", dataMap.values());
 
@@ -426,73 +398,80 @@ public class PaidTabController {
             if (fieldsOnly != null) {
                 return returnMap;
             }
-            List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
-            AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "daily", "SEARCH");
-            AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, bingAccountId, "daily");
-            List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
-            List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
-            //returnMap.put("bing", bingAccountPerformanceRows);
-            //returnMap.put("adwords", adwordsAccountReportRows);
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
             Map<String, ClicksImpressionsGraphBean> dataMap = new HashMap<>();
-            for (Iterator<AccountReportRow> iterator = adwordsAccountReportRows.iterator(); iterator.hasNext();) {
-                AccountReportRow accountReportRow = iterator.next();
-                String day = accountReportRow.getDay();
-                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
-                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
-                Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
+            if (accountDetails.getAdwordsAccountId() != null) {
+
+                List<ClicksImpressionsGraphBean> clicksImpressionsGraphBeans = new ArrayList<>();
+                AccountReport adwordsAccountPerformanceReport = adwordsService.getAccountReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "daily", "SEARCH");
+                List<AccountReportRow> adwordsAccountReportRows = adwordsAccountPerformanceReport.getAccountReportRow();
+                //returnMap.put("bing", bingAccountPerformanceRows);
+                //returnMap.put("adwords", adwordsAccountReportRows);
+                for (Iterator<AccountReportRow> iterator = adwordsAccountReportRows.iterator(); iterator.hasNext();) {
+                    AccountReportRow accountReportRow = iterator.next();
+                    String day = accountReportRow.getDay();
+                    Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
+                    Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
+                    Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
 //                Double cpc = parseDouble(accountReportRow.getAvgCPC() == null ? "0" : accountReportRow.getAvgCPC());
 //                Double cpa = parseDouble(accountReportRow.getCostConv() == null ? "0" : accountReportRow.getCostConv());
-                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
 
-                String adwordsStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "yyyy-MM-dd"));
-                ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
-                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
-                if (oldBean != null) {
-                    clicks += oldBean.getClicks();
-                    impressions += oldBean.getImpressions();
-                    cost += oldBean.getCost();
-                    conversions += oldBean.getConversions();
+                    String adwordsStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "yyyy-MM-dd"));
+                    ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
+                    ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                    if (oldBean != null) {
+                        clicks += oldBean.getClicks();
+                        impressions += oldBean.getImpressions();
+                        cost += oldBean.getCost();
+                        conversions += oldBean.getConversions();
+                    }
+                    bean.setClicks(clicks);
+                    bean.setImpressions(impressions);
+                    bean.setCost(cost);
+                    bean.setCpc(cost / clicks);
+                    bean.setCpa(cost / conversions);
+                    bean.setConversions(conversions);
+                    bean.setWeekDay(adwordsStartDayOfWeek);
+                    dataMap.put(adwordsStartDayOfWeek, bean);
                 }
-                bean.setClicks(clicks);
-                bean.setImpressions(impressions);
-                bean.setCost(cost);
-                bean.setCpc(cost / clicks);
-                bean.setCpa(cost / conversions);
-                bean.setConversions(conversions);
-                bean.setWeekDay(adwordsStartDayOfWeek);
-                dataMap.put(adwordsStartDayOfWeek, bean);
             }
+            if (accountDetails.getBingAccountId() != null) {
 
-            for (Iterator<AccountPerformanceRow> iterator = bingAccountPerformanceRows.iterator(); iterator.hasNext();) {
-                AccountPerformanceRow accountReportRow = iterator.next();
-                String day = accountReportRow.getGregorianDate().getValue();
-                Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
-                Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
-                Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
-                Double cpc = parseDouble(accountReportRow.getAverageCpc() == null ? "0" : accountReportRow.getAverageCpc().getValue());
-                Double cpa = parseDouble(accountReportRow.getCostPerConversion() == null ? "0" : accountReportRow.getCostPerConversion().getValue());
+                AccountPerformanceReport bingAccountPerformanceReport = bingService.getAccountPerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "daily");
+                List<AccountPerformanceRow> bingAccountPerformanceRows = bingAccountPerformanceReport.getAccountPerformanceRows();
 
-                String bingStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "MM/dd/yyyy"));
-                ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
-                ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
-                if (oldBean != null) {
-                    clicks += oldBean.getClicks();
-                    impressions += oldBean.getImpressions();
-                    cost += oldBean.getCost();
-                    conversions += oldBean.getConversions();
-                    cpc += oldBean.getCpc();
-                    cpa += oldBean.getCpa();
+                for (Iterator<AccountPerformanceRow> iterator = bingAccountPerformanceRows.iterator(); iterator.hasNext();) {
+                    AccountPerformanceRow accountReportRow = iterator.next();
+                    String day = accountReportRow.getGregorianDate().getValue();
+                    Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
+                    Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
+                    Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
+                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                    Double cpc = parseDouble(accountReportRow.getAverageCpc() == null ? "0" : accountReportRow.getAverageCpc().getValue());
+                    Double cpa = parseDouble(accountReportRow.getCostPerConversion() == null ? "0" : accountReportRow.getCostPerConversion().getValue());
+
+                    String bingStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "MM/dd/yyyy"));
+                    ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
+                    ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
+                    if (oldBean != null) {
+                        clicks += oldBean.getClicks();
+                        impressions += oldBean.getImpressions();
+                        cost += oldBean.getCost();
+                        conversions += oldBean.getConversions();
+                        cpc += oldBean.getCpc();
+                        cpa += oldBean.getCpa();
+                    }
+                    bean.setClicks(clicks);
+                    bean.setImpressions(impressions);
+                    bean.setCost(cost);
+                    bean.setConversions(conversions);
+                    bean.setCpc(cost / clicks);
+                    bean.setCpa(cost / conversions);
+                    bean.setWeekDay(bingStartDayOfWeek);
+
+                    dataMap.put(bingStartDayOfWeek, bean);
                 }
-                bean.setClicks(clicks);
-                bean.setImpressions(impressions);
-                bean.setCost(cost);
-                bean.setConversions(conversions);
-                bean.setCpc(cost / clicks);
-                bean.setCpa(cost / conversions);
-                bean.setWeekDay(bingStartDayOfWeek);
-
-                dataMap.put(bingStartDayOfWeek, bean);
             }
             returnMap.put("data", dataMap.values());
 
@@ -531,52 +510,58 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        String aggregation = "";
-        com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, "142-465-1427", aggregation, "SEARCH");
-        CampaignPerformanceReport bingCampaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate, bingAccountId, "");
-        List<CampaignPerformanceReportRow> adwordsCampaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
-        List<CampaignPerformanceRow> bingCampaignPerformanceRows = bingCampaignPerformanceReport.getCampaignPerformanceRows();
         List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
+        if (accountDetails.getAdwordsAccountId() != null) {
+            String aggregation = "";
+            com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, accountDetails.getAdwordsAccountId(), aggregation, "SEARCH");
+            List<CampaignPerformanceReportRow> adwordsCampaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
 
-        for (Iterator<CampaignPerformanceReportRow> reportRow = adwordsCampaignPerformanceReportRow.iterator(); reportRow.hasNext();) {
-            CampaignPerformanceReportRow row = reportRow.next();
-            CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
-            performanceBean.setSource("Google");
-            performanceBean.setImpressions(row.getImpressions());
-            performanceBean.setCampaignName(row.getCampaign());
-            performanceBean.setClicks(row.getClicks());
-            performanceBean.setCtr(row.getCtr());
-            performanceBean.setAveragePosition(row.getAvgPosition());
-            performanceBean.setCost(row.getCost());
-            performanceBean.setAverageCpc(row.getAvgCPC());
-            performanceBean.setConversions(row.getConversions());
-            performanceBean.setCpa(row.getCostConv());
-            performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());
-            performanceBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
-            performanceBean.setSearchImpressionsShareLostByRank(row.getSearchLostISRank());
-            performanceReportBeans.add(performanceBean);
+            for (Iterator<CampaignPerformanceReportRow> reportRow = adwordsCampaignPerformanceReportRow.iterator(); reportRow.hasNext();) {
+                CampaignPerformanceReportRow row = reportRow.next();
+                CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
+                performanceBean.setSource("Google");
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setCampaignName(row.getCampaign());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceBean.setCost(row.getCost());
+                performanceBean.setAverageCpc(row.getAvgCPC());
+                performanceBean.setConversions(row.getConversions());
+                performanceBean.setCpa(row.getCostConv());
+                performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());
+                performanceBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
+                performanceBean.setSearchImpressionsShareLostByRank(row.getSearchLostISRank());
+                performanceReportBeans.add(performanceBean);
+            }
         }
+        if (accountDetails.getBingAccountId() != null) {
 
-        for (Iterator<CampaignPerformanceRow> reportRow = bingCampaignPerformanceRows.iterator(); reportRow.hasNext();) {
-            CampaignPerformanceRow row = reportRow.next();
-            CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
-            performanceBean.setSource("Bing");
-            performanceBean.setImpressions(row.getImpressions().getValue());
-            performanceBean.setCampaignName(row.getCampaignName().getValue());
-            performanceBean.setClicks(row.getClicks().getValue());
-            performanceBean.setCtr(row.getCtr().getValue());
-            performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-            performanceBean.setCost(row.getSpend().getValue());
-            performanceBean.setAverageCpc(row.getClicks().getValue());
-            performanceBean.setCtr(row.getCtr().getValue());
-            performanceBean.setAverageCpc(row.getAverageCpc().getValue());
-            performanceBean.setConversions(row.getConversions().getValue());
-            performanceBean.setCpa(row.getCostPerConversion().getValue());
-            performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
-            performanceBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
-            performanceBean.setSearchImpressionsShareLostByRank("--");
-            performanceReportBeans.add(performanceBean);
+            CampaignPerformanceReport bingCampaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "");
+            List<CampaignPerformanceRow> bingCampaignPerformanceRows = bingCampaignPerformanceReport.getCampaignPerformanceRows();
 
+            for (Iterator<CampaignPerformanceRow> reportRow = bingCampaignPerformanceRows.iterator(); reportRow.hasNext();) {
+                CampaignPerformanceRow row = reportRow.next();
+                CampaignPerformanceReportBean performanceBean = new CampaignPerformanceReportBean();
+                performanceBean.setSource("Bing");
+                performanceBean.setImpressions(row.getImpressions().getValue());
+                performanceBean.setCampaignName(row.getCampaignName().getValue());
+                performanceBean.setClicks(row.getClicks().getValue());
+                performanceBean.setCtr(row.getCtr().getValue());
+                performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+                performanceBean.setCost(row.getSpend().getValue());
+                performanceBean.setAverageCpc(row.getClicks().getValue());
+                performanceBean.setCtr(row.getCtr().getValue());
+                performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setCpa(row.getCostPerConversion().getValue());
+                performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
+                performanceBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
+                performanceBean.setSearchImpressionsShareLostByRank("--");
+                performanceReportBeans.add(performanceBean);
+
+            }
         }
         returnMap.put("data", performanceReportBeans);
 
@@ -609,51 +594,57 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        GeoReport adWordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "142-465-1427", "", "SEARCH");
-        GeoCityLocationPerformanceReport bingGeoReport = bingService.getGeoCityLocationPerformanceReport(startDate, endDate, bingAccountId, "");
-        List<GeoReportRow> adWordsGeoPerformanceRow = adWordsGeoReport.getGeoReportRow();
-        List<GeoCityLocationPerformanceRow> bingGeoPerformanceRows = bingGeoReport.getGeoCityLocationPerformanceRows();
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
         List<GeoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        if (accountDetails.getAdwordsAccountId() != null) {
 
-        for (Iterator<GeoReportRow> reportRow = adWordsGeoPerformanceRow.iterator(); reportRow.hasNext();) {
-            GeoReportRow row = reportRow.next();
-            GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
-            performanceBean.setSource("Google");
-            performanceBean.setCountry(row.getCountryCriteriaId());
-            performanceBean.setState("--");
-            performanceBean.setCity(ApiUtils.getCityById(row.getCityCriteriaId()));
-            performanceBean.setZip("--");
-            performanceBean.setImpressions(row.getImpressions());
-            performanceBean.setClicks(row.getClicks());
-            performanceBean.setCost(row.getCost());
-            performanceBean.setCtr(row.getCtr());
-            performanceBean.setAverageCpc(row.getAvgCPC());
-            performanceBean.setConversions(row.getConversions());
-            performanceBean.setCpa(row.getCostConv());
-            performanceBean.setSearchImpressionsShare(row.getSearchBudgetLostImpressionShare());
-            performanceBean.setAveragePosition(row.getAvgPosition());
-            performanceReportBeans.add(performanceBean);
+            GeoReport adWordsGeoReport = adwordsService.getGeoReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
+            List<GeoReportRow> adWordsGeoPerformanceRow = adWordsGeoReport.getGeoReportRow();
+
+            for (Iterator<GeoReportRow> reportRow = adWordsGeoPerformanceRow.iterator(); reportRow.hasNext();) {
+                GeoReportRow row = reportRow.next();
+                GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
+                performanceBean.setSource("Google");
+                performanceBean.setCountry(row.getCountryCriteriaId());
+                performanceBean.setState("--");
+                performanceBean.setCity(ApiUtils.getCityById(row.getCityCriteriaId()));
+                performanceBean.setZip("--");
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCost(row.getCost());
+                performanceBean.setCtr(row.getCtr());
+                performanceBean.setAverageCpc(row.getAvgCPC());
+                performanceBean.setConversions(row.getConversions());
+                performanceBean.setCpa(row.getCostConv());
+                performanceBean.setSearchImpressionsShare(row.getSearchBudgetLostImpressionShare());
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceReportBeans.add(performanceBean);
+            }
         }
+        if (accountDetails.getBingAccountId() != null) {
 
-        for (Iterator<GeoCityLocationPerformanceRow> reportRow = bingGeoPerformanceRows.iterator(); reportRow.hasNext();) {
-            GeoCityLocationPerformanceRow row = reportRow.next();
-            GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
-            performanceBean.setSource("Bing");
-            performanceBean.setCountry(row.getCountry() == null ? "-" : row.getCountry().getValue());
-            performanceBean.setState(row.getState().getValue());
-            performanceBean.setCity(row.getCity().getValue());
-            performanceBean.setZip("--");
-            performanceBean.setCost(row.getSpend().getValue());
-            performanceBean.setImpressions(row.getImpressions().getValue());
-            performanceBean.setClicks(row.getClicks().getValue());
-            performanceBean.setCtr(row.getCtr().getValue());
-            performanceBean.setAverageCpc(row.getAverageCpc().getValue());
-            performanceBean.setConversions(row.getConversions().getValue());
-            performanceBean.setCpa(row.getCostPerConversion().getValue());
-            performanceBean.setSearchImpressionsShare("--");
-            performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-            performanceReportBeans.add(performanceBean);
+            GeoCityLocationPerformanceReport bingGeoReport = bingService.getGeoCityLocationPerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "");
+            List<GeoCityLocationPerformanceRow> bingGeoPerformanceRows = bingGeoReport.getGeoCityLocationPerformanceRows();
 
+            for (Iterator<GeoCityLocationPerformanceRow> reportRow = bingGeoPerformanceRows.iterator(); reportRow.hasNext();) {
+                GeoCityLocationPerformanceRow row = reportRow.next();
+                GeoPerformanceReportBean performanceBean = new GeoPerformanceReportBean();
+                performanceBean.setSource("Bing");
+                performanceBean.setCountry(row.getCountry() == null ? "-" : row.getCountry().getValue());
+                performanceBean.setState(row.getState().getValue());
+                performanceBean.setCity(row.getCity().getValue());
+                performanceBean.setZip("--");
+                performanceBean.setCost(row.getSpend().getValue());
+                performanceBean.setImpressions(row.getImpressions().getValue());
+                performanceBean.setClicks(row.getClicks().getValue());
+                performanceBean.setCtr(row.getCtr().getValue());
+                performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setCpa(row.getCostPerConversion().getValue());
+                performanceBean.setSearchImpressionsShare("--");
+                performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+                performanceReportBeans.add(performanceBean);
+            }
         }
         returnMap.put("data", performanceReportBeans);
         return returnMap;
@@ -674,36 +665,41 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "142-465-1427", "", "SEARCH");
-        AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate, bingAccountId, "");
-        List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
-        List<AccountDevicePerformanceRow> bingAccountDevicePerformanceRows = bingAccountDevicePerformanceReport.getAccountDevicePerformanceRows();
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
         List<DevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        if (accountDetails.getAdwordsAccountId() != null) {
 
-        for (Iterator<AccountDeviceReportRow> reportRow = adwordsAccountDeviceReportRow.iterator(); reportRow.hasNext();) {
-            AccountDeviceReportRow row = reportRow.next();
-            DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
-            performanceBean.setSource("Google");
-            if (row.getDevice().contains("Tablet")) {
-                performanceBean.setDevice("Tablet");
+            AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
+            List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
+
+            for (Iterator<AccountDeviceReportRow> reportRow = adwordsAccountDeviceReportRow.iterator(); reportRow.hasNext();) {
+                AccountDeviceReportRow row = reportRow.next();
+                DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
+                performanceBean.setSource("Google");
+                if (row.getDevice().contains("Tablet")) {
+                    performanceBean.setDevice("Tablet");
+                }
+                if (row.getDevice().contains("Mobile")) {
+                    performanceBean.setDevice("Smartphone");
+                }
+                if (row.getDevice().contains("Computer")) {
+                    performanceBean.setDevice("Computer");
+                }
+                performanceBean.setConversions(row.getConversions());
+                performanceReportBeans.add(performanceBean);
             }
-            if (row.getDevice().contains("Mobile")) {
-                performanceBean.setDevice("Smartphone");
-            }
-            if (row.getDevice().contains("Computer")) {
-                performanceBean.setDevice("Computer");
-            }
-            performanceBean.setConversions(row.getConversions());
-            performanceReportBeans.add(performanceBean);
         }
-
-        for (Iterator<AccountDevicePerformanceRow> reportRow = bingAccountDevicePerformanceRows.iterator(); reportRow.hasNext();) {
-            AccountDevicePerformanceRow row = reportRow.next();
-            DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
-            performanceBean.setSource("Bing");
-            performanceBean.setDevice(row.getDeviceType().getValue());
-            performanceBean.setConversions(row.getConversions().getValue());
-            performanceReportBeans.add(performanceBean);
+        if (accountDetails.getBingAccountId() != null) {
+            AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "");
+            List<AccountDevicePerformanceRow> bingAccountDevicePerformanceRows = bingAccountDevicePerformanceReport.getAccountDevicePerformanceRows();
+            for (Iterator<AccountDevicePerformanceRow> reportRow = bingAccountDevicePerformanceRows.iterator(); reportRow.hasNext();) {
+                AccountDevicePerformanceRow row = reportRow.next();
+                DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
+                performanceBean.setSource("Bing");
+                performanceBean.setDevice(row.getDeviceType().getValue());
+                performanceBean.setConversions(row.getConversions().getValue());
+                performanceReportBeans.add(performanceBean);
+            }
         }
         returnMap.put("data", performanceReportBeans);
         return returnMap;
@@ -733,67 +729,71 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
 
-        CampaignDeviceReport adwordsCampaignDeviceReport = adwordsService.getCampaignDeviceReport(startDate, endDate, "142-465-1427", "", "SEARCH");
-        CampaignDevicePerformanceReport bingCampaignDevicePerformanceReport = bingService.getCampaignDevicePerformanceReport(startDate, endDate, bingAccountId, "");
-        List<CampaignDeviceReportRow> adwordsCampaignDeviceReportRow = adwordsCampaignDeviceReport.getCampaignDeviceReportRow();
-        List<CampaignDevicePerformanceRow> bingCampaignDevicePerformanceRows = bingCampaignDevicePerformanceReport.getCampaignDevicePerformanceRows();
         List<CampaignDevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        if (accountDetails.getAdwordsAccountId() != null) {
+            CampaignDeviceReport adwordsCampaignDeviceReport = adwordsService.getCampaignDeviceReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
+            List<CampaignDeviceReportRow> adwordsCampaignDeviceReportRow = adwordsCampaignDeviceReport.getCampaignDeviceReportRow();
 
-        for (Iterator<CampaignDeviceReportRow> reportRow = adwordsCampaignDeviceReportRow.iterator(); reportRow.hasNext();) {
-            CampaignDeviceReportRow row = reportRow.next();
-            CampaignDevicePerformanceReportBean performanceBean = new CampaignDevicePerformanceReportBean();
-            performanceBean.setSource("Google");
-            if (row.getDevice().contains("Tablet")) {
-                performanceBean.setDevice("Tablet");
-            } else if (row.getDevice().contains("Mobile")) {
-                performanceBean.setDevice("Smartphone");
-            } else if (row.getDevice().contains("Computer")) {
-                performanceBean.setDevice("Computer");
-            } else {
-                performanceBean.setDevice(row.getDevice());
+            for (Iterator<CampaignDeviceReportRow> reportRow = adwordsCampaignDeviceReportRow.iterator(); reportRow.hasNext();) {
+                CampaignDeviceReportRow row = reportRow.next();
+                CampaignDevicePerformanceReportBean performanceBean = new CampaignDevicePerformanceReportBean();
+                performanceBean.setSource("Google");
+                if (row.getDevice().contains("Tablet")) {
+                    performanceBean.setDevice("Tablet");
+                } else if (row.getDevice().contains("Mobile")) {
+                    performanceBean.setDevice("Smartphone");
+                } else if (row.getDevice().contains("Computer")) {
+                    performanceBean.setDevice("Computer");
+                } else {
+                    performanceBean.setDevice(row.getDevice());
+                }
+                performanceBean.setCampaignName(row.getCampaign());
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+
+                performanceBean.setCost(row.getCost());
+                performanceBean.setAverageCpc(row.getAvgCPC());
+                performanceBean.setCpa(row.getCostConv());
+
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceBean.setConversions(row.getConversions());
+                performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
+                performanceReportBeans.add(performanceBean);
             }
-            performanceBean.setCampaignName(row.getCampaign());
-            performanceBean.setImpressions(row.getImpressions());
-            performanceBean.setClicks(row.getClicks());
-            performanceBean.setCtr(row.getCtr());
-
-            performanceBean.setCost(row.getCost());
-            performanceBean.setAverageCpc(row.getAvgCPC());
-            performanceBean.setCpa(row.getCostConv());
-
-            performanceBean.setAveragePosition(row.getAvgPosition());
-            performanceBean.setConversions(row.getConversions());
-            performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
-            performanceReportBeans.add(performanceBean);
         }
+        if (accountDetails.getBingAccountId() != null) {
+            CampaignDevicePerformanceReport bingCampaignDevicePerformanceReport = bingService.getCampaignDevicePerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "");
+            List<CampaignDevicePerformanceRow> bingCampaignDevicePerformanceRows = bingCampaignDevicePerformanceReport.getCampaignDevicePerformanceRows();
+            for (Iterator<CampaignDevicePerformanceRow> reportRow = bingCampaignDevicePerformanceRows.iterator(); reportRow.hasNext();) {
+                CampaignDevicePerformanceRow row = reportRow.next();
+                CampaignDevicePerformanceReportBean performanceBean = new CampaignDevicePerformanceReportBean();
+                performanceBean.setSource("Bing");
 
-        for (Iterator<CampaignDevicePerformanceRow> reportRow = bingCampaignDevicePerformanceRows.iterator(); reportRow.hasNext();) {
-            CampaignDevicePerformanceRow row = reportRow.next();
-            CampaignDevicePerformanceReportBean performanceBean = new CampaignDevicePerformanceReportBean();
-            performanceBean.setSource("Bing");
+                performanceBean.setCampaignName(row.getCampaignName().getValue());
+                if (row.getDeviceType().getValue().contains("Tablet")) {
+                    performanceBean.setDevice("Tablet");
+                } else if (row.getDeviceType().getValue().contains("Smartphone")) {
+                    performanceBean.setDevice("Smartphone");
+                } else if (row.getDeviceType().getValue().contains("Computer")) {
+                    performanceBean.setDevice("Computer");
+                } else {
+                    performanceBean.setDevice(row.getDeviceType().getValue());
+                }
+                performanceBean.setImpressions(row.getImpressions().getValue());
+                performanceBean.setClicks(row.getClicks().getValue());
+                performanceBean.setCtr(row.getCtr().getValue());
+                performanceBean.setCost(row.getSpend().getValue());
+                performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+                performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setCpa(row.getCostPerConversion().getValue());
+                performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
+                performanceReportBeans.add(performanceBean);
 
-            performanceBean.setCampaignName(row.getCampaignName().getValue());
-            if (row.getDeviceType().getValue().contains("Tablet")) {
-                performanceBean.setDevice("Tablet");
-            } else if (row.getDeviceType().getValue().contains("Smartphone")) {
-                performanceBean.setDevice("Smartphone");
-            } else if (row.getDeviceType().getValue().contains("Computer")) {
-                performanceBean.setDevice("Computer");
-            } else {
-                performanceBean.setDevice(row.getDeviceType().getValue());
             }
-            performanceBean.setImpressions(row.getImpressions().getValue());
-            performanceBean.setClicks(row.getClicks().getValue());
-            performanceBean.setCtr(row.getCtr().getValue());
-            performanceBean.setCost(row.getSpend().getValue());
-            performanceBean.setAverageCpc(row.getAverageCpc().getValue());
-            performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-            performanceBean.setConversions(row.getConversions().getValue());
-            performanceBean.setCpa(row.getCostPerConversion().getValue());
-            performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
-            performanceReportBeans.add(performanceBean);
-
         }
         returnMap.put("data", performanceReportBeans);
         return returnMap;
@@ -823,69 +823,72 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, "142-465-1427", "", "SEARCH");
-        AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate, bingAccountId, "");
-        List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
-        List<AccountDevicePerformanceRow> bingAccountDevicePerformanceRows = bingAccountDevicePerformanceReport.getAccountDevicePerformanceRows();
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
         List<DevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
-        for (Iterator<AccountDeviceReportRow> reportRow = adwordsAccountDeviceReportRow.iterator(); reportRow.hasNext();) {
-            AccountDeviceReportRow row = reportRow.next();
-            DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
-            performanceBean.setSource("Google");
-            if (row.getDevice().contains("Tablet")) {
-                performanceBean.setDevice("Tablet");
-            } else if (row.getDevice().contains("Mobile")) {
-                performanceBean.setDevice("Smartphone");
-            } else if (row.getDevice().contains("Computer")) {
-                performanceBean.setDevice("Computer");
-            } else {
-                performanceBean.setDevice(row.getDevice());
-            }
+        if (accountDetails.getAdwordsAccountId() != null) {
+            AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
+            List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
+            for (Iterator<AccountDeviceReportRow> reportRow = adwordsAccountDeviceReportRow.iterator(); reportRow.hasNext();) {
+                AccountDeviceReportRow row = reportRow.next();
+                DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
+                performanceBean.setSource("Google");
+                if (row.getDevice().contains("Tablet")) {
+                    performanceBean.setDevice("Tablet");
+                } else if (row.getDevice().contains("Mobile")) {
+                    performanceBean.setDevice("Smartphone");
+                } else if (row.getDevice().contains("Computer")) {
+                    performanceBean.setDevice("Computer");
+                } else {
+                    performanceBean.setDevice(row.getDevice());
+                }
 //            performanceBean.setDevice(row.getDevice());
-            performanceBean.setImpressions(row.getImpressions());
-            performanceBean.setClicks(row.getClicks());
-            performanceBean.setCtr(row.getCtr());
-            String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
-            performanceBean.setCost(cost);
-            String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                performanceBean.setCost(cost);
+                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
 
-            performanceBean.setAverageCpc(cpc);
-            String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                performanceBean.setAverageCpc(cpc);
+                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
 
-            performanceBean.setCpa(cpa);
+                performanceBean.setCpa(cpa);
 
-            performanceBean.setAveragePosition(row.getAvgPosition());
-            performanceBean.setConversions(row.getConversions());
-            performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
-            performanceReportBeans.add(performanceBean);
-        }
-
-        for (Iterator<AccountDevicePerformanceRow> reportRow = bingAccountDevicePerformanceRows.iterator(); reportRow.hasNext();) {
-            AccountDevicePerformanceRow row = reportRow.next();
-            DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
-            performanceBean.setSource("Bing");
-            //performanceBean.setDevice(row.getDeviceType().getValue());
-            if (row.getDeviceType().getValue().contains("Tablet")) {
-                performanceBean.setDevice("Tablet");
-            } else if (row.getDeviceType().getValue().contains("Smartphone")) {
-                performanceBean.setDevice("Smartphone");
-            } else if (row.getDeviceType().getValue().contains("Computer")) {
-                performanceBean.setDevice("Computer");
-            } else {
-                performanceBean.setDevice(row.getDeviceType().getValue());
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceBean.setConversions(row.getConversions());
+                performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
+                performanceReportBeans.add(performanceBean);
             }
-            performanceBean.setImpressions(row.getImpressions().getValue());
-            performanceBean.setClicks(row.getClicks().getValue());
-            performanceBean.setCtr(row.getCtr().getValue());
-            performanceBean.setCost(row.getSpend().getValue());
-            performanceBean.setAverageCpc(row.getAverageCpc().getValue());
-            performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-            performanceBean.setConversions(row.getConversions().getValue());
-            performanceBean.setCpa(row.getCostPerConversion().getValue());
-            performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
-            performanceReportBeans.add(performanceBean);
         }
-
+        if (accountDetails.getBingAccountId() != null) {
+            AccountDevicePerformanceReport bingAccountDevicePerformanceReport = bingService.getAccountDevicePerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "");
+            List<AccountDevicePerformanceRow> bingAccountDevicePerformanceRows = bingAccountDevicePerformanceReport.getAccountDevicePerformanceRows();
+            for (Iterator<AccountDevicePerformanceRow> reportRow = bingAccountDevicePerformanceRows.iterator(); reportRow.hasNext();) {
+                AccountDevicePerformanceRow row = reportRow.next();
+                DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
+                performanceBean.setSource("Bing");
+                //performanceBean.setDevice(row.getDeviceType().getValue());
+                if (row.getDeviceType().getValue().contains("Tablet")) {
+                    performanceBean.setDevice("Tablet");
+                } else if (row.getDeviceType().getValue().contains("Smartphone")) {
+                    performanceBean.setDevice("Smartphone");
+                } else if (row.getDeviceType().getValue().contains("Computer")) {
+                    performanceBean.setDevice("Computer");
+                } else {
+                    performanceBean.setDevice(row.getDeviceType().getValue());
+                }
+                performanceBean.setImpressions(row.getImpressions().getValue());
+                performanceBean.setClicks(row.getClicks().getValue());
+                performanceBean.setCtr(row.getCtr().getValue());
+                performanceBean.setCost(row.getSpend().getValue());
+                performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+                performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setCpa(row.getCostPerConversion().getValue());
+                performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
+                performanceReportBeans.add(performanceBean);
+            }
+        }
         returnMap.put("data", sumPerDevice(performanceReportBeans));
         return returnMap;
     }
@@ -944,51 +947,57 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AddGroupReport adwordsAdGroupReport = adwordsService.getAdGroupReport(startDate, endDate, "142-465-1427", "SEARCH");
-        AdGroupPerformanceReport bingAdGroupPerformanceReport = bingService.getAdGroupPerformanceReport(startDate, endDate, bingAccountId);
-
-        List<AdGroupReportRow> adwordsAdGroupReportRow = adwordsAdGroupReport.getAdGroupReportRow();
-        List<AdGroupPerformanceRow> bingAdGroupPerformanceRows = bingAdGroupPerformanceReport.getAdGroupPerformanceRows();
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
 
         List<AdGroupPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        if (accountDetails.getAdwordsAccountId() != null) {
 
-        for (Iterator<AdGroupReportRow> reportRow = adwordsAdGroupReportRow.iterator(); reportRow.hasNext();) {
-            AdGroupReportRow row = reportRow.next();
-            AdGroupPerformanceReportBean performanceBean = new AdGroupPerformanceReportBean();
-            performanceBean.setSource("Google");
-            performanceBean.setCampaignName(row.getCampaign());
-            performanceBean.setAdGroupName(row.getAdGroupName());
-            performanceBean.setImpressions(row.getImpressions());
-            performanceBean.setClicks(row.getClicks());
-            performanceBean.setCtr(row.getCtr());
+            AddGroupReport adwordsAdGroupReport = adwordsService.getAdGroupReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "SEARCH");
 
-            performanceBean.setCost(row.getCost());
-            performanceBean.setAverageCpc(row.getAvgCPC());
-            performanceBean.setCpa(row.getCostConv());
+            List<AdGroupReportRow> adwordsAdGroupReportRow = adwordsAdGroupReport.getAdGroupReportRow();
 
-            performanceBean.setAveragePosition(row.getAvgPosition());
-            performanceBean.setConversions(row.getConversions());
-            performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
-            performanceReportBeans.add(performanceBean);
+            for (Iterator<AdGroupReportRow> reportRow = adwordsAdGroupReportRow.iterator(); reportRow.hasNext();) {
+                AdGroupReportRow row = reportRow.next();
+                AdGroupPerformanceReportBean performanceBean = new AdGroupPerformanceReportBean();
+                performanceBean.setSource("Google");
+                performanceBean.setCampaignName(row.getCampaign());
+                performanceBean.setAdGroupName(row.getAdGroupName());
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+
+                performanceBean.setCost(row.getCost());
+                performanceBean.setAverageCpc(row.getAvgCPC());
+                performanceBean.setCpa(row.getCostConv());
+
+                performanceBean.setAveragePosition(row.getAvgPosition());
+                performanceBean.setConversions(row.getConversions());
+                performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
+                performanceReportBeans.add(performanceBean);
+            }
         }
+        if (accountDetails.getBingAccountId() != null) {
+            AdGroupPerformanceReport bingAdGroupPerformanceReport = bingService.getAdGroupPerformanceReport(startDate, endDate, accountDetails.getBingAccountId());
+            List<AdGroupPerformanceRow> bingAdGroupPerformanceRows = bingAdGroupPerformanceReport.getAdGroupPerformanceRows();
 
-        for (Iterator<AdGroupPerformanceRow> reportRow = bingAdGroupPerformanceRows.iterator(); reportRow.hasNext();) {
-            AdGroupPerformanceRow row = reportRow.next();
-            AdGroupPerformanceReportBean performanceBean = new AdGroupPerformanceReportBean();
-            performanceBean.setSource("Bing");
-            performanceBean.setCampaignName(row.getCampaignName().getValue());
-            performanceBean.setAdGroupName(row.getAdGroupName().getValue());
-            performanceBean.setImpressions(row.getImpressions().getValue());
-            performanceBean.setClicks(row.getClicks().getValue());
-            performanceBean.setCtr(row.getCtr().getValue());
-            performanceBean.setCost(row.getSpend().getValue());
-            performanceBean.setAverageCpc(row.getAverageCpc().getValue());
-            performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-            performanceBean.setConversions(row.getConversions().getValue());
-            performanceBean.setCpa(row.getCostPerConversion().getValue());
-            performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
-            performanceReportBeans.add(performanceBean);
+            for (Iterator<AdGroupPerformanceRow> reportRow = bingAdGroupPerformanceRows.iterator(); reportRow.hasNext();) {
+                AdGroupPerformanceRow row = reportRow.next();
+                AdGroupPerformanceReportBean performanceBean = new AdGroupPerformanceReportBean();
+                performanceBean.setSource("Bing");
+                performanceBean.setCampaignName(row.getCampaignName().getValue());
+                performanceBean.setAdGroupName(row.getAdGroupName().getValue());
+                performanceBean.setImpressions(row.getImpressions().getValue());
+                performanceBean.setClicks(row.getClicks().getValue());
+                performanceBean.setCtr(row.getCtr().getValue());
+                performanceBean.setCost(row.getSpend().getValue());
+                performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+                performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setCpa(row.getCostPerConversion().getValue());
+                performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
+                performanceReportBeans.add(performanceBean);
 
+            }
         }
         returnMap.put("data", performanceReportBeans);
         return returnMap;
@@ -1026,62 +1035,67 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AdReport adwordsAdReport = adwordsService.getAdReport(startDate, endDate, "142-465-1427", "", "SEARCH");
-        AdPerformanceReport bingAdPerformanceReport = bingService.getAdPerformanceReport(startDate, endDate, bingAccountId);
-
-        List<AdReportRow> adwordsAdReportRow = adwordsAdReport.getAdReportRow();
-        List<AdPerformanceRow> bingAdPerformanceRows = bingAdPerformanceReport.getAdPerformanceRows();
-
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
         List<AdPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        if (accountDetails.getAdwordsAccountId() != null) {
 
-        for (Iterator<AdReportRow> reportRow = adwordsAdReportRow.iterator(); reportRow.hasNext();) {
-            AdReportRow row = reportRow.next();
-            AdPerformanceReportBean performanceBean = new AdPerformanceReportBean();
-            performanceBean.setSource("Google");
-            performanceBean.setCampaignName(row.getCampaign());
-            performanceBean.setAdGroupName(row.getAdGroupName());
-            performanceBean.setImpressions(row.getImpressions());
-            performanceBean.setClicks(row.getClicks());
-            performanceBean.setCtr(row.getCtr());
-            performanceBean.setCost(row.getCost());
-            performanceBean.setAverageCpc(row.getAverageCpc());
-            performanceBean.setCpa(row.getCostPerConversion());
-            performanceBean.setDescription(row.getDescription());
-            performanceBean.setDescription1(row.getDescription1());
-            performanceBean.setDescription2(row.getDescription2());
-            performanceBean.setAdType(row.getAdType());
-            performanceBean.setCreativeDestinationUrl(row.getCreativeDestinationUrl());
-            performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
-            performanceBean.setDisplayUrl(row.getDisplayUrl());
-            performanceBean.setAveragePosition(row.getAveragePosition());
-            performanceBean.setConversions(row.getConversions());
-            performanceBean.setAdDescription(ApiUtils.getPaidAdDescription(performanceBean));
-            performanceReportBeans.add(performanceBean);
+            AdReport adwordsAdReport = adwordsService.getAdReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
+
+            List<AdReportRow> adwordsAdReportRow = adwordsAdReport.getAdReportRow();
+
+            for (Iterator<AdReportRow> reportRow = adwordsAdReportRow.iterator(); reportRow.hasNext();) {
+                AdReportRow row = reportRow.next();
+                AdPerformanceReportBean performanceBean = new AdPerformanceReportBean();
+                performanceBean.setSource("Google");
+                performanceBean.setCampaignName(row.getCampaign());
+                performanceBean.setAdGroupName(row.getAdGroupName());
+                performanceBean.setImpressions(row.getImpressions());
+                performanceBean.setClicks(row.getClicks());
+                performanceBean.setCtr(row.getCtr());
+                performanceBean.setCost(row.getCost());
+                performanceBean.setAverageCpc(row.getAverageCpc());
+                performanceBean.setCpa(row.getCostPerConversion());
+                performanceBean.setDescription(row.getDescription());
+                performanceBean.setDescription1(row.getDescription1());
+                performanceBean.setDescription2(row.getDescription2());
+                performanceBean.setAdType(row.getAdType());
+                performanceBean.setCreativeDestinationUrl(row.getCreativeDestinationUrl());
+                performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
+                performanceBean.setDisplayUrl(row.getDisplayUrl());
+                performanceBean.setAveragePosition(row.getAveragePosition());
+                performanceBean.setConversions(row.getConversions());
+                performanceBean.setAdDescription(ApiUtils.getPaidAdDescription(performanceBean));
+                performanceReportBeans.add(performanceBean);
+            }
         }
-        for (Iterator<AdPerformanceRow> reportRow = bingAdPerformanceRows.iterator(); reportRow.hasNext();) {
-            AdPerformanceRow row = reportRow.next();
-            AdPerformanceReportBean performanceBean = new AdPerformanceReportBean();
-            performanceBean.setSource("Bing");
-            performanceBean.setCampaignName(row.getCampaignName().getValue());
-            performanceBean.setAdGroupName(row.getAdGroupName().getValue());
-            performanceBean.setImpressions(row.getImpressions().getValue());
-            performanceBean.setClicks(row.getClicks().getValue());
-            performanceBean.setCtr(row.getCtr().getValue());
-            performanceBean.setCost(row.getSpend().getValue());
-            performanceBean.setAverageCpc(row.getAverageCpc().getValue());
-            performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-            performanceBean.setConversions(row.getConversions().getValue());
-            performanceBean.setCpa(row.getCostPerConversion().getValue());
-            performanceBean.setDescription(row.getAdTitle().getValue());
-            performanceBean.setDescription1(row.getAdDescription().getValue());
-            performanceBean.setDescription2("-");
-            performanceBean.setAdType("-");
-            performanceBean.setCreativeDestinationUrl(row.getDestinationUrl().getValue());
-            performanceBean.setCreativeFinalUrls(row.getFinalUrl().getValue());
-            performanceBean.setDisplayUrl(row.getDisplayUrl().getValue());
-            performanceBean.setAdDescription(ApiUtils.getPaidAdDescription(performanceBean));
-            performanceReportBeans.add(performanceBean);
+        if (accountDetails.getBingAccountId() != null) {
+            AdPerformanceReport bingAdPerformanceReport = bingService.getAdPerformanceReport(startDate, endDate, accountDetails.getBingAccountId());
+            List<AdPerformanceRow> bingAdPerformanceRows = bingAdPerformanceReport.getAdPerformanceRows();
+            for (Iterator<AdPerformanceRow> reportRow = bingAdPerformanceRows.iterator(); reportRow.hasNext();) {
+                AdPerformanceRow row = reportRow.next();
+                AdPerformanceReportBean performanceBean = new AdPerformanceReportBean();
+                performanceBean.setSource("Bing");
+                performanceBean.setCampaignName(row.getCampaignName().getValue());
+                performanceBean.setAdGroupName(row.getAdGroupName().getValue());
+                performanceBean.setImpressions(row.getImpressions().getValue());
+                performanceBean.setClicks(row.getClicks().getValue());
+                performanceBean.setCtr(row.getCtr().getValue());
+                performanceBean.setCost(row.getSpend().getValue());
+                performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+                performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setCpa(row.getCostPerConversion().getValue());
+                performanceBean.setDescription(row.getAdTitle().getValue());
+                performanceBean.setDescription1(row.getAdDescription().getValue());
+                performanceBean.setDescription2("-");
+                performanceBean.setAdType("-");
+                performanceBean.setCreativeDestinationUrl(row.getDestinationUrl().getValue());
+                performanceBean.setCreativeFinalUrls(row.getFinalUrl().getValue());
+                performanceBean.setDisplayUrl(row.getDisplayUrl().getValue());
+                performanceBean.setAdDescription(ApiUtils.getPaidAdDescription(performanceBean));
+                performanceReportBeans.add(performanceBean);
 
+            }
         }
         returnMap.put("data", performanceReportBeans);
         return returnMap;
@@ -1112,52 +1126,56 @@ public class PaidTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        CampaignPerformanceReport campaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate, bingAccountId, "");
-        CampaignReport campaignReport = adwordsService.getCampaignReport(startDate, endDate, "142-465-1427", "SEARCH");
-        List<CampaignPerformanceRow> bingCampaignPerformanceRows = campaignPerformanceReport.getCampaignPerformanceRows();
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
+
         List<CampaignPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+        if (accountDetails.getAdwordsAccountId() != null) {
+            CampaignReport campaignReport = adwordsService.getCampaignReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "SEARCH");
 
-        List<CampaignReportRow> adwordsCampaignReportRow = campaignReport.getCampaignReportRow();
-        for (Iterator<CampaignReportRow> reportRow = adwordsCampaignReportRow.iterator(); reportRow.hasNext();) {
-            CampaignReportRow row = reportRow.next();
-            CampaignPerformanceReportBean campaignBean = new CampaignPerformanceReportBean();
-            campaignBean.setSource("Google");
-            campaignBean.setCampaignName(row.getCampaign());
-            System.out.println(row.getCampaign());
-            campaignBean.setImpressions(row.getImpressions());
-            campaignBean.setClicks(row.getClicks());
-            campaignBean.setCtr(row.getCtr());
-            campaignBean.setCost(row.getCost());
-            campaignBean.setAverageCpc(row.getAvgCPC());
-            campaignBean.setAveragePosition(row.getAvgPosition());
-            campaignBean.setConversions(row.getConversions());
-            campaignBean.setCpa(row.getCostConv());
-            campaignBean.setSearchImpressionsShare(row.getSearchImprShare());
-            campaignBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
-            campaignBean.setSearchImpressionsShareLostByRank(row.getSearchLostISRank());
-            performanceReportBeans.add(campaignBean);
+            List<CampaignReportRow> adwordsCampaignReportRow = campaignReport.getCampaignReportRow();
+            for (Iterator<CampaignReportRow> reportRow = adwordsCampaignReportRow.iterator(); reportRow.hasNext();) {
+                CampaignReportRow row = reportRow.next();
+                CampaignPerformanceReportBean campaignBean = new CampaignPerformanceReportBean();
+                campaignBean.setSource("Google");
+                campaignBean.setCampaignName(row.getCampaign());
+                System.out.println(row.getCampaign());
+                campaignBean.setImpressions(row.getImpressions());
+                campaignBean.setClicks(row.getClicks());
+                campaignBean.setCtr(row.getCtr());
+                campaignBean.setCost(row.getCost());
+                campaignBean.setAverageCpc(row.getAvgCPC());
+                campaignBean.setAveragePosition(row.getAvgPosition());
+                campaignBean.setConversions(row.getConversions());
+                campaignBean.setCpa(row.getCostConv());
+                campaignBean.setSearchImpressionsShare(row.getSearchImprShare());
+                campaignBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
+                campaignBean.setSearchImpressionsShareLostByRank(row.getSearchLostISRank());
+                performanceReportBeans.add(campaignBean);
+            }
         }
+        if (accountDetails.getBingAccountId() != null) {
+            CampaignPerformanceReport campaignPerformanceReport = bingService.getCampaignPerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "");
+            List<CampaignPerformanceRow> bingCampaignPerformanceRows = campaignPerformanceReport.getCampaignPerformanceRows();
+            for (Iterator<CampaignPerformanceRow> reportRow = bingCampaignPerformanceRows.iterator(); reportRow.hasNext();) {
+                CampaignPerformanceRow row = reportRow.next();
+                CampaignPerformanceReportBean campaignBean = new CampaignPerformanceReportBean();
+                campaignBean.setSource("Bing");
+                campaignBean.setCampaignName(row.getCampaignName().getValue());
+                campaignBean.setImpressions(row.getImpressions().getValue());
+                campaignBean.setClicks(row.getClicks().getValue());
+                campaignBean.setCtr(row.getCtr().getValue());
+                campaignBean.setCost(row.getSpend().getValue());
+                campaignBean.setAverageCpc(row.getAverageCpc().getValue());
+                campaignBean.setAveragePosition(row.getAveragePosition().getValue());
+                campaignBean.setConversions(row.getConversions().getValue());
+                campaignBean.setCpa(row.getCostPerConversion().getValue());
+                campaignBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
+                campaignBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
+                campaignBean.setSearchImpressionsShareLostByRank("-");
+                performanceReportBeans.add(campaignBean);
 
-        for (Iterator<CampaignPerformanceRow> reportRow = bingCampaignPerformanceRows.iterator(); reportRow.hasNext();) {
-            CampaignPerformanceRow row = reportRow.next();
-            CampaignPerformanceReportBean campaignBean = new CampaignPerformanceReportBean();
-            campaignBean.setSource("Bing");
-            campaignBean.setCampaignName(row.getCampaignName().getValue());
-            campaignBean.setImpressions(row.getImpressions().getValue());
-            campaignBean.setClicks(row.getClicks().getValue());
-            campaignBean.setCtr(row.getCtr().getValue());
-            campaignBean.setCost(row.getSpend().getValue());
-            campaignBean.setAverageCpc(row.getAverageCpc().getValue());
-            campaignBean.setAveragePosition(row.getAveragePosition().getValue());
-            campaignBean.setConversions(row.getConversions().getValue());
-            campaignBean.setCpa(row.getCostPerConversion().getValue());
-            campaignBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
-            campaignBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
-            campaignBean.setSearchImpressionsShareLostByRank("-");
-            performanceReportBeans.add(campaignBean);
-
+            }
         }
-
         return performanceReportBeans;
     }
 

@@ -21,6 +21,7 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReportRow;
 import com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReportRow;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.dashboard.bean.AccountPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.AdPerformanceReportBean;
@@ -100,6 +101,8 @@ public class DisplayTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
+
         GeoReport adwordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "391-089-0213", "", "CONTENT");
         List<GeoReportRow> adwordsGeoReportRow = adwordsGeoReport.getGeoReportRow();
         List<GeoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
@@ -667,10 +670,10 @@ public class DisplayTabController {
     private String getGaDataForDateAdType(List<Map<String, String>> gaData, String field, String value, String metric) {
         for (Iterator<Map<String, String>> iterator = gaData.iterator(); iterator.hasNext();) {
             Map<String, String> data = iterator.next();
-            System.out.println("Matching value ---> " +  value);
+            System.out.println("Matching value ---> " + value);
             System.out.println("Matching field ---> " + "Ad name: " + data.get(field));
             if (value.startsWith("Ad name: " + data.get(field))) {
-            //if (data.get(field).indexOf(value) > 0) {
+                //if (data.get(field).indexOf(value) > 0) {
                 System.out.println("Matching =====" + data.get(metric));
                 return data.get(metric);
             }

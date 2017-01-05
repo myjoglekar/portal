@@ -5,10 +5,12 @@
  */
 package com.visumbu.api.utils;
 
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.dashboard.bean.AdPerformanceReportBean;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -80,6 +82,51 @@ public class ApiUtils {
 
     public static String toGaAccountId(String ppcBingAccountId) {
         return ppcBingAccountId.substring(0, 3) + "-" + ppcBingAccountId.substring(3, 6) + "-" + ppcBingAccountId.substring(6);
+    }
+
+    public static AccountDetails toAccountDetails(HttpServletRequest request, String serviceName) {
+        String ppcBingAccountId = request.getParameter(serviceName + "BingAccountId");
+        Long bingAccountId = null;
+        try {
+            bingAccountId = Long.parseLong(ppcBingAccountId);
+        } catch (Exception e) {
+
+        }
+        String ppcGoogleAdwordsAccountId = request.getParameter(serviceName + "GoogleAdwordsAccountId");
+        String adwordsAccountId = null;
+        try {
+            adwordsAccountId = ApiUtils.toGaAccountId(ppcGoogleAdwordsAccountId);
+        } catch (Exception e) {
+
+        }
+        String ppcGoogleAnalyticsProfileId = request.getParameter(serviceName + "GoogleAnalyticsAccountId");
+        String analyticsProfileId = null;
+        try {
+            analyticsProfileId = ppcGoogleAnalyticsProfileId;
+        } catch (Exception e) {
+
+        }
+        String ppcGoogleAnalyticsAccountId = request.getParameter(serviceName + "GoogleAnalyticsAccountId");
+        String analyticsAccountId = null;
+        try {
+            analyticsAccountId = ppcGoogleAnalyticsAccountId;
+        } catch (Exception e) {
+
+        }
+        String ppcCenturyAccountId = request.getParameter(serviceName + "CenturyAccountId");
+        Long centuryAccountId = null;
+        try {
+            centuryAccountId = Long.parseLong(ppcCenturyAccountId);
+        } catch (Exception e) {
+
+        }
+        AccountDetails accountDetails = new AccountDetails();
+        accountDetails.setBingAccountId(bingAccountId);
+        accountDetails.setAdwordsAccountId(adwordsAccountId);
+        accountDetails.setAnalyticsProfileId(analyticsProfileId);
+        accountDetails.setAnalyticsAccountId(analyticsAccountId);
+        accountDetails.setCenturyAccountId(centuryAccountId);
+        return accountDetails;
     }
 
 }
