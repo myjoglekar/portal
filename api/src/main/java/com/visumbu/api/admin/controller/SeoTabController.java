@@ -108,8 +108,8 @@ public class SeoTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("visits", "number", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("bounceRate", "number", "Bounce Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -161,8 +161,8 @@ public class SeoTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("visits", "number", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -213,8 +213,8 @@ public class SeoTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("visits", "number", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -265,8 +265,8 @@ public class SeoTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("visits", "number", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -318,8 +318,8 @@ public class SeoTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("visits", "number", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -370,8 +370,8 @@ public class SeoTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("visits", "string", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("visits", "number", "Visits", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("percentNewSessions", "string", "% New Sessions", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("avgTimeOnPage", "string", "Average Time On Page", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
