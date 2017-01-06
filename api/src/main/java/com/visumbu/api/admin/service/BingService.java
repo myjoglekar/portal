@@ -84,10 +84,10 @@ public class BingService {
     public static final String USER_NAME = "API_L2TMediaNew";
     public static final String PASSWORD = "l2ttangocode2016";
     public static final Long customerId = 14195800L;
-    public static final Long accountId = 2610614L;
+    //public static final Long accountId = 2610614L;
     public static final String tmpDir = "/tmp/";
 
-    private void initAuthentication() {
+    private void initAuthentication(Long accountId) {
         PasswordAuthentication passwordAuthentication
                 = new PasswordAuthentication(USER_NAME, PASSWORD);
         authorizationData.setAuthentication(passwordAuthentication);
@@ -98,9 +98,9 @@ public class BingService {
 
     }
 
-    public KeywordPerformanceReport getKeywordPerformanceReport(Date startDate, Date endDate)
+    public KeywordPerformanceReport getKeywordPerformanceReport(Date startDate, Date endDate, Long accountId)
             throws InterruptedException, ExecutionException, TimeoutException {
-        initAuthentication();
+        initAuthentication(accountId);
         ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
         reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
         String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -126,9 +126,9 @@ public class BingService {
         return report;
     }
 
-    public AccountPerformanceReport getAccountPerformanceReport(Date startDate, Date endDate, String aggregation)
+    public AccountPerformanceReport getAccountPerformanceReport(Date startDate, Date endDate, Long accountId, String aggregation)
             throws InterruptedException, ExecutionException, TimeoutException {
-        initAuthentication();
+        initAuthentication(accountId);
         ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
         reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
         String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -150,9 +150,9 @@ public class BingService {
         return report;
     }
 
-    public AccountHourOfDayPerformanceReport getAccountHourOfDayPerformanceReport(Date startDate, Date endDate)
+    public AccountHourOfDayPerformanceReport getAccountHourOfDayPerformanceReport(Date startDate, Date endDate, Long accountId )
             throws InterruptedException, ExecutionException, TimeoutException {
-        initAuthentication();
+        initAuthentication(accountId);
         ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
         reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
         String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -177,9 +177,9 @@ public class BingService {
         return report;
     }
 
-    public AccountDayOfWeekPerformanceReport getAccountDayOfWeekPerformanceReport(Date startDate, Date endDate)
+    public AccountDayOfWeekPerformanceReport getAccountDayOfWeekPerformanceReport(Date startDate, Date endDate,  Long accountId)
             throws InterruptedException, ExecutionException, TimeoutException {
-        initAuthentication();
+        initAuthentication(accountId);
         ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
         reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
         String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -201,9 +201,9 @@ public class BingService {
         return report;
     }
 
-    public AccountDevicePerformanceReport getAccountDevicePerformanceReport(Date startDate, Date endDate, String aggregation) {
+    public AccountDevicePerformanceReport getAccountDevicePerformanceReport(Date startDate, Date endDate, Long accountId,  String aggregation) {
         try {
-            initAuthentication();
+            initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -233,9 +233,9 @@ public class BingService {
         return null;
     }
 
-    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate, String aggregation) {
+    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate, Long accountId,  String aggregation) {
         try {
-            initAuthentication();
+            initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -265,9 +265,9 @@ public class BingService {
         return null;
     }
 
-    public CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(Date startDate, Date endDate, String aggregation) {
+    public CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(Date startDate, Date endDate, Long accountId,  String aggregation) {
         try {
-            initAuthentication();
+            initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -297,9 +297,9 @@ public class BingService {
         return null;
     }
 
-    public AdGroupPerformanceReport getAdGroupPerformanceReport(Date startDate, Date endDate) {
+    public AdGroupPerformanceReport getAdGroupPerformanceReport(Date startDate, Date endDate, Long accountId) {
         try {
-            initAuthentication();
+            initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -329,9 +329,9 @@ public class BingService {
         return null;
     }
 
-    public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate) {
+    public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate,  Long accountId) {
         try {
-            initAuthentication();
+            initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -361,9 +361,9 @@ public class BingService {
         return null;
     }
 
-    public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate, String aggregation) {
+    public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate,  Long accountId, String aggregation) {
         try {
-            initAuthentication();
+            initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
@@ -393,9 +393,9 @@ public class BingService {
         return null;
     }
 
-    public GeoZipLocationPerformanceReport getGeoZipLocationPerformanceReport(Date startDate, Date endDate)
+    public GeoZipLocationPerformanceReport getGeoZipLocationPerformanceReport(Date startDate, Date endDate,  Long accountId)
             throws InterruptedException, ExecutionException, TimeoutException {
-        initAuthentication();
+        initAuthentication(accountId);
         ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
         reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
         String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";

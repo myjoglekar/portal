@@ -83,14 +83,14 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         if (widget.columns) {
             widget.columns = widget.columns;
             if (widget.directUrl) {
-                $http.get(widget.directUrl + "?fieldsOnly=true").success(function (response) {
+                $http.get("admin/proxy/getJson?url=" + widget.directUrl + "&fieldsOnly=true").success(function (response) {
                     $scope.collectionFields = [];
                     $scope.collectionFields = response.columnDefs;
                 });
             }
         } else {
             if (widget.directUrl) {
-                $http.get(widget.directUrl + "?fieldsOnly=true").success(function (response) {
+                $http.get("admin/proxy/getJson?url=" + widget.directUrl + "&fieldsOnly=true").success(function (response) {
                     $scope.collectionFields = [];
                     widget.columns = response.columnDefs;
                     $scope.collectionFields = response.columnDefs;
@@ -257,6 +257,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.onDropComplete = function (index, widget, evt) {
+<<<<<<< HEAD
         if (widget !== "" && widget !== null) {
             var otherObj = $scope.widgets[index];
             var otherIndex = $scope.widgets.indexOf(widget);
@@ -272,6 +273,17 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             var data = {widgetOrder: widgetOrder};
             if (widgetOrder) {
                 $http({method: 'GET', url: 'admin/ui/dbWidgetUpdateOrder/' + $stateParams.tabId + "?widgetOrder=" + widgetOrder});
+=======
+        console.log(widget)
+        console.log($scope.widgets)
+        var otherObj = $scope.widgets[index];
+        var otherIndex = $scope.widgets.indexOf(widget);
+        $scope.widgets[index] = widget;
+        $scope.widgets[otherIndex] = otherObj;
+        var widgetOrder = $scope.widgets.map(function (value, key) {
+            if (!value) {
+                return;
+>>>>>>> origin/api-db-arul-vs
             }
         }
     };
@@ -408,7 +420,11 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 }
                 columnDefs.push(columnDef);
             });
+<<<<<<< HEAD
             $http.get(scope.dynamicTableUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+=======
+            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+>>>>>>> origin/api-db-arul-vs
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
                 scope.gridOptions = {
@@ -483,7 +499,11 @@ app.directive('tickerDirective', function ($http, $stateParams) {
 
             var setData = [];
             var data = [];
+<<<<<<< HEAD
             $http.get(scope.tickerUrl + "?widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+=======
+            $http.get("admin/proxy/getJson?url=" + scope.tickerUrl + "&widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+>>>>>>> origin/api-db-arul-vs
                 console.log(response);
                 if (!response) {
                     return;
@@ -592,7 +612,11 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
 
             if (scope.lineChartUrl) {
 
+<<<<<<< HEAD
                 $http.get(scope.lineChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+=======
+                $http.get("admin/proxy/getJson?url=" + scope.lineChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+>>>>>>> origin/api-db-arul-vs
                     scope.loadingLine = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -747,7 +771,11 @@ app.directive('barChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.barChartUrl) {
+<<<<<<< HEAD
                 $http.get(scope.barChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+=======
+                $http.get("admin/proxy/getJson?url=" + scope.barChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+>>>>>>> origin/api-db-arul-vs
                     scope.loadingBar = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -889,7 +917,11 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.pieChartUrl) {
+<<<<<<< HEAD
                 $http.get(scope.pieChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+=======
+                $http.get("admin/proxy/getJson?url=" + scope.pieChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+>>>>>>> origin/api-db-arul-vs
                     scope.loadingPie = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -1046,7 +1078,11 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.areaChartUrl) {
+<<<<<<< HEAD
                 $http.get(scope.areaChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+=======
+                $http.get("admin/proxy/getJson?url=" + scope.areaChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+>>>>>>> origin/api-db-arul-vs
                     scope.loadingArea = false;
                     scope.xAxis = [];
                     var loopCount = 0;

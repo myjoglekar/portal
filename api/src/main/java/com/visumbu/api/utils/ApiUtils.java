@@ -75,7 +75,11 @@ public class ApiUtils {
     }
 
     public static void main(String[] argv) {
-        System.out.println(getCityById("1000002"));
+        System.out.println(toGaAccountId("5360684369"));
+    }
+
+    public static String toGaAccountId(String ppcBingAccountId) {
+        return ppcBingAccountId.substring(0, 3) + "-" + ppcBingAccountId.substring(3, 6) + "-" + ppcBingAccountId.substring(6);
     }
 
 }

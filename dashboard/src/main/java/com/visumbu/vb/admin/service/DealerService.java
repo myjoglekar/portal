@@ -5,8 +5,13 @@
  */
 package com.visumbu.vb.admin.service;
 
+import com.google.common.base.CaseFormat;
 import com.visumbu.vb.admin.dao.DealerDao;
+import com.visumbu.vb.admin.dao.bean.DealerAccountBean;
 import com.visumbu.vb.model.Dealer;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,4 +37,18 @@ public class DealerService {
         List<Dealer> dealer = dealerDao.read(Dealer.class);
         return dealer;
     }
+
+    public Map<String, String> getDealerAccountDetails(String dealerId) {
+        List<DealerAccountBean> dealerAccountDetails = dealerDao.getDealerAccountDetails(dealerId);
+        Map<String, String> accountMap = new HashMap<>();
+        for (Iterator<DealerAccountBean> iterator = dealerAccountDetails.iterator(); iterator.hasNext();) {
+            DealerAccountBean accountBean = iterator.next();
+            String accountName = accountBean.getServiceName() + " " + accountBean.getSourceName() + " Account Id" ;
+            String profileName = accountBean.getServiceName() + " " + accountBean.getSourceName() + " Profile Id" ;
+            accountMap.put(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, accountName.toLowerCase().replace(" ", "_")), accountBean.getAccountId());
+            accountMap.put(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, profileName.toLowerCase().replace(" ", "_")), accountBean.getProfileId());
+        }
+        return accountMap;
+    }
+
 }
