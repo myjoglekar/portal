@@ -72,14 +72,26 @@ public class DealerDao extends BaseDao {
     }
 
     public List<DealerAccountBean> getDealerAccountDetails(String dealerId) {
-        String queryStr = "SELECT account_id accountId, profile_id profileId, source_name sourceName, ps.service_name serviceName"
-                + " FROM dealer_product_source dps, dealer_product dp, dealer d, dealer_product_service  ps "
-                + " where dp.id = dps.dealer_product_id and ps.dealer_product_id = dp.id and dp.dealer_id = d.id"
-                + " and d.dealer_ref_id = :dealerId";
+        String queryStr = "SELECT d.dealer_ref_id dealerMapId, d.id dealerId, product_name productName, account_id accountId, "
+                + " profile_id profileId, source_name sourceName, "
+                + " case when ps.service_name is null then 'none' else ps.service_name end serviceName "
+                + " FROM dealer_product_source dps join "
+                + " dealer_product dp join "
+                + " dealer d  left join "
+                + " dealer_product_service ps on ps.dealer_product_id = dp.id "
+                + " where dp.id = dps.dealer_product_id  "
+                + " and dp.dealer_id = d.id and d.dealer_ref_id = :dealerId";
+//        String queryStr = "SELECT account_id accountId, profile_id profileId, source_name sourceName, ps.service_name serviceName"
+//                + " FROM dealer_product_source dps, dealer_product dp, dealer d, dealer_product_service  ps "
+//                + " where dp.id = dps.dealer_product_id and ps.dealer_product_id = dp.id and dp.dealer_id = d.id"
+//                + " and d.dealer_ref_id = :dealerId";
         Query query = sessionFactory.getCurrentSession().createSQLQuery(queryStr)
+                .addScalar("dealerMapId", StringType.INSTANCE)
+                .addScalar("dealerId", StringType.INSTANCE)
                 .addScalar("accountId", StringType.INSTANCE)
                 .addScalar("profileId", StringType.INSTANCE)
                 .addScalar("sourceName", StringType.INSTANCE)
+                .addScalar("productName", StringType.INSTANCE)
                 .addScalar("serviceName", StringType.INSTANCE)
                 .setResultTransformer(Transformers.aliasToBean(DealerAccountBean.class));
         query.setParameter("dealerId", dealerId);

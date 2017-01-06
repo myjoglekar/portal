@@ -43,8 +43,22 @@ public class DealerService {
         Map<String, String> accountMap = new HashMap<>();
         for (Iterator<DealerAccountBean> iterator = dealerAccountDetails.iterator(); iterator.hasNext();) {
             DealerAccountBean accountBean = iterator.next();
-            String accountName = accountBean.getServiceName() + " " + accountBean.getSourceName() + " Account Id" ;
-            String profileName = accountBean.getServiceName() + " " + accountBean.getSourceName() + " Profile Id" ;
+            String serviceName = accountBean.getServiceName();
+            if(serviceName.equalsIgnoreCase("none")) {
+                if(accountBean.getProductName().indexOf("SEO") > 0){
+                    serviceName = "seo";
+                }
+                if(accountBean.getProductName().indexOf("Reputation Management") > 0){
+                    serviceName = "reputation";
+                }
+                if(accountBean.getProductName().indexOf("Social Impact") > 0){
+                    serviceName = "socialimpact";
+                }
+            }
+            String accountName = serviceName + " " + accountBean.getSourceName() + " Account Id" ;
+            String profileName = serviceName + " " + accountBean.getSourceName() + " Profile Id" ;
+            accountMap.put("dealerId", accountBean.getDealerId());
+            accountMap.put("dealerMapId", accountBean.getDealerMapId());
             accountMap.put(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, accountName.toLowerCase().replace(" ", "_")), accountBean.getAccountId());
             accountMap.put(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, profileName.toLowerCase().replace(" ", "_")), accountBean.getProfileId());
         }

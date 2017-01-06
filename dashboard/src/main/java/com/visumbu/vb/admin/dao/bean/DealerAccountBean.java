@@ -10,11 +10,38 @@ package com.visumbu.vb.admin.dao.bean;
  * @author user
  */
 public class DealerAccountBean {
+    private String dealerId;
+    private String dealerMapId;
     private String accountId;
     private String profileId;
     private String sourceName;
     private String serviceName;
+    private String productName;
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    
+    public String getDealerId() {
+        return dealerId;
+    }
+
+    public void setDealerId(String dealerId) {
+        this.dealerId = dealerId;
+    }
+
+    public String getDealerMapId() {
+        return dealerMapId;
+    }
+
+    public void setDealerMapId(String dealerMapId) {
+        this.dealerMapId = dealerMapId;
+    }
+    
     public String getAccountId() {
         return accountId;
     }
