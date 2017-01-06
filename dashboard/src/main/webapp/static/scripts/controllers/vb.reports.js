@@ -1,11 +1,10 @@
 app.controller("ReportController", function ($scope, $http, $stateParams) {
-    console.log($stateParams.reportId)
-    console.log($stateParams.startDate)
-    console.log($stateParams.endDate)
+
+    $scope.startDate = $stateParams.startDate;
+    $scope.endDate = $stateParams.endDate;
+    $scope.reportId = $stateParams.reportId ? $stateParams.reportId : 0;
+    $scope.dealerId = $stateParams.dealerId ? $stateParams.dealerId : 0;
     $scope.reportWidgets = [];
-    $scope.selectDurations = [{duration: "None"},
-        {duration: "Last Week"}, {duration: "Last Three Months"},
-        {duration: "Last Six Months"}, {duration: "Last Six Months"}]; // Month Durations-Popup
 
     console.log($stateParams.reportId)
 

@@ -1,3 +1,22 @@
+<style>
+    .select2 > .select2-choice.ui-select-match {
+        height: 29px;
+    }
+    .selectize-control > .selectize-dropdown {
+        top: 36px;
+    }
+    .select-box {
+        background: #fff;
+        position: relative;
+        z-index: 1;
+    }
+    .alert-info.positioned {
+        margin-top: 1em;
+        position: relative;
+        z-index: 10000;
+    }
+</style>
+
 <a href="" class="logo"> 
     <span class="logo-mini"><img src="static/img/logo-mobile.png" width="30" /></span> 
     <span class="logo-lg"><img src="static/img/logos/l2tmedia.png" width="150" /></span> 
@@ -5,12 +24,19 @@
 <section class="content-header header-menu" ng-controller="HeaderController">
     <ol class="breadcrumb">
         <li>
-            <a class="border-btn" data-toggle="dropdown"><i class="fa fa-home" style="font-size:20px;"></i>Dealer Name <i class="fa fa-caret-down"></i> </a> 
-            <ul class="dropdown-menu">
-                <li ng-repeat="dealer in dealers">
-                    <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>  
-                </li>
-            </ul>
+        <ui-select ng-model="selectDealer.selected" theme="selectize" ng-disabled="disabled" style="width: 300px;">
+            <ui-select-match placeholder="Select Dealer...">{{$select.selected.dealerName}}</ui-select-match>
+            <ui-select-choices repeat="dealer in dealers | filter: $select.search">
+                <span ng-click="getDealerId(dealer); loadNewUrl()" ng-bind-html="dealer.dealerName | highlight: $select.search"></span>
+                <!--<small ng-bind-html="country.code | highlight: $select.search"></small>-->
+            </ui-select-choices>
+        </ui-select>
+        <!--            <a class="border-btn" data-toggle="dropdown"><i class="fa fa-home" style="font-size:20px;"></i>Dealer Name <i class="fa fa-caret-down"></i> </a> 
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="dealer in dealers">
+                            <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>  
+                        </li>
+                    </ul>-->
         </li>
         <li>              
             <a class="pull-right" id="daterange-btn">

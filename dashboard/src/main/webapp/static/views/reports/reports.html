@@ -1,7 +1,7 @@
 <section class="content">
     <div class="pull-right-container pull-right row">
         <div class="btn-group">
-            <span ui-sref="index.report.newOrEdit({reportId: 0})"><button type="button" class="btn btn-block btn-info btn-flat"><i class="fa fa-plus-circle"></i> Add Reports</button></span>
+            <span ui-sref="index.report.newOrEdit({dealerId: dealerId, reportId: 0, startDate: startDate, endDate: endDate})"><button type="button" class="btn btn-block btn-info btn-flat"><i class="fa fa-plus-circle"></i> Add Reports</button></span>
         </div>
     </div>
 
@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="report in reports" ui-sref="index.report.newOrEdit({reportId: report.id?report.id:1, startDate: startDate, endDate: endDate})">
+            <tr ng-repeat="report in reports" ui-sref="index.report.newOrEdit({dealerId: dealerId, reportId: report.id?report.id:0, startDate: startDate, endDate: endDate})">
                 <td>{{$index + 1}}</td>
                 <td>{{report.reportTitle}}</td>
                 <td>{{report.time}}</td>

@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.utils;
 
+import com.visumbu.api.dashboard.bean.AdPerformanceReportBean;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,26 @@ import java.io.IOException;
  * @author user
  */
 public class ApiUtils {
+
+    public static String getDisplayAdDescription(AdPerformanceReportBean reportBean) {
+        String adDescription = "";
+        adDescription = reportBean.getHeadline() + "<br/>"
+                + ((reportBean.getCreativeFinalUrls() == null || reportBean.getCreativeFinalUrls().isEmpty()) ? "" : (reportBean.getCreativeFinalUrls() + "<br/>"));
+        return adDescription;
+    }
+
+    public static String getPaidAdDescription(AdPerformanceReportBean reportBean) {
+        String adDescription = "";
+        adDescription = reportBean.getDescription() + "<br/>"
+                + ((reportBean.getDescription1() == null || reportBean.getDescription1().isEmpty()) ? "" : (reportBean.getDescription1() + "<br/>"))
+                + ((reportBean.getDisplayUrl() == null || reportBean.getDisplayUrl().isEmpty()) ? "" : (reportBean.getDisplayUrl() + "<br/>"));
+        if (reportBean.getDescription() == null || reportBean.getDescription().isEmpty() || reportBean.getDescription().equalsIgnoreCase("--")) {
+            adDescription
+                    = ((reportBean.getDescription1() == null || reportBean.getDescription1().isEmpty()) ? "" : (reportBean.getDescription1() + "<br/>"))
+                    + ((reportBean.getDescription2() == null || reportBean.getDescription2().isEmpty()) ? "" : (reportBean.getDescription2() + "<br/>"));
+        }
+        return adDescription;
+    }
 
     public static Integer toInteger(String string) {
         try {

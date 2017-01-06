@@ -189,6 +189,7 @@ public class UserController {
         returnMap.put("dynamicDisplay", getDynamicDisplayDataSets());
         returnMap.put("socialImpact", getSocialImpactDataSets());
         returnMap.put("reviewPush", getReviewPushDataSets());
+        returnMap.put("overall", getOverallDataSets());
 
         return returnMap;
     }
@@ -330,6 +331,22 @@ public class UserController {
             "../api/admin/reviewPush/reviews;Reviews",
             "../api/admin/reviewPush/ratingSummary;Summary",
             "../api/admin/reviewPush/bySources;By Source",};
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
+        return returnList;
+    }
+    
+    private List<UrlBean> getOverallDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/overall/overallPerformance/summary/day/0;Summary",
+            "../api/admin/overall/overallPerformance/summary/week/12;12 Weeks Summary",
+            "../api/admin/overall/overallPerformance/detailed/day/0;Summary By Source",
+        };
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];

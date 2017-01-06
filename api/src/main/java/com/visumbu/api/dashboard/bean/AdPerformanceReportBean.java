@@ -10,6 +10,7 @@ package com.visumbu.api.dashboard.bean;
  * @author user
  */
 public class AdPerformanceReportBean {
+    private String adDescription;
     private String accountDescriptiveName;
     private String campaignName;
     private String source;
@@ -39,6 +40,14 @@ public class AdPerformanceReportBean {
     private String timeOnSiteGt2Mins; // goal5
     private String vdpViews; // goal 6
 
+    public String getAdDescription() {
+        return adDescription;
+    }
+
+    public void setAdDescription(String adDescription) {
+        this.adDescription = adDescription;
+    }
+    
     public String getDirectionsPageView() {
         return directionsPageView;
     }

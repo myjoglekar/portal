@@ -5,6 +5,44 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
+    console.log($stateParams.startDate + " - " + $stateParams.endDate);
+    $scope.dataCheck = function () {
+        console.log($stateParams.startDate + " - " + $stateParams.endDate);
+    }
+
+    $scope.toDate = function (strDate) {
+        if (!strDate) {
+            return new Date();
+        }
+        var from = strDate.split("/");
+        var f = new Date(from[2], from[0] - 1, from[1]);
+        return f;
+    };
+
+    $scope.getDay = function () {
+        var today = new Date();
+        var yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 29);
+        return yesterday;
+    }
+
+    $scope.firstDate = $stateParams.startDate ? $scope.toDate(decodeURIComponent($stateParams.startDate)) : $scope.getDay().toLocaleDateString("en-US");
+    $scope.lastDate = $stateParams.endDate ? $scope.toDate(decodeURIComponent($stateParams.endDate)) : new Date().toLocaleDateString("en-US");
+
+    if (!$stateParams.startDate) {
+        $stateParams.startDate = $scope.firstDate;
+    }
+    if (!$stateParams.endDate) {
+        $stateParams.endDate = $scope.lastDate;
+    }
+
+    try {
+        $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $scope.firstDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
+
+        $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $scope.lastDate;
+    } catch (e) {
+    }
+
 
     $scope.editDashboardTab = function (tab) {
         var data = {
@@ -14,7 +52,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $timeout(function () {
             $('#editTab' + tab.id).modal('show');
         }, 100);
-
     };
 
     $scope.selectProductName = "Select Product";
@@ -27,23 +64,17 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
         $scope.selectProductName = $scope.name.productName;
         console.log($scope.selectProductName);
-    });
-
-    $http.get('admin/user/sampleDealers').success(function (response) {
-        $scope.dealers = response;
-    });
+    });    
 
     $scope.loadTab = true;
     $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
-        console.log(response)
         $scope.loadTab = false;
         $scope.tabs = response;
-        console.log(response)
         angular.forEach(response, function (value, key) {
             $scope.dashboardName = value.dashboardId.dashboardTitle;
         });
         $scope.startId = response[0].id ? response[0].id : 0;
-        $state.go("index.dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, reload: true});
+        $state.go("index.dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
     });
 
     var dates = $(".pull-right i").text();
@@ -56,12 +87,13 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $http({method: 'POST', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data}).success(function (response) {
             $scope.tabs.push({id: response.id, tabName: tab.tabName, tabClose: true});
         });
+        tab.tabName = "";
     };
 
     $scope.deleteTab = function (index, tab) {
         $http({method: 'DELETE', url: 'admin/ui/dbTab/' + tab.id}).success(function (response) {
+            $scope.tabs.splice(index, 1);
         });
-        console.log(tab)
     };
 
     $scope.reports = [];
@@ -71,25 +103,27 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     $scope.addChild = function (report) {
         report.childItems.push({isEdit: true});
     };
-    $scope.save = function (item) {
-        console.log("Item Name : " + item);
-    };
+
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
     });
 
     $scope.onDropTabComplete = function (index, tab, evt) {
-        var otherObj = $scope.tabs[index];
-        var otherIndex = $scope.tabs.indexOf(tab);
-        $scope.tabs[index] = tab;
-        $scope.tabs[otherIndex] = otherObj;
-        console.log($scope.tabs);
-        var tabOrder = $scope.tabs.map(function (value, key) {
-            return value.id;
-        }).join(',');
-        console.log(tabOrder);
-        var data = {tabOrder: tabOrder};
-        $http({method: 'GET', url: 'admin/ui/dbTabUpdateOrder/' + $stateParams.productId + "?tabOrder=" + tabOrder});
+        if (tab !== "" && tab !== null) {
+            var otherObj = $scope.tabs[index];
+            var otherIndex = $scope.tabs.indexOf(tab);
+            $scope.tabs[index] = tab;
+            $scope.tabs[otherIndex] = otherObj;
+            console.log($scope.tabs);
+            var tabOrder = $scope.tabs.map(function (value, key) {
+                if (value) {
+                    return value.id;
+                }
+            }).join(',');
+            if (tabOrder) {
+                $http({method: 'GET', url: 'admin/ui/dbTabUpdateOrder/' + $stateParams.productId + "?tabOrder=" + tabOrder});
+            }
+        }
     };
 
     $scope.editedItem = null;
@@ -110,11 +144,11 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
             status: tab.status,
             tabName: tab.tabName,
             tabOrder: tab.tabOrder
-        }
+        };
         $http({method: 'PUT', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data})
         tab.editing = false;
         $scope.editedItem = null;
-
+        //tab.tabName = "";
     };
 })
         .directive('ngBlur', function () {
