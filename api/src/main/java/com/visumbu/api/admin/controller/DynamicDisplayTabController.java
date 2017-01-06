@@ -117,7 +117,8 @@ public class DynamicDisplayTabController {
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        return dynamicDisplayService.getAccountPerformance(startDate, endDate, DEALER_ID);
+        String dealerId = request.getParameter("dealerMapId");
+        return dynamicDisplayService.getAccountPerformance(startDate, endDate, dealerId);
     }
 
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
@@ -125,7 +126,8 @@ public class DynamicDisplayTabController {
     Object getLast12Weeks(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        return dynamicDisplayService.getLast12Weeks(startDate, endDate, DEALER_ID);
+        String dealerId = request.getParameter("dealerMapId");
+        return dynamicDisplayService.getLast12Weeks(startDate, endDate, dealerId);
     }
 
     private void forwardRequest(String url, OutputStream out, Map<String, String[]> parameterMap) {

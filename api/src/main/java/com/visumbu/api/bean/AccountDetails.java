@@ -15,6 +15,16 @@ public class AccountDetails {
     private String adwordsAccountId;
     private Long bingAccountId;
     private Long centuryAccountId;
+    private Long facebookAccountId;
+    private String reviewPushAccountId;
+
+    public String getReviewPushAccountId() {
+        return reviewPushAccountId;
+    }
+
+    public void setReviewPushAccountId(String reviewPushAccountId) {
+        this.reviewPushAccountId = reviewPushAccountId;
+    }
 
     public String getAnalyticsProfileId() {
         return analyticsProfileId;
@@ -54,5 +64,13 @@ public class AccountDetails {
 
     public void setCenturyAccountId(Long centuryAccountId) {
         this.centuryAccountId = centuryAccountId;
+    }
+
+    public Long getFacebookAccountId() {
+        return facebookAccountId;
+    }
+
+    public void setFacebookAccountId(Long facebookAccountId) {
+        this.facebookAccountId = facebookAccountId;
     }
 }

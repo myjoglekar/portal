@@ -120,12 +120,30 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
+        String facebookAccountIdStr = request.getParameter(serviceName + "FacebookAccountId");
+        Long facebookAccountId = null;
+        try {
+            centuryAccountId = Long.parseLong(facebookAccountIdStr);
+        } catch (Exception e) {
+
+        }
+        String reviewpushAccountIdStr = request.getParameter(serviceName + "ReviewpushAccountId");
+        Long reviewpushAccountId = null;
+        try {
+            centuryAccountId = Long.parseLong(reviewpushAccountIdStr);
+        } catch (Exception e) {
+
+        }
+        
+        
         AccountDetails accountDetails = new AccountDetails();
         accountDetails.setBingAccountId(bingAccountId);
         accountDetails.setAdwordsAccountId(adwordsAccountId);
         accountDetails.setAnalyticsProfileId(analyticsProfileId);
         accountDetails.setAnalyticsAccountId(analyticsAccountId);
         accountDetails.setCenturyAccountId(centuryAccountId);
+        accountDetails.setFacebookAccountId(facebookAccountId);
+        accountDetails.setReviewPushAccountId(reviewpushAccountId + "");
         return accountDetails;
     }
 

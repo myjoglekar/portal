@@ -27,6 +27,7 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReportRow;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
@@ -50,6 +51,7 @@ import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -135,8 +137,14 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getAccountPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getAccountPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+
+        }
         return returnMap;
     }
 
@@ -177,8 +185,13 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getCampaignPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getCampaignPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 
@@ -219,8 +232,14 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getAdPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getAdPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+
+        }
         return returnMap;
     }
 
@@ -261,8 +280,13 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getDevicePerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getDevicePerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 
@@ -303,8 +327,14 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getAgePerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getAgePerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+        }
+
         return returnMap;
     }
 
@@ -345,8 +375,13 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getGenderPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getGenderPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 

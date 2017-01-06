@@ -32,13 +32,13 @@ import org.json.simple.parser.ParseException;
  */
 @Service("dynamicDisplayService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-public class DynamicDisplayService {
+public class DealerVaultService {
 
-    private final static String DYNAMIC_DISPLAY_URL = "http://ec2-35-160-217-210.us-west-2.compute.amazonaws.com:5002/vizboard/";
+    private final static String DEALER_VAULT_URL = "http://ec2-35-160-217-210.us-west-2.compute.amazonaws.com:5003/vizboard/";
 
     public Object getAccountPerformance(Date startDate, Date endDate, String dealerId) {
         try {
-            String url = DYNAMIC_DISPLAY_URL + "all?dealerId=" + dealerId + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
+            String url = DEALER_VAULT_URL + "getData?dealerId=" + dealerId + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
             String data = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(data);
@@ -48,21 +48,8 @@ public class DynamicDisplayService {
 //            Map<String, String[]> parameterMap = request.getParameterMap();
 //            forwardRequest(url, response.getOutputStream(), parameterMap);
         } catch (Exception ex) {
-            Logger.getLogger(DynamicDisplayService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DealerVaultService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
-    }
-
-    public Object getLast12Weeks(Date startDate, Date endDate, String dealerId) {
-        try {
-            String url = DYNAMIC_DISPLAY_URL + "allByWeek?dealerId=" + dealerId + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
-            String data = Rest.getData(url);
-            JSONParser parser = new JSONParser();
-            Object jsonObj = parser.parse(data);
-            return jsonObj;
-        } catch (Exception ex) {
-            Logger.getLogger(DynamicDisplayService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
 }
