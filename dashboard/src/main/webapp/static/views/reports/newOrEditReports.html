@@ -103,7 +103,7 @@
 
 <div class="pull-right-container pull-right">
     <div class="btn-group"> 
-        <a ui-sref="index.report.reports" style="cursor: pointer;"><i class="fa fa-arrow-left"></i> Back</a>
+        <a ui-sref="index.report.reports({dealerId: dealerId, reportId: reportId, startDate: startDate, endDate: endDate})"><i class="fa fa-arrow-left"></i> Back</a>
     </div>
     <div class="btn-group"> 
         <a style="cursor: pointer;"><i class="fa fa-print"></i> Print</a> 
@@ -231,7 +231,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Product</label>
-                                            <select class="form-control" ng-model="reportWidget.productName" ng-change="selectProductName(reportWidget.productName, widget)" ng-options="(userProduct |    capitalize) for userProduct in userProducts">
+                                            <select class="form-control" ng-model="reportWidget.productName" ng-change="selectProductName(reportWidget.productName, widget)" ng-options="(userProduct |     capitalize) for userProduct in userProducts">
                                             </select>
                                         </div>
                                     </div>

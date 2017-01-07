@@ -124,15 +124,16 @@ public class DateUtils {
         cal.add(Calendar.DATE, 7);
         return cal.getTime();
     }
-    
+
     public static String getDayOfWeek(Integer day) {
         String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         return days[day - 1];
     }
+
     public static Integer getWeekDayByDay(String day) {
         String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-         List<String> list = Arrays.asList(days);
-         return list.indexOf(day) ;
+        List<String> list = Arrays.asList(days);
+        return list.indexOf(day);
     }
 
     public static Date getStartDateOfWeek(Date date) {
@@ -155,6 +156,30 @@ public class DateUtils {
 
 // Print dates of the current week starting on Monday
         return toGaDate(c.getTime());
+    }
+
+    public static Date goBack(String strStart, String type, Integer count) {
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Date startDate = null;
+        try {
+            startDate = (Date) formatter.parse(strStart);
+        } catch (Exception ex) {
+            System.out.println("Exception Start ");
+            startDate = new Date();
+        }
+        // return startDate;
+        Calendar calReturn = Calendar.getInstance();
+        calReturn.setTime(startDate);
+        if (type.equalsIgnoreCase("day")) {
+            calReturn.add(Calendar.DATE, (count * -1));
+        } else if (type.equalsIgnoreCase("week")) {
+            calReturn.add(Calendar.DATE, (count * -7));
+        } else if (type.equalsIgnoreCase("month")) {
+            calReturn.add(Calendar.MONTH, (count * -1));
+        } else if (type.equalsIgnoreCase("year")) {
+            calReturn.add(Calendar.YEAR, (count * -1));
+        }
+        return calReturn.getTime();
     }
 
     public static Date get12WeeksBack(String strStart) {

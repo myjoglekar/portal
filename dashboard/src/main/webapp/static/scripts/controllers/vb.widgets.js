@@ -47,7 +47,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.tableWrapText = [
         {name: 'None', value: ''},
         {name: 'Yes', value: "yes"},
-        {name: 'No', value: "no"}
     ];
     $scope.isEditPreviewColumn = false;
 
@@ -61,6 +60,14 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         });
     }
     getWidgetItem();
+    $scope.collectionField = {};
+    $scope.dispName = function (currentColumn) {
+        console.log(currentColumn.fieldName)
+        console.log($scope.collectionFields)
+        $scope.filterName = $filter('filter')($scope.collectionFields, {fieldName: currentColumn.fieldName})[0];
+        console.log($scope.filterName);
+        currentColumn.displayName = $scope.filterName.displayName;
+    };
 
     $scope.editWidget = function (widget) {     //Edit widget
         $scope.tableDef(widget);
@@ -155,7 +162,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.deleteWidget = function (widget, index) {                            //Delete Widget
         $http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {
             $scope.widgets.splice(index, 1);
-            $('.modal-backdrop').on("hide")
         });
     };
 
@@ -200,14 +206,14 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     //Data Set
-    function selectedItems(selectedItem) {
-        $http.get('admin/datasources/dataSet/' + selectedItem).success(function (response) {
-            $scope.dataSets = response;
-        });
-        $http.get('admin/datasources/dataDimensions/' + selectedItem).success(function (response) {
-            $scope.dataDimensions = response;
-        });
-    }
+//    function selectedItems(selectedItem) {
+//        $http.get('admin/datasources/dataSet/' + selectedItem).success(function (response) {
+//            $scope.dataSets = response;
+//        });
+//        $http.get('admin/datasources/dataDimensions/' + selectedItem).success(function (response) {
+//            $scope.dataDimensions = response;
+//        });
+//    }
 
     $scope.objectHeader = [];
     $scope.previewChart = function (chartType, widget, index) {                 //Selected Chart type - Bind chart-type to showPreview()
@@ -246,22 +252,28 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         widget.widgetColumns = widget.columns;
     };
 
+    $scope.closeWidget = function (widget) {
+        $scope.widget = "";
+    };
 
     $scope.onDropComplete = function (index, widget, evt) {
-        console.log(widget)
-        console.log($scope.widgets)
-        var otherObj = $scope.widgets[index];
-        var otherIndex = $scope.widgets.indexOf(widget);
-        $scope.widgets[index] = widget;
-        $scope.widgets[otherIndex] = otherObj;
-        var widgetOrder = $scope.widgets.map(function (value, key) {
-            if(!value) {
-                return;
+        if (widget !== "" && widget !== null) {
+            var otherObj = $scope.widgets[index];
+            var otherIndex = $scope.widgets.indexOf(widget);
+            $scope.widgets[index] = widget;
+            $scope.widgets[otherIndex] = otherObj;
+            var widgetOrder = $scope.widgets.map(function (value, key) {
+                console.log(value)
+                if (value) {
+                    return value.id;
+                }
+                //return value.id;
+            }).join(',');
+            var data = {widgetOrder: widgetOrder};
+            if (widgetOrder) {
+                $http({method: 'GET', url: 'admin/ui/dbWidgetUpdateOrder/' + $stateParams.tabId + "?widgetOrder=" + widgetOrder});
             }
-            return value.id;
-        }).join(',');
-        var data = {widgetOrder: widgetOrder};
-        $http({method: 'GET', url: 'admin/ui/dbWidgetUpdateOrder/' + $stateParams.tabId + "?widgetOrder=" + widgetOrder});
+        }
     };
 });
 
@@ -319,6 +331,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     cellFormat = value.displayFormat;
                 }
                 var cellAlignment = "";
+                var cellWrapText = "";
                 if (value.alignment === 'left') {
                     cellAlignment = 'text-left';
                 } else if (value.alignment === 'right') {
@@ -327,15 +340,15 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     cellAlignment = 'text-center';
                 }
                 if (value.wrapText) {
-                    cellAlignment += " wrap";
+                    cellWrapText = "wrap";
                 }
-                columnDef.cellTemplate = '<div  class="ui-grid-cell-contents ' + cellAlignment + '"><span>{{COL_FIELD | gridDisplayFormat : "' + cellFormat + '"}}</span></div>';
+                columnDef.cellTemplate = '<div  class="ui-grid-cell-contents ' + cellAlignment + " " + cellWrapText + '"><span>{{COL_FIELD | gridDisplayFormat : "' + cellFormat + '"}}</span></div>';
                 columnDef.footerCellTemplate = '<div class="' + cellAlignment + '" >{{col.getAggregationValue() | gridDisplayFormat:"' + cellFormat + '"}}</div>';
 
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
 //                                columnDef.cellClass = 'space-numbers',
@@ -395,7 +408,7 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                 }
                 columnDefs.push(columnDef);
             });
-            $http.get(scope.dynamicTableUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+            $http.get(scope.dynamicTableUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
                 scope.gridOptions = {
@@ -470,9 +483,9 @@ app.directive('tickerDirective', function ($http, $stateParams) {
 
             var setData = [];
             var data = [];
-            $http.get(scope.tickerUrl + "?widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+            $http.get(scope.tickerUrl + "?widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 console.log(response);
-                if(!response){
+                if (!response) {
                     return;
                 }
                 var tickerData = response.data;
@@ -579,7 +592,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
 
             if (scope.lineChartUrl) {
 
-                $http.get(scope.lineChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+                $http.get(scope.lineChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingLine = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -734,7 +747,7 @@ app.directive('barChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.barChartUrl) {
-                $http.get(scope.barChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+                $http.get(scope.barChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingBar = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -876,7 +889,7 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.pieChartUrl) {
-                $http.get(scope.pieChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+                $http.get(scope.pieChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingPie = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -1033,7 +1046,7 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.areaChartUrl) {
-                $http.get(scope.areaChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate).success(function (response) {
+                $http.get(scope.areaChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingArea = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -1137,7 +1150,7 @@ app.service('stats', function ($filter) {
     var initAggregation = function (aggregation) {
         /* To be used in conjunction with the cleanup finalizer */
         if (angular.isUndefined(aggregation.stats)) {
-            aggregation.stats = {sum: 0, impressionsSum: 0, clicksSum: 0, costSum: 0, conversionsSum: 0 };
+            aggregation.stats = {sum: 0, impressionsSum: 0, clicksSum: 0, costSum: 0, conversionsSum: 0};
         }
     };
     var initProperty = function (obj, prop) {
@@ -1224,7 +1237,7 @@ app.service('stats', function ($filter) {
                     if (isNaN(aggregatedCost)) {
                         aggregatedCost = Number(aggregatedCost.replace(/[^0-9.]/g, ""));
                     }
-                    return aggregatedCost/aggregatedClicks ;
+                    return aggregatedCost / aggregatedClicks;
                 }
                 return "";
             },
@@ -1251,7 +1264,7 @@ app.service('stats', function ($filter) {
                     if (isNaN(aggregatedCost)) {
                         aggregatedCost = Number(aggregatedCost.replace(/[^0-9.]/g, ""));
                     }
-                    return aggregatedCost/aggregatedConversions ;
+                    return aggregatedCost / aggregatedConversions;
                 }
                 return "";
             }
