@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.netphenix</groupId>
-    <artifactId>api.service</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>api.devqa.release</artifactId>
+    <version>1</version>
     <packaging>war</packaging>
 
     <name>ApiService</name>
