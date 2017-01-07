@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.dviz</groupId>
-    <artifactId>VizBoard</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>richanalytics.devqa.release</artifactId>
+    <version>1</version>
     <packaging>war</packaging>
 
-    <name>VizBoard</name>
+    <name>Dashboard</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
