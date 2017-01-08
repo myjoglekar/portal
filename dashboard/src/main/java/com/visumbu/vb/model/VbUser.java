@@ -52,6 +52,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "VbUser.findByTheme", query = "SELECT v FROM VbUser v WHERE v.theme = :theme"),
     @NamedQuery(name = "VbUser.findByUserName", query = "SELECT v FROM VbUser v WHERE v.userName = :userName")})
 public class VbUser implements Serializable {
+
     @OneToMany(mappedBy = "createdBy")
     private Collection<TabWidget> tabWidgetCollection;
     @OneToMany(mappedBy = "createdBy")
@@ -115,6 +116,9 @@ public class VbUser implements Serializable {
     @Size(max = 255)
     @Column(name = "user_name")
     private String userName;
+    @Size(max = 255)
+    @Column(name = "user_ref_id")
+    private String userRefId;
 
     public VbUser() {
     }
@@ -259,6 +263,14 @@ public class VbUser implements Serializable {
         this.userName = userName;
     }
 
+    public String getUserRefId() {
+        return userRefId;
+    }
+
+    public void setUserRefId(String userRefId) {
+        this.userRefId = userRefId;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -334,4 +346,4 @@ public class VbUser implements Serializable {
         this.dashboardCollection = dashboardCollection;
     }
 
-    }
+}

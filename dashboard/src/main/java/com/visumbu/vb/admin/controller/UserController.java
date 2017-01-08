@@ -88,6 +88,8 @@ public class UserController {
             returnMap.put("errorMessage", "Login Failed");
             return returnMap;
         }
+        VbUser user = userService.createNewUser(authData);
+        session.setAttribute("userId", user.getId());
         session.setAttribute("username", authData.getUserName());
         session.setAttribute("accessToken", authData.getAccessToken());
         session.setAttribute("permission", authData.getPermission());

@@ -136,4 +136,20 @@ public class UserService {
     public List<Dealer> getSampleDealers() {
         return dealerDao.getSampleDealers();
     }
+
+    public VbUser createNewUser(SecurityAuthBean authData) {
+        String userId = authData.getUserId();
+        String userName = authData.getUserName();
+        List<VbUser> users = userDao.findByUserName(userName);
+        VbUser user = null;
+        if(users != null && !users.isEmpty()) {
+            user = users.get(0);
+        }
+        if(user == null) {
+            System.out.println("Creating user " + userName);
+            user = userDao.createNewUser(userId, userName);
+            userDao.initUser(user);
+        }
+        return user;
+    }
 }

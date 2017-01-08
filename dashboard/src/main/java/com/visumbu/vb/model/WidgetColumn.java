@@ -34,6 +34,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "WidgetColumn.findAll", query = "SELECT w FROM WidgetColumn w")
     , @NamedQuery(name = "WidgetColumn.findById", query = "SELECT w FROM WidgetColumn w WHERE w.id = :id")
     , @NamedQuery(name = "WidgetColumn.findByFieldName", query = "SELECT w FROM WidgetColumn w WHERE w.fieldName = :fieldName")
+    , @NamedQuery(name = "WidgetColumn.findByWidget", query = "SELECT w FROM WidgetColumn w WHERE w.widgetId = :widget")
     , @NamedQuery(name = "WidgetColumn.findByDisplayName", query = "SELECT w FROM WidgetColumn w WHERE w.displayName = :displayName")
     , @NamedQuery(name = "WidgetColumn.findBySortPriority", query = "SELECT w FROM WidgetColumn w WHERE w.sortPriority = :sortPriority")
     , @NamedQuery(name = "WidgetColumn.findBySortOrder", query = "SELECT w FROM WidgetColumn w WHERE w.sortOrder = :sortOrder")
