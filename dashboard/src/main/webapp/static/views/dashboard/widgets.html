@@ -137,8 +137,8 @@
 
         <div ng-if="widget.chartType != 'ticker'">
             <div class="col-md-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
-                <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl" ng-drag="true" ng-drag-data="widget"> 
-                    <div class="box-header with-border">
+                <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl"> 
+                    <div class="box-header with-border" ng-drag="true" ng-drag-data="widget">
                         <h3 class="box-title">
                             <span class="{{widget.icon}}"></span> 
                             <span class="text-capitalize">{{widget.widgetTitle}}</span>

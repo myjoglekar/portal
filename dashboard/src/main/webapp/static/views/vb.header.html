@@ -24,30 +24,24 @@
 <section class="content-header header-menu" ng-controller="HeaderController">
     <ol class="breadcrumb">
         <li>
-        <ui-select ng-model="selectDealer.selected" theme="selectize" ng-disabled="disabled" style="width: 300px;">
+        <ui-select ng-model="selectDealer.selected" theme="selectize" ng-disabled="disabled" style="width:180px;">
             <ui-select-match placeholder="Select Dealer...">{{$select.selected.dealerName}}</ui-select-match>
             <ui-select-choices repeat="dealer in dealers | filter: $select.search">
                 <span ng-click="getDealerId(dealer); loadNewUrl()" ng-bind-html="dealer.dealerName | highlight: $select.search"></span>
                 <!--<small ng-bind-html="country.code | highlight: $select.search"></small>-->
             </ui-select-choices>
         </ui-select>
-        <!--            <a class="border-btn" data-toggle="dropdown"><i class="fa fa-home" style="font-size:20px;"></i>Dealer Name <i class="fa fa-caret-down"></i> </a> 
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="dealer in dealers">
-                            <a ui-sref="index.dashboard({dealerId: dealer.id})">{{dealer.dealerName}}</a>  
-                        </li>
-                    </ul>-->
         </li>
         <li>              
             <a class="pull-right" id="daterange-btn">
-                <i class="fa fa-calendar" id="date"></i>
+                <!--                <i class="fa fa-calendar" id="date"></i>-->
                 <span class="date-border">
                     {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
                 </span>
             </a>                   
         </li>
         <li> <span class="label label-info" ng-click="loadNewUrl()">Go</span></li>
-        <li class="user user-menu">
+        <li class="pull-right user user-menu">
             <a data-toggle="dropdown" class="logout">
                 <i class="fa fa-user" style="font-size:20px;"></i> {{userName}}</a>
             <ul class="dropdown-menu pull-left">
