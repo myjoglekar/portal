@@ -256,7 +256,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.widget = "";
     };
 
-     $scope.onDropComplete = function (index, widget, evt) {
+    $scope.onDropComplete = function (index, widget, evt) {
         if (widget !== "" && widget !== null) {
             var otherObj = $scope.widgets[index];
             var otherIndex = $scope.widgets.indexOf(widget);
@@ -288,26 +288,43 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
         },
         template: '<table class="table table-responsive table-bordered table-hover">' +
                 '<thead><tr>' +
-                '<th class="info">Group</th>' +
+                '<th class="info" ng-if="groupingName">'+
+                '<i style="cursor: pointer" class="fa" ng-click="" ng-class="{\'fa-plus\': !selected_Row, \'fa-minus\': selected_Row}"></i>' +
+                ' Group</th>' +
                 '<th class="text-uppercase info" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
                 '{{col.displayName}}<i class="fa pull-right" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
-                '</th>'+
+                '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
                 '<tbody ng-repeat="grouping in groupingData">' +
                 '<tr class="text-uppercase text-info info" ng-click="child = false;">' +
-                '<td>' +
-                '<i style="cursor: pointer" class="fa" ng-click="show = !show" ng-class="{\'fa-plus\': !show, \'fa-minus\': show}"></i> {{grouping._groupField}} : {{grouping._key}}</td>' +
-                '<td ng-repeat="col in columns">' + '<div>{{format(col, grouping[col.fieldName])}}</div></td></tr>' +
-                '<tr ng-show="show" ng-repeat-start="item in grouping.data" class="text-uppercase text-info info">' +
+                '<td ng-if="groupingName">' +
+                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; grouping.item.$hideRows = false;" ng-class="{\'fa-plus\': !grouping.$hideRows, \'fa-minus\': grouping.$hideRows}"></i>' +
+                ' {{grouping._groupField}} : {{grouping._key}}' +
+                '</td>' +
+                '<td ng-repeat="col in columns">' + '<div>{{format(col, grouping[col.fieldName])}}</div>' +
+                '</td>' +
+                '</tr>' +
+                '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-uppercase text-info info">' +
                 '<td style="background-color: #d7dedc">' +
-                '<i style="cursor: pointer" class="fa" ng-click="child = !child" ng-class="{\'fa-plus\': !child, \'fa-minus\': child}"></i> {{item._groupField}} : {{item._key}}</td>' +
-                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '{{item[col.fieldName]}}' + '</td></tr>' +
-                '<tr ng-show="child" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
-                '<td ng-repeat="col in columns">{{format(col, childItem[col.fieldName])}}</td></tr></tbody>' +
+                '<i style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus\': !item.$hideRows, \'fa-minus\': item.$hideRows}"></i> {{item._groupField}} : {{item._key}}</td>' +
+                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '{{item[col.fieldName]}}' +
+                '</td>' +
+                '</tr>' +
+                '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
+                '<td ng-repeat="col in columns">{{format(col, childItem[col.fieldName])}}</td></tr>' +
+                '</tbody>' +
                 '</table>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
+            scope.clickRow = function () {
+                scope.grouping.$hideRows = false;
+            };
+
+            scope.doSomething = function (ev) {
+                var element = ev.srcElement ? ev.srcElement : ev.target;
+                console.log(element, angular.element(element))
+            }
 
             //scope.currentPage = 1;
             //scope.pageSize = 10;
@@ -316,10 +333,10 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 scope.columns.push(value);
             });
-            
+
             scope.format = function (column, value) {
-                if(column.displayFormat) {
-                   return d3.format(column.displayFormat)(value);
+                if (column.displayFormat) {
+                    return d3.format(column.displayFormat)(value);
                 }
                 return value;
             }
@@ -342,7 +359,12 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             fullAggreagtionList = aggreagtionList;
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.groupingData = scope.group(response.data, groupByFields, aggreagtionList);
-               console.log(scope.groupingData);
+                angular.forEach(scope.groupingData, function (value, key) {
+                    scope.groupingName = value._groupField;
+                })
+
+                console.log(scope.groupingName);
+                console.log(scope.groupingName);
                 //console.log($scope.group(response, groupByFields, aggreagtionList));
 
             });
@@ -621,7 +643,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
 
             var setData = [];
             var data = [];
-          
+
             $http.get("admin/proxy/getJson?url=" + scope.tickerUrl + "&widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 console.log(response);
                 if (!response) {

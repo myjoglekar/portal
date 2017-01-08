@@ -72,8 +72,8 @@ public class DealerDao extends BaseDao {
     }
 
     public List<DealerAccountBean> getDealerAccountDetails(String dealerId) {
-        String queryStr = "SELECT d.dealer_ref_id dealerMapId, d.id dealerId, product_name productName, account_id accountId, "
-                + " profile_id profileId, source_name sourceName, "
+        String queryStr = "SELECT d.dealer_ref_id dealerMapId, d.id dealerId, product_name productName, dps.account_id accountId, "
+                + " dps.profile_id profileId, source_name sourceName, "
                 + " case when ps.service_name is null then 'none' else ps.service_name end serviceName "
                 + " FROM dealer_product_source dps join "
                 + " dealer_product dp join "
