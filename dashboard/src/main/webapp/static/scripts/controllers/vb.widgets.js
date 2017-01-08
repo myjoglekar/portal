@@ -340,7 +340,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 }
             }
             fullAggreagtionList = aggreagtionList;
-            $http.get(scope.dynamicTableUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.groupingData = scope.group(response.data, groupByFields, aggreagtionList);
                console.log(scope.groupingData);
                 //console.log($scope.group(response, groupByFields, aggreagtionList));
