@@ -277,7 +277,143 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 });
 
-app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams, stats) {
+app.directive('dynamicTable', function ($http, $filter, $stateParams) {
+    return{
+        restrict: 'A',
+        scope: {
+            dynamicTableUrl: '@',
+            widgetId: '@',
+            widgetColumns: '@',
+            setTableFn: '&'
+        },
+        template: '<table class="table tab-content table-bordered table-hover">' +
+                '<thead><tr>' +
+                '<th class="info">Group</th>' +
+                '<th class="text-uppercase info" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
+                '{{col.displayName}}<i class="fa pull-right" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
+                '</th></tr></thead>' +
+                //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
+                '<tbody ng-repeat="grouping in groupingData">' +
+                '<tr class="text-uppercase text-info info" ng-click="child = false;">' +
+                '<td>' +
+                '<i style="cursor: pointer" class="fa" ng-click="show = !show" ng-class="{\'fa-plus\': !show, \'fa-minus\': show}"></i> {{grouping._groupField}} : {{grouping._key}}</td>' +
+                '<td ng-repeat="col in columns">' + '<div>{{format(col, grouping[col.fieldName])}}</div></td></tr>' +
+                '<tr ng-show="show" ng-repeat-start="item in grouping.data" class="text-uppercase text-info info">' +
+                '<td style="background-color: #d7dedc">' +
+                '<i style="cursor: pointer" class="fa" ng-click="child = !child" ng-class="{\'fa-plus\': !child, \'fa-minus\': child}"></i> {{item._groupField}} : {{item._key}}</td>' +
+                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '{{item[col.fieldName]}}' + '</td></tr>' +
+                '<tr ng-show="child" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
+                '<td ng-repeat="col in columns">{{format(col, childItem[col.fieldName])}}</td></tr></tbody>' +
+                '</table>', //+
+        //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
+        link: function (scope, element, attr) {
+
+            //scope.currentPage = 1;
+            //scope.pageSize = 10;
+            // console.log
+            scope.columns = []
+            angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                scope.columns.push(value);
+            });
+            
+            scope.format = function (column, value) {
+                if(column.displayFormat) {
+                   return d3.format(column.displayFormat)(value);
+                }
+                return value;
+            }
+
+//            scope.columns = [{fieldName: 'name', displayName: 'Name', aggregation: 'count', groupOrder: 1},
+//                {fieldName: "age", displayName: "Age", aggregation: "avg", groupOrder: 2},
+//                {fieldName: "money", displayName: "Money", aggregation: "sum"}
+//            ];
+            groupByFields = []; // ['device', 'campaignName'];
+            aggreagtionList = [];
+
+            for (var i = 0; i < scope.columns.length; i++) {
+                if (scope.columns[i].groupPriority) {
+                    groupByFields.push(scope.columns[i].fieldName);
+                }
+                if (scope.columns[i].agregationFunction) {
+                    aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggreationType: scope.columns[i].agregationFunction});
+                }
+            }
+            fullAggreagtionList = aggreagtionList;
+            $http.get(scope.dynamicTableUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+                scope.groupingData = scope.group(response.data, groupByFields, aggreagtionList);
+               console.log(scope.groupingData);
+                //console.log($scope.group(response, groupByFields, aggreagtionList));
+
+            });
+
+            scope.sortColumn = scope.columns;
+
+            scope.reverse = false;
+            scope.toggleSort = function (index) {
+                if (scope.sortColumn === scope.objectHeader[index]) {
+                    scope.reverse = !scope.reverse;
+                }
+                scope.sortColumn = scope.objectHeader[index];
+            }
+
+//Dir-Paginations
+            scope.pageChangeHandler = function (num) {
+                console.log('reports page changed to ' + num);
+            };
+
+            scope.sum = function (list, fieldname) {
+                var sum = 0;
+                for (var i in list)
+                {
+                    sum = sum + Number(list[i][fieldname]);
+                }
+                return sum;
+            };
+
+            function aggregate(list, aggreationList) {
+                var returnValue = {};
+                angular.forEach(aggreationList, function (value, key) {
+                    if (value.aggreationType == "sum") {
+                        returnValue[value.fieldname] = scope.sum(list, value.fieldname);
+                    }
+                    if (value.aggreationType == "avg") {
+                        returnValue[value.fieldname] = scope.sum(list, value.fieldname) / list.length;
+                    }
+                    if (value.aggreationType == "count") {
+                        returnValue[value.fieldname] = list.length;
+                    }
+                });
+                return returnValue;
+            }
+
+            scope.group = function (list, fieldnames, aggreationList) {
+                var currentFields = fieldnames;
+                if (fieldnames.length == 0)
+                    return list;
+                var actualList = list;
+                var data = [];
+                var groupingField = currentFields[0];
+                var currentListGrouped = $filter('groupBy')(actualList, groupingField);
+                var currentFields = currentFields.splice(1);
+                angular.forEach(currentListGrouped, function (value1, key1) {
+                    var dataToPush = {};
+                    dataToPush._key = key1;
+                    dataToPush[groupingField] = key1;
+                    dataToPush._groupField = groupingField;
+                    dataToPush = angular.extend(dataToPush, aggregate(value1, fullAggreagtionList));
+                    console.log("DATA TO PUSH");
+                    console.log(dataToPush);
+                    dataToPush.data = scope.group(value1, currentFields, aggreationList);
+                    data.push(dataToPush);
+                });
+                return data;
+            }
+
+        }
+    }
+})
+
+app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams, stats) {
     return{
         restrict: 'A',
         scope: {
