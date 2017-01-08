@@ -286,12 +286,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             widgetColumns: '@',
             setTableFn: '&'
         },
-        template: '<table class="table tab-content table-bordered table-hover">' +
+        template: '<table class="table table-responsive table-bordered table-hover">' +
                 '<thead><tr>' +
                 '<th class="info">Group</th>' +
                 '<th class="text-uppercase info" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
                 '{{col.displayName}}<i class="fa pull-right" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
-                '</th></tr></thead>' +
+                '</th>'+
+                '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
                 '<tbody ng-repeat="grouping in groupingData">' +
                 '<tr class="text-uppercase text-info info" ng-click="child = false;">' +
