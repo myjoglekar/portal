@@ -3,8 +3,8 @@
 # and open the template in the editor.
 database.driver=com.mysql.jdbc.Driver
 database.url=jdbc:mysql://localhost/vb_arul?zeroDateTimeBehavior=convertToNull
-database.user=varghees
-database.password=samraj
+database.user=root
+database.password=
 
 hibernate.dialect=org.hibernate.dialect.MySQLDialect
 hibernate.show_sql=true
