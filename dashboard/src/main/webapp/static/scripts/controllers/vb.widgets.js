@@ -273,17 +273,17 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-hover">' +
                 '<thead><tr>' +
                 '<th class="info" ng-if="groupingName">' +
-                '<i style="cursor: pointer" class="fa" ng-class="{\'fa-plus\': !selected_Row, \'fa-minus\': selected_Row}"></i>' +
+                '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows);" class="fa" ng-class="{\'fa-plus\': !selected_Row, \'fa-minus\': selected_Row}"></i>' +
                 ' Group</th>' +
                 '<th class="text-uppercase info" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
                 '{{col.displayName}}<i class="fa pull-right" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
-                '<tbody ng-repeat="grouping in groupingData | orderBy: sortColumn:reverse: true">' +
+                '<tbody ng-repeat="grouping in groupingData.data | orderBy: sortColumn:reverse: true">' +
                 '<tr class="text-uppercase text-info info">' +
                 '<td ng-if="groupingName">' +
-                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; item.$hideRows = false" ng-class="{\'fa-plus\': !grouping.$hideRows, \'fa-minus\': grouping.$hideRows}"></i>' +
+                '<i style="cursor: pointer" class="fa" 11 ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus\': !grouping.$hideRows, \'fa-minus\': grouping.$hideRows}"></i>' +
                 ' {{grouping._groupField}} : {{grouping._key}}' +
                 '</td>' +
                 '<td ng-repeat="col in columns">' + '<div>{{format(col, grouping[col.fieldName])}}</div>' +
@@ -291,7 +291,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</tr>' +
                 '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-uppercase text-info info">' +
                 '<td style="background-color: #d7dedc">' +
-                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus\': !item.$hideRows, \'fa-minus\': item.$hideRows}"></i> {{item._groupField}} : {{item._key}}</td>' +
+                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" 22 ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus\': !item.$hideRows, \'fa-minus\': item.$hideRows}"></i> {{item._groupField}} : {{item._key}}</td>' +
                 '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '{{item[col.fieldName]}}' +
                 '</td>' +
                 '</tr>' +
@@ -305,7 +305,14 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             scope.clickRow = function () {
                 scope.grouping.$hideRows = false;
             };
-
+            scope.hideAll = function (grouping, hideStatus) {
+                if (!grouping)
+                    return;
+                angular.forEach(grouping.data, function (value, key) {
+                    value.$hideRows = hideStatus;
+                    scope.hideAll(value, hideStatus);
+                })
+            }
             scope.doSomething = function (ev) {
                 var element = ev.srcElement ? ev.srcElement : ev.target;
                 console.log(element, angular.element(element))
@@ -334,17 +341,31 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     groupByFields.push(scope.columns[i].fieldName);
                 }
                 if (scope.columns[i].agregationFunction) {
-                    aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggreationType: scope.columns[i].agregationFunction});
+                    aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
                 }
             }
             fullAggreagtionList = aggreagtionList;
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
-                scope.groupingData = scope.group(response.data, groupByFields, aggreagtionList);
-                angular.forEach(scope.groupingData, function (value, key) {
-                    scope.groupingName = value._groupField;
-                })
+                if (groupByFields && groupByFields.length > 0) {
+                    scope.groupingName = groupByFields;
+                    groupedData = scope.group(response.data, groupByFields, aggreagtionList);
+                    
+                    var dataToPush = {};
+                    dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
+                    dataToPush.data = groupedData;
+                    scope.groupingData = dataToPush;
+//                angular.forEach(scope.groupingData, function (value, key) {
+//                    scope.groupingName = value._groupField;
+//                })
+                }
+                else {
+                    var dataToPush = {};
+                    dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
+                    dataToPush.data = response.data;
+                    scope.groupingData = dataToPush;
+                }
                 console.log(scope.groupingData);
 //                console.log(scope.groupingName);
             });
@@ -376,20 +397,20 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             function aggregate(list, aggreationList) {
                 var returnValue = {};
                 angular.forEach(aggreationList, function (value, key) {
-                    if (value.aggreationType == "sum") {
+                    if (value.aggregationType == "sum") {
                         returnValue[value.fieldname] = scope.sum(list, value.fieldname);
                     }
-                    if (value.aggreationType == "avg") {
+                    if (value.aggregationType == "avg") {
                         returnValue[value.fieldname] = scope.sum(list, value.fieldname) / list.length;
                     }
-                    if (value.aggreationType == "count") {
+                    if (value.aggregationType == "count") {
                         returnValue[value.fieldname] = list.length;
                     }
-                    if (value.aggreationType == "min") {
-                        returnValue[value.fieldName] = _.min(list, value.fieldName);
+                    if (value.aggregationType == "min") {
+                        returnValue[value.fieldname] = Math.min.apply(Math,list.map(function(currentValue){return Number(currentValue[value.fieldname]);}));
                     }
-                    if(value.aggregationType == "max"){
-                        returnValue[value.fieldName] = _.max(list, value.fieldName);
+                    if (value.aggregationType == "max") {
+                        returnValue[value.fieldname] = Math.max.apply(Math,list.map(function(currentValue){return Number(currentValue[value.fieldname]);}));
                     }
                 });
                 return returnValue;
@@ -486,7 +507,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,
