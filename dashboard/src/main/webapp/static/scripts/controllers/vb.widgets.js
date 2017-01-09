@@ -62,10 +62,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     getWidgetItem();
     $scope.collectionField = {};
     $scope.dispName = function (currentColumn) {
-        console.log(currentColumn.fieldName)
-        console.log($scope.collectionFields)
         $scope.filterName = $filter('filter')($scope.collectionFields, {fieldName: currentColumn.fieldName})[0];
-        console.log($scope.filterName);
         currentColumn.displayName = $scope.filterName.displayName;
     };
 
@@ -205,16 +202,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         selectedItems(selectedItem);
     };
 
-    //Data Set
-//    function selectedItems(selectedItem) {
-//        $http.get('admin/datasources/dataSet/' + selectedItem).success(function (response) {
-//            $scope.dataSets = response;
-//        });
-//        $http.get('admin/datasources/dataDimensions/' + selectedItem).success(function (response) {
-//            $scope.dataDimensions = response;
-//        });
-//    }
-
     $scope.objectHeader = [];
     $scope.previewChart = function (chartType, widget, index) {                 //Selected Chart type - Bind chart-type to showPreview()
         $scope.selectedRow = chartType.type;
@@ -225,7 +212,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.showPreview = function (widget) {                                    //Show Preview Chart - Popup
-//        var data = JSON.parse(widget.productDisplayName);
         $scope.previewChartType = $scope.editChartType ? $scope.editChartType : widget.chartType;
         $scope.previewColumn = $scope.setPreviewColumn ? $scope.setPreviewColumn : widget;
         $scope.previewChartUrl = widget.previewUrl;
@@ -248,7 +234,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             widget.chartType = data.chartType;
         });
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
-        //widget.chartType = $scope.editChartType ? $scope.editChartType : widget.chartType;
         widget.widgetColumns = widget.columns;
     };
 
@@ -263,11 +248,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             $scope.widgets[index] = widget;
             $scope.widgets[otherIndex] = otherObj;
             var widgetOrder = $scope.widgets.map(function (value, key) {
-                console.log(value)
                 if (value) {
                     return value.id;
                 }
-                //return value.id;
             }).join(',');
             var data = {widgetOrder: widgetOrder};
             if (widgetOrder) {
@@ -286,27 +269,28 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             widgetColumns: '@',
             setTableFn: '&'
         },
-        template: '<table class="table table-responsive table-bordered table-hover">' +
+        template:'<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>'+
+                '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-hover">' +
                 '<thead><tr>' +
-                '<th class="info" ng-if="groupingName">'+
-                '<i style="cursor: pointer" class="fa" ng-click="" ng-class="{\'fa-plus\': !selected_Row, \'fa-minus\': selected_Row}"></i>' +
+                '<th class="info" ng-if="groupingName">' +
+                '<i style="cursor: pointer" class="fa" ng-class="{\'fa-plus\': !selected_Row, \'fa-minus\': selected_Row}"></i>' +
                 ' Group</th>' +
                 '<th class="text-uppercase info" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
                 '{{col.displayName}}<i class="fa pull-right" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
-                '<tbody ng-repeat="grouping in groupingData">' +
-                '<tr class="text-uppercase text-info info" ng-click="child = false;">' +
+                '<tbody ng-repeat="grouping in groupingData | orderBy: sortColumn:reverse: true">' +
+                '<tr class="text-uppercase text-info info">' +
                 '<td ng-if="groupingName">' +
-                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; grouping.item.$hideRows = false;" ng-class="{\'fa-plus\': !grouping.$hideRows, \'fa-minus\': grouping.$hideRows}"></i>' +
+                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; item.$hideRows = false" ng-class="{\'fa-plus\': !grouping.$hideRows, \'fa-minus\': grouping.$hideRows}"></i>' +
                 ' {{grouping._groupField}} : {{grouping._key}}' +
                 '</td>' +
                 '<td ng-repeat="col in columns">' + '<div>{{format(col, grouping[col.fieldName])}}</div>' +
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-uppercase text-info info">' +
-                '<td style="background-color: #d7dedc">' +
+                '<td ng-if="item._groupField" style="background-color: #d7dedc">' +
                 '<i style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus\': !item.$hideRows, \'fa-minus\': item.$hideRows}"></i> {{item._groupField}} : {{item._key}}</td>' +
                 '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '{{item[col.fieldName]}}' +
                 '</td>' +
@@ -317,6 +301,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</table>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
+            scope.loadingTable = true;
             scope.clickRow = function () {
                 scope.grouping.$hideRows = false;
             };
@@ -339,12 +324,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     return d3.format(column.displayFormat)(value);
                 }
                 return value;
-            }
+            };
 
-//            scope.columns = [{fieldName: 'name', displayName: 'Name', aggregation: 'count', groupOrder: 1},
-//                {fieldName: "age", displayName: "Age", aggregation: "avg", groupOrder: 2},
-//                {fieldName: "money", displayName: "Money", aggregation: "sum"}
-//            ];
             groupByFields = []; // ['device', 'campaignName'];
             aggreagtionList = [];
 
@@ -358,26 +339,25 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             }
             fullAggreagtionList = aggreagtionList;
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+                scope.ajaxLoadingCompleted = true;
+                scope.loadingTable = false;
                 scope.groupingData = scope.group(response.data, groupByFields, aggreagtionList);
                 angular.forEach(scope.groupingData, function (value, key) {
                     scope.groupingName = value._groupField;
                 })
-
-                console.log(scope.groupingName);
-                console.log(scope.groupingName);
-                //console.log($scope.group(response, groupByFields, aggreagtionList));
-
+//                console.log(scope.groupingName);
+//                console.log(scope.groupingName);
             });
 
             scope.sortColumn = scope.columns;
-
+            scope.objectHeader = [];
             scope.reverse = false;
             scope.toggleSort = function (index) {
                 if (scope.sortColumn === scope.objectHeader[index]) {
                     scope.reverse = !scope.reverse;
                 }
                 scope.sortColumn = scope.objectHeader[index];
-            }
+            };
 
 //Dir-Paginations
             scope.pageChangeHandler = function (num) {
@@ -424,8 +404,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush[groupingField] = key1;
                     dataToPush._groupField = groupingField;
                     dataToPush = angular.extend(dataToPush, aggregate(value1, fullAggreagtionList));
-                    console.log("DATA TO PUSH");
-                    console.log(dataToPush);
+//                    console.log("DATA TO PUSH");
+//                    console.log(dataToPush);
                     dataToPush.data = scope.group(value1, currentFields, aggreationList);
                     data.push(dataToPush);
                 });
@@ -447,12 +427,9 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<div id="grid1" class="grid full-height" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" ui-grid-grouping></div>',
-//                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" style="height: 850px;" ui-grid-grouping  ng-style="getTableHeight()"></div>',
         link: function (scope, element, attr) {
-//scope.rowData = []ui-if="gridData.data.length>0"
             scope.loadingTable = true;
             scope.gridOptions = {
-//                rowHeight: 50,
                 enableColumnMenus: false,
                 enableGridMenu: false,
                 enableRowSelection: false,
@@ -468,9 +445,6 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
             };
             var startDate = "";
             var endDate = "";
-//                        
-//            console.log(moment($('#daterange-btn').data('daterangepicker').startDate).format('YYYY-MM-DD HH:mm:ss'));
-//            console.log(moment($('#daterange-btn').data('daterangepicker').endDate).format('YYYY-MM-DD HH:mm:ss'));
             var columnDefs = [];
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
 
@@ -510,57 +484,35 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                             columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
                 }
                 if (value.agregationFunction == "sum") {
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
                 }
                 if (value.agregationFunction == "count") {
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.COUNT,
-                            //columnDef.cellFilter = 'number: 2';
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
-//                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
-//                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
-
                 }
                 if (value.agregationFunction == "max") {
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MAX,
-                            //columnDef.cellFilter = 'number: 2';
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
-//                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
-//                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
-
                 }
                 if (value.agregationFunction == "avg") {
-                    //columnDef.cellFilter = 'number: 2';
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.AVG,
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
-//                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD | setDecimal:2 }}</span></div>'
-//                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
-                    // columnDef.cellFilter = 'formatCaller'
-
                 }
                 if (value.agregationFunction == "min") {
 
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MIN,
-//                                columnDef.cellFilter = 'number: 2';
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
-//                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
-//                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
                 }
                 if (value.groupPriority) {
                     columnDef.grouping = {groupPriority: value.groupPriority};
@@ -572,7 +524,6 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
                 scope.gridOptions = {
-//                    rowHeight: 50,
                     enableColumnMenus: false,
                     enableGridMenu: false,
                     enableRowSelection: false,
@@ -583,7 +534,6 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                     multiSelect: false,
                     enableColumnResize: true,
                     data: response.data,
-//                    data: response.data.slice(0, 14),
                     columnDefs: columnDefs,
                     showColumnFooter: true,
                     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
@@ -601,17 +551,6 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                     }
                     scope.api.grid.gridHeight = scope.height;
                 }
-
-//                scope.getTableHeight = function () {
-//                    var rowHeight = 30; // your row height
-//                    var headerHeight = 30; // your header height
-//                    var minWidth = 150;
-//                    return {
-//                        height: (scope.gridOptions.data.length * rowHeight + headerHeight) + "px",
-//                        //'min-width': minWidth + "px"
-//                    };
-//                };
-
             });
         }
     };
@@ -752,8 +691,6 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.lineChartUrl) {
-
-
                 $http.get("admin/proxy/getJson?url=" + scope.lineChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingLine = false;
                     scope.xAxis = [];
@@ -768,9 +705,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                         loopCount++;
                         return a[xAxis.fieldName];
                     });
-
                     columns.push(xTicks);
-
 
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
@@ -779,8 +714,6 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-                    console.log(columns)
-
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
@@ -804,13 +737,6 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                                     format: d3.format(".2f")
                                 }
                             }
-//                            y: {
-//                                label: 'Impressions'
-//                            },
-//                            y2: {
-//                                show: true,
-//                                label: 'Clicks'
-//                            }
                         },
                         grid: {
                             x: {
@@ -925,7 +851,6 @@ app.directive('barChartDirective', function ($http, $stateParams) {
 
                     columns.push(xTicks);
 
-
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
                             return a[value.fieldName] || "0";
@@ -933,8 +858,6 @@ app.directive('barChartDirective', function ($http, $stateParams) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-                    console.log(columns)
-                    console.log(labels)
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
@@ -1028,7 +951,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                     y2 = {show: true, label: ''};
                 }
             });
-            console.log(labels);
             var xData = [];
             var xTicks = [];
 
@@ -1065,7 +987,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                         loopCount++;
                         return a[xAxis.fieldName];
                     });
-                    console.log(xData);
                     columns.push(xTicks);
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
@@ -1074,10 +995,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-                    console.log(columns)
-                    console.log(ySeriesData)
-                    console.log(columns)
-                    console.log(yAxis)
 
                     var data = {};
                     var legends = [];
@@ -1086,10 +1003,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                         legends.push(e[xAxis.fieldName]);
                         data[e[xAxis.fieldName]] = data[e[xAxis.fieldName]] ? data[e[xAxis.fieldName]] : 0 + e[yAxisField.fieldName] ? e[yAxisField.fieldName] : 0;
                     })
-
-                    console.log("...........................");
-                    console.log(data);
-                    console.log(legends);
 
                     var chart = c3.generate({
                         bindto: element[0],
@@ -1231,7 +1144,6 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-                    console.log('Line : ', columns)
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {

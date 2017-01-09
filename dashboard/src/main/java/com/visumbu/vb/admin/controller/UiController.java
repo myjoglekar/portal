@@ -234,7 +234,7 @@ public class UiController extends BaseController {
 
     @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
-    TabWidget deleteReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
+    ReportWidget deleteReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
         return uiService.deleteReportWidget(reportId);
     }
 
