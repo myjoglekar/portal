@@ -1,7 +1,4 @@
 app.controller("NewOrEditReportController", function ($scope, $http, $stateParams, $filter) {
-    console.log($stateParams.reportId);
-    console.log($stateParams.startDate);
-    console.log($stateParams.endDate);
 
     $scope.reportId = $stateParams.reportId;
     $scope.startDate = $stateParams.startDate;
@@ -115,11 +112,15 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
     };
 
     $scope.deleteReportWidget = function (reportWidget, index) {                            //Delete Widget
-        //$http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {
-        $scope.reportWidgets.splice(index, 1);
-        //  $('.modal-backdrop').remove();
-        //});
+        $http({method: 'DELETE', url: 'admin/ui/reportWidget/' + reportWidget.id}).success(function (response) {
+            $scope.reportWidgets.splice(index, 1);
+        });
     };
+    
+    $scope.deleteColumn = function (widgetColumns, index) {        //Delete Columns - Popup
+        widgetColumns.splice(index, 1);
+    };
+    
     $scope.dynamicLoadingUrl = function (reportWidget) {                                //Dynamic Url from columns Type data - Popup
         if (reportWidget.columns) {
             reportWidget.columns = reportWidget.columns;
@@ -172,7 +173,6 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         $scope.editChartType = chartType.type;
         $scope.setPreviewChartType = chartType.type;
         $scope.setPreviewColumn = reportWidget;
-//        $scope.changeTableColumns = chartType.type;
     };
     $scope.changeUrl = function (url, reportWidget) {                                       //Search dynamic Url      
         var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: url})[0];
@@ -222,24 +222,25 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
             reportWidget.chartType = data.chartType;
         });
         reportWidget.widgetTitle = reportWidget.previewTitle ? reportWidget.previewTitle : reportWidget.widgetTitle;
-        //reportWidget.chartType = $scope.previewChartType ? $scope.previewChartType : reportWidget.chartType;
         reportWidget.reportColumns = reportWidget.columns;
     };
 
     $scope.onDropComplete = function (index, reportWidget, evt) {
-        console.log(reportWidget)
-        console.log($scope.reportWidgets)
-        var otherObj = $scope.reportWidgets[index];
-        var otherIndex = $scope.reportWidgets.indexOf(reportWidget);
-        $scope.reportWidgets[index] = reportWidget;
-        $scope.reportWidgets[otherIndex] = otherObj;
-        var widgetOrder = $scope.reportWidgets.map(function (value, key) {
-            if (!value) {
-                return;
+        if (reportWidget !== "" && reportWidget !== null) {
+            var otherObj = $scope.reportWidgets[index];
+            var otherIndex = $scope.reportWidgets.indexOf(reportWidget);
+            $scope.reportWidgets[index] = reportWidget;
+            $scope.reportWidgets[otherIndex] = otherObj;
+            var widgetOrder = $scope.reportWidgets.map(function (value, key) {
+                if (!value) {
+                    return;
+                }
+                return value.id;
+            }).join(',');
+            if (widgetOrder) {
+                $http({method: 'GET', url: 'admin/ui/dbReportUpdateOrder/' + $stateParams.reportId + "?widgetOrder=" + widgetOrder});
             }
-            return value.id;
-        }).join(',');
-        // var data = {widgetOrder: widgetOrder};
-        $http({method: 'GET', url: 'admin/ui/dbReportUpdateOrder/' + $stateParams.reportId + "?widgetOrder=" + widgetOrder});
+        }
+        ;
     };
 });

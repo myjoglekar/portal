@@ -251,8 +251,8 @@ public class UiService {
         return uiDao.getReportWidget(reportId);
     }
 
-    public TabWidget deleteReportWidget(Integer reportId) {
-        return uiDao.deleteTabWidget(reportId);
+    public ReportWidget deleteReportWidget(Integer reportId) {
+        return uiDao.deleteReportWidget(reportId);
     }
 
     public Report getReportById(Integer reportId) {

@@ -9,11 +9,16 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.tabId = $stateParams.tabId;
 
     $scope.selectDealer = {};
-    $scope.selectDealer.selected = {dealerName: 'Acura of Pembroke Pines'};
-
     $http.get('admin/dealer').success(function (response) {
         $scope.dealers = response;
+        $scope.name = $filter('filter')($scope.dealers, {id: $stateParams.dealerId})[0];
+        $scope.selectDealer.selected = {dealerName: $scope.name.dealerName};
     });
+
+    $scope.getDealerId = function (dealer) {
+        console.log(dealer);
+        $stateParams.dealerId = dealer.id;
+    };
 
     $scope.toDate = function (strDate) {
         if (!strDate) {
@@ -41,10 +46,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         $stateParams.endDate = $scope.lastDate;
     }
 
-    $scope.getDealerId = function (dealer) {
-        console.log(dealer);
-        $stateParams.dealerId = dealer.id;
-    };
+
 
     console.log($stateParams.dealerId);
     $scope.loadNewUrl = function () {
