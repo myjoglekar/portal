@@ -45,12 +45,12 @@ public class FacebookService {
         return Rest.getData(url);
     }
 
-    public Object getAccountPerformance(Date startDate, Date endDate) {
+    public Object getAccountPerformance(Long accountId, Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
 
-            String url = BASE_URL + ACCOUNT_ID + "/insights?fields=account_name,impressions,clicks,ctr,cpc,spend,actions,reach,cost_per_action_type,adset_name&"
+            String url = BASE_URL + accountId + "/insights?fields=account_name,impressions,clicks,ctr,cpc,spend,actions,reach,cost_per_action_type,adset_name&"
                     + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
             String fbData = Rest.getData(url);
@@ -82,13 +82,13 @@ public class FacebookService {
         return null;
     }
 
-    public Object getCampaignPerformance(Date startDate, Date endDate) {
+    public Object getCampaignPerformance(Long accountId, Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
 //https://graph.facebook.com/v2.8/act_10153963646170050/insights?level=campaign&fields=account_name,impressions,clicks,ctr,cpc,spend,actions,reach,cost_per_action_type,campaign_name&time_range[since]=2016-10-01&time_range[until]=2016-10-31&access_token=EAANFRJpxZBZC0BAAqAeGjVgawF8X58ZCYRU824xzKpDcCN49s3wMGqie9MRdUZBnSK8pTsFw3KSOvfof88Oib6CCIOZBlnYQkkeYJrYdyOTJoELEZAmFAFKMoBg5cWvgbdnXdHmZAcYwsJQ6xL1XnMd8m6Hz4C7SAESJQLb36Qh0VSR3gIhiJOw
 
-            String url = BASE_URL + ACCOUNT_ID + "/insights?level=campaign&fields=account_name,impressions,clicks,ctr,cpc,spend,actions,reach,cost_per_action_type,campaign_name&"
+            String url = BASE_URL + accountId + "/insights?level=campaign&fields=account_name,impressions,clicks,ctr,cpc,spend,actions,reach,cost_per_action_type,campaign_name&"
                     + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
             String fbData = Rest.getData(url);
@@ -120,13 +120,13 @@ public class FacebookService {
         return null;
     }
 
-    public Object getAdPerformance(Date startDate, Date endDate) {
+    public Object getAdPerformance(Long accountId, Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
 //https://graph.facebook.com/v2.8/act_10153963646170050/insights?level=ad&fields=account_name,impressions,clicks,ctr,cpc,spend,actions,reach,cost_per_action_type,adset_name&time_range[since]=2016-10-01&time_range[until]=2016-10-31&access_token=EAANFRJpxZBZC0BAAqAeGjVgawF8X58ZCYRU824xzKpDcCN49s3wMGqie9MRdUZBnSK8pTsFw3KSOvfof88Oib6CCIOZBlnYQkkeYJrYdyOTJoELEZAmFAFKMoBg5cWvgbdnXdHmZAcYwsJQ6xL1XnMd8m6Hz4C7SAESJQLb36Qh0VSR3gIhiJOw
 
-            String url = BASE_URL + ACCOUNT_ID + "/insights?level=ad&fields=account_name,impressions,clicks,ctr,cpc,spend,actions,reach,cost_per_action_type,adset_name&"
+            String url = BASE_URL + accountId + "/insights?level=ad&fields=account_name,impressions,clicks,ctr,cpc,spend,actions,reach,cost_per_action_type,adset_name&"
                     + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
             String fbData = Rest.getData(url);
@@ -158,13 +158,13 @@ public class FacebookService {
         return null;
     }
 
-    public Object getDevicePerformance(Date startDate, Date endDate) {
+    public Object getDevicePerformance(Long accountId,Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
 //https://graph.facebook.com/v2.8/act_10153963646170050/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&time_range[since]=2016-10-01&time_range[until]=2016-10-31&breakdowns=impression_device&access_token=EAANFRJpxZBZC0BAAqAeGjVgawF8X58ZCYRU824xzKpDcCN49s3wMGqie9MRdUZBnSK8pTsFw3KSOvfof88Oib6CCIOZBlnYQkkeYJrYdyOTJoELEZAmFAFKMoBg5cWvgbdnXdHmZAcYwsJQ6xL1XnMd8m6Hz4C7SAESJQLb36Qh0VSR3gIhiJOw 
 
-            String url = BASE_URL + ACCOUNT_ID + "/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&breakdowns=impression_device&"
+            String url = BASE_URL + accountId + "/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&breakdowns=impression_device&"
                     + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
             String fbData = Rest.getData(url);
@@ -196,13 +196,13 @@ public class FacebookService {
         return null;
     }
 
-    public Object getAgePerformance(Date startDate, Date endDate) {
+    public Object getAgePerformance(Long accountId,Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
 //https://graph.facebook.com/v2.8/act_10153963646170050/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&time_range[since]=2016-10-01&time_range[until]=2016-10-31&breakdowns=age&access_token=EAANFRJpxZBZC0BAAqAeGjVgawF8X58ZCYRU824xzKpDcCN49s3wMGqie9MRdUZBnSK8pTsFw3KSOvfof88Oib6CCIOZBlnYQkkeYJrYdyOTJoELEZAmFAFKMoBg5cWvgbdnXdHmZAcYwsJQ6xL1XnMd8m6Hz4C7SAESJQLb36Qh0VSR3gIhiJOw
 
-            String url = BASE_URL + ACCOUNT_ID + "/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&breakdowns=age&"
+            String url = BASE_URL + accountId + "/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&breakdowns=age&"
                     + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
             String fbData = Rest.getData(url);
@@ -234,13 +234,13 @@ public class FacebookService {
         return null;
     }
 
-    public Object getGenderPerformance(Date startDate, Date endDate) {
+    public Object getGenderPerformance(Long accountId, Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
 //https://graph.facebook.com/v2.8/act_10153963646170050/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&time_range[since]=2016-10-01&time_range[until]=2016-10-31&breakdowns=gender&access_token=EAANFRJpxZBZC0BAAqAeGjVgawF8X58ZCYRU824xzKpDcCN49s3wMGqie9MRdUZBnSK8pTsFw3KSOvfof88Oib6CCIOZBlnYQkkeYJrYdyOTJoELEZAmFAFKMoBg5cWvgbdnXdHmZAcYwsJQ6xL1XnMd8m6Hz4C7SAESJQLb36Qh0VSR3gIhiJOw
 
-            String url = BASE_URL + ACCOUNT_ID + "/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&breakdowns=gender&"
+            String url = BASE_URL + accountId + "/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&breakdowns=gender&"
                     + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
             String fbData = Rest.getData(url);
@@ -272,16 +272,19 @@ public class FacebookService {
         return null;
     }
 
-    public List<Map<String, String>> getPostPerformance(Date startDate, Date endDate) {
+    public List<Map<String, String>> getPostPerformance(Long accountId, Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
 // https://graph.facebook.com/v2.8/110571071477/feed?fields=shares,likes,message,reactions,comments{message,comment_count,created_time,like_count},created_time,type&use_actual_created_time_for_backdated_post=true&until=2016-10-31&since=2015-10-01
             //&access_token=EAANFRJpxZBZC0BAAqAeGjVgawF8X58ZCYRU824xzKpDcCN49s3wMGqie9MRdUZBnSK8pTsFw3KSOvfof88Oib6CCIOZBlnYQkkeYJrYdyOTJoELEZAmFAFKMoBg5cWvgbdnXdHmZAcYwsJQ6xL1XnMd8m6Hz4C7SAESJQLb36Qh0VSR3gIhiJOw&limit=100
 
-            String url = BASE_URL_FEED + "110571071477" + "/feed?fields=shares,likes,message,reactions,comments{message,comment_count,created_time,like_count},created_time,type&use_actual_created_time_for_backdated_post=true&limit=100"
+            String url = BASE_URL_FEED + accountId + "/feed?fields=shares,likes,message,reactions,comments{message,comment_count,created_time,like_count},created_time,type&use_actual_created_time_for_backdated_post=true&limit=100"
                     + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
+//            String url = BASE_URL_FEED + "110571071477" + "/feed?fields=shares,likes,message,reactions,comments{message,comment_count,created_time,like_count},created_time,type&use_actual_created_time_for_backdated_post=true&limit=100"
+//                    + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
+//                    + "&access_token=" + ACCESS_TOKEN;
             String fbData = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(fbData);
@@ -307,7 +310,7 @@ public class FacebookService {
         return null;
     }
 
-    private List getPostSummary(Date startDate, Date endDate) {
+    private List getPostSummary(Long accountId, Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
@@ -315,9 +318,12 @@ public class FacebookService {
             //&access_token=EAANFRJpxZBZC0BAAqAeGjVgawF8X58ZCYRU824xzKpDcCN49s3wMGqie9MRdUZBnSK8pTsFw3KSOvfof88Oib6CCIOZBlnYQkkeYJrYdyOTJoELEZAmFAFKMoBg5cWvgbdnXdHmZAcYwsJQ6xL1XnMd8m6Hz4C7SAESJQLb36Qh0VSR3gIhiJOw&limit=100
 
             System.out.println("Getting post summary for " + startDateStr + endDateStr);
-            String url = BASE_URL_FEED + "110571071477" + "/feed?fields=shares,likes,reactions,comments{comment_count,created_time,like_count}&limit=100"
+            String url = BASE_URL_FEED + accountId + "/feed?fields=shares,likes,reactions,comments{comment_count,created_time,like_count}&limit=100"
                     + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
+//            String url = BASE_URL_FEED + "110571071477" + "/feed?fields=shares,likes,reactions,comments{comment_count,created_time,like_count}&limit=100"
+//                    + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
+//                    + "&access_token=" + ACCESS_TOKEN;
             String fbData = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(fbData);
@@ -348,7 +354,7 @@ public class FacebookService {
         Date endDate = new Date();
         Date currentStart = startDate;
         System.out.println(DateUtils.timeDiff(endDate, currentStart));
-        
+
         while (DateUtils.timeDiff(endDate, currentStart) > 0) {
             System.out.println("Getting data for week " + currentStart);
             Date weekStart = DateUtils.getStartDateOfWeek(currentStart);
@@ -357,7 +363,7 @@ public class FacebookService {
         }
     }
 
-    public Object getLast12WeeksPerformance(Date startDate, Date endDate) {
+    public Object getLast12WeeksPerformance(Long accountId, Date startDate, Date endDate) {
         try {
             Date currentStart = startDate;
             List returnAll = new ArrayList();
@@ -368,7 +374,7 @@ public class FacebookService {
                 System.out.println(" Date Difference " + DateUtils.timeDiff(endDate, currentStart));
                 System.out.println(" End Date " + endDate);
                 Date weekStart = DateUtils.getStartDateOfWeek(currentStart);
-                returnAll.addAll(getPostSummary(weekStart, DateUtils.getNextWeek(weekStart)));
+                returnAll.addAll(getPostSummary(accountId, weekStart, DateUtils.getNextWeek(weekStart)));
                 currentStart = DateUtils.getNextWeek(currentStart);
             }
             return returnAll;
@@ -457,12 +463,11 @@ public class FacebookService {
                     + "&access_token=" + ACCESS_TOKEN;
             //https://graph.facebook.com/v2.8/act_10153963646170050/insights?fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&time_range[since]=2016-10-01&time_range[until]=2016-10-31&time_increment=7&access_token=EAANFRJpxZBZC0BAAqAeGjVgawF8X58ZCYRU824xzKpDcCN49s3wMGqie9MRdUZBnSK8pTsFw3KSOvfof88Oib6CCIOZBlnYQkkeYJrYdyOTJoELEZAmFAFKMoBg5cWvgbdnXdHmZAcYwsJQ6xL1XnMd8m6Hz4C7SAESJQLb36Qh0VSR3gIhiJOw
 
- 
             String fbData = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(fbData);
             JSONObject array = (JSONObject) jsonObj;
-            
+
             JSONArray dataArr = (JSONArray) array.get("data");
             List dataValueList = new ArrayList();
             for (int i = 0; i < dataArr.size(); i++) {
@@ -481,6 +486,23 @@ public class FacebookService {
                 dataValueList.add(dataList);
             }
             return dataValueList;
+        } catch (ParseException ex) {
+            Logger.getLogger(FacebookService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public Object getLast12WeeksData(Date startDate, Date endDate) {
+        try {
+            String url = BASE_URL + ACCOUNT_ID + "/insights?"
+                    //+ "fields=campaigns{insights{campaign_name,clicks,impressions,ctr,cpc,actions,cost_per_action_type,spend,account_name}}"
+                    + "fields=impressions%2Cclicks%2Cctr%2Ccpc%2Cspend%2Cactions%2Caccount_name%2Ccost_per_action_type"
+                    + "&access_token=" + ACCESS_TOKEN;
+            String fbData = Rest.getData(url);
+            JSONParser parser = new JSONParser();
+            Object jsonObj = parser.parse(fbData);
+            JSONObject array = (JSONObject) jsonObj;
+            return array.get("data");
         } catch (ParseException ex) {
             Logger.getLogger(FacebookService.class.getName()).log(Level.SEVERE, null, ex);
         }

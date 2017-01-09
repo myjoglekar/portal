@@ -1,6 +1,6 @@
-app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter) {
-    console.log($stateParams.startDate)
-    console.log($stateParams.endDate)
+app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
+    console.log("Permission");
+    $scope.permission = localStorageService.get("permission");
     $scope.selectAggregations = [
         {name: 'None', value: ""},
         {name: 'Sum', value: "sum"},
@@ -62,10 +62,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     getWidgetItem();
     $scope.collectionField = {};
     $scope.dispName = function (currentColumn) {
-        console.log(currentColumn.fieldName)
-        console.log($scope.collectionFields)
         $scope.filterName = $filter('filter')($scope.collectionFields, {fieldName: currentColumn.fieldName})[0];
-        console.log($scope.filterName);
         currentColumn.displayName = $scope.filterName.displayName;
     };
 
@@ -83,14 +80,14 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         if (widget.columns) {
             widget.columns = widget.columns;
             if (widget.directUrl) {
-                $http.get(widget.directUrl + "?fieldsOnly=true").success(function (response) {
+                $http.get("admin/proxy/getJson?url=" + widget.directUrl + "&fieldsOnly=true").success(function (response) {
                     $scope.collectionFields = [];
                     $scope.collectionFields = response.columnDefs;
                 });
             }
         } else {
             if (widget.directUrl) {
-                $http.get(widget.directUrl + "?fieldsOnly=true").success(function (response) {
+                $http.get("admin/proxy/getJson?url=" + widget.directUrl + "&fieldsOnly=true").success(function (response) {
                     $scope.collectionFields = [];
                     widget.columns = response.columnDefs;
                     $scope.collectionFields = response.columnDefs;
@@ -205,16 +202,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         selectedItems(selectedItem);
     };
 
-    //Data Set
-//    function selectedItems(selectedItem) {
-//        $http.get('admin/datasources/dataSet/' + selectedItem).success(function (response) {
-//            $scope.dataSets = response;
-//        });
-//        $http.get('admin/datasources/dataDimensions/' + selectedItem).success(function (response) {
-//            $scope.dataDimensions = response;
-//        });
-//    }
-
     $scope.objectHeader = [];
     $scope.previewChart = function (chartType, widget, index) {                 //Selected Chart type - Bind chart-type to showPreview()
         $scope.selectedRow = chartType.type;
@@ -225,7 +212,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.showPreview = function (widget) {                                    //Show Preview Chart - Popup
-//        var data = JSON.parse(widget.productDisplayName);
         $scope.previewChartType = $scope.editChartType ? $scope.editChartType : widget.chartType;
         $scope.previewColumn = $scope.setPreviewColumn ? $scope.setPreviewColumn : widget;
         $scope.previewChartUrl = widget.previewUrl;
@@ -248,7 +234,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             widget.chartType = data.chartType;
         });
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
-        //widget.chartType = $scope.editChartType ? $scope.editChartType : widget.chartType;
         widget.widgetColumns = widget.columns;
     };
 
@@ -263,11 +248,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             $scope.widgets[index] = widget;
             $scope.widgets[otherIndex] = otherObj;
             var widgetOrder = $scope.widgets.map(function (value, key) {
-                console.log(value)
                 if (value) {
                     return value.id;
                 }
-                //return value.id;
             }).join(',');
             var data = {widgetOrder: widgetOrder};
             if (widgetOrder) {
@@ -277,7 +260,159 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 });
 
-app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams, stats) {
+app.directive('dynamicTable', function ($http, $filter, $stateParams) {
+    return{
+        restrict: 'A',
+        scope: {
+            dynamicTableUrl: '@',
+            widgetId: '@',
+            widgetColumns: '@',
+            setTableFn: '&'
+        },
+        template: '<table class="table table-responsive table-bordered table-hover">' +
+                '<thead><tr>' +
+                '<th class="info" ng-if="groupingName">' +
+                '<i style="cursor: pointer" class="fa" ng-class="{\'fa-plus\': !selected_Row, \'fa-minus\': selected_Row}"></i>' +
+                ' Group</th>' +
+                '<th class="text-uppercase info" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
+                '{{col.displayName}}<i class="fa pull-right" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
+                '</th>' +
+                '</tr></thead>' +
+                //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
+                '<tbody ng-repeat="grouping in groupingData">' +
+                '<tr class="text-uppercase text-info info">' +
+                '<td ng-if="groupingName">' +
+                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; item.$hideRows = false" ng-class="{\'fa-plus\': !grouping.$hideRows, \'fa-minus\': grouping.$hideRows}"></i>' +
+                ' {{grouping._groupField}} : {{grouping._key}}' +
+                '</td>' +
+                '<td ng-repeat="col in columns">' + '<div>{{format(col, grouping[col.fieldName])}}</div>' +
+                '</td>' +
+                '</tr>' +
+                '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-uppercase text-info info">' +
+                '<td ng-if="item._groupField" style="background-color: #d7dedc">' +
+                '<i style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus\': !item.$hideRows, \'fa-minus\': item.$hideRows}"></i> {{item._groupField}} : {{item._key}}</td>' +
+                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '{{item[col.fieldName]}}' +
+                '</td>' +
+                '</tr>' +
+                '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
+                '<td ng-repeat="col in columns">{{format(col, childItem[col.fieldName])}}</td></tr>' +
+                '</tbody>' +
+                '</table>', //+
+        //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
+        link: function (scope, element, attr) {
+            scope.clickRow = function () {
+                scope.grouping.$hideRows = false;
+            };
+
+            scope.doSomething = function (ev) {
+                var element = ev.srcElement ? ev.srcElement : ev.target;
+                console.log(element, angular.element(element))
+            }
+
+            //scope.currentPage = 1;
+            //scope.pageSize = 10;
+            // console.log
+            scope.columns = []
+            angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                scope.columns.push(value);
+            });
+
+            scope.format = function (column, value) {
+                if (column.displayFormat) {
+                    return d3.format(column.displayFormat)(value);
+                }
+                return value;
+            };
+
+            groupByFields = []; // ['device', 'campaignName'];
+            aggreagtionList = [];
+
+            for (var i = 0; i < scope.columns.length; i++) {
+                if (scope.columns[i].groupPriority) {
+                    groupByFields.push(scope.columns[i].fieldName);
+                }
+                if (scope.columns[i].agregationFunction) {
+                    aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggreationType: scope.columns[i].agregationFunction});
+                }
+            }
+            fullAggreagtionList = aggreagtionList;
+            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+                scope.groupingData = scope.group(response.data, groupByFields, aggreagtionList);
+                angular.forEach(scope.groupingData, function (value, key) {
+                    scope.groupingName = value._groupField;
+                })
+//                console.log(scope.groupingName);
+//                console.log(scope.groupingName);
+            });
+
+            scope.sortColumn = scope.columns;
+
+            scope.reverse = false;
+            scope.toggleSort = function (index) {
+                if (scope.sortColumn === scope.objectHeader[index]) {
+                    scope.reverse = !scope.reverse;
+                }
+                scope.sortColumn = scope.objectHeader[index];
+            };
+
+//Dir-Paginations
+            scope.pageChangeHandler = function (num) {
+                console.log('reports page changed to ' + num);
+            };
+
+            scope.sum = function (list, fieldname) {
+                var sum = 0;
+                for (var i in list)
+                {
+                    sum = sum + Number(list[i][fieldname]);
+                }
+                return sum;
+            };
+
+            function aggregate(list, aggreationList) {
+                var returnValue = {};
+                angular.forEach(aggreationList, function (value, key) {
+                    if (value.aggreationType == "sum") {
+                        returnValue[value.fieldname] = scope.sum(list, value.fieldname);
+                    }
+                    if (value.aggreationType == "avg") {
+                        returnValue[value.fieldname] = scope.sum(list, value.fieldname) / list.length;
+                    }
+                    if (value.aggreationType == "count") {
+                        returnValue[value.fieldname] = list.length;
+                    }
+                });
+                return returnValue;
+            }
+
+            scope.group = function (list, fieldnames, aggreationList) {
+                var currentFields = fieldnames;
+                if (fieldnames.length == 0)
+                    return list;
+                var actualList = list;
+                var data = [];
+                var groupingField = currentFields[0];
+                var currentListGrouped = $filter('groupBy')(actualList, groupingField);
+                var currentFields = currentFields.splice(1);
+                angular.forEach(currentListGrouped, function (value1, key1) {
+                    var dataToPush = {};
+                    dataToPush._key = key1;
+                    dataToPush[groupingField] = key1;
+                    dataToPush._groupField = groupingField;
+                    dataToPush = angular.extend(dataToPush, aggregate(value1, fullAggreagtionList));
+//                    console.log("DATA TO PUSH");
+//                    console.log(dataToPush);
+                    dataToPush.data = scope.group(value1, currentFields, aggreationList);
+                    data.push(dataToPush);
+                });
+                return data;
+            }
+
+        }
+    }
+})
+
+app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams, stats) {
     return{
         restrict: 'A',
         scope: {
@@ -351,68 +486,46 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                             columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
                 }
                 if (value.agregationFunction == "sum") {
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
                 }
                 if (value.agregationFunction == "count") {
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.COUNT,
-                            //columnDef.cellFilter = 'number: 2';
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
-//                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
-//                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
-
                 }
                 if (value.agregationFunction == "max") {
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MAX,
-                            //columnDef.cellFilter = 'number: 2';
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
-//                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
-//                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
-
                 }
                 if (value.agregationFunction == "avg") {
-                    //columnDef.cellFilter = 'number: 2';
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.AVG,
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
-//                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD | setDecimal:2 }}</span></div>'
-//                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
-                    // columnDef.cellFilter = 'formatCaller'
-
                 }
                 if (value.agregationFunction == "min") {
 
                     columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.MIN,
-//                                columnDef.cellFilter = 'number: 2';
-//                                columnDef.cellClass = 'space-numbers',
                             columnDef.cellTooltip = true,
                             columnDef.headerTooltip = true
-//                            columnDef.cellTemplate = '<div class="integerAlign"><span>{{COL_FIELD}}</span></div>'
-//                    columnDef.footerCellTemplate = '<div class="integerAlign" >{{col.getAggregationValue() | number:2 }}</div>'
                 }
                 if (value.groupPriority) {
                     columnDef.grouping = {groupPriority: value.groupPriority};
                 }
                 columnDefs.push(columnDef);
             });
-            $http.get(scope.dynamicTableUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+
+            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
                 scope.gridOptions = {
-//                    rowHeight: 50,
                     enableColumnMenus: false,
                     enableGridMenu: false,
                     enableRowSelection: false,
@@ -423,7 +536,6 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     multiSelect: false,
                     enableColumnResize: true,
                     data: response.data,
-//                    data: response.data.slice(0, 14),
                     columnDefs: columnDefs,
                     showColumnFooter: true,
                     enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
@@ -441,17 +553,6 @@ app.directive('dynamicTable', function ($http, uiGridConstants, uiGridGroupingCo
                     }
                     scope.api.grid.gridHeight = scope.height;
                 }
-
-//                scope.getTableHeight = function () {
-//                    var rowHeight = 30; // your row height
-//                    var headerHeight = 30; // your header height
-//                    var minWidth = 150;
-//                    return {
-//                        height: (scope.gridOptions.data.length * rowHeight + headerHeight) + "px",
-//                        //'min-width': minWidth + "px"
-//                    };
-//                };
-
             });
         }
     };
@@ -483,7 +584,8 @@ app.directive('tickerDirective', function ($http, $stateParams) {
 
             var setData = [];
             var data = [];
-            $http.get(scope.tickerUrl + "?widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+
+            $http.get("admin/proxy/getJson?url=" + scope.tickerUrl + "&widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 console.log(response);
                 if (!response) {
                     return;
@@ -591,8 +693,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.lineChartUrl) {
-
-                $http.get(scope.lineChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+                $http.get("admin/proxy/getJson?url=" + scope.lineChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingLine = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -606,9 +707,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                         loopCount++;
                         return a[xAxis.fieldName];
                     });
-
                     columns.push(xTicks);
-
 
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
@@ -617,8 +716,6 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-                    console.log(columns)
-
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
@@ -642,13 +739,6 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                                     format: d3.format(".2f")
                                 }
                             }
-//                            y: {
-//                                label: 'Impressions'
-//                            },
-//                            y2: {
-//                                show: true,
-//                                label: 'Clicks'
-//                            }
                         },
                         grid: {
                             x: {
@@ -747,7 +837,8 @@ app.directive('barChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.barChartUrl) {
-                $http.get(scope.barChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+
+                $http.get("admin/proxy/getJson?url=" + scope.barChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingBar = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -762,7 +853,6 @@ app.directive('barChartDirective', function ($http, $stateParams) {
 
                     columns.push(xTicks);
 
-
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
                             return a[value.fieldName] || "0";
@@ -770,8 +860,6 @@ app.directive('barChartDirective', function ($http, $stateParams) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-                    console.log(columns)
-                    console.log(labels)
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {
@@ -865,7 +953,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                     y2 = {show: true, label: ''};
                 }
             });
-            console.log(labels);
             var xData = [];
             var xTicks = [];
 
@@ -889,7 +976,8 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.pieChartUrl) {
-                $http.get(scope.pieChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+
+                $http.get("admin/proxy/getJson?url=" + scope.pieChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingPie = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -901,7 +989,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                         loopCount++;
                         return a[xAxis.fieldName];
                     });
-                    console.log(xData);
                     columns.push(xTicks);
                     angular.forEach(yAxis, function (value, key) {
                         ySeriesData = chartData.map(function (a) {
@@ -910,10 +997,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-                    console.log(columns)
-                    console.log(ySeriesData)
-                    console.log(columns)
-                    console.log(yAxis)
 
                     var data = {};
                     var legends = [];
@@ -922,10 +1005,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                         legends.push(e[xAxis.fieldName]);
                         data[e[xAxis.fieldName]] = data[e[xAxis.fieldName]] ? data[e[xAxis.fieldName]] : 0 + e[yAxisField.fieldName] ? e[yAxisField.fieldName] : 0;
                     })
-
-                    console.log("...........................");
-                    console.log(data);
-                    console.log(legends);
 
                     var chart = c3.generate({
                         bindto: element[0],
@@ -1046,7 +1125,8 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.areaChartUrl) {
-                $http.get(scope.areaChartUrl + "?widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+
+                $http.get("admin/proxy/getJson?url=" + scope.areaChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingArea = false;
                     scope.xAxis = [];
                     var loopCount = 0;
@@ -1066,7 +1146,6 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                         ySeriesData.unshift(value.displayName);
                         columns.push(ySeriesData);
                     });
-                    console.log('Line : ', columns)
                     var chart = c3.generate({
                         bindto: element[0],
                         data: {

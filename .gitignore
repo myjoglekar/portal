@@ -1,3 +1,4 @@
 /target/
-/dashboard/target/
 /api/target/
+/dashboard/target/
+database.properties

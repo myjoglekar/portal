@@ -48,7 +48,8 @@ public class GaController {
         Date endDate = new Date();
         String metrics = "ga:sessions,sessions;ga:visits,visits";
         String dimensions = "ga:browser";
-        return gaService.getGenericData(startDate, endDate, metrics, dimensions);
+        String filter = "ga:channelGrouping==Display;ga:medium==cpc";
+        return gaService.getGenericData("82176546", startDate, endDate, null, null, metrics, dimensions, filter);
     }
     
     

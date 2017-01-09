@@ -7,10 +7,12 @@ package com.visumbu.api.admin.controller;
 
 import com.visumbu.api.admin.service.ReviewPushService;
 import com.visumbu.api.admin.service.UserService;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bean.ReportPage;
 import com.visumbu.api.controller.BaseController;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,13 +94,17 @@ public class ReviewPushController extends BaseController {
         columnDefs.add(new ColumnDef("name", "string", "Name"));
         columnDefs.add(new ColumnDef("email", "string", "Email"));
         columnDefs.add(new ColumnDef("phone", "string", "Phone"));
-        
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
-        returnMap.put("data", reviewPushService.getRatingSummaryByDealer(startDate, endDate, "11415"));
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "none");
+        if (accountDetails.getReviewPushAccountId() != null) {
+            returnMap.put("data", reviewPushService.getRatingSummaryByDealer(startDate, endDate, accountDetails.getReviewPushAccountId()));
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 
@@ -118,13 +124,17 @@ public class ReviewPushController extends BaseController {
         columnDefs.add(new ColumnDef("type", "string", "Type"));
         columnDefs.add(new ColumnDef("name", "string", "Name"));
         columnDefs.add(new ColumnDef("site_name", "string", "Site Name"));
-        
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
-        returnMap.put("data", reviewPushService.getBySources(startDate, endDate, "11415"));
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "none");
+        if (accountDetails.getReviewPushAccountId() != null) {
+            returnMap.put("data", reviewPushService.getBySources(startDate, endDate, accountDetails.getReviewPushAccountId()));
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 

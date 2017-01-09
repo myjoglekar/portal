@@ -27,6 +27,7 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReportRow;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
@@ -50,6 +51,7 @@ import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -135,8 +137,14 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getAccountPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getAccountPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+
+        }
         return returnMap;
     }
 
@@ -177,8 +185,13 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getCampaignPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getCampaignPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 
@@ -219,8 +232,14 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getAdPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getAdPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+
+        }
         return returnMap;
     }
 
@@ -261,8 +280,13 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getDevicePerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getDevicePerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 
@@ -303,8 +327,14 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getAgePerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getAgePerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+        }
+
         return returnMap;
     }
 
@@ -345,8 +375,13 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getGenderPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getGenderPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 
@@ -383,6 +418,108 @@ public class PaidSocialTabController {
         }
         Object accountPerformance = facebookService.getLast12WeeksPerformanceData(startDate, endDate);
         returnMap.put("data", accountPerformance);
+        return returnMap;
+    }
+
+    @RequestMapping(value = "instagramPerformance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getInstagramPerformance(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("visits", "string", "Visits", 1));
+        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", 1));
+        columnDefs.add(new ColumnDef("newSessions", "string", "New Sessions Percentage", 1));
+        columnDefs.add(new ColumnDef("newUsers", "string", "New Users", 1));
+        columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", 1));
+        columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", 1));
+        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", 1));
+        columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", 1));
+        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.AVG));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        Object fbPublishedPosts = facebookService.getInstagramPerformance(startDate, endDate);
+        returnMap.put("data", fbPublishedPosts);
+        return returnMap;
+    }
+
+    @RequestMapping(value = "last12Weeks", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getLast12Weeks(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("visits", "string", "Visits", 1));
+        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", 1));
+        columnDefs.add(new ColumnDef("newSessions", "string", "New Sessions Percentage", 1));
+        columnDefs.add(new ColumnDef("newUsers", "string", "New Users", 1));
+        columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", 1));
+        columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", 1));
+        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", 1));
+        columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", 1));
+        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.AVG));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        Object last12WeeksData = facebookService.getLast12WeeksData(startDate, endDate);
+        returnMap.put("data", last12WeeksData);
+        return returnMap;
+    }
+
+    @RequestMapping(value = "dayOfWeek", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getDayOfWeek(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        Map returnMap = new HashMap();
+        List<ColumnDef> columnDefs = new ArrayList<>();
+        columnDefs.add(new ColumnDef("visits", "string", "Visits", 1));
+        columnDefs.add(new ColumnDef("sessions", "string", "Sessions", 1));
+        columnDefs.add(new ColumnDef("newSessions", "string", "New Sessions Percentage", 1));
+        columnDefs.add(new ColumnDef("newUsers", "string", "New Users", 1));
+        columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", 1));
+        columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", 1));
+        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", 1));
+        columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", 1));
+        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.AVG));
+        columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.AVG));
+
+        returnMap.put("columnDefs", columnDefs);
+        if (fieldsOnly != null) {
+            return returnMap;
+        }
+        Object dayOfWeekData = facebookService.getDayOfWeekData(startDate, endDate);
+        returnMap.put("data", dayOfWeekData);
         return returnMap;
     }
 

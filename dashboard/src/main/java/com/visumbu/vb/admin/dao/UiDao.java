@@ -213,7 +213,7 @@ public class UiDao extends BaseDao {
         query.setParameter("reportId", id);
         query.executeUpdate();
 
-        delete(getTabWidgetById(id));
+        delete(getReportWidgetById(id));
         return null;
     }
 
