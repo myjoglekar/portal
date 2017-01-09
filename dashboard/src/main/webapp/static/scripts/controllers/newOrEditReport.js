@@ -66,6 +66,7 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         $scope.reportTitle = response.reportTitle;
         $scope.description = response.description;
         $scope.reportTitle = response.reportTitle;
+        $scope.uploadLogo = response.logo;
         angular.forEach($scope.report, function (value, key) {
             $scope.logo = window.atob(value.logo);
         })
@@ -97,8 +98,9 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
             id: $stateParams.reportId,
             reportTitle: $scope.reportTitle,
             description: $scope.description,
-            logo: window.btoa($scope.uploadLogo)
+            logo: $scope.uploadLogo   //window.btoa($scope.uploadLogo)
         };
+        console.log(data.logo);
         $http({method: $stateParams.reportId ? 'PUT' : 'POST', url: 'admin/ui/report', data: data});
     };
 

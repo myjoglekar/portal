@@ -12,7 +12,7 @@ app.controller("ReportController", function ($scope, $http, $stateParams) {
         $scope.reports = response;
         angular.forEach($scope.report, function (value, key) {
             $scope.logo = window.atob(value.logo);
-            console.log($scope.logo)
+            console.log(value.logo)
         })
     });
 });
