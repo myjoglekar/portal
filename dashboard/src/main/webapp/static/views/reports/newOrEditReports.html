@@ -279,8 +279,8 @@
                                             <td>Sort</td>
                                             <td>Format</td>
                                             <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Alignment</td>
-                                            <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Width</td>
-                                            <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Wrap</td>
+<!--                                            <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Width</td>
+                                            <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Wrap</td>-->
                                             <td><button class="btn btn-info" ng-click="addColumns(reportWidget)"><i class="fa fa-plus"></i></button></td>
                                         </tr>
                                     </thead>
@@ -359,7 +359,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
+<!--                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
                                                 <div ng-hide="isEdit"> {{currentColumn.width}}</div>
                                                 <div ng-show="isEdit">
                                                     <input type="text" class="form-control" ng-model="currentColumn.width">
@@ -372,7 +372,7 @@
                                                         <option ng-repeat="tableWrap in tableWrapText" value="{{tableWrap.value}}">{{tableWrap.name}}</option>
                                                     </select>
                                                 </div>
-                                            </td>
+                                            </td>-->
                                             <td>
                                                 <div ng-show="isEdit">
                                                     <button class="btn btn-default btn-xs" ng-click="isEdit = false"><i class="fa fa-save"></i></button>

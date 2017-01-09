@@ -146,11 +146,9 @@
 
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>  
+                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
-                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                            </button>
-<!--                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                            </button>-->
 
                             <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                             <div id="delete{{widget.id}}" class="modal">
@@ -268,8 +266,8 @@
                                             <td>Sort</td>
                                             <td>Format</td>
                                             <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Alignment</td>
-                                            <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Width</td>
-                                            <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Wrap</td>
+                                            <!--<td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Width</td>-->
+                                            <!--<td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Wrap</td>-->
                                             <td><button class="btn btn-info" ng-click="addColumns(widget)"><i class="fa fa-plus"></i></button></td>
                                         </tr>
                                     </thead>
@@ -348,20 +346,20 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
+<!--                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
                                                 <div ng-hide="isEdit"> {{currentColumn.width}}</div>
                                                 <div ng-show="isEdit">
                                                     <input type="text" class="form-control" ng-model="currentColumn.width">
                                                 </div>
-                                            </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
+                                            </td>-->
+<!--                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
                                                 <div ng-hide="isEdit"> {{currentColumn.wrapText| capitalize}}</div>
                                                 <div ng-show="isEdit">                                                
                                                     <select ng-model="currentColumn.wrapText" class="form-control">
                                                         <option ng-repeat="tableWrap in tableWrapText" value="{{tableWrap.value}}">{{tableWrap.name}}</option>
                                                     </select>
                                                 </div>
-                                            </td>
+                                            </td>-->
                                             <td>
                                                 <div ng-show="isEdit">
                                                     <button class="btn btn-default btn-xs" ng-click="isEdit = false"><i class="fa fa-save"></i></button>
