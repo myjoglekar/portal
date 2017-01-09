@@ -269,7 +269,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             widgetColumns: '@',
             setTableFn: '&'
         },
-        template:'<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>'+
+        template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-hover">' +
                 '<thead><tr>' +
                 '<th class="info" ng-if="groupingName">' +
@@ -290,8 +290,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-uppercase text-info info">' +
-                '<td ng-if="item._groupField" style="background-color: #d7dedc">' +
-                '<i style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus\': !item.$hideRows, \'fa-minus\': item.$hideRows}"></i> {{item._groupField}} : {{item._key}}</td>' +
+                '<td style="background-color: #d7dedc">' +
+                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus\': !item.$hideRows, \'fa-minus\': item.$hideRows}"></i> {{item._groupField}} : {{item._key}}</td>' +
                 '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '{{item[col.fieldName]}}' +
                 '</td>' +
                 '</tr>' +
@@ -345,7 +345,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 angular.forEach(scope.groupingData, function (value, key) {
                     scope.groupingName = value._groupField;
                 })
-//                console.log(scope.groupingName);
+                console.log(scope.groupingData);
 //                console.log(scope.groupingName);
             });
 
@@ -385,6 +385,12 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     if (value.aggreationType == "count") {
                         returnValue[value.fieldname] = list.length;
                     }
+                    if (value.aggreationType == "min") {
+                        returnValue[value.fieldName] = _.min(list, value.fieldName);
+                    }
+                    if(value.aggregationType == "max"){
+                        returnValue[value.fieldName] = _.max(list, value.fieldName);
+                    }
                 });
                 return returnValue;
             }
@@ -404,17 +410,16 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush[groupingField] = key1;
                     dataToPush._groupField = groupingField;
                     dataToPush = angular.extend(dataToPush, aggregate(value1, fullAggreagtionList));
-//                    console.log("DATA TO PUSH");
-//                    console.log(dataToPush);
+                    console.log("DATA TO PUSH");
+                    console.log(dataToPush);
                     dataToPush.data = scope.group(value1, currentFields, aggreationList);
                     data.push(dataToPush);
                 });
                 return data;
-            }
-
+            };
         }
-    }
-})
+    };
+});
 
 app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingConstants, $timeout, $stateParams, stats) {
     return{
