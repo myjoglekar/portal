@@ -4296,7 +4296,6 @@ table.text-center, table.text-center td, table.text-center th {
     display: block;
     width: 100%;
     font-size: 12px;
-    margin-top: 1px;
 }
 
 .panel-heading {
@@ -4387,7 +4386,7 @@ a.mail-to {
 #daterange-btn {
     background-color: #fff;
     color: #adb8bd;
-    /*    border: 1px solid #adb8bd;*/
+    border: 1px solid #adb8bd;
 }
 
 .dropdown-toggle-btn {
@@ -4552,7 +4551,58 @@ button.close {
 }
 
 .date-border {
-    border: 1px solid #cdcdcd;
-    padding: 1px 5px;
-    border-radius: 2px;
+    padding: 2px;
+}
+
+.table-bg {
+    color: #f1883c;
+    font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    background: rgb(209, 215, 218) !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    font-style: normal;
+    font-size: 14px;
+}
+
+.table-l2t {
+    border: none;
+}
+
+.table-l2t tr {
+    border: none;
+}
+
+.table-l2t tr td {
+    color: #3d464d;
+    font-size: 13px;
+}
+
+.table-l2t .text-info {
+    color: #3d464d;
+    font-size: 13px;
+    border-bottom: none;
+}
+.table-l2t tr{
+    border: none;
+}
+
+.table-l2t tr > th {
+    vertical-align: top !important;
+}
+
+.right-group {
+    padding-left: 23px !important;
+}
+
+.box-l2t {
+    border: none !important;
+}
+
+.table > tbody + tbody {
+    border-top: 1px solid #ddd !important;
+}
+
+.table > tbody > tr.info > td {
+    background-color: #f1f1f1 !important;
 }
