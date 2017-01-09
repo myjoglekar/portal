@@ -17,9 +17,14 @@ import com.visumbu.vb.model.ReportWidget;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.model.WidgetColumn;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -40,7 +45,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping("ui")
 public class UiController extends BaseController {
 
-        @Autowired
+    @Autowired
     private UiService uiService;
 
     @Autowired
@@ -68,13 +73,12 @@ public class UiController extends BaseController {
         dashboardTabs.setDashboardId(uiService.getDashboardById(dashboardId));
         return uiService.createDashboardTabs(dashboardTabs);
     }
-    
-     @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.PUT, produces = "application/json")
+
+    @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     DashboardTabs updateTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId, @RequestBody DashboardTabs dashboardTab) {
         return uiService.updateTab(dashboardTab);
     }
-
 
     @RequestMapping(value = "dbTabUpdateOrder/{dashboardId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -174,18 +178,54 @@ public class UiController extends BaseController {
 
     @RequestMapping(value = "report", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    Report addReport(HttpServletRequest request, HttpServletResponse response, @RequestBody Report report) {
-        Integer getReportTypeId = 1;
-        System.out.println(report);
-        return uiService.addReport(report, getReportTypeId);
+    Report addReport(HttpServletRequest request, HttpServletResponse response// , @RequestBody Report report
+    ) {
+
+        try {
+            //        Integer getReportTypeId = 1;
+//        System.out.println(report);
+////        return uiService.addReport(report, getReportTypeId);
+//            StringBuilder sb = new StringBuilder();
+//            BufferedReader reader = request.getReader();
+//            String line = "";
+//            while((line = reader.readLine()) != null) {
+//                sb.append(reader.readLine());
+//            }
+//            String jsonString = sb.toString();
+//            System.out.println(jsonString);
+        } catch (Exception ex) {
+            Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @RequestMapping(value = "report", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
-    Report update(HttpServletRequest request, HttpServletResponse response, @RequestBody Report report) {
-        return uiService.updateReport(report);
+    Report update(HttpServletRequest request, HttpServletResponse response// @RequestBody Report report
+    ) {
+
+        try {
+            //        Integer getReportTypeId = 1;
+//        System.out.println(report);
+////        return uiService.addReport(report, getReportTypeId);
+            StringBuilder sb = new StringBuilder();
+            BufferedReader reader = request.getReader();
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            String jsonString = sb.toString();
+            ObjectMapper mapper = new ObjectMapper();
+            Report report = mapper.readValue(jsonString, Report.class);
+            System.out.println(jsonString);
+            return uiService.updateReport(report);
+        } catch (Exception ex) {
+            Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
     }
-    
+
     @RequestMapping(value = "dbReportUpdateOrder/{reportId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object updateReportUpdateOrder(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
@@ -205,7 +245,7 @@ public class UiController extends BaseController {
     List getReport(HttpServletRequest request, HttpServletResponse response) {
         return uiService.getReport();
     }
-    
+
     @RequestMapping(value = "report/{reportId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Report getReportById(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {

@@ -23,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Type;
 
 /**
  *
@@ -100,9 +101,9 @@ public class Report implements Serializable {
     @Size(max = 4096)
     @Column(name = "description")
     private String description;
-    @Lob
+    @Type(type = "org.hibernate.type.StringClobType")
     @Column(name = "logo")
-    private byte[] logo;
+    private String logo;
     @JoinColumn(name = "report_type_id", referencedColumnName = "id")
     @ManyToOne
     private ReportType reportTypeId;
@@ -245,11 +246,11 @@ public class Report implements Serializable {
         this.description = description;
     }
 
-    public byte[] getLogo() {
+    public String getLogo() {
         return logo;
     }
 
-    public void setLogo(byte[] logo) {
+    public void setLogo(String logo) {
         this.logo = logo;
     }
 
