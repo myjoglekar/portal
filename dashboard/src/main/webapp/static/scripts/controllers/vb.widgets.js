@@ -275,20 +275,24 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<th class="info" ng-if="groupingName">' +
                 '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows);" class="fa" ng-class="{\'fa-plus\': !selected_Row, \'fa-minus\': selected_Row}"></i>' +
                 ' Group</th>' +
-                '<th class="text-capitalize info table-bg" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
+                '<th class="text-uppercase info" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
                 '{{col.displayName}}<i class="fa pull-right" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
+                '<tbody ng-repeat="grouping in groupingData.data | orderBy: sortColumn:reverse: true">' +
+                '<tr class="text-uppercase text-info info">' +
+                '<td ng-if="groupingName">' +
+                '<i style="cursor: pointer" class="fa" 11 ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus\': !grouping.$hideRows, \'fa-minus\': grouping.$hideRows}"></i>' +
                 ' {{grouping._groupField}} : {{grouping._key}}' +
                 '</td>' +
                 '<td ng-repeat="col in columns">' + '<div>{{format(col, grouping[col.fieldName])}}</div>' +
                 '</td>' +
                 '</tr>' +
-                '<tbody ng-repeat="grouping in groupingData.data | orderBy: sortColumn:reverse: true">' +
-                '<tr class="text-uppercase text-info info">' +
-                '<td ng-if="groupingName">' +
-                '<i style="cursor: pointer" class="fa" 11 ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus\': !grouping.$hideRows, \'fa-minus\': grouping.$hideRows}"></i>' +
+                '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-uppercase text-info info">' +
+                '<td style="background-color: #d7dedc">' +
+                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" 22 ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus\': !item.$hideRows, \'fa-minus\': item.$hideRows}"></i> {{item._groupField}} : {{item._key}}</td>' +
+                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '{{item[col.fieldName]}}' +
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
