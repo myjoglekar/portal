@@ -10,7 +10,14 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {name: 'Avg', value: "avg"},
         {name: 'Count', value: "count"},
         {name: 'Min', value: "min"},
-        {name: 'Max', value: "max"}
+        {name: 'Max', value: "max"},
+        {name: 'CTL', value: "ctl"},
+        {name: 'CPLC', value: "cplc"},
+        {name: 'CPComment', value: "cpcomment"},
+        {name: 'CPostE', value: "cposte"},
+        {name: 'CPostE', value: "cpagee"},
+        {name: 'CPP', value: "cpp"}
+        
     ];   //Aggregation Type-Popup
     $scope.selectGroupPriorities = [
         {num: 'None', value: ""},
@@ -351,7 +358,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 if (groupByFields && groupByFields.length > 0) {
                     scope.groupingName = groupByFields;
                     groupedData = scope.group(response.data, groupByFields, aggreagtionList);
-                    
+
                     var dataToPush = {};
                     dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
                     dataToPush.data = groupedData;
@@ -394,6 +401,27 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 return sum;
             };
 
+            scope.calculatedMetric = function (list, field1, field2) {
+                var value1 = scope.sum(list, field1);
+                var value2 = scope.sum(list, field2);
+                if (value1 && value2) {
+                    return value1 / value2;
+                }
+            }
+
+            listOfCalculatedFunction = [
+                {name: 'ctr', field1: 'clicks', field2: 'reactions'},
+                {name: 'cpa', field1: 'cost', field2: 'conversions'},
+                {name: 'cpc', field1: 'cost', field2: 'clicks'},
+                {name: 'cpr', field1: 'cost', field2: 'reacctions'},
+                {name: 'ctl', field1: 'cost', field2: 'likes'},
+                {name: 'cplc', field1: 'cost', field2: 'link_clicks'},
+                {name: 'cpcomment', field1: 'cost', field2: 'comments'},
+                {name: 'cposte', field1: 'cost', field2: 'post_engagements'},
+                {name: 'cpagee', field1: 'cost', field2: 'page_engagements'},
+                {name: 'cpp', field1: 'cost', field2: 'posts'},
+            ];
+
             function aggregate(list, aggreationList) {
                 var returnValue = {};
                 angular.forEach(aggreationList, function (value, key) {
@@ -407,11 +435,20 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                         returnValue[value.fieldname] = list.length;
                     }
                     if (value.aggregationType == "min") {
-                        returnValue[value.fieldname] = Math.min.apply(Math,list.map(function(currentValue){return Number(currentValue[value.fieldname]);}));
+                        returnValue[value.fieldname] = Math.min.apply(Math, list.map(function (currentValue) {
+                            return Number(currentValue[value.fieldname]);
+                        }));
                     }
                     if (value.aggregationType == "max") {
-                        returnValue[value.fieldname] = Math.max.apply(Math,list.map(function(currentValue){return Number(currentValue[value.fieldname]);}));
+                        returnValue[value.fieldname] = Math.max.apply(Math, list.map(function (currentValue) {
+                            return Number(currentValue[value.fieldname]);
+                        }));
                     }
+                    angular.forEach(listOfCalculatedFunction, function (calculatedFn, key) {
+                        if (calculatedFn.name == value.aggregationType) {
+                            returnValue[value.fieldname] = scope.calculatedMetric(list, calculatedFn.field1, calculatedFn.field2);
+                        }
+                    })
                 });
                 return returnValue;
             }
