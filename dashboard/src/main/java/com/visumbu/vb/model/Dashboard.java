@@ -37,6 +37,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @NamedQueries({
     @NamedQuery(name = "Dashboard.findAll", query = "SELECT d FROM Dashboard d"),
     @NamedQuery(name = "Dashboard.findById", query = "SELECT d FROM Dashboard d WHERE d.id = :id"),
+    @NamedQuery(name = "Dashboard.findByUserId", query = "SELECT d FROM Dashboard d WHERE d.userId.id = :userId"),
     @NamedQuery(name = "Dashboard.findByDashboardTitle", query = "SELECT d FROM Dashboard d WHERE d.dashboardTitle = :dashboardTitle"),
     @NamedQuery(name = "Dashboard.findByCreatedTime", query = "SELECT d FROM Dashboard d WHERE d.createdTime = :createdTime"),
     @NamedQuery(name = "Dashboard.findByModifiedTime", query = "SELECT d FROM Dashboard d WHERE d.modifiedTime = :modifiedTime")})
@@ -59,8 +60,8 @@ public class Dashboard implements Serializable {
     @Column(name = "modified_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedTime;
-    @OneToMany(mappedBy = "dashboardId")
-    private Collection<DashboardTabs> dashboardTabsCollection;
+//    @OneToMany(mappedBy = "dashboardId")
+//    private Collection<DashboardTabs> dashboardTabsCollection;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private VbUser userId;
@@ -104,15 +105,15 @@ public class Dashboard implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    @XmlTransient
-    @JsonIgnore
-    public Collection<DashboardTabs> getDashboardTabsCollection() {
-        return dashboardTabsCollection;
-    }
-
-    public void setDashboardTabsCollection(Collection<DashboardTabs> dashboardTabsCollection) {
-        this.dashboardTabsCollection = dashboardTabsCollection;
-    }
+//    @XmlTransient
+//    @JsonIgnore
+//    public Collection<DashboardTabs> getDashboardTabsCollection() {
+//        return dashboardTabsCollection;
+//    }
+//
+//    public void setDashboardTabsCollection(Collection<DashboardTabs> dashboardTabsCollection) {
+//        this.dashboardTabsCollection = dashboardTabsCollection;
+//    }
 
     public VbUser getUserId() {
         return userId;

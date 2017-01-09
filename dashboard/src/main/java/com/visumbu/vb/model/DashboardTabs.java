@@ -37,6 +37,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @NamedQueries({
     @NamedQuery(name = "DashboardTabs.findAll", query = "SELECT d FROM DashboardTabs d"),
     @NamedQuery(name = "DashboardTabs.findById", query = "SELECT d FROM DashboardTabs d WHERE d.id = :id"),
+    @NamedQuery(name = "DashboardTabs.findByDashboard", 
+            query = "SELECT d FROM DashboardTabs d WHERE d.dashboardId = :dashboardId"),
     @NamedQuery(name = "DashboardTabs.findByTabName", query = "SELECT d FROM DashboardTabs d WHERE d.tabName = :tabName"),
     @NamedQuery(name = "DashboardTabs.findByCreatedTime", query = "SELECT d FROM DashboardTabs d WHERE d.createdTime = :createdTime"),
     @NamedQuery(name = "DashboardTabs.findByModifiedTime", query = "SELECT d FROM DashboardTabs d WHERE d.modifiedTime = :modifiedTime"),
@@ -67,8 +69,8 @@ public class DashboardTabs implements Serializable {
     private String status;
     @Column(name = "tab_order")
     private Integer tabOrder;
-    @OneToMany(mappedBy = "tabId")
-    private Collection<TabWidget> tabWidgetCollection;
+//    @OneToMany(mappedBy = "tabId")
+//    private Collection<TabWidget> tabWidgetCollection;
     @JoinColumn(name = "dashboard_id", referencedColumnName = "id")
     @ManyToOne
     private Dashboard dashboardId;
@@ -136,15 +138,15 @@ public class DashboardTabs implements Serializable {
         this.tabOrder = tabOrder;
     }
 
-    @XmlTransient
-    @JsonIgnore
-    public Collection<TabWidget> getTabWidgetCollection() {
-        return tabWidgetCollection;
-    }
-
-    public void setTabWidgetCollection(Collection<TabWidget> tabWidgetCollection) {
-        this.tabWidgetCollection = tabWidgetCollection;
-    }
+//    @XmlTransient
+//    @JsonIgnore
+//    public Collection<TabWidget> getTabWidgetCollection() {
+//        return tabWidgetCollection;
+//    }
+//
+//    public void setTabWidgetCollection(Collection<TabWidget> tabWidgetCollection) {
+//        this.tabWidgetCollection = tabWidgetCollection;
+//    }
 
     public Dashboard getDashboardId() {
         return dashboardId;

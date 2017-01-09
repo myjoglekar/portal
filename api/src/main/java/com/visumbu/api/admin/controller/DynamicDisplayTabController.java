@@ -9,6 +9,7 @@ import com.google.api.services.analyticsreporting.v4.model.GetReportsResponse;
 import com.google.api.services.analyticsreporting.v4.model.Report;
 import com.visumbu.api.admin.service.AdwordsService;
 import com.visumbu.api.admin.service.BingService;
+import com.visumbu.api.admin.service.DynamicDisplayService;
 import com.visumbu.api.admin.service.FacebookService;
 import com.visumbu.api.admin.service.GaService;
 import com.visumbu.api.admin.service.UserService;
@@ -105,7 +106,10 @@ public class DynamicDisplayTabController {
 
     @Autowired
     private FacebookService facebookService;
-    private final static String DYNAMIC_DISPLAY_URL = "http://192.168.225.216:5002/vizboard/";
+    
+    @Autowired
+    private DynamicDisplayService dynamicDisplayService;
+    
     private final static String DEALER_ID = "8125";
 
     @RequestMapping(value = "overallPerformance", method = RequestMethod.GET, produces = "application/json")
@@ -113,20 +117,8 @@ public class DynamicDisplayTabController {
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        try {
-            String url = DYNAMIC_DISPLAY_URL + "all?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
-            String data = Rest.getData(url);
-            JSONParser parser = new JSONParser();
-            Object jsonObj = parser.parse(data);
-            return jsonObj;
-//            OutputStream out = response.getOutputStream();
-//            out.write(data.getBytes());
-//            Map<String, String[]> parameterMap = request.getParameterMap();
-//            forwardRequest(url, response.getOutputStream(), parameterMap);
-        } catch (Exception ex) {
-            Logger.getLogger(DynamicDisplayTabController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
+        String dealerId = request.getParameter("dealerMapId");
+        return dynamicDisplayService.getAccountPerformance(startDate, endDate, dealerId);
     }
 
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
@@ -134,16 +126,8 @@ public class DynamicDisplayTabController {
     Object getLast12Weeks(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        try {
-            String url = DYNAMIC_DISPLAY_URL + "allByWeek?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
-            String data = Rest.getData(url);
-            JSONParser parser = new JSONParser();
-            Object jsonObj = parser.parse(data);
-            return jsonObj;
-        } catch (Exception ex) {
-            Logger.getLogger(DynamicDisplayTabController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        String dealerId = request.getParameter("dealerMapId");
+        return dynamicDisplayService.getLast12Weeks(startDate, endDate, dealerId);
     }
 
     private void forwardRequest(String url, OutputStream out, Map<String, String[]> parameterMap) {

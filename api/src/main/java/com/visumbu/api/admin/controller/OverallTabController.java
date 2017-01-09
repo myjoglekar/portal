@@ -29,6 +29,7 @@ import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
 import com.visumbu.api.adwords.report.xml.bean.VideoReport;
 import com.visumbu.api.adwords.report.xml.bean.VideoReportRow;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
@@ -112,6 +113,7 @@ public class OverallTabController {
 
     private final static String DYNAMIC_DISPLAY_URL = "http://192.168.225.216:5002/vizboard/";
     private final static String DEALER_ID = "8125";
+    public static final Long bingAccountId = 2610614L;
 
     @RequestMapping(value = "overallPerformance/{frequency}/{range}/{count}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -135,137 +137,154 @@ public class OverallTabController {
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.None, ColumnDef.Format.DECIMAL1));
+            columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
             returnMap.put("columnDefs", columnDefs);
             if (fieldsOnly != null) {
                 return returnMap;
             }
-            AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "142-465-1427", "", "SEARCH");
-            AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, "");
-            List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
-            List<AccountPerformanceRow> bingAccountRows = bingAccountReport.getAccountPerformanceRows();
-
             List<AccountPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<AccountReportRow> reportRow = adwordsAccountRow.iterator(); reportRow.hasNext();) {
-                AccountReportRow row = reportRow.next();
-                AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
-                performanceBean.setSource("Paid");
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                performanceBean.setCost(row.getCost());
-                performanceBean.setAverageCpc(row.getAvgCPC());
-                performanceBean.setCpa(row.getCostConv());
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-                performanceReportBeans.add(performanceBean);
-            }
-            for (Iterator<AccountPerformanceRow> reportRow = bingAccountRows.iterator(); reportRow.hasNext();) {
-                AccountPerformanceRow row = reportRow.next();
-                AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
-                performanceBean.setSource("Paid");
-                performanceBean.setImpressions(row.getImpressions().getValue());
-                performanceBean.setClicks(row.getClicks().getValue());
-                performanceBean.setCtr(row.getCtr().getValue());
-                performanceBean.setCost(row.getSpend().getValue());
-                performanceBean.setAverageCpc(row.getAverageCpc().getValue());
-                performanceBean.setCpa(row.getCostPerConversion().getValue());
-                performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-                performanceBean.setConversions(row.getConversions().getValue());
-                performanceReportBeans.add(performanceBean);
-            }
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "paid");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
+                List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
 
+                for (Iterator<AccountReportRow> reportRow = adwordsAccountRow.iterator(); reportRow.hasNext();) {
+                    AccountReportRow row = reportRow.next();
+                    AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                    performanceBean.setSource("Paid");
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    performanceBean.setCost(row.getCost());
+                    performanceBean.setAverageCpc(row.getAvgCPC());
+                    performanceBean.setCpa(row.getCostConv());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
+                    performanceReportBeans.add(performanceBean);
+                }
+            }
+            if (accountDetails.getBingAccountId() != null) {
+                AccountPerformanceReport bingAccountReport = bingService.getAccountPerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "");
+                List<AccountPerformanceRow> bingAccountRows = bingAccountReport.getAccountPerformanceRows();
+                for (Iterator<AccountPerformanceRow> reportRow = bingAccountRows.iterator(); reportRow.hasNext();) {
+                    AccountPerformanceRow row = reportRow.next();
+                    AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                    performanceBean.setSource("Paid");
+                    performanceBean.setImpressions(row.getImpressions().getValue());
+                    performanceBean.setClicks(row.getClicks().getValue());
+                    performanceBean.setCtr(row.getCtr().getValue());
+                    performanceBean.setCost(row.getSpend().getValue());
+                    performanceBean.setAverageCpc(row.getAverageCpc().getValue());
+                    performanceBean.setCpa(row.getCostPerConversion().getValue());
+                    performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+                    performanceBean.setConversions(row.getConversions().getValue());
+                    performanceReportBeans.add(performanceBean);
+                }
+            }
             // Display
-            GetReportsResponse goals = gaService.getGoals("123125706", startDate, endDate, "");
-            List<Map<String, String>> gaData = (List) gaService.getResponseAsMap(goals).get("data");
+            accountDetails = ApiUtils.toAccountDetails(request, "display");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                List<Map<String, String>> gaData = new ArrayList<>();
+                if (accountDetails.getAnalyticsProfileId() != null) {
+                    GetReportsResponse goals = gaService.getGoals(accountDetails.getAnalyticsProfileId(), startDate, endDate, "");
+                    gaData = (List) gaService.getResponseAsMap(goals).get("data");
+                }
+                AccountReport displayAdwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "CONTENT");
+                List<AccountReportRow> displayAdwordsAccountRow = displayAdwordsAccountReport.getAccountReportRow();
+                //List<AccountPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+                for (Iterator<AccountReportRow> reportRow = displayAdwordsAccountRow.iterator(); reportRow.hasNext();) {
+                    AccountReportRow row = reportRow.next();
+                    AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                    performanceBean.setSource("Display");
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    performanceBean.setCost(row.getCost());
+                    performanceBean.setAverageCpc(row.getAvgCPC());
+                    performanceBean.setCpa(row.getCostConv());
 
-            AccountReport displayAdwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, "391-089-0213", "", "CONTENT");
-            List<AccountReportRow> displayAdwordsAccountRow = displayAdwordsAccountReport.getAccountReportRow();
-            //List<AccountPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<AccountReportRow> reportRow = displayAdwordsAccountRow.iterator(); reportRow.hasNext();) {
-                AccountReportRow row = reportRow.next();
-                AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
-                performanceBean.setSource("Display");
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                performanceBean.setCost(row.getCost());
-                performanceBean.setAverageCpc(row.getAvgCPC());
-                performanceBean.setCpa(row.getCostConv());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
 
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-
-                performanceBean.setDirectionsPageView(getGaDataFor(gaData, row.getDay(), "Goal1Completions"));
-                performanceBean.setInventoryPageViews(getGaDataFor(gaData, row.getDay(), "Goal2Completions"));
-                performanceBean.setLeadSubmission(getGaDataFor(gaData, row.getDay(), "Goal3Completions"));
-                performanceBean.setSpecialsPageView(getGaDataFor(gaData, row.getDay(), "Goal4Completions"));
-                performanceBean.setTimeOnSiteGt2Mins(getGaDataFor(gaData, row.getDay(), "Goal5Completions"));
-                performanceBean.setVdpViews(getGaDataFor(gaData, row.getDay(), "Goal6Completions"));
-                Integer engagements = 0;
-                engagements += (ApiUtils.toInteger(performanceBean.getDirectionsPageView() == null ? "0" : performanceBean.getDirectionsPageView())
-                        + ApiUtils.toInteger(performanceBean.getInventoryPageViews() == null ? "0" : performanceBean.getInventoryPageViews())
-                        + ApiUtils.toInteger(performanceBean.getLeadSubmission() == null ? "0" : performanceBean.getLeadSubmission())
-                        + ApiUtils.toInteger(performanceBean.getSpecialsPageView() == null ? "0" : performanceBean.getSpecialsPageView())
-                        + ApiUtils.toInteger(performanceBean.getTimeOnSiteGt2Mins() == null ? "0" : performanceBean.getTimeOnSiteGt2Mins())
-                        + ApiUtils.toInteger(performanceBean.getVdpViews() == null ? "0" : performanceBean.getVdpViews()));
-                performanceBean.setConversions(engagements + "");
-                performanceReportBeans.add(performanceBean);
+                    performanceBean.setDirectionsPageView(getGaDataFor(gaData, row.getDay(), "Goal1Completions"));
+                    performanceBean.setInventoryPageViews(getGaDataFor(gaData, row.getDay(), "Goal2Completions"));
+                    performanceBean.setLeadSubmission(getGaDataFor(gaData, row.getDay(), "Goal3Completions"));
+                    performanceBean.setSpecialsPageView(getGaDataFor(gaData, row.getDay(), "Goal4Completions"));
+                    performanceBean.setTimeOnSiteGt2Mins(getGaDataFor(gaData, row.getDay(), "Goal5Completions"));
+                    performanceBean.setVdpViews(getGaDataFor(gaData, row.getDay(), "Goal6Completions"));
+                    Integer engagements = 0;
+                    engagements += (ApiUtils.toInteger(performanceBean.getDirectionsPageView() == null ? "0" : performanceBean.getDirectionsPageView())
+                            + ApiUtils.toInteger(performanceBean.getInventoryPageViews() == null ? "0" : performanceBean.getInventoryPageViews())
+                            + ApiUtils.toInteger(performanceBean.getLeadSubmission() == null ? "0" : performanceBean.getLeadSubmission())
+                            + ApiUtils.toInteger(performanceBean.getSpecialsPageView() == null ? "0" : performanceBean.getSpecialsPageView())
+                            + ApiUtils.toInteger(performanceBean.getTimeOnSiteGt2Mins() == null ? "0" : performanceBean.getTimeOnSiteGt2Mins())
+                            + ApiUtils.toInteger(performanceBean.getVdpViews() == null ? "0" : performanceBean.getVdpViews()));
+                    performanceBean.setConversions(engagements + "");
+                    performanceReportBeans.add(performanceBean);
+                }
             }
-
             // Video
-            VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
-            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
-            // List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
-                VideoReportRow row = reportRow.next();
-                AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
-                performanceBean.setSource("Video");
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                performanceBean.setCost(row.getCost());
-                performanceBean.setAverageCpc(row.getAvgCPC());
-                performanceBean.setCpa(row.getCostConv());
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-                performanceReportBeans.add(performanceBean);
+            accountDetails = ApiUtils.toAccountDetails(request, "youtube");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "YOUTUBE_WATCH");
+                List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+                // List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
+                for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                    VideoReportRow row = reportRow.next();
+                    AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                    performanceBean.setSource("Video");
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    performanceBean.setCost(row.getCost());
+                    performanceBean.setAverageCpc(row.getAvgCPC());
+                    performanceBean.setCpa(row.getCostConv());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
+                    performanceReportBeans.add(performanceBean);
+                }
             }
-
             // Paid Social
-            List<AccountPerformanceReportBean> paidSocialPerformanceReportBeans = new ArrayList<>();
-            List<Map<String, String>> accountPerformance = (List<Map<String, String>>) facebookService.getAccountPerformance(startDate, endDate);
-            for (Iterator<Map<String, String>> iterator = accountPerformance.iterator(); iterator.hasNext();) {
-                Map<String, String> paidSocialPerformance = iterator.next();
-                AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
-                performanceBean.setSource("Paid Social");
-                performanceBean.setImpressions(paidSocialPerformance.get("impressions"));
-                performanceBean.setClicks(paidSocialPerformance.get("clicks"));
-                performanceBean.setCtr(paidSocialPerformance.get("ctr"));
-                performanceBean.setCost(paidSocialPerformance.get("spend"));
-                performanceBean.setAverageCpc(paidSocialPerformance.get("cpc"));
-                performanceBean.setCpa(paidSocialPerformance.get("cost_page_engagement"));
-                performanceBean.setAveragePosition("0");
-                performanceBean.setConversions(paidSocialPerformance.get("actions_page_engagement"));
-                paidSocialPerformanceReportBeans.add(performanceBean);
+            // List<AccountPerformanceReportBean> paidSocialPerformanceReportBeans = new ArrayList<>();
+            accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                List<Map<String, String>> accountPerformance = (List<Map<String, String>>) facebookService.getAccountPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+                for (Iterator<Map<String, String>> iterator = accountPerformance.iterator(); iterator.hasNext();) {
+                    Map<String, String> paidSocialPerformance = iterator.next();
+                    AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                    performanceBean.setSource("Paid Social");
+                    performanceBean.setImpressions(paidSocialPerformance.get("impressions"));
+                    performanceBean.setClicks(paidSocialPerformance.get("clicks"));
+                    performanceBean.setCtr(paidSocialPerformance.get("ctr"));
+                    performanceBean.setCost(paidSocialPerformance.get("spend"));
+                    performanceBean.setAverageCpc(paidSocialPerformance.get("cpc"));
+                    performanceBean.setCpa(paidSocialPerformance.get("cost_page_engagement"));
+                    performanceBean.setAveragePosition("0");
+                    performanceBean.setConversions(paidSocialPerformance.get("actions_page_engagement"));
+                    performanceReportBeans.add(performanceBean);
+                }
             }
             // Dynamic Display
-            String url = DYNAMIC_DISPLAY_URL + "all?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
-            String data = Rest.getData(url);
-            JSONParser parser = new JSONParser();
-            Object jsonObj = parser.parse(data);
+            try {
+                String url = DYNAMIC_DISPLAY_URL + "all?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
+                String data = Rest.getData(url);
+                JSONParser parser = new JSONParser();
+                Object jsonObj = parser.parse(data);
+
+            } catch (Exception ex) {
+
+            }
             if (frequency.equalsIgnoreCase("summary")) {
                 returnMap.put("data", sumPerSource(performanceReportBeans, ""));
             } else {
                 returnMap.put("data", sumPerSource(performanceReportBeans, "source"));
 
             }
-
         } catch (Exception ex) {
             Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
         }

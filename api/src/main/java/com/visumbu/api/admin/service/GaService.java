@@ -57,7 +57,7 @@ public class GaService {
     private static final String CLIENT_SECRET_JSON_RESOURCE = "F:\\GaToken\\client_secret_384381056232-sqrgb2u8j26gbkqi6dis682ojapsf85a.apps.googleusercontent.com.json";
 
     // Replace with your view ID.
-    private static final String VIEW_ID = "82176546";
+     private static final String VIEW_ID = "82176546";
 
     // The directory where the user's credentials will be stored.
     private static final File DATA_STORE_DIR = new File("/tmp/");
@@ -107,10 +107,6 @@ public class GaService {
             Logger.getLogger(GaService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }
-
-    public GetReportsResponse getGenericData(Date startDate1, Date endDate1, String metrics, String dimentions) {
-        return getGenericData(startDate1, endDate1, null, null, metrics, dimentions);
     }
 
     public GetReportsResponse getSeoPerformance(String viewId, Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
@@ -341,135 +337,6 @@ public class GaService {
             Logger.getLogger(GaService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }
-
-    public GetReportsResponse getGenericData(Date startDate1, Date endDate1, Date startDate2, Date endDate2, String metrics, String dimentions) {
-        try {
-            List<DateRange> dateRangeList = new ArrayList<>();
-            DateRange dateRange = new DateRange();
-            dateRange.setStartDate(DateUtils.getGaStartDate(startDate1));
-            dateRange.setEndDate(DateUtils.getGaEndDate(endDate1));
-            dateRangeList.add(dateRange);
-
-            if (startDate2 != null) {
-                DateRange dateRange1 = new DateRange();
-                dateRange1.setStartDate(DateUtils.getGaStartDate(startDate2));
-                if (endDate2 != null) {
-                    dateRange1.setEndDate(DateUtils.getGaEndDate(endDate2));
-                } else {
-                    dateRange1.setEndDate(DateUtils.getGaEndDate(startDate1));
-                }
-                dateRangeList.add(dateRange1);
-            }
-            String[] metricsArray = metrics.split(";");
-            List<Metric> metricList = new ArrayList<>();
-            for (int i = 0; i < metricsArray.length; i++) {
-                String metricStr = metricsArray[i];
-                String[] nameAliasArray = metricStr.split(",");
-                if (nameAliasArray.length >= 2) {
-                    Metric metric = new Metric()
-                            .setExpression(nameAliasArray[0])
-                            .setAlias(nameAliasArray[1]);
-                    metricList.add(metric);
-                } else if (nameAliasArray.length >= 1) {
-                    Metric metric = new Metric()
-                            .setExpression(nameAliasArray[0]);
-                    metricList.add(metric);
-                }
-            }
-
-            String[] dimensionArray = dimentions.split(";");
-            List<Dimension> dimensionList = new ArrayList<>();
-            for (int i = 0; i < dimensionArray.length; i++) {
-                String dimensionStr = dimensionArray[i];
-                Dimension dimension = new Dimension()
-                        .setName(dimensionStr);
-                dimensionList.add(dimension);
-
-            }
-
-            ReportRequest request = new ReportRequest()
-                    .setViewId(VIEW_ID)
-                    .setDateRanges(dateRangeList)
-                    .setDimensions(dimensionList)
-                    .setMetrics(metricList);
-            ArrayList<ReportRequest> requests = new ArrayList<ReportRequest>();
-            requests.add(request);
-            // Create the GetReportsRequest object.
-            GetReportsRequest getReport = new GetReportsRequest()
-                    .setReportRequests(requests);
-
-            // Call the batchGet method.
-            GetReportsResponse response = analyticsReporting.reports().batchGet(getReport).execute();
-
-            // Return the response.
-            return response;
-        } catch (IOException ex) {
-            Logger.getLogger(GaService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    /**
-     * Query the Analytics Reporting API V4. Constructs a request for the
-     * sessions for the past seven days. Returns the API response.
-     *
-     * @param service
-     * @return GetReportResponse
-     * @throws IOException
-     */
-    private static GetReportsResponse getReport(AnalyticsReporting service) throws IOException {
-        // Create the DateRange object.
-        List<DateRange> dateRangeList = new ArrayList<>();
-// The start date for the query in the format `YYYY-MM-DD`.
-        DateRange dateRange = new DateRange();
-        dateRange.setStartDate("7DaysAgo");
-        dateRange.setEndDate("today");
-
-        dateRangeList.add(dateRange);
-        DateRange dateRange1 = new DateRange();
-        dateRange1.setStartDate("14DaysAgo");
-        dateRange1.setEndDate("7DaysAgo");
-        dateRangeList.add(dateRange1);
-        // Create the Metrics object.
-        Metric sessions = new Metric()
-                .setExpression("ga:sessions")
-                .setAlias("sessions");
-
-        //Create the Dimensions object.
-        Dimension browser = new Dimension()
-                .setName("ga:browser");
-
-        // Create the ReportRequest object.
-        ReportRequest request = new ReportRequest()
-                .setViewId(VIEW_ID)
-                .setDateRanges(dateRangeList)
-                .setDimensions(Arrays.asList(browser))
-                .setMetrics(Arrays.asList(sessions));
-
-        ArrayList<ReportRequest> requests = new ArrayList<ReportRequest>();
-        requests.add(request);
-
-        // Create the GetReportsRequest object.
-        GetReportsRequest getReport = new GetReportsRequest()
-                .setReportRequests(requests);
-
-        // Call the batchGet method.
-        GetReportsResponse response = service.reports().batchGet(getReport).execute();
-
-        // Return the response.
-        return response;
-    }
-
-    public static void main(String[] args) {
-        try {
-            AnalyticsReporting service = initializeAnalyticsReporting();
-
-            GetReportsResponse response = getReport(service);
-            printResponse(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public GetReportsResponse getSeoOverallPerformanceGoals(String viewId, Date startDate, Date endDate, String aggregation) {

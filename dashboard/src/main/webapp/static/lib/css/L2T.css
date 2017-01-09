@@ -4295,10 +4295,7 @@ table.text-center, table.text-center td, table.text-center th {
     border-radius: 2px;
     display: block;
     width: 100%;
-    height: 20px;
-    padding: 0px 0px;
     font-size: 12px;
-    margin-top: 2px;
 }
 
 .panel-heading {
@@ -4389,7 +4386,7 @@ a.mail-to {
 #daterange-btn {
     background-color: #fff;
     color: #adb8bd;
-    /*    border: 1px solid #adb8bd;*/
+    border: 1px solid #adb8bd;
 }
 
 .dropdown-toggle-btn {
@@ -4468,13 +4465,15 @@ a.mail-to {
 .label-info {
     background-color: #99a5aa !important;
     border-color: #99a5aa !important;
-    margin: 0px;
-    padding: 1px 4px;
+    margin: 0px 0px 0px 0px;
+    padding: 4px 4px 3px 4px;
     cursor: pointer;
+    float: left;
 }
 
 .logout {
     color:#99a5aa !important;
+    margin-top: -2px;
 }
 
 .ui-grid-render-container-body .ui-grid-viewport {
@@ -4552,7 +4551,62 @@ button.close {
 }
 
 .date-border {
-    border: 1px solid #cdcdcd;
-    padding: 0px 5px;
-    border-radius:2px;
+    padding: 2px;
+}
+
+.table-bg {
+    color: #f1883c;
+    font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    background: rgb(209, 215, 218) !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    font-style: normal;
+    font-size: 14px;
+}
+
+.table-l2t {
+    border: none;
+}
+
+.table-l2t tr {
+    border: none;
+}
+
+.table-l2t tr td {
+    color: #3d464d;
+    font-size: 13px;
+}
+
+.table-l2t .text-info {
+    color: #3d464d;
+    font-size: 13px;
+    border-bottom: none;
+}
+.table-l2t tr{
+    border: none;
+}
+
+.table-l2t tr > th {
+    vertical-align: top !important;
+}
+
+.right-group {
+    padding-left: 23px !important;
+}
+
+.box-l2t {
+    border: none !important;
+}
+
+.table > tbody + tbody {
+    border-top: 1px solid #ddd !important;
+}
+
+.table > tbody > tr.info > td {
+    background-color: #f1f1f1 !important;
+}
+
+tfoot {
+    background: #d1d7da;
 }

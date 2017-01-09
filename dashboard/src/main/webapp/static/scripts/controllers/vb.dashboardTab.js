@@ -1,4 +1,6 @@
-app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout) {
+app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout, localStorageService) {
+    $scope.permission = localStorageService.get("permission");
+
     $scope.selectTabID = $state;
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
@@ -62,7 +64,11 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
         $scope.selectProductName = $scope.name.productName;
         console.log($scope.selectProductName);
-    });    
+    });
+
+    $http.get('admin/user/sampleDealers').success(function (response) {
+        $scope.dealers = response;
+    });
 
     $scope.loadTab = true;
     $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
