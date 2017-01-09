@@ -88,7 +88,7 @@
     .lay-wid {
         text-align:left;
     }
-    
+
     .wrap{
         white-space: normal;
     }
@@ -129,15 +129,27 @@
 
         <div ng-if="widget.chartType == 'ticker'">
             <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data, $event)">
+                <div class="box-tools pull-right hover-delete">
+                        
+                        <button  type="button" ng-if="permission.allowCreateWidget == true" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                        </button>
+                        <!--                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                                                    </button>-->
+
+                        <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                       
+                    </div>
                 <div class="box-body chart-responsive" ng-drag="true" ng-drag-data="widget">
                     <div ticker-Directive ticker-Url="{{widget.directUrl}}" ticker-Id="{{widget.id}}" ticker-Columns="{{widget.columns}}"></div>
+
+                    
                 </div>
             </div>
         </div>
 
         <div ng-if="widget.chartType != 'ticker'">
             <div class="col-md-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
-                <div class="box box-primary" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl"  ng-drag="true" ng-drag-data="widget"> 
+                <div class="box box-primary box-l2t" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl"  ng-drag="true" ng-drag-data="widget"> 
                     <div class="box-header with-border">
                         <h3 class="box-title">
                             <span class="{{widget.icon}}"></span> 
@@ -149,7 +161,6 @@
                             </button>  
                             <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
-
                             <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                             <div id="delete{{widget.id}}" class="modal">
                                 <div class="modal-dialog modal-lg">
@@ -184,7 +195,7 @@
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
                         <div area-Chart-Directive area-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                     </div> 
-                    <div class="box-body full-height box-l2t" ng-if="widget.chartType === 'table'" adjust-height>
+                    <div class="box-body full-height" ng-if="widget.chartType === 'table'" adjust-height>
                         <div id="changes-height" class="table-responsive">
                             <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}"  widget-Columns="{{widget.columns}}"></div> 
                         </div>
@@ -218,7 +229,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Product</label>
-                                            <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |                     capitalize) for userProduct in userProducts">
+                                            <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="(userProduct |                       capitalize) for userProduct in userProducts">
                                             </select>
                                         </div>
                                     </div>
