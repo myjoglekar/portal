@@ -4610,3 +4610,26 @@ button.close {
 tfoot {
     background: #d1d7da;
 }
+
+.c3 svg {
+    border: 1px solid #ddd;
+}
+
+.selectize-control > .selectize-dropdown {
+    top: 27px !important;
+}
+
+.table-l2t tr > th:nth-child(1) {
+    min-width:80px;
+}
+
+.table {
+    margin-bottom: 0px;
+}
+
+.no-padding .table.table-bordered.table-hover tr td:last-child {
+    min-width: 90px;
+}
+
+
+

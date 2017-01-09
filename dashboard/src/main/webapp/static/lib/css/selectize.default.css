@@ -287,7 +287,7 @@
 
 .selectize-dropdown .active {
     color: #495c68;
-    background-color: #f5fafd;
+/*    background-color: #f5fafd;*/
 }
 
 .selectize-dropdown .active.create {
@@ -416,7 +416,7 @@
     border-color: #adb8bd;
     font-size: 12px;
     border: 1px solid #adb8bd;
-    padding: 0px 22px 0px 5px;
+    padding: 0px 5px 0px 5px;
     border-radius: 2px;
     color: #adb8bd;
 }
