@@ -24,20 +24,20 @@ public class ColumnDef {
 
         public static final String SUM = "sum";
         public static final String AVG = "avg";
-        public static final String CTR = "ctr";
-        public static final String CPA = "cpa";
-        public static final String CPC = "cpc";
+        public static final String CTR = "ctr";   // clicks/impressions
+        public static final String CPA = "cpa";   // cost/conversions
+        public static final String CPC = "cpc";   // cost/clicks
         public static final String MAX = "max";
         public static final String MIN = "min";
         public static final String COUNT = "count";
-        public static final String None = "none";
-        public static final String CPR = "cpr";
-        public static final String CPL = "cpl";
-        public static final String CPLC = "cpl";
-        public static final String CPComment = "cpcomment";
-        public static final String CPostE = "cposte";
-        public static final String CPageE = "cpagee";
-        public static final String CPP = "cpp";
+        public static final String None = "";
+        public static final String CPR = "cpr";  // cost/reacctions
+        public static final String CPL = "cpl";  // cost/likes
+        public static final String CPLC = "cplc"; // Cost/Link Click
+        public static final String CPComment = "cpcomment"; // cost/comments
+        public static final String CPostE = "cposte";  // cost/post engagements
+        public static final String CPageE = "cpagee"; // cost/page engagements
+        public static final String CPP = "cpp";  // cost/posts
     }
     public static class Format {
         public static final String CURRENCY = "$,.2f";
