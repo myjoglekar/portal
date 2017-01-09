@@ -345,6 +345,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
 
             scope.format = function (column, value) {
                 if (column.displayFormat) {
+                    if(Number.isNaN(returnValue)) {
+                        return "-";
+                    }
                     if (column.displayFormat.indexOf("%") > -1) {
                         return d3.format(column.displayFormat)(value / 100);
                     }
@@ -467,6 +470,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                         }
                     })
                 });
+                if(Number.isNaN(returnValue)) {
+                    returnValue[value.fieldname] = "-";
+                }
                 return returnValue;
             }
 
