@@ -269,7 +269,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             widgetColumns: '@',
             setTableFn: '&'
         },
-        template: '<table class="table table-responsive table-bordered table-hover">' +
+        template:'<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>'+
+                '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-hover">' +
                 '<thead><tr>' +
                 '<th class="info" ng-if="groupingName">' +
                 '<i style="cursor: pointer" class="fa" ng-class="{\'fa-plus\': !selected_Row, \'fa-minus\': selected_Row}"></i>' +
@@ -279,7 +280,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
-                '<tbody ng-repeat="grouping in groupingData">' +
+                '<tbody ng-repeat="grouping in groupingData | orderBy: sortColumn:reverse: true">' +
                 '<tr class="text-uppercase text-info info">' +
                 '<td ng-if="groupingName">' +
                 '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; item.$hideRows = false" ng-class="{\'fa-plus\': !grouping.$hideRows, \'fa-minus\': grouping.$hideRows}"></i>' +
@@ -300,6 +301,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</table>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
+            scope.loadingTable = true;
             scope.clickRow = function () {
                 scope.grouping.$hideRows = false;
             };
@@ -337,6 +339,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             }
             fullAggreagtionList = aggreagtionList;
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+                scope.ajaxLoadingCompleted = true;
+                scope.loadingTable = false;
                 scope.groupingData = scope.group(response.data, groupByFields, aggreagtionList);
                 angular.forEach(scope.groupingData, function (value, key) {
                     scope.groupingName = value._groupField;
@@ -346,7 +350,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             });
 
             scope.sortColumn = scope.columns;
-
+            scope.objectHeader = [];
             scope.reverse = false;
             scope.toggleSort = function (index) {
                 if (scope.sortColumn === scope.objectHeader[index]) {
@@ -423,12 +427,9 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<div id="grid1" class="grid full-height" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" ui-grid-grouping></div>',
-//                '<div class="grid" ng-if="ajaxLoadingCompleted" ui-grid="gridOptions" style="height: 850px;" ui-grid-grouping  ng-style="getTableHeight()"></div>',
         link: function (scope, element, attr) {
-//scope.rowData = []ui-if="gridData.data.length>0"
             scope.loadingTable = true;
             scope.gridOptions = {
-//                rowHeight: 50,
                 enableColumnMenus: false,
                 enableGridMenu: false,
                 enableRowSelection: false,
@@ -444,9 +445,6 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
             };
             var startDate = "";
             var endDate = "";
-//                        
-//            console.log(moment($('#daterange-btn').data('daterangepicker').startDate).format('YYYY-MM-DD HH:mm:ss'));
-//            console.log(moment($('#daterange-btn').data('daterangepicker').endDate).format('YYYY-MM-DD HH:mm:ss'));
             var columnDefs = [];
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
 
