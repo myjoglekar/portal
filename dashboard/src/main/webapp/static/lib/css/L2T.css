@@ -4606,3 +4606,7 @@ button.close {
 .table > tbody > tr.info > td {
     background-color: #f1f1f1 !important;
 }
+
+tfoot {
+    background: #d1d7da;
+}
