@@ -120,15 +120,15 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.selectProductName();
 
     $scope.changeUrl = function (displayName, widget) {
-        angular.forEach($scope.productFields,function(value, key){
-            if(value.productDisplayName == displayName){
-               $scope.requiredUrl = value.url;
+        angular.forEach($scope.productFields, function (value, key) {
+            if (value.productDisplayName == displayName) {
+                $scope.requiredUrl = value.url;
             }
         })
         //var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: displayName})[0];
         widget.previewUrl = $scope.requiredUrl;
         widget.columns = [];
-        $http.get($scope.requiredUrl + "?fieldsOnly=true").success(function (response) {
+        $http.get("admin/proxy/getJson?url=" + $scope.requiredUrl + "&fieldsOnly=true").success(function (response) {
             $scope.collectionFields = [];
             angular.forEach(response.columnDefs, function (value, key) {
                 widget.columns.push({fieldName: value.fieldName, displayName: value.displayName,
@@ -239,10 +239,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 fieldName: value.fieldName,
                 displayName: value.displayName,
                 agregationFunction: value.agregationFunction,
-                groupPriority: value.groupPriority,
-                xAxis: value.xAxis,
-                yAxis: value.yAxis,
-                sortOrder: value.sortOrder,
+                groupPriority: isNaN(value.groupPriority) ? null : value.groupPriority,
+                xAxis: isNaN(value.xAxis) ? null : value.xAxis,
+                yAxis: isNaN(value.yAxis) ? null : value.yAxis,
+                sortOrder: isNaN(value.sortOrder) ? null : value.sortOrder,
                 displayFormat: value.displayFormat,
                 alignment: value.alignment,
                 baseFieldName: value.baseFieldName,
@@ -251,8 +251,8 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 fieldType: value.fieldType,
                 functionParameters: value.functionParameters,
                 remarks: value.remarks,
-                sortPriority: value.sortPriority,
-                width: value.width,
+                sortPriority: isNaN(value.sortPriority) ? null : value.sortPriority,
+                width: isNaN(value.width) ? null : value.width,
                 wrapText: value.wrapText,
                 xAxisLabel: value.xAxisLabel,
                 yAxisLabel: value.yAxisLabel
@@ -376,7 +376,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             });
 
             scope.format = function (column, value) {
-                if(!value) {
+                if (!value) {
                     return "-";
                 }
                 if (column.displayFormat) {
@@ -599,7 +599,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,

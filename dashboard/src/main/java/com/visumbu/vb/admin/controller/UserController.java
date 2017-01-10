@@ -348,9 +348,9 @@ public class UserController {
             "../api/admin/overall/overallPerformance/summary/day/0;Summary",
             "../api/admin/overall/overallPerformance/summary/week/12;12 Weeks Summary",
             "../api/admin/overall/overallPerformance/detailed/day/0;Summary By Source",
-            "../api/admin/overall/overallPerformance/totalNoOfCalls;Total Calls",
-            "../api/admin/overall/overallPerformance/totalNoOfSales;Total Sales",
-            "../api/admin/overall/overallPerformance/totalBudget;Total Budget",
+            "../api/admin/overall/totalNoOfCalls;Total Calls",
+            "../api/admin/overall/totalNoOfSales;Total Sales",
+            "../api/admin/overall/totalBudget;Total Budget",
         };
 
         for (int i = 0; i < urlList.length; i++) {
