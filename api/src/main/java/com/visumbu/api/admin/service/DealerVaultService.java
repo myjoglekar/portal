@@ -34,7 +34,7 @@ import org.json.simple.parser.ParseException;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class DealerVaultService {
 
-    private final static String DEALER_VAULT_URL = "http://ec2-35-160-217-210.us-west-2.compute.amazonaws.com:5003/dealervault/";
+    private final static String DEALER_VAULT_URL = "http://ec2-35-166-148-54.us-west-2.compute.amazonaws.com:5003/dealervault/";
 
     public Object getAccountPerformance(Date startDate, Date endDate, String dealerId, String fieldsOnly) {
         try {

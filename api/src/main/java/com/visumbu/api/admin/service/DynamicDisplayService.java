@@ -34,7 +34,7 @@ import org.json.simple.parser.ParseException;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class DynamicDisplayService {
 
-    private final static String DYNAMIC_DISPLAY_URL = "http://ec2-35-160-217-210.us-west-2.compute.amazonaws.com:5002/speedshift/";
+    private final static String DYNAMIC_DISPLAY_URL = "http://ec2-35-166-148-54.us-west-2.compute.amazonaws.com:5002/speedshift/";
 
     public Object getAccountPerformance(Date startDate, Date endDate, String dealerId, String fieldsOnly) {
         try {
