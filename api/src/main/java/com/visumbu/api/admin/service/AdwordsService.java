@@ -177,6 +177,8 @@ public class AdwordsService {
             aggregationDuration = "DayOfWeek";
         } else if (aggregation.equalsIgnoreCase("hourOfDay")) {
             aggregationDuration = "HourOfDay";
+        } else if (aggregation == "") {
+            aggregationDuration = "";
         }
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         if (aggregation.equalsIgnoreCase("hourOfDay")) {
@@ -184,13 +186,6 @@ public class AdwordsService {
                     "Impressions", "Clicks", aggregationDuration,
                     "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
                     "Conversions", "SearchImpressionShare", "AveragePosition",
-                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
-            ));
-        } else if (aggregation.isEmpty()) {
-            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                    "Impressions", "Clicks",
-                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.isEmpty()) {

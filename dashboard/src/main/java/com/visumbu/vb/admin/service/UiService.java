@@ -40,15 +40,7 @@ public class UiService {
     private UiDao uiDao;
 
     public List<Product> getProduct() {
-        List<Product> product = uiDao.read(Product.class);
-        List<Product> returnList = new ArrayList<>();
-        for (Iterator<Product> iterator = product.iterator(); iterator.hasNext();) {
-            Product product1 = iterator.next();
-            if (!product1.getProductName().equalsIgnoreCase("overall")) {
-                returnList.add(product1);
-            }
-        }
-        return returnList;
+        return uiDao.read(Product.class);
     }
 
     public List<Dashboard> getDashboards(VbUser user) {
