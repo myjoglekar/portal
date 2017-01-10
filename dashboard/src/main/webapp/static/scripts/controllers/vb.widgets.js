@@ -338,7 +338,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
-                '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}" bind-html-unsafe="{{format(col, childItem[col.fieldName])}}"></span></td></tr>' +
+                '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}">{{format(col, childItem[col.fieldName])}}</span></td></tr>' +
                 '</tbody>' +
                 '<tfoot>' +
                 '<tr>' +
