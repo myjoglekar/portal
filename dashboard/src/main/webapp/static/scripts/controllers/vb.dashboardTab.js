@@ -5,7 +5,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
-    console.log($stateParams.startDate + " - " + $stateParams.endDate);
     $scope.dataCheck = function () {
         console.log($stateParams.startDate + " - " + $stateParams.endDate);
     }
@@ -63,7 +62,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $scope.products = response;
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
         $scope.selectProductName = $scope.name.productName;
-        console.log($scope.selectProductName);
     });
 
     $http.get('admin/user/sampleDealers').success(function (response) {
@@ -118,7 +116,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
             var otherIndex = $scope.tabs.indexOf(tab);
             $scope.tabs[index] = tab;
             $scope.tabs[otherIndex] = otherObj;
-            console.log($scope.tabs);
             var tabOrder = $scope.tabs.map(function (value, key) {
                 if (value) {
                     return value.id;
@@ -137,8 +134,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     }
 
     $scope.doneEditing = function (tab) {
-        console.log(tab)
-        console.log(tab.tabName)
         var data = {
             id: tab.id,
             createdTime: tab.createdTime,
@@ -152,7 +147,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $http({method: 'PUT', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data})
         tab.editing = false;
         $scope.editedItem = null;
-        //tab.tabName = "";
     };
 })
         .directive('ngBlur', function () {

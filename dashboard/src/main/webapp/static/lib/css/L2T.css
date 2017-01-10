@@ -4631,5 +4631,12 @@ tfoot {
     min-width: 90px;
 }
 
+.loader {
+    text-align: center;
+    position:relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:25%;
+}
 
 
