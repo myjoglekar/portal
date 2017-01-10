@@ -1,5 +1,4 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
-    console.log("Permission");
     $scope.permission = localStorageService.get("permission");
     $scope.selectAggregations = [
         {name: 'None', value: ""},
@@ -119,9 +118,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.selectProductName();
 
     $scope.changeUrl = function (displayName, widget) {
-        angular.forEach($scope.productFields,function(value, key){
-            if(value.productDisplayName == displayName){
-               $scope.requiredUrl = value.url;
+        angular.forEach($scope.productFields, function (value, key) {
+            if (value.productDisplayName == displayName) {
+                $scope.requiredUrl = value.url;
             }
         })
         //var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: displayName})[0];
@@ -363,7 +362,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             };
             scope.doSomething = function (ev) {
                 var element = ev.srcElement ? ev.srcElement : ev.target;
-                console.log(element, angular.element(element))
             }
 
             //scope.currentPage = 1;
@@ -375,7 +373,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             });
 
             scope.format = function (column, value) {
-                if(!value) {
+                if (!value) {
                     return "-";
                 }
                 if (column.displayFormat) {
@@ -676,7 +674,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
 app.directive('tickerDirective', function ($http, $stateParams) {
     return{
         restrict: 'AE',
-        template: '<div ng-show="loadingTicker" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>'+
+        template: '<div ng-show="loadingTicker" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<div ng-hide="loadingTicker" class="panel panel-default relative pnl-aln">' +
                 '<div class="m-b-10">' +
                 '<span>{{tickerTitle}}</span><br>' +
@@ -691,19 +689,32 @@ app.directive('tickerDirective', function ($http, $stateParams) {
         link: function (scope, element, attr) {
             scope.loadingTicker = true;
             var tickerName;
-            console.log(scope.tickerUrl);
-            console.log(scope.tickerId);
-            console.log(scope.tickerColumns);
             angular.forEach(JSON.parse(scope.tickerColumns), function (value, key) {
                 scope.tickerTitle = value.displayName;
-                tickerName = {fieldName: value.fieldName, displayName: value.displayName}
+                tickerName = {fieldName: value.fieldName, displayName: value.displayName, displayFormat: value.displayFormat}
             });
+
+            var format = function (column, value) {
+                if (!value) {
+                    return "-";
+                }
+                if (column.displayFormat) {
+                    if (Number.isNaN(value)) {
+                        return "-";
+                    }
+                    if (column.displayFormat.indexOf("%") > -1) {
+                        return d3.format(column.displayFormat)(value / 100);
+                    }
+                    return d3.format(column.displayFormat)(value);
+                }
+                return value;
+            };
 
             var setData = [];
             var data = [];
 
             $http.get("admin/proxy/getJson?url=" + scope.tickerUrl + "&widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
-               scope.loadingTicker = false;
+                scope.loadingTicker = false;
                 if (!response) {
                     return;
                 }
@@ -718,9 +729,9 @@ app.directive('tickerDirective', function ($http, $stateParams) {
                 var total = 0;
                 for (var i = 0; i < setData.length; i++) {
                     total += parseFloat(setData[i]);
-                }
-                scope.totalValue = total;
-            })
+                }               
+                    scope.totalValue = format(tickerName, total);
+            });
         }
     };
 });
@@ -1143,7 +1154,6 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                             x: {
                                 tick: {
                                     format: function (x) {
-                                        console.log(xData[x])
                                         return xData[x];
                                     }
                                 }
