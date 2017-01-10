@@ -4620,14 +4620,11 @@ tfoot {
 .selectize-control > .selectize-dropdown {
     top: 27px !important;
 }
-/*
-.table-l2t tr > th:nth-child(1) {
+
+
+.group-bg {
     white-space: nowrap;
 }
-
-.table-l2t tr > td:nth-child(1) {
-    white-space: nowrap;
-}*/
 
 .table {
     margin-bottom: 0px;

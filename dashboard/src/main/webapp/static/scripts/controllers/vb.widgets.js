@@ -161,7 +161,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             width: newWidget, 'minHeight': 25, columns: [], chartType: ""
         };
         $http({method: 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
-            $scope.widgets.push({id: response.id, width: newWidget, 'minHeight': 25, columns: []});
+            $scope.widgets.unshift({id: response.id, width: newWidget, 'minHeight': 25, columns: []});
             $scope.newWidgetId = response.id;
             $scope.openPopup(response);
         });
@@ -313,8 +313,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<th class="info table-bg" ng-if="groupingName">' +
                 '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
                 ' Group</th>' +
-                '<th class="text-capitalize info table-bg" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
-                '{{col.displayName}} <i class="fa" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
+                '<th class="text-capitalize info table-bg" ng-repeat="col in columns">' +
+                '{{col.displayName}}' +
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
@@ -337,7 +337,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
-                '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}">{{format(col, childItem[col.fieldName])}}</span></td></tr>' +
+                '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}">{{format(col, childItem[col.fieldName])}}</span></span></td></tr>' +
                 '</tbody>' +
                 '<tfoot>' +
                 '<tr>' +
@@ -676,7 +676,8 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
 app.directive('tickerDirective', function ($http, $stateParams) {
     return{
         restrict: 'AE',
-        template: '<div class="panel panel-default relative pnl-aln">' +
+        template: '<div ng-show="loadingTicker" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>'+
+                '<div ng-hide="loadingTicker" class="panel panel-default relative pnl-aln">' +
                 '<div class="m-b-10">' +
                 '<span>{{tickerTitle}}</span><br>' +
                 '<span class="text-lg tickers">{{totalValue}}</span>' +
@@ -688,6 +689,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
             tickerColumns: '@'
         },
         link: function (scope, element, attr) {
+            scope.loadingTicker = true;
             var tickerName;
             console.log(scope.tickerUrl);
             console.log(scope.tickerId);
@@ -701,7 +703,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
             var data = [];
 
             $http.get("admin/proxy/getJson?url=" + scope.tickerUrl + "&widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
-                console.log(response);
+               scope.loadingTicker = false;
                 if (!response) {
                     return;
                 }
@@ -1327,8 +1329,8 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             }])
         .filter('yAxis', [function () {
                 return function (chartYAxis) {
-                    var xAxis = ['', 'y-1', 'y-2']
-                    return xAxis[chartYAxis];
+                    var yAxis = ['', 'y-1', 'y-2']
+                    return yAxis[chartYAxis];
                 }
             }]);
 
