@@ -13,8 +13,7 @@ app.controller("LoginController", function ($scope, $http, $window, $cookies, lo
                 $cookies.putObject("username", response.authData.userName);
                 localStorageService.set("permission", response.authData.permission)
                 //$cookies.putObject("isAdmin", response.isAdmin);
-                $timeout( function(){ $window.location.href = 'index.html' }, 5000);
-                
+                $window.location.href = 'index.html' 
                 $scope.loadDashboard = false;
             }
         });
