@@ -100,6 +100,7 @@ public class ReviewPushController extends BaseController {
             return returnMap;
         }
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "none");
+            System.out.println("Review Push Account Id " + accountDetails.getReviewPushAccountId());
         if (accountDetails.getReviewPushAccountId() != null) {
             returnMap.put("data", reviewPushService.getRatingSummaryByDealer(startDate, endDate, accountDetails.getReviewPushAccountId()));
         } else {

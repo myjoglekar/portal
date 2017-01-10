@@ -127,10 +127,13 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
+        System.out.println(serviceName + "ReviewpushAccountId");
+        System.out.println(request.getParameter(serviceName + "ReviewpushAccountId"));
+        
         String reviewpushAccountIdStr = request.getParameter(serviceName + "ReviewpushAccountId");
         Long reviewpushAccountId = null;
         try {
-            centuryAccountId = Long.parseLong(reviewpushAccountIdStr);
+            reviewpushAccountId = Long.parseLong(reviewpushAccountIdStr);
         } catch (Exception e) {
 
         }

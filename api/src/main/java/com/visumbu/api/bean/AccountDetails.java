@@ -73,4 +73,9 @@ public class AccountDetails {
     public void setFacebookAccountId(Long facebookAccountId) {
         this.facebookAccountId = facebookAccountId;
     }
+
+    @Override
+    public String toString() {
+        return "AccountDetails{" + "analyticsProfileId=" + analyticsProfileId + ", analyticsAccountId=" + analyticsAccountId + ", adwordsAccountId=" + adwordsAccountId + ", bingAccountId=" + bingAccountId + ", centuryAccountId=" + centuryAccountId + ", facebookAccountId=" + facebookAccountId + ", reviewPushAccountId=" + reviewPushAccountId + '}';
+    }
 }
