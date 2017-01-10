@@ -123,12 +123,10 @@ public class ApiUtils {
         String facebookAccountIdStr = request.getParameter(serviceName + "FacebookAdsAccountId");
         Long facebookAccountId = null;
         try {
-            centuryAccountId = Long.parseLong(facebookAccountIdStr);
+            facebookAccountId = Long.parseLong(facebookAccountIdStr);
         } catch (Exception e) {
 
         }
-        System.out.println(serviceName + "ReviewpushAccountId");
-        System.out.println(request.getParameter(serviceName + "ReviewpushAccountId"));
         
         String reviewpushAccountIdStr = request.getParameter(serviceName + "ReviewpushAccountId");
         Long reviewpushAccountId = null;
@@ -137,7 +135,6 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
-        
         
         AccountDetails accountDetails = new AccountDetails();
         accountDetails.setBingAccountId(bingAccountId);
