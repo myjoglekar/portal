@@ -370,6 +370,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             });
 
             scope.format = function (column, value) {
+                if(!value) {
+                    return "-";
+                }
                 if (column.displayFormat) {
                     if (Number.isNaN(value)) {
                         return "-";
