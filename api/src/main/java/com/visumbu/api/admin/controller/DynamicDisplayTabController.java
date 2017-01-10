@@ -106,10 +106,10 @@ public class DynamicDisplayTabController {
 
     @Autowired
     private FacebookService facebookService;
-    
+
     @Autowired
     private DynamicDisplayService dynamicDisplayService;
-    
+
     private final static String DEALER_ID = "8125";
 
     @RequestMapping(value = "overallPerformance", method = RequestMethod.GET, produces = "application/json")
@@ -117,8 +117,9 @@ public class DynamicDisplayTabController {
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String fieldsOnly = request.getParameter("fieldsOnly");
         String dealerId = request.getParameter("dealerMapId");
-        return dynamicDisplayService.getAccountPerformance(startDate, endDate, dealerId);
+        return dynamicDisplayService.getAccountPerformance(startDate, endDate, dealerId, fieldsOnly);
     }
 
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
@@ -126,8 +127,9 @@ public class DynamicDisplayTabController {
     Object getLast12Weeks(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String fieldsOnly = request.getParameter("fieldsOnly");
         String dealerId = request.getParameter("dealerMapId");
-        return dynamicDisplayService.getLast12Weeks(startDate, endDate, dealerId);
+        return dynamicDisplayService.getLast12Weeks(startDate, endDate, dealerId, fieldsOnly);
     }
 
     private void forwardRequest(String url, OutputStream out, Map<String, String[]> parameterMap) {

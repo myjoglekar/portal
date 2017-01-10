@@ -17,7 +17,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {name: 'CPostE', value: "cposte"},
         {name: 'CPostE', value: "cpagee"},
         {name: 'CPP', value: "cpp"}
-        
+
     ];   //Aggregation Type-Popup
     $scope.selectGroupPriorities = [
         {num: 'None', value: ""},
@@ -345,6 +345,12 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
 
             scope.format = function (column, value) {
                 if (column.displayFormat) {
+                    if(Number.isNaN(returnValue)) {
+                        return "-";
+                    }
+                    if (column.displayFormat.indexOf("%") > -1) {
+                        return d3.format(column.displayFormat)(value / 100);
+                    }
                     return d3.format(column.displayFormat)(value);
                 }
                 return value;
@@ -410,19 +416,24 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 return sum;
             };
 
-            scope.calculatedMetric = function (list, field1, field2) {
+            scope.calculatedMetric = function (list, name, field1, field2) {
                 var value1 = scope.sum(list, field1);
                 var value2 = scope.sum(list, field2);
+                var returnValue = "0";
                 if (value1 && value2) {
-                    return value1 / value2;
+                    returnValue= value1 / value2;
                 }
+                if(name == "ctr") {
+                    returnValue = returnValue * 100;
+                }
+                return returnValue;
             }
 
             listOfCalculatedFunction = [
-                {name: 'ctr', field1: 'clicks', field2: 'reactions'},
+                {name: 'ctr', field1: 'clicks', field2: 'impressions'},
                 {name: 'cpa', field1: 'cost', field2: 'conversions'},
                 {name: 'cpc', field1: 'cost', field2: 'clicks'},
-                {name: 'cpr', field1: 'cost', field2: 'reacctions'},
+                {name: 'cpr', field1: 'cost', field2: 'reactions'},
                 {name: 'ctl', field1: 'cost', field2: 'likes'},
                 {name: 'cplc', field1: 'cost', field2: 'link_clicks'},
                 {name: 'cpcomment', field1: 'cost', field2: 'comments'},
@@ -455,10 +466,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     }
                     angular.forEach(listOfCalculatedFunction, function (calculatedFn, key) {
                         if (calculatedFn.name == value.aggregationType) {
-                            returnValue[value.fieldname] = scope.calculatedMetric(list, calculatedFn.field1, calculatedFn.field2);
+                            returnValue[value.fieldname] = scope.calculatedMetric(list, calculatedFn.name, calculatedFn.field1, calculatedFn.field2);
                         }
                     })
                 });
+                if(Number.isNaN(returnValue)) {
+                    returnValue[value.fieldname] = "-";
+                }
                 return returnValue;
             }
 
@@ -553,7 +567,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,
