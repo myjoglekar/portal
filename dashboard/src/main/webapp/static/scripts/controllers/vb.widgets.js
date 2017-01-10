@@ -170,7 +170,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.addColumns = function (widget) {                                     //Add Columns - Popup
-        widget.columns.unshift({});
+        widget.columns.unshift({isEdit: true});
     };
 
     $scope.saveColumn = function (widget, column) {                              //Delete Columns-Popup
@@ -226,13 +226,39 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
     $scope.save = function (widget) {
         widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
-
+        var widgetColumnsData = []
+        angular.forEach(widget.columns, function (value, key) {
+            var columnData = {
+                id: value.id,
+                fieldName: value.fieldName,
+                displayName: value.displayName,
+                agregationFunction: value.agregationFunction,
+                groupPriority: value.groupPriority,
+                xAxis: value.xAxis,
+                yAxis: value.yAxis,
+                sortOrder: value.sortOrder,
+                displayFormat: value.displayFormat,
+                alignment: value.alignment,
+                baseFieldName: value.baseFieldName,
+                fieldGenerationFields: value.fieldGenerationFields,
+                fieldGenerationFunction: value.fieldGenerationFunction,
+                fieldType: value.fieldType,
+                functionParameters: value.functionParameters,
+                remarks: value.remarks,
+                sortPriority: value.sortPriority,
+                width: value.width,
+                wrapText: value.wrapText,
+                xAxisLabel: value.xAxisLabel,
+                yAxisLabel: value.yAxisLabel
+            };
+            widgetColumnsData.push(columnData)
+        });
         var data = {
             id: widget.id,
             chartType: $scope.editChartType ? $scope.editChartType : widget.chartType,
             directUrl: widget.previewUrl,
             widgetTitle: widget.previewTitle,
-            widgetColumns: widget.columns,
+            widgetColumns: widgetColumnsData,
             productName: widget.productName,
             productDisplayName: widget.productDisplayName
         };
@@ -345,7 +371,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
 
             scope.format = function (column, value) {
                 if (column.displayFormat) {
-                    if(Number.isNaN(returnValue)) {
+                    if (Number.isNaN(value)) {
                         return "-";
                     }
                     if (column.displayFormat.indexOf("%") > -1) {
@@ -388,7 +414,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush.data = response.data;
                     scope.groupingData = dataToPush;
                 }
-                console.log(scope.groupingData);
 //                console.log(scope.groupingName);
             });
 
@@ -421,9 +446,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 var value2 = scope.sum(list, field2);
                 var returnValue = "0";
                 if (value1 && value2) {
-                    returnValue= value1 / value2;
+                    returnValue = value1 / value2;
                 }
-                if(name == "ctr") {
+                if (name == "ctr") {
                     returnValue = returnValue * 100;
                 }
                 return returnValue;
@@ -468,11 +493,11 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                         if (calculatedFn.name == value.aggregationType) {
                             returnValue[value.fieldname] = scope.calculatedMetric(list, calculatedFn.name, calculatedFn.field1, calculatedFn.field2);
                         }
-                    })
+                    });
+                    if (Number.isNaN(returnValue)) {
+                        returnValue[value.fieldname] = "-";
+                    }
                 });
-                if(Number.isNaN(returnValue)) {
-                    returnValue[value.fieldname] = "-";
-                }
                 return returnValue;
             }
 
@@ -491,8 +516,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush[groupingField] = key1;
                     dataToPush._groupField = groupingField;
                     dataToPush = angular.extend(dataToPush, aggregate(value1, fullAggreagtionList));
-                    console.log("DATA TO PUSH");
-                    console.log(dataToPush);
                     dataToPush.data = scope.group(value1, currentFields, aggreationList);
                     data.push(dataToPush);
                 });
@@ -567,7 +590,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,
@@ -647,8 +670,8 @@ app.directive('tickerDirective', function ($http, $stateParams) {
         restrict: 'AE',
         template: '<div class="panel panel-default relative pnl-aln">' +
                 '<div class="m-b-10">' +
-                '<span>{{tickerTitle}}</span>' +
-                '<span class="text-lg pull-right tickers">{{totalValue}}</span>' +
+                '<span>{{tickerTitle}}</span><br>' +
+                '<span class="text-lg tickers">{{totalValue}}</span>' +
                 '</div>' +
                 '</div>',
         scope: {
