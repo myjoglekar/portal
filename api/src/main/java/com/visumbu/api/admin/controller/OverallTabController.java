@@ -10,6 +10,7 @@ import com.google.api.services.analyticsreporting.v4.model.Report;
 import com.visumbu.api.admin.service.AdwordsService;
 import com.visumbu.api.admin.service.BingService;
 import com.visumbu.api.admin.service.CenturyCallService;
+import com.visumbu.api.admin.service.DealerVaultService;
 import com.visumbu.api.admin.service.FacebookService;
 import com.visumbu.api.admin.service.GaService;
 import com.visumbu.api.admin.service.UserService;
@@ -114,11 +115,23 @@ public class OverallTabController {
 
     @Autowired
     private CenturyCallService centuryCallService;
+    
+    @Autowired
+    private DealerVaultService dealerVaultService;
 
     private final static String DYNAMIC_DISPLAY_URL = "http://ec2-35-166-148-54.us-west-2.compute.amazonaws.com:5002/vizboard/";
     private final static String DEALER_ID = "8125";
     public static final Long bingAccountId = 2610614L;
 
+    @RequestMapping(value = "inventory", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getInventory(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        String dealerId = request.getParameter("dealerMapId");
+        return dealerVaultService.getInventory(startDate, endDate, dealerId, fieldsOnly);
+    }
     @RequestMapping(value = "totalNoOfCalls", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getTotalNoOfCalls(HttpServletRequest request, HttpServletResponse response) {
