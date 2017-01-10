@@ -24,11 +24,13 @@
 <section class="content-header header-menu" ng-controller="HeaderController">
     <ol class="breadcrumb">
         <li>
-        <ui-select ng-model="selectDealer.selected" theme="selectize" ng-disabled="disabled" style="width:180px;">
+        <ui-select ng-model="selectDealer.selected" on-select="getDealerId(selectDealer.selected); loadNewUrl()" theme="selectize" ng-disabled="disabled" style="width:180px;">
             <ui-select-match placeholder="Select Dealer...">{{$select.selected.dealerName}}</ui-select-match>
             <ui-select-choices repeat="dealer in dealers | filter: $select.search">
-                <span ng-click="getDealerId(dealer); loadNewUrl()" ng-bind-html="dealer.dealerName | highlight: $select.search"></span>
+            <a>
+                <span ng-bind-html="dealer.dealerName | highlight: $select.search"></span>
                 <!--<small ng-bind-html="country.code | highlight: $select.search"></small>-->
+            </a>
             </ui-select-choices>
         </ui-select>
         </li>
