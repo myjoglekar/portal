@@ -4355,7 +4355,9 @@ i.fa.fa-pencil {
 }
 
 th {
-    color: #f1883c;
+    color: #3d464d;
+    font-weight: normal;
+    font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
 }
 
 .light-blue {
@@ -4620,7 +4622,11 @@ tfoot {
 }
 
 .table-l2t tr > th:nth-child(1) {
-    min-width:80px;
+    white-space: nowrap;
+}
+
+.table-l2t tr > td:nth-child(1) {
+    white-space: nowrap;
 }
 
 .table {
