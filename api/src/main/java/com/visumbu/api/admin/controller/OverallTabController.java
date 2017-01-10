@@ -111,7 +111,7 @@ public class OverallTabController {
 
     @Autowired
     private GaService gaService;
-    
+
     @Autowired
     private CenturyCallService centuryCallService;
 
@@ -119,7 +119,6 @@ public class OverallTabController {
     private final static String DEALER_ID = "8125";
     public static final Long bingAccountId = 2610614L;
 
-    
     @RequestMapping(value = "totalNoOfCalls", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getTotalNoOfCalls(HttpServletRequest request, HttpServletResponse response) {
@@ -131,23 +130,25 @@ public class OverallTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("totalNoOfCalls", "number", "Total Calls", 1));
-        
+
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
-        if (accountDetails.getFacebookAccountId() != null) {
-            Integer totalNoOfCalls = centuryCallService.getTotalNoOfCalls(startDate, endDate,dealerId , fieldsOnly);
+        // AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (dealerId != null) {
+            Integer totalNoOfCalls = centuryCallService.getTotalNoOfCalls(startDate, endDate, dealerId, fieldsOnly);
             Map map = new HashMap();
             map.put("totalNoOfCalls", totalNoOfCalls);
-            returnMap.put("data", map);
+            List<Map> list = new ArrayList<>();
+            list.add(map);
+            returnMap.put("data", list);
         } else {
             returnMap.put("data", null);
         }
         return returnMap;
     }
-    
+
     @RequestMapping(value = "totalNoOfSales", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getTotalNoOfSales(HttpServletRequest request, HttpServletResponse response) {
@@ -159,24 +160,25 @@ public class OverallTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("totalNoOfSales", "budget", "Total Sales", 1));
-        
+
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
-        if (accountDetails.getFacebookAccountId() != null) {
-            Integer totalNoOfCalls = centuryCallService.getTotalNoOfSales(startDate, endDate,dealerId , fieldsOnly);
+        // AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (dealerId != null) {
+            Integer totalNoOfCalls = centuryCallService.getTotalNoOfSales(startDate, endDate, dealerId, fieldsOnly);
             Map map = new HashMap();
             map.put("totalNoOfSales", totalNoOfCalls);
-            returnMap.put("data", map);
+            List<Map> list = new ArrayList<>();
+            list.add(map);
+            returnMap.put("data", list);
         } else {
             returnMap.put("data", null);
         }
         return returnMap;
     }
 
-    
     @RequestMapping(value = "totalBudget", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getTotalBudget(HttpServletRequest request, HttpServletResponse response) {
@@ -187,24 +189,26 @@ public class OverallTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("totalBudget", "number", "Total Sales", 1));
-        
+        columnDefs.add(new ColumnDef("budget", "number", "Budget", 1));
+
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
         }
-        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
-        if (accountDetails.getFacebookAccountId() != null) {
-            Integer totalNoOfCalls = centuryCallService.getTotalBudget(startDate, endDate,dealerId , fieldsOnly);
+        // AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (dealerId != null) {
+            Double budget = centuryCallService.getTotalBudget(startDate, endDate, dealerId, fieldsOnly);
             Map map = new HashMap();
-            map.put("totalBudget", totalNoOfCalls);
-            returnMap.put("data", map);
+            map.put("budget", budget);
+            List<Map> list = new ArrayList<>();
+            list.add(map);
+            returnMap.put("data", list);
         } else {
             returnMap.put("data", null);
         }
         return returnMap;
     }
-    
+
     @RequestMapping(value = "overallPerformance/{frequency}/{range}/{count}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getAdPerformance(HttpServletRequest request, HttpServletResponse response,
