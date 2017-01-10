@@ -354,8 +354,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 angular.forEach(grouping.data, function (value, key) {
                     value.$hideRows = hideStatus;
                     scope.hideAll(value, hideStatus);
-                })
-            }
+                });
+            };
             scope.doSomething = function (ev) {
                 var element = ev.srcElement ? ev.srcElement : ev.target;
                 console.log(element, angular.element(element))

@@ -34,7 +34,7 @@
         <![endif]-->
     </head>
     <body class="hold-transition login-page" ng-app="loginApp" ng-controller="LoginController">
-        <div class="login-box">
+        <div class="login-box" ng-show="loadDashboard">
             <div class="login-logo">
                 <a href="index.html"><img src="static/img/Logo-l2t.png" width="150" /></a>
             </div>
@@ -69,6 +69,7 @@
             </div>
             <!-- /.login-box-body -->
         </div>
+        <div ng-hide="loadDashboard" class="loader"><img src="static/img/l2t-loader.gif" alt="Loading..."></div>
         <!-- /.login-box -->
         <!-- jQuery 2.2.3 -->
         <script src="static/lib/js/jquery/jquery-2.2.3.min.js"></script>
