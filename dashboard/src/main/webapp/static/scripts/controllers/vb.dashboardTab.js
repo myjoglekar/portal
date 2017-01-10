@@ -89,7 +89,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $http({method: 'POST', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data}).success(function (response) {
             $scope.tabs.push({id: response.id, tabName: tab.tabName, tabClose: true});
         });
-        tab.tabName = "";
+        //tab.tabName = "";
     };
 
     $scope.deleteTab = function (index, tab) {
