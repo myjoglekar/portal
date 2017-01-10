@@ -13,6 +13,7 @@ public class AccountPerformanceReportBean {
     private String impressions;
     private String clicks;
     private String ctr;
+    private String overall;
     private String averagePosition;
     private String cost;
     private String averageCpc;
@@ -119,6 +120,14 @@ public class AccountPerformanceReportBean {
         this.ctr = ctr;
     }
 
+    public String getOverall() {
+        return overall;
+    }
+
+    public void setOverall(String overall) {
+        this.overall = overall;
+    }
+    
     public String getAveragePosition() {
         return averagePosition;
     }

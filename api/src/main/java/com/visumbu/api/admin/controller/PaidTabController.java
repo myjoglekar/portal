@@ -104,7 +104,8 @@ public class PaidTabController {
             System.out.println(endDate);
             System.out.println("-------------------------");
             List<ColumnDef> columnDefs = new ArrayList<>();
-            columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+            columnDefs.add(new ColumnDef("source", "string", "Source"));
+            columnDefs.add(new ColumnDef("account", "string", "Account Name", 1));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
@@ -129,6 +130,7 @@ public class PaidTabController {
                 for (Iterator<AccountReportRow> reportRow = adwordsAccountRow.iterator(); reportRow.hasNext();) {
                     AccountReportRow row = reportRow.next();
                     AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                    performanceBean.setOverall("Overall");
                     performanceBean.setSource("Google");
 //            performanceBean.setDevice(row.getDevice());
                     performanceBean.setImpressions(row.getImpressions());
@@ -159,6 +161,7 @@ public class PaidTabController {
                 for (Iterator<AccountPerformanceRow> reportRow = bingAccountRows.iterator(); reportRow.hasNext();) {
                     AccountPerformanceRow row = reportRow.next();
                     AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                    performanceBean.setOverall("Overall");
                     performanceBean.setSource("Bing");
                     performanceBean.setImpressions(row.getImpressions().getValue());
                     performanceBean.setClicks(row.getClicks().getValue());
@@ -1013,6 +1016,7 @@ public class PaidTabController {
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
         columnDefs.add(new ColumnDef("source", "string", "Source", 1));
+        columnDefs.add(new ColumnDef("adDescription", "string", "Ad Description"));
         columnDefs.add(new ColumnDef("campaignName", "string", "Campaign Name"));
         columnDefs.add(new ColumnDef("adGroupName", "string", "Ad Group Name"));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
