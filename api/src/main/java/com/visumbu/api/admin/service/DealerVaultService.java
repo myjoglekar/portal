@@ -36,9 +36,12 @@ public class DealerVaultService {
 
     private final static String DEALER_VAULT_URL = "http://ec2-35-160-217-210.us-west-2.compute.amazonaws.com:5003/dealervault/";
 
-    public Object getAccountPerformance(Date startDate, Date endDate, String dealerId) {
+    public Object getAccountPerformance(Date startDate, Date endDate, String dealerId, String fieldsOnly) {
         try {
             String url = DEALER_VAULT_URL + "getData?dealerId=" + dealerId + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
+            if (fieldsOnly != null) {
+                url += "&fieldsOnly=true";
+            }
             String data = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(data);

@@ -36,9 +36,12 @@ public class DynamicDisplayService {
 
     private final static String DYNAMIC_DISPLAY_URL = "http://ec2-35-160-217-210.us-west-2.compute.amazonaws.com:5002/speedshift/";
 
-    public Object getAccountPerformance(Date startDate, Date endDate, String dealerId) {
+    public Object getAccountPerformance(Date startDate, Date endDate, String dealerId, String fieldsOnly) {
         try {
             String url = DYNAMIC_DISPLAY_URL + "all?dealerId=" + dealerId + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
+            if(fieldsOnly != null) {
+                url +=  "&fieldsOnly=true";
+            }
             String data = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(data);
@@ -53,9 +56,12 @@ public class DynamicDisplayService {
         return "";
     }
 
-    public Object getLast12Weeks(Date startDate, Date endDate, String dealerId) {
+    public Object getLast12Weeks(Date startDate, Date endDate, String dealerId, String fieldsOnly) {
         try {
             String url = DYNAMIC_DISPLAY_URL + "allByWeek?dealerId=" + dealerId + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
+            if(fieldsOnly != null) {
+                url +=  "&fieldsOnly=true";
+            }
             String data = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(data);
