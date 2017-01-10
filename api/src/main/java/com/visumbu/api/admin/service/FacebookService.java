@@ -34,14 +34,14 @@ import org.json.simple.parser.ParseException;
 public class FacebookService {
 
     public final String ACCESS_TOKEN = ExampleConfig.ACCESS_TOKEN;
-    public final Long ACCOUNT_ID = ExampleConfig.ACCOUNT_ID;
+    // public final Long ACCOUNT_ID = ExampleConfig.ACCOUNT_ID;
     public final String APP_SECRET = ExampleConfig.APP_SECRET;
     public final String BASE_URL = "https://graph.facebook.com/v2.8/act_";
     public final String BASE_URL_FEED = "https://graph.facebook.com/v2.8/";
     //public final APIContext context = new APIContext(ACCESS_TOKEN).enableDebug(true);
 
-    public String getFbPublishedPosts() {
-        String url = BASE_URL + ACCOUNT_ID + "/insights?fields=adset_name%2Cclicks%2Cimpressions&date_preset=today&access_token=" + ACCESS_TOKEN;
+    public String getFbPublishedPosts(Long accountId) {
+        String url = BASE_URL + accountId + "/insights?fields=adset_name%2Cclicks%2Cimpressions&date_preset=today&access_token=" + ACCESS_TOKEN;
         return Rest.getData(url);
     }
 
@@ -436,9 +436,9 @@ public class FacebookService {
         return actions.get("count");
     }
 
-    public Object getInstagramPerformance(Date startDate, Date endDate) {
+    public Object getInstagramPerformance(Long accountId, Date startDate, Date endDate) {
         try {
-            String url = BASE_URL + ACCOUNT_ID + "/insights?"
+            String url = BASE_URL + accountId + "/insights?"
                     //+ "fields=campaigns{insights{campaign_name,clicks,impressions,ctr,cpc,actions,cost_per_action_type,spend,account_name}}"
                     + "fields=impressions%2Cclicks%2Cctr%2Ccpc%2Cspend%2Cactions%2Caccount_name%2Ccost_per_action_type"
                     + "&access_token=" + ACCESS_TOKEN;
@@ -453,11 +453,11 @@ public class FacebookService {
         return null;
     }
 
-    public Object getLast12WeeksPerformanceData(Date startDate, Date endDate) {
+    public Object getLast12WeeksPerformanceData(Long accountId, Date startDate, Date endDate) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
-            String url = BASE_URL + ACCOUNT_ID + "/insights?"
+            String url = BASE_URL + accountId + "/insights?"
                     + "fields=clicks,impressions,ctr,spend,actions,cost_per_action_type&time_increment=7&time_range[since]=" + startDateStr
                     + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
@@ -492,9 +492,9 @@ public class FacebookService {
         return null;
     }
 
-    public Object getLast12WeeksData(Date startDate, Date endDate) {
+    public Object getLast12WeeksData(Long accountId, Date startDate, Date endDate) {
         try {
-            String url = BASE_URL + ACCOUNT_ID + "/insights?"
+            String url = BASE_URL + accountId + "/insights?"
                     //+ "fields=campaigns{insights{campaign_name,clicks,impressions,ctr,cpc,actions,cost_per_action_type,spend,account_name}}"
                     + "fields=impressions%2Cclicks%2Cctr%2Ccpc%2Cspend%2Cactions%2Caccount_name%2Ccost_per_action_type"
                     + "&access_token=" + ACCESS_TOKEN;
@@ -509,9 +509,9 @@ public class FacebookService {
         return null;
     }
 
-    public Object getDayOfWeekData(Date startDate, Date endDate) {
+    public Object getDayOfWeekData(Long accountId, Date startDate, Date endDate) {
         try {
-            String url = BASE_URL + ACCOUNT_ID + "/insights?"
+            String url = BASE_URL + accountId + "/insights?"
                     //+ "fields=campaigns{insights{campaign_name,clicks,impressions,ctr,cpc,actions,cost_per_action_type,spend,account_name}}"
                     + "fields=impressions%2Cclicks%2Cctr%2Ccpc%2Cspend%2Cactions%2Caccount_name%2Ccost_per_action_type"
                     + "&access_token=" + ACCESS_TOKEN;

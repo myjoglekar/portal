@@ -120,7 +120,7 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
-        String facebookAccountIdStr = request.getParameter(serviceName + "FacebookAccountId");
+        String facebookAccountIdStr = request.getParameter(serviceName + "FacebookAdsAccountId");
         Long facebookAccountId = null;
         try {
             centuryAccountId = Long.parseLong(facebookAccountIdStr);
