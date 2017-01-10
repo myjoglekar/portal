@@ -342,7 +342,7 @@ public class OverallTabController {
             // Paid Social
             // List<AccountPerformanceReportBean> paidSocialPerformanceReportBeans = new ArrayList<>();
             accountDetails = ApiUtils.toAccountDetails(request, "facebook");
-            if (accountDetails.getAdwordsAccountId() != null) {
+            if (accountDetails.getFacebookAccountId() != null) {
                 List<Map<String, String>> accountPerformance = (List<Map<String, String>>) facebookService.getAccountPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
                 for (Iterator<Map<String, String>> iterator = accountPerformance.iterator(); iterator.hasNext();) {
                     Map<String, String> paidSocialPerformance = iterator.next();
