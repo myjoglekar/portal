@@ -16,6 +16,7 @@ public class AccountDetails {
     private Long bingAccountId;
     private Long centuryAccountId;
     private Long facebookAccountId;
+    private Long facebookSmAccountId;
     private String reviewPushAccountId;
 
     public String getReviewPushAccountId() {
@@ -74,6 +75,14 @@ public class AccountDetails {
         this.facebookAccountId = facebookAccountId;
     }
 
+    public Long getFacebookSmAccountId() {
+        return facebookSmAccountId;
+    }
+
+    public void setFacebookSmAccountId(Long facebookSmAccountId) {
+        this.facebookSmAccountId = facebookSmAccountId;
+    }
+    
     @Override
     public String toString() {
         return "AccountDetails{" + "analyticsProfileId=" + analyticsProfileId + ", analyticsAccountId=" + analyticsAccountId + ", adwordsAccountId=" + adwordsAccountId + ", bingAccountId=" + bingAccountId + ", centuryAccountId=" + centuryAccountId + ", facebookAccountId=" + facebookAccountId + ", reviewPushAccountId=" + reviewPushAccountId + '}';

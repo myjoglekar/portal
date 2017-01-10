@@ -123,6 +123,13 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
+        String facebookSmAccountIdStr = request.getParameter(serviceName + "FacebookSmAccountId");
+        Long facebookSmAccountId = null;
+        try {
+            facebookSmAccountId = Long.parseLong(facebookSmAccountIdStr);
+        } catch (Exception e) {
+
+        }
         String facebookAccountIdStr = request.getParameter(serviceName + "FacebookAdsAccountId");
         Long facebookAccountId = null;
         try {
@@ -146,6 +153,7 @@ public class ApiUtils {
         accountDetails.setAnalyticsAccountId(analyticsAccountId);
         accountDetails.setCenturyAccountId(centuryAccountId);
         accountDetails.setFacebookAccountId(facebookAccountId);
+        accountDetails.setFacebookSmAccountId(facebookSmAccountId);
         accountDetails.setReviewPushAccountId(reviewpushAccountId + "");
         return accountDetails;
     }
