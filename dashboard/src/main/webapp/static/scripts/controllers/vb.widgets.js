@@ -118,11 +118,17 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     }
     $scope.selectProductName();
 
-    $scope.changeUrl = function (url, widget) {
-        var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: url})[0];
-        widget.previewUrl = searchUrl.url;
+    $scope.changeUrl = function (displayName, widget) {
+        console.log(displayName)
+        angular.forEach($scope.productFields,function(value, key){
+            if(value.productDisplayName == displayName){
+               $scope.requiredUrl = value.url
+            }
+        })
+        //var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: displayName})[0];
+        widget.previewUrl = $scope.requiredUrl;
         widget.columns = [];
-        $http.get(searchUrl.url + "?fieldsOnly=true").success(function (response) {
+        $http.get($scope.requiredUrl + "?fieldsOnly=true").success(function (response) {
             $scope.collectionFields = [];
             angular.forEach(response.columnDefs, function (value, key) {
                 widget.columns.push({fieldName: value.fieldName, displayName: value.displayName,
@@ -332,7 +338,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
-                '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}">{{format(col, childItem[col.fieldName])}}</span></td></tr>' +
+                '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}" bind-html-unsafe="{{format(col, childItem[col.fieldName])}}"></span></td></tr>' +
                 '</tbody>' +
                 '<tfoot>' +
                 '<tr>' +
