@@ -39,6 +39,7 @@ public class DealerService {
     }
 
     public Map<String, String> getDealerAccountDetails(String dealerId) {
+        System.out.println(dealerId);
         List<DealerAccountBean> dealerAccountDetails = dealerDao.getDealerAccountDetails(dealerId);
         Map<String, String> accountMap = new HashMap<>();
         for (Iterator<DealerAccountBean> iterator = dealerAccountDetails.iterator(); iterator.hasNext();) {
