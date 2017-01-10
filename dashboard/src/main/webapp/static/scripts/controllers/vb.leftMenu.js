@@ -1,22 +1,13 @@
 app.controller("MenuController", function ($scope, $http, $stateParams, $filter, $state) {
     $scope.reportId = $stateParams.reportId;
-    console.log($stateParams.reportId);
-    console.log($stateParams.tabId);
-    console.log($stateParams.startDate + " - " + $stateParams.endDate)
-    console.log($scope.productId);
     $scope.startDate = $stateParams.startDate;
     $scope.endDate = $stateParams.endDate;
     $scope.productId = $stateParams.productId;
     $scope.reportId = $stateParams.reportId;
     $scope.dealerId = $stateParams.dealerId;
-    console.log($stateParams.dealerId);
-    // $scope.tabId = $stateParams.tabId;
 
 
     $scope.setParamsDate = function () {
-        console.log($scope.productId);
-        console.log($stateParams.tabId);
-        console.log($stateParams.startDate + " - " + $stateParams.endDate)
         $scope.startDate = $stateParams.startDate;
         $scope.endDate = $stateParams.endDate;
         $scope.dealerId = $stateParams.dealerId;

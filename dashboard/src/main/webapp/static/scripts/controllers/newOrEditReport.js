@@ -176,11 +176,16 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         $scope.setPreviewChartType = chartType.type;
         $scope.setPreviewColumn = reportWidget;
     };
-    $scope.changeUrl = function (url, reportWidget) {                                       //Search dynamic Url      
-        var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: url})[0];
-        reportWidget.previewUrl = searchUrl.url;
+    $scope.changeUrl = function (displayName, reportWidget) {                                       //Search dynamic Url  
+        angular.forEach($scope.productFields,function(value, key){
+            if(value.productDisplayName == displayName){
+               $scope.requiredUrl = value.url;
+            }
+        });
+        //var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: url})[0];
+        reportWidget.previewUrl = $scope.requiredUrl;
         reportWidget.columns = [];
-        $http.get(searchUrl.url + "?fieldsOnly=true").success(function (response) {
+        $http.get($scope.requiredUrl + "?fieldsOnly=true").success(function (response) {
             $scope.collectionFields = [];
             angular.forEach(response.columnDefs, function (value, key) {
                 reportWidget.columns.push({fieldName: value.fieldName, displayName: value.displayName,

@@ -119,10 +119,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.selectProductName();
 
     $scope.changeUrl = function (displayName, widget) {
-        console.log(displayName)
         angular.forEach($scope.productFields,function(value, key){
             if(value.productDisplayName == displayName){
-               $scope.requiredUrl = value.url
+               $scope.requiredUrl = value.url;
             }
         })
         //var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: displayName})[0];
