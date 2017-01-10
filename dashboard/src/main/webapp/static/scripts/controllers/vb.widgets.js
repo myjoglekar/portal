@@ -11,12 +11,13 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {name: 'Count', value: "count"},
         {name: 'Min', value: "min"},
         {name: 'Max', value: "max"},
-        {name: 'CTL', value: "ctl"},
+        {name: 'CPL', value: "cpl"},
         {name: 'CPLC', value: "cplc"},
         {name: 'CPComment', value: "cpcomment"},
         {name: 'CPostE', value: "cposte"},
-        {name: 'CPostE', value: "cpagee"},
-        {name: 'CPP', value: "cpp"}
+        {name: 'CPageE', value: "cpagee"},
+        {name: 'CPP', value: "cpp"},
+        {name: 'CPR', value: "cpr"}
 
     ];   //Aggregation Type-Popup
     $scope.selectGroupPriorities = [
