@@ -226,7 +226,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 
     $scope.save = function (widget) {
         widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
-        var widgetColumnsData = []
+        var widgetColumnsData = [];
         angular.forEach(widget.columns, function (value, key) {
             var columnData = {
                 id: value.id,
@@ -251,7 +251,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 xAxisLabel: value.xAxisLabel,
                 yAxisLabel: value.yAxisLabel
             };
-            widgetColumnsData.push(columnData)
+            widgetColumnsData.push(columnData);
         });
         var data = {
             id: widget.id,

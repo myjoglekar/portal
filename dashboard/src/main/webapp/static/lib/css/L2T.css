@@ -4429,7 +4429,7 @@ a.mail-to {
 }
 
 .table>thead>tr>th {
-    background: rgba(90, 113, 122, 0.28);
+    background: #f1f1f1;
 }
 
 .add-widget {
@@ -4555,14 +4555,14 @@ button.close {
 }
 
 .table-bg {
-    color: #f1883c;
+    color:#3d464d;
     font-family: 'proxima_nova_ltsemibold', Helvetica, Arial, sans-serif;
     font-weight: normal;
-    background: rgb(209, 215, 218) !important;
+    background: #f1f1f1 !important;
     border-top: none !important;
     border-bottom: none !important;
     font-style: normal;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .table-l2t {
@@ -4575,7 +4575,7 @@ button.close {
 
 .table-l2t tr td {
     color: #3d464d;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .table-l2t .text-info {
@@ -4604,11 +4604,11 @@ button.close {
 }
 
 .table > tbody > tr.info > td {
-    background-color: #f1f1f1 !important;
+    background-color: #fff !important;
 }
 
 tfoot {
-    background: #d1d7da;
+    background: #f1f1f1;
 }
 
 .c3 svg {
