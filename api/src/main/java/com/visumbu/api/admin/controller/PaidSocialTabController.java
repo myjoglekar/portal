@@ -139,7 +139,7 @@ public class PaidSocialTabController {
         }
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
         if (accountDetails.getFacebookAccountId() != null) {
-            Object accountPerformance = facebookService.getAccountPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            Object accountPerformance = facebookService.getAccountPerformance(accountDetails.getFacebookAccountId(), startDate, endDate, "");
             returnMap.put("data", accountPerformance);
         } else {
             returnMap.put("data", null);

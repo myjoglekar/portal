@@ -36,7 +36,7 @@ public class DealerVaultService {
 
     private final static String DEALER_VAULT_URL = "http://ec2-35-166-148-54.us-west-2.compute.amazonaws.com:5003/dealervault/";
 
-    public Object getAccountPerformance(Date startDate, Date endDate, String dealerId, String fieldsOnly) {
+    public Object getInventory(Date startDate, Date endDate, String dealerId, String fieldsOnly) {
         try {
             String url = DEALER_VAULT_URL + "getData?dealerId=" + dealerId + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
             if (fieldsOnly != null) {

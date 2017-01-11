@@ -371,7 +371,7 @@ public class GaService {
             returnMap.put("columnDefs", columnDefs);
             if (rows == null) {
                 System.out.println("No data found for ");
-                return null;
+                return new HashMap();
             }
             List<Map<String, String>> data = new ArrayList<>();
             for (ReportRow row : rows) {

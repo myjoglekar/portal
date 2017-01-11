@@ -45,7 +45,7 @@ public class FacebookService {
         return Rest.getData(url);
     }
 
-    public Object getAccountPerformance(Long accountId, Date startDate, Date endDate) {
+    public Object getAccountPerformance(Long accountId, Date startDate, Date endDate, String aggregation) {
         try {
             String startDateStr = DateUtils.dateToString(startDate, "YYYY-MM-dd");
             String endDateStr = DateUtils.dateToString(endDate, "YYYY-MM-dd");
@@ -53,6 +53,12 @@ public class FacebookService {
             String url = BASE_URL + accountId + "/insights?fields=account_name,impressions,clicks,ctr,cpc,spend,actions,reach,cost_per_action_type,adset_name&"
                     + "time_range[since]=" + startDateStr + "&time_range[until]=" + endDateStr
                     + "&access_token=" + ACCESS_TOKEN;
+            if(aggregation.equalsIgnoreCase("weekly")) {
+                url +="&time_increment=7";
+            }
+            if(aggregation.equalsIgnoreCase("daily")) {
+                url +="&time_increment=1";
+            }
             String fbData = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(fbData);
