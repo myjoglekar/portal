@@ -346,7 +346,7 @@ public class UserController {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/overall/overallPerformance/summary/day/0;Summary",
-            "../api/admin/overall/overallPerformance/summary/week/12;12 Weeks Summary",
+            "../api/admin/overall/overallPerformance/detailed/week/12;12 Weeks Summary",
             "../api/admin/overall/overallPerformance/detailed/day/0;Summary By Source",
             "../api/admin/overall/inventory;Inventory",
             "../api/admin/overall/totalNoOfCalls;Total Calls",
