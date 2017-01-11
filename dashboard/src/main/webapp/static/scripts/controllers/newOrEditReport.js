@@ -247,7 +247,6 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
             if (widgetOrder) {
                 $http({method: 'GET', url: 'admin/ui/dbReportUpdateOrder/' + $stateParams.reportId + "?widgetOrder=" + widgetOrder});
             }
-        }
-        ;
+        };
     };
 });

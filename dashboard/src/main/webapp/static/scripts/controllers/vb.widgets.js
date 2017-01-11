@@ -332,7 +332,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<i ng-if="item._groupField" style="cursor: pointer" class="fa" 22 ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
 //                ' {{item._groupField}} : {{item._key}}</td>' +
                 ' {{item._key}}</td>' +
-                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '<span style="float: {{col.alignment}}">{{item[col.fieldName]}}</span>' +
+                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '<span style="float: {{col.alignment}}">{{item[col.fieldName]}}</span>' + //ng-bind-html-unsafe=todo.text
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
@@ -388,9 +388,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 return value;
             };
 
-            groupByFields = []; // ['device', 'campaignName'];
-            aggreagtionList = [];
-
+            var groupByFields = []; // ['device', 'campaignName'];
+            var aggreagtionList = [];
             for (var i = 0; i < scope.columns.length; i++) {
                 if (scope.columns[i].groupPriority) {
                     groupByFields.push(scope.columns[i].fieldName);
