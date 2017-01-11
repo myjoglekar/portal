@@ -269,7 +269,7 @@ public class OverallTabController {
                 return returnMap;
             }
             List<AccountPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "paid");
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
             if (accountDetails.getAdwordsAccountId() != null) {
                 AccountReport adwordsAccountReport = adwordsService.getAccountReport(startDate, endDate, accountDetails.getAdwordsAccountId(), aggregation, "SEARCH");
                 List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
@@ -300,7 +300,9 @@ public class OverallTabController {
                     performanceBean.setImpressions(row.getImpressions().getValue());
                     performanceBean.setClicks(row.getClicks().getValue());
                     performanceBean.setCtr(row.getCtr().getValue());
-                    performanceBean.setDay(DateUtils.getStartDayOfWeek(DateUtils.toDate(row.getGregorianDate().getValue(), "MM/dd/yyyy")));
+                    if (aggregation.equalsIgnoreCase("week")) {
+                        performanceBean.setDay(DateUtils.getStartDayOfWeek(DateUtils.toDate(row.getGregorianDate().getValue(), "MM/dd/yyyy")));
+                    }
                     performanceBean.setCost(row.getSpend().getValue());
                     performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                     performanceBean.setCpa(row.getCostPerConversion().getValue());
@@ -398,19 +400,23 @@ public class OverallTabController {
             try {
                 Map jsonMap = JsonSimpleUtils.jsonToMap((JSONObject) dynamicDisplayService.getAccountPerformance(startDate, endDate, dealerId, fieldsOnly));
                 List jsonDataList = (List) jsonMap.get("data");
+                System.out.println("DYNAMIC DISPLAY ");
+                System.out.println(jsonDataList);
                 for (Iterator iterator = jsonDataList.iterator(); iterator.hasNext();) {
+                    System.out.println("CURRENT DATA DYNAMIC DISPLAY");
                     Map map = (Map) iterator.next();
+                    System.out.println(map);
                     AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
                     performanceBean.setSource("Dynamic Display");
-                    performanceBean.setImpressions((String) map.get("impression"));
-                    performanceBean.setClicks((String) map.get("clicks"));
-                    performanceBean.setCtr((String) map.get("ctr"));
-                    performanceBean.setCost((String) map.get("spend"));
-                    performanceBean.setDay((String) map.get("date"));
-                    performanceBean.setAverageCpc((String) map.get("cpc"));
-                    performanceBean.setCpa((String) map.get("cost_page_engagement"));
+                    performanceBean.setImpressions(map.get("impression") + "");
+                    performanceBean.setClicks( map.get("engage_clicks") + "");
+                    performanceBean.setCtr(map.get("ctr") + "");
+                    performanceBean.setCost("0");
+                    performanceBean.setDay("-");
+                    performanceBean.setAverageCpc("0");
+                    performanceBean.setCpa("0");
                     performanceBean.setAveragePosition("0");
-                    performanceBean.setConversions((String) map.get("direct_conversions"));
+                    performanceBean.setConversions(map.get("direct_conversions") + "");
                     performanceReportBeans.add(performanceBean);
                 }
             } catch (Exception ex) {
