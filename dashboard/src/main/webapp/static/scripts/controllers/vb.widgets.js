@@ -729,8 +729,8 @@ app.directive('tickerDirective', function ($http, $stateParams) {
                 var total = 0;
                 for (var i = 0; i < setData.length; i++) {
                     total += parseFloat(setData[i]);
-                }               
-                    scope.totalValue = format(tickerName, total);
+                }
+                scope.totalValue = format(tickerName, total);
             });
         }
     };
