@@ -199,7 +199,7 @@ a:hover, a:active, a:focus {
     float: right;
     background-color: transparent;
     background-image: none;
-    padding: 15px 15px;
+    padding: 0px 15px;
     font-family: fontAwesome
 }
 .main-header .sidebar-toggle:before {
@@ -4403,7 +4403,7 @@ a.mail-to {
     color: #3d464d;
 }
 .skin-blue .main-header .navbar .sidebar-toggle {
-    color: #9dd5d7 !important;
+    color: #fff !important;
 }
 .integerAlign {
     text-align: right;
@@ -4641,5 +4641,20 @@ tfoot {
     margin-right: auto;
     margin-top:25%;
 }
-
+@media (max-width:767px) {
+ .mobile-navbar{
+        margin: 0;
+        z-index: 20001;
+        position: relative;
+        float: right;
+    }
+    .visible-xs{
+        display: block !important;
+    }
+}
+@media (max-width:767px) {
+    .hidden-xs {
+        display: none!important
+    }
+}
 

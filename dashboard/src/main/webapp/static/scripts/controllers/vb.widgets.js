@@ -1,3 +1,7 @@
+Array.prototype.move = function(from,to){
+  this.splice(to,0,this.splice(from,1)[0]);
+  return this;
+};
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
     $scope.permission = localStorageService.get("permission");
     $scope.selectAggregations = [
@@ -283,8 +287,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         if (widget !== "" && widget !== null) {
             var otherObj = $scope.widgets[index];
             var otherIndex = $scope.widgets.indexOf(widget);
-            $scope.widgets[index] = widget;
-            $scope.widgets[otherIndex] = otherObj;
+            $scope.widgets.move(otherIndex, index);
+//            $scope.widgets[index] = widget;
+//            $scope.widgets[otherIndex] = otherObj;
             var widgetOrder = $scope.widgets.map(function (value, key) {
                 if (value) {
                     return value.id;
@@ -325,7 +330,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
                 ' {{grouping._key}}' +
                 '</td>' +
-                '<td ng-repeat="col in columns">' + '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
+                '<td ng-repeat="col in columns">' + 
+//                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
+                    '<div style="float: {{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>'+
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
@@ -1342,6 +1349,11 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                     var yAxis = ['', 'y-1', 'y-2']
                     return yAxis[chartYAxis];
                 }
+            }])
+        .filter('to_trusted', ['$sce', function ($sce) {
+                return function (text) {
+                    return $sce.trustAsHtml(text);
+                };
             }]);
 
 app.service('stats', function ($filter) {

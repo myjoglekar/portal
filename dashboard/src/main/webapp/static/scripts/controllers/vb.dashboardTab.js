@@ -114,8 +114,11 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         if (tab !== "" && tab !== null) {
             var otherObj = $scope.tabs[index];
             var otherIndex = $scope.tabs.indexOf(tab);
-            $scope.tabs[index] = tab;
-            $scope.tabs[otherIndex] = otherObj;
+            
+            $scope.tabs.move(otherIndex, index);
+            
+//            $scope.tabs[index] = tab;
+//            $scope.tabs[otherIndex] = otherObj;
             var tabOrder = $scope.tabs.map(function (value, key) {
                 if (value) {
                     return value.id;
