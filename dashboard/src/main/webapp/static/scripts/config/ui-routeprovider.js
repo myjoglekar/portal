@@ -48,7 +48,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 activetab: 'report'
             });
 
-    $urlRouterProvider.otherwise('index/dashboard/dashboard/1/widget/1/1/1?29/23');
+    $urlRouterProvider.otherwise('index/dashboard/widget/1');
 });
 //
 //Array.prototype.move = function (from, to) {
