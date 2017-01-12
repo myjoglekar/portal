@@ -7,7 +7,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.selectTabID = $state;
 
     $scope.selectDealer = {};
-    $http.get('admin/user/allowedDealers').success(function (response) {
+    $http.get('admin/dealer').success(function (response) {
         $stateParams.dealerId = response[0].id;
         $state.go("index.dashboard.widget", {dealerId:$stateParams.dealerId, tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
         //$state.go('')
