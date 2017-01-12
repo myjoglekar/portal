@@ -87,7 +87,7 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.None, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
 
@@ -169,7 +169,7 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.None, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
 
@@ -260,7 +260,7 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.None, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
 
@@ -360,10 +360,10 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.None, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impressions Share", ColumnDef.Aggregation.None, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
 
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -446,14 +446,14 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.None, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("impressionShare", "number", "Impression Share", ColumnDef.Aggregation.None, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("searchImpressionsShareLostByBudget", "number", "Search Impressions Share Lost By Budget", ColumnDef.Aggregation.None, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("searchImpressionsShareLostByRank", "number", "Search Impressions Share Lost By Rank", ColumnDef.Aggregation.None, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("impressionShare", "number", "Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("searchImpressionsShareLostByBudget", "number", "Search Impression Share Lost By Budget", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+        columnDefs.add(new ColumnDef("searchImpressionsShareLostByRank", "number", "Search Impression Share Lost By Rank", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
 
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -524,10 +524,10 @@ public class DisplayTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.None, ColumnDef.Format.DECIMAL1));
+            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impressions Share", ColumnDef.Aggregation.None, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             returnMap.put("columnDefs", columnDefs);
             if (fieldsOnly != null) {
                 return returnMap;
@@ -584,13 +584,13 @@ public class DisplayTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.None, ColumnDef.Format.DECIMAL1));
+            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impressions Share", ColumnDef.Aggregation.None, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("searchImpressionsShareLostDueToBudget", "number", "Search Impressions Share Lost Due To Budget", ColumnDef.Aggregation.None, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("searchImpressionsShareLostDueToBudget", "number", "Search Impression Share Lost Due To Budget", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
 
-            columnDefs.add(new ColumnDef("searchImpressionsShareLostDueToRank", "number", "Search Impressions Share Lost Due To Rank", ColumnDef.Aggregation.None, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("searchImpressionsShareLostDueToRank", "number", "Search Impression Share Lost Due To Rank", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("day", "string", "Day"));
             columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
