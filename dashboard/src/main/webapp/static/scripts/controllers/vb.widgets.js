@@ -1,7 +1,3 @@
-Array.prototype.move = function(from,to){
-  this.splice(to,0,this.splice(from,1)[0]);
-  return this;
-};
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
     $scope.permission = localStorageService.get("permission");
     $scope.selectAggregations = [
@@ -30,10 +26,15 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     ];
     $scope.selectDateDurations = [
         {duration: "None"},
-        {duration: "Last Week"},
-        {duration: "Last Three Months"},
-        {duration: "Last Six Months"},
-        {duration: "Last Six Months"}
+        {duration: "Today"},
+        {duration: "Last N days"},
+        {duration: "Last N Weeks"},
+        {duration: "Last N Months"},
+        {duration: "This Month"},
+        {duration: "This Year"},
+        {duration: "Last Year"},
+        {duration: "Yesterday"},
+        {duration: "Custom"}
     ]; // Month Durations-Popup
     $scope.selectXAxis = [
         {label: 'None', value: ""},
@@ -68,6 +69,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         }
         $http.get("admin/ui/dbWidget/" + $stateParams.tabId).success(function (response) {
             $scope.widgets = response;
+            console.log(response)
         });
     }
     getWidgetItem();
@@ -234,6 +236,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.save = function (widget) {
+        console.log(widget)
         widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
         var widgetColumnsData = [];
         angular.forEach(widget.columns, function (value, key) {
@@ -269,7 +272,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             widgetTitle: widget.previewTitle,
             widgetColumns: widgetColumnsData,
             productName: widget.productName,
-            productDisplayName: widget.productDisplayName
+            productDisplayName: widget.productDisplayName,
+            tableFooter: widget.tableFooter,
+            dateDuration: widget.dateDuration
         };
         widget.chartType = "";
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
@@ -283,13 +288,25 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.widget = "";
     };
 
+    function arraymove(arr, fromIndex, toIndex) {
+        var element = arr[fromIndex];
+        arr.splice(fromIndex, 1);
+        arr.splice(toIndex, 0, element);
+    }
+
     $scope.onDropComplete = function (index, widget, evt) {
+
         if (widget !== "" && widget !== null) {
+            console.log(widget)
             var otherObj = $scope.widgets[index];
             var otherIndex = $scope.widgets.indexOf(widget);
-            $scope.widgets.move(otherIndex, index);
-//            $scope.widgets[index] = widget;
-//            $scope.widgets[otherIndex] = otherObj;
+//            $scope.widgets.move(otherIndex, index);
+//            var element = $scope.widgets[otherObj];
+//            $scope.widgets.splice(otherObj, 1);
+//            $scope.widgets.splice(otherIndex, 0, element);
+
+            $scope.widgets[index] = widget;
+            $scope.widgets[otherIndex] = otherObj;
             var widgetOrder = $scope.widgets.map(function (value, key) {
                 if (value) {
                     return value.id;
@@ -301,6 +318,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             }
         }
     };
+
+    function splitCamelCase(s) {
+        return s.split(/(?=[A-Z])/).join(' ');
+    }
 });
 
 app.directive('dynamicTable', function ($http, $filter, $stateParams) {
@@ -310,7 +331,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             dynamicTableUrl: '@',
             widgetId: '@',
             widgetColumns: '@',
-            setTableFn: '&'
+            setTableFn: '&',
+            tableFooter:'@'
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t">' +
@@ -323,16 +345,16 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
-                '<tbody ng-repeat="grouping in groupingData.data | orderBy: sortColumn:reverse: true">' +
+                '<tbody ng-repeat="grouping in groupingData.data">' +
                 '<tr class="text-capitalize text-info info">' +
                 '<td class="group-bg" ng-if="groupingName">' +
                 '<i style="cursor: pointer" class="fa" 11 ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
                 ' {{grouping._key}}' +
                 '</td>' +
-                '<td ng-repeat="col in columns">' + 
+                '<td ng-repeat="col in columns">' +
 //                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
-                    '<div style="float: {{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>'+
+                '<div style="float: {{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>' +
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
@@ -346,7 +368,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
                 '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}">{{format(col, childItem[col.fieldName])}}</span></span></td></tr>' +
                 '</tbody>' +
-                '<tfoot>' +
+                '<tfoot ng-if="displayFooter == \'true\'">' +
                 '<tr>' +
                 '<td ng-if="groupingName"></td>' +
                 //'<td ng-repeat="col in columns" class="col.alignment[groupingData]">{{format(col, groupingData[col.fieldName])}}</td>' +
@@ -356,6 +378,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</table>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
+            scope.displayFooter  = scope.tableFooter;
+            console.log("Table Footer : "+scope.displayFooter)
             scope.loadingTable = true;
             scope.clickRow = function () {
                 scope.grouping.$hideRows = false;
@@ -378,6 +402,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             scope.columns = [];
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 scope.columns.push(value);
+                console.log(value)
             });
 
             scope.format = function (column, value) {
@@ -406,7 +431,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
                 }
             }
-            fullAggreagtionList = aggreagtionList;
+            var fullAggreagtionList = aggreagtionList;
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
@@ -418,16 +443,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
                     dataToPush.data = groupedData;
                     scope.groupingData = dataToPush;
-//                angular.forEach(scope.groupingData, function (value, key) {
-//                    scope.groupingName = value._groupField;
-//                })
                 } else {
                     var dataToPush = {};
                     dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
                     dataToPush.data = response.data;
                     scope.groupingData = dataToPush;
                 }
-//                console.log(scope.groupingName);
+                console.log(scope.groupingData);
             });
 
             scope.sortColumn = scope.columns;
@@ -603,7 +625,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,

@@ -134,6 +134,12 @@ public class TabWidget implements Serializable {
     @Size(max = 255)
     @Column(name = "productName")
     private String productName;
+    @Size(max = 45)
+    @Column(name = "table_footer")
+    private Boolean tableFooter;
+    @Size(max = 255)
+    @Column(name = "date_duration")
+    private String dateDuration;
     @Size(max = 255)
     @Column(name = "product_display_name")
     private String productDisplayName;
@@ -354,6 +360,22 @@ public class TabWidget implements Serializable {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public Boolean getTableFooter() {
+        return tableFooter;
+    }
+
+    public void setTableFooter(Boolean tableFooter) {
+        this.tableFooter = tableFooter;
+    }
+    
+    public String getDateDuration() {
+        return dateDuration;
+    }
+
+    public void setDateDuration(String dateDuration) {
+        this.dateDuration = dateDuration;
     }
 
     public String getProductDisplayName() {
