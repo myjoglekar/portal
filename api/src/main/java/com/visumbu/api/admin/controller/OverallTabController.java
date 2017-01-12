@@ -365,7 +365,9 @@ public class OverallTabController {
                     performanceBean.setSource("Video");
                     performanceBean.setImpressions(row.getImpressions());
                     performanceBean.setClicks(row.getClicks());
-                    performanceBean.setClicks(row.getWeek());
+                    if (aggregation.equalsIgnoreCase("week")) {
+                        performanceBean.setDay(row.getWeek());
+                    }
                     performanceBean.setCtr(row.getCtr());
                     performanceBean.setCost(row.getCost());
                     performanceBean.setAverageCpc(row.getAvgCPC());
@@ -409,7 +411,7 @@ public class OverallTabController {
                     AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
                     performanceBean.setSource("Dynamic Display");
                     performanceBean.setImpressions(map.get("impression") + "");
-                    performanceBean.setClicks( map.get("engage_clicks") + "");
+                    performanceBean.setClicks(map.get("engage_clicks") + "");
                     performanceBean.setCtr(map.get("ctr") + "");
                     performanceBean.setCost("0");
                     performanceBean.setDay("-");
