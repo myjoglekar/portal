@@ -1,12 +1,10 @@
 app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $stateParams, $state, $location) {
     $scope.userName = $cookies.getObject("username");
+    $scope.fullName = $cookies.getObject("fullname");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
 
     $scope.selectTabID = $state;
-    $scope.userName = $cookies.getObject("username");
-    $scope.productId = $stateParams.productId;
-    $scope.tabId = $stateParams.tabId;
 
     $scope.selectDealer = {};
     $http.get('admin/dealer').success(function (response) {
