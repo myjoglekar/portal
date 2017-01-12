@@ -46,6 +46,8 @@ public class TabWidgetBean {
     private Integer widgetOrder;
     private String directUrl;
     private String productName;
+    private Boolean tableFooter;
+    private String dateDuration;
     private String productDisplayName;
     private List<WidgetColumnBean> widgetColumns;
 
@@ -249,6 +251,22 @@ public class TabWidgetBean {
         this.productName = productName;
     }
 
+    public Boolean getTableFooter() {
+        return tableFooter;
+    }
+
+    public void setTableFooter(Boolean tableFooter) {
+        this.tableFooter = tableFooter;
+    }
+       
+    public String getDateDuration() {
+        return dateDuration;
+    }
+
+    public void setDateDuration(String dateDuration) {
+        this.dateDuration = dateDuration;
+    }
+
     public String getProductDisplayName() {
         return productDisplayName;
     }
@@ -259,7 +277,6 @@ public class TabWidgetBean {
 
     @Override
     public String toString() {
-        return "TabWidgetBean{" + "id=" + id + ", chartType=" + chartType + ", closable=" + closable + ", col=" + col + ", dataset=" + dataset + ", datasource=" + datasource + ", dimension=" + dimension + ", displayColumns=" + displayColumns + ", editable=" + editable + ", filters=" + filters + ", icon=" + icon + ", minHeight=" + minHeight + ", minimizable=" + minimizable + ", paginationCount=" + paginationCount + ", refreshable=" + refreshable + ", row=" + row + ", sort=" + sort + ", status=" + status + ", widgetTitle=" + widgetTitle + ", width=" + width + ", widthClass=" + widthClass + ", widgetOrder=" + widgetOrder + ", directUrl=" + directUrl + ", productName=" + productName + ", productDisplayName=" + productDisplayName + ", widgetColumns=" + widgetColumns + '}';
-    }
-    
+        return "TabWidgetBean{" + "id=" + id + ", chartType=" + chartType + ", closable=" + closable + ", col=" + col + ", dataset=" + dataset + ", datasource=" + datasource + ", dimension=" + dimension + ", displayColumns=" + displayColumns + ", editable=" + editable + ", filters=" + filters + ", icon=" + icon + ", minHeight=" + minHeight + ", minimizable=" + minimizable + ", paginationCount=" + paginationCount + ", refreshable=" + refreshable + ", row=" + row + ", sort=" + sort + ", status=" + status + ", widgetTitle=" + widgetTitle + ", width=" + width + ", widthClass=" + widthClass + ", widgetOrder=" + widgetOrder + ", directUrl=" + directUrl + ", productName=" + productName + ", tableFooter=" + tableFooter + ", dateDuration=" + dateDuration + ", productDisplayName=" + productDisplayName + ", widgetColumns=" + widgetColumns + '}';
+    }       
 }

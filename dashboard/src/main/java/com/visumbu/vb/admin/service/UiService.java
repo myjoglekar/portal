@@ -126,6 +126,8 @@ public class UiService {
         tabWidget.setWidgetTitle(tabWidgetBean.getWidgetTitle());
         tabWidget.setProductName(tabWidgetBean.getProductName());
         tabWidget.setProductDisplayName(tabWidgetBean.getProductDisplayName());
+        tabWidget.setTableFooter(tabWidgetBean.getTableFooter());
+        tabWidget.setDateDuration(tabWidgetBean.getDateDuration());
         TabWidget savedTabWidget = uiDao.saveTabWidget(tabWidget);
         List<WidgetColumnBean> widgetColumns = tabWidgetBean.getWidgetColumns();
         uiDao.deleteWidgetColumns(tabWidget.getId());
