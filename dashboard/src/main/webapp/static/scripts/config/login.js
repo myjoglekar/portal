@@ -10,6 +10,7 @@ app.controller("LoginController", function ($scope, $http, $window, $cookies, lo
             if (!response.authData) {
                 $scope.errorMessage = response.errorMessage;
             } else {
+                $cookies.putObject("fullname", response.authData.fullName);
                 $cookies.putObject("username", response.authData.userName);
                 localStorageService.set("permission", response.authData.permission)
                 //$cookies.putObject("isAdmin", response.isAdmin);

@@ -1,3 +1,7 @@
+//Array.prototype.move = function (from, to) {
+//    this.splice(to, 0, this.splice(from, 1)[0]);
+//    return this;
+//};
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
     $scope.permission = localStorageService.get("permission");
     $scope.selectAggregations = [
@@ -301,9 +305,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             var otherObj = $scope.widgets[index];
             var otherIndex = $scope.widgets.indexOf(widget);
 //            $scope.widgets.move(otherIndex, index);
-//            var element = $scope.widgets[otherObj];
-//            $scope.widgets.splice(otherObj, 1);
-//            $scope.widgets.splice(otherIndex, 0, element);
 
             $scope.widgets[index] = widget;
             $scope.widgets[otherIndex] = otherObj;
@@ -438,7 +439,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 if (groupByFields && groupByFields.length > 0) {
                     scope.groupingName = groupByFields;
                     groupedData = scope.group(response.data, groupByFields, aggreagtionList);
-
+                    console.log(groupedData);
                     var dataToPush = {};
                     dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
                     dataToPush.data = groupedData;
@@ -471,7 +472,11 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 var sum = 0;
                 for (var i in list)
                 {
-                    sum = sum + Number(list[i][fieldname]);
+                    if (isNaN(list[i][fieldname])) {
+
+                    } else {
+                        sum = sum + Number(list[i][fieldname]);
+                    }
                 }
                 return sum;
             };
@@ -554,6 +559,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush.data = scope.group(value1, currentFields, aggreationList);
                     data.push(dataToPush);
                 });
+                console.log(data);
                 return data;
             };
         }

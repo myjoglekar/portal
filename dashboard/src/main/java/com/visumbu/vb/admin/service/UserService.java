@@ -147,7 +147,7 @@ public class UserService {
         }
         if(user == null) {
             System.out.println("Creating user " + userName);
-            user = userDao.createNewUser(userId, userName);
+            user = userDao.createNewUser(userId, userName, authData.getFullName());
             userDao.initUser(user);
         }
         return user;
