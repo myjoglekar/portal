@@ -50,8 +50,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.otherwise('index/dashboard/dashboard/1/widget/1/1/1?29/23');
 });
-
-Array.prototype.move = function (from, to) {
-    this.splice(to, 0, this.splice(from, 1)[0]);
-    return this;
-};
+//
+//Array.prototype.move = function (from, to) {
+//    this.splice(to, 0, this.splice(from, 1)[0]);
+//    return this;
+//};

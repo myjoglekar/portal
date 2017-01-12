@@ -1,7 +1,7 @@
-Array.prototype.move = function(from,to){
-  this.splice(to,0,this.splice(from,1)[0]);
-  return this;
-};
+//Array.prototype.move = function (from, to) {
+//    this.splice(to, 0, this.splice(from, 1)[0]);
+//    return this;
+//};
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
     $scope.permission = localStorageService.get("permission");
     $scope.selectAggregations = [
@@ -287,9 +287,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         if (widget !== "" && widget !== null) {
             var otherObj = $scope.widgets[index];
             var otherIndex = $scope.widgets.indexOf(widget);
-            $scope.widgets.move(otherIndex, index);
-//            $scope.widgets[index] = widget;
-//            $scope.widgets[otherIndex] = otherObj;
+//            $scope.widgets.move(otherIndex, index);
+            $scope.widgets[index] = widget;
+            $scope.widgets[otherIndex] = otherObj;
             var widgetOrder = $scope.widgets.map(function (value, key) {
                 if (value) {
                     return value.id;
@@ -330,9 +330,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
                 ' {{grouping._key}}' +
                 '</td>' +
-                '<td ng-repeat="col in columns">' + 
+                '<td ng-repeat="col in columns">' +
 //                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
-                    '<div style="float: {{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>'+
+                '<div style="float: {{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>' +
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
@@ -406,14 +406,14 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
                 }
             }
-            fullAggreagtionList = aggreagtionList;
+            var fullAggreagtionList = aggreagtionList;
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
                 if (groupByFields && groupByFields.length > 0) {
                     scope.groupingName = groupByFields;
                     groupedData = scope.group(response.data, groupByFields, aggreagtionList);
-
+                    console.log(groupedData);
                     var dataToPush = {};
                     dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
                     dataToPush.data = groupedData;
@@ -449,7 +449,11 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 var sum = 0;
                 for (var i in list)
                 {
-                    sum = sum + Number(list[i][fieldname]);
+                    if (isNaN(list[i][fieldname])) {
+
+                    } else {
+                        sum = sum + Number(list[i][fieldname]);
+                    }
                 }
                 return sum;
             };
@@ -532,6 +536,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush.data = scope.group(value1, currentFields, aggreationList);
                     data.push(dataToPush);
                 });
+                console.log(data);
                 return data;
             };
         }
