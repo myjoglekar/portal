@@ -261,7 +261,7 @@ public class OverallTabController {
             }
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.None, ColumnDef.Format.DECIMAL1));
+            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             returnMap.put("columnDefs", columnDefs);
