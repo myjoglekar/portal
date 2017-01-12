@@ -80,8 +80,8 @@ public class UserService {
         return VbUtils.getAuthData(userBean.getUsername(), userBean.getPassword());
     }
 
-    public SecurityAuthBean getPermissions(String accessToken) {
-        return VbUtils.getAuthData(accessToken);
+    public SecurityAuthBean getPermissions(String accessToken, String userGuid) {
+        return VbUtils.getAuthDataByGuid(accessToken, userGuid);
     }
 
     public LoginUserBean authenicate(LoginUserBean userBean) {

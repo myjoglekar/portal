@@ -97,6 +97,7 @@ public class UserController {
         session.setAttribute("username", authData.getUserName());
         session.setAttribute("accessToken", authData.getAccessToken());
         session.setAttribute("permission", authData.getPermission());
+        session.setAttribute("userGuid", authData.getUserGuid());
         Map returnMap = new HashMap();
         returnMap.put("authData", authData);
         returnMap.put("dealers", getDealerBySecuityBean(authData));
@@ -110,7 +111,9 @@ public class UserController {
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
         }
-        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"));
+        System.out.println((String) session.getAttribute("userGuid"));
+        System.out.println((String) session.getAttribute("accessToken"));
+        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"), (String) session.getAttribute("userGuid"));
         return getDealerBySecuityBean(authData);
     }
 
@@ -125,10 +128,10 @@ public class UserController {
         List<SecurityAuthRoleBean> roles = authData.getRoles();
         for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
             SecurityAuthRoleBean role = iterator.next();
+            System.out.println("DEALER ID " + role.getDealer().getId());
             if (role.getDealer() != null && !role.getDealer().getId().isEmpty() && !role.getDealer().getId().equalsIgnoreCase("0")) {
                 System.out.println("DEALER ID " + role.getDealer().getId());
-                //returnList.addAll(userService.getAllowedDealerByMapId(role.getDealer().getId()));
-                returnList.addAll(userService.getAllowedDealerByMapId("1505"));
+                returnList.addAll(userService.getAllowedDealerByMapId(role.getDealer().getId()));
             }
             if (role.getGroup() != null && !role.getGroup().getId().isEmpty() && !role.getGroup().getId().equalsIgnoreCase("0")) {
                 System.out.println("GROUP ID " + role.getGroup().getId());
@@ -156,19 +159,20 @@ public class UserController {
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
         }
-        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"));
+        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"), (String) session.getAttribute("userGuid"));
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
-        session.setAttribute("isAuthenticated", authData != null);
-        session.setAttribute("isAuthenticated", authData != null);
+        //session.setAttribute("isAuthenticated", authData != null);
+        //session.setAttribute("isAuthenticated", authData != null);
         if (authData == null) {
             Map returnMap = new HashMap();
             returnMap.put("authData", null);
             returnMap.put("errorMessage", "Login Failed");
             return returnMap;
         }
-        session.setAttribute("username", authData.getUserName());
-        session.setAttribute("accessToken", authData.getAccessToken());
-        session.setAttribute("permission", authData.getPermission());
+        // session.setAttribute("username", authData.getUserName());
+        // session.setAttribute("accessToken", authData.getAccessToken());
+        // session.setAttribute("userGuid", authData.getUserGuid());
+        // session.setAttribute("permission", authData.getPermission());
         Map returnMap = new HashMap();
         returnMap.put("authData", authData);
         //returnMap.put("dealers", getDealerBySecuityBean(authData));
@@ -198,7 +202,7 @@ public class UserController {
         returnMap.put("Reputation Management", getReviewPushDataSets());
         return returnMap;
     }
-    
+
     private List<UrlBean> getOverallDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
@@ -208,8 +212,7 @@ public class UserController {
             "../api/admin/overall/inventory;Inventory",
             "../api/admin/overall/totalNoOfCalls;Total Calls",
             "../api/admin/overall/totalNoOfSales;Total Sales",
-            "../api/admin/overall/totalBudget;Total Budget",
-        };
+            "../api/admin/overall/totalBudget;Total Budget",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -241,8 +244,7 @@ public class UserController {
         }
         return returnList;
     }
-    
-    
+
     private List<UrlBean> getDynamicDisplayDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
@@ -296,8 +298,8 @@ public class UserController {
         return returnList;
 
     }
-    
-     private List<UrlBean> getSeoDataSets() {
+
+    private List<UrlBean> getSeoDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/seo/accountPerformance;Account Performance",

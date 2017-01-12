@@ -97,6 +97,7 @@ public class VbUtils {
             SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
             authData.setFullName(authData.getUserName());
             authData.setUserName(username);
+            authData.setUserGuid(token.getUserGuid());
             authData.setAccessToken(token.getAccessToken());
             System.out.println(authData);
             Permission permission = getPermissions(authData);
@@ -108,14 +109,15 @@ public class VbUtils {
         return null;
     }
 
-    public static SecurityAuthBean getAuthData(String accessToken) {
+    public static SecurityAuthBean getAuthDataByGuid(String accessToken, String userGuid) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, String> accessHeader = new HashMap<>();
             accessHeader.put("Authorization", accessToken);
-            String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=00959ecd-41c5-4b92-8bd9-78c26d10486c", null, accessHeader);
+            String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=" + userGuid, null, accessHeader);
             SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
             authData.setAccessToken(accessToken);
+            authData.setAccessToken(userGuid);
             System.out.println(authData);
             Permission permission = getPermissions(authData);
             authData.setPermission(permission);
