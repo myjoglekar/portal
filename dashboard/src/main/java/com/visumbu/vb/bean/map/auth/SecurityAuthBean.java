@@ -70,8 +70,7 @@ public class SecurityAuthBean {
 
     @Override
     public String toString() {
-        return "SecurityAuthBean{" + "userId=" + userId + ", userName=" + userName + ", accessToken=" + accessToken + ", roles=" + roles + ", permission=" + permission + '}';
+        return "SecurityAuthBean{" + "userId=" + userId + ", userName=" + userName + ", fullName=" + fullName + ", accessToken=" + accessToken + ", roles=" + roles + ", permission=" + permission + '}';
     }
-    
     
 }
