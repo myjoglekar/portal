@@ -12,6 +12,8 @@ import com.visumbu.vb.bean.TabWidgetBean;
 import com.visumbu.vb.bean.WidgetColumnBean;
 import com.visumbu.vb.model.Dashboard;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.DataSet;
+import com.visumbu.vb.model.DataSource;
 import com.visumbu.vb.model.Product;
 import com.visumbu.vb.model.Report;
 import com.visumbu.vb.model.ReportColumn;
@@ -251,5 +253,49 @@ public class UiService {
 
     public Report getReportById(Integer reportId) {
         return uiDao.getReportById(reportId);
+    }
+
+    public DataSource create(DataSource dataSource) {
+        return (DataSource) uiDao.create(dataSource);
+    }
+
+    public DataSource read(Integer id) {
+        return (DataSource) uiDao.read(DataSource.class, id);
+    }
+
+    public DataSource delete(Integer id) {
+        DataSource dataSource = read(id);
+        return (DataSource) uiDao.delete(dataSource);
+    }
+
+    public List<DataSource> getDataSource() {
+        List<DataSource> dataSource = uiDao.read(DataSource.class);
+        return dataSource;
+    }
+
+    public DataSource update(DataSource dataSource) {
+        return (DataSource) uiDao.update(dataSource);
+    }
+
+    public List<DataSet> getDateSet() {
+        List<DataSet> dataSet = uiDao.read(DataSet.class);
+        return dataSet;
+    }
+
+    public DataSet create(DataSet dataSet) {
+        return (DataSet) uiDao.create(dataSet);
+    }
+
+    public DataSet update(DataSet dataSet) {
+        return (DataSet) uiDao.update(dataSet);
+    }
+
+    public DataSet readDataSet(Integer id) {
+        return (DataSet) uiDao.read(DataSet.class, id);
+    }
+
+    public DataSet deleteDataSet(Integer id) {
+        DataSet dataSet = readDataSet(id);
+        return (DataSet) uiDao.delete(dataSet);
     }
 }

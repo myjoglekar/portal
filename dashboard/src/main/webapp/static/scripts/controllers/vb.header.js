@@ -8,8 +8,9 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
 
     $scope.selectDealer = {};
     $http.get('admin/dealer').success(function (response) {
-        $stateParams.dealerId = response[0].id;
-        $state.go("index.dashboard.widget", {dealerId:$stateParams.dealerId, tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+        //$scope.loadDefault(response[0].id);
+        //$stateParams.dealerId = $stateParams.dealerId ? $stateParams.dealerId : response[0].id;
+        //$state.go("index.dashboard.widget", {dealerId:$stateParams.dealerId?$stateParams.dealerId:response[0].id, tabId: $stateParams.tabId ? $stateParams.tabId : 1, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
         //$state.go('')
         $scope.dealers = response;
         $scope.name = $filter('filter')($scope.dealers, {id: $stateParams.dealerId})[0];
@@ -50,6 +51,34 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
 
 
     console.log($stateParams.dealerId);
+
+    $scope.loadDefault = function (defaultDealerId) {
+        console.log($stateParams.dealerId);
+        try {
+            $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $scope.firstDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
+
+            $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $scope.lastDate;
+        } catch (e) {
+        }
+        console.log($stateParams);
+        console.log($scope.getCurrentTab());
+        console.log($scope.getCurrentPage());
+        if ($scope.getCurrentPage() === "dashboard") {
+            $state.go("index.dashboard." + $scope.getCurrentTab(), {dealerId: $stateParams.dealerId ? $stateParams.dealerId : defaultDealerId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "reports") {
+            $state.go("index.report.reports", {dealerId: $stateParams.dealerId ? $stateParams.dealerId : defaultDealerId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "newOrEdit") {
+            $state.go("index.report.newOrEdit", {dealerId: $stateParams.dealerId ? $stateParams.dealerId : defaultDealerId, productId: $stateParams.productId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "dataSource") {
+            $state.go("index.dataSource", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
+        }else if ($scope.getCurrentPage() === "dataSet") {
+            $state.go("index.dataSet", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
+        }  else {
+            $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
+        }
+    }
+
+
     $scope.loadNewUrl = function () {
         console.log($stateParams.dealerId);
         try {
@@ -67,6 +96,10 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
             $state.go("index.report.reports", {dealerId: $stateParams.dealerId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else if ($scope.getCurrentPage() === "newOrEdit") {
             $state.go("index.report.newOrEdit", {dealerId: $stateParams.dealerId, productId: $stateParams.productId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "dataSource") {
+            $state.go("index.dataSource", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
+        }else if ($scope.getCurrentPage() === "dataSet") {
+            $state.go("index.dataSet", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else {
             $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
         }
@@ -82,6 +115,12 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         }
         if (url.indexOf("report") > 0) {
             return "reports";
+        }
+        if (url.indexOf("dataSource") > 0) {
+            return "dataSource";
+        }
+        if (url.indexOf("dataSet") > 0) {
+            return "dataSet";
         }
         return "dashboard";
     };

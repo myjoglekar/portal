@@ -53,6 +53,11 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "VbUser.findByUserName", query = "SELECT v FROM VbUser v WHERE v.userName = :userName")})
 public class VbUser implements Serializable {
 
+    @OneToMany(mappedBy = "userId")
+    private Collection<DataSet> dataSetCollection;
+    @OneToMany(mappedBy = "userId")
+    private Collection<DataSource> dataSourceCollection;
+
     @OneToMany(mappedBy = "createdBy")
     private Collection<TabWidget> tabWidgetCollection;
     @OneToMany(mappedBy = "createdBy")
@@ -344,6 +349,26 @@ public class VbUser implements Serializable {
 
     public void setDashboardCollection(Collection<Dashboard> dashboardCollection) {
         this.dashboardCollection = dashboardCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<DataSet> getDataSetCollection() {
+        return dataSetCollection;
+    }
+
+    public void setDataSetCollection(Collection<DataSet> dataSetCollection) {
+        this.dataSetCollection = dataSetCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<DataSource> getDataSourceCollection() {
+        return dataSourceCollection;
+    }
+
+    public void setDataSourceCollection(Collection<DataSource> dataSourceCollection) {
+        this.dataSourceCollection = dataSourceCollection;
     }
 
 }

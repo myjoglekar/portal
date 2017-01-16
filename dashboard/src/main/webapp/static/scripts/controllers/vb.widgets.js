@@ -4,6 +4,7 @@
 //};
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
     $scope.permission = localStorageService.get("permission");
+    //$scope.widget = {isSpecial: 1}
     $scope.selectAggregations = [
         {name: 'None', value: ""},
         {name: 'Sum', value: "sum"},
@@ -73,7 +74,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         }
         $http.get("admin/ui/dbWidget/" + $stateParams.tabId).success(function (response) {
             $scope.widgets = response;
-            console.log(response)
         });
     }
     getWidgetItem();
@@ -171,7 +171,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             width: newWidget, 'minHeight': 25, columns: [], chartType: ""
         };
         $http({method: 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
-            $scope.widgets.unshift({id: response.id, width: newWidget, 'minHeight': 25, columns: []});
+            $scope.widgets.unshift({id: response.id, width: newWidget, 'minHeight': 25, columns: [], tableFooter: 1});
             $scope.newWidgetId = response.id;
             $scope.openPopup(response);
         });
@@ -353,7 +353,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
                 ' {{grouping._key}}' +
                 '</td>' +
-                '<td ng-repeat="col in columns">' +
+                '<td ng-repeat="col in columns" style="width: {{col.width}}%">' +
 //                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
                 '<div style="float: {{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>' +
                 '</td>' +
@@ -367,11 +367,11 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
-                '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}">{{format(col, childItem[col.fieldName])}}</span></span></td></tr>' +
+                '<td ng-repeat="col in columns" style="width: {{col.width}}%"><span style="float: {{col.alignment}}; width: {{col.width}}">{{format(col, childItem[col.fieldName])}}</span></span></td></tr>' +
                 '</tbody>' +
                 '<tfoot ng-if="displayFooter == \'true\'">' +
                 '<tr>' +
-                '<td ng-if="groupingName"></td>' +
+                '<td ng-if="groupingName">Total : </td>' +
                 //'<td ng-repeat="col in columns" class="col.alignment[groupingData]">{{format(col, groupingData[col.fieldName])}}</td>' +
                 '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</span></td>' +
                 '</tr>' +
@@ -380,7 +380,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
             scope.displayFooter  = scope.tableFooter;
-            console.log("Table Footer : "+scope.displayFooter)
             scope.loadingTable = true;
             scope.clickRow = function () {
                 scope.grouping.$hideRows = false;
@@ -403,7 +402,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             scope.columns = [];
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 scope.columns.push(value);
-                console.log(value)
             });
 
             scope.format = function (column, value) {
@@ -439,7 +437,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 if (groupByFields && groupByFields.length > 0) {
                     scope.groupingName = groupByFields;
                     groupedData = scope.group(response.data, groupByFields, aggreagtionList);
-                    console.log(groupedData);
                     var dataToPush = {};
                     dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
                     dataToPush.data = groupedData;
@@ -450,7 +447,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush.data = response.data;
                     scope.groupingData = dataToPush;
                 }
-                console.log(scope.groupingData);
             });
 
             scope.sortColumn = scope.columns;
@@ -559,7 +555,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush.data = scope.group(value1, currentFields, aggreationList);
                     data.push(dataToPush);
                 });
-                console.log(data);
                 return data;
             };
         }

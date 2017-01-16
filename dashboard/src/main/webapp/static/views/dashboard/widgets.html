@@ -103,6 +103,7 @@
             <a class="refresh" ng-click="pageRefresh()"><i class="fa fa-repeat"></i> Refresh Data</a>
         </div>
         <div ng-if="permission.allowCreateWidget == true" class="btn-group dropdown">
+            <!--<div class="btn-group dropdown">-->
             <a class="dropdown-toggle" type="button" data-toggle="dropdown">
                 <button type="button" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Add Widget</button>
             </a>
@@ -134,6 +135,23 @@
                         <button  type="button" ng-if="permission.allowCreateWidget == true" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                         </button>
                         <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                        <div id="delete{{widget.id}}" class="modal">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color:#9DD6D7;color:black;">
+                                        <strong>Delete</strong>
+                                        <strong><button class="close" data-dismiss="modal">&times;</button></strong>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span>Want to delete ? </span>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
+                                        <button class="btn btn-danger btn-xs" data-dismiss="modal"> No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div ticker-Directive ticker-Url="{{widget.directUrl}}" ticker-Id="{{widget.id}}" ticker-Columns="{{widget.columns}}"></div>
                 </div>
@@ -152,10 +170,11 @@
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
-                            <!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                                                        </button>-->
-                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
+<!--                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                            </button>-->
+                            <!--<button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>-->
                             <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                             <div id="delete{{widget.id}}" class="modal">
                                 <div class="modal-dialog modal-lg">
@@ -273,9 +292,9 @@
                                     <thead>
                                         <tr>
                                             <td>Field Name</td>
-                                            <td>Display Name</td>
+                                            <td ng-if="advanceMenu == true">Display Name</td>
                                             <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Aggregation Function</td>
-                                            <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">Group Priority</td>
+                                            <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' &&advanceMenu == true">Group Priority</td>
                                             <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">X-Axis</td>
                                             <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Y-Axis</td>
                                             <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Sort</td>
@@ -296,7 +315,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td ng-if="advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayName}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <input type="text" class="form-control" ng-model="currentColumn.displayName">
@@ -311,7 +330,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker'">
+                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.groupPriority}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <select ng-model="currentColumn.groupPriority" class="form-control">

@@ -193,8 +193,8 @@ public class UserController {
         Map returnMap = new LinkedHashMap();
         returnMap.put("Overall", getOverallDataSets());
         returnMap.put("Paid Search", getPaidDataSets());
-        returnMap.put("Display Dynamic", getDynamicDisplayDataSets());
         returnMap.put("Display", getDisplayDataSets());
+        returnMap.put("Dynamic Display", getDynamicDisplayDataSets());
         returnMap.put("Video", getVideoDataSets());
         returnMap.put("SEO", getSeoDataSets());
         returnMap.put("Paid Social", getPaidSocialDataSets());
