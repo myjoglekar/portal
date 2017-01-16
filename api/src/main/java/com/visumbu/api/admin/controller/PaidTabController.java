@@ -7,6 +7,7 @@ package com.visumbu.api.admin.controller;
 
 import com.visumbu.api.admin.service.AdwordsService;
 import com.visumbu.api.admin.service.BingService;
+import com.visumbu.api.admin.service.CenturyCallService;
 import com.visumbu.api.admin.service.UserService;
 import com.visumbu.api.adwords.report.xml.bean.AccountDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.AccountDeviceReportRow;
@@ -50,6 +51,7 @@ import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
 import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,6 +64,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -85,6 +88,9 @@ public class PaidTabController {
 
     @Autowired
     private BingService bingService;
+
+    @Autowired
+    private CenturyCallService centuryCallService;
 
     @Autowired
     private AdwordsService adwordsService;
@@ -179,8 +185,17 @@ public class PaidTabController {
 
                 }
             }
+            String dealerId = request.getParameter("dealerMapId");
+            if (dealerId != null) {
+                Integer totalNoOfCalls = centuryCallService.getTotalNoOfCalls(startDate, endDate, dealerId, fieldsOnly);
+                AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
+                performanceBean.setConversions(totalNoOfCalls + "");
+                performanceBean.setOverall("Overall");
+                performanceBean.setSource("Calls");
+                performanceReportBeans.add(performanceBean);
 
-            returnMap.put("data", performanceReportBeans);
+            }
+            returnMap.put("data", sumPerSource(performanceReportBeans, null));
 
         } catch (InterruptedException ex) {
             Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
@@ -190,6 +205,49 @@ public class PaidTabController {
             Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return returnMap;
+    }
+
+    public static List<AccountPerformanceReportBean> sumPerSource(List<AccountPerformanceReportBean> list, String fieldName) {
+        System.out.println("Summary -> " + fieldName);
+        Map<String, AccountPerformanceReportBean> map = new HashMap<>();
+        Integer count = 0;
+        for (AccountPerformanceReportBean p : list) {
+            count++;
+            String name = "Overall";
+            if (fieldName != null && !fieldName.isEmpty()) {
+                try {
+                    name = BeanUtils.getProperty(p, fieldName);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+                    Logger.getLogger(OverallTabController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            AccountPerformanceReportBean sum = map.get(name);
+            if (sum == null) {
+                sum = new AccountPerformanceReportBean();
+                map.put(name, sum);
+            }
+            if (fieldName != null && !fieldName.isEmpty()) {
+                try {
+                    BeanUtils.setProperty(p, fieldName, name);
+                } catch (IllegalAccessException | InvocationTargetException ex) {
+                    Logger.getLogger(OverallTabController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            sum.setSource(name);
+            sum.setImpressions((ApiUtils.toInteger(p.getImpressions()) + ApiUtils.toInteger(sum.getImpressions())) + "");
+            sum.setClicks((ApiUtils.toInteger(p.getClicks()) + ApiUtils.toInteger(sum.getClicks())) + "");
+            sum.setCost((ApiUtils.toDouble(p.getCost()) + ApiUtils.toDouble(sum.getCost())) + "");
+            sum.setSearchImpressionsShare(((ApiUtils.toDouble(p.getSearchImpressionsShare()) + ApiUtils.toDouble(sum.getSearchImpressionsShare()) * (count - 1)) / count) + "");
+            sum.setSearchImpressionsShareLostDueToRank(((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToRank()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToRank()) * (count - 1)) / count) + "");
+            sum.setSearchImpressionsShareLostDueToBudget(((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToBudget()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToBudget()) * (count - 1)) / count) + "");
+
+            sum.setAveragePosition((ApiUtils.toDouble(p.getAveragePosition()) + ApiUtils.toDouble(sum.getAveragePosition())) / 2 + "");
+            sum.setConversions((ApiUtils.toDouble(p.getConversions()) + ApiUtils.toDouble(sum.getConversions())) + "");
+            sum.setCtr(ApiUtils.toDouble(sum.getImpressions()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getClicks()) / ApiUtils.toDouble(sum.getImpressions())) + "");
+            sum.setAverageCpc(ApiUtils.toDouble(sum.getClicks()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getCost()) / ApiUtils.toDouble(sum.getClicks())) + "");
+            sum.setCpa(ApiUtils.toDouble(sum.getConversions()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getCost()) / ApiUtils.toDouble(sum.getConversions())) + "");
+        }
+        return new ArrayList<AccountPerformanceReportBean>(map.values());
     }
 
     @RequestMapping(value = "hourOfDayClickImpressions", method = RequestMethod.GET, produces = "application/json")
@@ -202,6 +260,7 @@ public class PaidTabController {
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("hourOfDay", "String", "Hour of day"));
+            columnDefs.add(new ColumnDef("nthHour", "number", "Nth Hour"));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
@@ -240,7 +299,12 @@ public class PaidTabController {
                     bean.setImpressions(impressions);
                     bean.setCost(cost);
                     bean.setConversions(conversions);
-                    bean.setHourOfDay(adwordsStartDayOfWeek);
+                    bean.setNthHour(ApiUtils.toInteger(adwordsStartDayOfWeek));
+                    Integer clockHour = ((ApiUtils.toInteger(adwordsStartDayOfWeek)) % 12); //+ "" +  (((ApiUtils.toInteger(bingStartDayOfWeek)/12) > 0)? " pm" : " am") ;
+                    if (clockHour == 0) {
+                        clockHour = 12;
+                    }
+                    bean.setHourOfDay(clockHour + "" + (((ApiUtils.toInteger(adwordsStartDayOfWeek) / 12) > 0) ? " pm" : " am"));
                     dataMap.put(adwordsStartDayOfWeek, bean);
                 }
             }
@@ -268,7 +332,13 @@ public class PaidTabController {
                     bean.setImpressions(impressions);
                     bean.setCost(cost);
                     bean.setConversions(conversions);
-                    bean.setHourOfDay(bingStartDayOfWeek);
+                    bean.setNthHour(ApiUtils.toInteger(bingStartDayOfWeek));
+
+                    Integer clockHour = ((ApiUtils.toInteger(bingStartDayOfWeek)) % 12); //+ "" +  (((ApiUtils.toInteger(bingStartDayOfWeek)/12) > 0)? " pm" : " am") ;
+                    if (clockHour == 0) {
+                        clockHour = 12;
+                    }
+                    bean.setHourOfDay(clockHour + "" + (((ApiUtils.toInteger(bingStartDayOfWeek) / 12) > 0) ? " pm" : " am"));
                     dataMap.put(bingStartDayOfWeek, bean);
                 }
             }

@@ -667,8 +667,16 @@ public class AdwordsService {
             predicate.setField("AdNetworkType1");
             predicate.setOperator(PredicateOperator.IN);
             predicate.getValues().add(filter);
+            
+            final Predicate predicate1 = new Predicate();
+            predicate1.setField("CampaignName");
+            predicate1.setOperator(PredicateOperator.CONTAINS_IGNORE_CASE);
+            predicate1.getValues().add("model");
+            
+            predicate1.getValues().add("");
             final Collection<Predicate> predicates = new ArrayList<>();
             predicates.add(predicate);
+            predicates.add(predicate1);
             selector.getPredicates().add(predicate);
         }
 
