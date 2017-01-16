@@ -12,6 +12,7 @@ package com.visumbu.api.dashboard.bean;
 public class ClicksImpressionsHourOfDayBean {
 
     private String hourOfDay;
+    private Integer nthHour;
     private Integer impressions;
     private Integer clicks;
     private Double cost;
@@ -19,6 +20,14 @@ public class ClicksImpressionsHourOfDayBean {
     private Double conversions;
     private Double cpa;
 
+    public Integer getNthHour() {
+        return nthHour;
+    }
+
+    public void setNthHour(Integer nthHour) {
+        this.nthHour = nthHour;
+    }
+    
     public Double getCost() {
         return cost;
     }
