@@ -1,11 +1,40 @@
 <div ng-controller="UiController">
-    <section class="content-header">
-        <h1 class="text-capitalize"> {{dashboardName}}</h1>
-    </section>
+    <!--    <section class="content-header">
+            <h3 class="text-capitalize"> {{dashboardName}}</h3>
+        </section>-->
+
+
+
+
+    <div class="normalheader transition animated fadeIn">
+        <div class="hpanel">
+            <div class="panel-body header-title">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li><a href="index.html">Dashboard</a></li>
+                        <li>
+                            <span>Home</span>
+                        </li>
+                        <li class="active">
+                            <span>Paid Search </span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-bold m-b-xs">
+                    {{dashboardName}}
+                </h2>
+               
+            </div>
+        </div>
+    </div>
+
+
+
+
     <section class="content">
         <div class="row">
-            <div class="col-md-12">
-                <div class="nav-tabs-custom">
+            <div class="col-lg-12">
+                <div class="hpanel hgreen">
                     <ul class="nav nav-tabs">
                         <li ng-repeat="tab in tabs" ui-sref-active="active" ng-dblclick="startEditing(tab);" ng-drop="true" ng-drop-success="onDropTabComplete($index, $data,$event)">
                             <a class="active" ng-drag="true" ng-drag-data="tab" ui-sref="index.dashboard.widget({productId: productId, tabId: tab.id?tab.id:0})">
@@ -14,39 +43,45 @@
                                     <input class="form-control" ng-model="tab.tabName" ng-blur="doneEditing(tab)" ng-focus="tab == editedItem">
                                 </form>
                             </a>
-                            <button ng-if="permission.allowCreateTab == true" class="close closeTab" data-toggle="modal" data-target="#deleteTabModal{{tab.id}}" type="button">×</button>
-                            <div id="deleteTabModal{{tab.id}}" class="modal bd-example-modal-md">
-                                <div class="modal-dialog modal-xs">
+                            <button class="close closeTab" data-toggle="modal" data-target="#deleteTabModal{{tab.id}}" type="button">×</button>
+
+
+                            <div class="modal fade hmodal-success" id="deleteTabModal{{tab.id}}" tabindex="-1" role="dialog"  aria-hidden="true">
+                                <div class="modal-dialog">
                                     <div class="modal-content">
+                                        <div class="color-line"></div>
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             <h4 class="modal-title">Delete</h4>
+                                            <small class="font-bold"></small>
                                         </div>
                                         <div class="modal-body">
                                             <span>Want to delete ?</span>
                                         </div>
                                         <div class="modal-footer">
-                                            <div class="col-sm-12">
-                                                <button type="button" class="btn btn-primary btn-xs" ng-click="deleteTab($index, tab)" data-dismiss="modal"><span class="fa fa-save"></span> Yes</button>  
-                                                <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> No
-                                                </button>
-                                            </div>
+                                            <button type="button" class="btn btn-primary btn-xs" ng-click="deleteTab($index, tab)" data-dismiss="modal"><span class="fa fa-save"></span> Yes</button>  
+                                            <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> No
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </li> 
-                        <li ng-if="permission.allowCreateTab == true" class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
 
-                        <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
-                            <div class="modal-dialog modal-md">
+
+                        </li> 
+                        <li class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
+
+
+                        <div class="modal fade hmodal-success" id="tabModal" tabindex="-1" role="dialog"  aria-hidden="true">
+                            <div class="modal-dialog">
                                 <div class="modal-content">
+                                    <div class="color-line"></div>
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         <h4 class="modal-title">TAB</h4>
+                                        <small class="font-bold"></small>
                                     </div>
-
-                                    <div class="modal-body ">
+                                    <div class="modal-body">
                                         <form class="form-horizontal" role="form">
 
                                             <div class="form-group">
@@ -71,12 +106,42 @@
                                 </div>
                             </div>
                         </div>
+
                     </ul>
-                </div>
+                
+
+
+
+
+
+                <!--                <div class="hpanel">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-1"> This is tab</a></li>
+                               
+                            </ul>
+                            <div class="tab-content">
+                                <div id="tab-1" class="tab-pane active">
+                                    <div class="panel-body">
+                                        
+                                    </div>
+                                </div>
+                                
+                            </div>-->
+
+
+
+
+
                 <div class="tab-content">
                     <div class="row" ngsf-fullscreen="fullscreenCtrl">
-                        <ui-view></ui-view>
+                        <div id="tab-1" class="tab-pane active">
+                            
+                                <ui-view></ui-view>
+                            
+                        </div>
                     </div>
+                </div>
+                
                 </div>
             </div>
         </div>

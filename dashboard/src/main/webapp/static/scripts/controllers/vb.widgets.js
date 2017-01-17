@@ -17,7 +17,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {name: 'CPostE', value: "cposte"},
         {name: 'CPostE', value: "cpagee"},
         {name: 'CPP', value: "cpp"}
-        
+
     ];   //Aggregation Type-Popup
     $scope.selectGroupPriorities = [
         {num: 'None', value: ""},
@@ -224,17 +224,65 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.previewChartUrl = widget.previewUrl;
     };
 
+//    $scope.save = function (widget) {
+//        widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
+//
+//        var data = {
+//            id: widget.id,
+//            chartType: $scope.editChartType ? $scope.editChartType : widget.chartType,
+//            directUrl: widget.previewUrl,
+//            widgetTitle: widget.previewTitle,
+//            widgetColumns: widget.columns,
+//            productName: widget.productName,
+//            productDisplayName: widget.productDisplayName
+//        };
+//        widget.chartType = "";
+//        $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
+//            widget.chartType = data.chartType;
+//        });
+//        widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
+//        widget.widgetColumns = widget.columns;
+//    };
     $scope.save = function (widget) {
+        console.log(widget)
         widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
-
+        var widgetColumnsData = [];
+        angular.forEach(widget.columns, function (value, key) {
+            var columnData = {
+                id: value.id,
+                fieldName: value.fieldName,
+                displayName: value.displayName,
+                agregationFunction: value.agregationFunction,
+                groupPriority: isNaN(value.groupPriority) ? null : value.groupPriority,
+                xAxis: isNaN(value.xAxis) ? null : value.xAxis,
+                yAxis: isNaN(value.yAxis) ? null : value.yAxis,
+                sortOrder: isNaN(value.sortOrder) ? null : value.sortOrder,
+                displayFormat: value.displayFormat,
+                alignment: value.alignment,
+                baseFieldName: value.baseFieldName,
+                fieldGenerationFields: value.fieldGenerationFields,
+                fieldGenerationFunction: value.fieldGenerationFunction,
+                fieldType: value.fieldType,
+                functionParameters: value.functionParameters,
+                remarks: value.remarks,
+                sortPriority: isNaN(value.sortPriority) ? null : value.sortPriority,
+                width: isNaN(value.width) ? null : value.width,
+                wrapText: value.wrapText,
+                xAxisLabel: value.xAxisLabel,
+                yAxisLabel: value.yAxisLabel
+            };
+            widgetColumnsData.push(columnData);
+        });
         var data = {
             id: widget.id,
             chartType: $scope.editChartType ? $scope.editChartType : widget.chartType,
             directUrl: widget.previewUrl,
             widgetTitle: widget.previewTitle,
-            widgetColumns: widget.columns,
+            widgetColumns: widgetColumnsData,
             productName: widget.productName,
-            productDisplayName: widget.productDisplayName
+            productDisplayName: widget.productDisplayName,
+            tableFooter: widget.tableFooter,
+            dateDuration: widget.dateDuration
         };
         widget.chartType = "";
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
@@ -276,33 +324,33 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             widgetColumns: '@',
             setTableFn: '&'
         },
-        template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
-                '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t">' +
+        template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif" width="40"></div>' +
+                '<table ng-if="ajaxLoadingCompleted" class="table table-striped">' +
                 '<thead><tr>' +
-                '<th class="info table-bg" ng-if="groupingName">' +
+                '<th ng-if="groupingName">' +
                 '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
                 ' Group</th>' +
-                '<th class="text-capitalize info table-bg" ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
+                '<th ng-click="toggleSort($index); reverse.col.fieldName = !reverse.col.fieldName" ng-repeat="col in columns">' +
                 '{{col.displayName}} <i class="fa" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
                 '<tbody ng-repeat="grouping in groupingData.data | orderBy: sortColumn:reverse: true">' +
-                '<tr class="text-capitalize text-info info">' +
-                '<td class="group-bg" ng-if="groupingName">' +
-                '<i style="cursor: pointer" class="fa" 11 ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
+                '<tr ng-class-odd="\'odd\'" ng-class-even="\'even\'">' +
+                '<td ng-if="groupingName">' +
+                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
                 ' {{grouping._key}}' +
                 '</td>' +
                 '<td ng-repeat="col in columns">' + '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
                 '</td>' +
                 '</tr>' +
-                '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
-                '<td class="right-group">' +
+                '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data">' +
+                '<td>' +
                 '<i ng-if="item._groupField" style="cursor: pointer" class="fa" 22 ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
 //                ' {{item._groupField}} : {{item._key}}</td>' +
                 ' {{item._key}}</td>' +
-                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '<span style="float: {{col.alignment}}">{{item[col.fieldName]}}</span>' +
+                '<td ng-repeat="col in columns">' + '<span style="float: {{col.alignment}}">{{item[col.fieldName]}}</span>' +
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
@@ -631,11 +679,12 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
 app.directive('tickerDirective', function ($http, $stateParams) {
     return{
         restrict: 'AE',
-        template: '<div class="panel panel-default relative pnl-aln">' +
-                '<div class="m-b-10">' +
-                '<span>{{tickerTitle}}</span>' +
-                '<span class="text-lg pull-right tickers">{{totalValue}}</span>' +
-                '</div>' +
+        template: '<div class="panel-body text-left h-200">' +
+                '<i class="pe-7s-graph1 fa-4x"></i>' +
+                '<h1 class="m-xs">{{totalValue}}</h1>' +
+                '<h3 class="font-extra-bold no-margins text-success">' +
+                '{{tickerTitle}}' +
+                '</h3>' +
                 '</div>',
         scope: {
             tickerUrl: '@',
@@ -681,7 +730,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
 app.directive('lineChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
-        template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif"></div>',
+        template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif" width="40"></div>',
         scope: {
             lineChartUrl: '@',
             widgetId: '@',
@@ -792,7 +841,12 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                             x: xAxis.fieldName,
                             columns: columns,
                             labels: labels,
-                            axes: axes
+                            axes: axes,
+
+                        },
+                        color: {
+                            pattern: ['#62cb31', '#555555']
+
                         },
                         tooltip: {show: false},
                         axis: {
@@ -828,7 +882,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
 app.directive('barChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
-        template: '<div ng-show="loadingBar" class="text-center"><img src="static/img/logos/loader.gif"></div>',
+        template: '<div ng-show="loadingBar" class="text-center"><img src="static/img/logos/loader.gif" width="40"></div>',
         scope: {
             barChartUrl: '@',
             widgetId: '@',
@@ -939,6 +993,10 @@ app.directive('barChartDirective', function ($http, $stateParams) {
                             type: 'bar',
                             axes: axes
                         },
+                        color: {
+                            pattern: ['#62cb31', '#555555']
+
+                        },
                         tooltip: {show: false},
                         axis: {
                             x: {
@@ -967,7 +1025,7 @@ app.directive('barChartDirective', function ($http, $stateParams) {
 app.directive('pieChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'AC',
-        template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>',
+        template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif" width="40"></div>',
         scope: {
             pieChartUrl: '@',
             widgetId: '@',
@@ -1091,12 +1149,15 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                             },
                             type: 'pie'
                         },
+                        color: {
+                            pattern: ['#62cb31', '#666666', '#a5d169', '#75ccd0']
+
+                        },
                         tooltip: {show: false},
                         axis: {
                             x: {
                                 tick: {
                                     format: function (x) {
-                                        console.log(xData[x])
                                         return xData[x];
                                     }
                                 }
@@ -1120,7 +1181,7 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
 app.directive('areaChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
-        template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>',
+        template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif" width="40"></div>',
         scope: {
             setPieChartFn: '&',
             widgetId: '@',
@@ -1224,6 +1285,10 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                             labels: labels,
                             type: 'area',
                             axes: axes
+                        },
+                        color: {
+                            pattern: ['#62cb31', '#555555']
+
                         },
                         tooltip: {show: false},
                         axis: {

@@ -7,12 +7,30 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
+    
+    $scope.setParamsDate = function () {
+        console.log($scope.productId);
+        console.log($stateParams.tabId);
+        console.log($stateParams.startDate + " - " + $stateParams.endDate)
+        $scope.startDate = $stateParams.startDate;
+        $scope.endDate = $stateParams.endDate;
+        $scope.dealerId = $stateParams.dealerId;
+    }
 
     $scope.selectDealer = {};
     $http.get('admin/dealer').success(function (response) {
         $scope.dealers = response;
         $scope.name = $filter('filter')($scope.dealers, {id: $stateParams.dealerId})[0];
         $scope.selectDealer.selected = {dealerName: $scope.name.dealerName};
+    });
+
+    $http.get('admin/ui/product').success(function (response) {
+        $scope.products = response;
+        console.log(response)
+        // $scope.searchProduct.unshift({"id": 0, "productName": "All Product"});
+        $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
+        $scope.selectProductName = $scope.name.productName;
+        console.log($scope.selectProductName)
     });
 
     $scope.getDealerId = function (dealer) {

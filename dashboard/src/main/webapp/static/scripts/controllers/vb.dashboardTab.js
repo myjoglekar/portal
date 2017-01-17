@@ -1,6 +1,6 @@
 app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout, localStorageService) {
     $scope.permission = localStorageService.get("permission");
-
+console.log($stateParams.dealerId)
     $scope.selectTabID = $state;
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
@@ -91,7 +91,6 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $http({method: 'POST', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data}).success(function (response) {
             $scope.tabs.push({id: response.id, tabName: tab.tabName, tabClose: true});
         });
-        tab.tabName = "";
     };
 
     $scope.deleteTab = function (index, tab) {

@@ -9,18 +9,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: "/dashboard/:dealerId/:productId",
                 templateUrl: "static/views/dashboard/dashboard.html",
             })
-//            .state("dashboard.tab", {
-//                url: "/tab",
-//                templateUrl: "static/views/dashboard/dashboardTabs.html", 
-//                controller: 'UiController'
-//            })
-//            .state("header", {
-//                url: "/header/:productId",
-//                templateUrl: "static/views/dashboard/dashboardTabs.html",
-//                controller: 'HeaderController'
-//            })
             .state("index.dashboard.widget", {
-                url: "/widget/:dealerId/:productId/:tabId?:startDate/:endDate",
+                url: "/widget/:dealerId/:tabId?:startDate/:endDate",
                 templateUrl: "static/views/dashboard/widgets.html",
                 controller: 'WidgetController'
             })
@@ -36,7 +26,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 activetab: 'template'
             })
             .state("index.report.reports", {
-                url: "/report/:dealerId/:reportId?:startDate/:endDate",
+                url: "/report/:dealerId?:startDate/:endDate",
                 templateUrl: "static/views/reports/reports.html",
                 controller: 'ReportController',
                 activetab: 'report'
@@ -48,5 +38,5 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 activetab: 'report'
             });
 
-    $urlRouterProvider.otherwise('index/dashboard/dashboard/1/widget/1/2/2?29/23');
+    $urlRouterProvider.otherwise('index/dashboard/2/2');
 });
