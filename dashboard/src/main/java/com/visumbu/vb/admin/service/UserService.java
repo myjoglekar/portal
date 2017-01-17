@@ -80,8 +80,8 @@ public class UserService {
         return VbUtils.getAuthData(userBean.getUsername(), userBean.getPassword());
     }
 
-    public SecurityAuthBean getPermissions(String accessToken) {
-        return VbUtils.getAuthData(accessToken);
+    public SecurityAuthBean getPermissions(String accessToken, String userGuid) {
+        return VbUtils.getAuthDataByGuid(accessToken, userGuid);
     }
 
     public LoginUserBean authenicate(LoginUserBean userBean) {
@@ -147,7 +147,7 @@ public class UserService {
         }
         if(user == null) {
             System.out.println("Creating user " + userName);
-            user = userDao.createNewUser(userId, userName);
+            user = userDao.createNewUser(userId, userName, authData.getFullName());
             userDao.initUser(user);
         }
         return user;

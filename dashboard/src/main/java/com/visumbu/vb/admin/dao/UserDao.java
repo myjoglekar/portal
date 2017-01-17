@@ -42,7 +42,7 @@ public class UserDao extends BaseDao {
         return query.list();
     }
 
-    public VbUser createNewUser(String userId, String userName) {
+    public VbUser createNewUser(String userId, String userName, String fullName) {
         VbUser user = new VbUser();
         user.setUserRefId(userId);
         user.setUserName(userName);

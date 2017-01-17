@@ -16,11 +16,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.collections.OrderedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -93,6 +97,7 @@ public class UserController {
         session.setAttribute("username", authData.getUserName());
         session.setAttribute("accessToken", authData.getAccessToken());
         session.setAttribute("permission", authData.getPermission());
+        session.setAttribute("userGuid", authData.getUserGuid());
         Map returnMap = new HashMap();
         returnMap.put("authData", authData);
         returnMap.put("dealers", getDealerBySecuityBean(authData));
@@ -106,7 +111,9 @@ public class UserController {
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
         }
-        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"));
+        System.out.println((String) session.getAttribute("userGuid"));
+        System.out.println((String) session.getAttribute("accessToken"));
+        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"), (String) session.getAttribute("userGuid"));
         return getDealerBySecuityBean(authData);
     }
 
@@ -121,10 +128,10 @@ public class UserController {
         List<SecurityAuthRoleBean> roles = authData.getRoles();
         for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
             SecurityAuthRoleBean role = iterator.next();
+            System.out.println("DEALER ID " + role.getDealer().getId());
             if (role.getDealer() != null && !role.getDealer().getId().isEmpty() && !role.getDealer().getId().equalsIgnoreCase("0")) {
                 System.out.println("DEALER ID " + role.getDealer().getId());
-                //returnList.addAll(userService.getAllowedDealerByMapId(role.getDealer().getId()));
-                returnList.addAll(userService.getAllowedDealerByMapId("1505"));
+                returnList.addAll(userService.getAllowedDealerByMapId(role.getDealer().getId()));
             }
             if (role.getGroup() != null && !role.getGroup().getId().isEmpty() && !role.getGroup().getId().equalsIgnoreCase("0")) {
                 System.out.println("GROUP ID " + role.getGroup().getId());
@@ -152,19 +159,20 @@ public class UserController {
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
         }
-        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"));
+        SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"), (String) session.getAttribute("userGuid"));
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
-        session.setAttribute("isAuthenticated", authData != null);
-        session.setAttribute("isAuthenticated", authData != null);
+        //session.setAttribute("isAuthenticated", authData != null);
+        //session.setAttribute("isAuthenticated", authData != null);
         if (authData == null) {
             Map returnMap = new HashMap();
             returnMap.put("authData", null);
             returnMap.put("errorMessage", "Login Failed");
             return returnMap;
         }
-        session.setAttribute("username", authData.getUserName());
-        session.setAttribute("accessToken", authData.getAccessToken());
-        session.setAttribute("permission", authData.getPermission());
+        // session.setAttribute("username", authData.getUserName());
+        // session.setAttribute("accessToken", authData.getAccessToken());
+        // session.setAttribute("userGuid", authData.getUserGuid());
+        // session.setAttribute("permission", authData.getPermission());
         Map returnMap = new HashMap();
         returnMap.put("authData", authData);
         //returnMap.put("dealers", getDealerBySecuityBean(authData));
@@ -182,18 +190,36 @@ public class UserController {
     @RequestMapping(value = "datasets", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getDataSets(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Map returnMap = new HashMap();
-        returnMap.put("paid", getPaidDataSets());
-        returnMap.put("display", getDisplayDataSets());
-        returnMap.put("paidSocial", getPaidSocialDataSets());
-        returnMap.put("video", getVideoDataSets());
-        returnMap.put("seo", getSeoDataSets());
-        returnMap.put("dynamicDisplay", getDynamicDisplayDataSets());
-        returnMap.put("socialImpact", getSocialImpactDataSets());
-        returnMap.put("reviewPush", getReviewPushDataSets());
-        returnMap.put("overall", getOverallDataSets());
-
+        Map returnMap = new LinkedHashMap();
+        returnMap.put("Overall", getOverallDataSets());
+        returnMap.put("Paid Search", getPaidDataSets());
+        returnMap.put("Display", getDisplayDataSets());
+        returnMap.put("Dynamic Display", getDynamicDisplayDataSets());
+        returnMap.put("Video", getVideoDataSets());
+        returnMap.put("SEO", getSeoDataSets());
+        returnMap.put("Paid Social", getPaidSocialDataSets());
+        returnMap.put("Social Impact", getSocialImpactDataSets());
+        returnMap.put("Reputation Management", getReviewPushDataSets());
         return returnMap;
+    }
+
+    private List<UrlBean> getOverallDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/overall/overallPerformance/summary/day/0;Summary",
+            "../api/admin/overall/overallPerformance/detailed/week/12;12 Weeks Summary",
+            "../api/admin/overall/overallPerformance/detailed/day/0;Summary By Source",
+            "../api/admin/overall/inventory;Inventory",
+            "../api/admin/overall/totalNoOfCalls;Total Calls",
+            "../api/admin/overall/totalNoOfSales;Total Sales",
+            "../api/admin/overall/totalBudget;Total Budget",};
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
+        return returnList;
     }
 
     private List<UrlBean> getPaidDataSets() {
@@ -210,6 +236,20 @@ public class UserController {
             "../api/admin/paid/accountDevice;Account Device",
             "../api/admin/paid/adGroups;AdGroups",
             "../api/admin/paid/adPerformance;Ad Performance",};
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
+        return returnList;
+    }
+
+    private List<UrlBean> getDynamicDisplayDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/dynamicDisplay/overallPerformance;Overall Performance",
+            "../api/admin/dynamicDisplay/accountPerformance12Weeks;Account Performance 12 Weeks",};
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];
@@ -259,6 +299,24 @@ public class UserController {
 
     }
 
+    private List<UrlBean> getSeoDataSets() {
+        List<UrlBean> returnList = new ArrayList<>();
+        String[] urlList = {
+            "../api/admin/seo/accountPerformance;Account Performance",
+            "../api/admin/seo/accountPerformance12Weeks;Account Performance 12 Weeks",
+            "../api/admin/seo/accountPerformanceDayOfWeek;Account Performance Day Of Week",
+            "../api/admin/seo/accountPerformanceTop10Page;Account Performance Top 10 Page",
+            "../api/admin/seo/accountDevicePerformance;Account Device Performance",
+            "../api/admin/seo/accountGeoPerformance;Account Geo Performance",};
+
+        for (int i = 0; i < urlList.length; i++) {
+            String urlStr = urlList[i];
+            String[] url = urlStr.split(";");
+            returnList.add(new UrlBean(url[0], url[1]));
+        }
+        return returnList;
+    }
+
     private List<UrlBean> getPaidSocialDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
@@ -295,60 +353,12 @@ public class UserController {
 
     }
 
-    private List<UrlBean> getSeoDataSets() {
-        List<UrlBean> returnList = new ArrayList<>();
-        String[] urlList = {
-            "../api/admin/seo/accountPerformance;Account Performance",
-            "../api/admin/seo/accountPerformance12Weeks;Account Performance 12 Weeks",
-            "../api/admin/seo/accountPerformanceDayOfWeek;Account Performance Day Of Week",
-            "../api/admin/seo/accountPerformanceTop10Page;Account Performance Top 10 Page",
-            "../api/admin/seo/accountDevicePerformance;Account Device Performance",
-            "../api/admin/seo/accountGeoPerformance;Account Geo Performance",};
-
-        for (int i = 0; i < urlList.length; i++) {
-            String urlStr = urlList[i];
-            String[] url = urlStr.split(";");
-            returnList.add(new UrlBean(url[0], url[1]));
-        }
-        return returnList;
-    }
-
-    private List<UrlBean> getDynamicDisplayDataSets() {
-        List<UrlBean> returnList = new ArrayList<>();
-        String[] urlList = {
-            "../api/admin/dynamicDisplay/overallPerformance;Overall Performance",
-            "../api/admin/dynamicDisplay/accountPerformance12Weeks;Account Performance 12 Weeks",};
-
-        for (int i = 0; i < urlList.length; i++) {
-            String urlStr = urlList[i];
-            String[] url = urlStr.split(";");
-            returnList.add(new UrlBean(url[0], url[1]));
-        }
-        return returnList;
-    }
-
     private List<UrlBean> getReviewPushDataSets() {
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/reviewPush/reviews;Reviews",
             "../api/admin/reviewPush/ratingSummary;Summary",
             "../api/admin/reviewPush/bySources;By Source",};
-
-        for (int i = 0; i < urlList.length; i++) {
-            String urlStr = urlList[i];
-            String[] url = urlStr.split(";");
-            returnList.add(new UrlBean(url[0], url[1]));
-        }
-        return returnList;
-    }
-    
-    private List<UrlBean> getOverallDataSets() {
-        List<UrlBean> returnList = new ArrayList<>();
-        String[] urlList = {
-            "../api/admin/overall/overallPerformance/summary/day/0;Summary",
-            "../api/admin/overall/overallPerformance/summary/week/12;12 Weeks Summary",
-            "../api/admin/overall/overallPerformance/detailed/day/0;Summary By Source",
-        };
 
         for (int i = 0; i < urlList.length; i++) {
             String urlStr = urlList[i];

@@ -15,6 +15,8 @@ import java.util.List;
 public class SecurityAuthBean {
     private String userId;
     private String userName;
+    private String fullName;
+    private String userGuid;
     private String accessToken;
     private List<SecurityAuthRoleBean> roles;
     private Permission permission;
@@ -43,6 +45,22 @@ public class SecurityAuthBean {
         this.userName = userName;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getUserGuid() {
+        return userGuid;
+    }
+
+    public void setUserGuid(String userGuid) {
+        this.userGuid = userGuid;
+    }
+    
     public String getAccessToken() {
         return accessToken;
     }
@@ -61,8 +79,7 @@ public class SecurityAuthBean {
 
     @Override
     public String toString() {
-        return "SecurityAuthBean{" + "userId=" + userId + ", userName=" + userName + ", accessToken=" + accessToken + ", roles=" + roles + ", permission=" + permission + '}';
+        return "SecurityAuthBean{" + "userId=" + userId + ", userName=" + userName + ", fullName=" + fullName + ", accessToken=" + accessToken + ", roles=" + roles + ", permission=" + permission + '}';
     }
-    
     
 }
