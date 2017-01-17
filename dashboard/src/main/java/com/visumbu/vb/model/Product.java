@@ -6,6 +6,7 @@
 package com.visumbu.vb.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,23 +15,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
- * @author DWI
+ * @author user
  */
 @Entity
 @Table(name = "product")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p")
-    , @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id")
-    , @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName")
-    , @NamedQuery(name = "Product.findByRemarks", query = "SELECT p FROM Product p WHERE p.remarks = :remarks")
-    , @NamedQuery(name = "Product.findByIcon", query = "SELECT p FROM Product p WHERE p.icon = :icon")})
+    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
+    @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
+    @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName"),
+    @NamedQuery(name = "Product.findByRemarks", query = "SELECT p FROM Product p WHERE p.remarks = :remarks")})
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,15 +42,18 @@ public class Product implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 255)
+    @Size(max = 256)
     @Column(name = "product_name")
     private String productName;
-    @Size(max = 255)
+    @Size(max = 1024)
     @Column(name = "remarks")
     private String remarks;
     @Size(max = 255)
     @Column(name = "icon")
     private String icon;
+
+    @OneToMany(mappedBy = "productId")
+    private Collection<Dashboard> dashboardCollection;
 
     public Product() {
     }
@@ -88,6 +94,16 @@ public class Product implements Serializable {
         this.icon = icon;
     }
 
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Dashboard> getDashboardCollection() {
+        return dashboardCollection;
+    }
+
+    public void setDashboardCollection(Collection<Dashboard> dashboardCollection) {
+        this.dashboardCollection = dashboardCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -112,5 +128,5 @@ public class Product implements Serializable {
     public String toString() {
         return "com.visumbu.vb.model.Product[ id=" + id + " ]";
     }
-    
+
 }

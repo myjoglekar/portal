@@ -155,5 +155,5 @@ public class Dashboard implements Serializable {
     public void setProductId(Product productId) {
         this.productId = productId;
     }
-    
-}
+
+    }

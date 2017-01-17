@@ -11,6 +11,8 @@ import com.visumbu.vb.bean.ReportWidgetBean;
 import com.visumbu.vb.bean.TabWidgetBean;
 import com.visumbu.vb.controller.BaseController;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.DataSet;
+import com.visumbu.vb.model.DataSource;
 import com.visumbu.vb.model.Report;
 import com.visumbu.vb.model.ReportType;
 import com.visumbu.vb.model.ReportWidget;
@@ -278,6 +280,54 @@ public class UiController extends BaseController {
         return uiService.deleteReportWidget(reportId);
     }
 
+    @RequestMapping(value = "dataSource", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    DataSource create(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSource dataSource) {
+        return uiService.create(dataSource);
+    }
+
+    @RequestMapping(value = "dataSource", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    DataSource update(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSource dataSource) {
+        return uiService.update(dataSource);
+    }
+
+    @RequestMapping(value = "dataSource", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getDataSource(HttpServletRequest request, HttpServletResponse response) {
+        return uiService.getDataSource();
+    }
+    
+    @RequestMapping(value = "dataSource/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    DataSource delete(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+        return uiService.delete(id);
+    }
+
+    @RequestMapping(value = "dataSet", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    DataSet create(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSet dataSet) {
+        return uiService.create(dataSet);
+    }
+
+    @RequestMapping(value = "dataSet", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    DataSet update(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSet dataSet) {
+        return uiService.update(dataSet);
+    }
+
+    @RequestMapping(value = "dataSet", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getDataSet(HttpServletRequest request, HttpServletResponse response) {
+        return uiService.getDateSet();
+    }
+    
+    @RequestMapping(value = "dataSet/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    DataSet deleteDataSet(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+        return uiService.deleteDataSet(id);
+    }
+   
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
