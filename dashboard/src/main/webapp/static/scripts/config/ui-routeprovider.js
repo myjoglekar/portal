@@ -10,12 +10,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/dashboard/dashboard.html",
             })
             .state("index.dashboard.widget", {
-                url: "/widget/:dealerId/:tabId?:startDate/:endDate",
+                url: "/widget/:tabId?:startDate/:endDate",
                 templateUrl: "static/views/dashboard/widgets.html",
                 controller: 'WidgetController'
             })
             .state("index.report", {
-                url: "/reportIndex",
+                url: "/reportIndex/:dealerId",
                 templateUrl: "static/views/reports/reportIndex.html",
                 controller: 'ReportIndexController'
             })
@@ -26,7 +26,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 activetab: 'template'
             })
             .state("index.report.reports", {
-                url: "/report/:dealerId?:startDate/:endDate",
+                url: "/report?:startDate/:endDate",
                 templateUrl: "static/views/reports/reports.html",
                 controller: 'ReportController',
                 activetab: 'report'
@@ -36,7 +36,21 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/reports/newOrEditReports.html",
                 controller: 'NewOrEditReportController',
                 activetab: 'report'
+            })
+            .state("index.dataSource", {
+                url: "/dataSource/:dealerId?:startDate/:endDate",
+                templateUrl: "static/views/source/dataSource.html",
+                controller: 'DataSourceController'
+            }).state("index.dataSet", {
+                url: "/dataSet/:dealerId?:startDate/:endDate",
+                templateUrl: "static/views/source/dataSet.html",
+                controller: 'DataSetController'
             });
 
-    $urlRouterProvider.otherwise('index/dashboard/2/2');
+    $urlRouterProvider.otherwise('index/dashboard/1/1');
 });
+//
+//Array.prototype.move = function (from, to) {
+//    this.splice(to, 0, this.splice(from, 1)[0]);
+//    return this;
+//};

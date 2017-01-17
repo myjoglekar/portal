@@ -1,11 +1,10 @@
 app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout, localStorageService) {
     $scope.permission = localStorageService.get("permission");
-console.log($stateParams.dealerId)
+
     $scope.selectTabID = $state;
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
-    console.log($stateParams.startDate + " - " + $stateParams.endDate);
     $scope.dataCheck = function () {
         console.log($stateParams.startDate + " - " + $stateParams.endDate);
     }
@@ -63,7 +62,6 @@ console.log($stateParams.dealerId)
         $scope.products = response;
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
         $scope.selectProductName = $scope.name.productName;
-        console.log($scope.selectProductName);
     });
 
     $http.get('admin/user/sampleDealers').success(function (response) {
@@ -78,7 +76,7 @@ console.log($stateParams.dealerId)
             $scope.dashboardName = value.dashboardId.dashboardTitle;
         });
         $scope.startId = response[0].id ? response[0].id : 0;
-        $state.go("index.dashboard.widget", {tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+        $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
     });
 
     var dates = $(".pull-right i").text();
@@ -91,6 +89,7 @@ console.log($stateParams.dealerId)
         $http({method: 'POST', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data}).success(function (response) {
             $scope.tabs.push({id: response.id, tabName: tab.tabName, tabClose: true});
         });
+        //tab.tabName = "";
     };
 
     $scope.deleteTab = function (index, tab) {
@@ -115,9 +114,11 @@ console.log($stateParams.dealerId)
         if (tab !== "" && tab !== null) {
             var otherObj = $scope.tabs[index];
             var otherIndex = $scope.tabs.indexOf(tab);
+            
+//            $scope.tabs.move(otherIndex, index);
+            
             $scope.tabs[index] = tab;
             $scope.tabs[otherIndex] = otherObj;
-            console.log($scope.tabs);
             var tabOrder = $scope.tabs.map(function (value, key) {
                 if (value) {
                     return value.id;
@@ -136,8 +137,6 @@ console.log($stateParams.dealerId)
     }
 
     $scope.doneEditing = function (tab) {
-        console.log(tab)
-        console.log(tab.tabName)
         var data = {
             id: tab.id,
             createdTime: tab.createdTime,
@@ -151,7 +150,6 @@ console.log($stateParams.dealerId)
         $http({method: 'PUT', url: 'admin/ui/dbTabs/' + $stateParams.productId, data: data})
         tab.editing = false;
         $scope.editedItem = null;
-        //tab.tabName = "";
     };
 })
         .directive('ngBlur', function () {
