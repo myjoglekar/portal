@@ -333,7 +333,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             widgetId: '@',
             widgetColumns: '@',
             setTableFn: '&',
-            tableFooter:'@'
+            tableFooter: '@'
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t">' +
@@ -355,31 +355,31 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</td>' +
                 '<td ng-repeat="col in columns" style="width: {{col.width}}%">' +
 //                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
-                '<div style="float: {{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>' +
+                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>' +
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
                 '<td class="right-group">' +
-                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" 22 ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
+                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
 //                ' {{item._groupField}} : {{item._key}}</td>' +
                 ' {{item._key}}</td>' +
-                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '<span style="float: {{col.alignment}}">{{format(col, item[col.fieldName])}}</span>' + //ng-bind-html-unsafe=todo.text
+                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '<div class="text-{{col.alignment}}">{{format(col, item[col.fieldName])}}</div>' + //ng-bind-html-unsafe=todo.text
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
-                '<td ng-repeat="col in columns" style="width: {{col.width}}%"><span style="float: {{col.alignment}}; width: {{col.width}}">{{format(col, childItem[col.fieldName])}}</span></span></td></tr>' +
+                '<td ng-repeat="col in columns" style="width: {{col.width}}%"><div class="text-{{col.alignment}};" style="width: {{col.width}}">{{format(col, childItem[col.fieldName])}}</div></span></td></tr>' +
                 '</tbody>' +
                 '<tfoot ng-if="displayFooter == \'true\'">' +
                 '<tr>' +
                 '<td ng-if="groupingName">Total : </td>' +
                 //'<td ng-repeat="col in columns" class="col.alignment[groupingData]">{{format(col, groupingData[col.fieldName])}}</td>' +
-                '<td ng-repeat="col in columns"><span style="float: {{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</span></td>' +
+                '<td ng-repeat="col in columns"><div class="text-{{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</div></td>' +
                 '</tr>' +
                 '</tfoot>' +
                 '</table>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
-            scope.displayFooter  = scope.tableFooter;
+            scope.displayFooter = scope.tableFooter;
             scope.loadingTable = true;
             scope.clickRow = function () {
                 scope.grouping.$hideRows = false;
