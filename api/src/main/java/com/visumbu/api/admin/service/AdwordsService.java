@@ -177,6 +177,8 @@ public class AdwordsService {
             aggregationDuration = "DayOfWeek";
         } else if (aggregation.equalsIgnoreCase("hourOfDay")) {
             aggregationDuration = "HourOfDay";
+        } else if (aggregation == "") {
+            aggregationDuration = "";
         }
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         if (aggregation.equalsIgnoreCase("hourOfDay")) {
@@ -184,13 +186,6 @@ public class AdwordsService {
                     "Impressions", "Clicks", aggregationDuration,
                     "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
                     "Conversions", "SearchImpressionShare", "AveragePosition",
-                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
-            ));
-        } else if (aggregation.isEmpty()) {
-            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                    "Impressions", "Clicks",
-                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.isEmpty()) {
@@ -672,8 +667,16 @@ public class AdwordsService {
             predicate.setField("AdNetworkType1");
             predicate.setOperator(PredicateOperator.IN);
             predicate.getValues().add(filter);
+            
+            final Predicate predicate1 = new Predicate();
+            predicate1.setField("CampaignName");
+            predicate1.setOperator(PredicateOperator.CONTAINS_IGNORE_CASE);
+            predicate1.getValues().add("model");
+            
+            predicate1.getValues().add("");
             final Collection<Predicate> predicates = new ArrayList<>();
             predicates.add(predicate);
+            predicates.add(predicate1);
             selector.getPredicates().add(predicate);
         }
 

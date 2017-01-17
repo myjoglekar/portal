@@ -139,7 +139,7 @@ public class PaidSocialTabController {
         }
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
         if (accountDetails.getFacebookAccountId() != null) {
-            Object accountPerformance = facebookService.getAccountPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            Object accountPerformance = facebookService.getAccountPerformance(accountDetails.getFacebookAccountId(), startDate, endDate, "");
             returnMap.put("data", accountPerformance);
         } else {
             returnMap.put("data", null);
@@ -416,8 +416,13 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getLast12WeeksPerformanceData(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object accountPerformance = facebookService.getLast12WeeksPerformanceData(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 
@@ -450,8 +455,14 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object fbPublishedPosts = facebookService.getInstagramPerformance(startDate, endDate);
-        returnMap.put("data", fbPublishedPosts);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object fbPublishedPosts = facebookService.getInstagramPerformance(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", fbPublishedPosts);
+        } else {
+
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 
@@ -484,8 +495,13 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object last12WeeksData = facebookService.getLast12WeeksData(startDate, endDate);
-        returnMap.put("data", last12WeeksData);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object last12WeeksData = facebookService.getLast12WeeksData(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", last12WeeksData);
+        } else {
+            returnMap.put("data", null);
+        }
         return returnMap;
     }
 
@@ -518,8 +534,14 @@ public class PaidSocialTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object dayOfWeekData = facebookService.getDayOfWeekData(startDate, endDate);
-        returnMap.put("data", dayOfWeekData);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookAccountId() != null) {
+            Object dayOfWeekData = facebookService.getDayOfWeekData(accountDetails.getFacebookAccountId(), startDate, endDate);
+            returnMap.put("data", dayOfWeekData);
+        } else {
+            returnMap.put("data", null);
+
+        }
         return returnMap;
     }
 

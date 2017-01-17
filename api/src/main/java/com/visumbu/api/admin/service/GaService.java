@@ -54,11 +54,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class GaService {
 
-    private static final String CLIENT_SECRET_JSON_RESOURCE = "F:\\GaToken\\client_secret_384381056232-sqrgb2u8j26gbkqi6dis682ojapsf85a.apps.googleusercontent.com.json";
-
+    // private static final String CLIENT_SECRET_JSON_RESOURCE = "F:\\GaToken\\client_secret_384381056232-sqrgb2u8j26gbkqi6dis682ojapsf85a.apps.googleusercontent.com.json";
     // Replace with your view ID.
      private static final String VIEW_ID = "82176546";
-
     // The directory where the user's credentials will be stored.
     private static final File DATA_STORE_DIR = new File("/tmp/");
 
@@ -192,6 +190,7 @@ public class GaService {
     }
 
     public GetReportsResponse getGenericData(String viewId, Date startDate1, Date endDate1, Date startDate2, Date endDate2, String metrics, String dimentions, String filter) {
+        System.out.println(viewId);
         try {
             List<DateRange> dateRangeList = new ArrayList<>();
             DateRange dateRange = new DateRange();
@@ -371,8 +370,8 @@ public class GaService {
             }
             returnMap.put("columnDefs", columnDefs);
             if (rows == null) {
-                System.out.println("No data found for " + VIEW_ID);
-                return null;
+                System.out.println("No data found for ");
+                return new HashMap();
             }
             List<Map<String, String>> data = new ArrayList<>();
             for (ReportRow row : rows) {
@@ -414,7 +413,7 @@ public class GaService {
             List<ReportRow> rows = report.getData().getRows();
 
             if (rows == null) {
-                System.out.println("No data found for " + VIEW_ID);
+                System.out.println("No data found for ");
                 return;
             }
 
@@ -435,4 +434,67 @@ public class GaService {
             }
         }
     }
+
+    /**
+     * Query the Analytics Reporting API V4. Constructs a request for the
+     * sessions for the past seven days. Returns the API response.
+     *
+     * @param service
+     * @return GetReportResponse
+     * @throws IOException
+     */
+    private static GetReportsResponse getReport(AnalyticsReporting service) throws IOException {
+        // Create the DateRange object.
+        List<DateRange> dateRangeList = new ArrayList<>();
+// The start date for the query in the format `YYYY-MM-DD`.
+        DateRange dateRange = new DateRange();
+        dateRange.setStartDate("7DaysAgo");
+        dateRange.setEndDate("today");
+
+        dateRangeList.add(dateRange);
+        DateRange dateRange1 = new DateRange();
+        dateRange1.setStartDate("14DaysAgo");
+        dateRange1.setEndDate("7DaysAgo");
+        dateRangeList.add(dateRange1);
+        // Create the Metrics object.
+        Metric sessions = new Metric()
+                .setExpression("ga:sessions")
+                .setAlias("sessions");
+
+        //Create the Dimensions object.
+        Dimension browser = new Dimension()
+                .setName("ga:browser");
+
+        // Create the ReportRequest object.
+        ReportRequest request = new ReportRequest()
+                .setViewId(VIEW_ID)
+                .setDateRanges(dateRangeList)
+                .setDimensions(Arrays.asList(browser))
+                .setMetrics(Arrays.asList(sessions));
+
+        ArrayList<ReportRequest> requests = new ArrayList<ReportRequest>();
+        requests.add(request);
+
+        // Create the GetReportsRequest object.
+        GetReportsRequest getReport = new GetReportsRequest()
+                .setReportRequests(requests);
+
+        // Call the batchGet method.
+        GetReportsResponse response = service.reports().batchGet(getReport).execute();
+
+        // Return the response.
+        return response;
+    }
+
+    public static void main(String[] args) {
+        try {
+            AnalyticsReporting service = initializeAnalyticsReporting();
+
+            GetReportsResponse response = getReport(service);
+            printResponse(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

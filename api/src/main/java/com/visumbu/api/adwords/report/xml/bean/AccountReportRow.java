@@ -21,6 +21,7 @@ public class AccountReportRow {
     private String impressions;
     private String clicks;
     private String day;
+    private String week;
     private String searchExactMatchIS;
     private String searchLostISBudget;
     private String searchLostISRank;
@@ -144,6 +145,15 @@ public class AccountReportRow {
         this.day = day;
     }
 
+    public String getWeek() {
+        return week;
+    }
+
+    @XmlAttribute
+    public void setWeek(String week) {
+        this.week = week;
+    }
+    
     public String getSearchExactMatchIS() {
         return searchExactMatchIS.replaceAll("%", "");
     }

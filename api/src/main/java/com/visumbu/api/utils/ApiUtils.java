@@ -99,7 +99,10 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
-        String ppcGoogleAnalyticsProfileId = request.getParameter(serviceName + "GoogleAnalyticsAccountId");
+        String ppcGoogleAnalyticsProfileId = request.getParameter(serviceName + "GoogleAnalyticsProfileId");
+        System.out.println(serviceName + "GoogleAnalyticsProfileId");
+        System.out.println(ppcGoogleAnalyticsProfileId);
+        System.out.println(request.getParameter("seoGoogleAnalyticsProfileId"));
         String analyticsProfileId = null;
         try {
             analyticsProfileId = ppcGoogleAnalyticsProfileId;
@@ -120,21 +123,28 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
-        String facebookAccountIdStr = request.getParameter(serviceName + "FacebookAccountId");
-        Long facebookAccountId = null;
+        String facebookSmAccountIdStr = request.getParameter(serviceName + "FacebookSmAccountId");
+        Long facebookSmAccountId = null;
         try {
-            centuryAccountId = Long.parseLong(facebookAccountIdStr);
+            facebookSmAccountId = Long.parseLong(facebookSmAccountIdStr);
         } catch (Exception e) {
 
         }
-        String reviewpushAccountIdStr = request.getParameter(serviceName + "ReviewpushAccountId");
-        Long reviewpushAccountId = null;
+        String facebookAccountIdStr = request.getParameter(serviceName + "FacebookAdsAccountId");
+        Long facebookAccountId = null;
         try {
-            centuryAccountId = Long.parseLong(reviewpushAccountIdStr);
+            facebookAccountId = Long.parseLong(facebookAccountIdStr);
         } catch (Exception e) {
 
         }
         
+        String reviewpushAccountIdStr = request.getParameter(serviceName + "ReviewpushAccountId");
+        Long reviewpushAccountId = null;
+        try {
+            reviewpushAccountId = Long.parseLong(reviewpushAccountIdStr);
+        } catch (Exception e) {
+
+        }
         
         AccountDetails accountDetails = new AccountDetails();
         accountDetails.setBingAccountId(bingAccountId);
@@ -143,6 +153,7 @@ public class ApiUtils {
         accountDetails.setAnalyticsAccountId(analyticsAccountId);
         accountDetails.setCenturyAccountId(centuryAccountId);
         accountDetails.setFacebookAccountId(facebookAccountId);
+        accountDetails.setFacebookSmAccountId(facebookSmAccountId);
         accountDetails.setReviewPushAccountId(reviewpushAccountId + "");
         return accountDetails;
     }
