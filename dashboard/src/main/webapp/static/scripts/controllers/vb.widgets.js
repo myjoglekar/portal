@@ -244,7 +244,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.save = function (widget) {
-        console.log(widget)
         widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
         var widgetColumnsData = [];
         angular.forEach(widget.columns, function (value, key) {
@@ -256,7 +255,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 groupPriority: isNaN(value.groupPriority) ? null : value.groupPriority,
                 xAxis: isNaN(value.xAxis) ? null : value.xAxis,
                 yAxis: isNaN(value.yAxis) ? null : value.yAxis,
-                sortOrder: isNaN(value.sortOrder) ? null : value.sortOrder,
+                sortOrder: value.sortOrder,
                 displayFormat: value.displayFormat,
                 alignment: value.alignment,
                 baseFieldName: value.baseFieldName,
@@ -307,7 +306,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.onDropComplete = function (index, widget, evt) {
 
         if (widget !== "" && widget !== null) {
-            console.log(widget)
             var otherObj = $scope.widgets[index];
             var otherIndex = $scope.widgets.indexOf(widget);
 //            $scope.widgets.move(otherIndex, index);
@@ -414,17 +412,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             
             scope.isZeroRow = function(row, col) {
                 var widgetData = JSON.parse(scope.widgetObj);
-                console.log(scope.widgetObj);
-                console.log(widgetData.zeroSuppression);
                 if(widgetData.zeroSuppression == false) {
                     return false;
                 }
                 var zeroRow = true;
-                console.log(row);
                 angular.forEach(col, function (value, key) {
                     var fieldName = value.fieldName;
                     var fieldValue = Number(row[fieldName]);
-                    console.log(fieldValue);
                     if (!isNaN(fieldValue) && fieldValue != 0) {
                         zeroRow = false;
                         return zeroRow;
@@ -470,10 +464,12 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 
                 console.log(response);
                 var responseData = response.data;
+                console.log(responseData);
                 responseData = scope.orderData(responseData, sortFields);
+                console.log(responseData);
                 var widgetData = JSON.parse(scope.widgetObj);
-                if(widgetData.maxRecord) {
-                    widgetData.maxRecord = responseData.slice(0, widgetData.maxRecord);
+                if(widgetData.maxRecord > 0) {
+                    responseData = responseData.slice(0, widgetData.maxRecord);
                 }
                 
                 if (groupByFields && groupByFields.length > 0) {
@@ -579,6 +575,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 return returnValue;
             }
             scope.orderData  = function(list, fieldnames) {
+                console.log("Sorted Columns");
+                console.log(fieldnames);
                 if(fieldnames.length == 0) {
                     return list;
                 }
@@ -590,7 +588,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                         fieldsOrder.push("-" + value.fieldname);
                     }
                 });
-                return $filter('orderBy')(list, ['firstProp', 'secondProp']);
+                return $filter('orderBy')(list, fieldsOrder);
             }
             scope.group = function (list, fieldnames, aggreationList) {
                 var currentFields = fieldnames;
