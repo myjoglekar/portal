@@ -58,17 +58,16 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     ];
     $scope.sorting = [
         {name: 'None', value: ''},
-        {name: 'asc', value: 1},
-        {name: 'dec', value: 0}
+        {name: 'asc', value: 'asc'},
+        {name: 'desc', value: 'desc'}
     ];
     $scope.tableWrapText = [
         {name: 'None', value: ''},
         {name: 'Yes', value: "yes"}
     ];
     $scope.hideOptions = [
-        {name: 'None', value: ''},
-        {name: 'Yes', value: 'yes'},
-        {name: 'No', value: 'no'}
+        {name: 'Yes', value: 1},
+        {name: 'No', value: ''}
     ];
     $scope.isEditPreviewColumn = false;
 
@@ -270,7 +269,8 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 width: isNaN(value.width) ? null : value.width,
                 wrapText: value.wrapText,
                 xAxisLabel: value.xAxisLabel,
-                yAxisLabel: value.yAxisLabel
+                yAxisLabel: value.yAxisLabel,
+                columnHide: value.columnHide
             };
             widgetColumnsData.push(columnData);
         });
@@ -284,6 +284,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             productDisplayName: widget.productDisplayName,
             tableFooter: widget.tableFooter,
             zeroSuppression: widget.zeroSuppression,
+            maxRecord: widget.maxRecord,
             dateDuration: widget.dateDuration
         };
         widget.chartType = "";
@@ -1393,6 +1394,12 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                 return function (chartYAxis) {
                     var yAxis = ['', 'y-1', 'y-2']
                     return yAxis[chartYAxis];
+                }
+            }])
+        .filter('hideColumn', [function () {
+                return function (chartYAxis) {
+                    var hideColumn = ['No','Yes']
+                    return hideColumn[chartYAxis];
                 }
             }])
         .filter('to_trusted', ['$sce', function ($sce) {

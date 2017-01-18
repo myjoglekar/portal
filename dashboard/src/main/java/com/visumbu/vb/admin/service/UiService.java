@@ -131,6 +131,7 @@ public class UiService {
         tabWidget.setTableFooter(tabWidgetBean.getTableFooter());
         tabWidget.setZeroSuppression(tabWidgetBean.getZeroSuppression());
         tabWidget.setDateDuration(tabWidgetBean.getDateDuration());
+        tabWidget.setMaxRecord(tabWidgetBean.getMaxRecord());
         TabWidget savedTabWidget = uiDao.saveTabWidget(tabWidget);
         List<WidgetColumnBean> widgetColumns = tabWidgetBean.getWidgetColumns();
         uiDao.deleteWidgetColumns(tabWidget.getId());
@@ -148,7 +149,14 @@ public class UiService {
             widgetColumn.setWidth(widgetColumnBean.getWidth());
             widgetColumn.setWrapText(widgetColumnBean.getWrapText());
             widgetColumn.setAlignment(widgetColumnBean.getAlignment());
-            widgetColumn.setColumnHide(widgetColumnBean.getGroupPriority());
+            Integer columnHide = 1;
+            if (widgetColumnBean.getGroupPriority() != null && widgetColumnBean.getGroupPriority() != 0) {
+                columnHide = 1;
+            }
+            if (widgetColumnBean.getColumnHide() != null) {
+                columnHide = widgetColumnBean.getColumnHide();
+            }
+            widgetColumn.setColumnHide(columnHide);
             widgetColumn.setWidgetId(savedTabWidget);
             uiDao.saveOrUpdate(widgetColumn);
         }

@@ -99,7 +99,7 @@
     .c3-chart-text .c3-texts .c3-text {
         font-weight: bold;
         font-size: 12px
-        /*fill: black;*/
+            /*fill: black;*/
     }
 
 </style>
@@ -271,23 +271,31 @@
                                             </a>
                                         </div>             
                                     </div>
-                                    <div class="col-md-4" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
+                                    <div class="col-md-2" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
                                         <div class="form-group">
                                             <input type="checkbox" ng-model="widget.tableFooter" ng-checked="widget.tableFooter == 1" />
                                             <!--<input type="checkbox" ng-model="widget.tableFooter" ng-checked="widget.tableFooter == true" />-->
                                             <label>Table Footer</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <input type="checkbox" ng-model="advanceMenu" value="true">
                                             <label>Advanced menu</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-4"  ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
+                                    <div class="col-md-3" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
                                         <div class="form-group">
                                             <input type="checkbox" ng-model="widget.zeroSuppression" ng-checked="widget.zeroSuppression == 1">
                                             <label>Zero Suppression</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
+                                        <div class="form-group">
+                                            <label class="col-sm-4">Max Record </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" ng-model="widget.maxRecord" placeholder="max record">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -394,7 +402,7 @@
                                                 </div>
                                             </td>
                                             <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
-                                                <div ng-hide="currentColumn.isEdit"> {{currentColumn.columnHide}}</div>
+                                                <div ng-hide="currentColumn.isEdit"> {{currentColumn.columnHide| hideColumn}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <select ng-model="currentColumn.columnHide" class="form-control">
                                                         <option ng-repeat="hideOption in hideOptions" value="{{hideOption.value}}">{{hideOption.name}}</option>
