@@ -277,7 +277,7 @@ public class OverallTabController {
                 for (Iterator<AccountReportRow> reportRow = adwordsAccountRow.iterator(); reportRow.hasNext();) {
                     AccountReportRow row = reportRow.next();
                     AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
-                    performanceBean.setSource("Paid");
+                    performanceBean.setSource("Paid Search");
                     performanceBean.setImpressions(row.getImpressions());
                     performanceBean.setClicks(row.getClicks());
                     performanceBean.setCtr(row.getCtr());
@@ -296,7 +296,7 @@ public class OverallTabController {
                 for (Iterator<AccountPerformanceRow> reportRow = bingAccountRows.iterator(); reportRow.hasNext();) {
                     AccountPerformanceRow row = reportRow.next();
                     AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
-                    performanceBean.setSource("Paid");
+                    performanceBean.setSource("Paid Search");
                     performanceBean.setImpressions(row.getImpressions().getValue());
                     performanceBean.setClicks(row.getClicks().getValue());
                     performanceBean.setCtr(row.getCtr().getValue());
