@@ -450,12 +450,16 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
 
             var groupByFields = []; // ['device', 'campaignName'];
             var aggreagtionList = [];
+            var sortFields = [];
             for (var i = 0; i < scope.columns.length; i++) {
                 if (scope.columns[i].groupPriority) {
                     groupByFields.push(scope.columns[i].fieldName);
                 }
                 if (scope.columns[i].agregationFunction) {
                     aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
+                }
+                if (scope.columns[i].sortOrder) {
+                    sortFields.push({fieldname: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder});
                 }
             }
             var fullAggreagtionList = aggreagtionList;
@@ -464,18 +468,24 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 scope.loadingTable = false;
                 
                 console.log(response);
+                var responseData = response.data;
+                responseData = scope.orderData(responseData, sortFields);
+                var widgetData = JSON.parse(scope.widgetObj);
+                if(widgetData.maxRecord) {
+                    widgetData.maxRecord = responseData.slice(0, widgetData.maxRecord);
+                }
                 
                 if (groupByFields && groupByFields.length > 0) {
                     scope.groupingName = groupByFields;
-                    groupedData = scope.group(response.data, groupByFields, aggreagtionList);
+                    groupedData = scope.group(responseData, groupByFields, aggreagtionList);
                     var dataToPush = {};
-                    dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
+                    dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
                     dataToPush.data = groupedData;
                     scope.groupingData = dataToPush;
                 } else {
                     var dataToPush = {};
-                    dataToPush = angular.extend(dataToPush, aggregate(response.data, fullAggreagtionList));
-                    dataToPush.data = response.data;
+                    dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
+                    dataToPush.data = responseData;
                     scope.groupingData = dataToPush;
                 }
             });
@@ -567,7 +577,20 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 });
                 return returnValue;
             }
-
+            scope.orderData  = function(list, fieldnames) {
+                if(fieldnames.length == 0) {
+                    return list;
+                }
+                var fieldsOrder = [];
+                angular.forEach(fieldnames, function(value, key){
+                    if(value.sortOrder == "asc") {
+                        fieldsOrder.push(value.fieldname);
+                    } else if(value.sortOrder == "desc") {
+                        fieldsOrder.push("-" + value.fieldname);
+                    }
+                });
+                return $filter('orderBy')(list, ['firstProp', 'secondProp']);
+            }
             scope.group = function (list, fieldnames, aggreationList) {
                 var currentFields = fieldnames;
                 if (fieldnames.length == 0)
