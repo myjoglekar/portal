@@ -63,7 +63,12 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     ];
     $scope.tableWrapText = [
         {name: 'None', value: ''},
-        {name: 'Yes', value: "yes"},
+        {name: 'Yes', value: "yes"}
+    ];
+    $scope.hideOptions = [
+        {name: 'None', value: ''},
+        {name: 'Yes', value: 'yes'},
+        {name: 'No', value: 'no'}
     ];
     $scope.isEditPreviewColumn = false;
 
@@ -171,7 +176,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             width: newWidget, 'minHeight': 25, columns: [], chartType: ""
         };
         $http({method: 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
-            $scope.widgets.unshift({id: response.id, width: newWidget, 'minHeight': 25, columns: [], tableFooter: 1});
+            $scope.widgets.unshift({id: response.id, width: newWidget, 'minHeight': 25, columns: [], tableFooter: 1, zeroSuppression: 1});
             $scope.newWidgetId = response.id;
             $scope.openPopup(response);
         });
@@ -278,6 +283,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             productName: widget.productName,
             productDisplayName: widget.productDisplayName,
             tableFooter: widget.tableFooter,
+            zeroSuppression: widget.zeroSuppression,
             dateDuration: widget.dateDuration
         };
         widget.chartType = "";
@@ -340,7 +346,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<th class="info table-bg" ng-if="groupingName" class="text-center">' +
                 '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
                 ' Group</th>' +
-                '<th class="text-capitalize info table-bg" ng-repeat="col in columns">' +
+                '<th class="text-capitalize info table-bg" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
                 '<div class="text-{{col.alignment}}">{{col.displayName}}</div>' +
                 '</th>' +
                 '</tr></thead>' +
@@ -352,7 +358,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
                 ' {{grouping._key}}' +
                 '</td>' +
-                '<td ng-repeat="col in columns" style="width: {{col.width}}%">' +
+                '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
 //                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
                 '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>' +
                 '</td>' +
@@ -362,18 +368,18 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
 //                ' {{item._groupField}} : {{item._key}}</td>' +
                 ' {{item._key}}</td>' +
-                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' +
+                '<td style="background-color: #d7dedc" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
                 '<div class="text-{{col.alignment}}">{{format(col, item[col.fieldName])}}</div>' + //ng-bind-html-unsafe=todo.text
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
-                '<td ng-repeat="col in columns" style="width: {{col.width}}%"><div class="text-{{col.alignment}};" style="width: {{col.width}}">{{format(col, childItem[col.fieldName])}}</div></span></td></tr>' +
+                '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null"><div class="text-{{col.alignment}};" style="width: {{col.width}}">{{format(col, childItem[col.fieldName])}}</div></span></td></tr>' +
                 '</tbody>' +
                 '<tfoot ng-if="displayFooter == \'true\'">' +
                 '<tr>' +
                 '<td ng-if="groupingName">Total : </td>' +
                 //'<td ng-repeat="col in columns" class="col.alignment[groupingData]">{{format(col, groupingData[col.fieldName])}}</td>' +
-                '<td ng-repeat="col in columns"><div class="text-{{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</div></td>' +
+                '<td ng-repeat="col in columns" ng-if="col.columnHide == null"><div class="text-{{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</div></td>' +
                 '</tr>' +
                 '</tfoot>' +
                 '</table>', //+

@@ -137,6 +137,9 @@ public class TabWidget implements Serializable {
     @Size(max = 45)
     @Column(name = "table_footer")
     private Boolean tableFooter;
+    @Size(max = 45)
+    @Column(name = "zero_suppression")
+    private Boolean zeroSuppression;
     @Size(max = 255)
     @Column(name = "date_duration")
     private String dateDuration;
@@ -368,6 +371,14 @@ public class TabWidget implements Serializable {
 
     public void setTableFooter(Boolean tableFooter) {
         this.tableFooter = tableFooter;
+    }
+
+    public Boolean getZeroSuppression() {
+        return zeroSuppression;
+    }
+
+    public void setZeroSuppression(Boolean zeroSuppression) {
+        this.zeroSuppression = zeroSuppression;
     }
     
     public String getDateDuration() {
