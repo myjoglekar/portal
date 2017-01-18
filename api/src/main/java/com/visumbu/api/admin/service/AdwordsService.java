@@ -678,6 +678,7 @@ public class AdwordsService {
             predicates.add(predicate);
             predicates.add(predicate1);
             selector.getPredicates().add(predicate);
+            selector.getPredicates().add(predicate1);
         }
 
         // Create report definition.

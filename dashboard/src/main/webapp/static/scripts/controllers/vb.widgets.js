@@ -635,7 +635,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,
@@ -839,7 +839,20 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             });
             var xData = [];
             var xTicks = [];
-
+            
+            function isZeroRow(row, col) {
+                var zeroRow = true;
+                angular.forEach(col, function (value, key) {
+                    var fieldName = value.fieldName;
+                    var fieldValue = Number(row[fieldName]);
+                    if (!isNaN(fieldValue) && fieldValue != 0) {
+                        zeroRow = false;
+                        return zeroRow;
+                    }
+                });
+                return zeroRow;
+            }
+            
             function sortResults(unsortedData, prop, asc) {
                 sortedData = unsortedData.sort(function (a, b) {
                     if (asc) {
