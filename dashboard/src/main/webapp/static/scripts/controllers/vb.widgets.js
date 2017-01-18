@@ -338,7 +338,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             widgetId: '@',
             widgetColumns: '@',
             setTableFn: '&',
-            tableFooter: '@'
+            tableFooter: '@',
+            widgetObj:'@'
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t">' +
@@ -352,7 +353,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
                 '<tbody ng-repeat="grouping in groupingData.data">' +
-                '<tr class="text-capitalize text-info info">' +
+                '<tr ng-if="!isZeroRow(grouping, columns)" class="text-capitalize text-info info">' +
                 '<td class="group-bg" ng-if="groupingName">' +
                 '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
@@ -363,7 +364,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>' +
                 '</td>' +
                 '</tr>' +
-                '<tr ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
+                '<tr ng-if="!isZeroRow(item, columns)" ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
                 '<td class="right-group">' +
                 '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
 //                ' {{item._groupField}} : {{item._key}}</td>' +
@@ -372,7 +373,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<div class="text-{{col.alignment}}">{{format(col, item[col.fieldName])}}</div>' + //ng-bind-html-unsafe=todo.text
                 '</td>' +
                 '</tr>' +
-                '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
+                '<tr ng-show="item.$hideRows" ng-if="!isZeroRow(childItem, columns)" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
                 '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null"><div class="text-{{col.alignment}};" style="width: {{col.width}}">{{format(col, childItem[col.fieldName])}}</div></span></td></tr>' +
                 '</tbody>' +
                 '<tfoot ng-if="displayFooter == \'true\'">' +
@@ -409,7 +410,28 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 scope.columns.push(value);
             });
-
+            
+            scope.isZeroRow = function(row, col) {
+                var widgetData = JSON.parse(scope.widgetObj);
+                console.log(scope.widgetObj);
+                console.log(widgetData.zeroSuppression);
+                if(widgetData.zeroSuppression == false) {
+                    return false;
+                }
+                var zeroRow = true;
+                console.log(row);
+                angular.forEach(col, function (value, key) {
+                    var fieldName = value.fieldName;
+                    var fieldValue = Number(row[fieldName]);
+                    console.log(fieldValue);
+                    if (!isNaN(fieldValue) && fieldValue != 0) {
+                        zeroRow = false;
+                        return zeroRow;
+                    }
+                });
+                return zeroRow;
+            }
+            
             scope.format = function (column, value) {
                 if (!value) {
                     return "-";
@@ -840,19 +862,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             var xData = [];
             var xTicks = [];
             
-            function isZeroRow(row, col) {
-                var zeroRow = true;
-                angular.forEach(col, function (value, key) {
-                    var fieldName = value.fieldName;
-                    var fieldValue = Number(row[fieldName]);
-                    if (!isNaN(fieldValue) && fieldValue != 0) {
-                        zeroRow = false;
-                        return zeroRow;
-                    }
-                });
-                return zeroRow;
-            }
-            
+
             function sortResults(unsortedData, prop, asc) {
                 sortedData = unsortedData.sort(function (a, b) {
                     if (asc) {
