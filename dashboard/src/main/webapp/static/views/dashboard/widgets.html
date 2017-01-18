@@ -96,6 +96,12 @@
         height: auto !important;
     }
 
+    .c3-chart-text .c3-texts .c3-text {
+        font-weight: bold;
+        font-size: 12px
+        /*fill: black;*/
+    }
+
 </style>
 <div class="add-widget">
     <div class="pull-right-container pull-right">
@@ -170,10 +176,10 @@
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
-<!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                            </button>-->
-                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
+                            <!--                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                                                        </button>-->
                             <!--<button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>-->
                             <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                             <div id="delete{{widget.id}}" class="modal">
@@ -294,7 +300,7 @@
                                             <td>Field Name</td>
                                             <td ng-if="advanceMenu == true">Display Name</td>
                                             <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Aggregation Function</td>
-                                            <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' &&advanceMenu == true">Group Priority</td>
+                                            <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Group Priority</td>
                                             <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">X-Axis</td>
                                             <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Y-Axis</td>
                                             <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Sort</td>

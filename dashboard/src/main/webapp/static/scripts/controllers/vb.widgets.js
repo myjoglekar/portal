@@ -292,11 +292,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.widget = "";
     };
 
-    function arraymove(arr, fromIndex, toIndex) {
-        var element = arr[fromIndex];
-        arr.splice(fromIndex, 1);
-        arr.splice(toIndex, 0, element);
-    }
+//    Array.prototype.move = function (from, to) {
+//        this.splice(to, 0, this.splice(from, 1)[0]);
+//        return this;
+//    };
 
     $scope.onDropComplete = function (index, widget, evt) {
 
@@ -338,18 +337,18 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t">' +
                 '<thead><tr>' +
-                '<th class="info table-bg" ng-if="groupingName">' +
+                '<th class="info table-bg" ng-if="groupingName" class="text-center">' +
                 '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
                 ' Group</th>' +
                 '<th class="text-capitalize info table-bg" ng-repeat="col in columns">' +
-                '{{col.displayName}}' +
+                '<div class="text-{{col.alignment}}">{{col.displayName}}</div>' +
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
                 '<tbody ng-repeat="grouping in groupingData.data">' +
                 '<tr class="text-capitalize text-info info">' +
                 '<td class="group-bg" ng-if="groupingName">' +
-                '<i style="cursor: pointer" class="fa" 11 ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
+                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
                 ' {{grouping._key}}' +
                 '</td>' +
@@ -363,7 +362,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
 //                ' {{item._groupField}} : {{item._key}}</td>' +
                 ' {{item._key}}</td>' +
-                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' + '<div class="text-{{col.alignment}}">{{format(col, item[col.fieldName])}}</div>' + //ng-bind-html-unsafe=todo.text
+                '<td style="background-color: #d7dedc" ng-repeat="col in columns">' +
+                '<div class="text-{{col.alignment}}">{{format(col, item[col.fieldName])}}</div>' + //ng-bind-html-unsafe=todo.text
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
@@ -434,6 +434,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
+                
+                console.log(response);
+                
                 if (groupByFields && groupByFields.length > 0) {
                     scope.groupingName = groupByFields;
                     groupedData = scope.group(response.data, groupByFields, aggreagtionList);
@@ -488,7 +491,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     returnValue = returnValue * 100;
                 }
                 return returnValue;
-            }
+            };
 
             listOfCalculatedFunction = [
                 {name: 'ctr', field1: 'clicks', field2: 'impressions'},

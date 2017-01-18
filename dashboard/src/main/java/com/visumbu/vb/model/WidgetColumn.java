@@ -114,6 +114,9 @@ public class WidgetColumn implements Serializable {
     @Size(max = 32)
     @Column(name = "alignment")
     private String alignment;
+    @Size(max = 32)
+    @Column(name = "column_hide")
+    private Integer columnHide;
 
     public WidgetColumn() {
     }
@@ -288,7 +291,15 @@ public class WidgetColumn implements Serializable {
 
     public void setAlignment(String alignment) {
         this.alignment = alignment;
-    }  
+    }
+
+    public Integer getColumnHide() {
+        return columnHide;
+    }
+
+    public void setColumnHide(Integer columnHide) {
+        this.columnHide = columnHide;
+    }
     
     @XmlTransient
     @JsonIgnore

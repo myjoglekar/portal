@@ -147,6 +147,7 @@ public class UiService {
             widgetColumn.setWidth(widgetColumnBean.getWidth());
             widgetColumn.setWrapText(widgetColumnBean.getWrapText());
             widgetColumn.setAlignment(widgetColumnBean.getAlignment());
+            widgetColumn.setColumnHide(widgetColumnBean.getGroupPriority());
             widgetColumn.setWidgetId(savedTabWidget);
             uiDao.saveOrUpdate(widgetColumn);
         }
