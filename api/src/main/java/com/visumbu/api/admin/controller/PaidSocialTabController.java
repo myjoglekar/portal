@@ -114,7 +114,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.CPR, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.CPL, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -162,7 +162,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.CPR, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.CPL, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -209,7 +209,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.CPR, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.CPL, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -257,7 +257,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.CPR, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.CPL, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -304,7 +304,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.CPR, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.CPL, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -352,7 +352,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("reach", "number", "Reach", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.CPR, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost_like", "number", "Cost/Like", ColumnDef.Aggregation.CPL, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("actions_like", "number", "Likes", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -399,7 +399,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.CPR, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Actions Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("actions_post_engagement", "number", "Post Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_page_engagement", "number", "Page Engagement", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_comment", "number", "Comments", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("actions_post_reaction", "number", "Post Reactions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -436,7 +436,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("newUsers", "string", "New Users", 1));
         columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", 1));
         columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", 1));
-        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", 1));
+        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rate", 1));
         columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", 1));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
         columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));
@@ -470,7 +470,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("newUsers", "string", "New Users", 1));
         columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", 1));
         columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", 1));
-        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", 1));
+        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rate", 1));
         columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", 1));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
         columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));
@@ -504,7 +504,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("newUsers", "string", "New Users", 1));
         columnDefs.add(new ColumnDef("pageViews", "string", "Page Views", 1));
         columnDefs.add(new ColumnDef("pagesOraganicVisits", "string", "Pages Organic Visits", 1));
-        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rage", 1));
+        columnDefs.add(new ColumnDef("bounceRate", "string", "Bounce Rate", 1));
         columnDefs.add(new ColumnDef("avgTimeOnSite", "string", "Average Time On Site", 1));
         columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.AVG));
         columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.AVG));

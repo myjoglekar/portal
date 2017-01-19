@@ -112,7 +112,7 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("day", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -181,7 +181,7 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("day", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -250,7 +250,7 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("week", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -321,7 +321,7 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day"));
             columnDefs.add(new ColumnDef("dayOfWeekId", "number", "Day Id"));
 
@@ -395,7 +395,7 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -469,7 +469,7 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -552,7 +552,7 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
