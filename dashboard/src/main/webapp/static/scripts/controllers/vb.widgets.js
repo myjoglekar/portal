@@ -2,7 +2,7 @@
 //    this.splice(to, 0, this.splice(from, 1)[0]);
 //    return this;
 //};
-app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
+app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService, $sce) {
     $scope.permission = localStorageService.get("permission");
     //$scope.widget = {isSpecial: 1}
     $scope.selectAggregations = [
@@ -329,7 +329,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     }
 });
 
-app.directive('dynamicTable', function ($http, $filter, $stateParams) {
+app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
     return{
         restrict: 'A',
         scope: {
@@ -338,7 +338,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             widgetColumns: '@',
             setTableFn: '&',
             tableFooter: '@',
-            widgetObj:'@'
+            widgetObj: '@'
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t">' +
@@ -354,26 +354,29 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<tbody ng-repeat="grouping in groupingData.data">' +
                 '<tr ng-if="!isZeroRow(grouping, columns)" class="text-capitalize text-info info">' +
                 '<td class="group-bg" ng-if="groupingName">' +
-                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; hideAll(grouping, grouping.$hideRows);" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
+                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; hideParent(grouping, grouping.$hideRows); hideChild(grouping.data, false)" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
                 ' {{grouping._key}}' +
                 '</td>' +
                 '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
 //                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
-                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName]) | to_trusted"></span></div>' +
+                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName])"></span></div>' +
                 '</td>' +
                 '</tr>' +
                 '<tr ng-if="!isZeroRow(item, columns)" ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
                 '<td class="right-group">' +
-                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows;" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
+                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows; hideChild(item, item.$hideRows)" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
 //                ' {{item._groupField}} : {{item._key}}</td>' +
                 ' {{item._key}}</td>' +
                 '<td style="background-color: #d7dedc" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
-                '<div class="text-{{col.alignment}}">{{format(col, item[col.fieldName])}}</div>' + //ng-bind-html-unsafe=todo.text
+                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, item[col.fieldName])"></span></div>' + //ng-bind-html-unsafe=todo.text
                 '</td>' +
                 '</tr>' +
                 '<tr ng-show="item.$hideRows" ng-if="!isZeroRow(childItem, columns)" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
-                '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null"><div class="text-{{col.alignment}};" style="width: {{col.width}}">{{format(col, childItem[col.fieldName])}}</div></span></td></tr>' +
+                '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
+                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, childItem[col.fieldName])"></span></div>' +
+                '</td>' +
+                '</tr>' +
                 '</tbody>' +
                 '<tfoot ng-if="displayFooter == \'true\'">' +
                 '<tr>' +
@@ -390,6 +393,31 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             scope.clickRow = function () {
                 scope.grouping.$hideRows = false;
             };
+
+            scope.hideParent = function (grouping, hideStatus) {
+                if (!grouping)
+                    return;
+                angular.forEach(grouping.data, function (value, key) {
+                    if (!value.data) {
+                        value.$hideRows = hideStatus;
+                        scope.hideParent(value, hideStatus);
+                    }
+                    // scope.hideChild(value.data, false)
+                    //value.data.$hideRows = true;
+                });
+            };
+
+            scope.hideChild = function (item, hideStatus) {
+               // console.log(item);
+                if (!item)
+                    return;
+                angular.forEach(item, function (value, key) {
+                    value.$hideRows = hideStatus;
+                    scope.hideChild(value, hideStatus);
+                    //value.data.$hideRows = true;
+                });
+            }
+
             scope.hideAll = function (grouping, hideStatus) {
                 if (!grouping)
                     return;
@@ -400,7 +428,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             };
             scope.doSomething = function (ev) {
                 var element = ev.srcElement ? ev.srcElement : ev.target;
-            }
+            };
 
             //scope.currentPage = 1;
             //scope.pageSize = 10;
@@ -409,10 +437,10 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 scope.columns.push(value);
             });
-            
-            scope.isZeroRow = function(row, col) {
+
+            scope.isZeroRow = function (row, col) {
                 var widgetData = JSON.parse(scope.widgetObj);
-                if(widgetData.zeroSuppression == false) {
+                if (widgetData.zeroSuppression == false) {
                     return false;
                 }
                 var zeroRow = true;
@@ -426,7 +454,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 });
                 return zeroRow;
             }
-            
+
             scope.format = function (column, value) {
                 if (!value) {
                     return "-";
@@ -461,17 +489,12 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
-                
-                console.log(response);
                 var responseData = response.data;
-                console.log(responseData);
                 responseData = scope.orderData(responseData, sortFields);
-                console.log(responseData);
                 var widgetData = JSON.parse(scope.widgetObj);
-                if(widgetData.maxRecord > 0) {
+                if (widgetData.maxRecord > 0) {
                     responseData = responseData.slice(0, widgetData.maxRecord);
                 }
-                
                 if (groupByFields && groupByFields.length > 0) {
                     scope.groupingName = groupByFields;
                     groupedData = scope.group(responseData, groupByFields, aggreagtionList);
@@ -484,9 +507,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
                     dataToPush.data = responseData;
                     scope.groupingData = dataToPush;
+//                    scope.groupingData = $sce.trustAsHtml(dataToPush);
                 }
             });
-
             scope.sortColumn = scope.columns;
             scope.objectHeader = [];
             scope.reverse = false;
@@ -574,17 +597,15 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 });
                 return returnValue;
             }
-            scope.orderData  = function(list, fieldnames) {
-                console.log("Sorted Columns");
-                console.log(fieldnames);
-                if(fieldnames.length == 0) {
+            scope.orderData = function (list, fieldnames) {
+                if (fieldnames.length == 0) {
                     return list;
                 }
                 var fieldsOrder = [];
-                angular.forEach(fieldnames, function(value, key){
-                    if(value.sortOrder == "asc") {
+                angular.forEach(fieldnames, function (value, key) {
+                    if (value.sortOrder == "asc") {
                         fieldsOrder.push(value.fieldname);
-                    } else if(value.sortOrder == "desc") {
+                    } else if (value.sortOrder == "desc") {
                         fieldsOrder.push("-" + value.fieldname);
                     }
                 });
@@ -679,7 +700,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,
@@ -883,7 +904,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             });
             var xData = [];
             var xTicks = [];
-            
+
 
             function sortResults(unsortedData, prop, asc) {
                 sortedData = unsortedData.sort(function (a, b) {
@@ -1429,15 +1450,23 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             }])
         .filter('hideColumn', [function () {
                 return function (chartYAxis) {
-                    var hideColumn = ['No','Yes']
+                    var hideColumn = ['No', 'Yes']
                     return hideColumn[chartYAxis];
-                }
-            }])
-        .filter('to_trusted', ['$sce', function ($sce) {
-                return function (text) {
-                    return $sce.trustAsHtml(text);
                 };
             }]);
+//        .filter('titleCase', function () {
+//            return function (input) {
+//                input = input || '';
+//                return input.replace(/\w\S*/g, function (txt) {
+//                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+//                });
+//            };
+//        })
+//        .filter('to_trusted', ['$sce', function ($sce) {
+//                return function (text) {
+//                    return $sce.trustAsHtml(text);
+//                };
+//            }]);
 
 app.service('stats', function ($filter) {
     var coreAccumulate = function (aggregation, value) {

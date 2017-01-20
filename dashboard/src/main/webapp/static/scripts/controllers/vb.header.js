@@ -4,7 +4,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
 
-    $scope.selectTabID = $state;
+    //$scope.selectTabID = $state;
 
     $scope.selectDealer = {};
     $http.get('admin/dealer').success(function (response) {
@@ -153,7 +153,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
 //                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
 //                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
 //                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'This Month': [moment().startOf('month'), moment().endOf(new Date())],
                         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                     },
                     startDate: moment().subtract(29, 'days'),

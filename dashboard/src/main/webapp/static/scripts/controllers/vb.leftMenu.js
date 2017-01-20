@@ -22,18 +22,14 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
     $scope.save = function (item) {
         console.log("Item Name : " + item);
     };
-    //console.log($stateParams.reportId);
     $http.get('static/datas/report.json').success(function (response) {
         $scope.reports = response;
     });
 
     $http.get('admin/ui/product').success(function (response) {
         $scope.products = response;
-        console.log(response)
-        // $scope.searchProduct.unshift({"id": 0, "productName": "All Product"});
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
         $scope.selectProductName = $scope.name.productName;
-        console.log($scope.selectProductName)
     });
 
 
