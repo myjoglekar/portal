@@ -144,6 +144,9 @@ public class TabWidget implements Serializable {
     @Column(name = "date_duration")
     private String dateDuration;
     @Size(max = 255)
+    @Column(name = "max_record")
+    private Integer maxRecord;
+    @Size(max = 255)
     @Column(name = "product_display_name")
     private String productDisplayName;
     @JoinColumn(name = "created_by", referencedColumnName = "id")
@@ -387,6 +390,14 @@ public class TabWidget implements Serializable {
 
     public void setDateDuration(String dateDuration) {
         this.dateDuration = dateDuration;
+    }
+
+    public Integer getMaxRecord() {
+        return maxRecord;
+    }
+
+    public void setMaxRecord(Integer maxRecord) {
+        this.maxRecord = maxRecord;
     }
 
     public String getProductDisplayName() {

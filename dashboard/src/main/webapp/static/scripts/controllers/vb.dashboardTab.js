@@ -119,8 +119,8 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $scope.reports = response;
     });
 
-    Array.prototype.move = function (from, to) {
-        this.splice(to, 0, this.splice(from, 1)[0]);
+    $scope.moveItem = function (list, from, to) {
+        list.splice(to, 0, list.splice(from, 1)[0]);
         return this;
     };
 
@@ -129,7 +129,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
             var otherObj = $scope.tabs[index];
             var otherIndex = $scope.tabs.indexOf(tab);
 
-            $scope.tabs.move(otherIndex, index);
+            $scope.tabs = $scope.moveItem($scope.tabs, otherIndex, index);
 
 //            $scope.tabs[index] = tab;
 //            $scope.tabs[otherIndex] = otherObj;

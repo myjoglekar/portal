@@ -58,17 +58,16 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     ];
     $scope.sorting = [
         {name: 'None', value: ''},
-        {name: 'asc', value: 1},
-        {name: 'dec', value: 0}
+        {name: 'asc', value: 'asc'},
+        {name: 'desc', value: 'desc'}
     ];
     $scope.tableWrapText = [
         {name: 'None', value: ''},
         {name: 'Yes', value: "yes"}
     ];
     $scope.hideOptions = [
-        {name: 'None', value: ''},
-        {name: 'Yes', value: 'yes'},
-        {name: 'No', value: 'no'}
+        {name: 'Yes', value: 1},
+        {name: 'No', value: ''}
     ];
     $scope.isEditPreviewColumn = false;
 
@@ -245,7 +244,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.save = function (widget) {
-        console.log(widget)
         widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
         var widgetColumnsData = [];
         angular.forEach(widget.columns, function (value, key) {
@@ -257,7 +255,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 groupPriority: isNaN(value.groupPriority) ? null : value.groupPriority,
                 xAxis: isNaN(value.xAxis) ? null : value.xAxis,
                 yAxis: isNaN(value.yAxis) ? null : value.yAxis,
-                sortOrder: isNaN(value.sortOrder) ? null : value.sortOrder,
+                sortOrder: value.sortOrder,
                 displayFormat: value.displayFormat,
                 alignment: value.alignment,
                 baseFieldName: value.baseFieldName,
@@ -270,7 +268,8 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 width: isNaN(value.width) ? null : value.width,
                 wrapText: value.wrapText,
                 xAxisLabel: value.xAxisLabel,
-                yAxisLabel: value.yAxisLabel
+                yAxisLabel: value.yAxisLabel,
+                columnHide: value.columnHide
             };
             widgetColumnsData.push(columnData);
         });
@@ -284,6 +283,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             productDisplayName: widget.productDisplayName,
             tableFooter: widget.tableFooter,
             zeroSuppression: widget.zeroSuppression,
+            maxRecord: widget.maxRecord,
             dateDuration: widget.dateDuration
         };
         widget.chartType = "";
@@ -306,7 +306,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.onDropComplete = function (index, widget, evt) {
 
         if (widget !== "" && widget !== null) {
-            console.log(widget)
             var otherObj = $scope.widgets[index];
             var otherIndex = $scope.widgets.indexOf(widget);
 //            $scope.widgets.move(otherIndex, index);
@@ -413,17 +412,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             
             scope.isZeroRow = function(row, col) {
                 var widgetData = JSON.parse(scope.widgetObj);
-                console.log(scope.widgetObj);
-                console.log(widgetData.zeroSuppression);
                 if(widgetData.zeroSuppression == false) {
                     return false;
                 }
                 var zeroRow = true;
-                console.log(row);
                 angular.forEach(col, function (value, key) {
                     var fieldName = value.fieldName;
                     var fieldValue = Number(row[fieldName]);
-                    console.log(fieldValue);
                     if (!isNaN(fieldValue) && fieldValue != 0) {
                         zeroRow = false;
                         return zeroRow;
@@ -469,10 +464,12 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 
                 console.log(response);
                 var responseData = response.data;
+                console.log(responseData);
                 responseData = scope.orderData(responseData, sortFields);
+                console.log(responseData);
                 var widgetData = JSON.parse(scope.widgetObj);
-                if(widgetData.maxRecord) {
-                    widgetData.maxRecord = responseData.slice(0, widgetData.maxRecord);
+                if(widgetData.maxRecord > 0) {
+                    responseData = responseData.slice(0, widgetData.maxRecord);
                 }
                 
                 if (groupByFields && groupByFields.length > 0) {
@@ -578,6 +575,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 return returnValue;
             }
             scope.orderData  = function(list, fieldnames) {
+                console.log("Sorted Columns");
+                console.log(fieldnames);
                 if(fieldnames.length == 0) {
                     return list;
                 }
@@ -589,7 +588,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                         fieldsOrder.push("-" + value.fieldname);
                     }
                 });
-                return $filter('orderBy')(list, ['firstProp', 'secondProp']);
+                return $filter('orderBy')(list, fieldsOrder);
             }
             scope.group = function (list, fieldnames, aggreationList) {
                 var currentFields = fieldnames;
@@ -1426,6 +1425,12 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                 return function (chartYAxis) {
                     var yAxis = ['', 'y-1', 'y-2']
                     return yAxis[chartYAxis];
+                }
+            }])
+        .filter('hideColumn', [function () {
+                return function (chartYAxis) {
+                    var hideColumn = ['No','Yes']
+                    return hideColumn[chartYAxis];
                 }
             }])
         .filter('to_trusted', ['$sce', function ($sce) {
