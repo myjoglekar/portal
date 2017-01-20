@@ -1055,6 +1055,11 @@ public class PaidTabController {
 
             for (Iterator<AdGroupPerformanceRow> reportRow = bingAdGroupPerformanceRows.iterator(); reportRow.hasNext();) {
                 AdGroupPerformanceRow row = reportRow.next();
+                System.out.println("CAmpaign Name " + row.getCampaignName().getValue());
+                if(row.getCampaignName().getValue().toLowerCase().indexOf("model") < 0) {
+                    System.out.println("Skip");
+                    continue;
+                }
                 AdGroupPerformanceReportBean performanceBean = new AdGroupPerformanceReportBean();
                 performanceBean.setSource("Bing");
                 performanceBean.setCampaignName(row.getCampaignName().getValue());

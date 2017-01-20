@@ -673,10 +673,10 @@ public class AdwordsService {
             predicate1.setOperator(PredicateOperator.CONTAINS_IGNORE_CASE);
             predicate1.getValues().add("model");
             
-            predicate1.getValues().add("");
-            final Collection<Predicate> predicates = new ArrayList<>();
-            predicates.add(predicate);
-            predicates.add(predicate1);
+//            predicate1.getValues().add("");
+//            final Collection<Predicate> predicates = new ArrayList<>();
+//            predicates.add(predicate);
+//            predicates.add(predicate1);
             selector.getPredicates().add(predicate);
             selector.getPredicates().add(predicate1);
         }

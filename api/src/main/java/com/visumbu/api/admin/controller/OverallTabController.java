@@ -125,8 +125,6 @@ public class OverallTabController {
     @Autowired
     private DealerVaultService dealerVaultService;
 
-    private final static String DYNAMIC_DISPLAY_URL = "http://ec2-35-166-148-54.us-west-2.compute.amazonaws.com:5002/vizboard/";
-    private final static String DEALER_ID = "8125";
     public static final Long bingAccountId = 2610614L;
 
     @RequestMapping(value = "inventory", method = RequestMethod.GET, produces = "application/json")

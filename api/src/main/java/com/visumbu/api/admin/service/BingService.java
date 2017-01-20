@@ -13,6 +13,7 @@ import com.microsoft.bingads.reporting.AccountReportScope;
 import com.microsoft.bingads.reporting.AccountThroughAdGroupReportScope;
 import com.microsoft.bingads.reporting.AccountThroughCampaignReportScope;
 import com.microsoft.bingads.reporting.AdGroupPerformanceReportColumn;
+import com.microsoft.bingads.reporting.AdGroupPerformanceReportFilter;
 import com.microsoft.bingads.reporting.AdGroupPerformanceReportRequest;
 import com.microsoft.bingads.reporting.AdPerformanceReportColumn;
 import com.microsoft.bingads.reporting.AdPerformanceReportRequest;
@@ -20,12 +21,15 @@ import com.microsoft.bingads.reporting.ArrayOfAccountPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfAdGroupPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfAdPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfCampaignPerformanceReportColumn;
+import com.microsoft.bingads.reporting.ArrayOfCampaignReportScope;
 import com.microsoft.bingads.reporting.ArrayOfGeoLocationPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfKeywordPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfKeywordPerformanceReportSort;
 import com.microsoft.bingads.reporting.ArrayOflong;
 import com.microsoft.bingads.reporting.CampaignPerformanceReportColumn;
 import com.microsoft.bingads.reporting.CampaignPerformanceReportRequest;
+import com.microsoft.bingads.reporting.CampaignReportScope;
+import com.microsoft.bingads.reporting.CampaignStatusReportFilter;
 import com.microsoft.bingads.reporting.GeoLocationPerformanceReportColumn;
 import com.microsoft.bingads.reporting.GeoLocationPerformanceReportRequest;
 import com.microsoft.bingads.reporting.KeywordPerformanceReportColumn;
@@ -53,6 +57,7 @@ import com.visumbu.api.bing.report.xml.bean.GeoZipLocationPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.KeywordPerformanceReport;
 import com.visumbu.api.utils.FileReader;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -1078,7 +1083,7 @@ public class BingService {
 
         ArrayOflong accountIds = new ArrayOflong();
         accountIds.getLongs().add(authorizationData.getAccountId());
-
+        
         report.setScope(new AccountThroughAdGroupReportScope());
         report.getScope().setAccountIds(accountIds);
         report.setTime(new ReportTime());
