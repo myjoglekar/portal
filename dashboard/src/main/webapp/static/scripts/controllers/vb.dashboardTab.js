@@ -1,7 +1,7 @@
 app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout, localStorageService) {
     $scope.permission = localStorageService.get("permission");
 
-    $scope.selectTabID = $state;
+//    $scope.selectTabID = $state;
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
