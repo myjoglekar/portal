@@ -10,8 +10,8 @@ package com.visumbu.vb.utils;
  * @author user
  */
 public class Settings {
-    private static String securityTokenUrl = "http://52.5.156.250:8080/L2TQA/oauth/access_token";
-    private static String securityAuthUrl = "http://52.5.156.250:8080/L2TQA/rest/userpermissons";
+    private static String securityTokenUrl = "http://52.7.231.175:8080/MAPDataLayer/oauth/access_token";
+    private static String securityAuthUrl = "http://52.7.231.175:8080/L2T1.5QA/rest/userpermissons";
 
     public static String getSecurityTokenUrl() {
         return securityTokenUrl;
