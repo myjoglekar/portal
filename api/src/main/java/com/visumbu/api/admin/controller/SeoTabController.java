@@ -133,6 +133,7 @@ public class SeoTabController {
         String dimensions = "ga:channelGrouping";
         String filter = "ga:channelGrouping==Organic Search";
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "seo");
+        System.out.println("SEO GA Profile Id " + accountDetails.getAnalyticsProfileId());
         List<Map<String, String>> gaDataMap = new ArrayList<>();
         System.out.println(accountDetails.getAnalyticsProfileId());
         if (accountDetails.getAnalyticsProfileId() != null) {

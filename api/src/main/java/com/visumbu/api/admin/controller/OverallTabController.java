@@ -390,9 +390,11 @@ public class OverallTabController {
                     performanceBean.setCost(paidSocialPerformance.get("spend"));
                     performanceBean.setDay(paidSocialPerformance.get("date_start"));
                     performanceBean.setAverageCpc(paidSocialPerformance.get("cpc"));
-                    performanceBean.setCpa(paidSocialPerformance.get("cost_page_engagement"));
+                    // performanceBean.setCpa(paidSocialPerformance.get("cost_page_engagement"));
+                    performanceBean.setCpa("0");
                     performanceBean.setAveragePosition("0");
-                    performanceBean.setConversions(paidSocialPerformance.get("actions_page_engagement"));
+                    //performanceBean.setConversions(paidSocialPerformance.get("actions_page_engagement"));
+                    performanceBean.setConversions("0");
                     performanceReportBeans.add(performanceBean);
                 }
             }
