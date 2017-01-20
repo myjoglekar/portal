@@ -8,6 +8,7 @@ package com.visumbu.vb.admin.dao;
 import com.visumbu.vb.dao.BaseDao;
 import com.visumbu.vb.model.Dashboard;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.Product;
 import com.visumbu.vb.model.Report;
 import com.visumbu.vb.model.ReportColumn;
 import com.visumbu.vb.model.ReportType;
@@ -72,6 +73,7 @@ public class UiDao extends BaseDao {
 
     public TabWidget getTabWidgetById(Integer widgetId) {
         TabWidget tabWidget = (TabWidget) sessionFactory.getCurrentSession().get(TabWidget.class, widgetId);
+        tabWidget.setColumns(getColumns(tabWidget));
         return tabWidget;
     }
 
@@ -248,6 +250,15 @@ public class UiDao extends BaseDao {
             update(reportWidget);
         }
         return null;
+    }
+
+    public List<Product> getDealerProduct(Integer dealerId) {
+        String queryStr = "select p from DealerProduct dp, Product p where (p.productName = dp.productName or (dp.productName='PPC' and p.productName = 'Paid Search')"
+                + " or (p.productName='You Tube' and dp.productName like 'YouTube%')) and dp.dealerId.id = :dealerId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("dealerId", dealerId);
+        return query.list();
+
     }
 
 }

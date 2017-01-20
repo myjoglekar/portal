@@ -81,6 +81,7 @@ public class DealerDao extends BaseDao {
                 + " dealer_product_service ps on ps.dealer_product_id = dp.id "
                 + " where dp.id = dps.dealer_product_id  "
                 + " and dp.dealer_id = d.id and d.id = :dealerId";
+        System.out.println(queryStr);
 //        String queryStr = "SELECT account_id accountId, profile_id profileId, source_name sourceName, ps.service_name serviceName"
 //                + " FROM dealer_product_source dps, dealer_product dp, dealer d, dealer_product_service  ps "
 //                + " where dp.id = dps.dealer_product_id and ps.dealer_product_id = dp.id and dp.dealer_id = d.id"

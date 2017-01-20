@@ -247,6 +247,11 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
         var widgetColumnsData = [];
         angular.forEach(widget.columns, function (value, key) {
+            var hideColumn = value.columnHide;
+            if (value.groupPriority > 0) {
+                hideColumn = 1;
+            }
+
             var columnData = {
                 id: value.id,
                 fieldName: value.fieldName,
@@ -269,7 +274,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
                 wrapText: value.wrapText,
                 xAxisLabel: value.xAxisLabel,
                 yAxisLabel: value.yAxisLabel,
-                columnHide: value.columnHide
+                columnHide: hideColumn
             };
             widgetColumnsData.push(columnData);
         });
@@ -288,10 +293,11 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         };
         widget.chartType = "";
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
+            widget.columns = response.columns; // widget.columns;
             widget.chartType = data.chartType;
         });
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
-        widget.widgetColumns = widget.columns;
+        widget.widgetColumns = widgetColumnsData; // widget.columns;
     };
 
     $scope.closeWidget = function (widget) {
@@ -338,13 +344,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             widgetColumns: '@',
             setTableFn: '&',
             tableFooter: '@',
-            widgetObj:'@'
+            widgetObj: '@'
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t">' +
                 '<thead><tr>' +
                 '<th class="info table-bg" ng-if="groupingName" class="text-center">' +
-                '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
+                '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows, true); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
                 ' Group</th>' +
                 '<th class="text-capitalize info table-bg" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
                 '<div class="text-{{col.alignment}}">{{col.displayName}}</div>' +
@@ -390,12 +396,14 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             scope.clickRow = function () {
                 scope.grouping.$hideRows = false;
             };
-            scope.hideAll = function (grouping, hideStatus) {
+            scope.hideAll = function (grouping, hideStatus, deepExpand) {
                 if (!grouping)
                     return;
                 angular.forEach(grouping.data, function (value, key) {
                     value.$hideRows = hideStatus;
-                    scope.hideAll(value, hideStatus);
+                    if (hideStatus == false || deepExpand == true) {
+                        scope.hideAll(value, hideStatus);
+                    }
                 });
             };
             scope.doSomething = function (ev) {
@@ -409,10 +417,10 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 scope.columns.push(value);
             });
-            
-            scope.isZeroRow = function(row, col) {
+
+            scope.isZeroRow = function (row, col) {
                 var widgetData = JSON.parse(scope.widgetObj);
-                if(widgetData.zeroSuppression == false) {
+                if (widgetData.zeroSuppression == false) {
                     return false;
                 }
                 var zeroRow = true;
@@ -426,7 +434,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 });
                 return zeroRow;
             }
-            
+
             scope.format = function (column, value) {
                 if (!value) {
                     return "-";
@@ -461,17 +469,17 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
-                
+
                 console.log(response);
                 var responseData = response.data;
                 console.log(responseData);
                 responseData = scope.orderData(responseData, sortFields);
                 console.log(responseData);
                 var widgetData = JSON.parse(scope.widgetObj);
-                if(widgetData.maxRecord > 0) {
+                if (widgetData.maxRecord > 0) {
                     responseData = responseData.slice(0, widgetData.maxRecord);
                 }
-                
+
                 if (groupByFields && groupByFields.length > 0) {
                     scope.groupingName = groupByFields;
                     groupedData = scope.group(responseData, groupByFields, aggreagtionList);
@@ -523,7 +531,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                     returnValue = value1 / value2;
                 }
                 if (name == "ctr") {
-                    returnValue = returnValue * 100;
+                    // returnValue = returnValue * 100;
                 }
                 return returnValue;
             };
@@ -574,17 +582,17 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 });
                 return returnValue;
             }
-            scope.orderData  = function(list, fieldnames) {
+            scope.orderData = function (list, fieldnames) {
                 console.log("Sorted Columns");
                 console.log(fieldnames);
-                if(fieldnames.length == 0) {
+                if (fieldnames.length == 0) {
                     return list;
                 }
                 var fieldsOrder = [];
-                angular.forEach(fieldnames, function(value, key){
-                    if(value.sortOrder == "asc") {
+                angular.forEach(fieldnames, function (value, key) {
+                    if (value.sortOrder == "asc") {
                         fieldsOrder.push(value.fieldname);
-                    } else if(value.sortOrder == "desc") {
+                    } else if (value.sortOrder == "desc") {
                         fieldsOrder.push("-" + value.fieldname);
                     }
                 });
@@ -883,7 +891,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             });
             var xData = [];
             var xTicks = [];
-            
+
 
             function sortResults(unsortedData, prop, asc) {
                 sortedData = unsortedData.sort(function (a, b) {
@@ -1429,7 +1437,7 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             }])
         .filter('hideColumn', [function () {
                 return function (chartYAxis) {
-                    var hideColumn = ['No','Yes']
+                    var hideColumn = ['No', 'Yes']
                     return hideColumn[chartYAxis];
                 }
             }])

@@ -46,7 +46,7 @@ public class DealerService {
             DealerAccountBean accountBean = iterator.next();
             String serviceName = accountBean.getServiceName();
             if(serviceName.equalsIgnoreCase("none")) {
-                if(accountBean.getProductName().indexOf("SEO") > 0){
+                if(accountBean.getProductName().toLowerCase().indexOf("seo") >= 0){
                     serviceName = "seo";
                 }
                 if(accountBean.getProductName().indexOf("Reputation Management") > 0){

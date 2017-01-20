@@ -58,6 +58,12 @@ public class UiController extends BaseController {
     List getProduct(HttpServletRequest request, HttpServletResponse response) {
         return uiService.getProduct();
     }
+    
+    @RequestMapping(value = "product/{dealerId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getDealerProduct(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dealerId) {
+        return uiService.getDealerProduct(dealerId);
+    }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody

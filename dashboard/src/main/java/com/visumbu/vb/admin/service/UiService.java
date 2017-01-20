@@ -53,6 +53,11 @@ public class UiService {
         return returnList;
     }
 
+    public List<Product> getDealerProduct(Integer dealerId) {
+        return uiDao.getDealerProduct(dealerId);
+    }
+
+    
     public List<Dashboard> getDashboards(VbUser user) {
         return uiDao.getDashboards(user);
     }
@@ -168,7 +173,7 @@ public class UiService {
             widgetColumn.setWidgetId(savedTabWidget);
             uiDao.saveOrUpdate(widgetColumn);
         }
-        return savedTabWidget;
+        return uiDao.getTabWidgetById(tabWidgetBean.getId());
     }
 
     public ReportType addReportType(ReportType reportTypes) {
