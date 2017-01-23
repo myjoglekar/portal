@@ -202,7 +202,7 @@
                         </div>
                     </div>
 
-                    <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">
+                    <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">{{lineEmptyMessage}}
                         <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
