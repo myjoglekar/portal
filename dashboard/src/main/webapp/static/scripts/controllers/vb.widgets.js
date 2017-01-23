@@ -309,15 +309,20 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
 //        return this;
 //    };
 
+    $scope.moveWidget = function (list, from, to) {
+        list.splice(to, 0, list.splice(from, 1)[0]);
+        return list;
+    };
+
     $scope.onDropComplete = function (index, widget, evt) {
 
         if (widget !== "" && widget !== null) {
             var otherObj = $scope.widgets[index];
             var otherIndex = $scope.widgets.indexOf(widget);
 //            $scope.widgets.move(otherIndex, index);
-
-            $scope.widgets[index] = widget;
-            $scope.widgets[otherIndex] = otherObj;
+            $scope.widgets = $scope.moveWidget($scope.widgets, otherIndex, index);
+//            $scope.widgets[index] = widget;
+//            $scope.widgets[otherIndex] = otherObj;
             var widgetOrder = $scope.widgets.map(function (value, key) {
                 if (value) {
                     return value.id;
@@ -347,7 +352,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             widgetObj: '@'
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
-                '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t">' +
+                '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t" ng-hide="hideEmptyTable">' +
                 '<thead><tr>' +
                 '<th class="info table-bg" ng-if="groupingName" class="text-center">' +
                 '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows, true); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
@@ -394,7 +399,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '</td>' +
                 '</tr>' +
                 '</tfoot>' +
-                '</table>', //+
+                '</table>' + '<div class="text-center" ng-show="hideEmptyTable">{{tableEmptyMessage}}</div>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
             scope.totalShown = 0;
@@ -510,28 +515,34 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
 
-                var responseData = response.data;
-                responseData = scope.orderData(responseData, sortFields);
-                var widgetData = JSON.parse(scope.widgetObj);
-                if (widgetData.maxRecord > 0) {
-                    responseData = responseData.slice(0, widgetData.maxRecord);
-                }
-
-                if (groupByFields && groupByFields.length > 0) {
-                    scope.groupingName = groupByFields;
-                    groupedData = scope.group(responseData, groupByFields, aggreagtionList);
-                    var dataToPush = {};
-                    dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
-                    dataToPush.data = groupedData;
-                    scope.groupingData = dataToPush;
+                if (response.data.length === 0) {
+                    scope.tableEmptyMessage = "No Data Found";
+                    scope.hideEmptyTable = true;
                 } else {
-                    var dataToPush = {};
-                    dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
-                    dataToPush.data = responseData;
-                    scope.groupingData = dataToPush;
+                    var responseData = response.data;
+                    responseData = scope.orderData(responseData, sortFields);
+                    var widgetData = JSON.parse(scope.widgetObj);
+                    if (widgetData.maxRecord > 0) {
+                        responseData = responseData.slice(0, widgetData.maxRecord);
+                    }
+
+                    if (groupByFields && groupByFields.length > 0) {
+                        scope.groupingName = groupByFields;
+                        groupedData = scope.group(responseData, groupByFields, aggreagtionList);
+                        var dataToPush = {};
+                        dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
+                        dataToPush.data = groupedData;
+                        scope.groupingData = dataToPush;
+                    } else {
+                        var dataToPush = {};
+                        dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
+                        dataToPush.data = responseData;
+                        scope.groupingData = dataToPush;
 //                    scope.groupingData = $sce.trustAsHtml(dataToPush);
+                    }
                 }
             });
+
             scope.sortColumn = scope.columns;
             scope.objectHeader = [];
             scope.reverse = false;
@@ -817,10 +828,11 @@ app.directive('tickerDirective', function ($http, $stateParams) {
         restrict: 'AE',
         template: '<div ng-show="loadingTicker" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<div ng-hide="loadingTicker" class="panel panel-default relative pnl-aln">' +
-                '<div class="m-b-10">' +
+                '<div class="m-b-10" ng-hide="hideEmptyTicker">' +
                 '<span>{{tickerTitle}}</span><br>' +
                 '<span class="text-lg tickers">{{totalValue}}</span>' +
                 '</div>' +
+                '<div ng-show="hideEmptyTicker">{{tickerEmptyMessage}}</div>' +
                 '</div>',
         scope: {
             tickerUrl: '@',
@@ -856,22 +868,27 @@ app.directive('tickerDirective', function ($http, $stateParams) {
 
             $http.get("admin/proxy/getJson?url=" + scope.tickerUrl + "&widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.loadingTicker = false;
-                if (!response) {
-                    return;
+                if (response.length === 0) {
+                    scope.tickerEmptyMessage = "No Data Found";
+                    scope.hideEmptyTicker = true;
+                } else {
+                    if (!response) {
+                        return;
+                    }
+                    var tickerData = response.data;
+                    var loopCount = 0;
+                    data = [tickerName.fieldName];
+                    setData = tickerData.map(function (a) {
+                        data.push(loopCount);
+                        loopCount++;
+                        return a[tickerName.fieldName];
+                    });
+                    var total = 0;
+                    for (var i = 0; i < setData.length; i++) {
+                        total += parseFloat(setData[i]);
+                    }
+                    scope.totalValue = format(tickerName, total);
                 }
-                var tickerData = response.data;
-                var loopCount = 0;
-                data = [tickerName.fieldName];
-                setData = tickerData.map(function (a) {
-                    data.push(loopCount);
-                    loopCount++;
-                    return a[tickerName.fieldName];
-                });
-                var total = 0;
-                for (var i = 0; i < setData.length; i++) {
-                    total += parseFloat(setData[i]);
-                }
-                scope.totalValue = format(tickerName, total);
             });
         }
     };
@@ -880,7 +897,8 @@ app.directive('tickerDirective', function ($http, $stateParams) {
 app.directive('lineChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
-        template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif"></div>',
+        template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif"></div>' +
+                '<div ng-show="hideEmptyLine" class="text-center">{{lineEmptyMessage}}</div>',
         scope: {
             lineChartUrl: '@',
             widgetId: '@',
@@ -888,7 +906,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             control: "=",
             collection: '@',
             widgetColumns: '@',
-            lineChartId: '@'
+            lineChartId: '@',
         },
         link: function (scope, element, attr) {
             var labels = {format: {}};
@@ -965,60 +983,65 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             if (scope.lineChartUrl) {
                 $http.get("admin/proxy/getJson?url=" + scope.lineChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingLine = false;
-                    scope.xAxis = [];
-                    var loopCount = 0;
-                    var chartData = response.data;
-                    if (sortField != "") {
-                        chartData = sortResults(chartData, sortField, sortOrder);
-                    }
-                    xTicks = [xAxis.fieldName];
-                    xData = chartData.map(function (a) {
-                        xTicks.push(loopCount);
-                        loopCount++;
-                        return a[xAxis.fieldName];
-                    });
-                    columns.push(xTicks);
-
-                    angular.forEach(yAxis, function (value, key) {
-                        ySeriesData = chartData.map(function (a) {
-                            return a[value.fieldName] || "0";
+                    if (response.data.length === 0) {
+                        scope.lineEmptyMessage = "No Data Found";
+                        scope.hideEmptyLine = true;
+                    } else {
+                        scope.xAxis = [];
+                        var loopCount = 0;
+                        var chartData = response.data;
+                        if (sortField != "") {
+                            chartData = sortResults(chartData, sortField, sortOrder);
+                        }
+                        xTicks = [xAxis.fieldName];
+                        xData = chartData.map(function (a) {
+                            xTicks.push(loopCount);
+                            loopCount++;
+                            return a[xAxis.fieldName];
                         });
-                        ySeriesData.unshift(value.displayName);
-                        columns.push(ySeriesData);
-                    });
-                    var chart = c3.generate({
-                        bindto: element[0],
-                        data: {
-                            x: xAxis.fieldName,
-                            columns: columns,
-                            labels: labels,
-                            axes: axes
-                        },
-                        tooltip: {show: false},
-                        axis: {
-                            x: {
-                                tick: {
-                                    format: function (x) {
-                                        return xData[x];
+                        columns.push(xTicks);
+
+                        angular.forEach(yAxis, function (value, key) {
+                            ySeriesData = chartData.map(function (a) {
+                                return a[value.fieldName] || "0";
+                            });
+                            ySeriesData.unshift(value.displayName);
+                            columns.push(ySeriesData);
+                        });
+                        var chart = c3.generate({
+                            bindto: element[0],
+                            data: {
+                                x: xAxis.fieldName,
+                                columns: columns,
+                                labels: labels,
+                                axes: axes
+                            },
+                            tooltip: {show: false},
+                            axis: {
+                                x: {
+                                    tick: {
+                                        format: function (x) {
+                                            return xData[x];
+                                        }
+                                    }
+                                },
+                                y2: {
+                                    show: true,
+                                    tick: {
+                                        format: d3.format(".2f")
                                     }
                                 }
                             },
-                            y2: {
-                                show: true,
-                                tick: {
-                                    format: d3.format(".2f")
+                            grid: {
+                                x: {
+                                    show: true
+                                },
+                                y: {
+                                    show: true
                                 }
                             }
-                        },
-                        grid: {
-                            x: {
-                                show: true
-                            },
-                            y: {
-                                show: true
-                            }
-                        }
-                    });
+                        });
+                    }
                 });
             }
         }
@@ -1028,7 +1051,8 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
 app.directive('barChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
-        template: '<div ng-show="loadingBar" class="text-center"><img src="static/img/logos/loader.gif"></div>',
+        template: '<div ng-show="loadingBar" class="text-center"><img src="static/img/logos/loader.gif"></div>' +
+                '<div ng-show="hideEmptyBar" class="text-center">{{barEmptyMessage}}</div>',
         scope: {
             barChartUrl: '@',
             widgetId: '@',
@@ -1110,55 +1134,60 @@ app.directive('barChartDirective', function ($http, $stateParams) {
 
                 $http.get("admin/proxy/getJson?url=" + scope.barChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingBar = false;
-                    scope.xAxis = [];
-                    var loopCount = 0;
-                    var chartData = response.data;
-                    chartData = sortResults(chartData, sortField, sortOrder);
-                    xTicks = [xAxis.fieldName];
-                    xData = chartData.map(function (a) {
-                        xTicks.push(loopCount);
-                        loopCount++;
-                        return a[xAxis.fieldName];
-                    });
-
-                    columns.push(xTicks);
-
-                    angular.forEach(yAxis, function (value, key) {
-                        ySeriesData = chartData.map(function (a) {
-                            return a[value.fieldName] || "0";
+                    if (response.data.length === 0) {
+                        scope.barEmptyMessage = "No Data Found";
+                        scope.hideEmptyBar = true;
+                    } else {
+                        scope.xAxis = [];
+                        var loopCount = 0;
+                        var chartData = response.data;
+                        chartData = sortResults(chartData, sortField, sortOrder);
+                        xTicks = [xAxis.fieldName];
+                        xData = chartData.map(function (a) {
+                            xTicks.push(loopCount);
+                            loopCount++;
+                            return a[xAxis.fieldName];
                         });
-                        ySeriesData.unshift(value.displayName);
-                        columns.push(ySeriesData);
-                    });
-                    var chart = c3.generate({
-                        bindto: element[0],
-                        data: {
-                            x: xAxis.fieldName,
-                            columns: columns,
-                            labels: labels,
-                            type: 'bar',
-                            axes: axes
-                        },
-                        tooltip: {show: false},
-                        axis: {
-                            x: {
-                                tick: {
-                                    format: function (x) {
-                                        return xData[x];
+
+                        columns.push(xTicks);
+
+                        angular.forEach(yAxis, function (value, key) {
+                            ySeriesData = chartData.map(function (a) {
+                                return a[value.fieldName] || "0";
+                            });
+                            ySeriesData.unshift(value.displayName);
+                            columns.push(ySeriesData);
+                        });
+                        var chart = c3.generate({
+                            bindto: element[0],
+                            data: {
+                                x: xAxis.fieldName,
+                                columns: columns,
+                                labels: labels,
+                                type: 'bar',
+                                axes: axes
+                            },
+                            tooltip: {show: false},
+                            axis: {
+                                x: {
+                                    tick: {
+                                        format: function (x) {
+                                            return xData[x];
+                                        }
                                     }
+                                },
+                                y2: y2
+                            },
+                            grid: {
+                                x: {
+                                    show: true
+                                },
+                                y: {
+                                    show: true
                                 }
-                            },
-                            y2: y2
-                        },
-                        grid: {
-                            x: {
-                                show: true
-                            },
-                            y: {
-                                show: true
                             }
-                        }
-                    });
+                        });
+                    }
                 });
             }
         }
@@ -1167,7 +1196,8 @@ app.directive('barChartDirective', function ($http, $stateParams) {
 app.directive('pieChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'AC',
-        template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>',
+        template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>'+
+        '<div ng-show="hideEmptyPie" class="text-center">{{pieEmptyMessage}}</div>',
         scope: {
             pieChartUrl: '@',
             widgetId: '@',
@@ -1246,70 +1276,74 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.pieChartUrl) {
-
                 $http.get("admin/proxy/getJson?url=" + scope.pieChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingPie = false;
-                    scope.xAxis = [];
-                    var loopCount = 0;
-                    var chartData = response.data;
-                    chartData = sortResults(chartData, sortField, sortOrder);
-                    xTicks = [xAxis.fieldName];
-                    xData = chartData.map(function (a) {
-                        xTicks.push(loopCount);
-                        loopCount++;
-                        return a[xAxis.fieldName];
-                    });
-                    columns.push(xTicks);
-                    angular.forEach(yAxis, function (value, key) {
-                        ySeriesData = chartData.map(function (a) {
-                            return a[value.fieldName] || "0";
+                    if (response.data.length === 0) {
+                        scope.pieEmptyMessage = "No Data Found";
+                        scope.hideEmptyPie = true;
+                    } else {
+                        scope.xAxis = [];
+                        var loopCount = 0;
+                        var chartData = response.data;
+                        chartData = sortResults(chartData, sortField, sortOrder);
+                        xTicks = [xAxis.fieldName];
+                        xData = chartData.map(function (a) {
+                            xTicks.push(loopCount);
+                            loopCount++;
+                            return a[xAxis.fieldName];
                         });
-                        ySeriesData.unshift(value.displayName);
-                        columns.push(ySeriesData);
-                    });
+                        columns.push(xTicks);
+                        angular.forEach(yAxis, function (value, key) {
+                            ySeriesData = chartData.map(function (a) {
+                                return a[value.fieldName] || "0";
+                            });
+                            ySeriesData.unshift(value.displayName);
+                            columns.push(ySeriesData);
+                        });
 
-                    var data = {};
-                    var legends = [];
-                    var yAxisField = yAxis[0];
-                    chartData.forEach(function (e) {
-                        legends.push(e[xAxis.fieldName]);
-                        data[e[xAxis.fieldName]] = data[e[xAxis.fieldName]] ? data[e[xAxis.fieldName]] : 0 + e[yAxisField.fieldName] ? e[yAxisField.fieldName] : 0;
-                    })
+                        var data = {};
+                        var legends = [];
+                        var yAxisField = yAxis[0];
+                        chartData.forEach(function (e) {
+                            legends.push(e[xAxis.fieldName]);
+                            data[e[xAxis.fieldName]] = data[e[xAxis.fieldName]] ? data[e[xAxis.fieldName]] : 0 + e[yAxisField.fieldName] ? e[yAxisField.fieldName] : 0;
+                        })
 
-                    var chart = c3.generate({
-                        bindto: element[0],
+                        var chart = c3.generate({
+                            bindto: element[0],
 //                        data: {
 //                            x: xAxis.fieldName,
 //                            columns: data,
 //                            labels: labels,
 //                            type: 'pie'
 //                        },
-                        data: {
-                            json: [data],
-                            keys: {
-                                value: xData,
+                            data: {
+                                json: [data],
+                                keys: {
+                                    value: xData,
+                                },
+                                type: 'pie'
                             },
-                            type: 'pie'
-                        },
-                        tooltip: {show: false},
-                        axis: {
-                            x: {
-                                tick: {
-                                    format: function (x) {
-                                        return xData[x];
+                            tooltip: {show: false},
+                            axis: {
+                                x: {
+                                    tick: {
+                                        format: function (x) {
+                                            return xData[x];
+                                        }
                                     }
                                 }
-                            }
-                        },
-                        grid: {
-                            x: {
-                                show: true
                             },
-                            y: {
-                                show: true
+                            grid: {
+                                x: {
+                                    show: true
+                                },
+                                y: {
+                                    show: true
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 });
             }
         }
@@ -1319,7 +1353,8 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
 app.directive('areaChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
-        template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>',
+        template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>'+
+                '<div ng-show="hideEmptyArea" class="text-center">{{areaEmptyMessage}}</div>',
         scope: {
             setPieChartFn: '&',
             widgetId: '@',
@@ -1397,53 +1432,58 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
 
                 $http.get("admin/proxy/getJson?url=" + scope.areaChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                     scope.loadingArea = false;
-                    scope.xAxis = [];
-                    var loopCount = 0;
-                    var chartData = response.data;
-                    chartData = sortResults(chartData, sortField, sortOrder);
-                    xTicks = [xAxis.fieldName];
-                    xData = chartData.map(function (a) {
-                        xTicks.push(loopCount);
-                        loopCount++;
-                        return a[xAxis.fieldName];
-                    });
-                    columns.push(xTicks);
-                    angular.forEach(yAxis, function (value, key) {
-                        ySeriesData = chartData.map(function (a) {
-                            return a[value.fieldName] || "0";
+                    if (response.data.length === 0) {
+                        scope.areaEmptyMessage = "No Data Found";
+                        scope.hideEmptyArea = true;
+                    } else {
+                        scope.xAxis = [];
+                        var loopCount = 0;
+                        var chartData = response.data;
+                        chartData = sortResults(chartData, sortField, sortOrder);
+                        xTicks = [xAxis.fieldName];
+                        xData = chartData.map(function (a) {
+                            xTicks.push(loopCount);
+                            loopCount++;
+                            return a[xAxis.fieldName];
                         });
-                        ySeriesData.unshift(value.displayName);
-                        columns.push(ySeriesData);
-                    });
-                    var chart = c3.generate({
-                        bindto: element[0],
-                        data: {
-                            x: xAxis.fieldName,
-                            columns: columns,
-                            labels: labels,
-                            type: 'area',
-                            axes: axes
-                        },
-                        tooltip: {show: false},
-                        axis: {
-                            x: {
-                                tick: {
-                                    format: function (x) {
-                                        return xData[x];
+                        columns.push(xTicks);
+                        angular.forEach(yAxis, function (value, key) {
+                            ySeriesData = chartData.map(function (a) {
+                                return a[value.fieldName] || "0";
+                            });
+                            ySeriesData.unshift(value.displayName);
+                            columns.push(ySeriesData);
+                        });
+                        var chart = c3.generate({
+                            bindto: element[0],
+                            data: {
+                                x: xAxis.fieldName,
+                                columns: columns,
+                                labels: labels,
+                                type: 'area',
+                                axes: axes
+                            },
+                            tooltip: {show: false},
+                            axis: {
+                                x: {
+                                    tick: {
+                                        format: function (x) {
+                                            return xData[x];
+                                        }
                                     }
+                                },
+                                y2: {show: true}
+                            },
+                            grid: {
+                                x: {
+                                    show: true
+                                },
+                                y: {
+                                    show: true
                                 }
-                            },
-                            y2: {show: true}
-                        },
-                        grid: {
-                            x: {
-                                show: true
-                            },
-                            y: {
-                                show: true
                             }
-                        }
-                    });
+                        });
+                    }
                 });
             }
         }
