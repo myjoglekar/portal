@@ -47,7 +47,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'DataSetController'
             });
 
-    $urlRouterProvider.otherwise('index/dashboard/1/1');
+    $urlRouterProvider.otherwise('index/dashboard/1/2');
 });
 //
 //Array.prototype.move = function (from, to) {

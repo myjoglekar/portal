@@ -1,4 +1,4 @@
-app.controller("MenuController", function ($scope, $http, $stateParams, $filter, $state) {
+app.controller("MenuController", function ($scope, $http, $stateParams, $filter, $state, $rootScope) {
     $scope.reportId = $stateParams.reportId;
     $scope.startDate = $stateParams.startDate;
     $scope.endDate = $stateParams.endDate;
@@ -26,11 +26,17 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
         $scope.reports = response;
     });
 
-    $http.get('admin/ui/product').success(function (response) {
+    $http.get('admin/ui/product/' + $stateParams.dealerId).success(function (response) {
         $scope.products = response;
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
         $scope.selectProductName = $scope.name.productName;
     });
 
-
+    $rootScope.$on('dealerChange', function (event, args) {
+        $http.get('admin/ui/product/' + $stateParams.dealerId).success(function (response) {
+            $scope.products = response;
+            $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
+            $scope.selectProductName = $scope.name.productName;
+        });
+    });
 })

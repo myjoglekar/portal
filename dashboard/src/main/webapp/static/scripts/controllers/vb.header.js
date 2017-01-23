@@ -1,4 +1,4 @@
-app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $stateParams, $state, $location) {
+app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $stateParams, $state, $location, $rootScope) {
     $scope.userName = $cookies.getObject("username");
     $scope.fullName = $cookies.getObject("fullname");
     $scope.productId = $stateParams.productId;
@@ -20,6 +20,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.getDealerId = function (dealer) {
         console.log(dealer);
         $stateParams.dealerId = dealer.id;
+        $rootScope.$emit('dealerChange', {dealerId: dealer.id});
     };
 
     $scope.toDate = function (strDate) {
@@ -159,9 +160,9 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
                     startDate: moment().subtract(29, 'days'),
                     endDate: moment()
                 },
-                function (start, end) {
-                    $('#daterange-btn span').html(start.format('MM-DD-YYYY') + ' - ' + end.format('MM-DD-YYYY'));
-                }
+        function (start, end) {
+            $('#daterange-btn span').html(start.format('MM-DD-YYYY') + ' - ' + end.format('MM-DD-YYYY'));
+        }
         );
         //Date picker
         $('#datepicker').datepicker({
