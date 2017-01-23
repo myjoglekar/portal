@@ -73,7 +73,7 @@ public class ApiUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "";
+        return "Unknown";
     }
 
     public static void main(String[] argv) {
