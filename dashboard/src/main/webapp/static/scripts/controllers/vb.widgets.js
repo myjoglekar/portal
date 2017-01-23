@@ -385,21 +385,32 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '</tr>' +
                 '</tbody>' +
                 '<tfoot ng-if="displayFooter == \'true\'">' +
-                '<tr>' +
-                '<td ng-if="groupingName">Total : </td>' +
+                '<tr> {{initTotalPrint()}}' +
+                '<td ng-if="groupingName">{{ showTotal() }}</td>' +
                 //'<td ng-repeat="col in columns" class="col.alignment[groupingData]">{{format(col, groupingData[col.fieldName])}}</td>' +
-                '<td ng-repeat="col in columns" ng-if="col.columnHide == null"><div class="text-{{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</div></td>' +
+                '<td ng-repeat="col in columns" ng-if="col.columnHide == null">' +
+                '<div ng-if="totalShown == 1" class="text-{{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</div>' +
+                '<div ng-if="totalShown != 1" class="text-{{col.alignment}}">{{ showTotal() }}</div>' +
+                '</td>' +
                 '</tr>' +
                 '</tfoot>' +
                 '</table>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
+            scope.totalShown = 0;
             scope.displayFooter = scope.tableFooter;
             scope.loadingTable = true;
             scope.clickRow = function () {
                 scope.grouping.$hideRows = false;
             };
-
+            scope.showTotal = function () {
+                scope.totalShown = 1;
+                return "Total :"
+            }
+            scope.initTotalPrint = function() {
+                scope.totalShown = 0;
+                return "";
+            }
             scope.hideParent = function (grouping, hideStatus) {
                 if (!grouping)
                     return;
@@ -414,7 +425,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             };
 
             scope.hideChild = function (item, hideStatus) {
-               // console.log(item);
+                // console.log(item);
                 if (!item)
                     return;
                 angular.forEach(item, function (value, key) {
@@ -483,6 +494,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             var aggreagtionList = [];
             var sortFields = [];
             for (var i = 0; i < scope.columns.length; i++) {
+                console.log(scope.columns[i]);
                 if (scope.columns[i].groupPriority) {
                     groupByFields.push(scope.columns[i].fieldName);
                 }
@@ -490,7 +502,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
                 }
                 if (scope.columns[i].sortOrder) {
-                    sortFields.push({fieldname: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder});
+                    sortFields.push({fieldname: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type:scope.columns[i].type});
                 }
             }
             var fullAggreagtionList = aggreagtionList;
@@ -613,10 +625,25 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 }
                 var fieldsOrder = [];
                 angular.forEach(fieldnames, function (value, key) {
-                    if (value.sortOrder == "asc") {
-                        fieldsOrder.push(value.fieldname);
-                    } else if (value.sortOrder == "desc") {
-                        fieldsOrder.push("-" + value.fieldname);
+                    console.log("TYPE " + value.type);
+                    console.log(value);
+                    if (value.type == "number") {
+                        if (value.sortOrder == "asc") {
+                            //fieldsOrder.push(value.fieldname);
+                            fieldsOrder.push(function (a) {
+                                return parseFloat(a[value.fieldName])
+                            });
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push(function (a) {
+                                return -1 * parseFloat(a[value.fieldName])
+                            });
+                        }
+                    } else {
+                        if (value.sortOrder == "asc") {
+                            fieldsOrder.push(value.fieldname);
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push("-" + value.fieldname);
+                        }
                     }
                 });
                 return $filter('orderBy')(list, fieldsOrder);
@@ -710,7 +737,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,
