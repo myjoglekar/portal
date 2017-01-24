@@ -130,7 +130,7 @@ public class DisplayTabController {
                 String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
                 performanceBean.setCpa(cpa);
                 performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setDirectionsPageView(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal1Completions"));
                 performanceBean.setInventoryPageViews(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal2Completions"));
                 performanceBean.setLeadSubmission(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal3Completions"));
@@ -221,7 +221,7 @@ public class DisplayTabController {
                 performanceBean.setCpa(cpa);
 
                 performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                 performanceBean.setDirectionsPageView(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal1Completions"));
                 performanceBean.setInventoryPageViews(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal2Completions"));
@@ -313,7 +313,7 @@ public class DisplayTabController {
                 performanceBean.setCpa(cpa);
 
                 performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                 performanceBean.setDirectionsPageView(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal1Completions"));
                 performanceBean.setInventoryPageViews(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal2Completions"));
@@ -414,7 +414,7 @@ public class DisplayTabController {
                 performanceBean.setAverageCpc(row.getAverageCpc());
                 performanceBean.setCpa(row.getCostPerConversion());
                 performanceBean.setAveragePosition(row.getAveragePosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConversions());
                 performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
                 performanceBean.setHeadline(row.getHeadline());
                 performanceBean.setDirectionsPageView(getGaDataForDateAdType(gaData, "ga:adContent", row.getHeadline(), "Goal1Completions"));
@@ -487,7 +487,7 @@ public class DisplayTabController {
                 performanceBean.setAveragePosition(row.getAvgPosition());
                 performanceBean.setCost(row.getCost());
                 performanceBean.setAverageCpc(row.getAvgCPC());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setCpa(row.getCostConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());
                 performanceBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
@@ -554,7 +554,7 @@ public class DisplayTabController {
                     performanceBean.setCpa(cpa);
 
                     performanceBean.setAveragePosition(row.getAvgPosition());
-                    performanceBean.setConversions(row.getConversions());
+                    performanceBean.setConversions(row.getAllConv());
                     performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                     performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                     performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
@@ -627,7 +627,7 @@ public class DisplayTabController {
                     performanceBean.setCpa(cpa);
 
                     performanceBean.setAveragePosition(row.getAvgPosition());
-                    performanceBean.setConversions(row.getConversions());
+                    performanceBean.setConversions(row.getAllConv());
                     performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                     performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                     performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
