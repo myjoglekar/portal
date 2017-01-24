@@ -137,7 +137,7 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
-        
+
         String reviewpushAccountIdStr = request.getParameter(serviceName + "ReviewpushAccountId");
         Long reviewpushAccountId = null;
         try {
@@ -145,7 +145,7 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
-        
+
         AccountDetails accountDetails = new AccountDetails();
         accountDetails.setBingAccountId(bingAccountId);
         accountDetails.setAdwordsAccountId(adwordsAccountId);
@@ -156,6 +156,16 @@ public class ApiUtils {
         accountDetails.setFacebookSmAccountId(facebookSmAccountId);
         accountDetails.setReviewPushAccountId(reviewpushAccountId + "");
         return accountDetails;
+    }
+
+    public static String removePercent(String value) {
+        value = value.replaceAll("%", "");
+        try {
+            return (Double.parseDouble(value) / 100.0) + "";
+        } catch (Exception e) {
+
+        }
+        return "0.0";
     }
 
 }

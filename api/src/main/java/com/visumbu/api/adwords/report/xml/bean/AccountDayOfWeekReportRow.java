@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.adwords.report.xml.bean;
 
+import com.visumbu.api.utils.ApiUtils;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -152,7 +153,7 @@ public class AccountDayOfWeekReportRow {
     }
 
     public String getCtr() {
-        return ctr;
+        return ApiUtils.removePercent(ctr);
     }
 
     @XmlAttribute

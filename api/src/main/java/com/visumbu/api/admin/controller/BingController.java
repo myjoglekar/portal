@@ -152,7 +152,7 @@ public class BingController {
     AdGroupPerformanceReport getAdGroupPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getAdGroupPerformanceReport(startDate, endDate, accountId);
+        return bingService.getAdGroupPerformanceReport(startDate, endDate, accountId, "");
     }
 
     //Error
