@@ -270,7 +270,8 @@ public class UiDao extends BaseDao {
                 + " and dp.dealer_id = d.id  and d.id = :dealerId "
                 + " ) a where (a.service_name = p.product_name or (a.service_name like 'YouTube%' and p.product_name='Video') "
                 + " or (a.service_name like 'PPC' and p.product_name='Paid Search') "
-                + " or (a.service_name like 'Digital%' and p.product_name='Paid Search') "
+                + " or (a.service_name like 'Digital Ad Package%' and p.product_name='Paid Search') "
+                + " or (a.service_name like 'Facebook%' and p.product_name='Paid Social') "
                 + " or (a.service_name like 'Call Tracking' and p.product_name='Paid Search') "
                 + " or (a.service_name like '%SEO%' and p.product_name='SEO') "
                 + " )";
