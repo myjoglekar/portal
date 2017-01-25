@@ -673,7 +673,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 angular.forEach(fieldnames, function (value, key) {
                     console.log("TYPE " + value.type);
                     console.log(value);
-                    if (value.type == "number") {
+                    if (value.type == "string") {
+                        if (value.sortOrder == "asc") {
+                            fieldsOrder.push(value.fieldname);
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push("-" + value.fieldname);
+                        }
+                    } else {
                         if (value.sortOrder == "asc") {
                             //fieldsOrder.push(value.fieldname);
                             fieldsOrder.push(function (a) {
@@ -683,12 +689,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                             fieldsOrder.push(function (a) {
                                 return -1 * parseFloat(a[value.fieldName])
                             });
-                        }
-                    } else {
-                        if (value.sortOrder == "asc") {
-                            fieldsOrder.push(value.fieldname);
-                        } else if (value.sortOrder == "desc") {
-                            fieldsOrder.push("-" + value.fieldname);
                         }
                     }
                 });

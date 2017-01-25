@@ -8,6 +8,7 @@ package com.visumbu.api.admin.service;
 import com.visumbu.api.admin.controller.DynamicDisplayTabController;
 import com.visumbu.api.utils.DateUtils;
 import com.visumbu.api.utils.ExampleConfig;
+import com.visumbu.api.utils.JsonSimpleUtils;
 import com.visumbu.api.utils.Rest;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,8 @@ public class DynamicDisplayService {
             String data = Rest.getData(url);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(data);
-            return jsonObj;
+            return JsonSimpleUtils.toMap((JSONObject)jsonObj);
+            // return jsonObj;
 //            OutputStream out = response.getOutputStream();
 //            out.write(data.getBytes());
 //            Map<String, String[]> parameterMap = request.getParameterMap();

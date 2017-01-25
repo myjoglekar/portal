@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.adwords.report.xml.bean;
 
+import com.visumbu.api.utils.ApiUtils;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -49,7 +50,7 @@ public class AccountHourOfDayReportRow {
     }
 
     public String getCtr() {
-        return ctr.replaceAll("%", "");
+        return ApiUtils.removePercent(ctr);
     }
 
     @XmlAttribute
@@ -125,7 +126,7 @@ public class AccountHourOfDayReportRow {
     }
 
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS;
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -134,7 +135,7 @@ public class AccountHourOfDayReportRow {
     }
 
     public String getSearchLostISBudget() {
-        return searchLostISBudget;
+        return ApiUtils.removePercent(searchLostISBudget);
     }
 
     @XmlAttribute
@@ -143,7 +144,7 @@ public class AccountHourOfDayReportRow {
     }
 
     public String getSearchLostISRank() {
-        return searchLostISRank;
+        return ApiUtils.removePercent(searchLostISRank);
     }
 
     @XmlAttribute
@@ -161,7 +162,7 @@ public class AccountHourOfDayReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare;
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute
@@ -192,7 +193,7 @@ public class AccountHourOfDayReportRow {
     }
 
     public String getSearchBudgetLostImpressionShare() {
-        return SearchBudgetLostImpressionShare;
+        return ApiUtils.removePercent(SearchBudgetLostImpressionShare);
     }
 
     @XmlAttribute

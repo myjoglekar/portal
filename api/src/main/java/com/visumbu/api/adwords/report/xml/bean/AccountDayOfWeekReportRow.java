@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.adwords.report.xml.bean;
 
+import com.visumbu.api.utils.ApiUtils;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -89,7 +90,7 @@ public class AccountDayOfWeekReportRow {
     }
 
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS;
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -125,7 +126,7 @@ public class AccountDayOfWeekReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare;
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute
@@ -152,7 +153,7 @@ public class AccountDayOfWeekReportRow {
     }
 
     public String getCtr() {
-        return ctr;
+        return ApiUtils.removePercent(ctr);
     }
 
     @XmlAttribute
@@ -179,7 +180,7 @@ public class AccountDayOfWeekReportRow {
     }
 
     public String getSearchBudgetLostImpressionShare() {
-        return SearchBudgetLostImpressionShare;
+        return ApiUtils.removePercent(SearchBudgetLostImpressionShare);
     }
 
     @XmlAttribute

@@ -185,10 +185,10 @@ public class AdwordsService {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", aggregationDuration,
                     "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                    "Conversions", "SearchImpressionShare", "AveragePosition",
+                    "Conversions", "SearchImpressionShare", "AveragePosition","AllConversions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
-        } else if (aggregation.isEmpty()) {
+        }  else if (aggregation.isEmpty()) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks",
                     "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
@@ -563,21 +563,28 @@ public class AdwordsService {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "Week",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.equalsIgnoreCase("daily")) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "Date",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "DayOfWeek",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("summary")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else {
@@ -651,28 +658,37 @@ public class AdwordsService {
         return null;
     }
 
-    public AddGroupReport getAdGroupReport(Date startDate, Date endDate, String accountId, String filter) {
+    public AddGroupReport getAdGroupReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
-        selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "AdGroupId", "AdGroupName",
-                "Impressions", "Clicks", "Date",
-                "SearchExactMatchImpressionShare", "SearchRankLostImpressionShare",
-                "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
-                "NumOfflineInteractions",
-                "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
-        ));
-
+        if (aggregation == null || aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "AdGroupId", "AdGroupName",
+                    "Impressions", "Clicks",
+                    "SearchExactMatchImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "NumOfflineInteractions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "AdGroupId", "AdGroupName",
+                    "Impressions", "Clicks", "Date",
+                    "SearchExactMatchImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "NumOfflineInteractions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        }
         if (filter != null) {
             final Predicate predicate = new Predicate();
             predicate.setField("AdNetworkType1");
             predicate.setOperator(PredicateOperator.IN);
             predicate.getValues().add(filter);
-            
+
             final Predicate predicate1 = new Predicate();
             predicate1.setField("CampaignName");
             predicate1.setOperator(PredicateOperator.CONTAINS_IGNORE_CASE);
             predicate1.getValues().add("model");
-            
+
 //            predicate1.getValues().add("");
 //            final Collection<Predicate> predicates = new ArrayList<>();
 //            predicates.add(predicate);

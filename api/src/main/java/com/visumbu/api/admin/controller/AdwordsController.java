@@ -56,7 +56,7 @@ public class AdwordsController {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
         String accountId = "581-484-4675";
-        return adwordsService.getAdGroupReport(startDate, endDate, accountId, "SEARCH");
+        return adwordsService.getAdGroupReport(startDate, endDate, accountId,"", "SEARCH");
     }
     @RequestMapping(value = "getAccountDevice", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody

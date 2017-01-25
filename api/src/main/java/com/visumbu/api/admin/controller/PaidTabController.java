@@ -117,7 +117,7 @@ public class PaidTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -150,7 +150,7 @@ public class PaidTabController {
                     performanceBean.setCpa(cpa);
 
                     performanceBean.setAveragePosition(row.getAvgPosition());
-                    performanceBean.setConversions(row.getConversions());
+                    performanceBean.setConversions(row.getAllConv());
                     performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                     performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                     performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
@@ -175,7 +175,7 @@ public class PaidTabController {
                     performanceBean.setCost(row.getSpend().getValue());
                     performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                     performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-                    performanceBean.setConversions(row.getConversions().getValue());
+                    performanceBean.setConversions(row.getPhoneCalls().getValue());
                     performanceBean.setCpa(row.getCostPerConversion().getValue());
                     performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                     performanceBean.setSearchBudgetLostImpressionShare("-");
@@ -240,13 +240,14 @@ public class PaidTabController {
             sum.setSearchImpressionsShare(((ApiUtils.toDouble(p.getSearchImpressionsShare()) + ApiUtils.toDouble(sum.getSearchImpressionsShare()) * (count - 1)) / count) + "");
             sum.setSearchImpressionsShareLostDueToRank(((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToRank()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToRank()) * (count - 1)) / count) + "");
             sum.setSearchImpressionsShareLostDueToBudget(((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToBudget()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToBudget()) * (count - 1)) / count) + "");
-
-            sum.setAveragePosition((ApiUtils.toDouble(p.getAveragePosition()) + ApiUtils.toDouble(sum.getAveragePosition())) / 2 + "");
+            sum.setAveragePosition((ApiUtils.toDouble(p.getAveragePosition()) + ApiUtils.toDouble(sum.getAveragePosition())) + "");
             sum.setConversions((ApiUtils.toDouble(p.getConversions()) + ApiUtils.toDouble(sum.getConversions())) + "");
             sum.setCtr(ApiUtils.toDouble(sum.getImpressions()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getClicks()) / ApiUtils.toDouble(sum.getImpressions())) + "");
             sum.setAverageCpc(ApiUtils.toDouble(sum.getClicks()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getCost()) / ApiUtils.toDouble(sum.getClicks())) + "");
             sum.setCpa(ApiUtils.toDouble(sum.getConversions()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getCost()) / ApiUtils.toDouble(sum.getConversions())) + "");
         }
+        AccountPerformanceReportBean data = map.get("Overall");
+        data.setAveragePosition((ApiUtils.toDouble(data.getAveragePosition()) / 2) + "");
         return new ArrayList<AccountPerformanceReportBean>(map.values());
     }
 
@@ -284,7 +285,7 @@ public class PaidTabController {
                     Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
                     Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
                     Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
-                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+                    Double conversions = parseDouble(accountReportRow.getAllConv() == null ? "0" : accountReportRow.getAllConv());
 
                     String adwordsStartDayOfWeek = day;
                     ClicksImpressionsHourOfDayBean oldBean = dataMap.get(adwordsStartDayOfWeek);
@@ -317,7 +318,7 @@ public class PaidTabController {
                     Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                     Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
                     Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                    Double conversions = parseDouble(accountReportRow.getPhoneCalls() == null ? "0" : accountReportRow.getPhoneCalls().getValue());
 
                     String bingStartDayOfWeek = day;
                     ClicksImpressionsHourOfDayBean oldBean = dataMap.get(bingStartDayOfWeek);
@@ -389,7 +390,7 @@ public class PaidTabController {
                     Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
                     Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
                     Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
-                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+                    Double conversions = parseDouble(accountReportRow.getAllConv() == null ? "0" : accountReportRow.getAllConv());
 
                     String adwordsStartDayOfWeek = day;
                     ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
@@ -419,7 +420,7 @@ public class PaidTabController {
                     Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                     Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
                     Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                    Double conversions = parseDouble(accountReportRow.getPhoneCalls() == null ? "0" : accountReportRow.getPhoneCalls().getValue());
 
                     String bingStartDayOfWeek = DateUtils.getDayOfWeek(Integer.parseInt(day));
                     ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
@@ -488,7 +489,7 @@ public class PaidTabController {
                     Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
 //                Double cpc = parseDouble(accountReportRow.getAvgCPC() == null ? "0" : accountReportRow.getAvgCPC());
 //                Double cpa = parseDouble(accountReportRow.getCostConv() == null ? "0" : accountReportRow.getCostConv());
-                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
+                    Double conversions = parseDouble(accountReportRow.getAllConv() == null ? "0" : accountReportRow.getAllConv());
 
                     String adwordsStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "yyyy-MM-dd"));
                     ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
@@ -520,7 +521,7 @@ public class PaidTabController {
                     Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                     Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
                     Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
+                    Double conversions = parseDouble(accountReportRow.getPhoneCalls() == null ? "0" : accountReportRow.getPhoneCalls().getValue());
                     Double cpc = parseDouble(accountReportRow.getAverageCpc() == null ? "0" : accountReportRow.getAverageCpc().getValue());
                     Double cpa = parseDouble(accountReportRow.getCostPerConversion() == null ? "0" : accountReportRow.getCostPerConversion().getValue());
 
@@ -570,7 +571,7 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("impressions", "string", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("clicks", "string", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("ctr", "string", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("averagePosition", "string", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "string", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost", "string", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "string", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -601,7 +602,7 @@ public class PaidTabController {
                 performanceBean.setAveragePosition(row.getAvgPosition());
                 performanceBean.setCost(row.getCost());
                 performanceBean.setAverageCpc(row.getAvgCPC());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setCpa(row.getCostConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());
                 performanceBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
@@ -627,7 +628,7 @@ public class PaidTabController {
                 performanceBean.setAverageCpc(row.getClicks().getValue());
                 performanceBean.setCtr(row.getCtr().getValue());
                 performanceBean.setAverageCpc(row.getAverageCpc().getValue());
-                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setConversions(row.getPhoneCalls().getValue());
                 performanceBean.setCpa(row.getCostPerConversion().getValue());
                 performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 performanceBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
@@ -662,7 +663,7 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "string", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("searchImpressionsShare", "string", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("averagePosition", "string", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "string", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
             return returnMap;
@@ -680,14 +681,15 @@ public class PaidTabController {
                 performanceBean.setSource("Google");
                 performanceBean.setCountry(row.getCountryCriteriaId());
                 performanceBean.setState("--");
-                performanceBean.setCity(ApiUtils.getCityById(row.getCityCriteriaId()));
+                String city = ApiUtils.getCityById(row.getCityCriteriaId());
+                performanceBean.setCity(city);
                 performanceBean.setZip("--");
                 performanceBean.setImpressions(row.getImpressions());
                 performanceBean.setClicks(row.getClicks());
                 performanceBean.setCost(row.getCost());
                 performanceBean.setCtr(row.getCtr());
                 performanceBean.setAverageCpc(row.getAvgCPC());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setCpa(row.getCostConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchBudgetLostImpressionShare());
                 performanceBean.setAveragePosition(row.getAvgPosition());
@@ -705,7 +707,11 @@ public class PaidTabController {
                 performanceBean.setSource("Bing");
                 performanceBean.setCountry(row.getCountry() == null ? "-" : row.getCountry().getValue());
                 performanceBean.setState(row.getState().getValue());
-                performanceBean.setCity(row.getCity().getValue());
+                String city = row.getCity().getValue();
+                if(city == null || city.isEmpty() || city.equalsIgnoreCase("-")) {
+                    city = "Unknown";
+                }
+                performanceBean.setCity(city);
                 performanceBean.setZip("--");
                 performanceBean.setCost(row.getSpend().getValue());
                 performanceBean.setImpressions(row.getImpressions().getValue());
@@ -758,7 +764,7 @@ public class PaidTabController {
                 if (row.getDevice().contains("Computer")) {
                     performanceBean.setDevice("Computer");
                 }
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceReportBeans.add(performanceBean);
             }
         }
@@ -770,7 +776,7 @@ public class PaidTabController {
                 DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
                 performanceBean.setSource("Bing");
                 performanceBean.setDevice(row.getDeviceType().getValue());
-                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setConversions(row.getPhoneCalls().getValue());
                 performanceReportBeans.add(performanceBean);
             }
         }
@@ -794,7 +800,7 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -832,7 +838,7 @@ public class PaidTabController {
                 performanceBean.setCpa(row.getCostConv());
 
                 performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                 performanceReportBeans.add(performanceBean);
             }
@@ -861,7 +867,7 @@ public class PaidTabController {
                 performanceBean.setCost(row.getSpend().getValue());
                 performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                 performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setConversions(row.getPhoneCalls().getValue());
                 performanceBean.setCpa(row.getCostPerConversion().getValue());
                 performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 performanceReportBeans.add(performanceBean);
@@ -888,7 +894,7 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -928,7 +934,7 @@ public class PaidTabController {
                 performanceBean.setCpa(cpa);
 
                 performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                 performanceReportBeans.add(performanceBean);
             }
@@ -956,7 +962,7 @@ public class PaidTabController {
                 performanceBean.setCost(row.getSpend().getValue());
                 performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                 performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setConversions(row.getPhoneCalls().getValue());
                 performanceBean.setCpa(row.getCostPerConversion().getValue());
                 performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 performanceReportBeans.add(performanceBean);
@@ -1012,7 +1018,7 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -1025,7 +1031,7 @@ public class PaidTabController {
         List<AdGroupPerformanceReportBean> performanceReportBeans = new ArrayList<>();
         if (accountDetails.getAdwordsAccountId() != null) {
 
-            AddGroupReport adwordsAdGroupReport = adwordsService.getAdGroupReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "SEARCH");
+            AddGroupReport adwordsAdGroupReport = adwordsService.getAdGroupReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
 
             List<AdGroupReportRow> adwordsAdGroupReportRow = adwordsAdGroupReport.getAdGroupReportRow();
 
@@ -1044,19 +1050,19 @@ public class PaidTabController {
                 performanceBean.setCpa(row.getCostConv());
 
                 performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                 performanceReportBeans.add(performanceBean);
             }
         }
         if (accountDetails.getBingAccountId() != null) {
-            AdGroupPerformanceReport bingAdGroupPerformanceReport = bingService.getAdGroupPerformanceReport(startDate, endDate, accountDetails.getBingAccountId());
+            AdGroupPerformanceReport bingAdGroupPerformanceReport = bingService.getAdGroupPerformanceReport(startDate, endDate, accountDetails.getBingAccountId(), "");
             List<AdGroupPerformanceRow> bingAdGroupPerformanceRows = bingAdGroupPerformanceReport.getAdGroupPerformanceRows();
 
             for (Iterator<AdGroupPerformanceRow> reportRow = bingAdGroupPerformanceRows.iterator(); reportRow.hasNext();) {
                 AdGroupPerformanceRow row = reportRow.next();
                 System.out.println("CAmpaign Name " + row.getCampaignName().getValue());
-                if(row.getCampaignName().getValue().toLowerCase().indexOf("model") < 0) {
+                if (row.getCampaignName().getValue().toLowerCase().indexOf("model") < 0) {
                     System.out.println("Skip");
                     continue;
                 }
@@ -1070,7 +1076,7 @@ public class PaidTabController {
                 performanceBean.setCost(row.getSpend().getValue());
                 performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                 performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-                performanceBean.setConversions(row.getConversions().getValue());
+                performanceBean.setConversions(row.getPhoneCalls().getValue());
                 performanceBean.setCpa(row.getCostPerConversion().getValue());
                 performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 performanceReportBeans.add(performanceBean);
@@ -1099,7 +1105,7 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("adType", "string", "Ad Type"));
@@ -1142,7 +1148,7 @@ public class PaidTabController {
                 performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
                 performanceBean.setDisplayUrl(row.getDisplayUrl());
                 performanceBean.setAveragePosition(row.getAveragePosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConversions());
                 performanceBean.setAdDescription(ApiUtils.getPaidAdDescription(performanceBean));
                 performanceReportBeans.add(performanceBean);
             }
@@ -1195,7 +1201,7 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -1224,7 +1230,7 @@ public class PaidTabController {
                 campaignBean.setCost(row.getCost());
                 campaignBean.setAverageCpc(row.getAvgCPC());
                 campaignBean.setAveragePosition(row.getAvgPosition());
-                campaignBean.setConversions(row.getConversions());
+                campaignBean.setConversions(row.getAllConv());
                 campaignBean.setCpa(row.getCostConv());
                 campaignBean.setSearchImpressionsShare(row.getSearchImprShare());
                 campaignBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
@@ -1246,7 +1252,7 @@ public class PaidTabController {
                 campaignBean.setCost(row.getSpend().getValue());
                 campaignBean.setAverageCpc(row.getAverageCpc().getValue());
                 campaignBean.setAveragePosition(row.getAveragePosition().getValue());
-                campaignBean.setConversions(row.getConversions().getValue());
+                campaignBean.setConversions(row.getPhoneCalls().getValue());
                 campaignBean.setCpa(row.getCostPerConversion().getValue());
                 campaignBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 campaignBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
