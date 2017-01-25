@@ -507,7 +507,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
                 }
                 if (scope.columns[i].sortOrder) {
-                    sortFields.push({fieldname: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type: scope.columns[i].type});
+                    sortFields.push({fieldName: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type: scope.columns[i].type});
                 }
             }
             var fullAggreagtionList = aggreagtionList;
@@ -648,7 +648,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                         if (value.sortOrder == "asc") {
                             //fieldsOrder.push(value.fieldname);
                             fieldsOrder.push(function (a) {
-                                return parseFloat(a[value.fieldName])
+
+                                var parsedValue = parseFloat(a[value.fieldName]);
+                                console.log(parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return a[value.fieldName];
+                                }
+                                return parsedValue;
                             });
                         } else if (value.sortOrder == "desc") {
                             fieldsOrder.push(function (a) {
