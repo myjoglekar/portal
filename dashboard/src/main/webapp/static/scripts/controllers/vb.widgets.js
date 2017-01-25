@@ -434,8 +434,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '</td>' +
                 '</tr>' +
                 '</tfoot>' +
-                '</table>' + '<div class="text-center" ng-show="hideEmptyTable">{{tableEmptyMessage}}</div>',
-         //+
+                '</table>' + '<div class="text-center" ng-show="hideEmptyTable">{{tableEmptyMessage}}</div>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
             scope.totalShown = 0;

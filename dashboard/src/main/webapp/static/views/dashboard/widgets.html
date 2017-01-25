@@ -101,6 +101,7 @@
         font-size: 12px
             /*fill: black;*/
     }
+    
 
 </style>
 <div class="add-widget">
@@ -180,10 +181,10 @@
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
-                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                            </button>
-<!--                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+<!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>-->
+                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                            </button>
                             <!--<button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>-->
                                                         <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                             <div id="delete{{widget.id}}" class="modal">
@@ -265,7 +266,7 @@
                                                                 <div class="col-sm-4" ng-if="selectDateDuration.value == ''"> <input type="text" class="form-control" ng-model="widget.selectedDurations"/></div>
                                                                 <div class="col-sm-4" ng-if="selectDateDuration.value == 'custom'">
                                                                     
-                                                                    <input date-Range-Picker class="pull-left form-control" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+                                                                    <input date-Range-Picker class="form-control" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
                                                                 </div>
                                                             </a>
                                                         </li>
