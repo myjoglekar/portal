@@ -285,7 +285,7 @@ public class PaidTabController {
                     Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks());
                     Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions());
                     Double cost = parseDouble(accountReportRow.getCost() == null ? "0" : accountReportRow.getCost());
-                    Double conversions = parseDouble(accountReportRow.getAllConv() == null ? "0" : accountReportRow.getAllConv());
+                    Double conversions = parseDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions());
 
                     String adwordsStartDayOfWeek = day;
                     ClicksImpressionsHourOfDayBean oldBean = dataMap.get(adwordsStartDayOfWeek);

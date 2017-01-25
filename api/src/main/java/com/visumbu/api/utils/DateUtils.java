@@ -184,7 +184,7 @@ public class DateUtils {
 
     public static Date get12WeeksBack(String strStart) {
         DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        Date startDate = null;
+        Date startDate = new Date();
         try {
             startDate = (Date) formatter.parse(strStart);
         } catch (Exception ex) {
@@ -195,6 +195,7 @@ public class DateUtils {
         Calendar calReturn = Calendar.getInstance();
         calReturn.setTime(startDate);
         calReturn.add(Calendar.DATE, -84);
+        System.out.println(calReturn.getTime());
         return calReturn.getTime();
     }
 

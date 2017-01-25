@@ -185,7 +185,7 @@ public class AdwordsService {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", aggregationDuration,
                     "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                    "Conversions", "SearchImpressionShare", "AveragePosition","AllConversions",
+                    "Conversions", "SearchImpressionShare", "AveragePosition",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         }  else if (aggregation.isEmpty()) {
