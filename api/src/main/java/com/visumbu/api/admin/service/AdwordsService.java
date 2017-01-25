@@ -185,7 +185,14 @@ public class AdwordsService {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", aggregationDuration,
                     "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
-                    "Conversions", "SearchImpressionShare", "AveragePosition",
+                    "Conversions", "SearchImpressionShare", "AveragePosition","AllConversions",
+                    "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.isEmpty()) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks",
+                    "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.isEmpty()) {
