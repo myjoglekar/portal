@@ -393,7 +393,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows, true); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
                 ' Group</th>' +
                 '<th class="text-capitalize info table-bg" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
-                '<div class="text-{{col.alignment}}">{{col.displayName}}</div>' +
+                '<div ng-click="initData(col)" class="text-{{col.alignment}}">{{col.displayName}}</div>' +
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
@@ -542,7 +542,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
                 }
                 if (scope.columns[i].sortOrder) {
-                    sortFields.push({fieldname: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type: scope.columns[i].type});
+                    sortFields.push({fieldName: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type: scope.columns[i].type});
                 }
             }
             var fullAggreagtionList = aggreagtionList;
@@ -555,6 +555,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     scope.hideEmptyTable = true;
                 } else {
                     var responseData = response.data;
+                    scope.orignalData = response.data;
                     responseData = scope.orderData(responseData, sortFields);
                     var widgetData = JSON.parse(scope.widgetObj);
                     if (widgetData.maxRecord > 0) {
@@ -577,7 +578,39 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     }
                 }
             });
+            
+            scope.initData = function(col) {
+                if(col.sortOrder == "asc") {
+                    col.sortOrder = "desc";
+                } else {
+                    col.sortOrder = "asc";
+                }
+                var sortFields = [];
+                sortFields.push({fieldName: col.fieldName, sortOrder: col.sortOrder, type: col.type});
+                var responseData = scope.orignalData;
+                    // scope.orignalData = response.data;
+                    responseData = scope.orderData(responseData, sortFields);
+                    var widgetData = JSON.parse(scope.widgetObj);
+                    if (widgetData.maxRecord > 0) {
+                        responseData = responseData.slice(0, widgetData.maxRecord);
+                    }
 
+                    if (groupByFields && groupByFields.length > 0) {
+                        scope.groupingName = groupByFields;
+                        groupedData = scope.group(responseData, groupByFields, aggreagtionList);
+                        var dataToPush = {};
+                        dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
+                        dataToPush.data = groupedData;
+                        scope.groupingData = dataToPush;
+                    } else {
+                        var dataToPush = {};
+                        dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
+                        dataToPush.data = responseData;
+                        scope.groupingData = dataToPush;
+//                    scope.groupingData = $sce.trustAsHtml(dataToPush);
+                    }
+            }
+            
             scope.sortColumn = scope.columns;
             scope.objectHeader = [];
             scope.reverse = false;
@@ -683,7 +716,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                         if (value.sortOrder == "asc") {
                             //fieldsOrder.push(value.fieldname);
                             fieldsOrder.push(function (a) {
-                                return parseFloat(a[value.fieldName])
+
+                                var parsedValue = parseFloat(a[value.fieldName]);
+                                console.log(parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return a[value.fieldName];
+                                }
+                                return parsedValue;
                             });
                         } else if (value.sortOrder == "desc") {
                             fieldsOrder.push(function (a) {
