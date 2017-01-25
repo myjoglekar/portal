@@ -87,7 +87,7 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
 
@@ -130,7 +130,7 @@ public class DisplayTabController {
                 String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
                 performanceBean.setCpa(cpa);
                 performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setDirectionsPageView(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal1Completions"));
                 performanceBean.setInventoryPageViews(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal2Completions"));
                 performanceBean.setLeadSubmission(getGaDataForType(gaData, "ga:city", performanceBean.getCity(), "Goal3Completions"));
@@ -169,7 +169,7 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
 
@@ -221,7 +221,7 @@ public class DisplayTabController {
                 performanceBean.setCpa(cpa);
 
                 performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                 performanceBean.setDirectionsPageView(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal1Completions"));
                 performanceBean.setInventoryPageViews(getGaDataFor2Types(gaData, "ga:deviceCategory", performanceBean.getDevice(), "ga:campaign", row.getCampaign(), "Goal2Completions"));
@@ -260,7 +260,7 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
 
@@ -313,7 +313,7 @@ public class DisplayTabController {
                 performanceBean.setCpa(cpa);
 
                 performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                 performanceBean.setDirectionsPageView(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal1Completions"));
                 performanceBean.setInventoryPageViews(getGaDataForType(gaData, "ga:deviceCategory", performanceBean.getDevice(), "Goal2Completions"));
@@ -360,7 +360,7 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -414,7 +414,7 @@ public class DisplayTabController {
                 performanceBean.setAverageCpc(row.getAverageCpc());
                 performanceBean.setCpa(row.getCostPerConversion());
                 performanceBean.setAveragePosition(row.getAveragePosition());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConversions());
                 performanceBean.setCreativeFinalUrls(row.getCreativeFinalUrls());
                 performanceBean.setHeadline(row.getHeadline());
                 performanceBean.setDirectionsPageView(getGaDataForDateAdType(gaData, "ga:adContent", row.getHeadline(), "Goal1Completions"));
@@ -446,7 +446,7 @@ public class DisplayTabController {
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
-        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+        columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
@@ -487,7 +487,7 @@ public class DisplayTabController {
                 performanceBean.setAveragePosition(row.getAvgPosition());
                 performanceBean.setCost(row.getCost());
                 performanceBean.setAverageCpc(row.getAvgCPC());
-                performanceBean.setConversions(row.getConversions());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setCpa(row.getCostConv());
                 performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());
                 performanceBean.setSearchImpressionsShareLostByBudget(row.getSearchLostISBudget());
@@ -524,7 +524,7 @@ public class DisplayTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -555,7 +555,7 @@ public class DisplayTabController {
                     performanceBean.setCpa(cpa);
 
                     performanceBean.setAveragePosition(row.getAvgPosition());
-                    performanceBean.setConversions(row.getConversions());
+                    performanceBean.setConversions(row.getAllConv());
                     performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                     performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                     performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
@@ -585,7 +585,7 @@ public class DisplayTabController {
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
+            columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("searchImpressionsShare", "number", "Search Impression Share", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -628,7 +628,7 @@ public class DisplayTabController {
                     performanceBean.setCpa(cpa);
 
                     performanceBean.setAveragePosition(row.getAvgPosition());
-                    performanceBean.setConversions(row.getConversions());
+                    performanceBean.setConversions(row.getAllConv());
                     performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                     performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                     performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
