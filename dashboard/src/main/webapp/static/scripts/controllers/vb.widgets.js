@@ -30,16 +30,16 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {num: 2, value: 2}
     ];
     $scope.selectDateDurations = [
-        {duration: "None"},
-        {duration: "Today"},
-        {duration: "Last N days"},
-        {duration: "Last N Weeks"},
-        {duration: "Last N Months"},
-        {duration: "This Month"},
-        {duration: "This Year"},
-        {duration: "Last Year"},
-        {duration: "Yesterday"},
-        {duration: "Custom"}
+        {duration: "None", value: 'none'},
+        {duration: "Today", value: 'today'},
+        {duration: "Last N days", value: ''},
+        {duration: "Last N Weeks", value: ''},
+        {duration: "Last N Months", value: ''},
+        {duration: "This Month", value: 'thisMonth'},
+        {duration: "This Year", value: 'thisYear'},
+        {duration: "Last Year", value: 'lastYear'},
+        {duration: "Yesterday", value: 'yesterday'},
+        {duration: "Custom", value: 'custom'}
     ]; // Month Durations-Popup
     $scope.selectXAxis = [
         {label: 'None', value: ""},
@@ -70,6 +70,20 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {name: 'No', value: ''}
     ];
     $scope.isEditPreviewColumn = false;
+
+
+    $('.dropdown-menu input').click(function (e) {
+        e.stopPropagation();
+    });
+
+    $scope.dateDuration = function (widget, selectDateDuration) {
+        widget.duration = selectDateDuration.duration;
+    };
+
+//    $('.dropdown-menu li').click(function () {
+//
+//        $('.dropdown-toggle b').remove().appendTo($('.dropdown-toggle').text($(this).text()));
+//    });
 
     $scope.widgets = [];
     function getWidgetItem() {      //Default Loading Items
@@ -340,6 +354,27 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     }
 });
 
+app.directive('dateRangePicker', function () {
+    return{
+        restrict: 'A',
+//        template: '<input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />',
+//        template: '<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">' +
+//                '<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;' +
+//                '<span></span> <b class="caret"></b>' + '</div>',
+        link: function (scope, element, attr) {
+            $(function () {
+                $('input[name="daterange"]').daterangepicker({
+                   // timePicker: true,
+                    //timePickerIncrement: 30,
+                    locale: {
+                        format: 'MM/DD/YYYY'
+                    }
+                });
+            });
+        }
+    };
+});
+
 app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
     return{
         restrict: 'A',
@@ -351,55 +386,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             tableFooter: '@',
             widgetObj: '@'
         },
-        template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
-                '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t" ng-hide="hideEmptyTable">' +
-                '<thead><tr>' +
-                '<th class="info table-bg" ng-if="groupingName" class="text-center">' +
-                '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows, true); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
-                ' Group</th>' +
-                '<th class="text-capitalize info table-bg" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
-                '<div class="text-{{col.alignment}}">{{col.displayName}}</div>' +
-                '</th>' +
-                '</tr></thead>' +
-                //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
-                '<tbody ng-repeat="grouping in groupingData.data">' +
-                '<tr ng-if="!isZeroRow(grouping, columns)" class="text-capitalize text-info info">' +
-                '<td class="group-bg" ng-if="groupingName">' +
-                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; hideParent(grouping, grouping.$hideRows); hideChild(grouping.data, false)" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
-//                ' {{grouping._groupField}} : {{grouping._key}}' +
-                ' {{grouping._key}}' +
-                '</td>' +
-                '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
-//                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
-                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName])"></span></div>' +
-                '</td>' +
-                '</tr>' +
-                '<tr ng-if="!isZeroRow(item, columns)" ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
-                '<td class="right-group">' +
-                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows; hideChild(item, item.$hideRows)" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
-//                ' {{item._groupField}} : {{item._key}}</td>' +
-                ' {{item._key}}</td>' +
-                '<td style="background-color: #d7dedc" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
-                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, item[col.fieldName])"></span></div>' + //ng-bind-html-unsafe=todo.text
-                '</td>' +
-                '</tr>' +
-                '<tr ng-show="item.$hideRows" ng-if="!isZeroRow(childItem, columns)" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
-                '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
-                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, childItem[col.fieldName])"></span></div>' +
-                '</td>' +
-                '</tr>' +
-                '</tbody>' +
-                '<tfoot ng-if="displayFooter == \'true\'">' +
-                '<tr> {{initTotalPrint()}}' +
-                '<td ng-if="groupingName">{{ showTotal() }}</td>' +
-                //'<td ng-repeat="col in columns" class="col.alignment[groupingData]">{{format(col, groupingData[col.fieldName])}}</td>' +
-                '<td ng-repeat="col in columns" ng-if="col.columnHide == null">' +
-                '<div ng-if="totalShown == 1" class="text-{{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</div>' +
-                '<div ng-if="totalShown != 1" class="text-{{col.alignment}}">{{ showTotal() }}</div>' +
-                '</td>' +
-                '</tr>' +
-                '</tfoot>' +
-                '</table>' + '<div class="text-center" ng-show="hideEmptyTable">{{tableEmptyMessage}}</div>', //+
+         //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
             scope.totalShown = 0;
@@ -412,7 +399,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 scope.totalShown = 1;
                 return "Total :"
             }
-            scope.initTotalPrint = function() {
+            scope.initTotalPrint = function () {
                 scope.totalShown = 0;
                 return "";
             }
@@ -507,7 +494,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
                 }
                 if (scope.columns[i].sortOrder) {
-                    sortFields.push({fieldname: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type:scope.columns[i].type});
+                    sortFields.push({fieldname: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type: scope.columns[i].type});
                 }
             }
             var fullAggreagtionList = aggreagtionList;
@@ -748,7 +735,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,
@@ -1196,8 +1183,8 @@ app.directive('barChartDirective', function ($http, $stateParams) {
 app.directive('pieChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'AC',
-        template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>'+
-        '<div ng-show="hideEmptyPie" class="text-center">{{pieEmptyMessage}}</div>',
+        template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>' +
+                '<div ng-show="hideEmptyPie" class="text-center">{{pieEmptyMessage}}</div>',
         scope: {
             pieChartUrl: '@',
             widgetId: '@',
@@ -1353,7 +1340,7 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
 app.directive('areaChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
-        template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>'+
+        template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>' +
                 '<div ng-show="hideEmptyArea" class="text-center">{{areaEmptyMessage}}</div>',
         scope: {
             setPieChartFn: '&',
