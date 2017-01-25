@@ -30,16 +30,16 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {num: 2, value: 2}
     ];
     $scope.selectDateDurations = [
-        {duration: "None"},
-        {duration: "Today"},
-        {duration: "Last N days"},
-        {duration: "Last N Weeks"},
-        {duration: "Last N Months"},
-        {duration: "This Month"},
-        {duration: "This Year"},
-        {duration: "Last Year"},
-        {duration: "Yesterday"},
-        {duration: "Custom"}
+        {duration: "None", value: 'none'},
+        {duration: "Today", value: 'today'},
+        {duration: "Last N days", value: ''},
+        {duration: "Last N Weeks", value: ''},
+        {duration: "Last N Months", value: ''},
+        {duration: "This Month", value: 'thisMonth'},
+        {duration: "This Year", value: 'thisYear'},
+        {duration: "Last Year", value: 'lastYear'},
+        {duration: "Yesterday", value: 'yesterday'},
+        {duration: "Custom", value: 'custom'}
     ]; // Month Durations-Popup
     $scope.selectXAxis = [
         {label: 'None', value: ""},
@@ -70,6 +70,20 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {name: 'No', value: ''}
     ];
     $scope.isEditPreviewColumn = false;
+
+
+    $('.dropdown-menu input').click(function (e) {
+        e.stopPropagation();
+    });
+
+    $scope.dateDuration = function (widget, selectDateDuration) {
+        widget.duration = selectDateDuration.duration;
+    };
+
+//    $('.dropdown-menu li').click(function () {
+//
+//        $('.dropdown-toggle b').remove().appendTo($('.dropdown-toggle').text($(this).text()));
+//    });
 
     $scope.widgets = [];
     function getWidgetItem() {      //Default Loading Items
@@ -338,6 +352,27 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     function splitCamelCase(s) {
         return s.split(/(?=[A-Z])/).join(' ');
     }
+});
+
+app.directive('dateRangePicker', function () {
+    return{
+        restrict: 'A',
+//        template: '<input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />',
+//        template: '<div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">' +
+//                '<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;' +
+//                '<span></span> <b class="caret"></b>' + '</div>',
+        link: function (scope, element, attr) {
+            $(function () {
+                $('input[name="daterange"]').daterangepicker({
+                   // timePicker: true,
+                    //timePickerIncrement: 30,
+                    locale: {
+                        format: 'MM/DD/YYYY'
+                    }
+                });
+            });
+        }
+    };
 });
 
 app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
@@ -787,7 +822,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,

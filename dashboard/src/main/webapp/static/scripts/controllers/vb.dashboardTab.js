@@ -1,4 +1,4 @@
-app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout, localStorageService) {
+app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout, localStorageService, $rootScope) {
     $scope.permission = localStorageService.get("permission");
 
 //    $scope.selectTabID = $state;
@@ -75,8 +75,13 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         angular.forEach(response, function (value, key) {
             $scope.dashboardName = value.dashboardId.dashboardTitle;
         });
-        $scope.startId = response[0].id ? response[0].id : 0;
-        $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+        if (!response) {
+            return;
+        }
+        //$scope.startId = response[0].id ? response[0].id : 0;
+        //$rootScope.$emit('dealerTabId', {tabId: response[0].id});
+        $stateParams.tabId = response[0].id;
+        $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: $stateParams.tabId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
     });
 
     var dates = $(".pull-right i").text();

@@ -101,6 +101,7 @@
         font-size: 12px
             /*fill: black;*/
     }
+    
 
 </style>
 <div class="add-widget">
@@ -108,8 +109,8 @@
         <div class="btn-group">
             <a class="refresh" ng-click="pageRefresh()"><i class="fa fa-repeat"></i> Refresh Data</a>
         </div>
-        <!--<div ng-if="permission.allowCreateWidget == true" class="btn-group dropdown">-->
-            <div class="btn-group dropdown">
+        <div ng-if="permission.allowCreateWidget == true" class="btn-group dropdown">
+        <!--<div class="btn-group dropdown">-->
             <a class="dropdown-toggle" type="button" data-toggle="dropdown">
                 <button type="button" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Add Widget</button>
             </a>
@@ -131,7 +132,11 @@
         </div>
     </div>
 </div>
-<div>
+<div>    
+<!--        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+            <span></span> <b class="caret"></b>
+        </div>-->
     <div ng-repeat="widget in widgets">
 
         <div ng-if="widget.chartType == 'ticker'">
@@ -176,12 +181,12 @@
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
-                                                        <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                                                        </button>
-                            <!--<button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>-->
+<!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                            </button>-->
+                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
-                            <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
-<!--                            <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>-->
+                            <!--<button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>-->
+                                                        <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                             <div id="delete{{widget.id}}" class="modal">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -202,7 +207,7 @@
                         </div>
                     </div>
 
-                    <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">{{lineEmptyMessage}}
+                    <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">{{lineEmptyMe                        ssage}}
                         <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
@@ -242,10 +247,35 @@
                             </div>
                             <div class="box-body popup-head">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Widget Title</label>
                                             <input type="text" class="form-control" ng-model="widget.previewTitle">
+                                        </div> 
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Date Durations</label>
+                                            <ul class="nav" role="navigation">
+                                                <li class="dropdown"> <a id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">{{widget.duration}}<b class="caret"></b></a>
+
+                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+                                                        <li ng-repeat="selectDateDuration in selectDateDurations" role="presentation" ng-click="dateDuration(widget, selectDateDuration)">
+                                                            <a role="menuitem" tabindex="-1">
+                                                                <div class="col-sm-8">{{selectDateDuration.duration}}</div>
+                                                                <div class="col-sm-4" ng-if="selectDateDuration.value == ''"> <input type="text" class="form-control" ng-model="widget.selectedDurations"/></div>
+                                                                <div class="col-sm-4" ng-if="selectDateDuration.value == 'custom'">
+                                                                    
+                                                                    <input date-Range-Picker class="form-control" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+
+
+                                            <!--<select class="form-control" ng-model="widget.durations" ng-options="selectDateDuration.duration for selectDateDuration in selectDateDurations"></select>-->
                                         </div> 
                                     </div>
                                     <div class="col-md-6">
@@ -297,7 +327,7 @@
                                                 <input type="text" class="form-control" ng-model="widget.maxRecord" placeholder="max record">
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>                                    
                                 </div>
                             </div>
                         </div>
