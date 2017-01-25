@@ -148,7 +148,7 @@ public class AdGroupReportRow {
     }
 
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS;
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -157,7 +157,7 @@ public class AdGroupReportRow {
     }
 
     public String getSearchLostISBudget() {
-        return searchLostISBudget;
+        return ApiUtils.removePercent(searchLostISBudget);
     }
 
     @XmlAttribute
@@ -166,7 +166,7 @@ public class AdGroupReportRow {
     }
 
     public String getSearchLostISRank() {
-        return searchLostISRank;
+        return ApiUtils.removePercent(searchLostISRank);
     }
 
     @XmlAttribute
@@ -184,7 +184,7 @@ public class AdGroupReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare;
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute

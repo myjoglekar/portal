@@ -240,14 +240,14 @@ public class PaidTabController {
             sum.setSearchImpressionsShare(((ApiUtils.toDouble(p.getSearchImpressionsShare()) + ApiUtils.toDouble(sum.getSearchImpressionsShare()) * (count - 1)) / count) + "");
             sum.setSearchImpressionsShareLostDueToRank(((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToRank()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToRank()) * (count - 1)) / count) + "");
             sum.setSearchImpressionsShareLostDueToBudget(((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToBudget()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToBudget()) * (count - 1)) / count) + "");
-            if (p.getAveragePosition() != null) {
-                sum.setAveragePosition((ApiUtils.toDouble(p.getAveragePosition()) + ApiUtils.toDouble(sum.getAveragePosition())) / 2 + "");
-            }
+            sum.setAveragePosition((ApiUtils.toDouble(p.getAveragePosition()) + ApiUtils.toDouble(sum.getAveragePosition())) + "");
             sum.setConversions((ApiUtils.toDouble(p.getConversions()) + ApiUtils.toDouble(sum.getConversions())) + "");
             sum.setCtr(ApiUtils.toDouble(sum.getImpressions()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getClicks()) / ApiUtils.toDouble(sum.getImpressions())) + "");
             sum.setAverageCpc(ApiUtils.toDouble(sum.getClicks()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getCost()) / ApiUtils.toDouble(sum.getClicks())) + "");
             sum.setCpa(ApiUtils.toDouble(sum.getConversions()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getCost()) / ApiUtils.toDouble(sum.getConversions())) + "");
         }
+        AccountPerformanceReportBean data = map.get("Overall");
+        data.setAveragePosition((ApiUtils.toDouble(data.getAveragePosition()) / 2) + "");
         return new ArrayList<AccountPerformanceReportBean>(map.values());
     }
 
@@ -681,7 +681,8 @@ public class PaidTabController {
                 performanceBean.setSource("Google");
                 performanceBean.setCountry(row.getCountryCriteriaId());
                 performanceBean.setState("--");
-                performanceBean.setCity(ApiUtils.getCityById(row.getCityCriteriaId()));
+                String city = ApiUtils.getCityById(row.getCityCriteriaId());
+                performanceBean.setCity(city);
                 performanceBean.setZip("--");
                 performanceBean.setImpressions(row.getImpressions());
                 performanceBean.setClicks(row.getClicks());
@@ -706,7 +707,11 @@ public class PaidTabController {
                 performanceBean.setSource("Bing");
                 performanceBean.setCountry(row.getCountry() == null ? "-" : row.getCountry().getValue());
                 performanceBean.setState(row.getState().getValue());
-                performanceBean.setCity(row.getCity().getValue());
+                String city = row.getCity().getValue();
+                if(city == null || city.isEmpty() || city.equalsIgnoreCase("-")) {
+                    city = "Unknown";
+                }
+                performanceBean.setCity(city);
                 performanceBean.setZip("--");
                 performanceBean.setCost(row.getSpend().getValue());
                 performanceBean.setImpressions(row.getImpressions().getValue());

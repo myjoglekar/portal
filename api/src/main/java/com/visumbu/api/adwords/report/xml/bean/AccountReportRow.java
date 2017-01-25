@@ -156,7 +156,7 @@ public class AccountReportRow {
     }
     
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS.replaceAll("%", "");
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -165,7 +165,7 @@ public class AccountReportRow {
     }
 
     public String getSearchLostISBudget() {
-        return searchLostISBudget.replaceAll("%", "");
+        return ApiUtils.removePercent(searchLostISBudget);
     }
 
     @XmlAttribute
@@ -174,7 +174,7 @@ public class AccountReportRow {
     }
 
     public String getSearchLostISRank() {
-        return searchLostISRank.replaceAll("%", "");
+        return ApiUtils.removePercent(searchLostISRank);
     }
 
     @XmlAttribute
@@ -192,7 +192,7 @@ public class AccountReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare.replaceAll("%", "");
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute

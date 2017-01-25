@@ -90,7 +90,7 @@ public class AccountDayOfWeekReportRow {
     }
 
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS;
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -126,7 +126,7 @@ public class AccountDayOfWeekReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare;
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute
@@ -180,7 +180,7 @@ public class AccountDayOfWeekReportRow {
     }
 
     public String getSearchBudgetLostImpressionShare() {
-        return SearchBudgetLostImpressionShare;
+        return ApiUtils.removePercent(SearchBudgetLostImpressionShare);
     }
 
     @XmlAttribute

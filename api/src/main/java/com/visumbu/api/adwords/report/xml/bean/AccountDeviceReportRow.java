@@ -136,7 +136,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS;
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -172,7 +172,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare.replaceAll("%", "");
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute
@@ -212,7 +212,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getSearchBudgetLostImpressionShare() {
-        return SearchBudgetLostImpressionShare;
+        return ApiUtils.removePercent(SearchBudgetLostImpressionShare);
     }
 
     @XmlAttribute

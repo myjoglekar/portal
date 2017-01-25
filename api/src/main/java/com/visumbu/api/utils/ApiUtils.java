@@ -57,7 +57,6 @@ public class ApiUtils {
     }
 
     public static String getCityById(String cityId) {
-        System.out.println("For City Id " + cityId);
         String line = "";
         String cvsSplitBy = ",";
         ClassLoader classLoader = ApiUtils.class.getClassLoader();
@@ -66,7 +65,6 @@ public class ApiUtils {
             while ((line = br.readLine()) != null) {
                 String[] city = line.split(cvsSplitBy);
                 if (cityId.equalsIgnoreCase(city[0])) {
-                    System.out.println("For City Id " + cityId + " --- " + city[1]);
                     return city[1];
                 }
             }
@@ -159,6 +157,9 @@ public class ApiUtils {
     }
 
     public static String removePercent(String value) {
+        if(value == null) {
+            return "0.0";
+        }
         value = value.replaceAll("%", "");
         try {
             return (Double.parseDouble(value) / 100.0) + "";

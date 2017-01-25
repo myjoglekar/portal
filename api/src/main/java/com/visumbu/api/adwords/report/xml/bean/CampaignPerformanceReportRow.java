@@ -130,7 +130,7 @@ public class CampaignPerformanceReportRow {
         if (searchExactMatchIS == null || searchExactMatchIS.isEmpty()) {
             return "0.0";
         }
-        return searchExactMatchIS.replaceAll("%", "");
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -142,7 +142,7 @@ public class CampaignPerformanceReportRow {
         if (searchLostISBudget == null || searchLostISBudget.isEmpty()) {
             return "0.0";
         }
-        return searchLostISBudget.replaceAll("%", "");
+        return ApiUtils.removePercent(searchLostISBudget);
     }
 
     @XmlAttribute
@@ -154,7 +154,7 @@ public class CampaignPerformanceReportRow {
         if (searchLostISRank == null || searchLostISRank.isEmpty()) {
             return "0.0";
         }
-        return searchLostISRank.replaceAll("%", "");
+        return ApiUtils.removePercent(searchLostISRank);
     }
 
     @XmlAttribute
@@ -175,7 +175,7 @@ public class CampaignPerformanceReportRow {
         if (searchImprShare == null || searchImprShare.isEmpty()) {
             return "0.0";
         }
-        return searchImprShare.replaceAll("%", "");
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute

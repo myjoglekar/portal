@@ -181,7 +181,7 @@ public class GeoReportRow {
 
     public String getSearchBudgetLostImpressionShare() {
 
-        return SearchBudgetLostImpressionShare;
+        return ApiUtils.removePercent(SearchBudgetLostImpressionShare);
     }
 
     @XmlAttribute
