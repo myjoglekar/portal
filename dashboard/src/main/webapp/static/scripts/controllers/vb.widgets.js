@@ -386,6 +386,55 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             tableFooter: '@',
             widgetObj: '@'
         },
+        template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
+                '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t" ng-hide="hideEmptyTable">' +
+                '<thead><tr>' +
+                '<th class="info table-bg" ng-if="groupingName" class="text-center">' +
+                '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows, true); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
+                ' Group</th>' +
+                '<th class="text-capitalize info table-bg" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
+                '<div class="text-{{col.alignment}}">{{col.displayName}}</div>' +
+                '</th>' +
+                '</tr></thead>' +
+                //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
+                '<tbody ng-repeat="grouping in groupingData.data">' +
+                '<tr ng-if="!isZeroRow(grouping, columns)" class="text-capitalize text-info info">' +
+                '<td class="group-bg" ng-if="groupingName">' +
+                '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; hideParent(grouping, grouping.$hideRows); hideChild(grouping.data, false)" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
+//                ' {{grouping._groupField}} : {{grouping._key}}' +
+                ' {{grouping._key}}' +
+                '</td>' +
+                '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
+//                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
+                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName])"></span></div>' +
+                '</td>' +
+                '</tr>' +
+                '<tr ng-if="!isZeroRow(item, columns)" ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
+                '<td class="right-group">' +
+                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows; hideChild(item, item.$hideRows)" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
+//                ' {{item._groupField}} : {{item._key}}</td>' +
+                ' {{item._key}}</td>' +
+                '<td style="background-color: #d7dedc" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
+                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, item[col.fieldName])"></span></div>' + //ng-bind-html-unsafe=todo.text
+                '</td>' +
+                '</tr>' +
+                '<tr ng-show="item.$hideRows" ng-if="!isZeroRow(childItem, columns)" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
+                '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
+                '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, childItem[col.fieldName])"></span></div>' +
+                '</td>' +
+                '</tr>' +
+                '</tbody>' +
+                '<tfoot ng-if="displayFooter == \'true\'">' +
+                '<tr> {{initTotalPrint()}}' +
+                '<td ng-if="groupingName">{{ showTotal() }}</td>' +
+                //'<td ng-repeat="col in columns" class="col.alignment[groupingData]">{{format(col, groupingData[col.fieldName])}}</td>' +
+                '<td ng-repeat="col in columns" ng-if="col.columnHide == null">' +
+                '<div ng-if="totalShown == 1" class="text-{{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</div>' +
+                '<div ng-if="totalShown != 1" class="text-{{col.alignment}}">{{ showTotal() }}</div>' +
+                '</td>' +
+                '</tr>' +
+                '</tfoot>' +
+                '</table>' + '<div class="text-center" ng-show="hideEmptyTable">{{tableEmptyMessage}}</div>',
          //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
