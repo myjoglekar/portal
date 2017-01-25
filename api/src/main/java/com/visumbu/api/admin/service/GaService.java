@@ -132,7 +132,8 @@ public class GaService {
         String filter = "ga:channelGrouping==Display;ga:medium==cpc";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
-    public GetReportsResponse getdynamicdisplayGoals(String viewId, Date startDate, Date endDate, String aggregation) {
+    
+    public GetReportsResponse getDynamicDisplayGoals(String viewId, Date startDate, Date endDate, String aggregation) {
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
@@ -142,7 +143,7 @@ public class GaService {
         if (aggregation == null || aggregation.isEmpty()) {
             dimensions = "ga:source";
         }
-        String filter = "ga:source==DynamicDisplay;ga:medium==Display";
+        String filter = "ga:source==dynamicdisplay;ga:medium==display";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
 

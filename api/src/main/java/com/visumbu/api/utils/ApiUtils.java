@@ -98,9 +98,6 @@ public class ApiUtils {
 
         }
         String ppcGoogleAnalyticsProfileId = request.getParameter(serviceName + "GoogleAnalyticsProfileId");
-        System.out.println(serviceName + "GoogleAnalyticsProfileId");
-        System.out.println(ppcGoogleAnalyticsProfileId);
-        System.out.println(request.getParameter("seoGoogleAnalyticsProfileId"));
         String analyticsProfileId = null;
         try {
             analyticsProfileId = ppcGoogleAnalyticsProfileId;
