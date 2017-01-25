@@ -412,7 +412,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 scope.totalShown = 1;
                 return "Total :"
             }
-            scope.initTotalPrint = function() {
+            scope.initTotalPrint = function () {
                 scope.totalShown = 0;
                 return "";
             }
@@ -507,7 +507,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
                 }
                 if (scope.columns[i].sortOrder) {
-                    sortFields.push({fieldname: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type:scope.columns[i].type});
+                    sortFields.push({fieldname: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type: scope.columns[i].type});
                 }
             }
             var fullAggreagtionList = aggreagtionList;
@@ -638,7 +638,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 angular.forEach(fieldnames, function (value, key) {
                     console.log("TYPE " + value.type);
                     console.log(value);
-                    if (value.type == "number") {
+                    if (value.type == "string") {
+                        if (value.sortOrder == "asc") {
+                            fieldsOrder.push(value.fieldname);
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push("-" + value.fieldname);
+                        }
+                    } else {
                         if (value.sortOrder == "asc") {
                             //fieldsOrder.push(value.fieldname);
                             fieldsOrder.push(function (a) {
@@ -648,12 +654,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                             fieldsOrder.push(function (a) {
                                 return -1 * parseFloat(a[value.fieldName])
                             });
-                        }
-                    } else {
-                        if (value.sortOrder == "asc") {
-                            fieldsOrder.push(value.fieldname);
-                        } else if (value.sortOrder == "desc") {
-                            fieldsOrder.push("-" + value.fieldname);
                         }
                     }
                 });
@@ -1196,8 +1196,8 @@ app.directive('barChartDirective', function ($http, $stateParams) {
 app.directive('pieChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'AC',
-        template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>'+
-        '<div ng-show="hideEmptyPie" class="text-center">{{pieEmptyMessage}}</div>',
+        template: '<div ng-show="loadingPie" class="text-center"><img src="static/img/logos/loader.gif"></div>' +
+                '<div ng-show="hideEmptyPie" class="text-center">{{pieEmptyMessage}}</div>',
         scope: {
             pieChartUrl: '@',
             widgetId: '@',
@@ -1353,7 +1353,7 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
 app.directive('areaChartDirective', function ($http, $stateParams) {
     return{
         restrict: 'A',
-        template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>'+
+        template: '<div ng-show="loadingArea" class="text-center"><img src="static/img/logos/loader.gif"></div>' +
                 '<div ng-show="hideEmptyArea" class="text-center">{{areaEmptyMessage}}</div>',
         scope: {
             setPieChartFn: '&',
