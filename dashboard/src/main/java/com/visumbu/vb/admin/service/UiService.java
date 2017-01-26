@@ -162,6 +162,7 @@ public class UiService {
             widgetColumn.setWidth(widgetColumnBean.getWidth());
             widgetColumn.setWrapText(widgetColumnBean.getWrapText());
             widgetColumn.setAlignment(widgetColumnBean.getAlignment());
+            widgetColumn.setFieldType(widgetColumnBean.getFieldType());
             Integer columnHide = null;
             if (widgetColumnBean.getGroupPriority() != null && widgetColumnBean.getGroupPriority() != 0) {
                 columnHide = 1;

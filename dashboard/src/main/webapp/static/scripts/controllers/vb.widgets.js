@@ -159,7 +159,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             $scope.collectionFields = [];
             angular.forEach(response.columnDefs, function (value, key) {
                 widget.columns.push({fieldName: value.fieldName, displayName: value.displayName,
-                    agregationFunction: value.agregationFunction, displayFormat: value.displayFormat,
+                    agregationFunction: value.agregationFunction, displayFormat: value.displayFormat, fieldType: value.type,
                     groupPriority: value.groupPriority, sortOrder: value.sortOrder, sortPriority: value.sortPriority});
             })
             $scope.previewFields = response.columnDefs;
@@ -393,7 +393,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows, true); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
                 ' Group</th>' +
                 '<th class="text-capitalize info table-bg" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
-                '<div ng-click="initData(col)" class="text-{{col.alignment}}">{{col.displayName}}</div>' +
+                '<div ng-click="initData(col)" class="text-{{col.alignment}}">{{col.displayName}}<i ng-if="col.sortOrder==\'asc\'" class="fa fa-sort-asc"></i><i ng-if="col.sortOrder==\'desc\'" class="fa fa-sort-desc"></i></div>' +
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
@@ -542,7 +542,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     aggreagtionList.push({fieldname: scope.columns[i].fieldName, aggregationType: scope.columns[i].agregationFunction});
                 }
                 if (scope.columns[i].sortOrder) {
-                    sortFields.push({fieldName: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, type: scope.columns[i].type});
+                    sortFields.push({fieldName: scope.columns[i].fieldName, sortOrder: scope.columns[i].sortOrder, fieldType: scope.columns[i].fieldType});
                 }
             }
             var fullAggreagtionList = aggreagtionList;
@@ -580,13 +580,19 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             });
             
             scope.initData = function(col) {
+                angular.forEach(scope.columns, function(value, key){
+                    if(value.fieldName != col.fieldName) {
+                        value.sortOrder = "";
+                    }
+                })
                 if(col.sortOrder == "asc") {
                     col.sortOrder = "desc";
                 } else {
                     col.sortOrder = "asc";
                 }
                 var sortFields = [];
-                sortFields.push({fieldName: col.fieldName, sortOrder: col.sortOrder, type: col.type});
+                sortFields.push({fieldName: col.fieldName, sortOrder: col.sortOrder, fieldType: col.fieldType});
+                console.log(sortFields);
                 var responseData = scope.orignalData;
                     // scope.orignalData = response.data;
                     responseData = scope.orderData(responseData, sortFields);
@@ -704,13 +710,34 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 }
                 var fieldsOrder = [];
                 angular.forEach(fieldnames, function (value, key) {
-                    console.log("TYPE " + value.type);
-                    console.log(value);
-                    if (value.type == "string") {
+                    if (value.fieldType == "string") {
                         if (value.sortOrder == "asc") {
-                            fieldsOrder.push(value.fieldname);
+                            fieldsOrder.push(value.fieldName);
                         } else if (value.sortOrder == "desc") {
-                            fieldsOrder.push("-" + value.fieldname);
+                            fieldsOrder.push("-" + value.fieldName);
+                        }
+                        console.log(fieldsOrder);
+                    } else if(value.fieldType == "number") {
+                        if (value.sortOrder == "asc") {
+                            //fieldsOrder.push(value.fieldname);
+                            fieldsOrder.push(function (a) {
+
+                                var parsedValue = parseFloat(a[value.fieldName]);
+                                console.log(parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return 0;
+                                }
+                                return parsedValue;
+                            });
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push(function (a) {
+                                var parsedValue = parseFloat(a[value.fieldName]);
+                                console.log(parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return 0;
+                                }
+                                return -1 * parsedValue;
+                            });
                         }
                     } else {
                         if (value.sortOrder == "asc") {
