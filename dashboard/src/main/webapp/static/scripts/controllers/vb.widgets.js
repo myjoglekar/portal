@@ -76,10 +76,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         e.stopPropagation();
     });
 
-    $scope.dateDuration = function (widget, selectDateDuration) {
-        widget.duration = selectDateDuration.duration;
-    };
-
 //    $('.dropdown-menu li').click(function () {
 //
 //        $('.dropdown-toggle b').remove().appendTo($('.dropdown-toggle').text($(this).text()));
@@ -257,6 +253,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $scope.previewChartUrl = widget.previewUrl;
     };
 
+    $scope.dateDuration = function (widget, selectDateDuration) {
+        widget.dateDuration = selectDateDuration.duration;
+    };
+
     $scope.save = function (widget) {
         widget.directUrl = widget.previewUrl ? widget.previewUrl : widget.directUrl;
         var widgetColumnsData = [];
@@ -292,6 +292,14 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             };
             widgetColumnsData.push(columnData);
         });
+//        if (widget.dateDuration) {
+//            widget.customRange = "";
+//        }
+
+        if (widget.dateDuration == 'None' || widget.dateDuration == "This Month" || widget.dateDuration == "This Year" || widget.dateDuration == "Last Year" || widget.dateDuration == "Yesterday" || widget.dateDuration == "Custom") {
+            widget.frequencyDuration = "";
+        }
+
         var data = {
             id: widget.id,
             chartType: $scope.editChartType ? $scope.editChartType : widget.chartType,
@@ -303,7 +311,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             tableFooter: widget.tableFooter,
             zeroSuppression: widget.zeroSuppression,
             maxRecord: widget.maxRecord,
-            dateDuration: widget.dateDuration
+            dateDuration: widget.dateDuration,
+            frequencyDuration: widget.frequencyDuration,
+            customRange: widget.customRange
         };
         widget.chartType = "";
         $http({method: widget.id ? 'PUT' : 'POST', url: 'admin/ui/dbWidget/' + $stateParams.tabId, data: data}).success(function (response) {
@@ -311,6 +321,9 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             widget.chartType = data.chartType;
         });
         widget.widgetTitle = widget.previewTitle ? widget.previewTitle : widget.widgetTitle;
+//        widget.dateDuration = widget.dateDuration;
+//        widget.frequencyDuration = widget.frequencyDuration;
+//        widget.customRange = widget.customRange;
         widget.widgetColumns = widgetColumnsData; // widget.columns;
     };
 
@@ -364,7 +377,7 @@ app.directive('dateRangePicker', function () {
         link: function (scope, element, attr) {
             $(function () {
                 $('input[name="daterange"]').daterangepicker({
-                   // timePicker: true,
+                    // timePicker: true,
                     //timePickerIncrement: 30,
                     locale: {
                         format: 'MM/DD/YYYY'
@@ -379,12 +392,16 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
     return{
         restrict: 'A',
         scope: {
+            whattodo: "=",
             dynamicTableUrl: '@',
             widgetId: '@',
             widgetColumns: '@',
             setTableFn: '&',
             tableFooter: '@',
-            widgetObj: '@'
+            widgetObj: '@',
+            widgetDateDuration: '@',
+            widgetFrequencyDuration: '@',
+            widgetCustomRange: '@',
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t" ng-hide="hideEmptyTable">' +
@@ -534,7 +551,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             var aggreagtionList = [];
             var sortFields = [];
             for (var i = 0; i < scope.columns.length; i++) {
-                console.log(scope.columns[i]);
                 if (scope.columns[i].groupPriority) {
                     groupByFields.push(scope.columns[i].fieldName);
                 }
@@ -546,9 +562,13 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 }
             }
             var fullAggreagtionList = aggreagtionList;
-            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId + "&dateDuration=" + scope.widgetDateDuration + "&frequencyDuration=" + scope.widgetFrequencyDuration + "&customRange=" + scope.customRange).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
+
+                if (!response.data) {
+                    return;
+                }
 
                 if (response.data.length === 0) {
                     scope.tableEmptyMessage = "No Data Found";
@@ -578,14 +598,14 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     }
                 }
             });
-            
-            scope.initData = function(col) {
-                angular.forEach(scope.columns, function(value, key){
-                    if(value.fieldName != col.fieldName) {
+
+            scope.initData = function (col) {
+                angular.forEach(scope.columns, function (value, key) {
+                    if (value.fieldName != col.fieldName) {
                         value.sortOrder = "";
                     }
                 })
-                if(col.sortOrder == "asc") {
+                if (col.sortOrder == "asc") {
                     col.sortOrder = "desc";
                 } else {
                     col.sortOrder = "asc";
@@ -594,29 +614,29 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 sortFields.push({fieldName: col.fieldName, sortOrder: col.sortOrder, fieldType: col.fieldType});
                 console.log(sortFields);
                 var responseData = scope.orignalData;
-                    // scope.orignalData = response.data;
-                    responseData = scope.orderData(responseData, sortFields);
-                    var widgetData = JSON.parse(scope.widgetObj);
-                    if (widgetData.maxRecord > 0) {
-                        responseData = responseData.slice(0, widgetData.maxRecord);
-                    }
+                // scope.orignalData = response.data;
+                responseData = scope.orderData(responseData, sortFields);
+                var widgetData = JSON.parse(scope.widgetObj);
+                if (widgetData.maxRecord > 0) {
+                    responseData = responseData.slice(0, widgetData.maxRecord);
+                }
 
-                    if (groupByFields && groupByFields.length > 0) {
-                        scope.groupingName = groupByFields;
-                        groupedData = scope.group(responseData, groupByFields, aggreagtionList);
-                        var dataToPush = {};
-                        dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
-                        dataToPush.data = groupedData;
-                        scope.groupingData = dataToPush;
-                    } else {
-                        var dataToPush = {};
-                        dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
-                        dataToPush.data = responseData;
-                        scope.groupingData = dataToPush;
+                if (groupByFields && groupByFields.length > 0) {
+                    scope.groupingName = groupByFields;
+                    groupedData = scope.group(responseData, groupByFields, aggreagtionList);
+                    var dataToPush = {};
+                    dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
+                    dataToPush.data = groupedData;
+                    scope.groupingData = dataToPush;
+                } else {
+                    var dataToPush = {};
+                    dataToPush = angular.extend(dataToPush, aggregate(responseData, fullAggreagtionList));
+                    dataToPush.data = responseData;
+                    scope.groupingData = dataToPush;
 //                    scope.groupingData = $sce.trustAsHtml(dataToPush);
-                    }
+                }
             }
-            
+
             scope.sortColumn = scope.columns;
             scope.objectHeader = [];
             scope.reverse = false;
@@ -717,7 +737,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                             fieldsOrder.push("-" + value.fieldName);
                         }
                         console.log(fieldsOrder);
-                    } else if(value.fieldType == "number") {
+                    } else if (value.fieldType == "number") {
                         if (value.sortOrder == "asc") {
                             //fieldsOrder.push(value.fieldname);
                             fieldsOrder.push(function (a) {
@@ -938,7 +958,10 @@ app.directive('tickerDirective', function ($http, $stateParams) {
         scope: {
             tickerUrl: '@',
             tickerId: '@',
-            tickerColumns: '@'
+            tickerColumns: '@',
+            tickerDateDuration: '@',
+            tickerFrequencyDuration: '@',
+            tickerCustomRange: '@'
         },
         link: function (scope, element, attr) {
             scope.loadingTicker = true;
@@ -967,8 +990,11 @@ app.directive('tickerDirective', function ($http, $stateParams) {
             var setData = [];
             var data = [];
 
-            $http.get("admin/proxy/getJson?url=" + scope.tickerUrl + "&widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+            $http.get("admin/proxy/getJson?url=" + scope.tickerUrl + "&widgetId=" + scope.tickerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId + "&dateDuration=" + scope.widgetDateDuration + "&frequencyDuration=" + scope.widgetFrequencyDuration + "&customRange=" + scope.customRange).success(function (response) {
                 scope.loadingTicker = false;
+//                if(!response){
+//                    return;
+//                }
                 if (response.length === 0) {
                     scope.tickerEmptyMessage = "No Data Found";
                     scope.hideEmptyTicker = true;
@@ -1008,6 +1034,9 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             collection: '@',
             widgetColumns: '@',
             lineChartId: '@',
+            widgetDateDuration: '@',
+            widgetFrequencyDuration: '@',
+            widgetCustomRange: '@'
         },
         link: function (scope, element, attr) {
             var labels = {format: {}};
@@ -1025,6 +1054,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             var startDate = "";
             var endDate = "";
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
+                console.log(value)
                 if (!labels["format"]) {
                     labels = {format: {}};
                 }
@@ -1082,7 +1112,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.lineChartUrl) {
-                $http.get("admin/proxy/getJson?url=" + scope.lineChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+                $http.get("admin/proxy/getJson?url=" + scope.lineChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId + "&dateDuration=" + scope.widgetDateDuration + "&frequencyDuration=" + scope.widgetFrequencyDuration + "&customRange=" + scope.customRange).success(function (response) {
                     scope.loadingLine = false;
                     if (response.data.length === 0) {
                         scope.lineEmptyMessage = "No Data Found";
@@ -1094,6 +1124,8 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                         if (sortField != "") {
                             chartData = sortResults(chartData, sortField, sortOrder);
                         }
+                        console.log(xAxis)
+                        console.log(xAxis.fieldName)
                         xTicks = [xAxis.fieldName];
                         xData = chartData.map(function (a) {
                             xTicks.push(loopCount);
@@ -1159,7 +1191,10 @@ app.directive('barChartDirective', function ($http, $stateParams) {
             widgetId: '@',
             setBarChartFn: '&',
             barChartId: '@',
-            widgetColumns: '@'
+            widgetColumns: '@',
+            widgetDateDuration: '@',
+            widgetFrequencyDuration: '@',
+            widgetCustomRange: '@'
         },
         link: function (scope, element, attr) {
             var labels = {format: {}};
@@ -1233,7 +1268,7 @@ app.directive('barChartDirective', function ($http, $stateParams) {
 
             if (scope.barChartUrl) {
 
-                $http.get("admin/proxy/getJson?url=" + scope.barChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+                $http.get("admin/proxy/getJson?url=" + scope.barChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId + "&dateDuration=" + scope.widgetDateDuration + "&frequencyDuration=" + scope.widgetFrequencyDuration + "&customRange=" + scope.customRange).success(function (response) {
                     scope.loadingBar = false;
                     if (response.data.length === 0) {
                         scope.barEmptyMessage = "No Data Found";
@@ -1305,7 +1340,10 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
             widgetColumns: '@',
             setPieChartFn: '&',
             pieChartId: '@',
-            loadingPie: '&'
+            loadingPie: '&',
+            widgetDateDuration: '@',
+            widgetFrequencyDuration: '@',
+            widgetCustomRange: '@'
         },
         link: function (scope, element, attr) {
             var labels = {format: {}};
@@ -1377,7 +1415,7 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
             }
 
             if (scope.pieChartUrl) {
-                $http.get("admin/proxy/getJson?url=" + scope.pieChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+                $http.get("admin/proxy/getJson?url=" + scope.pieChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId + "&dateDuration=" + scope.widgetDateDuration + "&frequencyDuration=" + scope.widgetFrequencyDuration + "&customRange=" + scope.customRange).success(function (response) {
                     scope.loadingPie = false;
                     if (response.data.length === 0) {
                         scope.pieEmptyMessage = "No Data Found";
@@ -1461,7 +1499,10 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             widgetId: '@',
             areaChartUrl: '@',
             widgetColumns: '@',
-            pieChartId: '@'
+            pieChartId: '@',
+            widgetDateDuration: '@',
+            widgetFrequencyDuration: '@',
+            widgetCustomRange: '@'
         },
         link: function (scope, element, attr) {
             var labels = {format: {}};
@@ -1531,7 +1572,7 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
 
             if (scope.areaChartUrl) {
 
-                $http.get("admin/proxy/getJson?url=" + scope.areaChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+                $http.get("admin/proxy/getJson?url=" + scope.areaChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId + "&dateDuration=" + scope.widgetDateDuration + "&frequencyDuration=" + scope.widgetFrequencyDuration + "&customRange=" + scope.customRange).success(function (response) {
                     scope.loadingArea = false;
                     if (response.data.length === 0) {
                         scope.areaEmptyMessage = "No Data Found";
