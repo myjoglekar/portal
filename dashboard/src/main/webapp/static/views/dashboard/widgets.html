@@ -290,10 +290,10 @@
                                                 <li class="dropdown"> <a id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">{{widget.dateDuration}}<b class="caret"></b></a>
                                                     <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
                                                         <li ng-repeat="selectDateDuration in selectDateDurations" role="presentation" ng-click="dateDuration(widget, selectDateDuration)">
-                                                            <input class="checkbox" type="checkbox" ng-model="selectType" ng-checked="widget.dateDuration == 1"/>
+                                                            <!--<input class="checkbox" type="checkbox" ng-model="selectType" ng-checked="widget.dateDuration == 1"/>-->
                                                             <a role="menuitem" tabindex="-1">
+                                                                <span ng-if="widget.dateDuration == selectDateDuration.duration" class="glyphicon glyphicon-ok"></span>
                                                                 <!--<div class="col-sm-8">-->
-                                                                                                                                 <!--<input type="checkbox" ng-model="selectDateDuration.selectType" value="{{$index+1}}">--> 
                                                                     {{selectDateDuration.duration}}
                                                                 <!--</div>-->
                                                                 <div ng-if="selectDateDuration.value == '' && selectType == true;">
