@@ -133,6 +133,7 @@ public class SeoTabController {
         String dimensions = "ga:channelGrouping";
         String filter = "ga:channelGrouping==Organic Search";
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "seo");
+        System.out.println("SEO GA Profile Id " + accountDetails.getAnalyticsProfileId());
         List<Map<String, String>> gaDataMap = new ArrayList<>();
         System.out.println(accountDetails.getAnalyticsProfileId());
         if (accountDetails.getAnalyticsProfileId() != null) {
@@ -141,6 +142,8 @@ public class SeoTabController {
 
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
                 map.put("channelGrouping", map.get("ga:channelGrouping"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
@@ -151,6 +154,7 @@ public class SeoTabController {
                         + ApiUtils.toInteger(map.get("vdpViews")));
                 map.put("engagements", engagements + "");
             }
+            // returnMap.put("gaData", gaData);
         }
         returnMap.put("data", gaDataMap);
         return returnMap;
@@ -196,6 +200,8 @@ public class SeoTabController {
             gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
                 map.put("yearWeek", map.get("ga:yearWeek"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
@@ -252,6 +258,8 @@ public class SeoTabController {
             gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
                 map.put("dayOfWeekName", map.get("ga:dayOfWeekName"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
@@ -309,6 +317,8 @@ public class SeoTabController {
             gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
                 map.put("pagePath", map.get("ga:pagePath"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
@@ -365,6 +375,8 @@ public class SeoTabController {
             gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
                 map.put("deviceCategory", map.get("ga:deviceCategory"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
@@ -420,6 +432,8 @@ public class SeoTabController {
             gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
                 map.put("city", map.get("ga:city"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))

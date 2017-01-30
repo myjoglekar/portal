@@ -60,6 +60,7 @@ public class ReviewPushService {
                 JSONObject dataArr1 = (JSONObject) dataArr.get(i);
                 Map dataMap = getDataAsMap(dataArr1);
                 dataMap.putAll(getDataAsMap((JSONObject) dataArr1.get("attributes")));
+                dataMap.put("review_date", DateUtils.dateToString(DateUtils.toDate(dataMap.get("review_date") + "", "yyyy-MM-dd"), "MM-dd-yyyy"));
                 returnAll.add(dataMap);
             }
             return returnAll;

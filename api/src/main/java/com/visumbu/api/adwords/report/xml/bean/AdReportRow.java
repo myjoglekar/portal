@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.adwords.report.xml.bean;
 
+import com.visumbu.api.utils.ApiUtils;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -176,7 +177,7 @@ public class AdReportRow {
         return allConversions;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "allConv")
     public void setAllConversions(String allConversions) {
         this.allConversions = allConversions;
     }
@@ -284,7 +285,7 @@ public class AdReportRow {
     }
 
     public String getCtr() {
-        return ctr.replaceAll("%", "");
+        return ApiUtils.removePercent(ctr);
         //return ctr;
     }
 

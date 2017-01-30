@@ -125,8 +125,6 @@ public class OverallTabController {
     @Autowired
     private DealerVaultService dealerVaultService;
 
-    private final static String DYNAMIC_DISPLAY_URL = "http://ec2-35-166-148-54.us-west-2.compute.amazonaws.com:5002/vizboard/";
-    private final static String DEALER_ID = "8125";
     public static final Long bingAccountId = 2610614L;
 
     @RequestMapping(value = "inventory", method = RequestMethod.GET, produces = "application/json")
@@ -263,7 +261,7 @@ public class OverallTabController {
             columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("averagePosition", "number", "Average Position", ColumnDef.Aggregation.AVG, ColumnDef.Format.DECIMAL1));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
             returnMap.put("columnDefs", columnDefs);
             if (fieldsOnly != null) {
                 return returnMap;
@@ -277,7 +275,7 @@ public class OverallTabController {
                 for (Iterator<AccountReportRow> reportRow = adwordsAccountRow.iterator(); reportRow.hasNext();) {
                     AccountReportRow row = reportRow.next();
                     AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
-                    performanceBean.setSource("Paid");
+                    performanceBean.setSource("Paid Search");
                     performanceBean.setImpressions(row.getImpressions());
                     performanceBean.setClicks(row.getClicks());
                     performanceBean.setCtr(row.getCtr());
@@ -296,7 +294,7 @@ public class OverallTabController {
                 for (Iterator<AccountPerformanceRow> reportRow = bingAccountRows.iterator(); reportRow.hasNext();) {
                     AccountPerformanceRow row = reportRow.next();
                     AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
-                    performanceBean.setSource("Paid");
+                    performanceBean.setSource("Paid Search");
                     performanceBean.setImpressions(row.getImpressions().getValue());
                     performanceBean.setClicks(row.getClicks().getValue());
                     performanceBean.setCtr(row.getCtr().getValue());
@@ -392,9 +390,11 @@ public class OverallTabController {
                     performanceBean.setCost(paidSocialPerformance.get("spend"));
                     performanceBean.setDay(paidSocialPerformance.get("date_start"));
                     performanceBean.setAverageCpc(paidSocialPerformance.get("cpc"));
-                    performanceBean.setCpa(paidSocialPerformance.get("cost_page_engagement"));
+                    // performanceBean.setCpa(paidSocialPerformance.get("cost_page_engagement"));
+                    performanceBean.setCpa("0");
                     performanceBean.setAveragePosition("0");
-                    performanceBean.setConversions(paidSocialPerformance.get("actions_page_engagement"));
+                    //performanceBean.setConversions(paidSocialPerformance.get("actions_page_engagement"));
+                    performanceBean.setConversions("0");
                     performanceReportBeans.add(performanceBean);
                 }
             }

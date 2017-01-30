@@ -28,6 +28,7 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReportRow;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
@@ -51,6 +52,7 @@ import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import com.visumbu.api.utils.Rest;
 import java.io.BufferedReader;
@@ -108,6 +110,9 @@ public class DynamicDisplayTabController {
     private FacebookService facebookService;
 
     @Autowired
+    private GaService gaService;
+
+    @Autowired
     private DynamicDisplayService dynamicDisplayService;
 
     private final static String DEALER_ID = "8125";
@@ -117,9 +122,38 @@ public class DynamicDisplayTabController {
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        List<ColumnDef> columnDefs = new ArrayList<>();
+
+        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
         String fieldsOnly = request.getParameter("fieldsOnly");
         String dealerId = request.getParameter("dealerMapId");
-        return dynamicDisplayService.getAccountPerformance(startDate, endDate, dealerId, fieldsOnly);
+        Map map = (Map) dynamicDisplayService.getAccountPerformance(startDate, endDate, dealerId, fieldsOnly);
+        List list = (List) map.get("columnDefs");
+        list.addAll(columnDefs);
+        if (fieldsOnly != null) {
+            return map;
+        }
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "dynamicDisplay");
+        System.out.println("SEO GA Profile Id " + accountDetails.getAnalyticsProfileId());
+        if (accountDetails.getAnalyticsProfileId() != null) {
+            GetReportsResponse gaData = gaService.getDynamicDisplayGoals(accountDetails.getAnalyticsProfileId(), startDate, endDate, "");
+            List gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
+            System.out.println("GA DATA ---> ");
+            System.out.println(gaDataMap);
+            if (gaDataMap != null) {
+                List dataList = (List)map.get("data");
+                Map  dataMap = (Map)dataList.get(0);
+                dataMap.putAll((Map) gaDataMap.get(0));
+            }
+        }
+        return map;
+
     }
 
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")

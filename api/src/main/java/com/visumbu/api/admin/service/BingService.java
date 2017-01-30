@@ -13,6 +13,7 @@ import com.microsoft.bingads.reporting.AccountReportScope;
 import com.microsoft.bingads.reporting.AccountThroughAdGroupReportScope;
 import com.microsoft.bingads.reporting.AccountThroughCampaignReportScope;
 import com.microsoft.bingads.reporting.AdGroupPerformanceReportColumn;
+import com.microsoft.bingads.reporting.AdGroupPerformanceReportFilter;
 import com.microsoft.bingads.reporting.AdGroupPerformanceReportRequest;
 import com.microsoft.bingads.reporting.AdPerformanceReportColumn;
 import com.microsoft.bingads.reporting.AdPerformanceReportRequest;
@@ -20,12 +21,15 @@ import com.microsoft.bingads.reporting.ArrayOfAccountPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfAdGroupPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfAdPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfCampaignPerformanceReportColumn;
+import com.microsoft.bingads.reporting.ArrayOfCampaignReportScope;
 import com.microsoft.bingads.reporting.ArrayOfGeoLocationPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfKeywordPerformanceReportColumn;
 import com.microsoft.bingads.reporting.ArrayOfKeywordPerformanceReportSort;
 import com.microsoft.bingads.reporting.ArrayOflong;
 import com.microsoft.bingads.reporting.CampaignPerformanceReportColumn;
 import com.microsoft.bingads.reporting.CampaignPerformanceReportRequest;
+import com.microsoft.bingads.reporting.CampaignReportScope;
+import com.microsoft.bingads.reporting.CampaignStatusReportFilter;
 import com.microsoft.bingads.reporting.GeoLocationPerformanceReportColumn;
 import com.microsoft.bingads.reporting.GeoLocationPerformanceReportRequest;
 import com.microsoft.bingads.reporting.KeywordPerformanceReportColumn;
@@ -53,6 +57,7 @@ import com.visumbu.api.bing.report.xml.bean.GeoZipLocationPerformanceReport;
 import com.visumbu.api.bing.report.xml.bean.KeywordPerformanceReport;
 import com.visumbu.api.utils.FileReader;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -150,7 +155,7 @@ public class BingService {
         return report;
     }
 
-    public AccountHourOfDayPerformanceReport getAccountHourOfDayPerformanceReport(Date startDate, Date endDate, Long accountId )
+    public AccountHourOfDayPerformanceReport getAccountHourOfDayPerformanceReport(Date startDate, Date endDate, Long accountId)
             throws InterruptedException, ExecutionException, TimeoutException {
         initAuthentication(accountId);
         ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -177,7 +182,7 @@ public class BingService {
         return report;
     }
 
-    public AccountDayOfWeekPerformanceReport getAccountDayOfWeekPerformanceReport(Date startDate, Date endDate,  Long accountId)
+    public AccountDayOfWeekPerformanceReport getAccountDayOfWeekPerformanceReport(Date startDate, Date endDate, Long accountId)
             throws InterruptedException, ExecutionException, TimeoutException {
         initAuthentication(accountId);
         ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -201,7 +206,7 @@ public class BingService {
         return report;
     }
 
-    public AccountDevicePerformanceReport getAccountDevicePerformanceReport(Date startDate, Date endDate, Long accountId,  String aggregation) {
+    public AccountDevicePerformanceReport getAccountDevicePerformanceReport(Date startDate, Date endDate, Long accountId, String aggregation) {
         try {
             initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -233,7 +238,7 @@ public class BingService {
         return null;
     }
 
-    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate, Long accountId,  String aggregation) {
+    public CampaignPerformanceReport getCampaignPerformanceReport(Date startDate, Date endDate, Long accountId, String aggregation) {
         try {
             initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -265,7 +270,7 @@ public class BingService {
         return null;
     }
 
-    public CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(Date startDate, Date endDate, Long accountId,  String aggregation) {
+    public CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(Date startDate, Date endDate, Long accountId, String aggregation) {
         try {
             initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -297,14 +302,14 @@ public class BingService {
         return null;
     }
 
-    public AdGroupPerformanceReport getAdGroupPerformanceReport(Date startDate, Date endDate, Long accountId) {
+    public AdGroupPerformanceReport getAdGroupPerformanceReport(Date startDate, Date endDate, Long accountId, String aggregation) {
         try {
             initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
             reportingServiceManager.setStatusPollIntervalInMilliseconds(5000);
             String filename = "bing-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
             ReportRequest reportRequest
-                    = getAdGroupPerformaceReportRequest(startDate, endDate);
+                    = getAdGroupPerformaceReportRequest(startDate, endDate, aggregation);
 
             ReportingDownloadParameters reportingDownloadParameters = new ReportingDownloadParameters();
             reportingDownloadParameters.setReportRequest(reportRequest);
@@ -329,7 +334,7 @@ public class BingService {
         return null;
     }
 
-    public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate,  Long accountId) {
+    public AdPerformanceReport getAdPerformanceReport(Date startDate, Date endDate, Long accountId) {
         try {
             initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -361,7 +366,7 @@ public class BingService {
         return null;
     }
 
-    public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate,  Long accountId, String aggregation) {
+    public GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(Date startDate, Date endDate, Long accountId, String aggregation) {
         try {
             initAuthentication(accountId);
             ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -393,7 +398,7 @@ public class BingService {
         return null;
     }
 
-    public GeoZipLocationPerformanceReport getGeoZipLocationPerformanceReport(Date startDate, Date endDate,  Long accountId)
+    public GeoZipLocationPerformanceReport getGeoZipLocationPerformanceReport(Date startDate, Date endDate, Long accountId)
             throws InterruptedException, ExecutionException, TimeoutException {
         initAuthentication(accountId);
         ReportingServiceManager reportingServiceManager = new ReportingServiceManager(authorizationData);
@@ -1068,7 +1073,7 @@ public class BingService {
         return report;
     }
 
-    private ReportRequest getAdGroupPerformaceReportRequest(Date startDate, Date endDate) {
+    private ReportRequest getAdGroupPerformaceReportRequest(Date startDate, Date endDate, String aggregation) {
         AdGroupPerformanceReportRequest report = new AdGroupPerformanceReportRequest();
         ReportFormat ReportFileFormat = ReportFormat.XML;
         report.setFormat(ReportFileFormat);
@@ -1118,7 +1123,11 @@ public class BingService {
         adGroupPerformanceReportColumn.getAdGroupPerformanceReportColumns().add(AdGroupPerformanceReportColumn.IMPRESSION_LOST_TO_BUDGET_PERCENT);
         adGroupPerformanceReportColumn.getAdGroupPerformanceReportColumns().add(AdGroupPerformanceReportColumn.IMPRESSION_LOST_TO_RANK_PERCENT);
         adGroupPerformanceReportColumn.getAdGroupPerformanceReportColumns().add(AdGroupPerformanceReportColumn.AVERAGE_POSITION);
-        adGroupPerformanceReportColumn.getAdGroupPerformanceReportColumns().add(AdGroupPerformanceReportColumn.TIME_PERIOD);
+        if (aggregation == null || aggregation.isEmpty()) {
+
+        } else {
+            adGroupPerformanceReportColumn.getAdGroupPerformanceReportColumns().add(AdGroupPerformanceReportColumn.TIME_PERIOD);
+        }
         adGroupPerformanceReportColumn.getAdGroupPerformanceReportColumns().add(AdGroupPerformanceReportColumn.CAMPAIGN_NAME);
         adGroupPerformanceReportColumn.getAdGroupPerformanceReportColumns().add(AdGroupPerformanceReportColumn.CAMPAIGN_ID);
         adGroupPerformanceReportColumn.getAdGroupPerformanceReportColumns().add(AdGroupPerformanceReportColumn.AD_GROUP_ID);

@@ -300,6 +300,7 @@ public class FacebookService {
             for (int i = 0; i < dataArr.size(); i++) {
                 JSONObject data = (JSONObject) dataArr.get(i);
                 Map<String, String> dataList = getDataValue(data);
+                dataList.put("created_time", DateUtils.dateToString(DateUtils.toDate(dataList.get("created_time").replace("+0000", "").replace("T", " "), "yyyy-MM-dd HH:mm:ss"), "MM-dd-yyyy HH:mm"));
                 dataList.put("date", startDateStr);
                 dataList.put("reactions", getActionsCount((JSONObject) data.get("reactions")) + "");
                 dataList.put("likes", getActionsCount((JSONObject) data.get("likes")) + "");
@@ -356,6 +357,8 @@ public class FacebookService {
     }
 
     public static void main(String[] argv) {
+        System.out.println(DateUtils.dateToString(DateUtils.toDate("2017-01-26T20:21:33+0000".replace("+0000", "").replace("T", " "), "yyyy-MM-dd HH:mm:ss"), "MM-dd-yyyy HH:mm"));
+        /*
         Date startDate = DateUtils.get12WeeksBack("");
         Date endDate = new Date();
         Date currentStart = startDate;
@@ -366,7 +369,7 @@ public class FacebookService {
             Date weekStart = DateUtils.getStartDateOfWeek(currentStart);
             //returnAll.addAll(getPostSummary(weekStart, DateUtils.getNextWeek(weekStart)));
             currentStart = DateUtils.getNextWeek(currentStart);
-        }
+        }*/
     }
 
     public Object getLast12WeeksPerformance(Long accountId, Date startDate, Date endDate) {
