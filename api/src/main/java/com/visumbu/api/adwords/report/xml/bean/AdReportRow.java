@@ -177,7 +177,7 @@ public class AdReportRow {
         return allConversions;
     }
 
-    @XmlAttribute
+    @XmlAttribute(name = "allConv")
     public void setAllConversions(String allConversions) {
         this.allConversions = allConversions;
     }
