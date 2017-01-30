@@ -301,13 +301,12 @@
             <artifactId>commons-email</artifactId>
             <version>1.4</version>
         </dependency>
-        <!-- TEST IF REQUIRED -->
-        <!-- https://mvnrepository.com/artifact/com.restfb/restfb -->
-<!--        <dependency>
-            <groupId>com.microsoft.bingads</groupId>
-            <artifactId>microsoft.bingads</artifactId>
-            <version>10.4.10</version>
-        </dependency> -->
+        <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.4</version>
+        </dependency>
         
     </dependencies>
 

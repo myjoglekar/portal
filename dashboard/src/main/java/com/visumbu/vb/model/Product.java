@@ -35,7 +35,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName"),
     @NamedQuery(name = "Product.findByRemarks", query = "SELECT p FROM Product p WHERE p.remarks = :remarks")})
 public class Product implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

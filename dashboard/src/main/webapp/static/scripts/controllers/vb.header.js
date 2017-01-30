@@ -40,6 +40,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.getDealerId = function (dealer) {
         console.log(dealer);
         $stateParams.dealerId = dealer.id;
+        $rootScope.$emit('dealerChange', {dealerId: dealer.id});
     };
 
     $scope.toDate = function (strDate) {
@@ -91,9 +92,9 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
             $state.go("index.report.newOrEdit", {dealerId: $stateParams.dealerId ? $stateParams.dealerId : defaultDealerId, productId: $stateParams.productId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else if ($scope.getCurrentPage() === "dataSource") {
             $state.go("index.dataSource", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
-        }else if ($scope.getCurrentPage() === "dataSet") {
+        } else if ($scope.getCurrentPage() === "dataSet") {
             $state.go("index.dataSet", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
-        }  else {
+        } else {
             $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
         }
     }
@@ -118,7 +119,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
             $state.go("index.report.newOrEdit", {dealerId: $stateParams.dealerId, productId: $stateParams.productId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else if ($scope.getCurrentPage() === "dataSource") {
             $state.go("index.dataSource", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
-        }else if ($scope.getCurrentPage() === "dataSet") {
+        } else if ($scope.getCurrentPage() === "dataSet") {
             $state.go("index.dataSet", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else {
             $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
@@ -169,10 +170,16 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         $('#daterange-btn').daterangepicker(
                 {
                     ranges: {
+//                        'Today': [moment(), moment()],
+//                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+//                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+//                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf(new Date())],
                         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                     },
                     startDate: moment().subtract(29, 'days'),
-                    endDate: moment()
+                    endDate: moment(),
+                    maxDate: new Date()
                 },
                 function (start, end) {
                     $('#daterange-btn span').html(start.format('MM-DD-YYYY') + ' - ' + end.format('MM-DD-YYYY'));

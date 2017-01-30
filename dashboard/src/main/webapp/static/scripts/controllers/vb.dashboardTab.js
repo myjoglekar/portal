@@ -1,7 +1,7 @@
-app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout, localStorageService) {
+app.controller('UiController', function ($scope, $http, $stateParams, $state, $filter, $cookies, $timeout, localStorageService, $rootScope) {
     $scope.permission = localStorageService.get("permission");
 
-    $scope.selectTabID = $state;
+//    $scope.selectTabID = $state;
     $scope.userName = $cookies.getObject("username");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
@@ -23,7 +23,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         var yesterday = new Date(today);
         yesterday.setDate(today.getDate() - 29);
         return yesterday;
-    }
+    };
 
     $scope.firstDate = $stateParams.startDate ? $scope.toDate(decodeURIComponent($stateParams.startDate)) : $scope.getDay().toLocaleDateString("en-US");
     $scope.lastDate = $stateParams.endDate ? $scope.toDate(decodeURIComponent($stateParams.endDate)) : new Date().toLocaleDateString("en-US");
@@ -46,7 +46,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     $scope.editDashboardTab = function (tab) {
         var data = {
             tabNames: tab.tabName
-        }
+        };
         $scope.tab = data;
         $timeout(function () {
             $('#editTab' + tab.id).modal('show');
@@ -69,19 +69,21 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     });
 
     $scope.loadTab = true;
-    function getItem() {
-        $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
-            $scope.loadTab = false;
-            $scope.tabs = response;
-            angular.forEach(response, function (value, key) {
-                $scope.dashboardName = value.dashboardId.dashboardTitle;
-            });
-            $scope.startId = response[0].id ? response[0].id : 0;
-            $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+    $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
+        $scope.loadTab = false;
+        $scope.tabs = response;
+        angular.forEach(response, function (value, key) {
+            $scope.dashboardName = value.dashboardId.dashboardTitle;
         });
-    }
+        if (!response) {
+            return;
+        }
+        //$scope.startId = response[0].id ? response[0].id : 0;
+        //$rootScope.$emit('dealerTabId', {tabId: response[0].id});
+        $stateParams.tabId = response[0].id;
+        $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: $stateParams.tabId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+    });
 
-    getItem();
     var dates = $(".pull-right i").text();
 
     $scope.tabs = [];
@@ -97,21 +99,16 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
 
     $scope.deleteTab = function (index, tab) {
         $http({method: 'DELETE', url: 'admin/ui/dbTab/' + tab.id}).success(function (response) {
-
             $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
                 $scope.loadTab = false;
                 $scope.tabs = response;
                 angular.forEach(response, function (value, key) {
                     $scope.dashboardName = value.dashboardId.dashboardTitle;
                 });
-               // $scope.startId = response[0].id ? response[0].id : 0;
+                //$scope.startId = response[0].id ? response[0].id : 0;
                 $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: response[0].id, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
             });
-            //.$state.go('index.dashboard.widget')
-            // getItem();
             // $scope.tabs.splice(index, 1);
-            // console.log(response)
-            // getItem();console.log(
         });
     };
 
@@ -127,15 +124,20 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $scope.reports = response;
     });
 
+    $scope.moveItem = function (list, from, to) {
+        list.splice(to, 0, list.splice(from, 1)[0]);
+        return list;
+    };
+
     $scope.onDropTabComplete = function (index, tab, evt) {
         if (tab !== "" && tab !== null) {
             var otherObj = $scope.tabs[index];
             var otherIndex = $scope.tabs.indexOf(tab);
 
-//            $scope.tabs.move(otherIndex, index);
+            $scope.tabs = $scope.moveItem($scope.tabs, otherIndex, index);
 
-            $scope.tabs[index] = tab;
-            $scope.tabs[otherIndex] = otherObj;
+//            $scope.tabs[index] = tab;
+//            $scope.tabs[otherIndex] = otherObj;
             var tabOrder = $scope.tabs.map(function (value, key) {
                 if (value) {
                     return value.id;
@@ -151,7 +153,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     $scope.startEditing = function (tab) {
         tab.editing = true;
         $scope.editedItem = tab;
-    }
+    };
 
     $scope.doneEditing = function (tab) {
         var data = {

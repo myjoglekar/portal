@@ -42,9 +42,22 @@ public class UiService {
     private UiDao uiDao;
 
     public List<Product> getProduct() {
-        return uiDao.read(Product.class);
+        List<Product> product = uiDao.read(Product.class);
+        List<Product> returnList = new ArrayList<>();
+        for (Iterator<Product> iterator = product.iterator(); iterator.hasNext();) {
+            Product product1 = iterator.next();
+            if (!product1.getProductName().equalsIgnoreCase("overall")) {
+                returnList.add(product1);
+            }
+        }
+        return returnList;
     }
 
+    public List<Product> getDealerProduct(Integer dealerId) {
+        return uiDao.getDealerProduct(dealerId);
+    }
+
+    
     public List<Dashboard> getDashboards(VbUser user) {
         return uiDao.getDashboards(user);
     }
@@ -129,7 +142,9 @@ public class UiService {
         tabWidget.setProductName(tabWidgetBean.getProductName());
         tabWidget.setProductDisplayName(tabWidgetBean.getProductDisplayName());
         tabWidget.setTableFooter(tabWidgetBean.getTableFooter());
+        tabWidget.setZeroSuppression(tabWidgetBean.getZeroSuppression());
         tabWidget.setDateDuration(tabWidgetBean.getDateDuration());
+        tabWidget.setMaxRecord(tabWidgetBean.getMaxRecord());
         TabWidget savedTabWidget = uiDao.saveTabWidget(tabWidget);
         List<WidgetColumnBean> widgetColumns = tabWidgetBean.getWidgetColumns();
         uiDao.deleteWidgetColumns(tabWidget.getId());
@@ -147,10 +162,19 @@ public class UiService {
             widgetColumn.setWidth(widgetColumnBean.getWidth());
             widgetColumn.setWrapText(widgetColumnBean.getWrapText());
             widgetColumn.setAlignment(widgetColumnBean.getAlignment());
+            widgetColumn.setFieldType(widgetColumnBean.getFieldType());
+            Integer columnHide = null;
+            if (widgetColumnBean.getGroupPriority() != null && widgetColumnBean.getGroupPriority() != 0) {
+                columnHide = 1;
+            }
+            if (widgetColumnBean.getColumnHide() != null) {
+                columnHide = widgetColumnBean.getColumnHide();
+            }
+            widgetColumn.setColumnHide(columnHide);
             widgetColumn.setWidgetId(savedTabWidget);
             uiDao.saveOrUpdate(widgetColumn);
         }
-        return savedTabWidget;
+        return uiDao.getTabWidgetById(tabWidgetBean.getId());
     }
 
     public ReportType addReportType(ReportType reportTypes) {
