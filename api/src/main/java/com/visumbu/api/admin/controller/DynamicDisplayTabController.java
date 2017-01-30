@@ -137,7 +137,7 @@ public class DynamicDisplayTabController {
         List list = (List) map.get("columnDefs");
         list.addAll(columnDefs);
         if (fieldsOnly != null) {
-            return list;
+            return map;
         }
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "dynamicDisplay");
         System.out.println("SEO GA Profile Id " + accountDetails.getAnalyticsProfileId());
