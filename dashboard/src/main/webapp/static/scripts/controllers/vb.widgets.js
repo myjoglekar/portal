@@ -5,6 +5,11 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService, $sce) {
     $scope.permission = localStorageService.get("permission");
     //$scope.widget = {isSpecial: 1}
+    $scope.addToPdf = function(data) {
+        // alert("TTTTT");
+        console.log("Adding to pdf");
+        console.log(data);
+    }
     $scope.selectAggregations = [
         {name: 'None', value: ""},
         {name: 'Sum', value: "sum"},
@@ -382,9 +387,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             dynamicTableUrl: '@',
             widgetId: '@',
             widgetColumns: '@',
-            setTableFn: '&',
             tableFooter: '@',
-            widgetObj: '@'
+            widgetObj: '@',
+            pdfFunction: '&'
         },
         template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t" ng-hide="hideEmptyTable">' +
@@ -437,6 +442,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '</table>' + '<div class="text-center" ng-show="hideEmptyTable">{{tableEmptyMessage}}</div>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
+            scope.pdfFunction({test:"Test"});
             scope.totalShown = 0;
             scope.displayFooter = scope.tableFooter;
             scope.loadingTable = true;
@@ -549,13 +555,15 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
-
+                var pdfData = {};
                 if (response.data.length === 0) {
                     scope.tableEmptyMessage = "No Data Found";
                     scope.hideEmptyTable = true;
+                    pdfData[scope.widgetId] = "No Data Found";
                 } else {
                     var responseData = response.data;
                     scope.orignalData = response.data;
+                    pdfData[scope.widgetId] = scope.orignalData;
                     responseData = scope.orderData(responseData, sortFields);
                     var widgetData = JSON.parse(scope.widgetObj);
                     if (widgetData.maxRecord > 0) {
@@ -577,6 +585,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
 //                    scope.groupingData = $sce.trustAsHtml(dataToPush);
                     }
                 }
+                //alert("CAlling");
+                console.log(pdfData);
+                scope.pdfFunction({test:pdfData});
             });
             
             scope.initData = function(col) {
@@ -704,6 +715,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 });
                 return returnValue;
             }
+            
             scope.orderData = function (list, fieldnames) {
                 if (fieldnames.length == 0) {
                     return list;

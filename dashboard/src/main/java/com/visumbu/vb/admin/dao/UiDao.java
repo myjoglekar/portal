@@ -274,7 +274,7 @@ public class UiDao extends BaseDao {
                 + " or (a.service_name like 'Facebook%' and p.product_name='Paid Social') "
                 + " or (a.service_name like 'Call Tracking' and p.product_name='Paid Search') "
                 + " or (a.service_name like '%SEO%' and p.product_name='SEO') "
-                + " )";
+                + " ) order by p.id";
         Query query = sessionFactory.getCurrentSession().createSQLQuery(queryStr)
                 .addScalar("id", IntegerType.INSTANCE)
                 .addScalar("product_name", StringType.INSTANCE)
