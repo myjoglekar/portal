@@ -104,9 +104,17 @@
 
     .even {
         color: #333;
-        background-color: 3fff !important;
+        background-color: #fff !important;
+    }
+    .oddFirst {
+        color: #333;
+        background-color: #fff !important;
     }
 
+    .evenFirst {
+        color: #333;
+        background-color: rgb(235, 238, 225) !important;
+    }
 
 </style>
 <div class="row add-widget">
@@ -141,7 +149,7 @@
 
         <div ng-if="widget.chartType == 'ticker'">
             <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data, $event)">
-                <div class="hpanel" ng-drag="true" ng-drag-data="widget">
+                <div class="hpanel border-table" ng-drag="true" ng-drag-data="widget">
                     <div class="panel-tools hover-delete">
                         <a class="edit" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                         </a>

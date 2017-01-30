@@ -342,7 +342,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '<i style="cursor: pointer" ng-click="groupingData.$hideRows = !groupingData.$hideRows; hideAll(groupingData, groupingData.$hideRows); selected_Row = !selected_Row" class="fa" ng-class="{\'fa-plus-circle\': !selected_Row, \'fa-minus-circle\': selected_Row}"></i>' +
                 ' Group</th>' +
                 '<th ng-repeat="col in columns">' +
-                '{{col.displayName}} <i class="fa" ng-class="{\'fa-caret-down\':!reverse.col.fieldName, \'fa-caret-up\':reverse.col.fieldName}"></i>' +
+                '{{col.displayName}}' +
                 '</th>' +
                 '</tr></thead>' +
                 //'<tbody dir-paginate="grouping in groupingData | orderBy: sortColumn:reverse | itemsPerPage: pageSize" current-page="currentPage"">' +
@@ -704,7 +704,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
     return{
         restrict: 'AE',
         template: '<div ng-show="loadingTicker"><img width="40" src="static/img/logos/loader.gif"></div>' +
-                '<div  ng-hide="loadingTicker" class="panel-body text-left h-200">' +
+                '<div  ng-hide="loadingTicker" class="panel-body text-left">' +
                 '<i class="pe-7s-graph1 fa-4x"></i>' +
                 '<h1 class="m-xs">{{totalValue}}</h1>' +
                 '<h3 class="font-extra-bold no-margins text-success">' +

@@ -45,7 +45,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: "/dataSet/:dealerId?:startDate/:endDate",
                 templateUrl: "static/views/source/dataSet.html",
                 controller: 'DataSetController'
-            });
+            })
+            .state("index.franchiseMarketing", {
+                url: "/franchiseMarketing",
+                templateUrl: "static/views/franchiseMarketing/franchiseMarketing.html",
+                controller: 'FranchiseMarketingController'
+            })
 
     $urlRouterProvider.otherwise('index/dashboard/1/1');
 });

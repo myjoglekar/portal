@@ -69,16 +69,19 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
     });
 
     $scope.loadTab = true;
-    $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
-        $scope.loadTab = false;
-        $scope.tabs = response;
-        angular.forEach(response, function (value, key) {
-            $scope.dashboardName = value.dashboardId.dashboardTitle;
+    function getItem() {
+        $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
+            $scope.loadTab = false;
+            $scope.tabs = response;
+            angular.forEach(response, function (value, key) {
+                $scope.dashboardName = value.dashboardId.dashboardTitle;
+            });
+            $scope.startId = response[0].id ? response[0].id : 0;
+            $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
         });
-        $scope.startId = response[0].id ? response[0].id : 0;
-        $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: $stateParams.tabId ? $stateParams.tabId : $scope.startId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
-    });
+    }
 
+    getItem();
     var dates = $(".pull-right i").text();
 
     $scope.tabs = [];
@@ -94,7 +97,21 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
 
     $scope.deleteTab = function (index, tab) {
         $http({method: 'DELETE', url: 'admin/ui/dbTab/' + tab.id}).success(function (response) {
-            $scope.tabs.splice(index, 1);
+
+            $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
+                $scope.loadTab = false;
+                $scope.tabs = response;
+                angular.forEach(response, function (value, key) {
+                    $scope.dashboardName = value.dashboardId.dashboardTitle;
+                });
+               // $scope.startId = response[0].id ? response[0].id : 0;
+                $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: response[0].id, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+            });
+            //.$state.go('index.dashboard.widget')
+            // getItem();
+            // $scope.tabs.splice(index, 1);
+            // console.log(response)
+            // getItem();console.log(
         });
     };
 
@@ -114,9 +131,9 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         if (tab !== "" && tab !== null) {
             var otherObj = $scope.tabs[index];
             var otherIndex = $scope.tabs.indexOf(tab);
-            
+
 //            $scope.tabs.move(otherIndex, index);
-            
+
             $scope.tabs[index] = tab;
             $scope.tabs[otherIndex] = otherObj;
             var tabOrder = $scope.tabs.map(function (value, key) {
