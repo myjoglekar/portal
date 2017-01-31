@@ -9,6 +9,7 @@ import com.visumbu.vb.admin.service.DealerService;
 import com.visumbu.vb.admin.service.UserService;
 import com.visumbu.vb.utils.Rest;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.Level;
@@ -42,6 +43,8 @@ public class ProxyController {
     public @ResponseBody
     Object getJson(HttpServletRequest request, HttpServletResponse response) {
         String url = request.getParameter("url");
+        String query = request.getParameter("query");
+        System.out.println("QUERY FROM BROWSER " + query);
         String dealerId = request.getParameter("dealerId");
         Map<String, String> dealerAccountDetails = dealerService.getDealerAccountDetails(dealerId);
         Integer port = request.getServerPort();
@@ -62,6 +65,9 @@ public class ProxyController {
             for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
                 String key = entrySet.getKey();
                 String[] value = entrySet.getValue();
+                for (int i = 0; i < value.length; i++) {
+                    value[i] = URLEncoder.encode(value[i], "UTF-8");
+                }
                 valueMap.put(key, Arrays.asList(value));
             }
             String data = Rest.getData(url, valueMap);

@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,9 +35,12 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @NamedQueries({
     @NamedQuery(name = "DataSet.findAll", query = "SELECT d FROM DataSet d")
     , @NamedQuery(name = "DataSet.findById", query = "SELECT d FROM DataSet d WHERE d.id = :id")
-    , @NamedQuery(name = "DataSet.findByName", query = "SELECT d FROM DataSet d WHERE d.name = :name")
-    , @NamedQuery(name = "DataSet.findByQuery", query = "SELECT d FROM DataSet d WHERE d.query = :query")})
+    , @NamedQuery(name = "DataSet.findByName", query = "SELECT d FROM DataSet d WHERE d.name = :name")})
 public class DataSet implements Serializable {
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "query")
+    private String query;
 
     @OneToMany(mappedBy = "dataSetId")
     private Collection<TabWidget> tabWidgetCollection;
@@ -50,9 +54,6 @@ public class DataSet implements Serializable {
     @Size(max = 255)
     @Column(name = "name")
     private String name;
-    @Size(max = 4096)
-    @Column(name = "query")
-    private String query;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private VbUser userId;
@@ -81,14 +82,6 @@ public class DataSet implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(String query) {
-        this.query = query;
     }
 
     public VbUser getUserId() {
@@ -140,6 +133,14 @@ public class DataSet implements Serializable {
 
     public void setTabWidgetCollection(Collection<TabWidget> tabWidgetCollection) {
         this.tabWidgetCollection = tabWidgetCollection;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     }

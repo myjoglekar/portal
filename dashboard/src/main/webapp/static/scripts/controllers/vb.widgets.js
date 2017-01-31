@@ -597,7 +597,20 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
             var fullAggreagtionList = aggreagtionList;
             var tableDataSource = JSON.parse(scope.dynamicTableSource)
             console.log(tableDataSource)
-            $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + tableDataSource.dataSourceId.connectionString + '&username=' + tableDataSource.dataSourceId.userName + '&password=' + tableDataSource.dataSourceId.password + '&port=3306&schema=vb&query=' + tableDataSource.query).success(function (response) {
+            var data = {
+                url : '../dbApi/admin/dataSet/getData',
+                connectionUrl: tableDataSource.dataSourceId.connectionString,        
+                startDate : $stateParams.startDate,
+                endDate : $stateParams.endDate,
+                username : tableDataSource.dataSourceId.userName,
+                password:tableDataSource.dataSourceId.password,
+                query : "select * from data ",
+                port:3306, 
+                schema:'vb'
+            }
+            console.log(data);
+            $http.get('admin/proxy/getJson?url=../dbApi/admin/dataSet/getData&connectionUrl=' + tableDataSource.dataSourceId.connectionString +  "&location=" + $stateParams.dealerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + '&username=' + tableDataSource.dataSourceId.userName + '&password=' + tableDataSource.dataSourceId.password + '&port=3306&schema=vb&query=' + encodeURI(tableDataSource.query)).success(function (response) {
+            //$http.post("admin/proxy/getJson", data).success(function (response) {
 //            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
 
                 scope.ajaxLoadingCompleted = true;
