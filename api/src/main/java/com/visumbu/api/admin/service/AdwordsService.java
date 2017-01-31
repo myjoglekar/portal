@@ -1211,13 +1211,13 @@ public class AdwordsService {
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         if (aggregation == null || aggregation.isEmpty()) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                    "Impressions", "Clicks", "CityCriteriaId",
+                    "Impressions", "Clicks", "CountryCriteriaId", "CityCriteriaId",
                     "Conversions", "AveragePosition", "AllConversions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                    "Impressions", "Clicks", "Date", "CityCriteriaId",
+                    "Impressions", "Clicks", "Date", "CountryCriteriaId", "CityCriteriaId",
                     "Conversions", "AveragePosition", "AllConversions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
