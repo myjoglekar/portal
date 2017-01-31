@@ -121,24 +121,25 @@
                     </a>
 
                     <div class="dropdown-menu hdropdown bigmenu animated flipInX">
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 row">
                             <div ng-repeat="product in products">
-                                <ul class="col-lg-4 icon-dash">
+                                <ul class="col-lg-3 icon-dash">
                                     <li class="product-dashboard-icon">
                                         <a class="active" ng-click="setParamsDate()" 
                                            data-ui-sref="index.dashboard.widget({dealerId: dealerId, productId: product.id?product.id:1, tabId: tabId, startDate: startDate, endDate: endDate})">
-                                            <i class="{{product.icon}}"></i> {{product.productName}}
+                                            <i class="{{product.icon}}"></i> <h5>{{product.productName}}</h5>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
-                            <div style="margin-left:13px;">
-                                <ul class="col-lg-4 icon-dash">
+                            <div>
+                                <ul class="col-lg-3 icon-dash">
                                     <li class="product-dashboard-icon">
-                                        <a data-ui-sref="index.franchiseMarketing"><i class="pe-7s-graph2 text-info"></i> Franchise Marketing</a>
+                                        <a data-ui-sref="index.franchiseMarketing"><i class="pe-7s-graph2 text-info"></i> <h5>Franchise Marketing</h5></a>
                                     </li>
                                 </ul>
                             </div>
+                            
                         </div>
 
 

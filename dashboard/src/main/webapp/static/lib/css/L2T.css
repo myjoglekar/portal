@@ -2985,15 +2985,15 @@ label.error:before {
 }
 /* Big menu */
 .hdropdown.bigmenu {
-    padding: 30px 30px 0px 30px;
+    padding: 10px 10px 10px 10px;
 }
 .bigmenu a i {
-    font-size: 46px;
+    font-size: 30px;
 }
 .bigmenu a {
     display: block;
     text-align: center;
-    margin: 0 10px 30px 0;
+    margin: 0 10px 10px 0;
     min-width: 100px;
 }
 .bigmenu h5 {
@@ -3810,7 +3810,7 @@ body.modal-open {
 
 .hdropdown.bigmenu {
     width:100%;
-    min-width:900px;
+    min-width:500px;
 }
 
 .product-dashboard-icon {
@@ -3824,6 +3824,8 @@ body.modal-open {
 
 .icon-dash {
     list-style-type: none;
+    margin:0;
+    padding:0;
 }
 
 .table {
