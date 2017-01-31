@@ -9,6 +9,8 @@ import com.visumbu.vb.admin.dao.bean.ProductBean;
 import com.visumbu.vb.dao.BaseDao;
 import com.visumbu.vb.model.Dashboard;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.DataSet;
+import com.visumbu.vb.model.DataSource;
 import com.visumbu.vb.model.Product;
 import com.visumbu.vb.model.Report;
 import com.visumbu.vb.model.ReportColumn;
@@ -284,6 +286,16 @@ public class UiDao extends BaseDao {
          query.setParameter("dealerId", dealerId);
         return query.list();
 
+    }
+    
+    public DataSource getDataSourceById(Integer dataSourceId) {
+        DataSource dataSource = (DataSource) sessionFactory.getCurrentSession().get(DataSource.class, dataSourceId);
+        return dataSource;
+    }
+    
+    public DataSet getDataSetById(Integer dataSetId) {
+        DataSet dataSet = (DataSet) sessionFactory.getCurrentSession().get(DataSet.class, dataSetId);
+        return dataSet;
     }
 
 }

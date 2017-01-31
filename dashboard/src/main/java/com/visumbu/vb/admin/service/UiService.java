@@ -130,12 +130,30 @@ public class UiService {
 
     public TabWidget saveTabWidget(Integer tabId, TabWidgetBean tabWidgetBean) {
         TabWidget tabWidget = null;
+        
         if (tabWidgetBean.getId() != null) {
             tabWidget = uiDao.getTabWidgetById(tabWidgetBean.getId());
 
         } else {
             tabWidget = new TabWidget();
         }
+        
+        DataSource dataSource = null;
+        if (tabWidgetBean.getDataSourceId()!= null) {
+            dataSource = uiDao.getDataSourceById(tabWidgetBean.getDataSourceId());
+
+        } else {
+            dataSource = new DataSource();
+        }
+        
+        DataSet dataSet = null;
+        if (tabWidgetBean.getDataSourceId()!= null) {
+            dataSet = uiDao.getDataSetById(tabWidgetBean.getDataSetId());
+
+        } else {
+            dataSet = new DataSet();
+        }        
+        
         tabWidget.setChartType(tabWidgetBean.getChartType());
         tabWidget.setDirectUrl(tabWidgetBean.getDirectUrl());
         tabWidget.setWidgetTitle(tabWidgetBean.getWidgetTitle());
@@ -145,6 +163,10 @@ public class UiService {
         tabWidget.setZeroSuppression(tabWidgetBean.getZeroSuppression());
         tabWidget.setDateDuration(tabWidgetBean.getDateDuration());
         tabWidget.setMaxRecord(tabWidgetBean.getMaxRecord());
+        tabWidget.setDatasource(tabWidgetBean.getDatasource());
+        tabWidget.setDataset(tabWidgetBean.getDataset());
+        tabWidget.setDataSetId(dataSet);
+        tabWidget.setDataSourceId(dataSource);
         TabWidget savedTabWidget = uiDao.saveTabWidget(tabWidget);
         List<WidgetColumnBean> widgetColumns = tabWidgetBean.getWidgetColumns();
         uiDao.deleteWidgetColumns(tabWidget.getId());

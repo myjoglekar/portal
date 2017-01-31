@@ -40,6 +40,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     , @NamedQuery(name = "DataSource.findByPassword", query = "SELECT d FROM DataSource d WHERE d.password = :password")})
 public class DataSource implements Serializable {
 
+    @OneToMany(mappedBy = "dataSourceId")
+    private Collection<TabWidget> tabWidgetCollection;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -153,5 +156,15 @@ public class DataSource implements Serializable {
     public String toString() {
         return "com.visumbu.vb.model.DataSource[ id=" + id + " ]";
     }
-    
-}
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<TabWidget> getTabWidgetCollection() {
+        return tabWidgetCollection;
+    }
+
+    public void setTabWidgetCollection(Collection<TabWidget> tabWidgetCollection) {
+        this.tabWidgetCollection = tabWidgetCollection;
+    }
+
+    }
