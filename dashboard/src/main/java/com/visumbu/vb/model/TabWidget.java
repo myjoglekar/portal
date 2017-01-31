@@ -6,7 +6,6 @@
 package com.visumbu.vb.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -20,15 +19,12 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -43,10 +39,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     , @NamedQuery(name = "TabWidget.findByChartType", query = "SELECT t FROM TabWidget t WHERE t.chartType = :chartType")
     , @NamedQuery(name = "TabWidget.findByClosable", query = "SELECT t FROM TabWidget t WHERE t.closable = :closable")
     , @NamedQuery(name = "TabWidget.findByCol", query = "SELECT t FROM TabWidget t WHERE t.col = :col")
-    , @NamedQuery(name = "TabWidget.findByTab", query = "SELECT t FROM TabWidget t WHERE t.tabId = :tab")
     , @NamedQuery(name = "TabWidget.findByCreatedTime", query = "SELECT t FROM TabWidget t WHERE t.createdTime = :createdTime")
-    , @NamedQuery(name = "TabWidget.findByDataset", query = "SELECT t FROM TabWidget t WHERE t.dataset = :dataset")
-    , @NamedQuery(name = "TabWidget.findByDatasource", query = "SELECT t FROM TabWidget t WHERE t.datasource = :datasource")
     , @NamedQuery(name = "TabWidget.findByDimension", query = "SELECT t FROM TabWidget t WHERE t.dimension = :dimension")
     , @NamedQuery(name = "TabWidget.findByEditable", query = "SELECT t FROM TabWidget t WHERE t.editable = :editable")
     , @NamedQuery(name = "TabWidget.findByFilters", query = "SELECT t FROM TabWidget t WHERE t.filters = :filters")
@@ -61,8 +54,18 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     , @NamedQuery(name = "TabWidget.findByWidgetTitle", query = "SELECT t FROM TabWidget t WHERE t.widgetTitle = :widgetTitle")
     , @NamedQuery(name = "TabWidget.findByWidth", query = "SELECT t FROM TabWidget t WHERE t.width = :width")
     , @NamedQuery(name = "TabWidget.findByWidthClass", query = "SELECT t FROM TabWidget t WHERE t.widthClass = :widthClass")
-    , @NamedQuery(name = "TabWidget.findByOrder", query = "SELECT t FROM TabWidget t WHERE t.widgetOrder = :widgetOrder")
-    , @NamedQuery(name = "TabWidget.findByDirectUrl", query = "SELECT t FROM TabWidget t WHERE t.directUrl = :directUrl")})
+    , @NamedQuery(name = "TabWidget.findByWidgetOrder", query = "SELECT t FROM TabWidget t WHERE t.widgetOrder = :widgetOrder")
+    , @NamedQuery(name = "TabWidget.findByDirectUrl", query = "SELECT t FROM TabWidget t WHERE t.directUrl = :directUrl")
+    , @NamedQuery(name = "TabWidget.findByProductDisplayName", query = "SELECT t FROM TabWidget t WHERE t.productDisplayName = :productDisplayName")
+    , @NamedQuery(name = "TabWidget.findByProductName", query = "SELECT t FROM TabWidget t WHERE t.productName = :productName")
+    , @NamedQuery(name = "TabWidget.findByTableFooter", query = "SELECT t FROM TabWidget t WHERE t.tableFooter = :tableFooter")
+    , @NamedQuery(name = "TabWidget.findByDateDuration", query = "SELECT t FROM TabWidget t WHERE t.dateDuration = :dateDuration")
+    , @NamedQuery(name = "TabWidget.findByZeroSuppression", query = "SELECT t FROM TabWidget t WHERE t.zeroSuppression = :zeroSuppression")
+    , @NamedQuery(name = "TabWidget.findByMaxRecord", query = "SELECT t FROM TabWidget t WHERE t.maxRecord = :maxRecord")
+    , @NamedQuery(name = "TabWidget.findByCustomRange", query = "SELECT t FROM TabWidget t WHERE t.customRange = :customRange")
+    , @NamedQuery(name = "TabWidget.findByFrequencyDuration", query = "SELECT t FROM TabWidget t WHERE t.frequencyDuration = :frequencyDuration")
+    , @NamedQuery(name = "TabWidget.findByDataset", query = "SELECT t FROM TabWidget t WHERE t.dataset = :dataset")
+    , @NamedQuery(name = "TabWidget.findByDatasource", query = "SELECT t FROM TabWidget t WHERE t.datasource = :datasource")})
 public class TabWidget implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -81,12 +84,6 @@ public class TabWidget implements Serializable {
     @Column(name = "created_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdTime;
-    @Size(max = 255)
-    @Column(name = "dataset")
-    private String dataset;
-    @Size(max = 255)
-    @Column(name = "datasource")
-    private String datasource;
     @Size(max = 255)
     @Column(name = "dimension")
     private String dimension;
@@ -128,36 +125,50 @@ public class TabWidget implements Serializable {
     private String widthClass;
     @Column(name = "widget_order")
     private Integer widgetOrder;
-    @Size(max = 4096)
+    @Size(max = 4095)
     @Column(name = "direct_url")
     private String directUrl;
+    @Size(max = 255)
+    @Column(name = "product_display_name")
+    private String productDisplayName;
     @Size(max = 255)
     @Column(name = "productName")
     private String productName;
     @Size(max = 45)
     @Column(name = "table_footer")
     private Boolean tableFooter;
-    @Size(max = 45)
-    @Column(name = "zero_suppression")
-    private Boolean zeroSuppression;
     @Size(max = 255)
     @Column(name = "date_duration")
     private String dateDuration;
-    @Size(max = 255)
+    @Column(name = "zero_suppression")
+    private Boolean zeroSuppression;
     @Column(name = "max_record")
     private Integer maxRecord;
     @Size(max = 255)
-    @Column(name = "product_display_name")
-    private String productDisplayName;
+    @Column(name = "custom_range")
+    private String customRange;
+    @Size(max = 255)
+    @Column(name = "frequency_duration")
+    private String frequencyDuration;
+    @Size(max = 255)
+    @Column(name = "dataset")
+    private String dataset;
+    @Size(max = 255)
+    @Column(name = "datasource")
+    private String datasource;
+    @JoinColumn(name = "data_set_id", referencedColumnName = "id")
+    @ManyToOne
+    private DataSet dataSetId;
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     @ManyToOne
     private VbUser createdBy;
+    @JoinColumn(name = "data_source_id", referencedColumnName = "id")
+    @ManyToOne
+    private DataSource dataSourceId;
     @JoinColumn(name = "tab_id", referencedColumnName = "id")
     @ManyToOne
     private DashboardTabs tabId;
-//    @OneToMany(mappedBy = "widgetId")
-//    private Collection<WidgetColumn> widgetColumnCollection;
-
+    
     @Transient
     private List<WidgetColumn> columns;
 
@@ -206,22 +217,6 @@ public class TabWidget implements Serializable {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
-    }
-
-    public String getDataset() {
-        return dataset;
-    }
-
-    public void setDataset(String dataset) {
-        this.dataset = dataset;
-    }
-
-    public String getDatasource() {
-        return datasource;
-    }
-
-    public void setDatasource(String datasource) {
-        this.datasource = datasource;
     }
 
     public String getDimension() {
@@ -360,6 +355,14 @@ public class TabWidget implements Serializable {
         this.directUrl = directUrl;
     }
 
+    public String getProductDisplayName() {
+        return productDisplayName;
+    }
+
+    public void setProductDisplayName(String productDisplayName) {
+        this.productDisplayName = productDisplayName;
+    }
+
     public String getProductName() {
         return productName;
     }
@@ -376,20 +379,20 @@ public class TabWidget implements Serializable {
         this.tableFooter = tableFooter;
     }
 
-    public Boolean getZeroSuppression() {
-        return zeroSuppression;
-    }
-
-    public void setZeroSuppression(Boolean zeroSuppression) {
-        this.zeroSuppression = zeroSuppression;
-    }
-    
     public String getDateDuration() {
         return dateDuration;
     }
 
     public void setDateDuration(String dateDuration) {
         this.dateDuration = dateDuration;
+    }
+
+    public Boolean getZeroSuppression() {
+        return zeroSuppression;
+    }
+
+    public void setZeroSuppression(Boolean zeroSuppression) {
+        this.zeroSuppression = zeroSuppression;
     }
 
     public Integer getMaxRecord() {
@@ -400,13 +403,37 @@ public class TabWidget implements Serializable {
         this.maxRecord = maxRecord;
     }
 
-    public String getProductDisplayName() {
-        return productDisplayName;
+    public String getCustomRange() {
+        return customRange;
     }
 
-    public void setProductDisplayName(String productDisplayName) {
-        this.productDisplayName = productDisplayName;
+    public void setCustomRange(String customRange) {
+        this.customRange = customRange;
     }
+
+    public String getFrequencyDuration() {
+        return frequencyDuration;
+    }
+
+    public void setFrequencyDuration(String frequencyDuration) {
+        this.frequencyDuration = frequencyDuration;
+    }
+
+    public String getDataset() {
+        return dataset;
+    }
+
+    public void setDataset(String dataset) {
+        this.dataset = dataset;
+    }
+
+    public String getDatasource() {
+        return datasource;
+    }
+
+    public void setDatasource(String datasource) {
+        this.datasource = datasource;
+    }   
 
     public VbUser getCreatedBy() {
         return createdBy;
@@ -414,6 +441,22 @@ public class TabWidget implements Serializable {
 
     public void setCreatedBy(VbUser createdBy) {
         this.createdBy = createdBy;
+    }
+    
+    public DataSet getDataSetId() {
+        return dataSetId;
+    }
+
+    public void setDataSetId(DataSet dataSetId) {
+        this.dataSetId = dataSetId;
+    }
+
+    public DataSource getDataSourceId() {
+        return dataSourceId;
+    }
+
+    public void setDataSourceId(DataSource dataSourceId) {
+        this.dataSourceId = dataSourceId;
     }
 
     public DashboardTabs getTabId() {
@@ -423,24 +466,14 @@ public class TabWidget implements Serializable {
     public void setTabId(DashboardTabs tabId) {
         this.tabId = tabId;
     }
-
-    public List<WidgetColumn> getColumns() {
+    
+     public List<WidgetColumn> getColumns() {
         return columns;
     }
 
     public void setColumns(List<WidgetColumn> columns) {
         this.columns = columns;
     }
-//
-//    @XmlTransient
-//    @JsonIgnore
-//    public Collection<WidgetColumn> getWidgetColumnCollection() {
-//        return widgetColumnCollection;
-//    }
-//
-//    public void setWidgetColumnCollection(Collection<WidgetColumn> widgetColumnCollection) {
-//        this.widgetColumnCollection = widgetColumnCollection;
-//    }
 
     @Override
     public int hashCode() {

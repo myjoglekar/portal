@@ -213,28 +213,28 @@
                     </div>
                     <div class="panel-body" ng-if="widget.chartType === 'line'">
                         <div>
-                            <div line-Chart-Directive line-Chart-Source="{{widget.dataset}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
+                            <div line-Chart-Directive line-Chart-Source="{{widget.dataSetId}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                         </div> 
                     </div>
                     <div class="panel-body" ng-if="widget.chartType === 'bar'">
                         <div>
-                            <div bar-Chart-Directive bar-Chart-Source="{{widget.dataset}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
+                            <div bar-Chart-Directive bar-Chart-Source="{{widget.dataSetId}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                         </div> 
                     </div>
                     <div class="panel-body" ng-if="widget.chartType === 'pie'">
                         <div>
-                            <div pie-Chart-Directive pie-Chart-Source='{{widget.dataset}}' widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
+                            <div pie-Chart-Directive pie-Chart-Source='{{widget.dataSetId}}' widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                         </div> 
                     </div>
                     <div class="panel-body"  ng-if="widget.chartType === 'area'">
                         <div class="table-responsive">
-                            <div area-Chart-Directive area-Chart-Source="{{widget.dataset}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
+                            <div area-Chart-Directive area-Chart-Source="{{widget.dataSetId}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
                         </div>
                     </div>
                     <div class="panel-body list" ng-if="widget.chartType === 'table'" adjust-height>
                         <div class="table-responsive project-list">
                             <div id="changes-height" class="project-list">
-                                <div dynamic-Table pdf-function="addToPdf(test)" dynamic-Table-Source="{{widget.dataset}}" widget-Id="{{widget.id}}" widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" widget-Columns="{{widget.columns}}"></div> 
+                                <div dynamic-Table pdf-function="addToPdf(test)" dynamic-Table-Source="{{widget.dataSetId}}" widget-Id="{{widget.id}}" widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" widget-Columns="{{widget.columns}}"></div> 
                             </div>
                         </div>
                     </div>
@@ -260,37 +260,38 @@
                                             <input type="text" class="form-control" ng-model="widget.previewTitle">
                                         </div> 
                                     </div>
-                                    
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Data Source</label>
-                                            <select class="form-control" ng-model="widget.datasource" ng-change="selectDataSource(widget.datasource, widget)" ng-options="dataSource.name for dataSource in dataSources">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Data Set</label>
-                                            <select class="form-control" ng-model="widget.dataset" ng-options="dataSet.name for dataSet in dataSets" ng-change="changeUrl(widget.dataset, widget)">
+                                            <select class="form-control" ng-model="widget.dataSourceId" ng-change="selectDataSource(widget.dataSourceId, widget)" ng-options="dataSource.name for dataSource in dataSources">
                                             </select>
                                         </div>
                                     </div>
                                     
-<!--                                    <div class="col-md-6">
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Product</label>
-                                            <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="userProduct for userProduct in userProducts">
+                                            <label>Data Set</label>
+                                            <select class="form-control" ng-model="widget.dataSetId" ng-options="dataSet.name for dataSet in dataSets" ng-change="changeUrl(widget.dataSetId, widget)">
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Name</label>
-                                            <select class="form-control" ng-model="widget.productDisplayName" ng-change="changeUrl(widget.productDisplayName, widget)">
-                                                <option ng-repeat="productField in productFields">{{productField.productDisplayName}}</option>
-                                            </select>
-                                        </div>
-                                    </div>-->
+
+                                    <!--                                    <div class="col-md-6">
+                                                                            <div class="form-group">
+                                                                                <label>Product</label>
+                                                                                <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="userProduct for userProduct in userProducts">
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-group">
+                                                                                <label>Name</label>
+                                                                                <select class="form-control" ng-model="widget.productDisplayName" ng-change="changeUrl(widget.productDisplayName, widget)">
+                                                                                    <option ng-repeat="productField in productFields">{{productField.productDisplayName}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>-->
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Type</label><br/>
@@ -316,21 +317,20 @@
                                         <div class="form-group">
                                             <input type="checkbox" ng-model="widget.zeroSuppression" ng-checked="widget.zeroSuppression == 1">
                                             <label>Zero Suppression</label>
-                                </div>
-                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-4" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
                                         <div class="form-group">
                                             <label class="col-sm-4">Max Record </label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" ng-model="widget.maxRecord" placeholder="max record">
-                        </div>
+                                            </div>
                                         </div>
                                     </div>                                    
                                 </div>
                             </div>
                         </div>
                         <div class="box">
-
                             <div class="box-body table-responsive no-padding">
                                 <table class="table table-bordered table-hover" >
                                     <thead>

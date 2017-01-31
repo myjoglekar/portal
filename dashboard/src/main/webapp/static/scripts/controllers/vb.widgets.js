@@ -125,9 +125,12 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.editWidget = function (widget) {     //Edit widget
+        console.log($scope.widgets)
         $scope.tableDef(widget);
         $scope.selectedRow = widget.chartType;
         widget.previewUrl = widget.directUrl;
+//        widget.dataSourceId = widget.dataSourceId.name;
+//        widget.dataSetId = widget.dataSetId.name;
         widget.previewType = widget.chartType;
         widget.previewTitle = widget.widgetTitle;
         $scope.editChartType = widget.chartType;
@@ -135,19 +138,20 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
-        console.log(widget.directUrl)
+        console.log(widget.directUrl);
+        console.log(widget.dataSetId);
         if (widget.columns) {
             widget.columns = widget.columns;
-            if (widget.directUrl) {
-                $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + widget.directUrl.dataSourceId.connectionString + '&username=' + widget.directUrl.dataSourceId.userName + '&password=' + widget.directUrl.dataSourceId.password + '&port=3306&schema=vb&query=' + widget.directUrl.query + "&fieldsOnly=true").success(function (response) {
+            if (widget.dataSetId) {
+                $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + widget.dataSetId.dataSourceId.connectionString + '&username=' + widget.dataSetId.dataSourceId.userName + '&password=' + widget.dataSetId.dataSourceId.password + '&port=3306&schema=vb&query=' + widget.dataSetId.query + "&fieldsOnly=true").success(function (response) {
 //                $http.get("admin/proxy/getJson?url=" + widget.directUrl + "&fieldsOnly=true").success(function (response) {
                     $scope.collectionFields = [];
                     $scope.collectionFields = response.columnDefs;
                 });
             }
         } else {
-            if (widget.directUrl) {
-                $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + widget.directUrl.dataSourceId.connectionString + '&username=' + widget.directUrl.dataSourceId.userName + '&password=' + widget.directUrl.dataSourceId.password + '&port=3306&schema=vb&query=' + widget.directUrl.query + "&fieldsOnly=true").success(function (response) {
+            if (widget.dataSetId) {
+                $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + widget.dataSetId.dataSourceId.connectionString + '&username=' + widget.dataSetId.dataSourceId.userName + '&password=' + widget.dataSetId.dataSourceId.password + '&port=3306&schema=vb&query=' + widget.dataSetId.query + "&fieldsOnly=true").success(function (response) {
 //                $http.get("admin/proxy/getJson?url=" + widget.directUrl + "&fieldsOnly=true").success(function (response) {
                     $scope.collectionFields = [];
                     widget.columns = response.columnDefs;
@@ -337,11 +341,11 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         var data = {
             id: widget.id,
             chartType: $scope.editChartType ? $scope.editChartType : widget.chartType,
-            //directUrl: widget.previewUrl,
+//            directUrl: widget.previewUrl,
             widgetTitle: widget.previewTitle,
             widgetColumns: widgetColumnsData,
-            //datasource: widget.dataSource,
-            //dataset: widget.dataSet,
+            dataSourceId: widget.dataSourceId.id,
+            dataSetId: widget.dataSetId.id,
 //            productName: widget.productName,
 //            productDisplayName: widget.productDisplayName,
             tableFooter: widget.tableFooter,
@@ -480,6 +484,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams) {
                 '</table>' + '<div class="text-center" ng-show="hideEmptyTable">{{tableEmptyMessage}}</div>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
+            console.log(scope.dynamicTableSource)
             scope.pdfFunction({test: "Test"});
             scope.totalShown = 0;
             scope.displayFooter = scope.tableFooter;
@@ -1153,7 +1158,6 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                         if (sortField != "") {
                             chartData = sortResults(chartData, sortField, sortOrder);
                         }
-                        alert(xAxis.fieldName)
                         xTicks = [xAxis.fieldName];
                         xData = chartData.map(function (a) {
                             xTicks.push(loopCount);
