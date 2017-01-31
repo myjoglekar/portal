@@ -83,7 +83,7 @@ app.directive('previewTable', function ($http, $filter, $stateParams) {
             var dataSourcePath = JSON.parse(scope.path)
             console.log(dataSourcePath)
             console.log(dataSourcePath.dataSourceId.userName)
-            $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + dataSourcePath.dataSourceId.connectionString + '&username=' + dataSourcePath.dataSourceId.userName + '&port=3306&schema=vb&query=' + dataSourcePath.query).success(function (response) {
+            $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + dataSourcePath.dataSourceId.connectionString + '&username=' + dataSourcePath.dataSourceId.userName + '&password=' + dataSourcePath.directUrl.dataSourceId.password + '&port=3306&schema=vb&query=' + dataSourcePath.query).success(function (response) {
 //            $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + scope.dataSourcePath.dataSource.connectionString + '&username=' + scope.dataSourcePath.dataSource.userName + '&password=' + scope.dataSourcePath.dataSource.password + '&port=3306&schema=vb&query=' + scope.dataSourcePath.query).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
