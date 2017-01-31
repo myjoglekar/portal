@@ -32,6 +32,7 @@ public class WidgetColumnBean {
     private Integer width;
     private String wrapText;
     private String alignment;
+    private Integer columnHide;
     
     public Integer getId() {
         return id;
@@ -209,9 +210,17 @@ public class WidgetColumnBean {
         this.alignment = alignment;
     }
 
-    @Override
-    public String toString() {
-        return "WidgetColumnBean{" + "id=" + id + ", fieldName=" + fieldName + ", type=" + type + ", xAxis=" + xAxis + ", yAxis=" + yAxis + ", yAxisLabel=" + yAxisLabel + ", xAxisLabel=" + xAxisLabel + ", displayName=" + displayName + ", sortPriority=" + sortPriority + ", sortOrder=" + sortOrder + ", groupPriority=" + groupPriority + ", agregationFunction=" + agregationFunction + ", functionParameters=" + functionParameters + ", fieldType=" + fieldType + ", baseFieldName=" + baseFieldName + ", fieldGenerationFunction=" + fieldGenerationFunction + ", fieldGenerationFields=" + fieldGenerationFields + ", remarks=" + remarks + ", displayFormat=" + displayFormat + ", width=" + width + ", wrapText=" + wrapText + ", alignment=" + alignment + '}';
+    public Integer getColumnHide() {
+        return columnHide;
     }
 
+    public void setColumnHide(Integer columnHide) {
+        this.columnHide = columnHide;
+    }
+
+    @Override
+    public String toString() {
+        return "WidgetColumnBean{" + "id=" + id + ", fieldName=" + fieldName + ", type=" + type + ", xAxis=" + xAxis + ", yAxis=" + yAxis + ", yAxisLabel=" + yAxisLabel + ", xAxisLabel=" + xAxisLabel + ", displayName=" + displayName + ", sortPriority=" + sortPriority + ", sortOrder=" + sortOrder + ", groupPriority=" + groupPriority + ", agregationFunction=" + agregationFunction + ", functionParameters=" + functionParameters + ", fieldType=" + fieldType + ", baseFieldName=" + baseFieldName + ", fieldGenerationFunction=" + fieldGenerationFunction + ", fieldGenerationFields=" + fieldGenerationFields + ", remarks=" + remarks + ", displayFormat=" + displayFormat + ", width=" + width + ", wrapText=" + wrapText + ", alignment=" + alignment + ", columnHide=" + columnHide + '}';
+    }
+    
 }

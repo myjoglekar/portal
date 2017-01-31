@@ -45,6 +45,18 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Dealer.findByLastSiteVisit", query = "SELECT w FROM Dealer w WHERE w.lastSiteVisit = :lastSiteVisit"),
     @NamedQuery(name = "Dealer.findByStatus", query = "SELECT w FROM Dealer w WHERE w.status = :status")})
 public class Dealer implements Serializable {
+    @Size(max = 255)
+    @Column(name = "accountmanager_email")
+    private String accountmanagerEmail;
+    @Size(max = 255)
+    @Column(name = "accountmanager_name")
+    private String accountmanagerName;
+    @Size(max = 255)
+    @Column(name = "accountmanager_title")
+    private String accountmanagerTitle;
+    @Column(name = "dealer_create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dealerCreateDate;
 
     @Size(max = 256)
     @Column(name = "dealer_group")
@@ -92,8 +104,21 @@ public class Dealer implements Serializable {
     @Column(name = "timezoneName")
     private String timezoneName;
     @Size(max = 1024)
-    @Column(name = "oemName")
+    @Column(name = "oem_name")
     private String oemName;
+    @Size(max = 32)
+    @Column(name = "oem_program_id")
+    private String oemProgramId;
+    @Size(max = 1024)
+    @Column(name = "oem_program_name")
+    private String oemProgramName;
+    @Size(max = 32)
+    @Column(name = "oem_region_id")
+    private String oemRegionId;
+    @Size(max = 1024)
+    @Column(name = "oem_region_name")
+    private String oemRegionName;
+
     @Size(max = 1024)
     @Column(name = "active_clients_product_name")
     private String activeClientsProductName;
@@ -128,6 +153,9 @@ public class Dealer implements Serializable {
     @Size(max = 45)
     @Column(name = "status")
     private String status;
+    @Size(max = 45)
+    @Column(name = "map_status")
+    private String mapStatus;
     @Column(name = "budget")
     private Double budget;
 
@@ -230,6 +258,14 @@ public class Dealer implements Serializable {
         this.status = status;
     }
 
+    public String getMapStatus() {
+        return mapStatus;
+    }
+
+    public void setMapStatus(String mapStatus) {
+        this.mapStatus = mapStatus;
+    }
+    
     public String getDealerAddress() {
         return dealerAddress;
     }
@@ -285,6 +321,39 @@ public class Dealer implements Serializable {
     public void setOemName(String oemName) {
         this.oemName = oemName;
     }
+
+    public String getOemProgramId() {
+        return oemProgramId;
+    }
+
+    public void setOemProgramId(String oemProgramId) {
+        this.oemProgramId = oemProgramId;
+    }
+
+    public String getOemProgramName() {
+        return oemProgramName;
+    }
+
+    public void setOemProgramName(String oemProgramName) {
+        this.oemProgramName = oemProgramName;
+    }
+
+    public String getOemRegionId() {
+        return oemRegionId;
+    }
+
+    public void setOemRegionId(String oemRegionId) {
+        this.oemRegionId = oemRegionId;
+    }
+
+    public String getOemRegionName() {
+        return oemRegionName;
+    }
+
+    public void setOemRegionName(String oemRegionName) {
+        this.oemRegionName = oemRegionName;
+    }
+    
 
     public String getActiveClientsProductName() {
         return activeClientsProductName;
@@ -393,6 +462,38 @@ public class Dealer implements Serializable {
 
     public void setDealerProductCollection(Collection<DealerProduct> dealerProductCollection) {
         this.dealerProductCollection = dealerProductCollection;
+    }
+
+    public String getAccountmanagerEmail() {
+        return accountmanagerEmail;
+    }
+
+    public void setAccountmanagerEmail(String accountmanagerEmail) {
+        this.accountmanagerEmail = accountmanagerEmail;
+    }
+
+    public String getAccountmanagerName() {
+        return accountmanagerName;
+    }
+
+    public void setAccountmanagerName(String accountmanagerName) {
+        this.accountmanagerName = accountmanagerName;
+    }
+
+    public String getAccountmanagerTitle() {
+        return accountmanagerTitle;
+    }
+
+    public void setAccountmanagerTitle(String accountmanagerTitle) {
+        this.accountmanagerTitle = accountmanagerTitle;
+    }
+
+    public Date getDealerCreateDate() {
+        return dealerCreateDate;
+    }
+
+    public void setDealerCreateDate(Date dealerCreateDate) {
+        this.dealerCreateDate = dealerCreateDate;
     }
 
 }

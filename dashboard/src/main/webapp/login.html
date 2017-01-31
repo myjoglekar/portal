@@ -34,18 +34,19 @@
         <![endif]-->
     </head>
     <body class="hold-transition login-page" ng-app="loginApp" ng-controller="LoginController">
-        <div class="login-box">
+        <div class="login-box" ng-show="loadDashboard">
             <div class="login-logo">
                 <a href="index.html"><img src="static/img/Logo-l2t.png" width="150" /></a>
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
                 <p class="login-box-msg">Welcome to L2T Media Dashboard!</p>
+                <p class="text-center text-danger">{{errorMessage}}</p>
 
                 <form ng-submit="submitForm()" name="adminForm">
                     <div class="form-group has-feedback">
                         <input class="form-control" placeholder="Username" type="text" ng-model="login.username">
-                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
                         <input class="form-control" placeholder="Password" type="password" ng-model="login.password">
@@ -54,9 +55,9 @@
                     <div class="row">
                         <div class="col-xs-8">
                             <div class="checkbox icheck">
-                                <label>
+<!--                                <label>
                                     <input type="checkbox"> Remember Me
-                                </label>
+                                </label>-->
                             </div>
                         </div>
                         <!-- /.col -->
@@ -69,6 +70,7 @@
             </div>
             <!-- /.login-box-body -->
         </div>
+        <div ng-hide="loadDashboard" class="loader"><img src="static/img/l2t-loader.gif" alt="Loading..."></div>
         <!-- /.login-box -->
         <!-- jQuery 2.2.3 -->
         <script src="static/lib/js/jquery/jquery-2.2.3.min.js"></script>
@@ -77,6 +79,7 @@
 
         <script src="static/lib/js/angular/angular.min.js"></script>
         <script src="static/lib/js/angular/angular-cookie.min.js"></script>
+        <script src="static/lib/js/angular/angular-local-storage.min.js"></script>
         <script src="static/scripts/config/login.js"></script>
     </body>
 </html>

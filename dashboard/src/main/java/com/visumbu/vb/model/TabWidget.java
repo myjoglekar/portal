@@ -43,6 +43,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     , @NamedQuery(name = "TabWidget.findByChartType", query = "SELECT t FROM TabWidget t WHERE t.chartType = :chartType")
     , @NamedQuery(name = "TabWidget.findByClosable", query = "SELECT t FROM TabWidget t WHERE t.closable = :closable")
     , @NamedQuery(name = "TabWidget.findByCol", query = "SELECT t FROM TabWidget t WHERE t.col = :col")
+    , @NamedQuery(name = "TabWidget.findByTab", query = "SELECT t FROM TabWidget t WHERE t.tabId = :tab")
     , @NamedQuery(name = "TabWidget.findByCreatedTime", query = "SELECT t FROM TabWidget t WHERE t.createdTime = :createdTime")
     , @NamedQuery(name = "TabWidget.findByDataset", query = "SELECT t FROM TabWidget t WHERE t.dataset = :dataset")
     , @NamedQuery(name = "TabWidget.findByDatasource", query = "SELECT t FROM TabWidget t WHERE t.datasource = :datasource")
@@ -133,6 +134,18 @@ public class TabWidget implements Serializable {
     @Size(max = 255)
     @Column(name = "productName")
     private String productName;
+    @Size(max = 45)
+    @Column(name = "table_footer")
+    private Boolean tableFooter;
+    @Size(max = 45)
+    @Column(name = "zero_suppression")
+    private Boolean zeroSuppression;
+    @Size(max = 255)
+    @Column(name = "date_duration")
+    private String dateDuration;
+    @Size(max = 255)
+    @Column(name = "max_record")
+    private Integer maxRecord;
     @Size(max = 255)
     @Column(name = "product_display_name")
     private String productDisplayName;
@@ -142,8 +155,8 @@ public class TabWidget implements Serializable {
     @JoinColumn(name = "tab_id", referencedColumnName = "id")
     @ManyToOne
     private DashboardTabs tabId;
-    @OneToMany(mappedBy = "widgetId")
-    private Collection<WidgetColumn> widgetColumnCollection;
+//    @OneToMany(mappedBy = "widgetId")
+//    private Collection<WidgetColumn> widgetColumnCollection;
 
     @Transient
     private List<WidgetColumn> columns;
@@ -355,6 +368,38 @@ public class TabWidget implements Serializable {
         this.productName = productName;
     }
 
+    public Boolean getTableFooter() {
+        return tableFooter;
+    }
+
+    public void setTableFooter(Boolean tableFooter) {
+        this.tableFooter = tableFooter;
+    }
+
+    public Boolean getZeroSuppression() {
+        return zeroSuppression;
+    }
+
+    public void setZeroSuppression(Boolean zeroSuppression) {
+        this.zeroSuppression = zeroSuppression;
+    }
+    
+    public String getDateDuration() {
+        return dateDuration;
+    }
+
+    public void setDateDuration(String dateDuration) {
+        this.dateDuration = dateDuration;
+    }
+
+    public Integer getMaxRecord() {
+        return maxRecord;
+    }
+
+    public void setMaxRecord(Integer maxRecord) {
+        this.maxRecord = maxRecord;
+    }
+
     public String getProductDisplayName() {
         return productDisplayName;
     }
@@ -386,16 +431,16 @@ public class TabWidget implements Serializable {
     public void setColumns(List<WidgetColumn> columns) {
         this.columns = columns;
     }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<WidgetColumn> getWidgetColumnCollection() {
-        return widgetColumnCollection;
-    }
-
-    public void setWidgetColumnCollection(Collection<WidgetColumn> widgetColumnCollection) {
-        this.widgetColumnCollection = widgetColumnCollection;
-    }
+//
+//    @XmlTransient
+//    @JsonIgnore
+//    public Collection<WidgetColumn> getWidgetColumnCollection() {
+//        return widgetColumnCollection;
+//    }
+//
+//    public void setWidgetColumnCollection(Collection<WidgetColumn> widgetColumnCollection) {
+//        this.widgetColumnCollection = widgetColumnCollection;
+//    }
 
     @Override
     public int hashCode() {

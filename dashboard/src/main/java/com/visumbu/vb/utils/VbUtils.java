@@ -5,11 +5,24 @@
  */
 package com.visumbu.vb.utils;
 
+import com.google.common.base.CaseFormat;
+import com.visumbu.vb.bean.Permission;
+import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
+import com.visumbu.vb.bean.map.auth.SecurityAuthPermission;
+import com.visumbu.vb.bean.map.auth.SecurityAuthRoleBean;
+import com.visumbu.vb.bean.map.auth.SecurityTokenBean;
+import static com.visumbu.vb.utils.Rest.getData;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  *
@@ -55,7 +68,7 @@ public class VbUtils {
         }
         return returnValue;
     }
-    
+
     public static String getDomainName(String url) {
         // Alternative Solution
         // http://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
@@ -67,5 +80,65 @@ public class VbUtils {
             Logger.getLogger(VbUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public static SecurityAuthBean getAuthData(String username, String password) {
+        try {
+            String output = Rest.postRawForm(Settings.getSecurityTokenUrl(), "client_id=f8f06d06436f4104ade219fd7d535654&client_secret=ba082149c90f41c49e86f4862e22e980&grant_type=password&scope=FullControl&username=" + username + "&password=" + password);
+            if (output == null) {
+                return null;
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            SecurityTokenBean token = mapper.readValue(output, SecurityTokenBean.class);
+
+            Map<String, String> accessHeader = new HashMap<>();
+            accessHeader.put("Authorization", token.getAccessToken());
+            String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=" + token.getUserGuid(), null, accessHeader);
+            SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
+            authData.setFullName(authData.getUserName());
+            authData.setUserName(username);
+            authData.setUserGuid(token.getUserGuid());
+            authData.setAccessToken(token.getAccessToken());
+            System.out.println(authData);
+            Permission permission = getPermissions(authData);
+            authData.setPermission(permission);
+            return authData;
+        } catch (IOException | NullPointerException ex) {
+            Logger.getLogger(Rest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public static SecurityAuthBean getAuthDataByGuid(String accessToken, String userGuid) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, String> accessHeader = new HashMap<>();
+            accessHeader.put("Authorization", accessToken);
+            String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=" + userGuid, null, accessHeader);
+            SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
+            authData.setAccessToken(accessToken);
+            authData.setAccessToken(userGuid);
+            System.out.println(authData);
+            Permission permission = getPermissions(authData);
+            authData.setPermission(permission);
+            return authData;
+        } catch (IOException ex) {
+            Logger.getLogger(Rest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    private static Permission getPermissions(SecurityAuthBean authData) {
+        List<SecurityAuthRoleBean> roles = authData.getRoles();
+        Permission permission = new Permission();
+        for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
+            SecurityAuthRoleBean role = iterator.next();
+            List<SecurityAuthPermission> permissions = role.getPermissions();
+            for (Iterator<SecurityAuthPermission> iterator1 = permissions.iterator(); iterator1.hasNext();) {
+                SecurityAuthPermission authPermission = iterator1.next();
+                permission.setPermission(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, authPermission.getName()), Boolean.TRUE);
+            }
+        }
+        return permission;
     }
 }

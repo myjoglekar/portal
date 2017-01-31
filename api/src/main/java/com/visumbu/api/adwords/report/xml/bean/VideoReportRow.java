@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.adwords.report.xml.bean;
 
+import com.visumbu.api.utils.ApiUtils;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -55,7 +56,7 @@ public class VideoReportRow {
     }
 
     public String getViewRate() {
-        return viewRate.replaceAll("%", "");
+        return ApiUtils.removePercent(viewRate);
     }
 
     @XmlAttribute
@@ -73,7 +74,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo100() {
-        return videoPlayedTo100.replaceAll("%", "");
+        return ApiUtils.removePercent(videoPlayedTo100);
     }
 
     @XmlAttribute
@@ -82,7 +83,8 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo25() {
-        return videoPlayedTo25.replaceAll("%", "");
+        return ApiUtils.removePercent(videoPlayedTo25);
+        
     }
 
     @XmlAttribute
@@ -91,7 +93,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo50() {
-        return videoPlayedTo50.replaceAll("%", "");
+        return ApiUtils.removePercent(videoPlayedTo50);
     }
 
     @XmlAttribute
@@ -100,7 +102,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo75() {
-        return videoPlayedTo75.replaceAll("%", "");
+        return ApiUtils.removePercent(videoPlayedTo75);
     }
 
     @XmlAttribute
@@ -122,7 +124,7 @@ public class VideoReportRow {
     }
 
     public String getCtr() {
-        return ctr.replaceAll("%", "");
+        return ApiUtils.removePercent(ctr);
     }
 
     @XmlAttribute
@@ -225,7 +227,7 @@ public class VideoReportRow {
     }
 
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS;
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -234,7 +236,7 @@ public class VideoReportRow {
     }
 
     public String getSearchLostISBudget() {
-        return searchLostISBudget;
+        return ApiUtils.removePercent(searchLostISBudget);
     }
 
     @XmlAttribute
@@ -243,7 +245,7 @@ public class VideoReportRow {
     }
 
     public String getSearchLostISRank() {
-        return searchLostISRank;
+        return ApiUtils.removePercent(searchLostISRank);
     }
 
     @XmlAttribute
@@ -261,7 +263,7 @@ public class VideoReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare;
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute

@@ -52,6 +52,7 @@ public class BingController {
 
     @Autowired
     private BingService bingService;
+    public static final Long accountId = 2610614L;
 
     @RequestMapping(value = "testBing", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -59,7 +60,7 @@ public class BingController {
         try {
             Date startDate = DateUtils.get30DaysBack();
             Date endDate = new Date();
-            return bingService.getKeywordPerformanceReport(startDate, endDate);
+            return bingService.getKeywordPerformanceReport(startDate, endDate, accountId);
         } catch (InterruptedException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
@@ -76,7 +77,7 @@ public class BingController {
         try {
             Date startDate = DateUtils.get30DaysBack();
             Date endDate = new Date();
-            return bingService.getAccountPerformanceReport(startDate, endDate, "daily");
+            return bingService.getAccountPerformanceReport(startDate, endDate, accountId, "daily");
         } catch (InterruptedException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
@@ -93,7 +94,7 @@ public class BingController {
         try {
             Date startDate = DateUtils.get30DaysBack();
             Date endDate = new Date();
-            return bingService.getAccountHourOfDayPerformanceReport(startDate, endDate);
+            return bingService.getAccountHourOfDayPerformanceReport(startDate, endDate, accountId);
         } catch (InterruptedException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
@@ -110,7 +111,7 @@ public class BingController {
         try {
             Date startDate = DateUtils.get30DaysBack();
             Date endDate = new Date();
-            return bingService.getAccountDayOfWeekPerformanceReport(startDate, endDate);
+            return bingService.getAccountDayOfWeekPerformanceReport(startDate, endDate, accountId);
         } catch (InterruptedException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
@@ -126,7 +127,7 @@ public class BingController {
     AccountDevicePerformanceReport getAccountDevicePerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getAccountDevicePerformanceReport(startDate, endDate, "");
+        return bingService.getAccountDevicePerformanceReport(startDate, endDate, accountId, "");
 
     }
 
@@ -135,7 +136,7 @@ public class BingController {
     CampaignPerformanceReport getCampaignPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getCampaignPerformanceReport(startDate, endDate, "");
+        return bingService.getCampaignPerformanceReport(startDate, endDate, accountId, "");
     }
 
     @RequestMapping(value = "getCampaignDevicePerformanceReport", method = RequestMethod.GET, produces = "application/json")
@@ -143,7 +144,7 @@ public class BingController {
     CampaignDevicePerformanceReport getCampaignDevicePerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getCampaignDevicePerformanceReport(startDate, endDate, "daily");
+        return bingService.getCampaignDevicePerformanceReport(startDate, endDate, accountId, "daily");
     }
 
     @RequestMapping(value = "getAdGroupPerformanceReport", method = RequestMethod.GET, produces = "application/json")
@@ -151,7 +152,7 @@ public class BingController {
     AdGroupPerformanceReport getAdGroupPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getAdGroupPerformanceReport(startDate, endDate);
+        return bingService.getAdGroupPerformanceReport(startDate, endDate, accountId, "");
     }
 
     //Error
@@ -160,7 +161,7 @@ public class BingController {
     AdPerformanceReport getAdPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getAdPerformanceReport(startDate, endDate);
+        return bingService.getAdPerformanceReport(startDate, endDate, accountId);
     }
 
     @RequestMapping(value = "getGeoCityLocationPerformanceReport", method = RequestMethod.GET, produces = "application/json")
@@ -168,7 +169,7 @@ public class BingController {
     GeoCityLocationPerformanceReport getGeoCityLocationPerformanceReport(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
-        return bingService.getGeoCityLocationPerformanceReport(startDate, endDate, "");
+        return bingService.getGeoCityLocationPerformanceReport(startDate, endDate, accountId, "");
     }
 
     @RequestMapping(value = "getGeoZipLocationPerformanceReport", method = RequestMethod.GET, produces = "application/json")
@@ -177,7 +178,7 @@ public class BingController {
         try {
             Date startDate = DateUtils.get30DaysBack();
             Date endDate = new Date();
-            return bingService.getGeoZipLocationPerformanceReport(startDate, endDate);
+            return bingService.getGeoZipLocationPerformanceReport(startDate, endDate, accountId);
         } catch (InterruptedException ex) {
             Logger.getLogger(BingController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {

@@ -106,6 +106,7 @@
         <a ui-sref="index.report.reports({dealerId: dealerId, reportId: reportId, startDate: startDate, endDate: endDate})"><i class="fa fa-arrow-left"></i> Back</a>
     </div>
     <div class="btn-group"> 
+        <!--<a style="cursor: pointer;" pdf-save-button="printReport" pdf-name="report.pdf"><i class="fa fa-print"></i> Print</a>--> 
         <a style="cursor: pointer;"><i class="fa fa-print"></i> Print</a> 
     </div>
 
@@ -154,6 +155,7 @@
         </div>
     </div>
 </div>
+<!--<div  pdf-save-content="printReport">-->
 <div class="row">
     <div ng-repeat="reportWidget in reportWidgets">
         <div class="col-md-{{2 * reportWidget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
@@ -170,7 +172,7 @@
                         <button type="button" class="btn btn-box-tool" ng-click="editReportWidget(reportWidget);" data-toggle="modal" data-target="#preview{{reportWidget.id}}"><i class="fa fa-pencil"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{reportWidget.id}}"><i class="fa fa-times"></i></button>
-                        <div id="delete{{reportWidget.id}}" class="modal fade">
+                        <div id="delete{{reportWidget.id}}" class="modal">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header" style="background-color:#9DD6D7;color:black;">
@@ -206,7 +208,7 @@
             </div>
         </div>
 
-        <div id="preview{{reportWidget.id}}" class="modal fade">
+        <div id="preview{{reportWidget.id}}" class="modal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -224,24 +226,20 @@
                             </div>
                             <div class="box-body popup-head">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Widget Title</label>
                                             <input type="text" class="form-control" ng-model="reportWidget.previewTitle">
-                                        </div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Product</label>
-                                            <select class="form-control" ng-model="reportWidget.productName" ng-change="selectProductName(reportWidget.productName, widget)" ng-options="(userProduct |     capitalize) for userProduct in userProducts">
+                                            <select class="form-control" ng-model="reportWidget.productName" ng-change="selectProductName(reportWidget.productName, widget)" ng-options="(userProduct |        capitalize) for userProduct in userProducts">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Date Duration</label>
-                                            <select class="form-control">
-                                                <option ng-repeat="selectDateDuration in selectDurations" value="{{selectDateDuration.duration}}">{{selectDateDuration.duration}}</option>
-                                            </select>
-                                        </div>
                                         <div class="form-group">
                                             <label>Name</label>
                                             <select class="form-control" ng-model="reportWidget.productDisplayName" ng-change="changeUrl(reportWidget.productDisplayName, reportWidget)">
@@ -279,8 +277,8 @@
                                             <td>Sort</td>
                                             <td>Format</td>
                                             <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Alignment</td>
-                                            <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Width</td>
-                                            <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Wrap</td>
+                                            <!--                                            <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Width</td>
+                                                                                        <td ng-if="(reportWidget.widgetChartType ? reportWidget.widgetChartType : reportWidget.chartType) === 'table'">Wrap</td>-->
                                             <td><button class="btn btn-info" ng-click="addColumns(reportWidget)"><i class="fa fa-plus"></i></button></td>
                                         </tr>
                                     </thead>
@@ -359,20 +357,20 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
-                                                <div ng-hide="isEdit"> {{currentColumn.width}}</div>
-                                                <div ng-show="isEdit">
-                                                    <input type="text" class="form-control" ng-model="currentColumn.width">
-                                                </div>
-                                            </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
-                                                <div ng-hide="isEdit"> {{currentColumn.wrapText}}</div>
-                                                <div ng-show="isEdit">                                                
-                                                    <select ng-model="currentColumn.wrapText" class="form-control">
-                                                        <option ng-repeat="tableWrap in tableWrapText" value="{{tableWrap.value}}">{{tableWrap.name}}</option>
-                                                    </select>
-                                                </div>
-                                            </td>
+                                            <!--                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
+                                                                                            <div ng-hide="isEdit"> {{currentColumn.width}}</div>
+                                                                                            <div ng-show="isEdit">
+                                                                                                <input type="text" class="form-control" ng-model="currentColumn.width">
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
+                                                                                            <div ng-hide="isEdit"> {{currentColumn.wrapText}}</div>
+                                                                                            <div ng-show="isEdit">                                                
+                                                                                                <select ng-model="currentColumn.wrapText" class="form-control">
+                                                                                                    <option ng-repeat="tableWrap in tableWrapText" value="{{tableWrap.value}}">{{tableWrap.name}}</option>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </td>-->
                                             <td>
                                                 <div ng-show="isEdit">
                                                     <button class="btn btn-default btn-xs" ng-click="isEdit = false"><i class="fa fa-save"></i></button>
@@ -427,3 +425,4 @@
         </div>
     </div>
 </div>
+<!--</div>-->

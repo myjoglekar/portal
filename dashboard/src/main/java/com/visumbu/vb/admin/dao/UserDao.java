@@ -6,8 +6,19 @@
 package com.visumbu.vb.admin.dao;
 
 import com.visumbu.vb.dao.BaseDao;
+import com.visumbu.vb.model.Dashboard;
+import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
+import com.visumbu.vb.model.WidgetColumn;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +35,116 @@ public class UserDao extends BaseDao {
         Query query = sessionFactory.getCurrentSession().createQuery("from VbUser where status is null or status != 'Deleted'");
         return query.list();
     }
-    
+
     public List<VbUser> findByUserName(String username) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery("VbUser.findByUserName");
         query.setParameter("userName", username);
         return query.list();
     }
+
+    public VbUser createNewUser(String userId, String userName, String fullName) {
+        VbUser user = new VbUser();
+        user.setUserRefId(userId);
+        user.setUserName(userName);
+        create(user);
+        System.out.println("Created User " + user);
+        return user;
+    }
+
+    public void initUser(VbUser user) {
+        List<Dashboard> dashboards = initDashboardItems(user);
+    }
+
+    private List<Dashboard> initDashboardItems(VbUser user) {
+        List<Dashboard> returnList = new ArrayList<>();
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Dashboard.findByUserId");
+        query.setParameter("userId", 1);
+        List<Dashboard> dashboards = query.list();
+        for (Iterator<Dashboard> iterator = dashboards.iterator(); iterator.hasNext();) {
+            Dashboard dashboard = iterator.next();
+            Dashboard newObject = new Dashboard();
+            try {
+                BeanUtils.copyProperties(newObject, dashboard);
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            newObject.setId(null);
+            newObject.setUserId(user);
+            newObject.setCreatedTime(new Date());
+            create(newObject);
+            initDashboardTabs(user, dashboard, newObject);
+            returnList.add(newObject);
+        }
+        return returnList;
+    }
+
+    private List<DashboardTabs> initDashboardTabs(VbUser user, Dashboard oldDashboard, Dashboard newDashboard) {
+        List<DashboardTabs> returnList = new ArrayList<>();
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("DashboardTabs.findByDashboard");
+        query.setParameter("dashboardId", oldDashboard);
+        List<DashboardTabs> dashboardTabs = query.list();
+        for (Iterator<DashboardTabs> iterator = dashboardTabs.iterator(); iterator.hasNext();) {
+            DashboardTabs dashboardTab = iterator.next();
+            DashboardTabs newObject = new DashboardTabs();
+            try {
+                BeanUtils.copyProperties(newObject, dashboardTab);
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            newObject.setId(null);
+            newObject.setDashboardId(newDashboard);
+            newObject.setCreatedTime(new Date());
+            create(newObject);
+            initDashboardTabWidget(user,  dashboardTab, newObject);
+            returnList.add(newObject);
+        }
+        return returnList;
+    }
+
+    private List<TabWidget> initDashboardTabWidget(VbUser user, DashboardTabs oldDashboardTab, DashboardTabs newDashboardTab) {
+        List<TabWidget> returnList = new ArrayList<>();
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("TabWidget.findByTab");
+        query.setParameter("tab", oldDashboardTab);
+        List<TabWidget> widgets = query.list();
+        for (Iterator<TabWidget> iterator = widgets.iterator(); iterator.hasNext();) {
+            TabWidget tabWidget = iterator.next();
+            TabWidget newObject = new TabWidget();
+            try {
+                BeanUtils.copyProperties(newObject, tabWidget);
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            newObject.setId(null);
+            newObject.setTabId(newDashboardTab);
+            newObject.setCreatedTime(new Date());
+            create(newObject);
+            initWidgetColumns(user,  tabWidget, newObject);
+            returnList.add(newObject);
+        }
+        
+        return returnList;
+    }
+
+    private List<WidgetColumn> initWidgetColumns(VbUser user, TabWidget oldWidget, TabWidget newWidget) {
+        List<WidgetColumn> returnList = new ArrayList<>();
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("WidgetColumn.findByWidget");
+        query.setParameter("widget", oldWidget);
+        List<WidgetColumn> widgetColumns = query.list();
+        for (Iterator<WidgetColumn> iterator = widgetColumns.iterator(); iterator.hasNext();) {
+            WidgetColumn widgetColumn = iterator.next();
+            WidgetColumn newObject = new WidgetColumn();
+            try {
+                BeanUtils.copyProperties(newObject, widgetColumn);
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            newObject.setId(null);
+            newObject.setWidgetId(newWidget);
+            create(newObject);
+            returnList.add(newObject);
+        }
+        
+        return returnList;
+    }
+
 }

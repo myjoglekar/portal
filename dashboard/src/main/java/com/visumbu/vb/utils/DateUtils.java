@@ -5,6 +5,7 @@
  */
 package com.visumbu.vb.utils;
 
+import com.visumbu.vb.bean.DateRange;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joda.time.LocalDate;
 
 /**
  *

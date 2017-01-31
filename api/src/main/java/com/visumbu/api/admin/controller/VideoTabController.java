@@ -28,6 +28,7 @@ import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
 import com.visumbu.api.adwords.report.xml.bean.VideoReport;
 import com.visumbu.api.adwords.report.xml.bean.VideoReportRow;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
@@ -52,6 +53,7 @@ import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.VideoPerformanceReportBean;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -107,14 +109,13 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("day", "string", "Day", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+            columnDefs.add(new ColumnDef("views", "number", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -124,37 +125,38 @@ public class VideoTabController {
             if (fieldsOnly != null) {
                 return returnMap;
             }
-
-            VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
-            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
             List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
-                VideoReportRow row = reportRow.next();
-                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
-                performanceBean.setSource("Google");
-                performanceBean.setDay(row.getDay());
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "youtube");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "YOUTUBE_WATCH");
+                List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+                for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                    VideoReportRow row = reportRow.next();
+                    VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                    performanceBean.setSource("Google");
+                    performanceBean.setDay(row.getDay());
 //            performanceBean.setDevice(row.getDevice());
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
-                performanceBean.setCost(cost);
-                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
-                performanceBean.setAverageCpc(cpc);
-                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
-                performanceBean.setCpa(cpa);
-                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
-                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
-                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
-                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
-                performanceBean.setVideoTitle(row.getVideoTitle());
-                performanceBean.setViews(row.getViews());
-                performanceBean.setViewRate(row.getViewRate());
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-                performanceReportBeans.add(performanceBean);
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                    performanceBean.setCost(cost);
+                    String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                    performanceBean.setAverageCpc(cpc);
+                    String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                    performanceBean.setCpa(cpa);
+                    performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                    performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                    performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                    performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                    performanceBean.setVideoTitle(row.getVideoTitle());
+                    performanceBean.setViews(row.getViews());
+                    performanceBean.setViewRate(row.getViewRate());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
+                    performanceReportBeans.add(performanceBean);
+                }
             }
-
             returnMap.put("data", performanceReportBeans);
 
         } catch (Exception ex) {
@@ -175,54 +177,54 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("day", "string", "Day", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("day", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+            columnDefs.add(new ColumnDef("views", "number", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo75", "string", "VideoPlayedTo75", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("videoTitle", "string", "Video Title"));
             returnMap.put("columnDefs", columnDefs);
             if (fieldsOnly != null) {
                 return returnMap;
             }
-
-            VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
-            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
             List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
-                VideoReportRow row = reportRow.next();
-                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
-                performanceBean.setSource("Google");
-                performanceBean.setDay(row.getDay());
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "youtube");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "summary", "YOUTUBE_WATCH");
+                List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+                for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                    VideoReportRow row = reportRow.next();
+                    VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                    performanceBean.setSource("Google");
+                    performanceBean.setDay(row.getDay());
 //            performanceBean.setDevice(row.getDevice());
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
-                performanceBean.setCost(cost);
-                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
-                performanceBean.setAverageCpc(cpc);
-                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
-                performanceBean.setCpa(cpa);
-                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
-                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
-                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
-                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
-                performanceBean.setVideoTitle(row.getVideoTitle());
-                performanceBean.setViews(row.getViews());
-                performanceBean.setViewRate(row.getViewRate());
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-                performanceReportBeans.add(performanceBean);
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                    performanceBean.setCost(cost);
+                    String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                    performanceBean.setAverageCpc(cpc);
+                    String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                    performanceBean.setCpa(cpa);
+                    performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                    performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                    performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                    performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                    performanceBean.setVideoTitle(row.getVideoTitle());
+                    performanceBean.setViews(row.getViews());
+                    performanceBean.setViewRate(row.getViewRate());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
+                    performanceReportBeans.add(performanceBean);
+                }
             }
-
             returnMap.put("data", performanceReportBeans);
 
         } catch (Exception ex) {
@@ -243,56 +245,56 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("week", "string", "Day", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("week", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+            columnDefs.add(new ColumnDef("views", "number", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo75", "string", "VideoPlayedTo75", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("videoTitle", "string", "Video Title"));
             returnMap.put("columnDefs", columnDefs);
             if (fieldsOnly != null) {
                 return returnMap;
             }
-
-            VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, "391-089-0213", "weekly", "YOUTUBE_WATCH");
-            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
             List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
-                VideoReportRow row = reportRow.next();
-                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
-                performanceBean.setSource("Google");
-                performanceBean.setDay(row.getDay());
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "youtube");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "weekly", "YOUTUBE_WATCH");
+                List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+                for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                    VideoReportRow row = reportRow.next();
+                    VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                    performanceBean.setSource("Google");
+                    performanceBean.setDay(row.getDay());
 //            performanceBean.setDevice(row.getDevice());
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
-                performanceBean.setCost(cost);
-                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
-                performanceBean.setAverageCpc(cpc);
-                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
-                performanceBean.setCpa(cpa);
-                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
-                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
-                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
-                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
-                performanceBean.setVideoTitle(row.getVideoTitle());
-                performanceBean.setViews(row.getViews());
-                performanceBean.setWeek(row.getWeek());
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                    performanceBean.setCost(cost);
+                    String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                    performanceBean.setAverageCpc(cpc);
+                    String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                    performanceBean.setCpa(cpa);
+                    performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                    performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                    performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                    performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                    performanceBean.setVideoTitle(row.getVideoTitle());
+                    performanceBean.setViews(row.getViews());
+                    performanceBean.setWeek(row.getWeek());
 
-                performanceBean.setViewRate(row.getViewRate());
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-                performanceReportBeans.add(performanceBean);
+                    performanceBean.setViewRate(row.getViewRate());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
+                    performanceReportBeans.add(performanceBean);
+                }
             }
-
             returnMap.put("data", performanceReportBeans);
 
         } catch (Exception ex) {
@@ -313,58 +315,58 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day"));
             columnDefs.add(new ColumnDef("dayOfWeekId", "number", "Day Id"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+            columnDefs.add(new ColumnDef("views", "number", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo75", "string", "VideoPlayedTo75", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("videoTitle", "string", "Video Title"));
             returnMap.put("columnDefs", columnDefs);
             if (fieldsOnly != null) {
                 return returnMap;
             }
-
-            VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, "391-089-0213", "dayOfWeek", "YOUTUBE_WATCH");
-            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
             List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
-                VideoReportRow row = reportRow.next();
-                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
-                performanceBean.setSource("Google");
-                performanceBean.setDay(row.getDay());
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "youtube");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "dayOfWeek", "YOUTUBE_WATCH");
+                List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+                for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                    VideoReportRow row = reportRow.next();
+                    VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                    performanceBean.setSource("Google");
+                    performanceBean.setDay(row.getDay());
 //            performanceBean.setDevice(row.getDevice());
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
-                performanceBean.setCost(cost);
-                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
-                performanceBean.setAverageCpc(cpc);
-                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
-                performanceBean.setCpa(cpa);
-                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
-                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
-                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
-                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
-                performanceBean.setVideoTitle(row.getVideoTitle());
-                performanceBean.setViews(row.getViews());
-                performanceBean.setDayOfWeek(row.getDayOfWeek());
-                performanceBean.setDayOfWeek(DateUtils.getWeekDayByDay(row.getDayOfWeek()) + "");
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                    performanceBean.setCost(cost);
+                    String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                    performanceBean.setAverageCpc(cpc);
+                    String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                    performanceBean.setCpa(cpa);
+                    performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                    performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                    performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                    performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                    performanceBean.setVideoTitle(row.getVideoTitle());
+                    performanceBean.setViews(row.getViews());
+                    performanceBean.setDayOfWeek(row.getDayOfWeek());
+                    performanceBean.setDayOfWeek(DateUtils.getWeekDayByDay(row.getDayOfWeek()) + "");
 
-                performanceBean.setViewRate(row.getViewRate());
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-                performanceReportBeans.add(performanceBean);
+                    performanceBean.setViewRate(row.getViewRate());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
+                    performanceReportBeans.add(performanceBean);
+                }
             }
-
             returnMap.put("data", performanceReportBeans);
 
         } catch (Exception ex) {
@@ -386,14 +388,14 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("campaign", "string", "Campaign Name"));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+            columnDefs.add(new ColumnDef("views", "number", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -403,40 +405,41 @@ public class VideoTabController {
             if (fieldsOnly != null) {
                 return returnMap;
             }
-
-            VideoReport adwordsVideoReport = adwordsService.getVideoCampaignReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
-            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
             List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
-                VideoReportRow row = reportRow.next();
-                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
-                performanceBean.setSource("Google");
-                performanceBean.setDay(row.getDay());
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "youtube");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                VideoReport adwordsVideoReport = adwordsService.getVideoCampaignReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "YOUTUBE_WATCH");
+                List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+                for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                    VideoReportRow row = reportRow.next();
+                    VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                    performanceBean.setSource("Google");
+                    performanceBean.setDay(row.getDay());
 //            performanceBean.setDevice(row.getDevice());
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
-                performanceBean.setCost(cost);
-                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
-                performanceBean.setAverageCpc(cpc);
-                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
-                performanceBean.setCpa(cpa);
-                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
-                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
-                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
-                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
-                performanceBean.setVideoTitle(row.getVideoTitle());
-                performanceBean.setViews(row.getViews());
-                performanceBean.setCampaign(row.getCampaign());
-                performanceBean.setDayOfWeek(row.getDayOfWeek());
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                    performanceBean.setCost(cost);
+                    String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                    performanceBean.setAverageCpc(cpc);
+                    String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                    performanceBean.setCpa(cpa);
+                    performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                    performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                    performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                    performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                    performanceBean.setVideoTitle(row.getVideoTitle());
+                    performanceBean.setViews(row.getViews());
+                    performanceBean.setCampaign(row.getCampaign());
+                    performanceBean.setDayOfWeek(row.getDayOfWeek());
 
-                performanceBean.setViewRate(row.getViewRate());
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-                performanceReportBeans.add(performanceBean);
+                    performanceBean.setViewRate(row.getViewRate());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
+                    performanceReportBeans.add(performanceBean);
+                }
             }
-
             returnMap.put("data", performanceReportBeans);
 
         } catch (Exception ex) {
@@ -459,14 +462,14 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("device", "string", "Device"));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+            columnDefs.add(new ColumnDef("views", "number", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -476,49 +479,50 @@ public class VideoTabController {
             if (fieldsOnly != null) {
                 return returnMap;
             }
-
-            VideoReport adwordsVideoReport = adwordsService.getVideoCampaignDeviceReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
-            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
             List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
-                VideoReportRow row = reportRow.next();
-                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
-                performanceBean.setSource("Google");
-                performanceBean.setDay(row.getDay());
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "youtube");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                VideoReport adwordsVideoReport = adwordsService.getVideoCampaignDeviceReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "YOUTUBE_WATCH");
+                List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+                for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                    VideoReportRow row = reportRow.next();
+                    VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                    performanceBean.setSource("Google");
+                    performanceBean.setDay(row.getDay());
 //            performanceBean.setDevice(row.getDevice());
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
-                performanceBean.setCost(cost);
-                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
-                performanceBean.setAverageCpc(cpc);
-                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
-                performanceBean.setCpa(cpa);
-                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
-                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
-                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
-                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
-                performanceBean.setVideoTitle(row.getVideoTitle());
-                performanceBean.setViews(row.getViews());
-                performanceBean.setCampaign(row.getCampaign());
-                if (row.getDevice().contains("Tablet")) {
-                    performanceBean.setDevice("tablet");
-                } else if (row.getDevice().contains("Mobile")) {
-                    performanceBean.setDevice("mobile");
-                } else if (row.getDevice().contains("Computer")) {
-                    performanceBean.setDevice("desktop");
-                } else {
-                    performanceBean.setDevice(row.getDevice());
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                    performanceBean.setCost(cost);
+                    String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                    performanceBean.setAverageCpc(cpc);
+                    String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                    performanceBean.setCpa(cpa);
+                    performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                    performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                    performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                    performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                    performanceBean.setVideoTitle(row.getVideoTitle());
+                    performanceBean.setViews(row.getViews());
+                    performanceBean.setCampaign(row.getCampaign());
+                    if (row.getDevice().contains("Tablet")) {
+                        performanceBean.setDevice("tablet");
+                    } else if (row.getDevice().contains("Mobile")) {
+                        performanceBean.setDevice("mobile");
+                    } else if (row.getDevice().contains("Computer")) {
+                        performanceBean.setDevice("desktop");
+                    } else {
+                        performanceBean.setDevice(row.getDevice());
+                    }
+                    performanceBean.setDayOfWeek(row.getDayOfWeek());
+
+                    performanceBean.setViewRate(row.getViewRate());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
+                    performanceReportBeans.add(performanceBean);
                 }
-                performanceBean.setDayOfWeek(row.getDayOfWeek());
-
-                performanceBean.setViewRate(row.getViewRate());
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-                performanceReportBeans.add(performanceBean);
             }
-
             returnMap.put("data", performanceReportBeans);
 
         } catch (Exception ex) {
@@ -541,14 +545,14 @@ public class VideoTabController {
             columnDefs.add(new ColumnDef("device", "string", "Device"));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
             columnDefs.add(new ColumnDef("conversions", "number", "Conversions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-            columnDefs.add(new ColumnDef("cpa", "number", "CPA", ColumnDef.Aggregation.AVG, ColumnDef.Format.CURRENCY));
-            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day", ColumnDef.Aggregation.AVG));
+            columnDefs.add(new ColumnDef("cpa", "number", "CPL", ColumnDef.Aggregation.CPA, ColumnDef.Format.CURRENCY));
+            columnDefs.add(new ColumnDef("dayOfWeek", "string", "Day"));
 
             columnDefs.add(new ColumnDef("viewRate", "string", "View Rate", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
-            columnDefs.add(new ColumnDef("views", "string", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.PERCENTAGE));
+            columnDefs.add(new ColumnDef("views", "number", "Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("videoPlayedTo100", "string", "VideoPlayedTo100", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo25", "string", "VideoPlayedTo25", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
             columnDefs.add(new ColumnDef("videoPlayedTo50", "string", "VideoPlayedTo50", ColumnDef.Aggregation.AVG, ColumnDef.Format.PERCENTAGE));
@@ -558,48 +562,49 @@ public class VideoTabController {
             if (fieldsOnly != null) {
                 return returnMap;
             }
-
-            VideoReport adwordsVideoReport = adwordsService.getVideoDeviceReport(startDate, endDate, "391-089-0213", "", "YOUTUBE_WATCH");
-            List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
             List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
-            for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
-                VideoReportRow row = reportRow.next();
-                VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
-                performanceBean.setSource("Google");
-                performanceBean.setDay(row.getDay());
+            AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "youtube");
+            if (accountDetails.getAdwordsAccountId() != null) {
+                VideoReport adwordsVideoReport = adwordsService.getVideoDeviceReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "YOUTUBE_WATCH");
+                List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
+                for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
+                    VideoReportRow row = reportRow.next();
+                    VideoPerformanceReportBean performanceBean = new VideoPerformanceReportBean();
+                    performanceBean.setSource("Google");
+                    performanceBean.setDay(row.getDay());
 //            performanceBean.setDevice(row.getDevice());
-                performanceBean.setImpressions(row.getImpressions());
-                performanceBean.setClicks(row.getClicks());
-                performanceBean.setCtr(row.getCtr());
-                String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
-                performanceBean.setCost(cost);
-                String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
-                performanceBean.setAverageCpc(cpc);
-                String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
-                performanceBean.setCpa(cpa);
-                performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
-                performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
-                performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
-                performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
-                performanceBean.setVideoTitle(row.getVideoTitle());
-                performanceBean.setViews(row.getViews());
-                if (row.getDevice().contains("Tablet")) {
-                    performanceBean.setDevice("tablet");
-                } else if (row.getDevice().contains("Mobile")) {
-                    performanceBean.setDevice("mobile");
-                } else if (row.getDevice().contains("Computer")) {
-                    performanceBean.setDevice("desktop");
-                } else {
-                    performanceBean.setDevice(row.getDevice());
+                    performanceBean.setImpressions(row.getImpressions());
+                    performanceBean.setClicks(row.getClicks());
+                    performanceBean.setCtr(row.getCtr());
+                    String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
+                    performanceBean.setCost(cost);
+                    String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
+                    performanceBean.setAverageCpc(cpc);
+                    String cpa = row.getCostConv(); //Integer.toString(Integer.parseInt(row.getCostConv()) / 1000000);
+                    performanceBean.setCpa(cpa);
+                    performanceBean.setVideoPlayedTo100(row.getVideoPlayedTo100());
+                    performanceBean.setVideoPlayedTo75(row.getVideoPlayedTo75());
+                    performanceBean.setVideoPlayedTo50(row.getVideoPlayedTo50());
+                    performanceBean.setVideoPlayedTo25(row.getVideoPlayedTo25());
+                    performanceBean.setVideoTitle(row.getVideoTitle());
+                    performanceBean.setViews(row.getViews());
+                    if (row.getDevice().contains("Tablet")) {
+                        performanceBean.setDevice("tablet");
+                    } else if (row.getDevice().contains("Mobile")) {
+                        performanceBean.setDevice("mobile");
+                    } else if (row.getDevice().contains("Computer")) {
+                        performanceBean.setDevice("desktop");
+                    } else {
+                        performanceBean.setDevice(row.getDevice());
+                    }
+                    performanceBean.setDayOfWeek(row.getDayOfWeek());
+
+                    performanceBean.setViewRate(row.getViewRate());
+                    performanceBean.setAveragePosition(row.getAvgPosition());
+                    performanceBean.setConversions(row.getConversions());
+                    performanceReportBeans.add(performanceBean);
                 }
-                performanceBean.setDayOfWeek(row.getDayOfWeek());
-
-                performanceBean.setViewRate(row.getViewRate());
-                performanceBean.setAveragePosition(row.getAvgPosition());
-                performanceBean.setConversions(row.getConversions());
-                performanceReportBeans.add(performanceBean);
             }
-
             returnMap.put("data", performanceReportBeans);
 
         } catch (Exception ex) {

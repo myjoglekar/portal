@@ -5,9 +5,11 @@
  */
 package com.visumbu.vb.admin.dao;
 
+import com.visumbu.vb.admin.dao.bean.ProductBean;
 import com.visumbu.vb.dao.BaseDao;
 import com.visumbu.vb.model.Dashboard;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.Product;
 import com.visumbu.vb.model.Report;
 import com.visumbu.vb.model.ReportColumn;
 import com.visumbu.vb.model.ReportType;
@@ -19,6 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -72,6 +77,7 @@ public class UiDao extends BaseDao {
 
     public TabWidget getTabWidgetById(Integer widgetId) {
         TabWidget tabWidget = (TabWidget) sessionFactory.getCurrentSession().get(TabWidget.class, widgetId);
+        tabWidget.setColumns(getColumns(tabWidget));
         return tabWidget;
     }
 
@@ -213,7 +219,7 @@ public class UiDao extends BaseDao {
         query.setParameter("reportId", id);
         query.executeUpdate();
 
-        delete(getTabWidgetById(id));
+        delete(getReportWidgetById(id));
         return null;
     }
 
@@ -248,6 +254,36 @@ public class UiDao extends BaseDao {
             update(reportWidget);
         }
         return null;
+    }
+
+    public List<Product> getDealerProduct(Integer dealerId) {
+        String queryStr = "select p from DealerProduct dp, Product p where (p.productName = dp.productName or (dp.productName='PPC' and p.productName = 'Paid Search')"
+                + " or (p.productName like 'You%Tube%' and dp.productName like 'Video')) and dp.dealerId.id = :dealerId";
+
+        queryStr = "select distinct p.* from product p,  "
+                + "(SELECT distinct case when service_name is null then product_name else service_name end service_name "
+                + " FROM dealer_product_source dps join  "
+                + " dealer_product dp join  "
+                + " dealer d  left join  "
+                + " dealer_product_service ps on ps.dealer_product_id = dp.id  "
+                + " where dp.id = dps.dealer_product_id   "
+                + " and dp.dealer_id = d.id  and d.id = :dealerId "
+                + " ) a where (a.service_name = p.product_name or (a.service_name like 'YouTube%' and p.product_name='Video') "
+                + " or (a.service_name like 'PPC' and p.product_name='Paid Search') "
+                + " or (a.service_name like 'Digital Ad Package%' and p.product_name='Paid Search') "
+                + " or (a.service_name like 'Facebook%' and p.product_name='Paid Social') "
+                + " or (a.service_name like 'Call Tracking' and p.product_name='Paid Search') "
+                + " or (a.service_name like '%SEO%' and p.product_name='SEO') "
+                + " ) order by p.id";
+        Query query = sessionFactory.getCurrentSession().createSQLQuery(queryStr)
+                .addScalar("id", IntegerType.INSTANCE)
+                .addScalar("product_name", StringType.INSTANCE)
+                .addScalar("remarks", StringType.INSTANCE)
+                .addScalar("icon", StringType.INSTANCE)
+                .setResultTransformer(Transformers.aliasToBean(ProductBean.class));
+         query.setParameter("dealerId", dealerId);
+        return query.list();
+
     }
 
 }

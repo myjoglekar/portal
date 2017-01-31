@@ -54,11 +54,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class GaService {
 
-    private static final String CLIENT_SECRET_JSON_RESOURCE = "F:\\GaToken\\client_secret_384381056232-sqrgb2u8j26gbkqi6dis682ojapsf85a.apps.googleusercontent.com.json";
-
+    // private static final String CLIENT_SECRET_JSON_RESOURCE = "F:\\GaToken\\client_secret_384381056232-sqrgb2u8j26gbkqi6dis682ojapsf85a.apps.googleusercontent.com.json";
     // Replace with your view ID.
-    private static final String VIEW_ID = "82176546";
-
+     private static final String VIEW_ID = "82176546";
     // The directory where the user's credentials will be stored.
     private static final File DATA_STORE_DIR = new File("/tmp/");
 
@@ -109,10 +107,6 @@ public class GaService {
         return null;
     }
 
-    public GetReportsResponse getGenericData(Date startDate1, Date endDate1, String metrics, String dimentions) {
-        return getGenericData(startDate1, endDate1, null, null, metrics, dimentions);
-    }
-
     public GetReportsResponse getSeoPerformance(String viewId, Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
         Date startDate = DateUtils.get30DaysBack();
         Date endDate = new Date();
@@ -121,7 +115,7 @@ public class GaService {
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
         String dimensions = "ga:medium";
-        String filter = "ga:medium==organic";
+        String filter = "ga:medium==organic,ga:medium==Organic";
         return getGenericData(viewId, startDate1, endDate1, startDate2, endDate2, metricsList, dimensions, filter);
     }
 
@@ -135,7 +129,22 @@ public class GaService {
         if (aggregation == null || aggregation.isEmpty()) {
             dimensions = "ga:channelGrouping";
         }
-        String filter = "ga:channelGrouping==Display;ga:medium==cpc";
+        String filter = "ga:channelGrouping==Display,ga:channelGrouping==display;ga:medium==cpc,ga:medium==Cpc,ga:medium==CPC";
+        return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
+    }
+    
+    public GetReportsResponse getDynamicDisplayGoals(String viewId, Date startDate, Date endDate, String aggregation) {
+        String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
+                + "ga:bounceRate,BounceRate;"
+                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
+                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+
+        String dimensions = "ga:source;ga:date";
+        if (aggregation == null || aggregation.isEmpty()) {
+            dimensions = "ga:source";
+        }
+
+        String filter = "ga:source==DynamicDisplay,ga:source==dynamicdisplay;ga:medium==Display,ga:medium==display";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
 
@@ -148,7 +157,7 @@ public class GaService {
         if (aggregation == null || aggregation.isEmpty()) {
             dimensions = "ga:channelGrouping;ga:campaign";
         }
-        String filter = "ga:channelGrouping==Display";
+        String filter = "ga:channelGrouping==Display,ga:channelGrouping==display;ga:medium==cpc,ga:medium==Cpc,ga:medium==CPC";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
 
@@ -161,7 +170,7 @@ public class GaService {
         if (aggregation == null || aggregation.isEmpty()) {
             dimensions = "ga:channelGrouping;ga:adContent";
         }
-        String filter = "ga:channelGrouping==Display";
+        String filter = "ga:channelGrouping==Display,ga:channelGrouping==display;ga:medium==cpc,ga:medium==Cpc,ga:medium==CPC";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
 
@@ -171,7 +180,7 @@ public class GaService {
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
         String dimensions = "ga:channelGrouping;ga:deviceCategory";
-        String filter = "ga:channelGrouping==Display;ga:medium==cpc";
+        String filter = "ga:channelGrouping==Display,ga:channelGrouping==display;ga:medium==cpc,ga:medium==Cpc,ga:medium==CPC";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
 
@@ -181,7 +190,7 @@ public class GaService {
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
         String dimensions = "ga:channelGrouping;ga:campaign;ga:deviceCategory";
-        String filter = "ga:channelGrouping==Display";
+        String filter = "ga:channelGrouping==Display,ga:channelGrouping==display;ga:medium==cpc,ga:medium==Cpc,ga:medium==CPC";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
 
@@ -191,11 +200,12 @@ public class GaService {
                 + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
                 + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
         String dimensions = "ga:channelGrouping;ga:city";
-        String filter = "ga:channelGrouping==Display;ga:medium==cpc";
+        String filter = "ga:channelGrouping==Display,ga:channelGrouping==display;ga:medium==cpc,ga:medium==Cpc,ga:medium==CPC";
         return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
     }
 
     public GetReportsResponse getGenericData(String viewId, Date startDate1, Date endDate1, Date startDate2, Date endDate2, String metrics, String dimentions, String filter) {
+        System.out.println(viewId);
         try {
             List<DateRange> dateRangeList = new ArrayList<>();
             DateRange dateRange = new DateRange();
@@ -343,71 +353,101 @@ public class GaService {
         return null;
     }
 
-    public GetReportsResponse getGenericData(Date startDate1, Date endDate1, Date startDate2, Date endDate2, String metrics, String dimentions) {
-        try {
-            List<DateRange> dateRangeList = new ArrayList<>();
-            DateRange dateRange = new DateRange();
-            dateRange.setStartDate(DateUtils.getGaStartDate(startDate1));
-            dateRange.setEndDate(DateUtils.getGaEndDate(endDate1));
-            dateRangeList.add(dateRange);
-
-            if (startDate2 != null) {
-                DateRange dateRange1 = new DateRange();
-                dateRange1.setStartDate(DateUtils.getGaStartDate(startDate2));
-                if (endDate2 != null) {
-                    dateRange1.setEndDate(DateUtils.getGaEndDate(endDate2));
-                } else {
-                    dateRange1.setEndDate(DateUtils.getGaEndDate(startDate1));
-                }
-                dateRangeList.add(dateRange1);
-            }
-            String[] metricsArray = metrics.split(";");
-            List<Metric> metricList = new ArrayList<>();
-            for (int i = 0; i < metricsArray.length; i++) {
-                String metricStr = metricsArray[i];
-                String[] nameAliasArray = metricStr.split(",");
-                if (nameAliasArray.length >= 2) {
-                    Metric metric = new Metric()
-                            .setExpression(nameAliasArray[0])
-                            .setAlias(nameAliasArray[1]);
-                    metricList.add(metric);
-                } else if (nameAliasArray.length >= 1) {
-                    Metric metric = new Metric()
-                            .setExpression(nameAliasArray[0]);
-                    metricList.add(metric);
-                }
-            }
-
-            String[] dimensionArray = dimentions.split(";");
-            List<Dimension> dimensionList = new ArrayList<>();
-            for (int i = 0; i < dimensionArray.length; i++) {
-                String dimensionStr = dimensionArray[i];
-                Dimension dimension = new Dimension()
-                        .setName(dimensionStr);
-                dimensionList.add(dimension);
-
-            }
-
-            ReportRequest request = new ReportRequest()
-                    .setViewId(VIEW_ID)
-                    .setDateRanges(dateRangeList)
-                    .setDimensions(dimensionList)
-                    .setMetrics(metricList);
-            ArrayList<ReportRequest> requests = new ArrayList<ReportRequest>();
-            requests.add(request);
-            // Create the GetReportsRequest object.
-            GetReportsRequest getReport = new GetReportsRequest()
-                    .setReportRequests(requests);
-
-            // Call the batchGet method.
-            GetReportsResponse response = analyticsReporting.reports().batchGet(getReport).execute();
-
-            // Return the response.
-            return response;
-        } catch (IOException ex) {
-            Logger.getLogger(GaService.class.getName()).log(Level.SEVERE, null, ex);
+    public GetReportsResponse getSeoOverallPerformanceGoals(String viewId, Date startDate, Date endDate, String aggregation) {
+        String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
+                + "ga:bounceRate,BounceRate;"
+                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
+                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+        String dimensions = "ga:channelGrouping;ga:date";
+        if (aggregation == null || aggregation.isEmpty()) {
+            dimensions = "ga:channelGrouping";
         }
-        return null;
+        String filter = "ga:medium==organic,ga:medium==Organic";
+        return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
+    }
+
+    public static Map getResponseAsMap(GetReportsResponse response) {
+        Map returnMap = new HashMap();
+
+        for (Report report : response.getReports()) {
+            ColumnHeader header = report.getColumnHeader();
+            List<String> dimensionHeaders = header.getDimensions();
+            List<MetricHeaderEntry> metricHeaders = header.getMetricHeader().getMetricHeaderEntries();
+            List<ReportRow> rows = report.getData().getRows();
+            List<ColumnDef> columnDefs = new ArrayList<>();
+            for (int i = 0; i < dimensionHeaders.size(); i++) {
+                columnDefs.add(new ColumnDef(dimensionHeaders.get(i), "string", dimensionHeaders.get(i)));
+                System.out.println(dimensionHeaders.get(i));
+            }
+            for (int i = 0; i < metricHeaders.size(); i++) {
+                columnDefs.add(new ColumnDef(metricHeaders.get(i).getName(), metricHeaders.get(i).getType(), metricHeaders.get(i).getName()));
+                System.out.println(metricHeaders.get(i));
+            }
+            returnMap.put("columnDefs", columnDefs);
+            if (rows == null) {
+                System.out.println("No data found for ");
+                return new HashMap();
+            }
+            List<Map<String, String>> data = new ArrayList<>();
+            for (ReportRow row : rows) {
+                List<String> dimensions = row.getDimensions();
+                List<DateRangeValues> metrics = row.getMetrics();
+                Map dataMap = new HashMap();
+                for (int i = 0; i < dimensionHeaders.size() && i < dimensions.size(); i++) {
+                    System.out.println(dimensionHeaders.get(i) + ": " + dimensions.get(i));
+                    dataMap.put(dimensionHeaders.get(i), dimensions.get(i));
+                }
+
+                for (int j = 0; j < metrics.size(); j++) {
+                    System.out.print("Date Range (" + j + "): ");
+                    DateRangeValues values = metrics.get(j);
+                    for (int k = 0; k < values.getValues().size() && k < metricHeaders.size(); k++) {
+                        dataMap.put(metricHeaders.get(k).getName(), values.getValues().get(k));
+                        System.out.println(metricHeaders.get(k).getName() + ": " + values.getValues().get(k));
+                    }
+                }
+                data.add(dataMap);
+
+            }
+            returnMap.put("data", data);
+        }
+        return returnMap;
+    }
+
+    /**
+     * Parses and prints the Analytics Reporting API V4 response.
+     *
+     * @param response the Analytics Reporting API V4 response.
+     */
+    private static void printResponse(GetReportsResponse response) {
+
+        for (Report report : response.getReports()) {
+            ColumnHeader header = report.getColumnHeader();
+            List<String> dimensionHeaders = header.getDimensions();
+            List<MetricHeaderEntry> metricHeaders = header.getMetricHeader().getMetricHeaderEntries();
+            List<ReportRow> rows = report.getData().getRows();
+
+            if (rows == null) {
+                System.out.println("No data found for ");
+                return;
+            }
+
+            for (ReportRow row : rows) {
+                List<String> dimensions = row.getDimensions();
+                List<DateRangeValues> metrics = row.getMetrics();
+                for (int i = 0; i < dimensionHeaders.size() && i < dimensions.size(); i++) {
+                    System.out.println(dimensionHeaders.get(i) + ": " + dimensions.get(i));
+                }
+
+                for (int j = 0; j < metrics.size(); j++) {
+                    System.out.print("Date Range (" + j + "): ");
+                    DateRangeValues values = metrics.get(j);
+                    for (int k = 0; k < values.getValues().size() && k < metricHeaders.size(); k++) {
+                        System.out.println(metricHeaders.get(k).getName() + ": " + values.getValues().get(k));
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -472,100 +512,4 @@ public class GaService {
         }
     }
 
-    public GetReportsResponse getSeoOverallPerformanceGoals(String viewId, Date startDate, Date endDate, String aggregation) {
-        String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
-                + "ga:bounceRate,BounceRate;"
-                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
-                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
-        String dimensions = "ga:channelGrouping;ga:date";
-        if (aggregation == null || aggregation.isEmpty()) {
-            dimensions = "ga:channelGrouping";
-        }
-        String filter = "ga:channelGrouping==Display";
-        return getGenericData(viewId, startDate, endDate, null, null, metricsList, dimensions, filter);
-    }
-
-    public static Map getResponseAsMap(GetReportsResponse response) {
-        Map returnMap = new HashMap();
-
-        for (Report report : response.getReports()) {
-            ColumnHeader header = report.getColumnHeader();
-            List<String> dimensionHeaders = header.getDimensions();
-            List<MetricHeaderEntry> metricHeaders = header.getMetricHeader().getMetricHeaderEntries();
-            List<ReportRow> rows = report.getData().getRows();
-            List<ColumnDef> columnDefs = new ArrayList<>();
-            for (int i = 0; i < dimensionHeaders.size(); i++) {
-                columnDefs.add(new ColumnDef(dimensionHeaders.get(i), "string", dimensionHeaders.get(i)));
-                System.out.println(dimensionHeaders.get(i));
-            }
-            for (int i = 0; i < metricHeaders.size(); i++) {
-                columnDefs.add(new ColumnDef(metricHeaders.get(i).getName(), metricHeaders.get(i).getType(), metricHeaders.get(i).getName()));
-                System.out.println(metricHeaders.get(i));
-            }
-            returnMap.put("columnDefs", columnDefs);
-            if (rows == null) {
-                System.out.println("No data found for " + VIEW_ID);
-                return null;
-            }
-            List<Map<String, String>> data = new ArrayList<>();
-            for (ReportRow row : rows) {
-                List<String> dimensions = row.getDimensions();
-                List<DateRangeValues> metrics = row.getMetrics();
-                Map dataMap = new HashMap();
-                for (int i = 0; i < dimensionHeaders.size() && i < dimensions.size(); i++) {
-                    System.out.println(dimensionHeaders.get(i) + ": " + dimensions.get(i));
-                    dataMap.put(dimensionHeaders.get(i), dimensions.get(i));
-                }
-
-                for (int j = 0; j < metrics.size(); j++) {
-                    System.out.print("Date Range (" + j + "): ");
-                    DateRangeValues values = metrics.get(j);
-                    for (int k = 0; k < values.getValues().size() && k < metricHeaders.size(); k++) {
-                        dataMap.put(metricHeaders.get(k).getName(), values.getValues().get(k));
-                        System.out.println(metricHeaders.get(k).getName() + ": " + values.getValues().get(k));
-                    }
-                }
-                data.add(dataMap);
-
-            }
-            returnMap.put("data", data);
-        }
-        return returnMap;
-    }
-
-    /**
-     * Parses and prints the Analytics Reporting API V4 response.
-     *
-     * @param response the Analytics Reporting API V4 response.
-     */
-    private static void printResponse(GetReportsResponse response) {
-
-        for (Report report : response.getReports()) {
-            ColumnHeader header = report.getColumnHeader();
-            List<String> dimensionHeaders = header.getDimensions();
-            List<MetricHeaderEntry> metricHeaders = header.getMetricHeader().getMetricHeaderEntries();
-            List<ReportRow> rows = report.getData().getRows();
-
-            if (rows == null) {
-                System.out.println("No data found for " + VIEW_ID);
-                return;
-            }
-
-            for (ReportRow row : rows) {
-                List<String> dimensions = row.getDimensions();
-                List<DateRangeValues> metrics = row.getMetrics();
-                for (int i = 0; i < dimensionHeaders.size() && i < dimensions.size(); i++) {
-                    System.out.println(dimensionHeaders.get(i) + ": " + dimensions.get(i));
-                }
-
-                for (int j = 0; j < metrics.size(); j++) {
-                    System.out.print("Date Range (" + j + "): ");
-                    DateRangeValues values = metrics.get(j);
-                    for (int k = 0; k < values.getValues().size() && k < metricHeaders.size(); k++) {
-                        System.out.println(metricHeaders.get(k).getName() + ": " + values.getValues().get(k));
-                    }
-                }
-            }
-        }
-    }
 }

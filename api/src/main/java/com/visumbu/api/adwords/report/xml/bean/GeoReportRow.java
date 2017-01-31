@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.adwords.report.xml.bean;
 
+import com.visumbu.api.utils.ApiUtils;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
@@ -45,7 +46,7 @@ public class GeoReportRow {
     }
 
     public String getCtr() {
-        return ctr.replaceAll("%", "");
+        return ApiUtils.removePercent(ctr);
     }
 
     @XmlAttribute
@@ -180,7 +181,7 @@ public class GeoReportRow {
 
     public String getSearchBudgetLostImpressionShare() {
 
-        return SearchBudgetLostImpressionShare;
+        return ApiUtils.removePercent(SearchBudgetLostImpressionShare);
     }
 
     @XmlAttribute

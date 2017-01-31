@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.adwords.report.xml.bean;
 
+import com.visumbu.api.utils.ApiUtils;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -50,7 +51,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getCtr() {
-        return ctr.replaceAll("%", "");
+        return ApiUtils.removePercent(ctr);
     }
 
     @XmlAttribute
@@ -135,7 +136,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS;
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -171,7 +172,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare.replaceAll("%", "");
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute
@@ -211,7 +212,7 @@ public class AccountDeviceReportRow {
     }
 
     public String getSearchBudgetLostImpressionShare() {
-        return SearchBudgetLostImpressionShare;
+        return ApiUtils.removePercent(SearchBudgetLostImpressionShare);
     }
 
     @XmlAttribute

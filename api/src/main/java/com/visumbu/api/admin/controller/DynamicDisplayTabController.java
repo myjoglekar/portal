@@ -9,6 +9,7 @@ import com.google.api.services.analyticsreporting.v4.model.GetReportsResponse;
 import com.google.api.services.analyticsreporting.v4.model.Report;
 import com.visumbu.api.admin.service.AdwordsService;
 import com.visumbu.api.admin.service.BingService;
+import com.visumbu.api.admin.service.DynamicDisplayService;
 import com.visumbu.api.admin.service.FacebookService;
 import com.visumbu.api.admin.service.GaService;
 import com.visumbu.api.admin.service.UserService;
@@ -27,6 +28,7 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReportRow;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
@@ -50,6 +52,7 @@ import com.visumbu.api.dashboard.bean.CampaignPerformanceReportBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsGraphBean;
 import com.visumbu.api.dashboard.bean.ClicksImpressionsHourOfDayBean;
 import com.visumbu.api.dashboard.bean.GeoPerformanceReportBean;
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import com.visumbu.api.utils.Rest;
 import java.io.BufferedReader;
@@ -105,7 +108,13 @@ public class DynamicDisplayTabController {
 
     @Autowired
     private FacebookService facebookService;
-    private final static String DYNAMIC_DISPLAY_URL = "http://192.168.225.216:5002/vizboard/";
+
+    @Autowired
+    private GaService gaService;
+
+    @Autowired
+    private DynamicDisplayService dynamicDisplayService;
+
     private final static String DEALER_ID = "8125";
 
     @RequestMapping(value = "overallPerformance", method = RequestMethod.GET, produces = "application/json")
@@ -113,20 +122,38 @@ public class DynamicDisplayTabController {
     Object getAccountPerformance(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        try {
-            String url = DYNAMIC_DISPLAY_URL + "all?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
-            String data = Rest.getData(url);
-            JSONParser parser = new JSONParser();
-            Object jsonObj = parser.parse(data);
-            return jsonObj;
-//            OutputStream out = response.getOutputStream();
-//            out.write(data.getBytes());
-//            Map<String, String[]> parameterMap = request.getParameterMap();
-//            forwardRequest(url, response.getOutputStream(), parameterMap);
-        } catch (Exception ex) {
-            Logger.getLogger(DynamicDisplayTabController.class.getName()).log(Level.SEVERE, null, ex);
+        List<ColumnDef> columnDefs = new ArrayList<>();
+
+        columnDefs.add(new ColumnDef("directionsPageView", "number", "Directions Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("inventoryPageViews", "number", "Inventory Page Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("leadSubmission", "number", "Lead Submission", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("specialsPageView", "number", "Specials Page View", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        String dealerId = request.getParameter("dealerMapId");
+        Map map = (Map) dynamicDisplayService.getAccountPerformance(startDate, endDate, dealerId, fieldsOnly);
+        List list = (List) map.get("columnDefs");
+        list.addAll(columnDefs);
+        if (fieldsOnly != null) {
+            return map;
         }
-        return "";
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "dynamicDisplay");
+        System.out.println("SEO GA Profile Id " + accountDetails.getAnalyticsProfileId());
+        if (accountDetails.getAnalyticsProfileId() != null) {
+            GetReportsResponse gaData = gaService.getDynamicDisplayGoals(accountDetails.getAnalyticsProfileId(), startDate, endDate, "");
+            List gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
+            System.out.println("GA DATA ---> ");
+            System.out.println(gaDataMap);
+            if (gaDataMap != null) {
+                List dataList = (List)map.get("data");
+                Map  dataMap = (Map)dataList.get(0);
+                dataMap.putAll((Map) gaDataMap.get(0));
+            }
+        }
+        return map;
+
     }
 
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
@@ -134,16 +161,9 @@ public class DynamicDisplayTabController {
     Object getLast12Weeks(HttpServletRequest request, HttpServletResponse response) {
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-        try {
-            String url = DYNAMIC_DISPLAY_URL + "allByWeek?dealerId=" + DEALER_ID + "&startDate=" + DateUtils.dateToString(startDate, "MM/dd/YYYY") + "&endDate=" + DateUtils.dateToString(endDate, "MM/dd/YYYY");
-            String data = Rest.getData(url);
-            JSONParser parser = new JSONParser();
-            Object jsonObj = parser.parse(data);
-            return jsonObj;
-        } catch (Exception ex) {
-            Logger.getLogger(DynamicDisplayTabController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        String fieldsOnly = request.getParameter("fieldsOnly");
+        String dealerId = request.getParameter("dealerMapId");
+        return dynamicDisplayService.getLast12Weeks(startDate, endDate, dealerId, fieldsOnly);
     }
 
     private void forwardRequest(String url, OutputStream out, Map<String, String[]> parameterMap) {

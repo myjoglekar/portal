@@ -46,7 +46,11 @@ public class TabWidgetBean {
     private Integer widgetOrder;
     private String directUrl;
     private String productName;
+    private Boolean tableFooter;
+    private Boolean zeroSuppression;
+    private String dateDuration;
     private String productDisplayName;
+    private Integer maxRecord;
     private List<WidgetColumnBean> widgetColumns;
 
     public Integer getId() {
@@ -249,6 +253,30 @@ public class TabWidgetBean {
         this.productName = productName;
     }
 
+    public Boolean getTableFooter() {
+        return tableFooter;
+    }
+
+    public void setTableFooter(Boolean tableFooter) {
+        this.tableFooter = tableFooter;
+    }
+
+    public Boolean getZeroSuppression() {
+        return zeroSuppression;
+    }
+
+    public void setZeroSuppression(Boolean zeroSuppression) {
+        this.zeroSuppression = zeroSuppression;
+    }
+       
+    public String getDateDuration() {
+        return dateDuration;
+    }
+
+    public void setDateDuration(String dateDuration) {
+        this.dateDuration = dateDuration;
+    }
+
     public String getProductDisplayName() {
         return productDisplayName;
     }
@@ -257,9 +285,17 @@ public class TabWidgetBean {
         this.productDisplayName = productDisplayName;
     }
 
+    public Integer getMaxRecord() {
+        return maxRecord;
+    }
+
+    public void setMaxRecord(Integer maxRecord) {
+        this.maxRecord = maxRecord;
+    }
+
     @Override
     public String toString() {
-        return "TabWidgetBean{" + "id=" + id + ", chartType=" + chartType + ", closable=" + closable + ", col=" + col + ", dataset=" + dataset + ", datasource=" + datasource + ", dimension=" + dimension + ", displayColumns=" + displayColumns + ", editable=" + editable + ", filters=" + filters + ", icon=" + icon + ", minHeight=" + minHeight + ", minimizable=" + minimizable + ", paginationCount=" + paginationCount + ", refreshable=" + refreshable + ", row=" + row + ", sort=" + sort + ", status=" + status + ", widgetTitle=" + widgetTitle + ", width=" + width + ", widthClass=" + widthClass + ", widgetOrder=" + widgetOrder + ", directUrl=" + directUrl + ", productName=" + productName + ", productDisplayName=" + productDisplayName + ", widgetColumns=" + widgetColumns + '}';
+        return "TabWidgetBean{" + "chartType=" + chartType + ", closable=" + closable + ", col=" + col + ", dataset=" + dataset + ", datasource=" + datasource + ", dimension=" + dimension + ", displayColumns=" + displayColumns + ", editable=" + editable + ", filters=" + filters + ", icon=" + icon + ", minHeight=" + minHeight + ", minimizable=" + minimizable + ", paginationCount=" + paginationCount + ", refreshable=" + refreshable + ", row=" + row + ", sort=" + sort + ", status=" + status + ", widgetTitle=" + widgetTitle + ", width=" + width + ", widthClass=" + widthClass + ", widgetOrder=" + widgetOrder + ", directUrl=" + directUrl + ", productName=" + productName + ", tableFooter=" + tableFooter + ", zeroSuppression=" + zeroSuppression + ", dateDuration=" + dateDuration + ", productDisplayName=" + productDisplayName + ", maxRecord=" + maxRecord + ", widgetColumns=" + widgetColumns + '}';
     }
     
 }

@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.adwords.report.xml.bean;
 
+import com.visumbu.api.utils.ApiUtils;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -21,6 +22,7 @@ public class AccountReportRow {
     private String impressions;
     private String clicks;
     private String day;
+    private String week;
     private String searchExactMatchIS;
     private String searchLostISBudget;
     private String searchLostISRank;
@@ -50,7 +52,7 @@ public class AccountReportRow {
     }
 
     public String getCtr() {
-        return ctr.replaceAll("%", "");
+        return ApiUtils.removePercent(ctr);
         //return ctr;
     }
 
@@ -144,8 +146,17 @@ public class AccountReportRow {
         this.day = day;
     }
 
+    public String getWeek() {
+        return week;
+    }
+
+    @XmlAttribute
+    public void setWeek(String week) {
+        this.week = week;
+    }
+    
     public String getSearchExactMatchIS() {
-        return searchExactMatchIS.replaceAll("%", "");
+        return ApiUtils.removePercent(searchExactMatchIS);
     }
 
     @XmlAttribute
@@ -154,7 +165,7 @@ public class AccountReportRow {
     }
 
     public String getSearchLostISBudget() {
-        return searchLostISBudget.replaceAll("%", "");
+        return ApiUtils.removePercent(searchLostISBudget);
     }
 
     @XmlAttribute
@@ -163,7 +174,7 @@ public class AccountReportRow {
     }
 
     public String getSearchLostISRank() {
-        return searchLostISRank.replaceAll("%", "");
+        return ApiUtils.removePercent(searchLostISRank);
     }
 
     @XmlAttribute
@@ -181,7 +192,7 @@ public class AccountReportRow {
     }
 
     public String getSearchImprShare() {
-        return searchImprShare.replaceAll("%", "");
+        return ApiUtils.removePercent(searchImprShare);
     }
 
     @XmlAttribute

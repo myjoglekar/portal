@@ -27,6 +27,7 @@ import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReportRow;
 import com.visumbu.api.adwords.report.xml.bean.GeoReport;
 import com.visumbu.api.adwords.report.xml.bean.GeoReportRow;
+import com.visumbu.api.bean.AccountDetails;
 import com.visumbu.api.bean.ColumnDef;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.bing.report.xml.bean.AccountDevicePerformanceReport;
@@ -122,8 +123,13 @@ public class SocialImpactTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getPostPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        returnMap.put("data", null);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "none");
+        System.out.println("Facebook  SM Account Id " + accountDetails.getFacebookSmAccountId());
+        if (accountDetails.getFacebookSmAccountId() != null) {
+            Object accountPerformance = facebookService.getPostPerformance(accountDetails.getFacebookSmAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        }
         return returnMap;
     }
 
@@ -146,8 +152,12 @@ public class SocialImpactTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        List<Map<String, String>> accountPerformance = facebookService.getPostPerformance(startDate, endDate);
-        returnMap.put("data", sumByType(accountPerformance));
+        returnMap.put("data", null);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "none");
+        if (accountDetails.getFacebookSmAccountId() != null) {
+            List<Map<String, String>> accountPerformance = facebookService.getPostPerformance(accountDetails.getFacebookSmAccountId(), startDate, endDate);
+            returnMap.put("data", sumByType(accountPerformance));
+        }
         return returnMap;
     }
 
@@ -190,8 +200,15 @@ public class SocialImpactTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        List<Map<String, String>> accountPerformance = facebookService.getPostPerformance(startDate, endDate);
-        returnMap.put("data", sumBySummary(accountPerformance));
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "none");
+        if (accountDetails.getFacebookSmAccountId() != null) {
+            List<Map<String, String>> accountPerformance = facebookService.getPostPerformance(accountDetails.getFacebookSmAccountId(), startDate, endDate);
+            returnMap.put("data", sumBySummary(accountPerformance));
+        } else {
+            returnMap.put("data", null);
+
+        }
+
         return returnMap;
     }
 
@@ -239,8 +256,12 @@ public class SocialImpactTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
-        Object accountPerformance = facebookService.getLast12WeeksPerformance(startDate, endDate);
-        returnMap.put("data", accountPerformance);
+        returnMap.put("data", null);
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "facebook");
+        if (accountDetails.getFacebookSmAccountId() != null) {
+            Object accountPerformance = facebookService.getLast12WeeksPerformance(accountDetails.getFacebookSmAccountId(), startDate, endDate);
+            returnMap.put("data", accountPerformance);
+        }
         return returnMap;
     }
 

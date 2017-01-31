@@ -7,14 +7,18 @@
             <div class="col-md-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li ng-repeat="tab in tabs" ui-sref-active="active" ng-dblclick="startEditing(tab);" ng-drop="true" ng-drop-success="onDropTabComplete($index, $data,$event)">
-                            <a class="active" ng-drag="true" ng-drag-data="tab" ui-sref="index.dashboard.widget({productId: productId, tabId: tab.id?tab.id:0})">
+                        <li ng-repeat="tab in tabs" ui-sref-active="active" 
+                            ng-dblclick="startEditing(tab);" 
+                            ng-drop="true" 
+                            ng-drop-success="onDropTabComplete($index, $data,$event)">
+                            <a class="active" ng-drag="true" ng-drag-data="tab" 
+                               ui-sref="index.dashboard.widget({productId: productId, tabId: tab.id?tab.id:0})">
                                 <span ng-hide="tab.editing">{{tab.tabName}}</span>
                                 <form ng-submit="doneEditing(tab)" ng-show="tab.editing">
                                     <input class="form-control" ng-model="tab.tabName" ng-blur="doneEditing(tab)" ng-focus="tab == editedItem">
                                 </form>
                             </a>
-                            <button class="close closeTab" data-toggle="modal" data-target="#deleteTabModal{{tab.id}}" type="button">×</button>
+                            <button ng-if="permission.allowCreateTab == true" class="close closeTab" data-toggle="modal" data-target="#deleteTabModal{{tab.id}}" type="button">×</button>
                             <div id="deleteTabModal{{tab.id}}" class="modal bd-example-modal-md">
                                 <div class="modal-dialog modal-xs">
                                     <div class="modal-content">
@@ -36,7 +40,7 @@
                                 </div>
                             </div>
                         </li> 
-                        <li class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
+                        <li ng-if="permission.allowCreateTab == true" class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
 
                         <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
                             <div class="modal-dialog modal-md">

@@ -11,15 +11,22 @@ import com.visumbu.vb.bean.ReportWidgetBean;
 import com.visumbu.vb.bean.TabWidgetBean;
 import com.visumbu.vb.controller.BaseController;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.DataSet;
+import com.visumbu.vb.model.DataSource;
 import com.visumbu.vb.model.Report;
 import com.visumbu.vb.model.ReportType;
 import com.visumbu.vb.model.ReportWidget;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.VbUser;
 import com.visumbu.vb.model.WidgetColumn;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -40,7 +47,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping("ui")
 public class UiController extends BaseController {
 
-        @Autowired
+    @Autowired
     private UiService uiService;
 
     @Autowired
@@ -50,6 +57,12 @@ public class UiController extends BaseController {
     public @ResponseBody
     List getProduct(HttpServletRequest request, HttpServletResponse response) {
         return uiService.getProduct();
+    }
+    
+    @RequestMapping(value = "product/{dealerId}", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getDealerProduct(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dealerId) {
+        return uiService.getDealerProduct(dealerId);
     }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.GET, produces = "application/json")
@@ -68,13 +81,12 @@ public class UiController extends BaseController {
         dashboardTabs.setDashboardId(uiService.getDashboardById(dashboardId));
         return uiService.createDashboardTabs(dashboardTabs);
     }
-    
-     @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.PUT, produces = "application/json")
+
+    @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     DashboardTabs updateTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId, @RequestBody DashboardTabs dashboardTab) {
         return uiService.updateTab(dashboardTab);
     }
-
 
     @RequestMapping(value = "dbTabUpdateOrder/{dashboardId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -174,18 +186,54 @@ public class UiController extends BaseController {
 
     @RequestMapping(value = "report", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
-    Report addReport(HttpServletRequest request, HttpServletResponse response, @RequestBody Report report) {
-        Integer getReportTypeId = 1;
-        System.out.println(report);
-        return uiService.addReport(report, getReportTypeId);
+    Report addReport(HttpServletRequest request, HttpServletResponse response// , @RequestBody Report report
+    ) {
+
+        try {
+            //        Integer getReportTypeId = 1;
+//        System.out.println(report);
+////        return uiService.addReport(report, getReportTypeId);
+//            StringBuilder sb = new StringBuilder();
+//            BufferedReader reader = request.getReader();
+//            String line = "";
+//            while((line = reader.readLine()) != null) {
+//                sb.append(reader.readLine());
+//            }
+//            String jsonString = sb.toString();
+//            System.out.println(jsonString);
+        } catch (Exception ex) {
+            Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @RequestMapping(value = "report", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
-    Report update(HttpServletRequest request, HttpServletResponse response, @RequestBody Report report) {
-        return uiService.updateReport(report);
+    Report update(HttpServletRequest request, HttpServletResponse response// @RequestBody Report report
+    ) {
+
+        try {
+            //        Integer getReportTypeId = 1;
+//        System.out.println(report);
+////        return uiService.addReport(report, getReportTypeId);
+            StringBuilder sb = new StringBuilder();
+            BufferedReader reader = request.getReader();
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            String jsonString = sb.toString();
+            ObjectMapper mapper = new ObjectMapper();
+            Report report = mapper.readValue(jsonString, Report.class);
+            System.out.println(jsonString);
+            return uiService.updateReport(report);
+        } catch (Exception ex) {
+            Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
     }
-    
+
     @RequestMapping(value = "dbReportUpdateOrder/{reportId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object updateReportUpdateOrder(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
@@ -205,7 +253,7 @@ public class UiController extends BaseController {
     List getReport(HttpServletRequest request, HttpServletResponse response) {
         return uiService.getReport();
     }
-    
+
     @RequestMapping(value = "report/{reportId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Report getReportById(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
@@ -234,10 +282,58 @@ public class UiController extends BaseController {
 
     @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
-    TabWidget deleteReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
+    ReportWidget deleteReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
         return uiService.deleteReportWidget(reportId);
     }
 
+    @RequestMapping(value = "dataSource", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    DataSource create(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSource dataSource) {
+        return uiService.create(dataSource);
+    }
+
+    @RequestMapping(value = "dataSource", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    DataSource update(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSource dataSource) {
+        return uiService.update(dataSource);
+    }
+
+    @RequestMapping(value = "dataSource", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getDataSource(HttpServletRequest request, HttpServletResponse response) {
+        return uiService.getDataSource();
+    }
+    
+    @RequestMapping(value = "dataSource/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    DataSource delete(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+        return uiService.delete(id);
+    }
+
+    @RequestMapping(value = "dataSet", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    DataSet create(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSet dataSet) {
+        return uiService.create(dataSet);
+    }
+
+    @RequestMapping(value = "dataSet", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    DataSet update(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSet dataSet) {
+        return uiService.update(dataSet);
+    }
+
+    @RequestMapping(value = "dataSet", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List getDataSet(HttpServletRequest request, HttpServletResponse response) {
+        return uiService.getDateSet();
+    }
+    
+    @RequestMapping(value = "dataSet/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    DataSet deleteDataSet(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+        return uiService.deleteDataSet(id);
+    }
+   
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {

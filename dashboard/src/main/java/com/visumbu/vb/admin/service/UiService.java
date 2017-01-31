@@ -12,6 +12,8 @@ import com.visumbu.vb.bean.TabWidgetBean;
 import com.visumbu.vb.bean.WidgetColumnBean;
 import com.visumbu.vb.model.Dashboard;
 import com.visumbu.vb.model.DashboardTabs;
+import com.visumbu.vb.model.DataSet;
+import com.visumbu.vb.model.DataSource;
 import com.visumbu.vb.model.Product;
 import com.visumbu.vb.model.Report;
 import com.visumbu.vb.model.ReportColumn;
@@ -51,6 +53,11 @@ public class UiService {
         return returnList;
     }
 
+    public List<Product> getDealerProduct(Integer dealerId) {
+        return uiDao.getDealerProduct(dealerId);
+    }
+
+    
     public List<Dashboard> getDashboards(VbUser user) {
         return uiDao.getDashboards(user);
     }
@@ -134,6 +141,10 @@ public class UiService {
         tabWidget.setWidgetTitle(tabWidgetBean.getWidgetTitle());
         tabWidget.setProductName(tabWidgetBean.getProductName());
         tabWidget.setProductDisplayName(tabWidgetBean.getProductDisplayName());
+        tabWidget.setTableFooter(tabWidgetBean.getTableFooter());
+        tabWidget.setZeroSuppression(tabWidgetBean.getZeroSuppression());
+        tabWidget.setDateDuration(tabWidgetBean.getDateDuration());
+        tabWidget.setMaxRecord(tabWidgetBean.getMaxRecord());
         TabWidget savedTabWidget = uiDao.saveTabWidget(tabWidget);
         List<WidgetColumnBean> widgetColumns = tabWidgetBean.getWidgetColumns();
         uiDao.deleteWidgetColumns(tabWidget.getId());
@@ -151,10 +162,19 @@ public class UiService {
             widgetColumn.setWidth(widgetColumnBean.getWidth());
             widgetColumn.setWrapText(widgetColumnBean.getWrapText());
             widgetColumn.setAlignment(widgetColumnBean.getAlignment());
+            widgetColumn.setFieldType(widgetColumnBean.getFieldType());
+            Integer columnHide = null;
+            if (widgetColumnBean.getGroupPriority() != null && widgetColumnBean.getGroupPriority() != 0) {
+                columnHide = 1;
+            }
+            if (widgetColumnBean.getColumnHide() != null) {
+                columnHide = widgetColumnBean.getColumnHide();
+            }
+            widgetColumn.setColumnHide(columnHide);
             widgetColumn.setWidgetId(savedTabWidget);
             uiDao.saveOrUpdate(widgetColumn);
         }
-        return savedTabWidget;
+        return uiDao.getTabWidgetById(tabWidgetBean.getId());
     }
 
     public ReportType addReportType(ReportType reportTypes) {
@@ -251,11 +271,55 @@ public class UiService {
         return uiDao.getReportWidget(reportId);
     }
 
-    public TabWidget deleteReportWidget(Integer reportId) {
-        return uiDao.deleteTabWidget(reportId);
+    public ReportWidget deleteReportWidget(Integer reportId) {
+        return uiDao.deleteReportWidget(reportId);
     }
 
     public Report getReportById(Integer reportId) {
         return uiDao.getReportById(reportId);
+    }
+
+    public DataSource create(DataSource dataSource) {
+        return (DataSource) uiDao.create(dataSource);
+    }
+
+    public DataSource read(Integer id) {
+        return (DataSource) uiDao.read(DataSource.class, id);
+    }
+
+    public DataSource delete(Integer id) {
+        DataSource dataSource = read(id);
+        return (DataSource) uiDao.delete(dataSource);
+    }
+
+    public List<DataSource> getDataSource() {
+        List<DataSource> dataSource = uiDao.read(DataSource.class);
+        return dataSource;
+    }
+
+    public DataSource update(DataSource dataSource) {
+        return (DataSource) uiDao.update(dataSource);
+    }
+
+    public List<DataSet> getDateSet() {
+        List<DataSet> dataSet = uiDao.read(DataSet.class);
+        return dataSet;
+    }
+
+    public DataSet create(DataSet dataSet) {
+        return (DataSet) uiDao.create(dataSet);
+    }
+
+    public DataSet update(DataSet dataSet) {
+        return (DataSet) uiDao.update(dataSet);
+    }
+
+    public DataSet readDataSet(Integer id) {
+        return (DataSet) uiDao.read(DataSet.class, id);
+    }
+
+    public DataSet deleteDataSet(Integer id) {
+        DataSet dataSet = readDataSet(id);
+        return (DataSet) uiDao.delete(dataSet);
     }
 }
