@@ -3899,3 +3899,15 @@ tfoot tr td {
 .franchise-btn {
     margin-top:3px;
 }
+
+.data-source {
+    min-height:600px;
+}
+
+.table {
+    background:#fff;
+}
+
+.data-title {
+    font-size:24px;
+}
