@@ -42,6 +42,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Dashboard.findByCreatedTime", query = "SELECT d FROM Dashboard d WHERE d.createdTime = :createdTime"),
     @NamedQuery(name = "Dashboard.findByModifiedTime", query = "SELECT d FROM Dashboard d WHERE d.modifiedTime = :modifiedTime")})
 public class Dashboard implements Serializable {
+
+    @OneToMany(mappedBy = "dashboardId")
+    private Collection<DashboardTabs> dashboardTabsCollection;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne
     private Product productId;
@@ -154,6 +157,16 @@ public class Dashboard implements Serializable {
 
     public void setProductId(Product productId) {
         this.productId = productId;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<DashboardTabs> getDashboardTabsCollection() {
+        return dashboardTabsCollection;
+    }
+
+    public void setDashboardTabsCollection(Collection<DashboardTabs> dashboardTabsCollection) {
+        this.dashboardTabsCollection = dashboardTabsCollection;
     }
 
     }

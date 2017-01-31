@@ -466,5 +466,5 @@ public class TabWidget implements Serializable {
     public String toString() {
         return "com.visumbu.vb.model.TabWidget[ id=" + id + " ]";
     }
-
+    
 }

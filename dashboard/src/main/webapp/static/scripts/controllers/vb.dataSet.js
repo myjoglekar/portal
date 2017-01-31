@@ -58,8 +58,8 @@ app.directive('previewTable', function ($http, $filter, $stateParams) {
     return{
         restrict: 'A',
         scope: {
-            path: '@',
-            dataSetId: '@'
+            path: '@'
+//            dataSetId: '@'
                     // widgetColumns: '@',
                     //setTableFn: '&',
                     // tableFooter:'@'

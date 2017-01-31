@@ -145,6 +145,8 @@ public class UiService {
         tabWidget.setZeroSuppression(tabWidgetBean.getZeroSuppression());
         tabWidget.setDateDuration(tabWidgetBean.getDateDuration());
         tabWidget.setMaxRecord(tabWidgetBean.getMaxRecord());
+        tabWidget.setDatasource(tabWidgetBean.getDatasource());
+        tabWidget.setDataset(tabWidgetBean.getDataset());
         TabWidget savedTabWidget = uiDao.saveTabWidget(tabWidget);
         List<WidgetColumnBean> widgetColumns = tabWidgetBean.getWidgetColumns();
         uiDao.deleteWidgetColumns(tabWidget.getId());
