@@ -64,7 +64,7 @@ app.directive('previewTable', function ($http, $filter, $stateParams) {
                     //setTableFn: '&',
                     // tableFooter:'@'
         },
-        template: '<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
+        template:'<div ng-show="loadingTable" class="text-center" style="color: #228995;"><img src="static/img/logos/loader.gif"></div>' +
                 '<table ng-if="ajaxLoadingCompleted" class="table table-responsive table-bordered table-l2t">' +
                 '<thead><tr>' +
                 '<th class="text-capitalize info table-bg" ng-repeat="col in tableColumns">' +
@@ -84,7 +84,6 @@ app.directive('previewTable', function ($http, $filter, $stateParams) {
             console.log(dataSourcePath)
             console.log(dataSourcePath.dataSourceId.userName)
             $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + dataSourcePath.dataSourceId.connectionString + '&username=' + dataSourcePath.dataSourceId.userName + '&password=' + dataSourcePath.directUrl.dataSourceId.password + '&port=3306&schema=vb&query=' + dataSourcePath.query).success(function (response) {
-//            $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + scope.dataSourcePath.dataSource.connectionString + '&username=' + scope.dataSourcePath.dataSource.userName + '&password=' + scope.dataSourcePath.dataSource.password + '&port=3306&schema=vb&query=' + scope.dataSourcePath.query).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
                 scope.tableColumns = response.columnDefs;
