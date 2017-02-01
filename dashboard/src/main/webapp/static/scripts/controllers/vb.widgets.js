@@ -673,13 +673,14 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 {name: 'ctr', field1: 'clicks', field2: 'impressions'},
                 {name: 'cpa', field1: 'cost', field2: 'conversions'},
                 {name: 'cpc', field1: 'cost', field2: 'clicks'},
-                {name: 'cpr', field1: 'cost', field2: 'reactions'},
-                {name: 'ctl', field1: 'cost', field2: 'likes'},
-                {name: 'cplc', field1: 'cost', field2: 'link_clicks'},
-                {name: 'cpcomment', field1: 'cost', field2: 'comments'},
-                {name: 'cposte', field1: 'cost', field2: 'post_engagements'},
-                {name: 'cpagee', field1: 'cost', field2: 'page_engagements'},
-                {name: 'cpp', field1: 'cost', field2: 'posts'},
+                {name: 'cps', field1: 'spend', field2: 'clicks'},
+                {name: 'cpr', field1: 'spend', field2: 'actions_post_reaction'},
+                {name: 'ctl', field1: 'spend', field2: 'actions_like'},
+                {name: 'cplc', field1: 'spend', field2: 'actions_link_click'},
+                {name: 'cpcomment', field1: 'spend', field2: 'actions_comment'},
+                {name: 'cposte', field1: 'spend', field2: 'cost_post_engagement'},
+                {name: 'cpagee', field1: 'spend', field2: 'cost_page_engagement'},
+                {name: 'cpp', field1: 'spend', field2: 'actions_post'},
             ];
 
             function aggregate(list, aggreationList) {

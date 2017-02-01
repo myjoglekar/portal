@@ -5,6 +5,8 @@
  */
 package com.visumbu.api.dashboard.bean;
 
+import com.visumbu.api.utils.ApiUtils;
+
 /**
  *
  * @author user
@@ -171,7 +173,7 @@ public class CampaignPerformanceReportBean {
     }
 
     public String getSearchImpressionsShare() {
-        return searchImpressionsShare;
+        return ApiUtils.removePercent(searchImpressionsShare);
     }
 
     public void setSearchImpressionsShare(String searchImpressionsShare) {
@@ -179,7 +181,7 @@ public class CampaignPerformanceReportBean {
     }
 
     public String getSearchImpressionsShareLostByBudget() {
-        return searchImpressionsShareLostByBudget;
+        return ApiUtils.removePercent(searchImpressionsShareLostByBudget);
     }
 
     public void setSearchImpressionsShareLostByBudget(String searchImpressionsShareLostByBudget) {
@@ -187,7 +189,7 @@ public class CampaignPerformanceReportBean {
     }
 
     public String getSearchImpressionsShareLostByRank() {
-        return searchImpressionsShareLostByRank;
+        return ApiUtils.removePercent(searchImpressionsShareLostByRank);
     }
 
     public void setSearchImpressionsShareLostByRank(String searchImpressionsShareLostByRank) {
