@@ -129,7 +129,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.CPageE, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.CPP, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
-        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPS, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
@@ -177,7 +177,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.CPageE, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.CPP, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
-        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPS, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
@@ -224,7 +224,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.CPageE, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.CPP, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
-        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPS, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
@@ -272,7 +272,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.CPageE, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.CPP, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
-        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPS, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
@@ -319,7 +319,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.CPageE, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.CPP, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
-        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPS, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
@@ -367,7 +367,7 @@ public class PaidSocialTabController {
         columnDefs.add(new ColumnDef("cost_page_engagement", "number", "Cost/Page Engagement", ColumnDef.Aggregation.CPageE, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("cost_post", "number", "Cost/Post", ColumnDef.Aggregation.CPP, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("account_name", "string", "Account Name"));
-        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));
+        columnDefs.add(new ColumnDef("cpc", "number", "CPC", ColumnDef.Aggregation.CPS, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("spend", "number", "Spend", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
 
