@@ -3900,14 +3900,19 @@ tfoot tr td {
     margin-top:3px;
 }
 
-.data-source {
-    /*min-height:600px;*/
-}
-
 .table {
     background:#fff;
 }
 
 .data-title {
     font-size:24px;
+}
+
+textarea.form-control {
+    min-height:300px;
+}
+
+.data-table-set {
+    min-height:600px;
+    overflow: auto;
 }
