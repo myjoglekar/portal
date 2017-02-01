@@ -1046,7 +1046,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
                         if (format.indexOf("%") > -1) {
-                            return d3.format(format)(value / 100);
+                            //return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
                     };
@@ -1197,7 +1197,7 @@ app.directive('barChartDirective', function ($http, $stateParams) {
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
                         if (format.indexOf("%") > -1) {
-                            return d3.format(format)(value / 100);
+                            //return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
                     };
@@ -1342,7 +1342,7 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
                         if (format.indexOf("%") > -1) {
-                            return d3.format(format)(value / 100);
+                            //return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
                     };
@@ -1499,7 +1499,7 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
                         if (format.indexOf("%") > -1) {
-                            return d3.format(format)(value / 100);
+                            //return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
                     };
@@ -1615,7 +1615,7 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             return function (input, formatString) {
                 if (formatString) {
                     if (formatString.indexOf("%") > -1) {
-                        return d3.format(formatString)(input / 100);
+                        //return d3.format(formatString)(input / 100);
                     }
                     return d3.format(formatString)(input);
                 }
