@@ -20,6 +20,8 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.selectDealer = {};
     $http.get('admin/proxy/getJson?url=../dbApi/admin/dataSet/getData&connectionUrl=jdbc:mysql://192.168.0.102:3306/skyzone&startDate=09/07/2016&endDate=09/30/2016&username=jp&password=password&port=3306&schema=vb&query=select location id, location dealerName from (select distinct location_1 location from Data) a').success(function (response) {
         $scope.dealers = response.data;
+        console.log(response.data[0].id)
+        $stateParams.dealerId = $stateParams.dealerId?$stateParams.dealerId:response.data[0].id;
         $scope.name = $filter('filter')($scope.dealers, {id: $stateParams.dealerId})[0];
         $scope.selectDealer.selected = {dealerName: $scope.name.dealerName};
     });
@@ -36,7 +38,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.getDealerId = function (dealer) {
         console.log(dealer);
         $stateParams.dealerId = dealer.id;
-        $rootScope.$emit('dealerChange', {dealerId: dealer.id});
+       // $rootScope.$emit('dealerChange', {dealerId: dealer.id});
     };
 
     $scope.toDate = function (strDate) {

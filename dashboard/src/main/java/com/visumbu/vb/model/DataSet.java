@@ -6,7 +6,6 @@
 package com.visumbu.vb.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,12 +17,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -37,13 +33,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     , @NamedQuery(name = "DataSet.findById", query = "SELECT d FROM DataSet d WHERE d.id = :id")
     , @NamedQuery(name = "DataSet.findByName", query = "SELECT d FROM DataSet d WHERE d.name = :name")})
 public class DataSet implements Serializable {
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "query")
-    private String query;
-
-    @OneToMany(mappedBy = "dataSetId")
-    private Collection<TabWidget> tabWidgetCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,12 +43,16 @@ public class DataSet implements Serializable {
     @Size(max = 255)
     @Column(name = "name")
     private String name;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne
-    private VbUser userId;
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "query")
+    private String query;
     @JoinColumn(name = "data_source_id", referencedColumnName = "id")
     @ManyToOne
     private DataSource dataSourceId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    private VbUser userId;
 
     public DataSet() {
     }
@@ -84,12 +77,12 @@ public class DataSet implements Serializable {
         this.name = name;
     }
 
-    public VbUser getUserId() {
-        return userId;
+    public String getQuery() {
+        return query;
     }
 
-    public void setUserId(VbUser userId) {
-        this.userId = userId;
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     public DataSource getDataSourceId() {
@@ -98,6 +91,14 @@ public class DataSet implements Serializable {
 
     public void setDataSourceId(DataSource dataSourceId) {
         this.dataSourceId = dataSourceId;
+    }
+
+    public VbUser getUserId() {
+        return userId;
+    }
+
+    public void setUserId(VbUser userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -124,23 +125,5 @@ public class DataSet implements Serializable {
     public String toString() {
         return "com.visumbu.vb.model.DataSet[ id=" + id + " ]";
     }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<TabWidget> getTabWidgetCollection() {
-        return tabWidgetCollection;
-    }
-
-    public void setTabWidgetCollection(Collection<TabWidget> tabWidgetCollection) {
-        this.tabWidgetCollection = tabWidgetCollection;
-    }
-
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(String query) {
-        this.query = query;
-    }
-
-    }
+    
+}

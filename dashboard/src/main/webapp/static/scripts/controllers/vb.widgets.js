@@ -4,6 +4,10 @@
 //};
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService) {
     $scope.permission = localStorageService.get("permission");
+    
+    $scope.locationID = $stateParams.dealerId;
+    $scope.widgetStartDate = $stateParams.startDate;
+    $scope.widgetEndDate = $stateParams.endDate;
     //$scope.widget = {isSpecial: 1}
     $scope.addToPdf = function (data) {
         // alert("TTTTT");
@@ -138,8 +142,6 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.tableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
-        console.log(widget.directUrl);
-        console.log(widget.dataSetId);
         if (widget.columns) {
         widget.columns = widget.columns;
                 if (widget.dataSetId) {
@@ -242,7 +244,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
             $scope.openPopup(response);
         });
     };
-
+    
+    $scope.removeBackDrop = function(){
+        $('body').removeClass().removeAttr('style');$('.modal-backdrop').remove(); 
+    }
 
     $scope.deleteWidget = function (widget, index) {                            //Delete Widget
         $http({method: 'DELETE', url: 'admin/ui/dbWidget/' + widget.id}).success(function (response) {

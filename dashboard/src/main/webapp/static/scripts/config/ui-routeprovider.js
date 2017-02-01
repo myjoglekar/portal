@@ -50,9 +50,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: "/franchiseMarketing",
                 templateUrl: "static/views/franchiseMarketing/franchiseMarketing.html",
                 controller: 'FranchiseMarketingController'
-            })
+            });
 
-    $urlRouterProvider.otherwise('index/dashboard/1/1');
+    $urlRouterProvider.otherwise(function ($injector) {
+      $injector.get('$state').go('index.dashboard.widget', {}, { location: false });
+    });
+//    $urlRouterProvider.otherwise('index/dashboard/1/1');
 });
 //
 //Array.prototype.move = function (from, to) {
