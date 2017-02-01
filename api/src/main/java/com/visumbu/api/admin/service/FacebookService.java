@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.admin.service;
 
+import com.visumbu.api.utils.ApiUtils;
 import com.visumbu.api.utils.DateUtils;
 import com.visumbu.api.utils.ExampleConfig;
 import com.visumbu.api.utils.Rest;
@@ -78,6 +79,7 @@ public class FacebookService {
                 if (costPerActionTypeArr != null) {
                     dataList.putAll(getActionsData(costPerActionTypeArr, "cost_"));
                 }
+                dataList.put("ctr", ApiUtils.removePercent(dataList.get("ctr")));
                 dataValueList.add(dataList);
             }
             return dataValueList;  //getActions(actionsArr);
@@ -116,6 +118,8 @@ public class FacebookService {
                 if (costPerActionTypeArr != null) {
                     dataList.putAll(getActionsData(costPerActionTypeArr, "cost_"));
                 }
+                                dataList.put("ctr", ApiUtils.removePercent(dataList.get("ctr")));
+
                 dataValueList.add(dataList);
             }
             return dataValueList;  //getActions(actionsArr);
@@ -154,6 +158,7 @@ public class FacebookService {
                 if (costPerActionTypeArr != null) {
                     dataList.putAll(getActionsData(costPerActionTypeArr, "cost_"));
                 }
+                dataList.put("ctr", ApiUtils.removePercent(dataList.get("ctr")));
                 dataValueList.add(dataList);
             }
             return dataValueList;  //getActions(actionsArr);
@@ -192,6 +197,7 @@ public class FacebookService {
                 if (costPerActionTypeArr != null) {
                     dataList.putAll(getActionsData(costPerActionTypeArr, "cost_"));
                 }
+                dataList.put("ctr", ApiUtils.removePercent(dataList.get("ctr")));
                 dataValueList.add(dataList);
             }
             return dataValueList;
@@ -230,6 +236,7 @@ public class FacebookService {
                 if (costPerActionTypeArr != null) {
                     dataList.putAll(getActionsData(costPerActionTypeArr, "cost_"));
                 }
+                dataList.put("ctr", ApiUtils.removePercent(dataList.get("ctr")));
                 dataValueList.add(dataList);
             }
             return dataValueList;
@@ -268,6 +275,7 @@ public class FacebookService {
                 if (costPerActionTypeArr != null) {
                     dataList.putAll(getActionsData(costPerActionTypeArr, "cost_"));
                 }
+                dataList.put("ctr", ApiUtils.removePercent(dataList.get("ctr")));
                 dataValueList.add(dataList);
             }
             return dataValueList;
@@ -492,6 +500,7 @@ public class FacebookService {
                 if (costPerActionTypeArr != null) {
                     dataList.putAll(getActionsData(costPerActionTypeArr, "cost_"));
                 }
+                dataList.put("ctr", ApiUtils.removePercent(dataList.get("ctr")));
                 dataValueList.add(dataList);
             }
             return dataValueList;

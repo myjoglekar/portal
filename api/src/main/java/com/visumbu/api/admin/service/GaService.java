@@ -136,8 +136,8 @@ public class GaService {
     public GetReportsResponse getDynamicDisplayGoals(String viewId, Date startDate, Date endDate, String aggregation) {
         String metricsList = "ga:visits,Visits;ga:sessions,Sessions;"
                 + "ga:bounceRate,BounceRate;"
-                + "ga:goal1Completions,Goal1Completions;ga:goal2Completions,Goal2Completions;ga:goal3Completions,Goal3Completions;"
-                + "ga:goal4Completions,Goal4Completions;ga:goal5Completions,Goal5Completions;ga:goal6Completions,Goal6Completions;";
+                + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
+                + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
 
         String dimensions = "ga:source;ga:date";
         if (aggregation == null || aggregation.isEmpty()) {
