@@ -67,10 +67,10 @@
         <form role="search" class="navbar-form-custom" method="post" action="#">
             <div class="form-group">
                 <!--<input type="text" placeholder="Dealer Name" class="form-control" name="search">-->
-                <ui-select ng-model="selectDealer.selected" theme="selectize" ng-disabled="disabled" style="width:180px;">
+                <ui-select ng-model="selectDealer.selected" on-select="getDealerId(selectDealer.selected); loadNewUrl()" theme="selectize" ng-disabled="disabled" style="width:180px;">
                     <ui-select-match placeholder="Select Dealer...">{{$select.selected.dealerName}}</ui-select-match>
                     <ui-select-choices repeat="dealer in dealers | filter: $select.search">
-                        <span ng-click="getDealerId(dealer); loadNewUrl()" ng-bind-html="dealer.dealerName | highlight: $select.search"></span>
+                        <span ng-bind-html="dealer.dealerName | highlight: $select.search"></span>
                         <!--<small ng-bind-html="country.code | highlight: $select.search"></small>-->
                     </ui-select-choices>
                 </ui-select>
