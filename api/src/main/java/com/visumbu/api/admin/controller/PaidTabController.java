@@ -154,7 +154,6 @@ public class PaidTabController {
                     performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                     performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                     performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
-
                     performanceReportBeans.add(performanceBean);
                 }
             }

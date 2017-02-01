@@ -171,7 +171,7 @@ public class AccountPerformanceReportBean {
     }
 
     public String getSearchImpressionsShare() {
-        return ApiUtils.removePercent(searchImpressionsShare);
+        return searchImpressionsShare;
     }
 
     public void setSearchImpressionsShare(String searchImpressionsShare) {
@@ -179,7 +179,7 @@ public class AccountPerformanceReportBean {
     }
 
     public String getSearchBudgetLostImpressionShare() {
-        return ApiUtils.removePercent(searchBudgetLostImpressionShare);
+        return searchBudgetLostImpressionShare;
     }
 
     public void setSearchBudgetLostImpressionShare(String searchBudgetLostImpressionShare) {
@@ -187,7 +187,7 @@ public class AccountPerformanceReportBean {
     }
 
     public String getSearchImpressionsShareLostDueToBudget() {
-        return ApiUtils.removePercent(searchImpressionsShareLostDueToBudget);
+        return searchImpressionsShareLostDueToBudget;
     }
 
     public void setSearchImpressionsShareLostDueToBudget(String searchImpressionsShareLostDueToBudget) {
@@ -195,7 +195,7 @@ public class AccountPerformanceReportBean {
     }
 
     public String getSearchImpressionsShareLostDueToRank() {
-        return ApiUtils.removePercent(searchImpressionsShareLostDueToRank);
+        return searchImpressionsShareLostDueToRank;
     }
 
     public void setSearchImpressionsShareLostDueToRank(String searchImpressionsShareLostDueToRank) {

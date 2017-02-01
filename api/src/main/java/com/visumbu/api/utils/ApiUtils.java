@@ -6,6 +6,7 @@
 package com.visumbu.api.utils;
 
 import com.visumbu.api.bean.AccountDetails;
+import com.visumbu.api.bing.report.xml.bean.Data;
 import com.visumbu.api.dashboard.bean.AdPerformanceReportBean;
 import java.io.BufferedReader;
 import java.io.File;
@@ -154,7 +155,7 @@ public class ApiUtils {
     }
 
     public static String removePercent(String value) {
-        if(value == null) {
+        if (value == null) {
             return "0.0";
         }
         value = value.replaceAll("%", "");
@@ -164,6 +165,24 @@ public class ApiUtils {
 
         }
         return "0.0";
+    }
+
+    public static Data removePercent(Data value) {
+        Data data = new Data();
+        String value1 = value.getValue();
+        if (value == null) {
+            data.setValue("0.0");
+            return data;
+        }
+        value1 = value1.replaceAll("%", "");
+        try {
+            data.setValue((Double.parseDouble(value1) / 100.0) + "");
+            return data;
+        } catch (Exception e) {
+
+        }
+        data.setValue("0.0");
+        return data;
     }
 
 }
