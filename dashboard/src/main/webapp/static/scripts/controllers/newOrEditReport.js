@@ -61,7 +61,7 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         {name: 'No', value: "no"}
     ];
 
-    $http.get("admin/ui/report/" + $stateParams.reportId + "?dealerId=" + $stateParams.dealerId).success(function (response) {
+    $http.get("admin/ui/report/" + $stateParams.reportId + "?locationId=" + $stateParams.locationId).success(function (response) {
         $scope.reports = response;
         $scope.reportTitle = response.reportTitle;
         $scope.description = response.description;
@@ -72,7 +72,7 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         })
     });
 
-    $http.get('admin/ui/reportWidget/' + $stateParams.reportId + "?dealerId=" + $stateParams.dealerId).success(function (response) {
+    $http.get('admin/ui/reportWidget/' + $stateParams.reportId + "?locationId=" + $stateParams.locationId).success(function (response) {
         $scope.reportWidgets = response;
     })
 

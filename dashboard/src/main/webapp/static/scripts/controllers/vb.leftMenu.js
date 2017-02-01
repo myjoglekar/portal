@@ -10,7 +10,7 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
     $scope.endDate = $stateParams.endDate;
     $scope.productId = $stateParams.productId;
     $scope.reportId = $stateParams.reportId;
-    $scope.dealerId = $stateParams.dealerId;
+    $scope.locationId = $stateParams.locationId;
 
 
     $scope.setParamsDate = function (product) {
@@ -25,7 +25,7 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
         $stateParams.productId = product.id
         $scope.startDate = $stateParams.startDate;
         $scope.endDate = $stateParams.endDate;
-        $scope.dealerId = $stateParams.dealerId;
+        $scope.locationId = $stateParams.locationId;
     };
 
     $scope.reports = [];
@@ -42,14 +42,14 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
         $scope.reports = response;
     });
 
-    $http.get('admin/ui/product/' + $stateParams.dealerId).success(function (response) {
+    $http.get('admin/ui/product/' + $stateParams.locationId).success(function (response) {
         $scope.products = response;
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
         $scope.selectProductName = $scope.name.productName;
     });
 
     $rootScope.$on('dealerChange', function (event, args) {
-        $http.get('admin/ui/product/' + $stateParams.dealerId).success(function (response) {
+        $http.get('admin/ui/product/' + $stateParams.locationId).success(function (response) {
             $scope.products = response;
             $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
             $scope.selectProductName = $scope.name.productName;
@@ -70,15 +70,15 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
         console.log($scope.getCurrentTab());
         console.log($scope.getCurrentPage());
         if ($scope.getCurrentPage() === "dashboard") {
-            $state.go("index.dashboard." + $scope.getCurrentTab(), {dealerId: $stateParams.dealerId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
+            $state.go("index.dashboard." + $scope.getCurrentTab(), {locationId: $stateParams.locationId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else if ($scope.getCurrentPage() === "reports") {
-            $state.go("index.report.reports", {dealerId: $stateParams.dealerId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
+            $state.go("index.report.reports", {locationId: $stateParams.locationId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else if ($scope.getCurrentPage() === "newOrEdit") {
-            $state.go("index.report.newOrEdit", {dealerId: $stateParams.dealerId, productId: $stateParams.productId, startDate: $scope.startDate, endDate: $scope.endDate});
+            $state.go("index.report.newOrEdit", {locationId: $stateParams.locationId, productId: $stateParams.productId, startDate: $scope.startDate, endDate: $scope.endDate});
         } //else if ($scope.getCurrentPage() === "dataSource") {
-//            $state.go("index.dataSource", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
+//            $state.go("index.dataSource", {locationId: $stateParams.locationId, startDate: $scope.startDate, endDate: $scope.endDate});
 //        } else if ($scope.getCurrentPage() === "dataSet") {
-//            $state.go("index.dataSet", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
+//            $state.go("index.dataSet", {locationId: $stateParams.locationId, startDate: $scope.startDate, endDate: $scope.endDate});
 //        } else {
 //            $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
 //        }

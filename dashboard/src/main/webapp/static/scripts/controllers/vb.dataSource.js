@@ -1,5 +1,5 @@
 app.controller("DataSourceController", function ($scope, $stateParams, $http) {
-    console.log($stateParams.dealerId);
+    console.log($stateParams.locationId);
 
     $http.get('admin/ui/dataSource').success(function (response) {
         $scope.dataSources = response;
@@ -13,6 +13,7 @@ app.controller("DataSourceController", function ($scope, $stateParams, $http) {
         var data = {
             id: dataSource.id,
             connectionString: dataSource.connectionString,
+            sqlDriver: dataSource.sqlDriver,
             name: dataSource.name,
             password: dataSource.password,
             userName: dataSource.userName

@@ -11,6 +11,7 @@
             <tr>
                 <td>Name</td>
                 <td>Connection String</td>
+                <td>Driver</td>
                 <td>User Name</td>
                 <td>Password</td>
                 <td><button class="btn btn-info btn-sm" ng-click="addDataSource()"><i class="fa fa-plus"></i></button></td>
@@ -32,6 +33,14 @@
                     </span>
                     <span ng-show="dataSource.isEdit">
                         <input type="text" class="form-control" ng-model="dataSource.connectionString">
+                    </span>
+                </td>
+                <td>
+                    <span ng-hide="dataSource.isEdit">
+                        {{dataSource.sqlDriver}}
+                    </span>
+                    <span ng-show="dataSource.isEdit">
+                        <input type="text" class="form-control" ng-model="dataSource.sqlDriver">
                     </span>
                 </td>
                 <td>

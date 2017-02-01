@@ -81,7 +81,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         //$scope.startId = response[0].id ? response[0].id : 0;
         //$rootScope.$emit('dealerTabId', {tabId: response[0].id});
         $stateParams.tabId = response[0].id;
-        $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: $stateParams.tabId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+        $state.go("index.dashboard.widget", {locationId: $stateParams.locationId, tabId: $stateParams.tabId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
     });
 
     var dates = $(".pull-right i").text();
@@ -106,7 +106,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
                     $scope.dashboardName = value.dashboardId.dashboardTitle;
                 });
                 //$scope.startId = response[0].id ? response[0].id : 0;
-                $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: response[0].id, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+                $state.go("index.dashboard.widget", {locationId: $stateParams.locationId, tabId: response[0].id, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
             });
             // $scope.tabs.splice(index, 1);
         });

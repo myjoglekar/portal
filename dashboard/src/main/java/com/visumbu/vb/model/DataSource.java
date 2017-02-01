@@ -6,7 +6,6 @@
 package com.visumbu.vb.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,12 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -37,11 +33,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     , @NamedQuery(name = "DataSource.findByName", query = "SELECT d FROM DataSource d WHERE d.name = :name")
     , @NamedQuery(name = "DataSource.findByConnectionString", query = "SELECT d FROM DataSource d WHERE d.connectionString = :connectionString")
     , @NamedQuery(name = "DataSource.findByUserName", query = "SELECT d FROM DataSource d WHERE d.userName = :userName")
-    , @NamedQuery(name = "DataSource.findByPassword", query = "SELECT d FROM DataSource d WHERE d.password = :password")})
+    , @NamedQuery(name = "DataSource.findByPassword", query = "SELECT d FROM DataSource d WHERE d.password = :password")
+    , @NamedQuery(name = "DataSource.findBySqlDriver", query = "SELECT d FROM DataSource d WHERE d.sqlDriver = :sqlDriver")})
 public class DataSource implements Serializable {
-
-    @OneToMany(mappedBy = "dataSourceId")
-    private Collection<TabWidget> tabWidgetCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,8 +55,9 @@ public class DataSource implements Serializable {
     @Size(max = 45)
     @Column(name = "password")
     private String password;
-    @OneToMany(mappedBy = "dataSourceId")
-    private Collection<DataSet> dataSetCollection;
+    @Size(max = 255)
+    @Column(name = "sql_driver")
+    private String sqlDriver;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private VbUser userId;
@@ -114,14 +109,12 @@ public class DataSource implements Serializable {
         this.password = password;
     }
 
-    @XmlTransient
-    @JsonIgnore
-    public Collection<DataSet> getDataSetCollection() {
-        return dataSetCollection;
+    public String getSqlDriver() {
+        return sqlDriver;
     }
 
-    public void setDataSetCollection(Collection<DataSet> dataSetCollection) {
-        this.dataSetCollection = dataSetCollection;
+    public void setSqlDriver(String sqlDriver) {
+        this.sqlDriver = sqlDriver;
     }
 
     public VbUser getUserId() {
@@ -156,15 +149,5 @@ public class DataSource implements Serializable {
     public String toString() {
         return "com.visumbu.vb.model.DataSource[ id=" + id + " ]";
     }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<TabWidget> getTabWidgetCollection() {
-        return tabWidgetCollection;
-    }
-
-    public void setTabWidgetCollection(Collection<TabWidget> tabWidgetCollection) {
-        this.tabWidgetCollection = tabWidgetCollection;
-    }
-
-    }
+    
+}

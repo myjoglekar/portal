@@ -6,7 +6,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/vb.index.html"
             })
             .state("index.dashboard", {
-                url: "/dashboard/:dealerId/:productId",
+                url: "/dashboard/:locationId/:productId",
                 templateUrl: "static/views/dashboard/dashboard.html",
             })
             .state("index.dashboard.widget", {
@@ -15,12 +15,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'WidgetController'
             })
             .state("index.report", {
-                url: "/reportIndex/:dealerId",
+                url: "/reportIndex/:locationId",
                 templateUrl: "static/views/reports/reportIndex.html",
                 controller: 'ReportIndexController'
             })
             .state("index.report.template", {
-                url: "/template/:dealerId/:reportId?:startDate/:endDate",
+                url: "/template/:locationId/:reportId?:startDate/:endDate",
                 templateUrl: "static/views/reports/reportTemplate.html",
                 controller: 'TemplateController',
                 activetab: 'template'
@@ -32,17 +32,17 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 activetab: 'report'
             })
             .state("index.report.newOrEdit", {
-                url: "/newOrEdit/:dealerId/:reportId?:startDate/:endDate",
+                url: "/newOrEdit/:locationId/:reportId?:startDate/:endDate",
                 templateUrl: "static/views/reports/newOrEditReports.html",
                 controller: 'NewOrEditReportController',
                 activetab: 'report'
             })
             .state("index.dataSource", {
-                url: "/dataSource/:dealerId?:startDate/:endDate",
+                url: "/dataSource/:locationId?:startDate/:endDate",
                 templateUrl: "static/views/source/dataSource.html",
                 controller: 'DataSourceController'
             }).state("index.dataSet", {
-                url: "/dataSet/:dealerId?:startDate/:endDate",
+                url: "/dataSet/:locationId?:startDate/:endDate",
                 templateUrl: "static/views/source/dataSet.html",
                 controller: 'DataSetController'
             })
