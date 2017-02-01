@@ -24,6 +24,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         $stateParams.dealerId = $stateParams.dealerId?$stateParams.dealerId:response.data[0].id;
         $scope.name = $filter('filter')($scope.dealers, {id: $stateParams.dealerId})[0];
         $scope.selectDealer.selected = {dealerName: $scope.name.dealerName};
+        $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: $stateParams.tabId?$stateParams.tabId:1, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
     });
 
     $http.get('admin/ui/product').success(function (response) {

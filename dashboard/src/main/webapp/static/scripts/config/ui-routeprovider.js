@@ -53,7 +53,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             });
 
     $urlRouterProvider.otherwise(function ($injector) {
-      $injector.get('$state').go('index.dashboard.widget', {}, { location: false });
+      $injector.get('$state').go('index.dashboard', {productId: 1}, { location: false });
     });
 //    $urlRouterProvider.otherwise('index/dashboard/1/1');
 });
