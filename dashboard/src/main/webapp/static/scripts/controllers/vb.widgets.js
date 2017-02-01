@@ -15,6 +15,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {name: 'Sum', value: "sum"},
         {name: 'CTR', value: "ctr"},
         {name: 'CPC', value: "cpc"},
+        {name: 'CPS', value: "cps"},
         {name: 'CPA', value: "cpa"},
         {name: 'Avg', value: "avg"},
         {name: 'Count', value: "count"},
@@ -970,7 +971,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
                         return "-";
                     }
                     if (column.displayFormat.indexOf("%") > -1) {
-                        return d3.format(column.displayFormat)(value / 100);
+                        // return d3.format(column.displayFormat)(value / 100);
                     }
                     return d3.format(column.displayFormat)(value);
                 }
