@@ -20,16 +20,34 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.selectDealer = {};
     $http.get('admin/proxy/getJson?url=../dbApi/admin/dataSet/getData&connectionUrl=jdbc:mysql://localhost:3306/skyzone&startDate=09/07/2016&endDate=09/30/2016&username=root&password=&port=3306&schema=vb&query=select location id, location dealerName from (select distinct location_1 location from Data) a').success(function (response) {
         $scope.dealers = response.data;
-        console.log(response.data[0].id)
-        $stateParams.locationId = $stateParams.locationId?$stateParams.locationId:response.data[0].id;
+        console.log($stateParams.locationId)
+        $stateParams.locationId = $stateParams.locationId ? $stateParams.locationId : response.data[0].id;
         $scope.name = $filter('filter')($scope.dealers, {id: $stateParams.locationId})[0];
         $scope.selectDealer.selected = {dealerName: $scope.name.dealerName};
-        $state.go("index.dashboard.widget", {locationId: $stateParams.locationId, tabId: $stateParams.tabId?$stateParams.tabId:1, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+        //$state.go("index.dashboard.widget", {locationId: $stateParams.locationId, tabId: $stateParams.tabId?$stateParams.tabId:1, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
+        try {
+            $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $scope.firstDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
+
+            $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $scope.lastDate;
+        } catch (e) {
+        }
+        if ($scope.getCurrentPage() === "dashboard") {
+            $state.go("index.dashboard." + $scope.getCurrentTab(), {locationId: $stateParams.locationId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "reports") {
+            $state.go("index.report.reports", {locationId: $stateParams.locationId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "newOrEdit") {
+            $state.go("index.report.newOrEdit", {locationId: $stateParams.locationId, productId: $stateParams.productId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "dataSource") {
+            $state.go("index.dataSource", {locationId: $stateParams.locationId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "dataSet") {
+            $state.go("index.dataSet", {locationId: $stateParams.locationId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else {
+            $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
+        }
     });
 
     $http.get('admin/ui/product').success(function (response) {
         $scope.products = response;
-        console.log(response)
         // $scope.searchProduct.unshift({"id": 0, "productName": "All Product"});
         $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
         $scope.selectProductName = $scope.name.productName;
@@ -39,7 +57,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.getDealerId = function (dealer) {
         console.log(dealer);
         $stateParams.locationId = dealer.id;
-       // $rootScope.$emit('dealerChange', {locationId: dealer.id});
+        // $rootScope.$emit('dealerChange', {locationId: dealer.id});
     };
 
     $scope.toDate = function (strDate) {
@@ -67,9 +85,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     if (!$stateParams.endDate) {
         $stateParams.endDate = $scope.lastDate;
     }
-
-
-
+    
     console.log($stateParams.locationId);
 
     $scope.loadDefault = function (defaultDealerId) {

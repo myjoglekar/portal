@@ -267,7 +267,7 @@
                                             <select class="form-control" ng-model="widget.dataSourceId" ng-change="selectDataSource(widget.dataSourceId, widget)" ng-options="dataSource.name for dataSource in dataSources">
                                             </select></div>
                                             <div class="col-md-2 circle-data-set">
-                                            <i title="Data Source" ng-click="removeBackDrop()" ui-sref="index.dataSource({locationId: locationID, startDate: widgetStartDate, endDate: widgetEndDate})" class="fa fa-link"></i>
+                                            <i title="Data Source" ng-click="removeBackDrop()" data-ui-sref="index.dataSource({locationId: locationID, startDate: widgetStartDate, endDate: widgetEndDate})" class="fa fa-link"></i>
                                             </div></div>
                                     </div>
                                     
@@ -278,7 +278,7 @@
                                             <select class="form-control" ng-model="widget.dataSetId" ng-options="dataSet.name for dataSet in dataSets" ng-change="changeUrl(widget.dataSetId, widget)">
                                             </select></div>
                                             <div class="col-md-2 circle-data-set">
-                                            <i title="Data Set" ng-click="removeBackDrop()" ui-sref="index.dataSet({locationId: locationID, startDate: widgetStartDate, endDate: widgetEndDate})" class="fa fa-link"></i>
+                                            <i title="Data Set" ng-click="removeBackDrop()" data-ui-sref="index.dataSet({locationId: locationID, startDate: widgetStartDate, endDate: widgetEndDate})" class="fa fa-link"></i>
                                         </div></div>
                                     </div>
                                     </div>

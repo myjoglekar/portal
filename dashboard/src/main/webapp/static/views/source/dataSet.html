@@ -3,6 +3,11 @@
         /** Setting height is also important, otherwise editor wont showup**/
         height: 300px;
     }
+    .selectedTableRow {
+        background-color:#b3e0d3;
+        color:#121111;
+        font-weight:bold;
+    }
 </style>
 <section class="content">
     <div class="row">
@@ -23,7 +28,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="dataSet in dataSets">
+                            <tr ng-repeat="dataSet in dataSets" ng-class="{'selectedTableRow':$index == selectedRow}" ng-click="setClickedRow($index)">
                                 <td ng-click="editDataSet(dataSet)">
                                     {{dataSet.dataSourceId.name}}
                                 </td>
@@ -70,7 +75,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <label style="font-weight:normal;">Preview</label>
-                                        <button class="close" data-dismiss="modal">&times;</button>
+                                        <button ng-click="resetPreview(dataSet)" class="close" data-dismiss="modal">&times;</button>
                                     </div>
                                     <div class="modal-body">                            
                                         <div class="box box-default">
@@ -83,6 +88,13 @@
                                             <div class="box-body popup-head" ng-if="previewData">
                                                 <div class="row">
                                                     <div id="changes-height" class="table-responsive">
+                                                        <!--                                                        <div class="panel-body list" ng-if="widget.chartType === 'table'" adjust-height>
+                                                                                                                    <div class="table-responsive project-list">
+                                                                                                                        <div id="changes-height" class="project-list">
+                                                                                                                            <div dynamic-Table pdf-function="addToPdf(test)" dynamic-Table-Source="{{previewData}}" widget-Id="{{widget.id}}" widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" widget-Columns="{{widget.columns}}"></div> 
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>-->
                                                         <div preview-Table path="{{previewData}}"></div>
                                                     </div>
                                                 </div>
