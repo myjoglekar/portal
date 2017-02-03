@@ -137,7 +137,7 @@ public class DynamicDisplayTabController {
         List list = (List) map.get("columnDefs");
         list.addAll(columnDefs);
         if (fieldsOnly != null) {
-            return list;
+            return map;
         }
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "dynamicDisplay");
         System.out.println("SEO GA Profile Id " + accountDetails.getAnalyticsProfileId());
@@ -159,7 +159,7 @@ public class DynamicDisplayTabController {
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getLast12Weeks(HttpServletRequest request, HttpServletResponse response) {
-        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date startDate = DateUtils.get12WeeksBack(request.getParameter("endDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
         String fieldsOnly = request.getParameter("fieldsOnly");
         String dealerId = request.getParameter("dealerMapId");

@@ -188,7 +188,7 @@ public class AdwordsService {
                     "Conversions", "SearchImpressionShare", "AveragePosition",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
-        }  else if (aggregation.isEmpty()) {
+        } else if (aggregation.isEmpty()) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks",
                     "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
@@ -275,28 +275,28 @@ public class AdwordsService {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "Week", "CampaignName",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.equalsIgnoreCase("daily")) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "Date", "CampaignName",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "DayOfWeek", "CampaignName",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle", "Campaign",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "CampaignName",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         }
@@ -371,28 +371,28 @@ public class AdwordsService {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "Week", "CampaignName", "Device",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.equalsIgnoreCase("daily")) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "Date", "CampaignName", "Device",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "DayOfWeek", "CampaignName", "Device",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle", "Campaign",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "CampaignName", "Device",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         }
@@ -467,28 +467,28 @@ public class AdwordsService {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "Week", "Device",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.equalsIgnoreCase("daily")) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "Date", "Device",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else if (aggregation.equalsIgnoreCase("dayOfWeek")) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "DayOfWeek", "Device",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle", "Campaign",
+                    "Conversions", "Campaign",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks", "Device",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
-                    "Conversions", "VideoTitle",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         }
@@ -587,11 +587,18 @@ public class AdwordsService {
                     "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
-        } else {
+        } else if (aggregation.equalsIgnoreCase("videoTab")) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
                     "Conversions", "VideoTitle",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         }
@@ -1068,7 +1075,7 @@ public class AdwordsService {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                "Impressions", "Clicks", "Date",
+                "Impressions", "Clicks",
                 "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
                 "Conversions", "SearchImpressionShare", "AveragePosition",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate", "HourOfDay"
@@ -1139,7 +1146,7 @@ public class AdwordsService {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                "Impressions", "Clicks", "Date",
+                "Impressions", "Clicks", "DayOfWeek",
                 "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
                 "Conversions", "SearchImpressionShare", "AveragePosition",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"

@@ -5,6 +5,8 @@
  */
 package com.visumbu.api.dashboard.bean;
 
+import com.visumbu.api.utils.ApiUtils;
+
 /**
  *
  * @author user

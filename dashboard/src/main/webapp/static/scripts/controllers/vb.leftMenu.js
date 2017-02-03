@@ -44,14 +44,15 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
 
     $http.get('admin/ui/product/' + $stateParams.dealerId).success(function (response) {
         $scope.products = response;
-        $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
+        $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
         $scope.selectProductName = $scope.name.productName;
     });
 
     $rootScope.$on('dealerChange', function (event, args) {
         $http.get('admin/ui/product/' + $stateParams.dealerId).success(function (response) {
             $scope.products = response;
-            $scope.name = $filter('filter')($scope.products, {id: $stateParams.dashboardId})[0];
+            $stateParams.productId = response[0].id;
+            $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
             $scope.selectProductName = $scope.name.productName;
         });
     });

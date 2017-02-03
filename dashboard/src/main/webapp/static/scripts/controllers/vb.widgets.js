@@ -5,11 +5,17 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService, $sce) {
     $scope.permission = localStorageService.get("permission");
     //$scope.widget = {isSpecial: 1}
+    $scope.addToPdf = function(data) {
+        // alert("TTTTT");
+        console.log("Adding to pdf");
+        console.log(data);
+    }
     $scope.selectAggregations = [
         {name: 'None', value: ""},
         {name: 'Sum', value: "sum"},
         {name: 'CTR', value: "ctr"},
         {name: 'CPC', value: "cpc"},
+        {name: 'CPS', value: "cps"},
         {name: 'CPA', value: "cpa"},
         {name: 'Avg', value: "avg"},
         {name: 'Count', value: "count"},
@@ -396,7 +402,6 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             dynamicTableUrl: '@',
             widgetId: '@',
             widgetColumns: '@',
-            setTableFn: '&',
             tableFooter: '@',
             widgetObj: '@',
             widgetDateDuration: '@',
@@ -446,7 +451,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '<td ng-if="groupingName">{{ showTotal() }}</td>' +
                 //'<td ng-repeat="col in columns" class="col.alignment[groupingData]">{{format(col, groupingData[col.fieldName])}}</td>' +
                 '<td ng-repeat="col in columns" ng-if="col.columnHide == null">' +
-                '<div ng-if="totalShown == 1" class="text-{{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</div>' +
+                '<div ng-if="totalShown == 1" class="text-{{col.alignment}}"><span ng-bind-html="format(col, groupingData[col.fieldName])"></span></div>' +
                 '<div ng-if="totalShown != 1" class="text-{{col.alignment}}">{{ showTotal() }}</div>' +
                 '</td>' +
                 '</tr>' +
@@ -454,6 +459,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '</table>' + '<div class="text-center" ng-show="hideEmptyTable">{{tableEmptyMessage}}</div>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
+//            scope.pdfFunction({test:"Test"});
             scope.totalShown = 0;
             scope.displayFooter = scope.tableFooter;
             scope.loadingTable = true;
@@ -565,17 +571,15 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
             $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId + "&dateDuration=" + scope.widgetDateDuration + "&frequencyDuration=" + scope.widgetFrequencyDuration + "&customRange=" + scope.customRange).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
-
-                if (!response.data) {
-                    return;
-                }
-
+                var pdfData = {};
                 if (response.data.length === 0) {
                     scope.tableEmptyMessage = "No Data Found";
                     scope.hideEmptyTable = true;
+                    pdfData[scope.widgetId] = "No Data Found";
                 } else {
                     var responseData = response.data;
                     scope.orignalData = response.data;
+                    pdfData[scope.widgetId] = scope.orignalData;
                     responseData = scope.orderData(responseData, sortFields);
                     var widgetData = JSON.parse(scope.widgetObj);
                     if (widgetData.maxRecord > 0) {
@@ -597,6 +601,9 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
 //                    scope.groupingData = $sce.trustAsHtml(dataToPush);
                     }
                 }
+                //alert("CAlling");
+                console.log(pdfData);
+                scope.pdfFunction({test:pdfData});
             });
 
             scope.initData = function (col) {
@@ -682,13 +689,14 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 {name: 'ctr', field1: 'clicks', field2: 'impressions'},
                 {name: 'cpa', field1: 'cost', field2: 'conversions'},
                 {name: 'cpc', field1: 'cost', field2: 'clicks'},
-                {name: 'cpr', field1: 'cost', field2: 'reactions'},
-                {name: 'ctl', field1: 'cost', field2: 'likes'},
-                {name: 'cplc', field1: 'cost', field2: 'link_clicks'},
-                {name: 'cpcomment', field1: 'cost', field2: 'comments'},
-                {name: 'cposte', field1: 'cost', field2: 'post_engagements'},
-                {name: 'cpagee', field1: 'cost', field2: 'page_engagements'},
-                {name: 'cpp', field1: 'cost', field2: 'posts'},
+                {name: 'cps', field1: 'spend', field2: 'clicks'},
+                {name: 'cpr', field1: 'spend', field2: 'actions_post_reaction'},
+                {name: 'ctl', field1: 'spend', field2: 'actions_like'},
+                {name: 'cplc', field1: 'spend', field2: 'actions_link_click'},
+                {name: 'cpcomment', field1: 'spend', field2: 'actions_comment'},
+                {name: 'cposte', field1: 'spend', field2: 'actions_post_engagement'},
+                {name: 'cpagee', field1: 'spend', field2: 'actions_page_engagement'},
+                {name: 'cpp', field1: 'spend', field2: 'actions_post'},
             ];
 
             function aggregate(list, aggreationList) {
@@ -724,6 +732,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 });
                 return returnValue;
             }
+            
             scope.orderData = function (list, fieldnames) {
                 if (fieldnames.length == 0) {
                     return list;
@@ -980,7 +989,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
                         return "-";
                     }
                     if (column.displayFormat.indexOf("%") > -1) {
-                        return d3.format(column.displayFormat)(value / 100);
+                        // return d3.format(column.displayFormat)(value / 100);
                     }
                     return d3.format(column.displayFormat)(value);
                 }
@@ -1063,7 +1072,7 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
                         if (format.indexOf("%") > -1) {
-                            return d3.format(format)(value / 100);
+                            //return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
                     };
@@ -1219,7 +1228,7 @@ app.directive('barChartDirective', function ($http, $stateParams) {
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
                         if (format.indexOf("%") > -1) {
-                            return d3.format(format)(value / 100);
+                            //return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
                     };
@@ -1367,7 +1376,7 @@ app.directive('pieChartDirective', function ($http, $stateParams) {
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
                         if (format.indexOf("%") > -1) {
-                            return d3.format(format)(value / 100);
+                            //return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
                     };
@@ -1527,7 +1536,7 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
                     var displayName = value.displayName;
                     labels["format"][displayName] = function (value) {
                         if (format.indexOf("%") > -1) {
-                            return d3.format(format)(value / 100);
+                            //return d3.format(format)(value / 100);
                         }
                         return d3.format(format)(value);
                     };
@@ -1643,7 +1652,7 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
             return function (input, formatString) {
                 if (formatString) {
                     if (formatString.indexOf("%") > -1) {
-                        return d3.format(formatString)(input / 100);
+                        //return d3.format(formatString)(input / 100);
                     }
                     return d3.format(formatString)(input);
                 }

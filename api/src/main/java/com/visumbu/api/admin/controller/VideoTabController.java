@@ -128,7 +128,7 @@ public class VideoTabController {
             List<VideoPerformanceReportBean> performanceReportBeans = new ArrayList<>();
             AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "youtube");
             if (accountDetails.getAdwordsAccountId() != null) {
-                VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "YOUTUBE_WATCH");
+                VideoReport adwordsVideoReport = adwordsService.getVideoReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "videoTab", "YOUTUBE_WATCH");
                 List<VideoReportRow> adwordsVideoRow = adwordsVideoReport.getVideoReportRow();
                 for (Iterator<VideoReportRow> reportRow = adwordsVideoRow.iterator(); reportRow.hasNext();) {
                     VideoReportRow row = reportRow.next();

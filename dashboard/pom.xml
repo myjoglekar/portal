@@ -301,14 +301,25 @@
             <artifactId>commons-email</artifactId>
             <version>1.4</version>
         </dependency>
-        <!-- TEST IF REQUIRED -->
-        <!-- https://mvnrepository.com/artifact/com.restfb/restfb -->
+        <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
 <!--        <dependency>
-            <groupId>com.microsoft.bingads</groupId>
-            <artifactId>microsoft.bingads</artifactId>
-            <version>10.4.10</version>
-        </dependency> -->
-        
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+         https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-core 
+        <dependency>
+            <groupId>net.sourceforge.dynamicreports</groupId>
+            <artifactId>dynamicreports-core</artifactId>
+            <version>5.0.0</version>
+        </dependency>-->
+<!--         https://mvnrepository.com/artifact/org.apache.poi/poi 
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.12</version>
+        </dependency>-->
+
     </dependencies>
 
     <build>

@@ -101,7 +101,7 @@
         font-size: 12px
             /*fill: black;*/
     }
-    
+
 
 </style>
 <div class="add-widget">
@@ -110,7 +110,7 @@
             <a class="refresh" ng-click="pageRefresh()"><i class="fa fa-repeat"></i> Refresh Data</a>
         </div>
         <div ng-if="permission.allowCreateWidget == true" class="btn-group dropdown">
-        <!--<div class="btn-group dropdown">-->
+            <!--<div class="btn-group dropdown">-->
             <a class="dropdown-toggle" type="button" data-toggle="dropdown">
                 <button type="button" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Add Widget</button>
             </a>
@@ -133,17 +133,18 @@
     </div>
 </div>
 <div>    
-<!--        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-            <span></span> <b class="caret"></b>
-        </div>-->
+    <!--        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                <span></span> <b class="caret"></b>
+            </div>-->
     <div ng-repeat="widget in widgets">
 
         <div ng-if="widget.chartType == 'ticker'">
             <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data, $event)">
                 <div class="box-body chart-responsive" ng-drag="true" ng-drag-data="widget">
                     <div class="box-tools pull-right hover-delete">
-                        <button  type="button" ng-if="permission.allowCreateWidget == true" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                        <!--<button  type="button" ng-if="permission.allowCreateWidget == true" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>-->
+                        <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                         </button>
                         <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                         <div id="delete{{widget.id}}" class="modal">
@@ -183,10 +184,10 @@
                             </button>
                             <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
-<!--                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                            </button>-->
+                            <!--                            <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                                                        </button>-->
                             <!--<button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>-->
-                                                        <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                            <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                             <div id="delete{{widget.id}}" class="modal">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -207,12 +208,12 @@
                         </div>
                     </div>
 
-                <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">{{lineEmptyMessage}}
-                    <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" 
-                         widget-Date-Duration="{{widget.dateDuration}}" 
+                    <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">{{lineEmptyMessage}}
+                        <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" 
+                             widget-Date-Duration="{{widget.dateDuration}}" 
                              widget-Frequency-Duration="{{widget.frequencyDuration}}" 
                              widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                            widget-Columns="{{widget.columns}}">                                 
+                             widget-Columns="{{widget.columns}}">                                 
                         </div>
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
@@ -220,7 +221,7 @@
                              widget-Date-Duration="{{widget.dateDuration}}" 
                              widget-Frequency-Duration="{{widget.frequencyDuration}}" 
                              widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                            widget-Columns="{{widget.columns}}">                                 
+                             widget-Columns="{{widget.columns}}">                                 
                         </div>
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
@@ -229,7 +230,7 @@
                              widget-Date-Duration="{{widget.dateDuration}}" 
                              widget-Frequency-Duration="{{widget.frequencyDuration}}" 
                              widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                            widget-Columns="{{widget.columns}}">                                 
+                             widget-Columns="{{widget.columns}}">                                 
                         </div>
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
@@ -237,26 +238,27 @@
                              widget-Date-Duration="{{widget.dateDuration}}" 
                              widget-Frequency-Duration="{{widget.frequencyDuration}}" 
                              widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                            widget-Columns="{{widget.columns}}">                                 
+                             widget-Columns="{{widget.columns}}">                                 
                         </div>
                     </div> 
                     <div class="box-body full-height" ng-if="widget.chartType === 'table'" adjust-height>
                         <div id="changes-height" class="table-responsive">
-                            <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" 
-                                 
-                                 set-Table-Chart-Fn="setTableFn(tableChartFn)"
-                                 
-                                 widget-Date-Duration="{{widget.dateDuration}}" 
-                                 widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                 widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                                 widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" 
-                                widget-Columns="{{widget.columns}}">                                     
-                            </div> 
-                        </div>
-                    </div> 
-                </div>
-            </div>            
-        </div> 
+                            <div id="changes-height" class="table-responsive">
+                                <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" 
+                                     set-Table-Chart-Fn="setTableFn(tableChartFn)"
+                                     widget-Date-Duration="{{widget.dateDuration}}" 
+                                     widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                     widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                                     widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" 
+                                     widget-Columns="{{widget.columns}}">                                     
+                                </div> 
+                            </div>
+                        </div> 
+                        <!--<div dynamic-Table pdf-function="addToPdf(test)" dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" widget-Columns="{{widget.columns}}"></div>--> 
+                    </div>
+                </div> 
+            </div>
+        </div>            
 
         <div id="preview{{widget.id}}" class="modal fade">
             <div class="modal-dialog modal-lg">
@@ -282,7 +284,7 @@
                                             <input type="text" class="form-control" ng-model="widget.previewTitle">
                                         </div> 
                                     </div>
-                                    
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Date Duration</label>
@@ -294,7 +296,7 @@
                                                             <a role="menuitem" tabindex="-1">
                                                                 <span ng-if="widget.dateDuration == selectDateDuration.duration" class="glyphicon glyphicon-ok"></span>
                                                                 <!--<div class="col-sm-8">-->
-                                                                    {{selectDateDuration.duration}}
+                                                                {{selectDateDuration.duration}}
                                                                 <!--</div>-->
                                                                 <div ng-if="selectDateDuration.value == '' && selectType == true;">
                                                                     <input type="text" ng-model="selectDateDuration.frequencyDuration" class="form-control">
@@ -514,7 +516,7 @@
                                          ticker-Id="{{widget.id}}" ticker-Columns="{{previewColumn.columns}}" 
                                          widget-Date-Duration="{{widget.dateDuration}}" 
                                          widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                        widget-Custom-Range="{{widget.customRange}}">                                             
+                                         widget-Custom-Range="{{widget.customRange}}">                                             
                                     </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
@@ -524,7 +526,7 @@
                                          widget-Frequency-Duration="{{widget.frequencyDuration}}" 
                                          widget-Custom-Range="{{widget.customRange}}" 
                                          line-Chart-Directive 
-                                        style="min-height:{{widget.minHeight}}">                                             
+                                         style="min-height:{{widget.minHeight}}">                                             
                                     </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
@@ -533,7 +535,7 @@
                                          area-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
                                          widget-Frequency-Duration="{{widget.frequencyDuration}}" 
                                          widget-Custom-Range="{{widget.customRange}}" 
-                                        style="min-height:{{widget.minHeight}}">
+                                         style="min-height:{{widget.minHeight}}">
                                     </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
@@ -542,7 +544,7 @@
                                          bar-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
                                          widget-Frequency-Duration="{{widget.frequencyDuration}}" 
                                          widget-Custom-Range="{{widget.customRange}}" 
-                                        style="min-height:{{widget.minHeight}}">                                             
+                                         style="min-height:{{widget.minHeight}}">                                             
                                     </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
@@ -551,7 +553,7 @@
                                          pie-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
                                          widget-Frequency-Duration="{{widget.frequencyDuration}}" 
                                          widget-Custom-Range="{{widget.customRange}}" 
-                                        style="min-height:{{widget.minHeight}}">
+                                         style="min-height:{{widget.minHeight}}">
                                     </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
@@ -560,7 +562,7 @@
                                          widget-Columns="{{previewColumn.columns}}" 
                                          widget-Date-Duration="{{widget.dateDuration}}" 
                                          widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                        widget-Custom-Range="{{widget.customRange}}">
+                                         widget-Custom-Range="{{widget.customRange}}">
                                     </div>
                                 </div> 
                             </div>

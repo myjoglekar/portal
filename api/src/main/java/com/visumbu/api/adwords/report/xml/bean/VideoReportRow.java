@@ -56,7 +56,7 @@ public class VideoReportRow {
     }
 
     public String getViewRate() {
-        return viewRate.replaceAll("%", "");
+        return ApiUtils.removePercent(viewRate);
     }
 
     @XmlAttribute
@@ -74,7 +74,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo100() {
-        return videoPlayedTo100.replaceAll("%", "");
+        return ApiUtils.removePercent(videoPlayedTo100);
     }
 
     @XmlAttribute
@@ -83,7 +83,8 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo25() {
-        return videoPlayedTo25.replaceAll("%", "");
+        return ApiUtils.removePercent(videoPlayedTo25);
+        
     }
 
     @XmlAttribute
@@ -92,7 +93,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo50() {
-        return videoPlayedTo50.replaceAll("%", "");
+        return ApiUtils.removePercent(videoPlayedTo50);
     }
 
     @XmlAttribute
@@ -101,7 +102,7 @@ public class VideoReportRow {
     }
 
     public String getVideoPlayedTo75() {
-        return videoPlayedTo75.replaceAll("%", "");
+        return ApiUtils.removePercent(videoPlayedTo75);
     }
 
     @XmlAttribute

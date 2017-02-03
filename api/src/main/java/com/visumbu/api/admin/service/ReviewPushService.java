@@ -148,6 +148,9 @@ public class ReviewPushService {
                 dataMap.putAll(getDataAsMap((JSONObject) dataArr1.get("attributes")));
                 dataMap.putAll(getDataAsMap((JSONObject) ((JSONObject) dataArr1.get("attributes")).get("site"), "site_"));
                 dataMap.putAll(getDataAsMap((JSONObject) ((JSONObject) dataArr1.get("attributes")).get("aggregate")));
+                if(((String)dataMap.get("site_name")).equalsIgnoreCase("ReviewPush")){
+                    dataMap.put("site_name", "Private Reviews");
+                }
                 returnAll.add(dataMap);
             }
             return returnAll;
