@@ -435,7 +435,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '<td ng-if="groupingName">{{ showTotal() }}</td>' +
                 //'<td ng-repeat="col in columns" class="col.alignment[groupingData]">{{format(col, groupingData[col.fieldName])}}</td>' +
                 '<td ng-repeat="col in columns" ng-if="col.columnHide == null">' +
-                '<div ng-if="totalShown == 1" class="text-{{col.alignment}}">{{format(col, groupingData[col.fieldName])}}</div>' +
+                '<div ng-if="totalShown == 1" class="text-{{col.alignment}}"><span ng-bind-html="format(col, groupingData[col.fieldName])"></span></div>' +
                 '<div ng-if="totalShown != 1" class="text-{{col.alignment}}">{{ showTotal() }}</div>' +
                 '</td>' +
                 '</tr>' +
@@ -679,8 +679,8 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 {name: 'ctl', field1: 'spend', field2: 'actions_like'},
                 {name: 'cplc', field1: 'spend', field2: 'actions_link_click'},
                 {name: 'cpcomment', field1: 'spend', field2: 'actions_comment'},
-                {name: 'cposte', field1: 'spend', field2: 'cost_post_engagement'},
-                {name: 'cpagee', field1: 'spend', field2: 'cost_page_engagement'},
+                {name: 'cposte', field1: 'spend', field2: 'actions_post_engagement'},
+                {name: 'cpagee', field1: 'spend', field2: 'actions_page_engagement'},
                 {name: 'cpp', field1: 'spend', field2: 'actions_post'},
             ];
 
