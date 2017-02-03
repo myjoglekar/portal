@@ -28,13 +28,13 @@ public class ApiUtils {
 
     public static String getPaidAdDescription(AdPerformanceReportBean reportBean) {
         String adDescription = "";
-        adDescription = reportBean.getDescription() + "<br/>"
-                + ((reportBean.getDescription1() == null || reportBean.getDescription1().isEmpty()) ? "" : (reportBean.getDescription1() + "<br/>"))
+        adDescription = reportBean.getDescription().replaceAll("’", "'") + "<br/>"
+                + ((reportBean.getDescription1() == null || reportBean.getDescription1().isEmpty()) ? "" : (reportBean.getDescription1().replaceAll("’", "'") + "<br/>"))
                 + ((reportBean.getDisplayUrl() == null || reportBean.getDisplayUrl().isEmpty()) ? "" : (reportBean.getDisplayUrl() + "<br/>"));
         if (reportBean.getDescription() == null || reportBean.getDescription().isEmpty() || reportBean.getDescription().equalsIgnoreCase("--")) {
             adDescription
-                    = ((reportBean.getDescription1() == null || reportBean.getDescription1().isEmpty()) ? "" : (reportBean.getDescription1() + "<br/>"))
-                    + ((reportBean.getDescription2() == null || reportBean.getDescription2().isEmpty()) ? "" : (reportBean.getDescription2() + "<br/>"));
+                    = ((reportBean.getDescription1() == null || reportBean.getDescription1().isEmpty()) ? "" : (reportBean.getDescription1().replaceAll("’", "'") + "<br/>"))
+                    + ((reportBean.getDescription2() == null || reportBean.getDescription2().isEmpty()) ? "" : (reportBean.getDescription2().replaceAll("’", "'") + "<br/>"));
         }
         return adDescription;
     }
@@ -75,9 +75,7 @@ public class ApiUtils {
         return "Unknown";
     }
 
-    public static void main(String[] argv) {
-        System.out.println(toGaAccountId("5360684369"));
-    }
+   
 
     public static String toGaAccountId(String ppcBingAccountId) {
         return ppcBingAccountId.substring(0, 3) + "-" + ppcBingAccountId.substring(3, 6) + "-" + ppcBingAccountId.substring(6);
@@ -185,4 +183,15 @@ public class ApiUtils {
         return data;
     }
 
+    public static String toMins(String seconds) {
+        Double secondsInt = toDouble(seconds);
+        Double minsInt = secondsInt/60;
+        secondsInt = secondsInt%60;
+        return String.format("%02d", minsInt.intValue()) + ":" + String.format("%02d", secondsInt.intValue());
+    }
+
+     public static void main(String[] argv) {
+        System.out.println(toMins("7468"));
+    }
+    
 }

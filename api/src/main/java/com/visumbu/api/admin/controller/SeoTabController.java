@@ -142,6 +142,7 @@ public class SeoTabController {
 
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
+                map.put("avgTimeOnPage", ApiUtils.toMins(map.get("avgTimeOnPage")));
                 map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
                 map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
                 map.put("channelGrouping", map.get("ga:channelGrouping"));
