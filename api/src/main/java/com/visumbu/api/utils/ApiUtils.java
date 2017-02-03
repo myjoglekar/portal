@@ -21,7 +21,7 @@ public class ApiUtils {
 
     public static String getDisplayAdDescription(AdPerformanceReportBean reportBean) {
         String adDescription = "";
-        adDescription = reportBean.getHeadline() + "<br/>"
+        adDescription = reportBean.getHeadline().replaceAll("’", "'") + "<br/>"
                 + ((reportBean.getCreativeFinalUrls() == null || reportBean.getCreativeFinalUrls().isEmpty()) ? "" : (reportBean.getCreativeFinalUrls() + "<br/>"));
         return adDescription;
     }
