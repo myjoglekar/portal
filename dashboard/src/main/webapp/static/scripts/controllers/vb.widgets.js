@@ -5,7 +5,7 @@
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService, $sce) {
     $scope.permission = localStorageService.get("permission");
     //$scope.widget = {isSpecial: 1}
-    $scope.addToPdf = function(data) {
+    $scope.addToPdf = function (data) {
         // alert("TTTTT");
         console.log("Adding to pdf");
         console.log(data);
@@ -134,14 +134,23 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     };
 
     $scope.selectProductName = function (productName, widget) {
+        console.log(productName)
         if (productName === null) {
             return;
         }
         $http.get("admin/user/datasets").success(function (response) {                //User Based Products and Urls
             $scope.userProducts = [];
+            $http.get('admin/ui/product/' + $stateParams.dealerId).success(function (response) {
+                $scope.products = response;
+            });
+            console.log("Product")
+            $scope.name = $filter('filter')($scope.products, {id: $stateParams.productId})[0];
+            $scope.selectName = $scope.name.productName;
             angular.forEach(response, function (value, key) {
-                $scope.userProducts.push(key);
-            })
+                if ($scope.selectName == key) {
+                    $scope.userProducts.push(key);
+                }
+            });
             $scope.productFields = response[productName];
         });
 
@@ -371,6 +380,17 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     function splitCamelCase(s) {
         return s.split(/(?=[A-Z])/).join(' ');
     }
+    
+    function makeUnselectable(node) {
+    if (node.nodeType == 1) {
+        node.setAttribute("unselectable", "on");
+    }
+    var child = node.firstChild;
+    while (child) {
+        makeUnselectable(child);
+        child = child.nextSibling;
+    }
+}
 });
 
 app.directive('dateRangePicker', function () {
@@ -424,7 +444,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '<td class="group-bg" ng-if="groupingName">' +
                 '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; hideParent(grouping, grouping.$hideRows); hideChild(grouping.data, false)" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
 //                ' {{grouping._groupField}} : {{grouping._key}}' +
-                ' {{grouping._key}}' +
+                ' <span ng-bind-html="grouping._key"></span>' +
                 '</td>' +
                 '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
 //                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
@@ -435,7 +455,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '<td class="right-group">' +
                 '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows; hideChild(item, item.$hideRows)" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
 //                ' {{item._groupField}} : {{item._key}}</td>' +
-                ' {{item._key}}</td>' +
+                ' <span ng-bind-html="item._key"></span></td>' +
                 '<td style="background-color: #d7dedc" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
                 '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, item[col.fieldName])"></span></div>' + //ng-bind-html-unsafe=todo.text
                 '</td>' +
@@ -459,6 +479,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '</table>' + '<div class="text-center" ng-show="hideEmptyTable">{{tableEmptyMessage}}</div>', //+
         //'<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="static/views/reports/pagination.tpl.html"></dir-pagination-controls>',
         link: function (scope, element, attr) {
+            scope.html = '<p class="text-color">Your html code</p>';
 //            scope.pdfFunction({test:"Test"});
             scope.totalShown = 0;
             scope.displayFooter = scope.tableFooter;
@@ -568,9 +589,14 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 }
             }
             var fullAggreagtionList = aggreagtionList;
-            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId + "&dateDuration=" + scope.widgetDateDuration + "&frequencyDuration=" + scope.widgetFrequencyDuration + "&customRange=" + scope.customRange).success(function (response) {
+            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
+//            $http.get("admin/proxy/getJson?url=" + scope.dynamicTableUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId + "&dateDuration=" + scope.widgetDateDuration + "&frequencyDuration=" + scope.widgetFrequencyDuration + "&customRange=" + scope.customRange).success(function (response) {
+
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
+                if (!response.data) {
+                    return;
+                }
                 var pdfData = {};
                 if (response.data.length === 0) {
                     scope.tableEmptyMessage = "No Data Found";
@@ -603,7 +629,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 }
                 //alert("CAlling");
                 console.log(pdfData);
-                scope.pdfFunction({test:pdfData});
+                // scope.pdfFunction({test: pdfData});
             });
 
             scope.initData = function (col) {
@@ -732,7 +758,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 });
                 return returnValue;
             }
-            
+
             scope.orderData = function (list, fieldnames) {
                 if (fieldnames.length == 0) {
                     return list;
@@ -1690,11 +1716,19 @@ app.directive('areaChartDirective', function ($http, $stateParams) {
 //                });
 //            };
 //        })
-//        .filter('to_trusted', ['$sce', function ($sce) {
-//                return function (text) {
-//                    return $sce.trustAsHtml(text);
-//                };
-//            }]);
+app.filter('to_trusted', ['$sce', function ($sce) {
+        return function (text) {
+            var filterData;
+            if (angular.isNumber(text)) {
+                filterData = $sce.trustAsHtml(text).toString();
+                alert("Integer : " + filterData)
+            } else {
+                filterData = $sce.trustAsHtml(text);
+                alert("String : " + filterData)
+            }
+            return filterData;
+        };
+    }]);
 
 app.service('stats', function ($filter) {
     var coreAccumulate = function (aggregation, value) {
