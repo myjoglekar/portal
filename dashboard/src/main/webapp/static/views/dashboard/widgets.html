@@ -282,26 +282,26 @@
                             </div>
                             <div class="box-body popup-head">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Widget Title</label>
                                             <input type="text" class="form-control" ng-model="widget.previewTitle">
                                         </div> 
                                     </div>
 
-                                    <div class="col-md-6">
+<!--                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Date Duration</label>
                                             <ul class="nav" role="navigation">
                                                 <li class="dropdown"> <a id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">{{widget.dateDuration}}<b class="caret"></b></a>
                                                     <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
                                                         <li ng-repeat="selectDateDuration in selectDateDurations" role="presentation" ng-click="dateDuration(widget, selectDateDuration)">
-                                                            <!--<input class="checkbox" type="checkbox" ng-model="selectType" ng-checked="widget.dateDuration == 1"/>-->
+                                                            <input class="checkbox" type="checkbox" ng-model="selectType" ng-checked="widget.dateDuration == 1"/>
                                                             <a role="menuitem" tabindex="-1">
                                                                 <span ng-if="widget.dateDuration == selectDateDuration.duration" class="glyphicon glyphicon-ok"></span>
-                                                                <!--<div class="col-sm-8">-->
+                                                                <div class="col-sm-8">
                                                                 {{selectDateDuration.duration}}
-                                                                <!--</div>-->
+                                                                </div>
                                                                 <div ng-if="selectDateDuration.value == '' && selectType == true;">
                                                                     <input type="text" ng-model="selectDateDuration.frequencyDuration" class="form-control">
                                                                 </div>
@@ -313,9 +313,9 @@
                                                     </ul>
                                                 </li>
                                             </ul>
-                                            <!--<select class="form-control" ng-model="widget.durations" ng-options="selectDateDuration.duration for selectDateDuration in selectDateDurations"></select>-->
+                                            <select class="form-control" ng-model="widget.durations" ng-options="selectDateDuration.duration for selectDateDuration in selectDateDurations"></select>
                                         </div> 
-                                    </div>
+                                    </div>-->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Product</label>
