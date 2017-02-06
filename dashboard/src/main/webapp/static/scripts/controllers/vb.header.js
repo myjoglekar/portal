@@ -23,6 +23,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         console.log(dealer);
         $stateParams.dealerId = dealer.id;
         $rootScope.$emit('dealerChange', {dealerId: dealer.id});
+        //$stateParams.tabId = "";
     };
 
     $scope.toDate = function (strDate) {
@@ -79,7 +80,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         } else {
             $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
         }
-    }
+    };
 
 
     $scope.loadNewUrl = function () {

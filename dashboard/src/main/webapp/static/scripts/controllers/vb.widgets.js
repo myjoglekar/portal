@@ -380,17 +380,17 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     function splitCamelCase(s) {
         return s.split(/(?=[A-Z])/).join(' ');
     }
-    
+
     function makeUnselectable(node) {
-    if (node.nodeType == 1) {
-        node.setAttribute("unselectable", "on");
+        if (node.nodeType == 1) {
+            node.setAttribute("unselectable", "on");
+        }
+        var child = node.firstChild;
+        while (child) {
+            makeUnselectable(child);
+            child = child.nextSibling;
+        }
     }
-    var child = node.firstChild;
-    while (child) {
-        makeUnselectable(child);
-        child = child.nextSibling;
-    }
-}
 });
 
 app.directive('dateRangePicker', function () {
@@ -443,24 +443,24 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 '<tr ng-if="!isZeroRow(grouping, columns)" class="text-capitalize text-info info">' +
                 '<td class="group-bg" ng-if="groupingName">' +
                 '<i style="cursor: pointer" class="fa" ng-click="grouping.$hideRows = !grouping.$hideRows; hideParent(grouping, grouping.$hideRows); hideChild(grouping.data, false)" ng-class="{\'fa-plus-circle\': !grouping.$hideRows, \'fa-minus-circle\': grouping.$hideRows}"></i>' +
-//                ' {{grouping._groupField}} : {{grouping._key}}' +
+                //                ' {{grouping._groupField}} : {{grouping._key}}' +
                 ' <span ng-bind-html="grouping._key"></span>' +
                 '</td>' +
                 '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
-//                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
+                //                    '<div><span style="float: {{col.alignment}}">{{format(col, grouping[col.fieldName])}}</span></div>' +
                 '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, grouping[col.fieldName])"></span></div>' +
                 '</td>' +
                 '</tr>' +
                 '<tr ng-if="!isZeroRow(item, columns)" ng-show="grouping.$hideRows" ng-repeat-start="item in grouping.data" class="text-capitalize text-info info">' +
                 '<td class="right-group">' +
-                '<i ng-if="item._groupField" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows; hideChild(item, item.$hideRows)" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
-//                ' {{item._groupField}} : {{item._key}}</td>' +
+                '<i ng-if="item._groupField && item.data.length != 1" style="cursor: pointer" class="fa" ng-click="item.$hideRows = !item.$hideRows; hideChild(item, item.$hideRows)" ng-class="{\'fa-plus-circle\': !item.$hideRows, \'fa-minus-circle\': item.$hideRows}"></i>' +
+                //                ' {{item._groupField}} : {{item._key}}</td>' +
                 ' <span ng-bind-html="item._key"></span></td>' +
                 '<td style="background-color: #d7dedc" ng-repeat="col in columns" ng-if="col.columnHide == null">' +
                 '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, item[col.fieldName])"></span></div>' + //ng-bind-html-unsafe=todo.text
                 '</td>' +
                 '</tr>' +
-                '<tr ng-show="item.$hideRows" ng-if="!isZeroRow(childItem, columns)" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
+                '<tr ng-show="item.$hideRows" ng-if="!isZeroRow(childItem, columns) && item.data.length != 1" ng-repeat="childItem in item.data" ng-repeat-end><td></td>' +
                 '<td ng-repeat="col in columns" style="width: {{col.width}}%" ng-if="col.columnHide == null">' +
                 '<div class="text-{{col.alignment}}"><span ng-bind-html="format(col, childItem[col.fieldName])"></span></div>' +
                 '</td>' +
@@ -499,9 +499,10 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 if (!grouping)
                     return;
                 angular.forEach(grouping.data, function (value, key) {
-                    if (!value.data) {
+                    if (hideStatus == false) {
                         value.$hideRows = hideStatus;
                         scope.hideParent(value, hideStatus);
+                        scope.hideParent(value.data, false)
                     }
                     // scope.hideChild(value.data, false)
                     //value.data.$hideRows = true;
@@ -514,18 +515,24 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                     return;
                 angular.forEach(item, function (value, key) {
                     value.$hideRows = hideStatus;
-                    scope.hideChild(value, hideStatus);
+
+                    if (hideStatus == false) {
+                        scope.hideChild(value, hideStatus);
+                    }
                     //value.data.$hideRows = true;
                 });
-            }
+            };
 
             scope.hideAll = function (grouping, hideStatus) {
                 if (!grouping)
                     return;
                 angular.forEach(grouping.data, function (value, key) {
                     value.$hideRows = hideStatus;
-                    if (hideStatus == false || deepExpand == true) {
+//                    if (value.data)
+//                        return;
+                    if (hideStatus == false) {
                         scope.hideAll(value, hideStatus);
+                        scope.hideAll(value.data, false)
                     }
                 });
             };

@@ -25,7 +25,7 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
 //        $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
 //            $stateParams.tabId = response[0].id;
 //        });
-       // $stateParams.tabId = "";
+        //$stateParams.tabId = "";
     };
 
     $scope.reports = [];

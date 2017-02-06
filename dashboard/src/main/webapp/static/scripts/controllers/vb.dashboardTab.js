@@ -80,7 +80,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         }
         //$scope.startId = response[0].id ? response[0].id : 0;
         //$rootScope.$emit('dealerTabId', {tabId: response[0].id});
-//        $scope.paramsTabId = $stateParams.tabId ? $stateParams.tabId : response[0].id;
+        $scope.paramsTabId = $stateParams.tabId ? $stateParams.tabId : response[0].id;
         $state.go("index.dashboard.widget", {dealerId: $stateParams.dealerId, tabId: response[0].id, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
     });
 
