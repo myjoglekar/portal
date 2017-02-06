@@ -139,17 +139,27 @@ public class DynamicDisplayTabController {
         if (fieldsOnly != null) {
             return map;
         }
+        System.out.println("DATA FROM DD");
+        System.out.println(map);
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "dynamicDisplay");
         System.out.println("SEO GA Profile Id " + accountDetails.getAnalyticsProfileId());
         if (accountDetails.getAnalyticsProfileId() != null) {
-            GetReportsResponse gaData = gaService.getDynamicDisplayGoals(accountDetails.getAnalyticsProfileId(), startDate, endDate, "");
+            GetReportsResponse gaData = gaService.getDynamicDisplayGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId(), startDate, endDate, "");
             List gaDataMap = (List) gaService.getResponseAsMap(gaData).get("data");
             System.out.println("GA DATA ---> ");
             System.out.println(gaDataMap);
             if (gaDataMap != null) {
-                List dataList = (List)map.get("data");
-                Map  dataMap = (Map)dataList.get(0);
-                dataMap.putAll((Map) gaDataMap.get(0));
+                List dataList = (List) map.get("data");
+                Map dataMap;
+                if (dataList == null || dataList.isEmpty()) {
+                    dataMap = new HashMap();
+                    dataList.add(dataMap);
+                } else {
+                    dataMap = (Map) dataList.get(0);
+                }
+                if (gaDataMap != null && !gaDataMap.isEmpty()) {
+                    dataMap.putAll((Map) gaDataMap.get(0));
+                }
             }
         }
         return map;
