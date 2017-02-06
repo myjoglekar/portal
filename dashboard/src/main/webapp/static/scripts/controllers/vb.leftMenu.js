@@ -14,18 +14,18 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
 
 
     $scope.setParamsDate = function (product) {
-
-
         console.log("TabId : ")
         console.log($stateParams.tabId)
-
-
         console.log(product.id)
         console.log(product)
-        $stateParams.productId = product.id
+        $stateParams.productId = product.id;
         $scope.startDate = $stateParams.startDate;
         $scope.endDate = $stateParams.endDate;
         $scope.dealerId = $stateParams.dealerId;
+//        $http.get("admin/ui/dbTabs/" + $stateParams.productId).success(function (response) {
+//            $stateParams.tabId = response[0].id;
+//        });
+        //$stateParams.tabId = "";
     };
 
     $scope.reports = [];
@@ -59,17 +59,12 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
 
 
     $scope.loadNewUrl = function () {
-        console.log("ProductId : ")
-        console.log($stateParams.productId)
         try {
             $scope.startDate = moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').startDate).format('MM/DD/YYYY') : $scope.firstDate;//$scope.startDate.setDate($scope.startDate.getDate() - 1);
 
             $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $scope.lastDate;
         } catch (e) {
         }
-        console.log($stateParams);
-        console.log($scope.getCurrentTab());
-        console.log($scope.getCurrentPage());
         if ($scope.getCurrentPage() === "dashboard") {
             $state.go("index.dashboard." + $scope.getCurrentTab(), {dealerId: $stateParams.dealerId, productId: $stateParams.productId, tabId: $stateParams.tabId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else if ($scope.getCurrentPage() === "reports") {
@@ -111,8 +106,4 @@ app.controller("MenuController", function ($scope, $http, $stateParams, $filter,
         }
         return "widget";
     };
-
-
-
-
 });

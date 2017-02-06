@@ -147,6 +147,16 @@ public class TabWidget implements Serializable {
     @Size(max = 255)
     @Column(name = "max_record")
     private Integer maxRecord;
+    
+    
+    @Size(max = 255)
+    @Column(name = "frequency_duration")
+    private String frequencyDuration;
+    @Size(max = 255)
+    @Column(name = "custom_range")
+    private String customRange;
+    
+    
     @Size(max = 255)
     @Column(name = "product_display_name")
     private String productDisplayName;
@@ -443,6 +453,23 @@ public class TabWidget implements Serializable {
     public void setColumns(List<WidgetColumn> columns) {
         this.columns = columns;
     }
+
+    public String getFrequencyDuration() {
+        return frequencyDuration;
+    }
+
+    public void setFrequencyDuration(String frequencyDuration) {
+        this.frequencyDuration = frequencyDuration;
+    }
+
+    public String getCustomRange() {
+        return customRange;
+    }
+
+    public void setCustomRange(String customRange) {
+        this.customRange = customRange;
+    }   
+    
 //
 //    @XmlTransient
 //    @JsonIgnore

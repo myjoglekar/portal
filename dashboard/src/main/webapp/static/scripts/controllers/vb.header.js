@@ -3,6 +3,8 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.fullName = $cookies.getObject("fullname");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
+    
+    console.log($scope.tabId)
 
     //$scope.selectTabID = $state;
 
@@ -21,6 +23,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         console.log(dealer);
         $stateParams.dealerId = dealer.id;
         $rootScope.$emit('dealerChange', {dealerId: dealer.id});
+        //$stateParams.tabId = "";
     };
 
     $scope.toDate = function (strDate) {
@@ -61,7 +64,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
             $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $scope.lastDate;
         } catch (e) {
         }
-        console.log($stateParams);
+        console.log($stateParams.tabId);
         console.log($scope.getCurrentTab());
         console.log($scope.getCurrentPage());
         if ($scope.getCurrentPage() === "dashboard") {
@@ -77,7 +80,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         } else {
             $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
         }
-    }
+    };
 
 
     $scope.loadNewUrl = function () {
@@ -88,7 +91,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
             $scope.endDate = moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') ? moment($('#daterange-btn').data('daterangepicker').endDate).format('MM/DD/YYYY') : $scope.lastDate;
         } catch (e) {
         }
-        console.log($stateParams);
+        console.log($stateParams.tabId);
         console.log($scope.getCurrentTab());
         console.log($scope.getCurrentPage());
         if ($scope.getCurrentPage() === "dashboard") {

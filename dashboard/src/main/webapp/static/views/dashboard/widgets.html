@@ -101,8 +101,21 @@
         font-size: 12px
             /*fill: black;*/
     }
-    
+    .as-sortable-item, .as-sortable-placeholder {
+        display: table-row !important;
+    }
+    *.unselectable {
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
 
+        /*
+          Introduced in IE 10.
+          See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+        */
+        -ms-user-select: none;
+        user-select: none;
+    }
 </style>
 <div class="add-widget">
     <div class="pull-right-container pull-right">
@@ -110,7 +123,7 @@
             <a class="refresh" ng-click="pageRefresh()"><i class="fa fa-repeat"></i> Refresh Data</a>
         </div>
         <div ng-if="permission.allowCreateWidget == true" class="btn-group dropdown">
-        <!--<div class="btn-group dropdown">-->
+            <!--<div class="btn-group dropdown">-->
             <a class="dropdown-toggle" type="button" data-toggle="dropdown">
                 <button type="button" class="btn btn-block btn-info"><i class="fa fa-plus-circle"></i> Add Widget</button>
             </a>
@@ -132,13 +145,8 @@
         </div>
     </div>
 </div>
-<div>    
-<!--        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-            <span></span> <b class="caret"></b>
-        </div>-->
+<div>
     <div ng-repeat="widget in widgets">
-
         <div ng-if="widget.chartType == 'ticker'">
             <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data, $event)">
                 <div class="box-body chart-responsive" ng-drag="true" ng-drag-data="widget">
@@ -181,12 +189,9 @@
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
-<!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                            </button>-->
                             <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
-                            <!--<button type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>-->
-                                                        <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                            <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                             <div id="delete{{widget.id}}" class="modal">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -208,26 +213,56 @@
                     </div>
 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">{{lineEmptyMessage}}
-                        <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
+                        <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" 
+                             widget-Date-Duration="{{widget.dateDuration}}" 
+                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                             widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                             widget-Columns="{{widget.columns}}">                                 
+                        </div>
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
-                        <div bar-Chart-Directive bar-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
+                        <div bar-Chart-Directive bar-Chart-Url="{{widget.directUrl}}" 
+                             widget-Date-Duration="{{widget.dateDuration}}" 
+                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                             widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                             widget-Columns="{{widget.columns}}">                                 
+                        </div>
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
 
-                        <div pie-Chart-Directive pie-Chart-Url='{{widget.directUrl}}' widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
+                        <div pie-Chart-Directive pie-Chart-Url='{{widget.directUrl}}' 
+                             widget-Date-Duration="{{widget.dateDuration}}" 
+                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                             widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                             widget-Columns="{{widget.columns}}">                                 
+                        </div>
                     </div> 
                     <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
-                        <div area-Chart-Directive area-Chart-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Columns="{{widget.columns}}"></div>
+                        <div area-Chart-Directive area-Chart-Url="{{widget.directUrl}}" 
+                             widget-Date-Duration="{{widget.dateDuration}}" 
+                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                             widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                             widget-Columns="{{widget.columns}}">                                 
+                        </div>
                     </div> 
                     <div class="box-body full-height" ng-if="widget.chartType === 'table'" adjust-height>
                         <div id="changes-height" class="table-responsive">
-                            <div dynamic-Table pdf-function="addToPdf(test)" dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" widget-Columns="{{widget.columns}}"></div> 
-                        </div>
-                    </div> 
-                </div>
-            </div>            
-        </div> 
+                            <div id="changes-height" class="table-responsive">
+                                <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" 
+                                     set-Table-Chart-Fn="setTableFn(tableChartFn)"
+                                     widget-Date-Duration="{{widget.dateDuration}}" 
+                                     widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                     widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                                     widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" 
+                                     widget-Columns="{{widget.columns}}">                                     
+                                </div> 
+                            </div>
+                        </div> 
+                        <!--<div dynamic-Table pdf-function="addToPdf(test)" dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" widget-Columns="{{widget.columns}}"></div>--> 
+                    </div>
+                </div> 
+            </div>
+        </div>            
 
         <div id="preview{{widget.id}}" class="modal fade">
             <div class="modal-dialog modal-lg">
@@ -253,28 +288,31 @@
                                             <input type="text" class="form-control" ng-model="widget.previewTitle">
                                         </div> 
                                     </div>
+
 <!--                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Date Durations</label>
+                                            <label>Date Duration</label>
                                             <ul class="nav" role="navigation">
-                                                <li class="dropdown"> <a id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">{{widget.duration}}<b class="caret"></b></a>
-
+                                                <li class="dropdown"> <a id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">{{widget.dateDuration}}<b class="caret"></b></a>
                                                     <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
                                                         <li ng-repeat="selectDateDuration in selectDateDurations" role="presentation" ng-click="dateDuration(widget, selectDateDuration)">
+                                                            <input class="checkbox" type="checkbox" ng-model="selectType" ng-checked="widget.dateDuration == 1"/>
                                                             <a role="menuitem" tabindex="-1">
-                                                                <div class="col-sm-8">{{selectDateDuration.duration}}</div>
-                                                                <div class="col-sm-4" ng-if="selectDateDuration.value == ''"> <input type="text" class="form-control" ng-model="widget.selectedDurations"/></div>
-                                                                <div class="col-sm-4" ng-if="selectDateDuration.value == 'custom'">
-                                                                    
-                                                                    <input date-Range-Picker class="form-control" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+                                                                <span ng-if="widget.dateDuration == selectDateDuration.duration" class="glyphicon glyphicon-ok"></span>
+                                                                <div class="col-sm-8">
+                                                                {{selectDateDuration.duration}}
+                                                                </div>
+                                                                <div ng-if="selectDateDuration.value == '' && selectType == true;">
+                                                                    <input type="text" ng-model="selectDateDuration.frequencyDuration" class="form-control">
+                                                                </div>
+                                                                <div ng-if="selectDateDuration.value == 'custom' && selectType == true;">                                                                    
+                                                                    <input date-Range-Picker class="form-control" ng-model="widget.customRange" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
                                                                 </div>
                                                             </a>
                                                         </li>
                                                     </ul>
                                                 </li>
                                             </ul>
-
-
                                             <select class="form-control" ng-model="widget.durations" ng-options="selectDateDuration.duration for selectDateDuration in selectDateDurations"></select>
                                         </div> 
                                     </div>-->
@@ -356,9 +394,10 @@
                                             <td><button class="btn btn-info" ng-click="addColumns(widget)"><i class="fa fa-plus"></i></button></td>
                                         </tr>
                                     </thead>
-                                    <tbody ui:sortable ng:model="widget.columns">
-                                        <tr ng-repeat="currentColumn in widget.columns" style="cursor: move;">
-                                            <td>
+                                    <!--<tbody ui:sortable ng:model="widget.columns">-->
+                                    <tbody data-as-sortable="" data-ng-model="widget.columns" unselectable="on" class="unselectable">
+                                        <tr ng-repeat="currentColumn in widget.columns" data-as-sortable-item>
+                                            <td data-as-sortable-item-handle>
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayName}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <select ng-model="currentColumn.fieldName" class="form-control" ng-change="dispName(currentColumn)">
@@ -366,13 +405,13 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td ng-if="advanceMenu == true">
+                                            <td data-as-sortable-item-handle ng-if="advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayName}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <input type="text" class="form-control" ng-model="currentColumn.displayName">
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                            <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.agregationFunction}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <!--<input type="text" class="form-control" ng-model="column.agregationFunction">-->
@@ -381,7 +420,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                            <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.groupPriority}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <select ng-model="currentColumn.groupPriority" class="form-control">
@@ -390,7 +429,7 @@
                                                     <!--<input type="text" class="form-control" ng-model="currentColumn.groupPriority">-->
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                            <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.xAxis| xAxis}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <select ng-model="currentColumn.xAxis" class="form-control">
@@ -399,7 +438,7 @@
                                                     <!--<input type="text" class="form-control" ng-model="currentColumn.xAxis">-->
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                            <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.yAxis| yAxis}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <select ng-model="currentColumn.yAxis" class="form-control">
@@ -408,7 +447,7 @@
                                                     <!--<input type="text" class="form-control" ng-model="currentColumn.yAxis">-->
                                                 </div>  
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                            <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.sortOrder}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <!--<input type="text" class="form-control" ng-model="widget.sortOrder">-->
@@ -417,13 +456,13 @@
                                                     </select>
                                                 </div> 
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                            <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayFormat}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <input type="text" class="form-control" ng-model="currentColumn.displayFormat">
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                            <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.alignment}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <select ng-model="currentColumn.alignment" class="form-control">
@@ -431,7 +470,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                            <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
                                                 <div ng-hide="currentColumn.isEdit"> {{currentColumn.columnHide| hideColumn}}</div>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <select ng-model="currentColumn.columnHide" class="form-control">
@@ -453,7 +492,7 @@
                                                                                                 </select>
                                                                                             </div>
                                                                                         </td>-->
-                                            <td>
+                                            <td data-as-sortable-item-handle>
                                                 <div ng-show="currentColumn.isEdit">
                                                     <button class="btn btn-default btn-xs" ng-click="currentColumn.isEdit = false"><i class="fa fa-save"></i></button>
                                                     <!--<button class="btn btn-default btn-xs" ng-click="saveColumn(widget, column); widget.isEdit = false"><i class="fa fa-save"></i></button>-->
@@ -478,28 +517,58 @@
                         <div ng-show="showPreviewChart">
                             <div class="col-md-12">
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'ticker'">
-                                    <div ticker-Directive ticker-Url="{{previewChartUrl}}" ticker-Id="{{widget.id}}" ticker-Columns="{{previewColumn.columns}}"></div>
+                                    <div ticker-Directive ticker-Url="{{previewChartUrl}}" 
+                                         ticker-Id="{{widget.id}}" ticker-Columns="{{previewColumn.columns}}" 
+                                         widget-Date-Duration="{{widget.dateDuration}}" 
+                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                         widget-Custom-Range="{{widget.customRange}}">                                             
+                                    </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
-                                    <div line-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" line-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                    <div line-Chart-Url='{{previewChartUrl}}' 
+                                         widget-Columns="{{previewColumn.columns}}" 
+                                         widget-Date-Duration="{{widget.dateDuration}}" 
+                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                         widget-Custom-Range="{{widget.customRange}}" 
+                                         line-Chart-Directive 
+                                         style="min-height:{{widget.minHeight}}">                                             
+                                    </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
-                                    <div area-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" area-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                    <div area-Chart-Url='{{previewChartUrl}}' 
+                                         widget-Columns="{{previewColumn.columns}}" 
+                                         area-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
+                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                         widget-Custom-Range="{{widget.customRange}}" 
+                                         style="min-height:{{widget.minHeight}}">
+                                    </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
-                                    <div bar-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                    <div bar-Chart-Url='{{previewChartUrl}}' 
+                                         widget-Columns="{{previewColumn.columns}}" 
+                                         bar-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
+                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                         widget-Custom-Range="{{widget.customRange}}" 
+                                         style="min-height:{{widget.minHeight}}">                                             
+                                    </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
-                                    <div pie-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" pie-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
-                                </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType === 'donut'">
-                                    <div donut-Chart-Url='{{previewChartUrl}}' donut-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
-                                </div> 
-                                <div class="box-body chart-responsive" ng-if="previewChartType === 'groupedBar'">
-                                    <div grouped-Bar-Chart-Url='{{previewChartUrl}}' grouped-Bar-Chart-Directive style="min-height:{{widget.minHeight}}"></div>
+                                    <div pie-Chart-Url='{{previewChartUrl}}' 
+                                         widget-Columns="{{previewColumn.columns}}" 
+                                         pie-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
+                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                         widget-Custom-Range="{{widget.customRange}}" 
+                                         style="min-height:{{widget.minHeight}}">
+                                    </div>
                                 </div> 
                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
-                                    <div dynamic-Table dynamic-Table-Url="{{previewChartUrl}}" widget-Id="{{previewColumn.id}}" widget-Columns="{{previewColumn.columns}}"></div>
+                                    <div dynamic-Table dynamic-Table-Url="{{previewChartUrl}}" 
+                                         widget-Id="{{previewColumn.id}}" 
+                                         widget-Columns="{{previewColumn.columns}}" 
+                                         widget-Date-Duration="{{widget.dateDuration}}" 
+                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                         widget-Custom-Range="{{widget.customRange}}">
+                                    </div>
                                 </div> 
                             </div>
                         </div>
