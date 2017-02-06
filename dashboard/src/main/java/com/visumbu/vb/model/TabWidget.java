@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -160,6 +161,9 @@ public class TabWidget implements Serializable {
 
     @Transient
     private List<WidgetColumn> columns;
+    
+    @Transient
+    private List<Map<String, String>> data;
 
     public TabWidget() {
     }
@@ -240,6 +244,14 @@ public class TabWidget implements Serializable {
         this.displayColumns = displayColumns;
     }
 
+    public List<Map<String, String>> getData() {
+        return data;
+    }
+
+    public void setData(List<Map<String, String>> data) {
+        this.data = data;
+    }
+    
     public Short getEditable() {
         return editable;
     }
