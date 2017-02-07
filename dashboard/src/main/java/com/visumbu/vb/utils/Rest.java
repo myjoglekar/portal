@@ -139,6 +139,8 @@ public class Rest {
 
     public static String postRawForm(String postUrl, String postParams) throws IOException {
         String returnStr = null;
+        System.out.println("URL -> " + postUrl);
+        System.out.println("URL Params -> " + postParams);
         URL obj = new URL(postUrl);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
