@@ -154,7 +154,6 @@ public class PaidTabController {
                     performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                     performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                     performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());
-
                     performanceReportBeans.add(performanceBean);
                 }
             }
@@ -237,10 +236,12 @@ public class PaidTabController {
             sum.setImpressions((ApiUtils.toInteger(p.getImpressions()) + ApiUtils.toInteger(sum.getImpressions())) + "");
             sum.setClicks((ApiUtils.toInteger(p.getClicks()) + ApiUtils.toInteger(sum.getClicks())) + "");
             sum.setCost((ApiUtils.toDouble(p.getCost()) + ApiUtils.toDouble(sum.getCost())) + "");
-            sum.setSearchImpressionsShare(((ApiUtils.toDouble(p.getSearchImpressionsShare()) + ApiUtils.toDouble(sum.getSearchImpressionsShare()) * (count - 1)) / count) + "");
-            sum.setSearchImpressionsShareLostDueToRank(((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToRank()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToRank()) * (count - 1)) / count) + "");
-            sum.setSearchImpressionsShareLostDueToBudget(((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToBudget()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToBudget()) * (count - 1)) / count) + "");
-            sum.setAveragePosition((ApiUtils.toDouble(p.getAveragePosition()) + ApiUtils.toDouble(sum.getAveragePosition())) + "");
+            
+            sum.setSearchImpressionsShare((ApiUtils.toDouble(p.getSearchImpressionsShare()) + ApiUtils.toDouble(sum.getSearchImpressionsShare())) + "");
+            sum.setSearchImpressionsShareLostDueToRank((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToRank()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToRank())) + "");
+            sum.setSearchImpressionsShareLostDueToBudget((ApiUtils.toDouble(p.getSearchImpressionsShareLostDueToBudget()) + ApiUtils.toDouble(sum.getSearchImpressionsShareLostDueToBudget())) + "");
+            
+            sum.setAveragePosition((ApiUtils.toDouble(p.getAveragePosition()) + ApiUtils.toDouble(sum.getAveragePosition())) + "");            
             sum.setConversions((ApiUtils.toDouble(p.getConversions()) + ApiUtils.toDouble(sum.getConversions())) + "");
             sum.setCtr(ApiUtils.toDouble(sum.getImpressions()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getClicks()) / ApiUtils.toDouble(sum.getImpressions())) + "");
             sum.setAverageCpc(ApiUtils.toDouble(sum.getClicks()) == 0.0 ? "0" : (ApiUtils.toDouble(sum.getCost()) / ApiUtils.toDouble(sum.getClicks())) + "");
@@ -248,6 +249,9 @@ public class PaidTabController {
         }
         AccountPerformanceReportBean data = map.get("Overall");
         data.setAveragePosition((ApiUtils.toDouble(data.getAveragePosition()) / 2) + "");
+        data.setSearchImpressionsShare((ApiUtils.toDouble(data.getSearchImpressionsShare()) / 2) + "");
+        data.setSearchImpressionsShareLostDueToRank((ApiUtils.toDouble(data.getSearchImpressionsShareLostDueToRank()) / 2) + "");
+        data.setSearchImpressionsShareLostDueToBudget((ApiUtils.toDouble(data.getSearchImpressionsShareLostDueToBudget()) / 2) + "");
         return new ArrayList<AccountPerformanceReportBean>(map.values());
     }
 
@@ -1101,7 +1105,7 @@ public class PaidTabController {
         columnDefs.add(new ColumnDef("campaignName", "string", "Campaign Name"));
         columnDefs.add(new ColumnDef("adGroupName", "string", "Ad Group Name"));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("clicks", "string", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
+        columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("averageCpc", "number", "Average CPC", ColumnDef.Aggregation.CPC, ColumnDef.Format.CURRENCY));

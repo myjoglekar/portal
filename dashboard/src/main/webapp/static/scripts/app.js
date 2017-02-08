@@ -1,2 +1,2 @@
-var app = angular.module("VizBoardApp", ["ui.router", "ui.bootstrap", "ui", "ngCookies", "ngDraggable", 'angular.filter', 'ngSanitize', 'ui.select', 'LocalStorageModule']);
+var app = angular.module("VizBoardApp", ["ui.router", "ui.bootstrap", "ui", "ngCookies", "ngDraggable", 'angular.filter', 'ngSanitize', 'ui.select', 'LocalStorageModule', 'ui.sortable']);
 //var app = angular.module("VizBoardApp", ["ui.bootstrap", "ui.router", "ngCookies", "angularScreenfull", "ngDraggable", "angularUtils.directives.dirPagination", 'smart-table', 'angular.filter', 'ngSanitize', 'ui.select','ui.grid', 'ui.grid.grouping', 'ui.grid.edit', 'ui.grid.selection',]);

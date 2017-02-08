@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -146,6 +147,16 @@ public class TabWidget implements Serializable {
     @Size(max = 255)
     @Column(name = "max_record")
     private Integer maxRecord;
+    
+    
+    @Size(max = 255)
+    @Column(name = "frequency_duration")
+    private String frequencyDuration;
+    @Size(max = 255)
+    @Column(name = "custom_range")
+    private String customRange;
+    
+    
     @Size(max = 255)
     @Column(name = "product_display_name")
     private String productDisplayName;
@@ -160,6 +171,9 @@ public class TabWidget implements Serializable {
 
     @Transient
     private List<WidgetColumn> columns;
+    
+    @Transient
+    private List<Map<String, String>> data;
 
     public TabWidget() {
     }
@@ -240,6 +254,14 @@ public class TabWidget implements Serializable {
         this.displayColumns = displayColumns;
     }
 
+    public List<Map<String, String>> getData() {
+        return data;
+    }
+
+    public void setData(List<Map<String, String>> data) {
+        this.data = data;
+    }
+    
     public Short getEditable() {
         return editable;
     }
@@ -431,6 +453,23 @@ public class TabWidget implements Serializable {
     public void setColumns(List<WidgetColumn> columns) {
         this.columns = columns;
     }
+
+    public String getFrequencyDuration() {
+        return frequencyDuration;
+    }
+
+    public void setFrequencyDuration(String frequencyDuration) {
+        this.frequencyDuration = frequencyDuration;
+    }
+
+    public String getCustomRange() {
+        return customRange;
+    }
+
+    public void setCustomRange(String customRange) {
+        this.customRange = customRange;
+    }   
+    
 //
 //    @XmlTransient
 //    @JsonIgnore

@@ -188,7 +188,7 @@ public class AdwordsService {
                     "Conversions", "SearchImpressionShare", "AveragePosition",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
-        }  else if (aggregation.isEmpty()) {
+        } else if (aggregation.isEmpty()) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
                     "Impressions", "Clicks",
                     "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
@@ -585,6 +585,13 @@ public class AdwordsService {
                     "Impressions", "Clicks",
                     "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
                     "Conversions",
+                    "Ctr", "Cost", "CostPerConversion", "ConversionRate"
+            ));
+        } else if (aggregation.equalsIgnoreCase("videoTab")) {
+            selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
+                    "Impressions", "Clicks",
+                    "VideoQuartile100Rate", "VideoQuartile25Rate", "VideoQuartile50Rate", "VideoQuartile75Rate",
+                    "Conversions", "VideoTitle",
                     "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else {
@@ -1139,7 +1146,7 @@ public class AdwordsService {
         AdWordsSession session = getSession(accountId);
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                "Impressions", "Clicks","DayOfWeek",
+                "Impressions", "Clicks", "DayOfWeek",
                 "SearchExactMatchImpressionShare", "SearchBudgetLostImpressionShare", "SearchRankLostImpressionShare",
                 "Conversions", "SearchImpressionShare", "AveragePosition",
                 "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
@@ -1211,13 +1218,13 @@ public class AdwordsService {
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         if (aggregation == null || aggregation.isEmpty()) {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                    "Impressions", "Clicks", "CityCriteriaId",
+                    "Impressions", "Clicks", "CountryCriteriaId", "CityCriteriaId",
                     "Conversions", "AveragePosition", "AllConversions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
         } else {
             selector.getFields().addAll(Lists.newArrayList("VideoViews", "VideoViewRate", "AccountDescriptiveName",
-                    "Impressions", "Clicks", "Date", "CityCriteriaId",
+                    "Impressions", "Clicks", "Date", "CountryCriteriaId", "CityCriteriaId",
                     "Conversions", "AveragePosition", "AllConversions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
             ));
