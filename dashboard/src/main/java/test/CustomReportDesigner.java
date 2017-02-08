@@ -33,26 +33,33 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.DefaultDrawingSupplier;
 import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.TextAnchor;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.plot.DatasetRenderingOrder;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.LegendItem;
+import org.jfree.chart.LegendItemCollection;
+import org.jfree.chart.axis.AxisLocation;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
 
 /**
  *
@@ -393,6 +400,11 @@ public class CustomReportDesigner {
                     document.add(pdfTable);
                 } else if (tabWidget.getChartType().equalsIgnoreCase("pieChart")) {
                     document.add(generatePieChart(writer, tabWidget));
+                } else if (tabWidget.getChartType().equalsIgnoreCase("barChart")) {
+                    document.add(multiAxisBarChart(writer, tabWidget));
+                    document.add(generateBarChart(writer, tabWidget));
+                } else if (tabWidget.getChartType().equalsIgnoreCase("lineChart")) {
+                    document.add(generateLineChart(writer, tabWidget));
                 }
                 document.add(Chunk.NEWLINE);
                 document.add(Chunk.NEWLINE);
@@ -407,6 +419,263 @@ public class CustomReportDesigner {
         }
     }
 
+    public static Image generateLineChart(PdfWriter writer, TabWidget tabWidget) throws BadElementException {
+        DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Number of times user visit", "Count", "Number Of Visits",
+                dataSet, PlotOrientation.VERTICAL, false, true, false);
+        chart.setBackgroundPaint(Color.white);
+        CategoryPlot plot = chart.getCategoryPlot();
+        plot.setBackgroundPaint(Color.white);
+        final CategoryItemRenderer renderer = new CustomRenderer(
+                new Paint[]{new Color(116, 196, 198), new Color(116, 196, 198),
+                    new Color(116, 196, 198), new Color(116, 196, 198),
+                    new Color(116, 196, 198)
+                });
+//        renderer.setLabelGenerator(new StandardCategoryLabelGenerator());
+        renderer.setItemLabelsVisible(true);
+        final ItemLabelPosition p = new ItemLabelPosition(
+                ItemLabelAnchor.CENTER, TextAnchor.CENTER, TextAnchor.CENTER, 45.0
+        );
+        renderer.setPositiveItemLabelPosition(p);
+        plot.setRenderer(renderer);
+
+        plot.setDrawingSupplier(new ChartDrawingSupplier());
+
+        PdfContentByte contentByte = writer.getDirectContent();
+
+        PdfTemplate templatePie = contentByte.createTemplate(500, 300);
+        Graphics2D graphics2dPie = templatePie.createGraphics(500, 300,
+                new DefaultFontMapper());
+        Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, 500,
+                300);
+
+        chart.draw(graphics2dPie, rectangle2dPie);
+
+        graphics2dPie.dispose();
+
+        // contentByte.addTemplate(templatePie, 30, 30);
+        Image img = Image.getInstance(templatePie);
+        return img;
+    }
+
+    public Image multiAxisBarChart(PdfWriter writer, TabWidget tabWidget) {
+        try {
+
+            List<WidgetColumn> columns = tabWidget.getColumns();
+
+            List<Map<String, String>> originalData = tabWidget.getData();
+            List<Map<String, String>> data = new ArrayList<>(originalData);
+
+            List<Map<String, String>> tempData = tabWidget.getData();
+//        if (data == null || data.isEmpty()) {
+//            PdfPTable table = new PdfPTable(columns.size());
+//            PdfPCell cell;
+//            cell = new PdfPCell(new Phrase(tabWidget.getWidgetTitle()));
+//            cell.setHorizontalAlignment(1);
+//            cell.setColspan(columns.size());
+//            table.addCell(cell);
+//            table.setWidthPercentage(95f);
+//            for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
+//                WidgetColumn column = iterator.next();
+//                PdfPCell dataCell = new PdfPCell(new Phrase(column.getFieldName()));
+//                dataCell.setBackgroundColor(BaseColor.GRAY);
+//                table.addCell(dataCell);
+//            }
+//            return table;
+//        }
+
+            List<SortType> sortFields = new ArrayList<>();
+            List<Aggregation> aggreagtionList = new ArrayList<>();
+            List<String> firstAxis = new ArrayList<>();
+            List<String> secondAxis = new ArrayList<>();
+            String xAxis = null;
+
+            for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
+                WidgetColumn column = iterator.next();
+                if (column.getSortOrder() != null) {
+                    sortFields.add(new SortType(column.getFieldName(), column.getSortOrder(), column.getFieldType()));
+                }
+                if (column.getAgregationFunction() != null) {
+                    aggreagtionList.add(new Aggregation(column.getFieldName(), column.getAgregationFunction()));
+                }
+                if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) == 1) {
+                    firstAxis.add(column.getFieldName());
+                }
+                if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) > 1) {
+                    secondAxis.add(column.getFieldName());
+                }
+                if (column.getxAxis() != null) {
+                    xAxis = column.getFieldName();
+                }
+            }
+
+            if (sortFields.size() > 0) {
+                data = sortData(data, sortFields);
+            }
+            if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
+                data = data.subList(0, tabWidget.getMaxRecord());
+            }
+
+            final CategoryDataset dataset1 = createDataset1(data, firstAxis, secondAxis, xAxis);
+            final CategoryDataset dataset2 = createDataset1(data, secondAxis, firstAxis, xAxis);
+            final CategoryAxis domainAxis = new CategoryAxis(xAxis);
+            final NumberAxis rangeAxis = new NumberAxis("Value");
+            final BarRenderer renderer1 = new BarRenderer();
+            final CategoryPlot plot = new CategoryPlot(dataset1, domainAxis, rangeAxis, renderer1) {
+
+                /**
+                 * Override the getLegendItems() method to handle special case.
+                 *
+                 * @return the legend items.
+                 */
+                public LegendItemCollection getLegendItems() {
+
+                    final LegendItemCollection result = new LegendItemCollection();
+
+                    final CategoryDataset data = getDataset();
+                    if (data != null) {
+                        final CategoryItemRenderer r = getRenderer();
+                        if (r != null) {
+                            final LegendItem item = r.getLegendItem(0, 0);
+                            result.add(item);
+                        }
+                    }
+
+                    // the JDK 1.2.2 compiler complained about the name of this
+                    // variable 
+                    final CategoryDataset dset2 = getDataset(1);
+                    if (dset2 != null) {
+                        final CategoryItemRenderer renderer2 = getRenderer(1);
+                        if (renderer2 != null) {
+                            final LegendItem item = renderer2.getLegendItem(1, 1);
+                            result.add(item);
+                        }
+                    }
+
+                    return result;
+
+                }
+
+            };
+
+            final JFreeChart chart = new JFreeChart(tabWidget.getWidgetTitle(), plot);
+            chart.setBackgroundPaint(Color.white);
+//        chart.getLegend().setAnchor(Legend.SOUTH);
+            plot.setBackgroundPaint(new Color(0xEE, 0xEE, 0xFF));
+            plot.setDomainAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
+            plot.setDataset(1, dataset2);
+            plot.mapDatasetToRangeAxis(1, 1);
+            final ValueAxis axis2 = new NumberAxis("Secondary");
+            plot.setRangeAxis(1, axis2);
+            plot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
+            final BarRenderer renderer2 = new BarRenderer();
+            plot.setRenderer(1, renderer2);
+            plot.setDatasetRenderingOrder(DatasetRenderingOrder.REVERSE);
+            // OPTIONAL CUSTOMISATION COMPLETED.
+
+            plot.setDrawingSupplier(new ChartDrawingSupplier());
+
+            PdfContentByte contentByte = writer.getDirectContent();
+
+            PdfTemplate templatePie = contentByte.createTemplate(500, 300);
+            Graphics2D graphics2dPie = templatePie.createGraphics(500, 300,
+                    new DefaultFontMapper());
+            Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, 500,
+                    300);
+
+            chart.draw(graphics2dPie, rectangle2dPie);
+
+            graphics2dPie.dispose();
+
+            // contentByte.addTemplate(templatePie, 30, 30);
+            Image img = Image.getInstance(templatePie);
+            return img;
+        } catch (BadElementException ex) {
+            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Creates a sample dataset.
+     *
+     * @return The dataset.
+     */
+    private CategoryDataset createDataset1(List<Map<String, String>> data, List<String> firstAxis, List<String> secondAxis, String xAxis) {
+        // row keys...
+//        final String series1 = "Series 1";
+//        final String series2 = "Dummy 1";
+//
+//        // column keys...
+//        final String category1 = "Category 1";
+//        final String category2 = "Category 2";
+//        final String category3 = "Category 3";
+//        final String category4 = "Category 4";
+
+        // create the dataset...
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, String> dataMap = iterator.next();
+            for (Iterator<String> iterator1 = firstAxis.iterator(); iterator1.hasNext();) {
+                String axis = iterator1.next();
+                dataset.addValue(ApiUtils.toDouble(dataMap.get(axis)), axis, dataMap.get(xAxis));
+            }
+            for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
+                String axis = iterator1.next();
+                dataset.addValue(null, axis, dataMap.get(xAxis));
+            }
+
+        }
+
+//        dataset.addValue(1.0, series1, category1);
+//        dataset.addValue(4.0, series1, category2);
+//        dataset.addValue(3.0, series1, category3);
+//        dataset.addValue(5.0, series1, category4);
+//
+//        dataset.addValue(null, series2, category1);
+//        dataset.addValue(null, series2, category2);
+//        dataset.addValue(null, series2, category3);
+//        dataset.addValue(null, series2, category4);
+        return dataset;
+
+    }
+
+    /**
+     * Creates a sample dataset.
+     *
+     * @return The dataset.
+     */
+    private static CategoryDataset createDataset2() {
+
+        // row keys...
+        final String series1 = "Dummy 2";
+        final String series2 = "Series 2";
+
+        // column keys...
+        final String category1 = "Category 1";
+        final String category2 = "Category 2";
+        final String category3 = "Category 3";
+        final String category4 = "Category 4";
+
+        // create the dataset...
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        dataset.addValue(null, series1, category1);
+        dataset.addValue(null, series1, category2);
+        dataset.addValue(null, series1, category3);
+        dataset.addValue(null, series1, category4);
+
+        dataset.addValue(75.0, series2, category1);
+        dataset.addValue(87.0, series2, category2);
+        dataset.addValue(96.0, series2, category3);
+        dataset.addValue(68.0, series2, category4);
+
+        return dataset;
+
+    }
+
     public static Image generateBarChart(PdfWriter writer, TabWidget tabWidget) throws BadElementException {
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 
@@ -414,7 +683,6 @@ public class CustomReportDesigner {
 //            FrequencyReportBean frequencyReportBean = iterator.next();
 //            dataSet.setValue(frequencyReportBean.getCount(), "No of Times", frequencyReportBean.getNoOfTimes());
 //        }
-
         JFreeChart chart = ChartFactory.createBarChart(
                 "Number of times user visit", "Count", "Number Of Visits",
                 dataSet, PlotOrientation.VERTICAL, false, true, false);
