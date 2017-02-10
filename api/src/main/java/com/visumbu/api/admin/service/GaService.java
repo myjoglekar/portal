@@ -529,15 +529,15 @@ public class GaService {
                 Goals goals = analytics.management().goals().list(accountId, "~all", "~all").execute();
                 for (Goal goal : goals.getItems()) {
                     if (goal.getProfileId().equalsIgnoreCase(viewId)) {
-                        if (goal.getName().equalsIgnoreCase("Directions Page View")) {
+                        if (goal.getName().equalsIgnoreCase("Directions Page View") || goal.getName().equalsIgnoreCase("Directions Page Views")) {
                             returnStr += "ga:goal" + goal.getId() + "Completions,directionsPageView;";
-                        } else if (goal.getName().equalsIgnoreCase("Inventory Page View")) {
+                        } else if (goal.getName().equalsIgnoreCase("Inventory Page View") || goal.getName().equalsIgnoreCase("Inventory Page Views")) {
                             returnStr += "ga:goal" + goal.getId() + "Completions,inventoryPageViews;";
-                        } else if (goal.getName().equalsIgnoreCase("Lead Submission")) {
+                        } else if (goal.getName().equalsIgnoreCase("Lead Submission") || goal.getName().equalsIgnoreCase("Lead Submission - General")) {
                             returnStr += "ga:goal" + goal.getId() + "Completions,leadSubmission;";
-                        } else if (goal.getName().equalsIgnoreCase("Specials Page Views")) {
+                        } else if (goal.getName().equalsIgnoreCase("Specials Page Views") || goal.getName().equalsIgnoreCase("Specials Page View")) {
                             returnStr += "ga:goal" + goal.getId() + "Completions,specialsPageView;";
-                        } else if (goal.getName().equalsIgnoreCase("Time on Site > 2 Min")) {
+                        } else if (goal.getName().equalsIgnoreCase("Time on Site > 2 Min") || goal.getName().equalsIgnoreCase("Time on Site > 2 Minutes")) {
                             returnStr += "ga:goal" + goal.getId() + "Completions,timeOnSiteGt2Mins;";
                         } else if (goal.getName().equalsIgnoreCase("VDP Views")) {
                             returnStr += "ga:goal" + goal.getId() + "Completions,vdpViews;";

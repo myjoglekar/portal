@@ -27,6 +27,7 @@ public class AccountPerformanceReportBean {
     private String searchImpressionsShareLostDueToRank;
     private String source;
     private String day;
+    private String week;
     private String directionsPageView; // goal1
     private String inventoryPageViews; // goal2
     private String leadSubmission; //goal 3
@@ -88,6 +89,14 @@ public class AccountPerformanceReportBean {
 
     public void setDay(String day) {
         this.day = day;
+    }
+
+    public String getWeek() {
+        return week;
+    }
+
+    public void setWeek(String week) {
+        this.week = week;
     }
     
     public String getSource() {

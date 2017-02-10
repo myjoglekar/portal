@@ -167,7 +167,7 @@ public class AdwordsService {
         }
         return null;
     }
-
+    
     public AccountReport getAccountReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
         AdWordsSession session = getSession(accountId);
         String aggregationDuration = "Date";
