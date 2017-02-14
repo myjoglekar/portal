@@ -12,6 +12,8 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Phrase;
@@ -70,6 +72,7 @@ import org.jfree.chart.renderer.category.LineRenderer3D;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYDataset;
+import static test.FontTest.FONT;
 
 /**
  *
@@ -78,11 +81,21 @@ import org.jfree.data.xy.XYDataset;
 public class CustomReportDesigner {
 
     private static List<CalcualtedFunction> calcualtedFunctions = new ArrayList<>();
+    private static BaseColor widgetTitleColor = new BaseColor(90, 113, 122, 28);
+    private static BaseColor tableHeaderColor = new BaseColor(255, 0, 0);
+    private static BaseColor tableFooterColor = new BaseColor(241, 241, 241);
+    private static final String FONT = CustomReportDesigner.class.getResource("") + "../../../static/lib/fonts/proxima/proximanova-reg-webfont.woff"; // "E:\\work\\vizboard\\dashboard\\src\\main\\webapp\\static\\lib\\fonts\\proxima\\proximanova-reg-webfont.woff";
+    private static final Rectangle pageSize = PageSize.A2;
+    private static final float widgetWidth = pageSize.getWidth() - 100;
+    private static final float widgetHeight = 300;
 
     static {
+        FontFactory.register(FONT, "proxima_nova_rgregular");
         calcualtedFunctions.add(new CalcualtedFunction("ctr", "clicks", "impressions"));
         calcualtedFunctions.add(new CalcualtedFunction("cpa", "cost", "conversions"));
+        System.out.println("PATH ----> " + CustomReportDesigner.class.getResource("") + "../../../static/lib/fonts/proxima/proximanova-reg-webfont.woff");
     }
+    Font pdfFont = FontFactory.getFont("proxima_nova_rgregular", "Cp1253", true);
 
     private Boolean isZeroRow(Map<String, String> mapData, List<WidgetColumn> columns) {
         for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
@@ -270,7 +283,10 @@ public class CustomReportDesigner {
             for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
                 WidgetColumn column = iterator.next();
                 PdfPCell dataCell = new PdfPCell(new Phrase(column.getFieldName()));
-                dataCell.setBackgroundColor(BaseColor.GRAY);
+                dataCell.setBackgroundColor(tableHeaderColor);
+                if (column.getAlignment() != null) {
+                    dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
+                }
                 table.addCell(dataCell);
             }
             return table;
@@ -356,7 +372,11 @@ public class CustomReportDesigner {
                         if (column.getDisplayFormat() != null) {
                             value = Formatter.format(column.getDisplayFormat(), value);
                         }
-                        table.addCell(value);
+                        PdfPCell dataCell = new PdfPCell(new Phrase(value, pdfFont));
+                        if (column.getAlignment() != null) {
+                            dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
+                        }
+                        table.addCell(dataCell);
                     } else {
                         table.addCell("");
                     }
@@ -391,21 +411,26 @@ public class CustomReportDesigner {
         }
         PdfPTable table = new PdfPTable(noOfColumns);
         PdfPCell cell;
-        cell = new PdfPCell(new Phrase(tabWidget.getWidgetTitle()));
-        cell.setHorizontalAlignment(1);
+        cell = new PdfPCell(new Phrase(tabWidget.getWidgetTitle(), pdfFont));
+        cell.setFixedHeight(30);
+        cell.setBackgroundColor(widgetTitleColor);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
         cell.setColspan(noOfColumns);
         table.addCell(cell);
         table.setWidthPercentage(95f);
         if (groupFields != null && groupFields.size() > 0) {
-            PdfPCell dataCell = new PdfPCell(new Phrase("Group"));
-            dataCell.setBackgroundColor(BaseColor.GRAY);
+            PdfPCell dataCell = new PdfPCell(new Phrase("Group", pdfFont));
+            dataCell.setBackgroundColor(tableHeaderColor);
             table.addCell(dataCell);
         }
         for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
             WidgetColumn column = iterator.next();
             if (column.getColumnHide() == null || column.getColumnHide() == 0) {
-                PdfPCell dataCell = new PdfPCell(new Phrase(column.getDisplayName()));
-                dataCell.setBackgroundColor(BaseColor.GRAY);
+                PdfPCell dataCell = new PdfPCell(new Phrase(column.getDisplayName(), pdfFont));
+                dataCell.setBackgroundColor(tableHeaderColor);
+                if (column.getAlignment() != null) {
+                    dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
+                }
                 table.addCell(dataCell);
             }
         }
@@ -420,7 +445,10 @@ public class CustomReportDesigner {
                     if (column.getDisplayFormat() != null) {
                         value = Formatter.format(column.getDisplayFormat(), value);
                     }
-                    dataCell = new PdfPCell(new Phrase(value));
+                    dataCell = new PdfPCell(new Phrase(value, pdfFont));
+                    if (column.getAlignment() != null) {
+                        dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
+                    }
                     // dataCell.setBackgroundColor(BaseColor.GREEN);
                     table.addCell(dataCell);
                 }
@@ -432,8 +460,8 @@ public class CustomReportDesigner {
         if (tabWidget.getTableFooter() != null && tabWidget.getTableFooter()) {
             Boolean totalDisplayed = false;
             if (groupFields != null && groupFields.size() > 0) {
-                PdfPCell dataCell = new PdfPCell(new Phrase("Total:"));
-                dataCell.setBackgroundColor(BaseColor.GRAY);
+                PdfPCell dataCell = new PdfPCell(new Phrase("Total:", pdfFont));
+                dataCell.setBackgroundColor(tableFooterColor);
                 table.addCell(dataCell);
                 totalDisplayed = true;
             }
@@ -441,8 +469,8 @@ public class CustomReportDesigner {
                 WidgetColumn column = iterator.next();
                 if (column.getColumnHide() == null || column.getColumnHide() == 0) {
                     if (totalDisplayed == false) {
-                        PdfPCell dataCell = new PdfPCell(new Phrase("Total:"));
-                        dataCell.setBackgroundColor(BaseColor.GRAY);
+                        PdfPCell dataCell = new PdfPCell(new Phrase("Total:", pdfFont));
+                        dataCell.setBackgroundColor(tableFooterColor);
                         table.addCell(dataCell);
                         totalDisplayed = true;
                     } else {
@@ -450,8 +478,11 @@ public class CustomReportDesigner {
                         if (column.getDisplayFormat() != null) {
                             value = Formatter.format(column.getDisplayFormat(), value);
                         }
-                        PdfPCell dataCell = new PdfPCell(new Phrase(value));
-                        dataCell.setBackgroundColor(BaseColor.GRAY);
+                        PdfPCell dataCell = new PdfPCell(new Phrase(value, pdfFont));
+                        if (column.getAlignment() != null) {
+                            dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
+                        }
+                        dataCell.setBackgroundColor(tableFooterColor);
                         table.addCell(dataCell);
                     }
                 }
@@ -464,7 +495,7 @@ public class CustomReportDesigner {
     public void dynamicPdfTable(List<TabWidget> tabWidgets, OutputStream out) {
         try {
             PdfWriter writer = null;
-            Document document = new Document(PageSize.A2, 36, 36, 72, 72);
+            Document document = new Document(pageSize, 36, 36, 72, 72);
             writer = PdfWriter.getInstance(document, out);
             document.open();
             HeaderFooterTable event = new HeaderFooterTable();
@@ -489,8 +520,10 @@ public class CustomReportDesigner {
                     document.add(multiAxisAreaChart(writer, tabWidget));
                 }
                 // System.out.println("Chart Type ===> " + tabWidget.getChartType());
-                document.add(Chunk.NEWLINE);
-                document.add(Chunk.NEWLINE);
+
+                document.add(new Phrase("\n"));
+                document.add(new Phrase("\n"));
+                document.add(new Phrase("\n"));
             }
             document.close();
             out.flush();
@@ -528,11 +561,11 @@ public class CustomReportDesigner {
 
         PdfContentByte contentByte = writer.getDirectContent();
 
-        PdfTemplate templatePie = contentByte.createTemplate(500, 300);
-        Graphics2D graphics2dPie = templatePie.createGraphics(500, 300,
+        PdfTemplate templatePie = contentByte.createTemplate(widgetWidth, widgetHeight);
+        Graphics2D graphics2dPie = templatePie.createGraphics(widgetWidth, widgetHeight,
                 new DefaultFontMapper());
-        Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, 500,
-                300);
+        Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, widgetWidth,
+                widgetHeight);
 
         chart.draw(graphics2dPie, rectangle2dPie);
 
@@ -651,11 +684,11 @@ public class CustomReportDesigner {
 
             PdfContentByte contentByte = writer.getDirectContent();
 
-            PdfTemplate templatePie = contentByte.createTemplate(500, 300);
-            Graphics2D graphics2dPie = templatePie.createGraphics(500, 300,
+            PdfTemplate templatePie = contentByte.createTemplate(widgetWidth, widgetHeight);
+            Graphics2D graphics2dPie = templatePie.createGraphics(widgetWidth, widgetHeight,
                     new DefaultFontMapper());
-            Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, 500,
-                    300);
+            Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, widgetWidth,
+                    widgetHeight);
 
             chart.draw(graphics2dPie, rectangle2dPie);
 
@@ -790,11 +823,11 @@ public class CustomReportDesigner {
 
             PdfContentByte contentByte = writer.getDirectContent();
 
-            PdfTemplate templatePie = contentByte.createTemplate(500, 300);
-            Graphics2D graphics2dPie = templatePie.createGraphics(500, 300,
+            PdfTemplate templatePie = contentByte.createTemplate(widgetWidth, widgetHeight);
+            Graphics2D graphics2dPie = templatePie.createGraphics(widgetWidth, widgetHeight,
                     new DefaultFontMapper());
-            Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, 500,
-                    300);
+            Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, widgetWidth,
+                    widgetHeight);
 
             chart.draw(graphics2dPie, rectangle2dPie);
 
@@ -928,11 +961,11 @@ public class CustomReportDesigner {
 
             PdfContentByte contentByte = writer.getDirectContent();
 
-            PdfTemplate templatePie = contentByte.createTemplate(500, 300);
-            Graphics2D graphics2dPie = templatePie.createGraphics(500, 300,
+            PdfTemplate templatePie = contentByte.createTemplate(widgetWidth, widgetHeight);
+            Graphics2D graphics2dPie = templatePie.createGraphics(widgetWidth, widgetHeight,
                     new DefaultFontMapper());
-            Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, 500,
-                    300);
+            Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, widgetWidth,
+                    widgetHeight);
 
             chart.draw(graphics2dPie, rectangle2dPie);
 
@@ -1082,11 +1115,11 @@ public class CustomReportDesigner {
 
         PdfContentByte contentByte = writer.getDirectContent();
 
-        PdfTemplate templatePie = contentByte.createTemplate(500, 300);
-        Graphics2D graphics2dPie = templatePie.createGraphics(500, 300,
+        PdfTemplate templatePie = contentByte.createTemplate(widgetWidth, widgetHeight);
+        Graphics2D graphics2dPie = templatePie.createGraphics(widgetWidth, widgetHeight,
                 new DefaultFontMapper());
-        Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, 500,
-                300);
+        Rectangle2D rectangle2dPie = new Rectangle2D.Double(0, 0, widgetWidth,
+                widgetHeight);
 
         chart.draw(graphics2dPie, rectangle2dPie);
 
@@ -1146,11 +1179,11 @@ public class CustomReportDesigner {
         }
 
         PdfContentByte contentByte = writer.getDirectContent();
-        PdfTemplate templateBar = contentByte.createTemplate(500, 300);
-        Graphics2D graphics2dBar = templateBar.createGraphics(500, 300,
+        PdfTemplate templateBar = contentByte.createTemplate(widgetWidth, widgetHeight);
+        Graphics2D graphics2dBar = templateBar.createGraphics(widgetWidth, widgetHeight,
                 new DefaultFontMapper());
-        Rectangle2D rectangle2dBar = new Rectangle2D.Double(0, 0, 500,
-                300);
+        Rectangle2D rectangle2dBar = new Rectangle2D.Double(0, 0, widgetWidth,
+                widgetHeight);
 
         chart.draw(graphics2dBar, rectangle2dBar);
 
@@ -1339,9 +1372,10 @@ public class CustomReportDesigner {
 //                ct.addElement(e);
 //            }
             PdfPTable table = new PdfPTable(1);
-
+            
             table.setTotalWidth(523);
             PdfPCell cell = new PdfPCell(new Phrase("Page Number " + writer.getPageNumber()));
+            cell.setBorder(Rectangle.NO_BORDER);
             //cell.setBackgroundColor(BaseColor.ORANGE);
             table.addCell(cell);
             //cell = new PdfPCell(new Phrase("This is a copyright notice"));
@@ -1373,10 +1407,10 @@ public class CustomReportDesigner {
 //                ct.addElement(e);
 //            }
                 // System.out.println("LOCATION PATH " + getClass().getProtectionDomain().getCodeSource().getLocation());
-                Rectangle rectangle = new Rectangle(10, 900, 100, 850);
+                Rectangle rectangle = pageSize; // new Rectangle(10, 900, 100, 850);
                 Image img = Image.getInstance(CustomReportDesigner.class.getResource("") + "/../images/l2tmedia-logo.png");
                 img.scaleToFit(100, 100);
-                img.setAbsolutePosition((rectangle.getLeft() + rectangle.getRight()) / 2 - 45, rectangle.getTop() - 50);
+                img.setAbsolutePosition(45, rectangle.getTop() - 50);
                 img.setAlignment(Element.ALIGN_TOP);
                 writer.getDirectContent().addImage(img);
                 if (footer != null) {
