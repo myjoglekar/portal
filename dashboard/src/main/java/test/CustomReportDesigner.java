@@ -25,6 +25,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.WidgetColumn;
 import com.visumbu.vb.utils.ApiUtils;
+import com.visumbu.vb.utils.Formatter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -256,8 +257,8 @@ public class CustomReportDesigner {
 
         List<Map<String, String>> originalData = tabWidget.getData();
         List<Map<String, String>> data = new ArrayList<>(originalData);
-
-        List<Map<String, String>> tempData = tabWidget.getData();
+        // System.out.println(tabWidget.getWidgetTitle() + "Actual Size ===> " + data.size());
+        List<Map<String, String>> tempData = new ArrayList<>();
         if (data == null || data.isEmpty()) {
             PdfPTable table = new PdfPTable(columns.size());
             PdfPCell cell;
@@ -274,6 +275,8 @@ public class CustomReportDesigner {
             }
             return table;
         }
+        // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size****5 " + data.size());
+
         if (tabWidget.getZeroSuppression() != null && tabWidget.getZeroSuppression()) {
             for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
                 Map<String, String> dataMap = iterator.next();
@@ -281,8 +284,12 @@ public class CustomReportDesigner {
                     tempData.add(dataMap);
                 }
             }
+            // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size****4 " + tempData.size());
+
             data = tempData;
         }
+        // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size****3 " + data.size());
+
         List<SortType> sortFields = new ArrayList<>();
         List<Aggregation> aggreagtionList = new ArrayList<>();
         List<String> groupByFields = new ArrayList<>();
@@ -302,13 +309,16 @@ public class CustomReportDesigner {
         if (sortFields.size() > 0) {
             data = sortData(data, sortFields);
         }
+        // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size****2 " + data.size());
+
         if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
             data = data.subList(0, tabWidget.getMaxRecord());
         }
         Map groupedMapData = new HashMap();
+        // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size****1 " + data.size());
 
-        System.out.println("Group by Fields --> " + groupByFields.size());
-        System.out.println(groupByFields);
+        // System.out.println("Group by Fields --> " + groupByFields.size());
+        // System.out.println(groupByFields);
         List<String> originalGroupByFields = new ArrayList<>(groupByFields);
         if (groupByFields.size() > 0) {
             List groupedData = groupData(data, groupByFields, aggreagtionList);
@@ -320,8 +330,8 @@ public class CustomReportDesigner {
             groupedMapData.putAll(aggregateData(data, aggreagtionList));
             groupedMapData.put("data", data);
         }
-        System.out.println("Grouped Data");
-        System.out.println(groupedMapData.get("_groupFields"));
+        // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size " + data.size());
+        // System.out.println(groupedMapData.get("_groupFields"));
 
         return generateTable(groupedMapData, tabWidget);
 
@@ -332,10 +342,24 @@ public class CustomReportDesigner {
         List data = (List) groupedData.get("data");
         for (Iterator iterator = data.iterator(); iterator.hasNext();) {
             Map mapData = (Map) iterator.next();
+            if (mapData.get(mapData.get("_groupField")) != null) {
+                String groupValue = mapData.get(mapData.get("_groupField")) + "";
+                table.addCell(groupValue);
+            } else {
+                table.addCell("");
+            }
             for (Iterator<WidgetColumn> iterator1 = columns.iterator(); iterator1.hasNext();) {
                 WidgetColumn column = iterator1.next();
-                if (column.getColumnHide() != null || column.getColumnHide() == 0) {
-                    table.addCell(mapData.get(column.getFieldName()) + "");
+                if (column.getColumnHide() == null || column.getColumnHide() == 0) {
+                    if (mapData.get(column.getFieldName()) != null) {
+                        String value = mapData.get(column.getFieldName()) + "";
+                        if (column.getDisplayFormat() != null) {
+                            value = Formatter.format(column.getDisplayFormat(), value);
+                        }
+                        table.addCell(value);
+                    } else {
+                        table.addCell("");
+                    }
                 }
             }
 
@@ -349,12 +373,8 @@ public class CustomReportDesigner {
         Integer count = 0;
         for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
             WidgetColumn column = iterator.next();
-            System.out.println("Column: "+column.getColumnHide());
-            if (column.getColumnHide() != null || column.getColumnHide() == 0) {
-                System.out.println("if condition...");      
-            } else {
+            if (column.getColumnHide() == null || column.getColumnHide() == 0) {
                 count++;
-                System.out.println("else condition...");      
             }
         }
         return count;
@@ -365,12 +385,8 @@ public class CustomReportDesigner {
         List<WidgetColumn> columns = tabWidget.getColumns();
         List<Map<String, String>> data = tabWidget.getData();
         List<String> groupFields = (List< String>) groupedData.get("_groupFields");
-        System.out.println("GROUP FIELDS");
-        System.out.println(groupFields);
-
         Integer noOfColumns = countColumns(columns); //.size();
-        System.out.println("noOfColumns: "+noOfColumns); 
-        if (groupFields.size() > 0) {
+        if (groupFields != null && groupFields.size() > 0) {
             noOfColumns++;
         }
         PdfPTable table = new PdfPTable(noOfColumns);
@@ -380,22 +396,32 @@ public class CustomReportDesigner {
         cell.setColspan(noOfColumns);
         table.addCell(cell);
         table.setWidthPercentage(95f);
+        if (groupFields != null && groupFields.size() > 0) {
+            PdfPCell dataCell = new PdfPCell(new Phrase("Group"));
+            dataCell.setBackgroundColor(BaseColor.GRAY);
+            table.addCell(dataCell);
+        }
         for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
             WidgetColumn column = iterator.next();
-            if (column.getColumnHide() != null || column.getColumnHide() == 0) {
-                PdfPCell dataCell = new PdfPCell(new Phrase(column.getFieldName()));
+            if (column.getColumnHide() == null || column.getColumnHide() == 0) {
+                PdfPCell dataCell = new PdfPCell(new Phrase(column.getDisplayName()));
                 dataCell.setBackgroundColor(BaseColor.GRAY);
                 table.addCell(dataCell);
             }
         }
         if (groupFields == null || groupFields.isEmpty()) {
+            // System.out.println(tabWidget.getWidgetTitle() + "No Group Enabled ===> " + data.size());
             for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
                 Map<String, String> dataMap = iterator.next();
                 for (Iterator<WidgetColumn> iterator1 = columns.iterator(); iterator1.hasNext();) {
                     WidgetColumn column = iterator1.next();
                     PdfPCell dataCell;
-                    dataCell = new PdfPCell(new Phrase(dataMap.get(column.getFieldName())));
-                    // dataCell.setBackgroundColor(BaseColor.GRAY);
+                    String value = dataMap.get(column.getFieldName());
+                    if (column.getDisplayFormat() != null) {
+                        value = Formatter.format(column.getDisplayFormat(), value);
+                    }
+                    dataCell = new PdfPCell(new Phrase(value));
+                    // dataCell.setBackgroundColor(BaseColor.GREEN);
                     table.addCell(dataCell);
                 }
             }
@@ -404,11 +430,31 @@ public class CustomReportDesigner {
         }
 
         if (tabWidget.getTableFooter() != null && tabWidget.getTableFooter()) {
-            for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
-                WidgetColumn column = iterator.next();
-                PdfPCell dataCell = new PdfPCell(new Phrase((String) groupedData.get(column.getFieldName())));
+            Boolean totalDisplayed = false;
+            if (groupFields != null && groupFields.size() > 0) {
+                PdfPCell dataCell = new PdfPCell(new Phrase("Total:"));
                 dataCell.setBackgroundColor(BaseColor.GRAY);
                 table.addCell(dataCell);
+                totalDisplayed = true;
+            }
+            for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
+                WidgetColumn column = iterator.next();
+                if (column.getColumnHide() == null || column.getColumnHide() == 0) {
+                    if (totalDisplayed == false) {
+                        PdfPCell dataCell = new PdfPCell(new Phrase("Total:"));
+                        dataCell.setBackgroundColor(BaseColor.GRAY);
+                        table.addCell(dataCell);
+                        totalDisplayed = true;
+                    } else {
+                        String value = (String) groupedData.get(column.getFieldName());
+                        if (column.getDisplayFormat() != null) {
+                            value = Formatter.format(column.getDisplayFormat(), value);
+                        }
+                        PdfPCell dataCell = new PdfPCell(new Phrase(value));
+                        dataCell.setBackgroundColor(BaseColor.GRAY);
+                        table.addCell(dataCell);
+                    }
+                }
             }
         }
 
@@ -418,7 +464,7 @@ public class CustomReportDesigner {
     public void dynamicPdfTable(List<TabWidget> tabWidgets, OutputStream out) {
         try {
             PdfWriter writer = null;
-            Document document = new Document(PageSize.A4, 36, 36, 72, 72);
+            Document document = new Document(PageSize.A2, 36, 36, 72, 72);
             writer = PdfWriter.getInstance(document, out);
             document.open();
             HeaderFooterTable event = new HeaderFooterTable();
@@ -442,7 +488,7 @@ public class CustomReportDesigner {
                 } else if (tabWidget.getChartType().equalsIgnoreCase("areaChart")) {
                     document.add(multiAxisAreaChart(writer, tabWidget));
                 }
-                System.out.println("Chart Type ===> " + tabWidget.getChartType());
+                // System.out.println("Chart Type ===> " + tabWidget.getChartType());
                 document.add(Chunk.NEWLINE);
                 document.add(Chunk.NEWLINE);
             }
@@ -503,7 +549,6 @@ public class CustomReportDesigner {
             List<WidgetColumn> columns = tabWidget.getColumns();
 
             List<Map<String, String>> originalData = tabWidget.getData();
-            System.out.println(originalData);
 
             List<Map<String, String>> tempData = tabWidget.getData();
             if (originalData == null || originalData.isEmpty()) {
@@ -1327,7 +1372,7 @@ public class CustomReportDesigner {
 //            for (Element e : header) {
 //                ct.addElement(e);
 //            }
-                System.out.println("LOCATION PATH " + getClass().getProtectionDomain().getCodeSource().getLocation());
+                // System.out.println("LOCATION PATH " + getClass().getProtectionDomain().getCodeSource().getLocation());
                 Rectangle rectangle = new Rectangle(10, 900, 100, 850);
                 Image img = Image.getInstance(CustomReportDesigner.class.getResource("") + "/../images/l2tmedia-logo.png");
                 img.scaleToFit(100, 100);
