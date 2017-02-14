@@ -274,7 +274,7 @@ public class CustomReportDesigner {
             }
             return table;
         }
-        if (tabWidget.getZeroSuppression()) {
+        if (tabWidget.getZeroSuppression() != null && tabWidget.getZeroSuppression()) {
             for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
                 Map<String, String> dataMap = iterator.next();
                 if (!isZeroRow(dataMap, columns)) {
@@ -334,13 +334,30 @@ public class CustomReportDesigner {
             Map mapData = (Map) iterator.next();
             for (Iterator<WidgetColumn> iterator1 = columns.iterator(); iterator1.hasNext();) {
                 WidgetColumn column = iterator1.next();
-                table.addCell(mapData.get(column.getFieldName()) + "");
+                if (column.getColumnHide() != null || column.getColumnHide() == 0) {
+                    table.addCell(mapData.get(column.getFieldName()) + "");
+                }
             }
 
             if (mapData.get("data") != null) {
                 generateGroupedRows(mapData, tabWidget, table);
             }
         }
+    }
+
+    private Integer countColumns(List<WidgetColumn> columns) {
+        Integer count = 0;
+        for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
+            WidgetColumn column = iterator.next();
+            System.out.println("Column: "+column.getColumnHide());
+            if (column.getColumnHide() != null || column.getColumnHide() == 0) {
+                System.out.println("if condition...");      
+            } else {
+                count++;
+                System.out.println("else condition...");      
+            }
+        }
+        return count;
     }
 
     private PdfPTable generateTable(Map groupedData, TabWidget tabWidget) {
@@ -351,7 +368,11 @@ public class CustomReportDesigner {
         System.out.println("GROUP FIELDS");
         System.out.println(groupFields);
 
-        Integer noOfColumns = columns.size();
+        Integer noOfColumns = countColumns(columns); //.size();
+        System.out.println("noOfColumns: "+noOfColumns); 
+        if (groupFields.size() > 0) {
+            noOfColumns++;
+        }
         PdfPTable table = new PdfPTable(noOfColumns);
         PdfPCell cell;
         cell = new PdfPCell(new Phrase(tabWidget.getWidgetTitle()));
@@ -361,9 +382,11 @@ public class CustomReportDesigner {
         table.setWidthPercentage(95f);
         for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
             WidgetColumn column = iterator.next();
-            PdfPCell dataCell = new PdfPCell(new Phrase(column.getFieldName()));
-            dataCell.setBackgroundColor(BaseColor.GRAY);
-            table.addCell(dataCell);
+            if (column.getColumnHide() != null || column.getColumnHide() == 0) {
+                PdfPCell dataCell = new PdfPCell(new Phrase(column.getFieldName()));
+                dataCell.setBackgroundColor(BaseColor.GRAY);
+                table.addCell(dataCell);
+            }
         }
         if (groupFields == null || groupFields.isEmpty()) {
             for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
@@ -380,7 +403,7 @@ public class CustomReportDesigner {
             generateGroupedRows(groupedData, tabWidget, table);
         }
 
-        if (tabWidget.getTableFooter()) {
+        if (tabWidget.getTableFooter() != null && tabWidget.getTableFooter()) {
             for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
                 WidgetColumn column = iterator.next();
                 PdfPCell dataCell = new PdfPCell(new Phrase((String) groupedData.get(column.getFieldName())));
@@ -901,11 +924,11 @@ public class CustomReportDesigner {
             Map<String, String> dataMap = iterator.next();
             for (Iterator<String> iterator1 = firstAxis.iterator(); iterator1.hasNext();) {
                 String axis = iterator1.next();
-                dataset.addValue(ApiUtils.toDouble(dataMap.get(axis)), axis, dataMap.get(xAxis));
+                dataset.addValue(ApiUtils.toDouble(dataMap.get(axis)), axis, dataMap.get(xAxis) + "");
             }
             for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
                 String axis = iterator1.next();
-                dataset.addValue(null, axis, dataMap.get(xAxis));
+                dataset.addValue(null, axis, dataMap.get(xAxis) + "");
             }
 
         }
