@@ -16,6 +16,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -24,8 +25,12 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.WidgetColumn;
+import com.visumbu.vb.pdf.L2TReportHeader;
+import com.visumbu.vb.pdf.ReportHeader;
 import com.visumbu.vb.utils.ApiUtils;
 import com.visumbu.vb.utils.Formatter;
 import java.awt.Color;
@@ -84,50 +89,52 @@ public class CustomReportDesigner {
     private static BaseColor widgetTitleColor = new BaseColor(90, 113, 122, 28);
     private static BaseColor tableHeaderColor = new BaseColor(255, 0, 0);
     private static BaseColor tableFooterColor = new BaseColor(241, 241, 241);
+    private static BaseColor widgetBorderColor = BaseColor.DARK_GRAY;
+
     private static final String FONT = CustomReportDesigner.class.getResource("") + "../../../static/lib/fonts/proxima/proximanova-reg-webfont.woff"; // "E:\\work\\vizboard\\dashboard\\src\\main\\webapp\\static\\lib\\fonts\\proxima\\proximanova-reg-webfont.woff";
     private static final Rectangle pageSize = PageSize.A2;
-    private static final float widgetWidth = pageSize.getWidth() - 100;
+    private static final float widgetWidth = pageSize.getWidth() - 130;
     private static final float widgetHeight = 300;
+    private static final ReportHeader reportHeader = new L2TReportHeader();
 
     static {
         FontFactory.register(FONT, "proxima_nova_rgregular");
         calcualtedFunctions.add(new CalcualtedFunction("ctr", "clicks", "impressions"));
         calcualtedFunctions.add(new CalcualtedFunction("cpa", "cost", "conversions"));
-        System.out.println("PATH ----> " + CustomReportDesigner.class.getResource("") + "../../../static/lib/fonts/proxima/proximanova-reg-webfont.woff");
     }
     Font pdfFont = FontFactory.getFont("proxima_nova_rgregular", "Cp1253", true);
 
-    private Boolean isZeroRow(Map<String, String> mapData, List<WidgetColumn> columns) {
+    private Boolean isZeroRow(Map<String, Object> mapData, List<WidgetColumn> columns) {
         for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
             WidgetColumn column = iterator.next();
-            if (ApiUtils.toDouble(mapData.get(column.getFieldName())) != 0) {
+            if (ApiUtils.toDouble(mapData.get(column.getFieldName()) + "") != 0) {
                 return false;
             }
         }
         return true;
     }
 
-    private Double sum(List<Map<String, String>> data, String fieldName) {
+    private Double sum(List<Map<String, Object>> data, String fieldName) {
         Double sum = 0.0;
-        for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
-            Map<String, String> mapData = iterator.next();
-            sum += ApiUtils.toDouble(mapData.get(fieldName));
+        for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, Object> mapData = iterator.next();
+            sum += ApiUtils.toDouble(mapData.get(fieldName) + "");
         }
         return sum;
     }
 
-    private Double min(List<Map<String, String>> data, String fieldName) {
+    private Double min(List<Map<String, Object>> data, String fieldName) {
         Double min = null;
-        for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
-            Map<String, String> mapData = iterator.next();
-            if (min == null || ApiUtils.toDouble(mapData.get(fieldName)) < min) {
-                min = ApiUtils.toDouble(mapData.get(fieldName));
+        for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, Object> mapData = iterator.next();
+            if (min == null || ApiUtils.toDouble(mapData.get(fieldName) + "") < min) {
+                min = ApiUtils.toDouble(mapData.get(fieldName) + "");
             }
         }
         return min;
     }
 
-    private Double calulatedMetric(List<Map<String, String>> data, CalcualtedFunction calcualtedFunction) {
+    private Double calulatedMetric(List<Map<String, Object>> data, CalcualtedFunction calcualtedFunction) {
         String name = calcualtedFunction.getName();
         String field1 = calcualtedFunction.getField1();
         String field2 = calcualtedFunction.getField2();
@@ -139,12 +146,12 @@ public class CustomReportDesigner {
         return 0.0;
     }
 
-    private Double max(List<Map<String, String>> data, String fieldName) {
+    private Double max(List<Map<String, Object>> data, String fieldName) {
         Double max = null;
-        for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
-            Map<String, String> mapData = iterator.next();
-            if (max == null || ApiUtils.toDouble(mapData.get(fieldName)) > max) {
-                max = ApiUtils.toDouble(mapData.get(fieldName));
+        for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, Object> mapData = iterator.next();
+            if (max == null || ApiUtils.toDouble(mapData.get(fieldName) + "") > max) {
+                max = ApiUtils.toDouble(mapData.get(fieldName) + "");
             }
         }
         return max;
@@ -154,11 +161,11 @@ public class CustomReportDesigner {
         return value;
     }
 
-    private List<Map<String, String>> sortData(List<Map<String, String>> data, List<SortType> sortType) {
+    private List<Map<String, Object>> sortData(List<Map<String, Object>> data, List<SortType> sortType) {
         if (1 == 1) {
             return data;
         }
-        Collections.sort(data, (Map<String, String> o1, Map<String, String> o2) -> {
+        Collections.sort(data, (Map<String, Object> o1, Map<String, Object> o2) -> {
             for (Iterator<SortType> iterator = sortType.iterator(); iterator.hasNext();) {
                 SortType sortType1 = iterator.next();
                 int order = 1;
@@ -166,14 +173,14 @@ public class CustomReportDesigner {
                     order = -1;
                 }
                 if (sortType1.getFieldType().equalsIgnoreCase("number")) {
-                    Double value1 = ApiUtils.toDouble(o1.get(sortType1.getFieldName()));
-                    Double value2 = ApiUtils.toDouble(o2.get(sortType1.getFieldName()));
+                    Double value1 = ApiUtils.toDouble(o1.get(sortType1.getFieldName()) + "");
+                    Double value2 = ApiUtils.toDouble(o2.get(sortType1.getFieldName()) + "");
                     if (value1 != value2) {
                         return order * new Double(value1 - value2).intValue();
                     }
                 } else {
-                    String value1 = o1.get(sortType1.getFieldName());
-                    String value2 = o2.get(sortType1.getFieldName());
+                    String value1 = o1.get(sortType1.getFieldName()) + "";
+                    String value2 = o2.get(sortType1.getFieldName()) + "";
                     if (value1.compareTo(value2) != 0) {
                         return order * value1.compareTo(value2);
                     }
@@ -182,9 +189,9 @@ public class CustomReportDesigner {
             return 0;
         });
 
-//        Collections.sort(data, new Comparator<Map<String, String>>() {
+//        Collections.sort(data, new Comparator<Map<String, Object>>() {
 //            @Override
-//            public int compare(Map<String, String> o1, Map<String, String> o2) {
+//            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
 //                for (Iterator<SortType> iterator = sortType.iterator(); iterator.hasNext();) {
 //                    SortType sortType = iterator.next();
 //                    
@@ -195,12 +202,12 @@ public class CustomReportDesigner {
         return data;
     }
 
-    private Map<String, List<Map<String, String>>> groupBy(List<Map<String, String>> data, String groupField) {
-        Map<String, List<Map<String, String>>> returnMap = new HashMap<>();
-        for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
-            Map<String, String> dataMap = iterator.next();
-            String fieldValue = dataMap.get(groupField);
-            List<Map<String, String>> groupDataList = returnMap.get(fieldValue);
+    private Map<String, List<Map<String, Object>>> groupBy(List<Map<String, Object>> data, String groupField) {
+        Map<String, List<Map<String, Object>>> returnMap = new HashMap<>();
+        for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, Object> dataMap = iterator.next();
+            String fieldValue = dataMap.get(groupField) + "";
+            List<Map<String, Object>> groupDataList = returnMap.get(fieldValue);
 
             if (groupDataList == null) {
                 groupDataList = new ArrayList<>();
@@ -211,19 +218,19 @@ public class CustomReportDesigner {
         return returnMap;
     }
 
-    private List groupData(List<Map<String, String>> data, List<String> groupByFields, List<Aggregation> aggreagtionList) {
+    private List groupData(List<Map<String, Object>> data, List<String> groupByFields, List<Aggregation> aggreagtionList) {
         List<String> currentFields = groupByFields;
         if (groupByFields.size() == 0) {
             return data;
         }
-        List<Map<String, String>> actualList = data;
-        List<Map<String, String>> groupedData = new ArrayList<>();
+        List<Map<String, Object>> actualList = data;
+        List<Map<String, Object>> groupedData = new ArrayList<>();
         String groupingField = currentFields.get(0);
-        Map<String, List<Map<String, String>>> currentListGrouped = groupBy(actualList, groupingField);
+        Map<String, List<Map<String, Object>>> currentListGrouped = groupBy(actualList, groupingField);
         groupByFields.remove(0);
-        for (Map.Entry<String, List<Map<String, String>>> entrySet : currentListGrouped.entrySet()) {
+        for (Map.Entry<String, List<Map<String, Object>>> entrySet : currentListGrouped.entrySet()) {
             String key = entrySet.getKey();
-            List<Map<String, String>> value = entrySet.getValue();
+            List<Map<String, Object>> value = entrySet.getValue();
             Map dataToPush = new HashMap<>();
             dataToPush.put("_key", key);
             dataToPush.put(groupingField, key);
@@ -236,8 +243,8 @@ public class CustomReportDesigner {
         return groupedData;
     }
 
-    private Map<String, String> aggregateData(List<Map<String, String>> data, List<Aggregation> aggreagtionList) {
-        Map<String, String> returnMap = new HashMap<>();
+    private Map<String, Object> aggregateData(List<Map<String, Object>> data, List<Aggregation> aggreagtionList) {
+        Map<String, Object> returnMap = new HashMap<>();
         for (Iterator<Aggregation> iterator = aggreagtionList.iterator(); iterator.hasNext();) {
             Aggregation aggregation = iterator.next();
             if (aggregation.getAggregationType().equalsIgnoreCase("sum")) {
@@ -268,10 +275,10 @@ public class CustomReportDesigner {
     public PdfPTable dynamicPdfTable(TabWidget tabWidget) throws DocumentException {
         List<WidgetColumn> columns = tabWidget.getColumns();
 
-        List<Map<String, String>> originalData = tabWidget.getData();
-        List<Map<String, String>> data = new ArrayList<>(originalData);
+        List<Map<String, Object>> originalData = tabWidget.getData();
+        List<Map<String, Object>> data = new ArrayList<>(originalData);
         // System.out.println(tabWidget.getWidgetTitle() + "Actual Size ===> " + data.size());
-        List<Map<String, String>> tempData = new ArrayList<>();
+        List<Map<String, Object>> tempData = new ArrayList<>();
         if (data == null || data.isEmpty()) {
             PdfPTable table = new PdfPTable(columns.size());
             PdfPCell cell;
@@ -294,8 +301,8 @@ public class CustomReportDesigner {
         // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size****5 " + data.size());
 
         if (tabWidget.getZeroSuppression() != null && tabWidget.getZeroSuppression()) {
-            for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
-                Map<String, String> dataMap = iterator.next();
+            for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+                Map<String, Object> dataMap = iterator.next();
                 if (!isZeroRow(dataMap, columns)) {
                     tempData.add(dataMap);
                 }
@@ -403,7 +410,7 @@ public class CustomReportDesigner {
     private PdfPTable generateTable(Map groupedData, TabWidget tabWidget) {
 
         List<WidgetColumn> columns = tabWidget.getColumns();
-        List<Map<String, String>> data = tabWidget.getData();
+        List<Map<String, Object>> data = tabWidget.getData();
         List<String> groupFields = (List< String>) groupedData.get("_groupFields");
         Integer noOfColumns = countColumns(columns); //.size();
         if (groupFields != null && groupFields.size() > 0) {
@@ -436,12 +443,12 @@ public class CustomReportDesigner {
         }
         if (groupFields == null || groupFields.isEmpty()) {
             // System.out.println(tabWidget.getWidgetTitle() + "No Group Enabled ===> " + data.size());
-            for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
-                Map<String, String> dataMap = iterator.next();
+            for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+                Map<String, Object> dataMap = iterator.next();
                 for (Iterator<WidgetColumn> iterator1 = columns.iterator(); iterator1.hasNext();) {
                     WidgetColumn column = iterator1.next();
                     PdfPCell dataCell;
-                    String value = dataMap.get(column.getFieldName());
+                    String value = dataMap.get(column.getFieldName()) + "";
                     if (column.getDisplayFormat() != null) {
                         value = Formatter.format(column.getDisplayFormat(), value);
                     }
@@ -492,6 +499,123 @@ public class CustomReportDesigner {
         return table;
     }
 
+    public void addReportHeader(Document document) {
+        try {
+            // 236, 255, 224
+            BaseColor backgroundColor = new BaseColor(236, 255, 224);
+
+            Integer headerCellCount = 4;
+            Font f = new Font(pdfFont);
+            Font pdfFontNormal = new Font(pdfFont);
+            Font pdfFontBold = new Font(pdfFont);
+            Font pdfFontHighlight = new Font(pdfFont);
+
+            pdfFontBold.setStyle(Font.BOLD);
+            pdfFontHighlight.setColor(BaseColor.ORANGE);
+
+            f.setSize(20);
+            f.setColor(BaseColor.ORANGE);
+            Paragraph reportTitle = new Paragraph("Month End Report".toUpperCase(), f);
+            LineSeparator dottedline = new LineSeparator();
+
+            dottedline.setOffset(-6);
+            dottedline.setLineWidth(5);
+            dottedline.setLineColor(BaseColor.LIGHT_GRAY);
+            reportTitle.add(dottedline);
+            document.add(reportTitle);
+            document.add(new Phrase("\n"));
+
+            PdfPTable table = new PdfPTable(headerCellCount);
+            table.setWidths(new float[]{20, 20, 20, 1});
+            table.setWidthPercentage(95f);
+
+            Paragraph leftParagraph = new Paragraph("September 2016", pdfFontNormal);
+            leftParagraph.add(new Phrase("\n"));
+            leftParagraph.add(new Paragraph("Facebook Monthly Budget", pdfFontBold));
+            leftParagraph.add(new Phrase("\n"));
+            leftParagraph.add(new Paragraph("Budget ", pdfFontNormal));
+            leftParagraph.add(new Paragraph("$1500", pdfFontHighlight));
+
+            Paragraph rightParagraph = new Paragraph("Digital Advisor", pdfFontHighlight);
+            rightParagraph.add(new Phrase("\n"));
+            rightParagraph.add(new Paragraph("Zoe Suffety", pdfFontBold));
+            rightParagraph.add(new Phrase("\n"));
+            rightParagraph.add(new Paragraph("Email: ", pdfFontNormal));
+            rightParagraph.add(new Paragraph("zsuffety@l2tmedia.com", pdfFontBold));
+            rightParagraph.add(new Phrase("\n"));
+            rightParagraph.add(new Paragraph("Phone: ", pdfFontNormal));
+            rightParagraph.add(new Paragraph("847-901-8156", pdfFontBold));
+
+            PdfPCell bottomCell = new PdfPCell(new Phrase("\n"));
+            bottomCell.setBackgroundColor(backgroundColor);
+            bottomCell.setColspan(headerCellCount);
+            PdfPCell topCell = new PdfPCell(new Phrase(""));
+            topCell.setBackgroundColor(backgroundColor);
+            topCell.setColspan(headerCellCount);
+            PdfPCell leftCell = new PdfPCell(leftParagraph);
+            PdfPCell middleCell = new PdfPCell();
+            PdfPCell rightCornorCell = new PdfPCell(new Phrase("\n"));
+            rightCornorCell.setBackgroundColor(backgroundColor);
+
+            PdfPCell rightCell = new PdfPCell(rightParagraph);
+            rightCell.setBackgroundColor(BaseColor.WHITE);
+
+            topCell.setBorder(PdfPCell.NO_BORDER);
+            bottomCell.setBorder(PdfPCell.NO_BORDER);
+            leftCell.setBorder(PdfPCell.NO_BORDER);
+            leftCell.setBackgroundColor(backgroundColor);
+            middleCell.setBorder(PdfPCell.NO_BORDER);
+            middleCell.setBackgroundColor(backgroundColor);
+
+            rightCornorCell.setBorder(PdfPCell.NO_BORDER);
+            rightCell.setBorder(PdfPCell.NO_BORDER);
+
+            topCell.setBorderColorBottom(backgroundColor);
+            topCell.setBorderColorTop(backgroundColor);
+            topCell.setBorderColorLeft(backgroundColor);
+            topCell.setBorderColorRight(backgroundColor);
+
+            leftCell.setBorderColorBottom(backgroundColor);
+            leftCell.setBorderColorTop(backgroundColor);
+            leftCell.setBorderColorLeft(backgroundColor);
+            leftCell.setBorderColorRight(backgroundColor);
+
+            middleCell.setBorderColorBottom(backgroundColor);
+            middleCell.setBorderColorTop(backgroundColor);
+            middleCell.setBorderColorLeft(backgroundColor);
+            middleCell.setBorderColorRight(backgroundColor);
+
+            rightCell.setBorderColorBottom(backgroundColor);
+            rightCell.setBorderColorTop(backgroundColor);
+            rightCell.setBorderColorLeft(backgroundColor);
+            rightCell.setBorderColorRight(backgroundColor);
+
+            rightCornorCell.setBorderColorBottom(backgroundColor);
+            rightCornorCell.setBorderColorTop(backgroundColor);
+            rightCornorCell.setBorderColorLeft(backgroundColor);
+            rightCornorCell.setBorderColorRight(backgroundColor);
+
+            bottomCell.setBorderColorBottom(backgroundColor);
+            bottomCell.setBorderColorTop(backgroundColor);
+            bottomCell.setBorderColorLeft(backgroundColor);
+            bottomCell.setBorderColorRight(backgroundColor);
+
+            leftCell.setPaddingLeft(10);
+            rightCell.setPadding(10);
+            topCell.setBorderWidthTop(5);
+            table.addCell(topCell);
+            table.addCell(leftCell);
+            table.addCell(middleCell);
+            table.addCell(rightCell);
+            table.addCell(rightCornorCell);
+            table.addCell(bottomCell);
+
+            document.add(table);
+        } catch (DocumentException ex) {
+            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void dynamicPdfTable(List<TabWidget> tabWidgets, OutputStream out) {
         try {
             PdfWriter writer = null;
@@ -502,19 +626,58 @@ public class CustomReportDesigner {
             writer.setPageEvent(event);
             PageNumeration pevent = new PageNumeration();
             writer.setPageEvent(pevent);
+
+            addReportHeader(document);
+
+            reportHeader.getReportHeader(document);
+            document.add(new Phrase("\n"));
+            document.add(new Phrase("\n"));
             for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
                 TabWidget tabWidget = iterator.next();
                 if (tabWidget.getChartType().equalsIgnoreCase("table")) {
                     PdfPTable pdfTable = dynamicPdfTable(tabWidget);
                     document.add(pdfTable);
-                } else if (tabWidget.getChartType().equalsIgnoreCase("pieChart")) {
+                } else if (tabWidget.getChartType().equalsIgnoreCase("pie")) {
                     document.add(generatePieChart(writer, tabWidget));
-                } else if (tabWidget.getChartType().equalsIgnoreCase("barChart")) {
-                    document.add(multiAxisBarChart(writer, tabWidget));
+                } else if (tabWidget.getChartType().equalsIgnoreCase("bar")) {
+                    //document.add(multiAxisBarChart(writer, tabWidget));
+                    PdfPTable table = new PdfPTable(1);
+                    PdfPCell cell;
+                    table.setWidthPercentage(95f);
+                    cell = new PdfPCell(new Phrase(tabWidget.getWidgetTitle(), pdfFont));
+                    cell.setFixedHeight(30);
+                    cell.setBorderColor(widgetBorderColor);
+                    cell.setBackgroundColor(widgetTitleColor);
+                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                    cell.setColspan(1);
+                    table.addCell(cell);
+                    Image barChart = multiAxisBarChart(writer, tabWidget);
+                    if (barChart != null) {
+                        PdfPCell chartCell = new PdfPCell(barChart);
+                        chartCell.setBorderColor(widgetBorderColor);
+                        //chartCell.setPadding(100);
+                        table.addCell(chartCell);
+                        document.add(table);
+                    }
+
                 } else if (tabWidget.getChartType().equalsIgnoreCase("line")) {
+                    PdfPTable table = new PdfPTable(1);
+                    PdfPCell cell;
+                    table.setWidthPercentage(95f);
+                    cell = new PdfPCell(new Phrase(tabWidget.getWidgetTitle(), pdfFont));
+                    cell.setFixedHeight(30);
+                    cell.setBorderColor(widgetBorderColor);
+                    cell.setBackgroundColor(widgetTitleColor);
+                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                    cell.setColspan(1);
+                    table.addCell(cell);
                     Image lineChart = multiAxisLineChart(writer, tabWidget);
                     if (lineChart != null) {
-                        document.add(lineChart);
+                        PdfPCell chartCell = new PdfPCell(lineChart);
+                        chartCell.setBorderColor(widgetBorderColor);
+                        //chartCell.setPadding(100);
+                        table.addCell(chartCell);
+                        document.add(table);
                     }
                 } else if (tabWidget.getChartType().equalsIgnoreCase("areaChart")) {
                     document.add(multiAxisAreaChart(writer, tabWidget));
@@ -581,13 +744,13 @@ public class CustomReportDesigner {
 
             List<WidgetColumn> columns = tabWidget.getColumns();
 
-            List<Map<String, String>> originalData = tabWidget.getData();
+            List<Map<String, Object>> originalData = tabWidget.getData();
 
-            List<Map<String, String>> tempData = tabWidget.getData();
+            List<Map<String, Object>> tempData = tabWidget.getData();
             if (originalData == null || originalData.isEmpty()) {
                 return null;
             }
-            List<Map<String, String>> data = new ArrayList<>(originalData);
+            List<Map<String, Object>> data = new ArrayList<>(originalData);
 
             List<SortType> sortFields = new ArrayList<>();
             List<Aggregation> aggreagtionList = new ArrayList<>();
@@ -621,12 +784,13 @@ public class CustomReportDesigner {
                 data = data.subList(0, tabWidget.getMaxRecord());
             }
 
-//            final CategoryDataset dataset1 = createDataset1();
-//            final CategoryDataset dataset2 = createDataset2();
+//            final CategoryDataset dataset1 = createDataset3();
+//            final CategoryDataset dataset2 = createDataset4();
             final CategoryDataset dataset1 = createDataset1(data, firstAxis, secondAxis, xAxis);
-            final CategoryDataset dataset2 = createDataset1(data, secondAxis, firstAxis, xAxis);
+            final CategoryDataset dataset2 = createDataset2(data, secondAxis, firstAxis, xAxis);
             final CategoryAxis domainAxis = new CategoryAxis(xAxis);
-            final NumberAxis rangeAxis = new NumberAxis("Value");
+            // final NumberAxis rangeAxis = new NumberAxis("Value");
+            final NumberAxis rangeAxis = new NumberAxis();
             final LineAndShapeRenderer renderer1 = new LineAndShapeRenderer();
             final CategoryPlot plot = new CategoryPlot(dataset1, domainAxis, rangeAxis, renderer1) {
 
@@ -664,15 +828,20 @@ public class CustomReportDesigner {
                 }
 
             };
+            plot.setRangeGridlinesVisible(true);
+            plot.setDomainGridlinesVisible(true);
+            //final JFreeChart chart = new JFreeChart(tabWidget.getWidgetTitle(), plot);
+            final JFreeChart chart = new JFreeChart(plot);
 
-            final JFreeChart chart = new JFreeChart(tabWidget.getWidgetTitle(), plot);
             chart.setBackgroundPaint(Color.white);
 //        chart.getLegend().setAnchor(Legend.SOUTH);
-            plot.setBackgroundPaint(new Color(0xEE, 0xEE, 0xFF));
+            //plot.setBackgroundPaint(new Color(0xEE, 0xEE, 0xFF));
+            plot.setBackgroundPaint(Color.white);
             plot.setDomainAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
             plot.setDataset(1, dataset2);
             plot.mapDatasetToRangeAxis(1, 1);
-            final ValueAxis axis2 = new NumberAxis("Secondary");
+            //final ValueAxis axis2 = new NumberAxis("Secondary");
+            final ValueAxis axis2 = new NumberAxis();
             plot.setRangeAxis(1, axis2);
             plot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
             final LineAndShapeRenderer renderer2 = new LineAndShapeRenderer();
@@ -708,10 +877,10 @@ public class CustomReportDesigner {
 
             List<WidgetColumn> columns = tabWidget.getColumns();
 
-            List<Map<String, String>> originalData = tabWidget.getData();
-            List<Map<String, String>> data = new ArrayList<>(originalData);
+            List<Map<String, Object>> originalData = tabWidget.getData();
+            List<Map<String, Object>> data = new ArrayList<>(originalData);
 
-//            List<Map<String, String>> tempData = tabWidget.getData();
+//            List<Map<String, Object>> tempData = tabWidget.getData();
 //        if (data == null || data.isEmpty()) {
 //            PdfPTable table = new PdfPTable(columns.size());
 //            PdfPCell cell;
@@ -765,7 +934,8 @@ public class CustomReportDesigner {
             final CategoryDataset dataset1 = createDataset1(data, firstAxis, secondAxis, xAxis);
             final CategoryDataset dataset2 = createDataset1(data, secondAxis, firstAxis, xAxis);
             final CategoryAxis domainAxis = new CategoryAxis(xAxis);
-            final NumberAxis rangeAxis = new NumberAxis("Value");
+            // final NumberAxis rangeAxis = new NumberAxis("Value");
+            final NumberAxis rangeAxis = new NumberAxis();
             final AreaRenderer renderer1 = new AreaRenderer();
             final CategoryPlot plot = new CategoryPlot(dataset1, domainAxis, rangeAxis, renderer1) {
 
@@ -803,15 +973,18 @@ public class CustomReportDesigner {
                 }
 
             };
-
+            plot.setRangeGridlinesVisible(true);
+            plot.setDomainGridlinesVisible(true);
             final JFreeChart chart = new JFreeChart(tabWidget.getWidgetTitle(), plot);
             chart.setBackgroundPaint(Color.white);
 //        chart.getLegend().setAnchor(Legend.SOUTH);
-            plot.setBackgroundPaint(new Color(0xEE, 0xEE, 0xFF));
+            // plot.setBackgroundPaint(new Color(0xEE, 0xEE, 0xFF));
+            plot.setBackgroundPaint(Color.white);
             plot.setDomainAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
             plot.setDataset(1, dataset2);
             plot.mapDatasetToRangeAxis(1, 1);
-            final ValueAxis axis2 = new NumberAxis("Secondary");
+            // final ValueAxis axis2 = new NumberAxis("Secondary");
+            final ValueAxis axis2 = new NumberAxis();
             plot.setRangeAxis(1, axis2);
             plot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
             final AreaRenderer renderer2 = new AreaRenderer();
@@ -847,10 +1020,10 @@ public class CustomReportDesigner {
 
             List<WidgetColumn> columns = tabWidget.getColumns();
 
-            List<Map<String, String>> originalData = tabWidget.getData();
-            List<Map<String, String>> data = new ArrayList<>(originalData);
+            List<Map<String, Object>> originalData = tabWidget.getData();
+            List<Map<String, Object>> data = new ArrayList<>(originalData);
 
-            List<Map<String, String>> tempData = tabWidget.getData();
+            List<Map<String, Object>> tempData = tabWidget.getData();
 //        if (data == null || data.isEmpty()) {
 //            PdfPTable table = new PdfPTable(columns.size());
 //            PdfPCell cell;
@@ -900,10 +1073,13 @@ public class CustomReportDesigner {
                 data = data.subList(0, tabWidget.getMaxRecord());
             }
 
+//            final CategoryDataset dataset1 = createDataset3();
+//            final CategoryDataset dataset2 = createDataset4();
             final CategoryDataset dataset1 = createDataset1(data, firstAxis, secondAxis, xAxis);
-            final CategoryDataset dataset2 = createDataset1(data, secondAxis, firstAxis, xAxis);
+            final CategoryDataset dataset2 = createDataset2(data, secondAxis, firstAxis, xAxis);
             final CategoryAxis domainAxis = new CategoryAxis(xAxis);
-            final NumberAxis rangeAxis = new NumberAxis("Value");
+            //final NumberAxis rangeAxis = new NumberAxis("Value");
+            final NumberAxis rangeAxis = new NumberAxis();
             final BarRenderer renderer1 = new BarRenderer();
             final CategoryPlot plot = new CategoryPlot(dataset1, domainAxis, rangeAxis, renderer1) {
 
@@ -941,15 +1117,19 @@ public class CustomReportDesigner {
                 }
 
             };
-
-            final JFreeChart chart = new JFreeChart(tabWidget.getWidgetTitle(), plot);
+            plot.setRangeGridlinesVisible(true);
+            plot.setDomainGridlinesVisible(true);
+            // final JFreeChart chart = new JFreeChart(tabWidget.getWidgetTitle(), plot);
+            final JFreeChart chart = new JFreeChart(plot);
             chart.setBackgroundPaint(Color.white);
 //        chart.getLegend().setAnchor(Legend.SOUTH);
-            plot.setBackgroundPaint(new Color(0xEE, 0xEE, 0xFF));
+            // plot.setBackgroundPaint(new Color(0xEE, 0xEE, 0xFF));
+            plot.setBackgroundPaint(Color.white);
             plot.setDomainAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
             plot.setDataset(1, dataset2);
             plot.mapDatasetToRangeAxis(1, 1);
-            final ValueAxis axis2 = new NumberAxis("Secondary");
+            //final ValueAxis axis2 = new NumberAxis("Secondary");
+            final ValueAxis axis2 = new NumberAxis();
             plot.setRangeAxis(1, axis2);
             plot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
             final BarRenderer renderer2 = new BarRenderer();
@@ -985,7 +1165,7 @@ public class CustomReportDesigner {
      *
      * @return The dataset.
      */
-    private CategoryDataset createDataset1(List<Map<String, String>> data, List<String> firstAxis, List<String> secondAxis, String xAxis) {
+    private CategoryDataset createDataset1(List<Map<String, Object>> data, List<String> firstAxis, List<String> secondAxis, String xAxis) {
         // row keys...
 //        final String series1 = "Series 1";
 //        final String series2 = "Dummy 1";
@@ -998,17 +1178,83 @@ public class CustomReportDesigner {
 
         // create the dataset...
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
-            Map<String, String> dataMap = iterator.next();
+        for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, Object> dataMap = iterator.next();
             for (Iterator<String> iterator1 = firstAxis.iterator(); iterator1.hasNext();) {
                 String axis = iterator1.next();
-                dataset.addValue(ApiUtils.toDouble(dataMap.get(axis)), axis, dataMap.get(xAxis) + "");
+                System.out.println(ApiUtils.toDouble(dataMap.get(axis) + "") + "---" + axis + "----" + dataMap.get(xAxis) + "");
+                dataset.addValue(ApiUtils.toDouble(dataMap.get(axis) + ""), axis, dataMap.get(xAxis) + "");
             }
+//            for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
+//                String axis = iterator1.next();
+//                System.out.println(null + "---" + axis + "----" + dataMap.get(xAxis) + "");
+//                dataset.addValue(null, axis, dataMap.get(xAxis) + "");
+//            }
+
+        }
+        for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, Object> dataMap = iterator.next();
+
             for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
                 String axis = iterator1.next();
+                System.out.println(null + "---" + axis + "----" + dataMap.get(xAxis) + "");
                 dataset.addValue(null, axis, dataMap.get(xAxis) + "");
             }
+        }
 
+//        dataset.addValue(1.0, series1, category1);
+//        dataset.addValue(4.0, series1, category2);
+//        dataset.addValue(3.0, series1, category3);
+//        dataset.addValue(5.0, series1, category4);
+//
+//        dataset.addValue(null, series2, category1);
+//        dataset.addValue(null, series2, category2);
+//        dataset.addValue(null, series2, category3);
+//        dataset.addValue(null, series2, category4);
+        return dataset;
+
+    }
+
+    /**
+     * Creates a sample dataset.
+     *
+     * @return The dataset.
+     */
+    private CategoryDataset createDataset2(List<Map<String, Object>> data, List<String> secondAxis, List<String> firstAxis, String xAxis) {
+        // row keys...
+//        final String series1 = "Series 1";
+//        final String series2 = "Dummy 1";
+//
+//        // column keys...
+//        final String category1 = "Category 1";
+//        final String category2 = "Category 2";
+//        final String category3 = "Category 3";
+//        final String category4 = "Category 4";
+
+        // create the dataset...
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, Object> dataMap = iterator.next();
+            for (Iterator<String> iterator1 = firstAxis.iterator(); iterator1.hasNext();) {
+                String axis = iterator1.next();
+                System.out.println(ApiUtils.toDouble(dataMap.get(axis) + "") + "---" + axis + "----" + dataMap.get(xAxis) + "");
+                dataset.addValue(null, axis, dataMap.get(xAxis) + "");
+            }
+//            for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
+//                String axis = iterator1.next();
+//                System.out.println(null + "---" + axis + "----" + dataMap.get(xAxis) + "");
+//                dataset.addValue(null, axis, dataMap.get(xAxis) + "");
+//            }
+
+        }
+        for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, Object> dataMap = iterator.next();
+
+            for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
+                String axis = iterator1.next();
+                System.out.println(null + "---" + axis + "----" + dataMap.get(xAxis) + "");
+                dataset.addValue(ApiUtils.toDouble(dataMap.get(axis) + ""), axis, dataMap.get(xAxis) + "");
+            }
         }
 
 //        dataset.addValue(1.0, series1, category1);
@@ -1085,6 +1331,79 @@ public class CustomReportDesigner {
 
     }
 
+    private CategoryDataset createDataset3() {
+        // row keys...
+
+        final String series1 = "Series 1";
+        final String series2 = "Dummy 1";
+//        // column keys...
+        final String category1 = "Category 1";
+        final String category2 = "Category 2";
+        final String category3 = "Category 3";
+        final String category4 = "Category 4";
+
+        // create the dataset...
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        dataset.addValue(785, "clicks", "Monday");
+        dataset.addValue(572, "clicks", "Tuesday");
+        dataset.addValue(558, "clicks", "Wednessday");
+        dataset.addValue(391, "clicks", "Thursday");
+        dataset.addValue(536, "clicks", "Friday");
+        dataset.addValue(490, "clicks", "Saturday");
+        dataset.addValue(731, "clicks", "Sunday");
+
+        dataset.addValue(null, "conversions", "Monday");
+        dataset.addValue(null, "conversions", "Tuesday");
+        dataset.addValue(null, "conversions", "Wednessday");
+        dataset.addValue(null, "conversions", "Thursday");
+        dataset.addValue(null, "conversions", "Friday");
+        dataset.addValue(null, "conversions", "Saturday");
+        dataset.addValue(null, "conversions", "Sunday");
+        return dataset;
+
+    }
+
+    /**
+     * Creates a sample dataset.
+     *
+     * @return The dataset.
+     */
+    private static CategoryDataset createDataset4() {
+
+        // row keys...
+        final String series1 = "Dummy 2";
+        final String series2 = "Series 2";
+
+        // column keys...
+        final String category1 = "Category 1";
+        final String category2 = "Category 2";
+        final String category3 = "Category 3";
+        final String category4 = "Category 4";
+
+        // create the dataset...
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        dataset.addValue(null, "clicks", "Monday");
+        dataset.addValue(null, "clicks", "Tuesday");
+        dataset.addValue(null, "clicks", "Wednessday");
+        dataset.addValue(null, "clicks", "Thursday");
+        dataset.addValue(null, "clicks", "Friday");
+        dataset.addValue(null, "clicks", "Saturday");
+        dataset.addValue(null, "clicks", "Sunday");
+
+        dataset.addValue(132, "conversions", "Monday");
+        dataset.addValue(79, "conversions", "Tuesday");
+        dataset.addValue(72, "conversions", "Wednessday");
+        dataset.addValue(18, "conversions", "Thursday");
+        dataset.addValue(68, "conversions", "Friday");
+        dataset.addValue(73, "conversions", "Saturday");
+        dataset.addValue(34, "conversions", "Sunday");
+
+        return dataset;
+
+    }
+
     public static Image generateBarChart(PdfWriter writer, TabWidget tabWidget) throws BadElementException {
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 
@@ -1132,8 +1451,8 @@ public class CustomReportDesigner {
 
     public static Image generatePieChart(PdfWriter writer, TabWidget tabWidget) throws BadElementException {
         List<WidgetColumn> columns = tabWidget.getColumns();
-        List<Map<String, String>> originaldata = tabWidget.getData();
-        List<Map<String, String>> data = new ArrayList<>(originaldata);
+        List<Map<String, Object>> originaldata = tabWidget.getData();
+        List<Map<String, Object>> data = new ArrayList<>(originaldata);
 
         String xAxis = null;
         String yAxis = null;
@@ -1150,10 +1469,10 @@ public class CustomReportDesigner {
         DefaultPieDataset dataSet = new DefaultPieDataset();
         List<String> legends = new ArrayList<>();
 
-        for (Iterator<Map<String, String>> iterator = data.iterator(); iterator.hasNext();) {
-            Map<String, String> dataMap = iterator.next();
-            dataSet.setValue(dataMap.get(xAxis), ApiUtils.toDouble(dataMap.get(yAxis)));
-            legends.add(dataMap.get(xAxis));
+        for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
+            Map<String, Object> dataMap = iterator.next();
+            dataSet.setValue(dataMap.get(xAxis) + "", ApiUtils.toDouble(dataMap.get(yAxis) + ""));
+            legends.add(dataMap.get(xAxis) + "");
         }
 
         JFreeChart chart = ChartFactory.createPieChart(
@@ -1372,7 +1691,7 @@ public class CustomReportDesigner {
 //                ct.addElement(e);
 //            }
             PdfPTable table = new PdfPTable(1);
-            
+
             table.setTotalWidth(523);
             PdfPCell cell = new PdfPCell(new Phrase("Page Number " + writer.getPageNumber()));
             cell.setBorder(Rectangle.NO_BORDER);
@@ -1408,9 +1727,9 @@ public class CustomReportDesigner {
 //            }
                 // System.out.println("LOCATION PATH " + getClass().getProtectionDomain().getCodeSource().getLocation());
                 Rectangle rectangle = pageSize; // new Rectangle(10, 900, 100, 850);
-                Image img = Image.getInstance(CustomReportDesigner.class.getResource("") + "/../images/l2tmedia-logo.png");
-                img.scaleToFit(100, 100);
-                img.setAbsolutePosition(45, rectangle.getTop() - 50);
+                Image img = Image.getInstance(CustomReportDesigner.class.getResource("") + "/../images/l2tmedia-logo-dark.png");
+                img.scaleToFit(200, 200);
+                img.setAbsolutePosition(45, rectangle.getTop() - 100);
                 img.setAlignment(Element.ALIGN_TOP);
                 writer.getDirectContent().addImage(img);
                 if (footer != null) {
