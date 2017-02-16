@@ -5,6 +5,7 @@
  */
 package com.visumbu.api.admin.controller;
 
+import com.google.api.services.analyticsreporting.v4.model.GetReportsResponse;
 import com.visumbu.api.admin.service.BingService;
 import com.visumbu.api.admin.service.GaService;
 import com.visumbu.api.admin.service.UserService;
@@ -49,8 +50,13 @@ public class GaController {
         String metrics = request.getParameter("metrics"); // "ga:sessions,sessions;ga:visits,visits";
         String dimensions = request.getParameter("dimensions"); // "ga:browser";
         String filter = request.getParameter("filter"); //"ga:channelGrouping==Display;ga:medium==cpc";
+        String raw = request.getParameter("_raw"); //"ga:channelGrouping==Display;ga:medium==cpc";
         filter=filter.replaceAll(",", "==");
-        return gaService.getResponseAsMap(gaService.getGenericData("82176546", startDate, endDate, null, null, metrics, dimensions, filter));
+        GetReportsResponse gaData = gaService.getGenericData("82176546", startDate, endDate, null, null, metrics, dimensions, filter);
+        if(raw != null) {
+            return gaData;
+        }
+        return gaService.getResponseAsMap(gaData);
     }
     
     @RequestMapping(value = "testGa", method = RequestMethod.GET, produces = "application/json")
