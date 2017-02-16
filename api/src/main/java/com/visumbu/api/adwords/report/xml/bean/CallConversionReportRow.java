@@ -21,9 +21,16 @@ public class CallConversionReportRow {
     private String status;
     private String callType;
     private String day;
-    
+    private String conversions;
 
-    
+    public String getConversions() {
+        return conversions;
+    }
+
+    @XmlAttribute
+    public void setConversions(String conversions) {
+        this.conversions = conversions;
+    }
 
     public String getAccount() {
         return account;

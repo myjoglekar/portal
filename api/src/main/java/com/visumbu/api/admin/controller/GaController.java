@@ -41,6 +41,18 @@ public class GaController {
     private GaService gaService;
     
 
+    @RequestMapping(value = "getGa", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object getGa(HttpServletRequest request, HttpServletResponse response) throws IOException, GeneralSecurityException {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String metrics = request.getParameter("metrics"); // "ga:sessions,sessions;ga:visits,visits";
+        String dimensions = request.getParameter("dimensions"); // "ga:browser";
+        String filter = request.getParameter("filter"); //"ga:channelGrouping==Display;ga:medium==cpc";
+        filter=filter.replaceAll(",", "==");
+        return gaService.getResponseAsMap(gaService.getGenericData("82176546", startDate, endDate, null, null, metrics, dimensions, filter));
+    }
+    
     @RequestMapping(value = "testGa", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getAllDataSets(HttpServletRequest request, HttpServletResponse response) throws IOException, GeneralSecurityException {
