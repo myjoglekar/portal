@@ -180,7 +180,7 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("yearWeek", "string", "Year Of Week"));
+        columnDefs.add(new ColumnDef("yearWeek", "date", "Year Of Week"));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
@@ -202,7 +202,7 @@ public class SeoTabController {
                 map.put("avgTimeOnPage", ApiUtils.toMins(map.get("avgTimeOnPage")));
                 map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate") + ""));
                 map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions") + ""));
-                map.put("yearWeek", map.get("ga:yearWeek"));
+                map.put("yearWeek", DateUtils.yearWeekToDate(map.get("ga:yearWeek"), "MM/dd/yyyy"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
                         + ApiUtils.toInteger(map.get("inventoryPageViews"))

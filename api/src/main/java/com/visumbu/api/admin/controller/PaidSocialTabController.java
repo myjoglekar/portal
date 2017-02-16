@@ -394,8 +394,8 @@ public class PaidSocialTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         Map returnMap = new HashMap();
         List<ColumnDef> columnDefs = new ArrayList<>();
-        columnDefs.add(new ColumnDef("date_start", "string", "Date Start"));
-        columnDefs.add(new ColumnDef("date_stop", "string", "Date Stop"));
+        columnDefs.add(new ColumnDef("date_start", "date", "Date Start"));
+        columnDefs.add(new ColumnDef("date_stop", "date", "Date Stop"));
         columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
         columnDefs.add(new ColumnDef("cost_post_reaction", "number", "Cost Post Reaction", ColumnDef.Aggregation.CPR, ColumnDef.Format.CURRENCY));
         columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));

@@ -465,7 +465,7 @@ public class PaidTabController {
             Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
-            columnDefs.add(new ColumnDef("weekDay", "String", "Week Day"));
+            columnDefs.add(new ColumnDef("weekDay", "date", "Week Day"));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("cost", "number", "Cost", ColumnDef.Aggregation.SUM, ColumnDef.Format.CURRENCY));
@@ -495,7 +495,7 @@ public class PaidTabController {
 //                Double cpa = parseDouble(accountReportRow.getCostConv() == null ? "0" : accountReportRow.getCostConv());
                     Double conversions = parseDouble(accountReportRow.getAllConv() == null ? "0" : accountReportRow.getAllConv());
 
-                    String adwordsStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "yyyy-MM-dd"));
+                    String adwordsStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "yyyy-MM-dd"), "MM/dd/yyyy");
                     ClicksImpressionsGraphBean oldBean = dataMap.get(adwordsStartDayOfWeek);
                     ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
                     if (oldBean != null) {
@@ -529,7 +529,7 @@ public class PaidTabController {
                     Double cpc = parseDouble(accountReportRow.getAverageCpc() == null ? "0" : accountReportRow.getAverageCpc().getValue());
                     Double cpa = parseDouble(accountReportRow.getCostPerConversion() == null ? "0" : accountReportRow.getCostPerConversion().getValue());
 
-                    String bingStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "MM/dd/yyyy"));
+                    String bingStartDayOfWeek = DateUtils.getStartDayOfWeek(DateUtils.toDate(day, "MM/dd/yyyy"), "MM/dd/yyyy");
                     ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
                     ClicksImpressionsGraphBean bean = new ClicksImpressionsGraphBean();
                     if (oldBean != null) {
@@ -1003,6 +1003,16 @@ public class PaidTabController {
 
         }
         return new ArrayList<DevicePerformanceReportBean>(map.values());
+    }
+
+    @RequestMapping(value = "callConversionsTest", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object callConversionsTest(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "ppc");
+
+        return adwordsService.getCallConversionsReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
     }
 
     @RequestMapping(value = "adGroups", method = RequestMethod.GET, produces = "application/json")
