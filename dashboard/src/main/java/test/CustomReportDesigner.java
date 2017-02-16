@@ -8,7 +8,6 @@ package test;
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -25,7 +24,6 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.model.WidgetColumn;
@@ -69,15 +67,8 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.labels.StandardXYToolTipGenerator;
-import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.AreaRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.chart.renderer.category.LineRenderer3D;
-import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.xy.XYDataset;
-import static test.FontTest.FONT;
 
 /**
  *
@@ -502,31 +493,58 @@ public class CustomReportDesigner {
     public void addReportHeader(Document document) {
         try {
             // 236, 255, 224
-            BaseColor backgroundColor = new BaseColor(236, 255, 224);
+            BaseColor backgroundColor = new BaseColor(235, 249, 235);
+            BaseColor dottedLineColor = new BaseColor(18, 39, 59);
+            BaseColor reportTitleColor = new BaseColor(255, 117, 26);
+            BaseColor textHighlightColor = new BaseColor(255, 166, 77);
 
             Integer headerCellCount = 4;
             Font f = new Font(pdfFont);
             Font pdfFontNormal = new Font(pdfFont);
+            Font pdfFontNormalLight = new Font(pdfFont);
             Font pdfFontBold = new Font(pdfFont);
             Font pdfFontHighlight = new Font(pdfFont);
+            Font pdfFontBoldSmall = new Font(pdfFont);
+            Font pdfFontBoldLarge = new Font(pdfFont);
+
+            pdfFontNormal.setColor(BaseColor.GRAY);
+            pdfFontNormal.setSize(14);
+
+            pdfFontNormalLight.setColor(BaseColor.LIGHT_GRAY);
+            pdfFontNormalLight.setSize(14);
 
             pdfFontBold.setStyle(Font.BOLD);
-            pdfFontHighlight.setColor(BaseColor.ORANGE);
+            pdfFontBold.setColor(BaseColor.GRAY);
+            pdfFontBold.setSize(14);
+            pdfFontBoldSmall.setStyle(Font.BOLD);
+            pdfFontBoldSmall.setColor(BaseColor.GRAY);
+            pdfFontBoldSmall.setSize(12);
+            pdfFontBoldLarge.setStyle(Font.BOLD);
+            pdfFontBoldLarge.setColor(dottedLineColor);
+            pdfFontBoldLarge.setSize(16);
+
+            pdfFontHighlight.setSize(14);
+            pdfFontHighlight.setColor(textHighlightColor);
 
             f.setSize(20);
-            f.setColor(BaseColor.ORANGE);
+            f.setColor(reportTitleColor);
+            f.setStyle(Font.BOLD);
+            
             Paragraph reportTitle = new Paragraph("Month End Report".toUpperCase(), f);
             LineSeparator dottedline = new LineSeparator();
 
-            dottedline.setOffset(-6);
-            dottedline.setLineWidth(5);
-            dottedline.setLineColor(BaseColor.LIGHT_GRAY);
-            reportTitle.add(dottedline);
+            dottedline.setOffset(6);
+            dottedline.setLineWidth(12);
+            dottedline.setLineColor(dottedLineColor);
+            reportTitle.setAlignment(10);
+//            reportTitle.add(dottedline);
+            
+            document.add(dottedline);
             document.add(reportTitle);
             document.add(new Phrase("\n"));
 
             PdfPTable table = new PdfPTable(headerCellCount);
-            table.setWidths(new float[]{20, 20, 20, 1});
+            table.setWidths(new float[]{20, 20, 13, 1});
             table.setWidthPercentage(95f);
 
             Paragraph leftParagraph = new Paragraph("September 2016", pdfFontNormal);
@@ -534,19 +552,21 @@ public class CustomReportDesigner {
             leftParagraph.add(new Paragraph("Facebook Monthly Budget", pdfFontBold));
             leftParagraph.add(new Phrase("\n"));
             leftParagraph.add(new Paragraph("Budget ", pdfFontNormal));
-            leftParagraph.add(new Paragraph("$1500", pdfFontHighlight));
+            leftParagraph.add(new Paragraph("$1,500", pdfFontHighlight));
+            leftParagraph.add(new Phrase("\n\n"));
+            leftParagraph.add(new Paragraph("Bob Smith BMW", pdfFontBoldLarge));
 
-            Paragraph rightParagraph = new Paragraph("Digital Advisor", pdfFontHighlight);
+            Paragraph rightParagraph = new Paragraph("DIGITAL ADVISOR", pdfFontHighlight);
             rightParagraph.add(new Phrase("\n"));
-            rightParagraph.add(new Paragraph("Zoe Suffety", pdfFontBold));
+            rightParagraph.add(new Paragraph("Zoe Suffety", pdfFontBoldSmall));
             rightParagraph.add(new Phrase("\n"));
-            rightParagraph.add(new Paragraph("Email: ", pdfFontNormal));
-            rightParagraph.add(new Paragraph("zsuffety@l2tmedia.com", pdfFontBold));
+            rightParagraph.add(new Paragraph("EMAIL: ", pdfFontNormalLight));
+            rightParagraph.add(new Paragraph("zsuffety@l2tmedia.com", pdfFontBoldSmall));
             rightParagraph.add(new Phrase("\n"));
-            rightParagraph.add(new Paragraph("Phone: ", pdfFontNormal));
-            rightParagraph.add(new Paragraph("847-901-8156", pdfFontBold));
+            rightParagraph.add(new Paragraph("PHONE: ", pdfFontNormalLight));
+            rightParagraph.add(new Paragraph("847-901-8156", pdfFontBoldSmall));
 
-            PdfPCell bottomCell = new PdfPCell(new Phrase("\n"));
+            PdfPCell bottomCell = new PdfPCell(new Phrase("\n\n"));
             bottomCell.setBackgroundColor(backgroundColor);
             bottomCell.setColspan(headerCellCount);
             PdfPCell topCell = new PdfPCell(new Phrase(""));
@@ -1729,7 +1749,7 @@ public class CustomReportDesigner {
                 Rectangle rectangle = pageSize; // new Rectangle(10, 900, 100, 850);
                 Image img = Image.getInstance(CustomReportDesigner.class.getResource("") + "/../images/l2tmedia-logo-dark.png");
                 img.scaleToFit(200, 200);
-                img.setAbsolutePosition(45, rectangle.getTop() - 100);
+                img.setAbsolutePosition(38, rectangle.getTop() - 85);
                 img.setAlignment(Element.ALIGN_TOP);
                 writer.getDirectContent().addImage(img);
                 if (footer != null) {
