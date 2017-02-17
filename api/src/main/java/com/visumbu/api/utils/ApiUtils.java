@@ -41,7 +41,7 @@ public class ApiUtils {
 
     public static Integer toInteger(String string) {
         try {
-            return Integer.parseInt(string);
+            return toDouble(string).intValue();
         } catch (Exception e) {
 
         }

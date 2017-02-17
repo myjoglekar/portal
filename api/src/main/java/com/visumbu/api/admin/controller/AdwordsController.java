@@ -43,6 +43,7 @@ public class AdwordsController {
         String accountId = request.getParameter("accountId");
         String fields[] = request.getParameterValues("fields");
         String aggregation = request.getParameter("aggregation");
+        String reportType = request.getParameter("reportType");
         Map<String, String> filter = new HashMap<>();
         String filters[] = request.getParameterValues("filters");
         for (int i = 0; i < filters.length; i++) {
@@ -50,7 +51,7 @@ public class AdwordsController {
             String[] filterArr = filterString.split(",");
             filter.put(filterArr[0], filterArr[1]);
         }
-        return adwordsService.adWordsAsMap(startDate, endDate, accountId, fields, filter, aggregation);
+        return adwordsService.adWordsAsMap(startDate, endDate, accountId, fields, filter, aggregation, reportType);
     }
 
     @RequestMapping(value = "getCampain", method = RequestMethod.GET, produces = "application/json")
