@@ -518,7 +518,7 @@ public class DisplayTabController {
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
-            columnDefs.add(new ColumnDef("week", "string", "Week", 1));
+            columnDefs.add(new ColumnDef("week", "date", "Week", 1));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
@@ -547,6 +547,7 @@ public class DisplayTabController {
                     performanceBean.setClicks(row.getClicks());
                     performanceBean.setCtr(row.getCtr());
                     performanceBean.setDay(row.getWeek());
+                    performanceBean.setWeek(row.getWeek());
                     String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
                     performanceBean.setCost(cost);
                     String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);

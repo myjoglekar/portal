@@ -126,26 +126,24 @@ public class ProxyController {
         List<TabWidget> tabWidgets = uiService.getTabWidget(tabId);
         for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
             TabWidget tabWidget = iterator.next();
-            if (tabWidget.getChartType().equalsIgnoreCase("table")) {
-                try {
-                    String url = tabWidget.getDirectUrl();
-                    Integer port = request.getServerPort();
+            try {
+                String url = tabWidget.getDirectUrl();
+                Integer port = request.getServerPort();
 
-                    String localUrl = request.getScheme() + "://" + request.getServerName() + ":" + port + "/";
+                String localUrl = request.getScheme() + "://" + request.getServerName() + ":" + port + "/";
 
-                    if (url.startsWith("../")) {
-                        url = url.replaceAll("\\.\\./", localUrl);
-                    }
-                    String data = Rest.getData(url, valueMap);
-                    JSONParser parser = new JSONParser();
-                    Object jsonObj = parser.parse(data);
-                    Map<String, Object> responseMap = JsonSimpleUtils.toMap((JSONObject) jsonObj);
-                    List dataList = (List) responseMap.get("data");
-                    tabWidget.setData(dataList);
-
-                } catch (ParseException ex) {
-                    Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+                if (url.startsWith("../")) {
+                    url = url.replaceAll("\\.\\./", localUrl);
                 }
+                String data = Rest.getData(url, valueMap);
+                JSONParser parser = new JSONParser();
+                Object jsonObj = parser.parse(data);
+                Map<String, Object> responseMap = JsonSimpleUtils.toMap((JSONObject) jsonObj);
+                List dataList = (List) responseMap.get("data");
+                tabWidget.setData(dataList);
+
+            } catch (ParseException ex) {
+                Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         try {

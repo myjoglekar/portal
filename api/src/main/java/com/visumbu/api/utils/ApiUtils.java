@@ -193,5 +193,5 @@ public class ApiUtils {
      public static void main(String[] argv) {
         System.out.println(toMins("7468"));
     }
-    
+
 }

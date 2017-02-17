@@ -126,13 +126,13 @@ public class SeoTabController {
         if (fieldsOnly != null) {
             return returnMap;
         }
+        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "seo");
+        System.out.println("GOALS -> " + gaService.getGaGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId()));
         String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                 + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
-                + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
-                + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
+                + gaService.getGaGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId());
         String dimensions = "ga:channelGrouping";
         String filter = "ga:channelGrouping==Organic Search";
-        AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "seo");
         System.out.println("SEO GA Profile Id " + accountDetails.getAnalyticsProfileId());
         List<Map<String, String>> gaDataMap = new ArrayList<>();
         System.out.println(accountDetails.getAnalyticsProfileId());
@@ -143,8 +143,8 @@ public class SeoTabController {
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
                 map.put("avgTimeOnPage", ApiUtils.toMins(map.get("avgTimeOnPage")));
-                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
-                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate") + ""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions") + ""));
                 map.put("channelGrouping", map.get("ga:channelGrouping"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
@@ -181,7 +181,7 @@ public class SeoTabController {
         columnDefs.add(new ColumnDef("timeOnSiteGt2Mins", "number", "Time On Site > 2Mins", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("vdpViews", "number", "VDP Views", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
         columnDefs.add(new ColumnDef("engagements", "number", "Engagements", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
-        columnDefs.add(new ColumnDef("yearWeek", "string", "Year Of Week"));
+        columnDefs.add(new ColumnDef("yearWeek", "date", "Year Of Week"));
 
         returnMap.put("columnDefs", columnDefs);
         if (fieldsOnly != null) {
@@ -192,8 +192,7 @@ public class SeoTabController {
         if (accountDetails.getAnalyticsProfileId() != null) {
             String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                     + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
-                    + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
-                    + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
+                    + gaService.getGaGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId());
             String dimensions = "ga:yearWeek";
             String filter = "ga:channelGrouping==Organic Search";
 
@@ -202,9 +201,9 @@ public class SeoTabController {
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
                 map.put("avgTimeOnPage", ApiUtils.toMins(map.get("avgTimeOnPage")));
-                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
-                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
-                map.put("yearWeek", map.get("ga:yearWeek"));
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate") + ""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions") + ""));
+                map.put("yearWeek", DateUtils.yearWeekToDate(map.get("ga:yearWeek"), "MM/dd/yyyy"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
                         + ApiUtils.toInteger(map.get("inventoryPageViews"))
@@ -251,8 +250,7 @@ public class SeoTabController {
         if (accountDetails.getAnalyticsProfileId() != null) {
             String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                     + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
-                    + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
-                    + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
+                    + gaService.getGaGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId());
             String dimensions = "ga:dayOfWeekName";
             String filter = "ga:channelGrouping==Organic Search";
 
@@ -261,8 +259,8 @@ public class SeoTabController {
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
                 map.put("avgTimeOnPage", ApiUtils.toMins(map.get("avgTimeOnPage")));
-                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
-                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate") + ""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions") + ""));
                 map.put("dayOfWeekName", map.get("ga:dayOfWeekName"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
@@ -310,8 +308,7 @@ public class SeoTabController {
         if (accountDetails.getAnalyticsProfileId() != null) {
             String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                     + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
-                    + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
-                    + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
+                    + gaService.getGaGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId());
             String dimensions = "ga:pagePath";
             String filter = "ga:channelGrouping==Organic Search";
             String orderBy = "ga:visits";
@@ -321,8 +318,8 @@ public class SeoTabController {
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
                 map.put("avgTimeOnPage", ApiUtils.toMins(map.get("avgTimeOnPage")));
-                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
-                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate") + ""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions") + ""));
                 map.put("pagePath", map.get("ga:pagePath"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
@@ -370,8 +367,7 @@ public class SeoTabController {
         if (accountDetails.getAnalyticsProfileId() != null) {
             String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                     + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
-                    + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
-                    + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
+                    + gaService.getGaGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId());
             String dimensions = "ga:deviceCategory";
             String filter = "ga:channelGrouping==Organic Search";
 
@@ -380,8 +376,8 @@ public class SeoTabController {
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
                 map.put("avgTimeOnPage", ApiUtils.toMins(map.get("avgTimeOnPage")));
-                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
-                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate") + ""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions") + ""));
                 map.put("deviceCategory", map.get("ga:deviceCategory"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))
@@ -428,8 +424,7 @@ public class SeoTabController {
         if (accountDetails.getAnalyticsProfileId() != null) {
             String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                     + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
-                    + "ga:goal1Completions,directionsPageView;ga:goal2Completions,inventoryPageViews;ga:goal3Completions,leadSubmission;"
-                    + "ga:goal4Completions,specialsPageView;ga:goal5Completions,timeOnSiteGt2Mins;ga:goal6Completions,vdpViews;";
+                    + gaService.getGaGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId());
             String dimensions = "ga:city";
             String filter = "ga:channelGrouping==Organic Search";
 
@@ -438,8 +433,8 @@ public class SeoTabController {
             for (Iterator<Map<String, String>> iterator = gaDataMap.iterator(); iterator.hasNext();) {
                 Map<String, String> map = iterator.next();
                 map.put("avgTimeOnPage", ApiUtils.toMins(map.get("avgTimeOnPage")));
-                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate")+""));
-                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions")+""));
+                map.put("bounceRate", ApiUtils.removePercent(map.get("bounceRate") + ""));
+                map.put("percentNewSessions", ApiUtils.removePercent(map.get("percentNewSessions") + ""));
                 map.put("city", map.get("ga:city"));
                 Integer engagements = 0;
                 engagements += (ApiUtils.toInteger(map.get("directionsPageView"))

@@ -173,7 +173,7 @@ public class TabWidget implements Serializable {
     private List<WidgetColumn> columns;
     
     @Transient
-    private List<Map<String, String>> data;
+    private List<Map<String, Object>> data;
 
     public TabWidget() {
     }
@@ -254,11 +254,11 @@ public class TabWidget implements Serializable {
         this.displayColumns = displayColumns;
     }
 
-    public List<Map<String, String>> getData() {
+    public List<Map<String, Object>> getData() {
         return data;
     }
 
-    public void setData(List<Map<String, String>> data) {
+    public void setData(List<Map<String, Object>> data) {
         this.data = data;
     }
     

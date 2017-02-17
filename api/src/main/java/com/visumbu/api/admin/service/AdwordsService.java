@@ -34,6 +34,7 @@ import com.visumbu.api.adwords.report.xml.bean.AccountHourOfDayReport;
 import com.visumbu.api.adwords.report.xml.bean.AccountReport;
 import com.visumbu.api.adwords.report.xml.bean.AdReport;
 import com.visumbu.api.adwords.report.xml.bean.AddGroupReport;
+import com.visumbu.api.adwords.report.xml.bean.CallConversionReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignReport;
@@ -42,11 +43,13 @@ import com.visumbu.api.adwords.report.xml.bean.VideoReport;
 import com.visumbu.api.bing.report.xml.bean.KeywordPerformanceReport;
 import com.visumbu.api.utils.DateUtils;
 import com.visumbu.api.utils.FileReader;
+import com.visumbu.api.utils.XmlUtils;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -671,7 +674,7 @@ public class AdwordsService {
         if (aggregation == null || aggregation.isEmpty()) {
             selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "AdGroupId", "AdGroupName",
                     "Impressions", "Clicks",
-                    "SearchExactMatchImpressionShare", "SearchRankLostImpressionShare",
+                    "SearchExactMatchImpressionShare", "SearchRankLostImpressionShare", "NumOfflineInteractions",
                     "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
                     "NumOfflineInteractions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
@@ -679,7 +682,7 @@ public class AdwordsService {
         } else {
             selector.getFields().addAll(Lists.newArrayList("CampaignId", "AccountDescriptiveName", "CampaignName", "AdGroupId", "AdGroupName",
                     "Impressions", "Clicks", "Date",
-                    "SearchExactMatchImpressionShare", "SearchRankLostImpressionShare",
+                    "SearchExactMatchImpressionShare", "SearchRankLostImpressionShare", "NumOfflineInteractions",
                     "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
                     "NumOfflineInteractions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "ConversionRate"
@@ -840,12 +843,12 @@ public class AdwordsService {
         com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
         if (aggregation == null || aggregation.isEmpty()) {
             selector.getFields().addAll(Lists.newArrayList("CampaignId", "CampaignName", "Impressions", "Clicks",
-                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions", "NumOfflineInteractions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
             ));
         } else {
             selector.getFields().addAll(Lists.newArrayList("CampaignId", "CampaignName", "Impressions", "Clicks", "Date",
-                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions",
+                    "Conversions", "SearchImpressionShare", "AveragePosition", "AllConversions", "NumOfflineInteractions",
                     "AverageCpc", "Ctr", "Cost", "CostPerConversion", "Amount", "ConversionRate"
             ));
         }
@@ -1290,6 +1293,151 @@ public class AdwordsService {
         }
         return null;
     }
+
+    public CallConversionReport getAccountCallConversionsReport(Date startDate, Date endDate, String accountId, String aggregation, String filter) {
+        AdWordsSession session = getSession(accountId);
+        com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
+        selector.getFields().addAll(Lists.newArrayList("AccountDescriptiveName",
+                "Conversions"
+        ));
+
+        if (filter != null) {
+            final Predicate predicate1 = new Predicate();
+            predicate1.setField("ConversionTypeName");
+            predicate1.setOperator(PredicateOperator.IN);
+            predicate1.getValues().add("Lead");
+            final Predicate predicate = new Predicate();
+            predicate.setField("AdNetworkType1");
+            predicate.setOperator(PredicateOperator.IN);
+            predicate.getValues().add(filter);
+            //final Collection<Predicate> predicates = new ArrayList<>();
+            //predicates.add(predicate);
+            //predicates.add(predicate1);
+            selector.getPredicates().add(predicate);
+            selector.getPredicates().add(predicate1);
+        }
+        // Create report definition.
+        ReportDefinition reportDefinition = new ReportDefinition();
+        reportDefinition.setReportName("Call Conversion report #" + System.currentTimeMillis());
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
+        reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
+        reportDefinition.setDownloadFormat(DownloadFormat.XML);
+
+        // Optional: Set the reporting configuration of the session to suppress header, column name, or
+        // summary rows in the report output. You can also configure this via your ads.properties
+        // configuration file. See AdWordsSession.Builder.from(Configuration) for details.
+        // In addition, you can set whether you want to explicitly include or exclude zero impression
+        // rows.
+        ReportingConfiguration reportingConfiguration
+                = new ReportingConfiguration.Builder()
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
+        session.setReportingConfiguration(reportingConfiguration);
+
+        reportDefinition.setSelector(selector);
+
+        try {
+            String filename = XML_FILE_DIR + "adwords-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            // Set the property api.adwords.reportDownloadTimeout or call
+            // ReportDownloader.setReportDownloadTimeout to set a timeout (in milliseconds)
+            // for CONNECT and READ in report downloads.
+            ReportDownloadResponse response
+                    = new ReportDownloader(session).downloadReport(reportDefinition);
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(response.getInputStream(), Charsets.UTF_8));
+            response.saveToFile(filename);
+
+            CallConversionReport report = (CallConversionReport) FileReader.readXML(filename, CallConversionReport.class);
+            System.out.println(report);
+            System.out.printf("Report successfully downloaded to: %s%n", filename);
+            return report;
+        } catch (ReportDownloadResponseException e) {
+            System.out.printf("Report was not downloaded due to: %s%n", e);
+        } catch (ReportException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public Object adWordsAsMap(Date startDate, Date endDate, String accountId, String[] fields, Map<String, String> filter, String aggregation) {
+        AdWordsSession session = getSession(accountId);
+        com.google.api.ads.adwords.lib.jaxb.v201609.Selector selector = new com.google.api.ads.adwords.lib.jaxb.v201609.Selector();
+        selector.getFields().addAll(Lists.newArrayList(fields));
+        
+        if (filter != null) {
+            for (Map.Entry<String, String> entrySet : filter.entrySet()) {
+                String filterName = entrySet.getKey();
+                String filterValue = entrySet.getValue();
+                final Predicate predicate = new Predicate();
+                predicate.setField(filterName);
+                predicate.setOperator(PredicateOperator.IN);
+                predicate.getValues().add(filterValue);
+                selector.getPredicates().add(predicate);
+            }
+        }
+        // Create report definition.
+        ReportDefinition reportDefinition = new ReportDefinition();
+        reportDefinition.setReportName("Call Conversion report #" + System.currentTimeMillis());
+        reportDefinition.setDateRangeType(ReportDefinitionDateRangeType.CUSTOM_DATE);
+        DateRange dateRange = new DateRange();
+        dateRange.setMin(DateUtils.getAdWordsStartDate(startDate));
+        dateRange.setMax(DateUtils.getAdWordsEndDate(endDate));
+        selector.setDateRange(dateRange);
+        reportDefinition.setReportType(ReportDefinitionReportType.ACCOUNT_PERFORMANCE_REPORT);
+        reportDefinition.setDownloadFormat(DownloadFormat.XML);
+
+        // Optional: Set the reporting configuration of the session to suppress header, column name, or
+        // summary rows in the report output. You can also configure this via your ads.properties
+        // configuration file. See AdWordsSession.Builder.from(Configuration) for details.
+        // In addition, you can set whether you want to explicitly include or exclude zero impression
+        // rows.
+        ReportingConfiguration reportingConfiguration
+                = new ReportingConfiguration.Builder()
+                .skipReportHeader(true)
+                .skipColumnHeader(true)
+                .skipReportSummary(true)
+                // Enable to allow rows with zero impressions to show.
+                .includeZeroImpressions(false)
+                .build();
+        session.setReportingConfiguration(reportingConfiguration);
+
+        reportDefinition.setSelector(selector);
+
+        try {
+            String filename = XML_FILE_DIR + "adwords-" + RandomStringUtils.randomAlphanumeric(32).toUpperCase() + ".xml";
+            // Set the property api.adwords.reportDownloadTimeout or call
+            // ReportDownloader.setReportDownloadTimeout to set a timeout (in milliseconds)
+            // for CONNECT and READ in report downloads.
+            ReportDownloadResponse response
+                    = new ReportDownloader(session).downloadReport(reportDefinition);
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(response.getInputStream(), Charsets.UTF_8));
+            response.saveToFile(filename);
+
+            return XmlUtils.getAsMap(filename);
+            
+//            CallConversionReport report = (CallConversionReport) FileReader.readXML(filename, CallConversionReport.class);
+//            System.out.println(report);
+//            System.out.printf("Report successfully downloaded to: %s%n", filename);
+//            return report;
+        } catch (ReportDownloadResponseException e) {
+            System.out.printf("Report was not downloaded due to: %s%n", e);
+        } catch (ReportException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AdwordsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
 //
 //    public Object getCampaigns1(Date startDate, Date endDate) {
 //        try {

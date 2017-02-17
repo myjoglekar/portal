@@ -22,6 +22,7 @@ public class CampaignPerformanceReportBean {
     private String averageCpc;
     private String conversions;
     private String cpa;
+    private String phoneCalls;
     private String searchImpressionsShare;
     private String searchImpressionsShareLostByBudget;
     private String searchImpressionsShareLostByRank;
@@ -34,6 +35,14 @@ public class CampaignPerformanceReportBean {
     private String timeOnSiteGt2Mins; // goal5
     private String vdpViews; // goal 6
 
+    public String getPhoneCalls() {
+        return phoneCalls;
+    }
+
+    public void setPhoneCalls(String phoneCalls) {
+        this.phoneCalls = phoneCalls;
+    }
+    
     public String getDay() {
         return day;
     }
