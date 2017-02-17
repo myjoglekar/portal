@@ -127,6 +127,7 @@ public class SeoTabController {
             return returnMap;
         }
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "seo");
+        System.out.println("GOALS -> " + gaService.getGaGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId()));
         String metricsList = "ga:visits,visits;ga:percentNewSessions,percentNewSessions;"
                 + "ga:bounceRate,bounceRate;ga:avgTimeOnPage,avgTimeOnPage;"
                 + gaService.getGaGoals(accountDetails.getAnalyticsAccountId(), accountDetails.getAnalyticsProfileId());

@@ -528,7 +528,7 @@ public class GaService {
             try {
                 Goals goals = analytics.management().goals().list(accountId, "~all", "~all").execute();
                 for (Goal goal : goals.getItems()) {
-                    if (goal.getProfileId().equalsIgnoreCase(viewId)) {
+                    if (goal.getProfileId().equalsIgnoreCase(viewId) && goal.getActive()) {
                         if (goal.getName().equalsIgnoreCase("Directions Page View") || goal.getName().equalsIgnoreCase("Directions Page Views")) {
                             returnStr += "ga:goal" + goal.getId() + "Completions,directionsPageView;";
                         } else if (goal.getName().equalsIgnoreCase("Inventory Page View") || goal.getName().equalsIgnoreCase("Inventory Page Views")) {
