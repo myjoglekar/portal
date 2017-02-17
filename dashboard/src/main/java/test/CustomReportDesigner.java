@@ -77,14 +77,19 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 public class CustomReportDesigner {
 
     private static List<CalcualtedFunction> calcualtedFunctions = new ArrayList<>();
-    private static BaseColor widgetTitleColor = new BaseColor(90, 113, 122, 28);
-    private static BaseColor tableHeaderColor = new BaseColor(255, 0, 0);
-    private static BaseColor tableFooterColor = new BaseColor(241, 241, 241);
-    private static BaseColor widgetBorderColor = BaseColor.DARK_GRAY;
+//    private static BaseColor widgetTitleColor = new BaseColor(90, 113, 122, 28);
+//    private static BaseColor tableHeaderColor = new BaseColor(255, 0, 0);
+//    private static BaseColor tableFooterColor = new BaseColor(241, 241, 241);
+//    private static BaseColor widgetBorderColor = BaseColor.DARK_GRAY;
+    
+    private static BaseColor widgetTitleColor = new BaseColor(231, 231, 231);
+    private static BaseColor tableHeaderColor = new BaseColor(231, 231, 231);
+    private static BaseColor tableFooterColor = new BaseColor(231, 231, 231);
+    private static BaseColor widgetBorderColor = new BaseColor(204, 204, 204);
 
     private static final String FONT = CustomReportDesigner.class.getResource("") + "../../../static/lib/fonts/proxima/proximanova-reg-webfont.woff"; // "E:\\work\\vizboard\\dashboard\\src\\main\\webapp\\static\\lib\\fonts\\proxima\\proximanova-reg-webfont.woff";
     private static final Rectangle pageSize = PageSize.A2;
-    private static final float widgetWidth = pageSize.getWidth() - 130;
+    private static final float widgetWidth = pageSize.getWidth() - 100;
     private static final float widgetHeight = 300;
     private static final ReportHeader reportHeader = new L2TReportHeader();
 
@@ -276,11 +281,16 @@ public class CustomReportDesigner {
             cell = new PdfPCell(new Phrase(tabWidget.getWidgetTitle()));
             cell.setHorizontalAlignment(1);
             cell.setColspan(columns.size());
+            cell.setBorderColor(widgetBorderColor);
+            cell.setBackgroundColor(tableHeaderColor);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            cell.setPadding(5);
             table.addCell(cell);
             table.setWidthPercentage(95f);
-            for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
+            for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {           
                 WidgetColumn column = iterator.next();
                 PdfPCell dataCell = new PdfPCell(new Phrase(column.getFieldName()));
+                dataCell.setBorderColor(widgetBorderColor);
                 dataCell.setBackgroundColor(tableHeaderColor);
                 if (column.getAlignment() != null) {
                     dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
@@ -418,6 +428,7 @@ public class CustomReportDesigner {
         table.setWidthPercentage(95f);
         if (groupFields != null && groupFields.size() > 0) {
             PdfPCell dataCell = new PdfPCell(new Phrase("Group", pdfFont));
+            
             dataCell.setBackgroundColor(tableHeaderColor);
             table.addCell(dataCell);
         }
@@ -493,10 +504,11 @@ public class CustomReportDesigner {
     public void addReportHeader(Document document) {
         try {
             // 236, 255, 224
-            BaseColor backgroundColor = new BaseColor(235, 249, 235);
-            BaseColor dottedLineColor = new BaseColor(18, 39, 59);
-            BaseColor reportTitleColor = new BaseColor(255, 117, 26);
-            BaseColor textHighlightColor = new BaseColor(255, 166, 77);
+            BaseColor backgroundColor = new BaseColor(244, 250, 245);
+            BaseColor dottedLineColor = new BaseColor(90, 113, 122);
+            BaseColor reportTitleColor = new BaseColor(241, 136, 60);
+            BaseColor textHighlightColor = new BaseColor(242, 156, 33);
+            BaseColor bobSmithBMWColor = new BaseColor(1,67,98);       
 
             Integer headerCellCount = 4;
             Font f = new Font(pdfFont);
@@ -520,7 +532,7 @@ public class CustomReportDesigner {
             pdfFontBoldSmall.setColor(BaseColor.GRAY);
             pdfFontBoldSmall.setSize(12);
             pdfFontBoldLarge.setStyle(Font.BOLD);
-            pdfFontBoldLarge.setColor(dottedLineColor);
+            pdfFontBoldLarge.setColor(bobSmithBMWColor);
             pdfFontBoldLarge.setSize(16);
 
             pdfFontHighlight.setSize(14);
@@ -534,7 +546,7 @@ public class CustomReportDesigner {
             LineSeparator dottedline = new LineSeparator();
 
             dottedline.setOffset(6);
-            dottedline.setLineWidth(12);
+            dottedline.setLineWidth(4);
             dottedline.setLineColor(dottedLineColor);
             reportTitle.setAlignment(10);
 //            reportTitle.add(dottedline);
