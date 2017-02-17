@@ -67,7 +67,10 @@ import org.jfree.chart.axis.ValueAxis;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAnchor;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.renderer.category.AreaRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 
@@ -454,7 +457,8 @@ public class CustomReportDesigner {
         cell.setBackgroundColor(tableTitleColor);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
         cell.setColspan(noOfColumns);
-        cell.setPadding(10);
+        cell.setPaddingTop(5);
+        cell.setPaddingLeft(10);
         table.addCell(cell);
         table.setWidthPercentage(95f);
         if (groupFields != null && groupFields.size() > 0) {
@@ -806,10 +810,11 @@ public class CustomReportDesigner {
                 });
 //        renderer.setLabelGenerator(new StandardCategoryLabelGenerator());
         renderer.setItemLabelsVisible(true);
-        final ItemLabelPosition p = new ItemLabelPosition(
-                ItemLabelAnchor.CENTER, TextAnchor.CENTER, TextAnchor.CENTER, 45.0
-        );
-        renderer.setPositiveItemLabelPosition(p);
+        
+//        final ItemLabelPosition p = new ItemLabelPosition(
+//                ItemLabelAnchor.CENTER, TextAnchor.CENTER, TextAnchor.CENTER, 45.0
+//        );
+//        renderer.setPositiveItemLabelPosition(p);
         plot.setRenderer(renderer);
 
         plot.setDrawingSupplier(new ChartDrawingSupplier());
@@ -881,7 +886,7 @@ public class CustomReportDesigner {
             final CategoryDataset dataset1 = createDataset1(data, firstAxis, secondAxis, xAxis);
             final CategoryDataset dataset2 = createDataset2(data, secondAxis, firstAxis, xAxis);
             final CategoryAxis domainAxis = new CategoryAxis(xAxis);
-            // final NumberAxis rangeAxis = new NumberAxis("Value");
+                       // final NumberAxis rangeAxis = new NumberAxis("Value");
             final NumberAxis rangeAxis = new NumberAxis();
             final LineAndShapeRenderer renderer1 = new LineAndShapeRenderer();
             final CategoryPlot plot = new CategoryPlot(dataset1, domainAxis, rangeAxis, renderer1) {
@@ -898,6 +903,11 @@ public class CustomReportDesigner {
                     final CategoryDataset data = getDataset();
                     if (data != null) {
                         final CategoryItemRenderer r = getRenderer();
+                        r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                        r.setBaseItemLabelsVisible(true);
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                                TextAnchor.BASELINE_CENTER);
+                        r.setBasePositiveItemLabelPosition(position);
                         if (r != null) {
                             final LegendItem item = r.getLegendItem(0, 0);
                             result.add(item);
@@ -909,6 +919,11 @@ public class CustomReportDesigner {
                     final CategoryDataset dset2 = getDataset(1);
                     if (dset2 != null) {
                         final CategoryItemRenderer renderer2 = getRenderer(1);
+                        renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                        renderer2.setBaseItemLabelsVisible(true);
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                                TextAnchor.BOTTOM_RIGHT);
+                        renderer2.setBasePositiveItemLabelPosition(position);
                         if (renderer2 != null) {
                             final LegendItem item = renderer2.getLegendItem(1, 1);
                             result.add(item);
@@ -920,10 +935,14 @@ public class CustomReportDesigner {
                 }
 
             };
+            
             plot.setRangeGridlinesVisible(true);
             plot.setDomainGridlinesVisible(true);
+            plot.setOrientation(PlotOrientation.VERTICAL);
             //final JFreeChart chart = new JFreeChart(tabWidget.getWidgetTitle(), plot);
             final JFreeChart chart = new JFreeChart(plot);
+            CategoryAxis axis = chart.getCategoryPlot().getDomainAxis();
+            axis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
 
             chart.setBackgroundPaint(Color.white);
 //        chart.getLegend().setAnchor(Legend.SOUTH);
@@ -1043,6 +1062,12 @@ public class CustomReportDesigner {
                     final CategoryDataset data = getDataset();
                     if (data != null) {
                         final CategoryItemRenderer r = getRenderer();
+                        r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                        r.setBaseItemLabelsVisible(true);
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                                TextAnchor.BASELINE_CENTER);
+                        r.setBasePositiveItemLabelPosition(position);
+
                         if (r != null) {
                             final LegendItem item = r.getLegendItem(0, 0);
                             result.add(item);
@@ -1054,6 +1079,11 @@ public class CustomReportDesigner {
                     final CategoryDataset dset2 = getDataset(1);
                     if (dset2 != null) {
                         final CategoryItemRenderer renderer2 = getRenderer(1);
+                        renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                        renderer2.setBaseItemLabelsVisible(true);
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                                TextAnchor.BOTTOM_RIGHT);
+                        renderer2.setBasePositiveItemLabelPosition(position);
                         if (renderer2 != null) {
                             final LegendItem item = renderer2.getLegendItem(1, 1);
                             result.add(item);
@@ -1068,6 +1098,8 @@ public class CustomReportDesigner {
             plot.setRangeGridlinesVisible(true);
             plot.setDomainGridlinesVisible(true);
             final JFreeChart chart = new JFreeChart(tabWidget.getWidgetTitle(), plot);
+            CategoryAxis axis = chart.getCategoryPlot().getDomainAxis();
+            axis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
             chart.setBackgroundPaint(Color.white);
 //        chart.getLegend().setAnchor(Legend.SOUTH);
             // plot.setBackgroundPaint(new Color(0xEE, 0xEE, 0xFF));
@@ -1187,6 +1219,11 @@ public class CustomReportDesigner {
                     final CategoryDataset data = getDataset();
                     if (data != null) {
                         final CategoryItemRenderer r = getRenderer();
+                        r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                        r.setBaseItemLabelsVisible(true);
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                                TextAnchor.BASELINE_CENTER);
+                        r.setBasePositiveItemLabelPosition(position);
                         if (r != null) {
                             final LegendItem item = r.getLegendItem(0, 0);
                             result.add(item);
@@ -1198,21 +1235,27 @@ public class CustomReportDesigner {
                     final CategoryDataset dset2 = getDataset(1);
                     if (dset2 != null) {
                         final CategoryItemRenderer renderer2 = getRenderer(1);
+                        renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                        renderer2.setBaseItemLabelsVisible(true);
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                                TextAnchor.BASELINE_CENTER);
+                        renderer2.setBasePositiveItemLabelPosition(position);
                         if (renderer2 != null) {
                             final LegendItem item = renderer2.getLegendItem(1, 1);
                             result.add(item);
                         }
                     }
-
                     return result;
-
                 }
 
             };
             plot.setRangeGridlinesVisible(true);
             plot.setDomainGridlinesVisible(true);
+            plot.setOrientation(PlotOrientation.VERTICAL);
             // final JFreeChart chart = new JFreeChart(tabWidget.getWidgetTitle(), plot);
             final JFreeChart chart = new JFreeChart(plot);
+            CategoryAxis axis = chart.getCategoryPlot().getDomainAxis();
+            axis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
             chart.setBackgroundPaint(Color.white);
 //        chart.getLegend().setAnchor(Legend.SOUTH);
             // plot.setBackgroundPaint(new Color(0xEE, 0xEE, 0xFF));
@@ -1304,7 +1347,6 @@ public class CustomReportDesigner {
 //        dataset.addValue(null, series2, category3);
 //        dataset.addValue(null, series2, category4);
         return dataset;
-
     }
 
     /**
@@ -1516,10 +1558,11 @@ public class CustomReportDesigner {
                 });
 //        renderer.setLabelGenerator(new StandardCategoryLabelGenerator());
         renderer.setItemLabelsVisible(true);
-        final ItemLabelPosition p = new ItemLabelPosition(
-                ItemLabelAnchor.CENTER, TextAnchor.CENTER, TextAnchor.CENTER, 45.0
-        );
-        renderer.setPositiveItemLabelPosition(p);
+        
+//        final ItemLabelPosition p = new ItemLabelPosition(
+//                ItemLabelAnchor.CENTER, TextAnchor.CENTER, TextAnchor.CENTER, 45.0
+//        );
+//        renderer.setPositiveItemLabelPosition(p);
         plot.setRenderer(renderer);
 
         plot.setDrawingSupplier(new ChartDrawingSupplier());
