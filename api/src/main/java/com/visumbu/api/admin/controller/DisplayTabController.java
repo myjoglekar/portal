@@ -548,8 +548,8 @@ public class DisplayTabController {
                     performanceBean.setImpressions(row.getImpressions());
                     performanceBean.setClicks(row.getClicks());
                     performanceBean.setCtr(row.getCtr());
-                    performanceBean.setDay(row.getWeek());
-                    performanceBean.setWeek(row.getWeek());
+                    performanceBean.setDay(DateUtils.dateToString(DateUtils.toDate(row.getWeek(), "yyyy-MM-dd"), "MM/dd/yyyy"));
+                    performanceBean.setWeek(DateUtils.dateToString(DateUtils.toDate(row.getWeek(), "yyyy-MM-dd"), "MM/dd/yyyy")); //
                     String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
                     performanceBean.setCost(cost);
                     String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
