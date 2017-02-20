@@ -4642,7 +4642,7 @@ tfoot {
     margin-top:25%;
 }
 @media (max-width:767px) {
- .mobile-navbar{
+    .mobile-navbar{
         margin: 0;
         z-index: 20001;
         position: relative;
@@ -4660,4 +4660,10 @@ tfoot {
 
 .data-title {
     margin:0px !important;
+}
+.nDaySelect .daterangepicker.dropdown-menu.ltr.show-calendar.opensright {
+    display: block !important;
+}
+.daterangepicker.dropdown-menu.ltr.show-calendar.opensright{
+    display: none !important;
 }

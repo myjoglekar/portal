@@ -1,12 +1,6 @@
-//Array.prototype.move = function (from, to) {
-//    this.splice(to, 0, this.splice(from, 1)[0]);
-//    return this;
-//};
 app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService, $sce) {
     $scope.permission = localStorageService.get("permission");
-    //$scope.widget = {isSpecial: 1}
     $scope.addToPdf = function (data) {
-        // alert("TTTTT");
         console.log("Adding to pdf");
         console.log(data);
     }
@@ -76,6 +70,10 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         {name: 'No', value: ''}
     ];
     $scope.isEditPreviewColumn = false;
+
+    $scope.downloadPdf = function () { 
+        $http.get("admin/proxy/download/" + $stateParams.tabId + "?dealerId=" + $stateParams.dealerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate)
+    };
 
 
     $('.dropdown-menu input').click(function (e) {
@@ -401,6 +399,28 @@ app.directive('dateRangePicker', function () {
 //                '<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;' +
 //                '<span></span> <b class="caret"></b>' + '</div>',
         link: function (scope, element, attr) {
+            
+//             $(element[0]).daterangepicker(
+//                {
+//                    ranges: {
+////                        'Today': [moment(), moment()],
+////                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+////                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+////                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+//                        'This Month': [moment().startOf('month'), moment().endOf(new Date())],
+//                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+//                    },
+//                    startDate:moment().subtract(29, 'days'),
+//                    endDate:moment(),
+//                    maxDate: new Date()
+//                },
+//                function (start, end) {
+//                    $('.widget-datePicker').html(start.format('MM-DD-YYYY') + ' - ' + end.format('MM-DD-YYYY'));
+//                }
+//        );
+            
+            
+//            
             $(function () {
                 $('input[name="daterange"]').daterangepicker({
                     // timePicker: true,
@@ -936,7 +956,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,
@@ -1089,7 +1109,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
     };
 });
 
-app.directive('lineChartDirective', function ($http,$filter, $stateParams) {
+app.directive('lineChartDirective', function ($http, $filter, $stateParams) {
     return{
         restrict: 'A',
         template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif"></div>' +
@@ -1122,7 +1142,7 @@ app.directive('lineChartDirective', function ($http,$filter, $stateParams) {
             var startDate = "";
             var endDate = "";
             var sortFields = [];
-           
+
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 console.log(value)
                 if (!labels["format"]) {
