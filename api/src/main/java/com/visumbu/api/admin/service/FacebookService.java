@@ -308,7 +308,7 @@ public class FacebookService {
             for (int i = 0; i < dataArr.size(); i++) {
                 JSONObject data = (JSONObject) dataArr.get(i);
                 Map<String, String> dataList = getDataValue(data);
-                dataList.put("created_time", DateUtils.dateToString(DateUtils.toDate(dataList.get("created_time").replace("+0000", "").replace("T", " "), "yyyy-MM-dd HH:mm:ss"), "MM-dd-yyyy HH:mm"));
+                dataList.put("created_time", DateUtils.dateToString(DateUtils.toDate(dataList.get("created_time").replace("+0000", "").replace("T", " "), "yyyy-MM-dd HH:mm:ss"), "MM/dd/yyyy HH:mm"));
                 dataList.put("date", startDateStr);
                 dataList.put("reactions", getActionsCount((JSONObject) data.get("reactions")) + "");
                 dataList.put("likes", getActionsCount((JSONObject) data.get("likes")) + "");
@@ -500,6 +500,8 @@ public class FacebookService {
                 if (costPerActionTypeArr != null) {
                     dataList.putAll(getActionsData(costPerActionTypeArr, "cost_"));
                 }
+                dataList.put("date_start", DateUtils.dateToString(DateUtils.toDate(dataList.get("date_start"), "yyyy-MM-dd"), "MM/dd/yyyy"));
+                dataList.put("date_stop", DateUtils.dateToString(DateUtils.toDate(dataList.get("date_stop"), "yyyy-MM-dd"), "MM/dd/yyyy"));
                 dataList.put("ctr", ApiUtils.removePercent(dataList.get("ctr")));
                 dataValueList.add(dataList);
             }

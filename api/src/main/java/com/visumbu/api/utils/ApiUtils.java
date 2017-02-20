@@ -41,7 +41,7 @@ public class ApiUtils {
 
     public static Integer toInteger(String string) {
         try {
-            return Integer.parseInt(string);
+            return toDouble(string).intValue();
         } catch (Exception e) {
 
         }
@@ -193,5 +193,5 @@ public class ApiUtils {
      public static void main(String[] argv) {
         System.out.println(toMins("7468"));
     }
-    
+
 }

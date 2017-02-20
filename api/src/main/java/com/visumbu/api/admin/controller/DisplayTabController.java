@@ -16,6 +16,8 @@ import com.visumbu.api.adwords.report.xml.bean.AccountReport;
 import com.visumbu.api.adwords.report.xml.bean.AccountReportRow;
 import com.visumbu.api.adwords.report.xml.bean.AdReport;
 import com.visumbu.api.adwords.report.xml.bean.AdReportRow;
+import com.visumbu.api.adwords.report.xml.bean.CallConversionReport;
+import com.visumbu.api.adwords.report.xml.bean.CallConversionReportRow;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.CampaignDeviceReportRow;
 import com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReportRow;
@@ -518,7 +520,7 @@ public class DisplayTabController {
             String fieldsOnly = request.getParameter("fieldsOnly");
             List<ColumnDef> columnDefs = new ArrayList<>();
             columnDefs.add(new ColumnDef("source", "string", "Source", 1));
-            columnDefs.add(new ColumnDef("week", "string", "Week", 1));
+            columnDefs.add(new ColumnDef("week", "date", "Week", 1));
             columnDefs.add(new ColumnDef("impressions", "number", "Impressions", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("clicks", "number", "Clicks", ColumnDef.Aggregation.SUM, ColumnDef.Format.INTEGER));
             columnDefs.add(new ColumnDef("ctr", "number", "CTR", ColumnDef.Aggregation.CTR, ColumnDef.Format.PERCENTAGE));
@@ -546,8 +548,8 @@ public class DisplayTabController {
                     performanceBean.setImpressions(row.getImpressions());
                     performanceBean.setClicks(row.getClicks());
                     performanceBean.setCtr(row.getCtr());
-                    performanceBean.setDay(row.getWeek());
-                    performanceBean.setWeek(row.getWeek());
+                    performanceBean.setDay(DateUtils.dateToString(DateUtils.toDate(row.getWeek(), "yyyy-MM-dd"), "MM/dd/yyyy"));
+                    performanceBean.setWeek(DateUtils.dateToString(DateUtils.toDate(row.getWeek(), "yyyy-MM-dd"), "MM/dd/yyyy")); //
                     String cost = row.getCost(); //Integer.toString(Integer.parseInt(row.getCost()) / 1000000);
                     performanceBean.setCost(cost);
                     String cpc = row.getAvgCPC(); //Integer.toString(Integer.parseInt(row.getAvgCPC()) / 1000000);
@@ -605,6 +607,25 @@ public class DisplayTabController {
                 return returnMap;
             }
             AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "display");
+            
+//            com.visumbu.api.adwords.report.xml.bean.CampaignPerformanceReport adWordsCampaignPerformanceReport = adwordsService.getCampaignPerformanceReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "CONTENT");
+//                Integer conversionSum = 0;
+//                List<CampaignPerformanceReportRow> campaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
+//                for (Iterator<CampaignPerformanceReportRow> iterator = campaignPerformanceReportRow.iterator(); iterator.hasNext();) {
+//                    CampaignPerformanceReportRow reportRow = iterator.next();
+//                    System.out.println("Conversion => " + reportRow.getPhoneCalls());
+//                    conversionSum += ApiUtils.toInteger(reportRow.getPhoneCalls());
+//                }
+//
+//                CallConversionReport accountCallConversionsReport = adwordsService.getAccountCallConversionsReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "CONTENT");
+//                if (accountCallConversionsReport != null) {
+//                    List<CallConversionReportRow> callConversionReportRow = accountCallConversionsReport.getCallConversionReportRow();
+//                    for (Iterator<CallConversionReportRow> iterator = callConversionReportRow.iterator(); iterator.hasNext();) {
+//                        CallConversionReportRow reportRow = iterator.next();
+//                        System.out.println("Conversion1 => " + ApiUtils.toDouble(reportRow.getConversions()));
+//                        conversionSum += ApiUtils.toDouble(reportRow.getConversions()).intValue();
+//                    }
+//                }
             List<AccountPerformanceReportBean> performanceReportBeans = new ArrayList<>();
             if (accountDetails.getAdwordsAccountId() != null) {
                 GetReportsResponse goals = gaService.getGoals(accountDetails.getAnalyticsAccountId(),accountDetails.getAnalyticsProfileId(), startDate, endDate, "");
@@ -630,6 +651,7 @@ public class DisplayTabController {
 
                     performanceBean.setAveragePosition(row.getAvgPosition());
                     performanceBean.setConversions(row.getAllConv());
+                    // performanceBean.setConversions(conversionSum + "");
                     performanceBean.setSearchImpressionsShare(row.getSearchImprShare());
                     performanceBean.setSearchImpressionsShareLostDueToRank(row.getSearchLostISRank());
                     performanceBean.setSearchImpressionsShareLostDueToBudget(row.getSearchLostISBudget());

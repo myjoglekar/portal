@@ -801,6 +801,31 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                                 return -1 * parsedValue;
                             });
                         }
+                    } else if (value.fieldType == "date") {
+                        if (value.sortOrder == "asc") {
+                            //fieldsOrder.push(value.fieldname);
+                            fieldsOrder.push(function (a) {
+
+                                var parsedDate = new Date(a[value.fieldName]);
+                                var parsedValue = parsedDate.getTime() / 1000;
+                                console.log(parsedValue);
+                                console.log("TIME ---> " + parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return 0;
+                                }
+                                return parsedValue;
+                            });
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push(function (a) {
+                                var parsedDate = new Date(a[value.fieldName]);
+                                var parsedValue = parsedDate.getTime() / 1000;
+                                console.log(parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return 0;
+                                }
+                                return -1 * parsedValue;
+                            });
+                        }
                     } else {
                         if (value.sortOrder == "asc") {
                             //fieldsOrder.push(value.fieldname);
@@ -911,7 +936,7 @@ app.directive('dynamictable', function ($http, uiGridConstants, uiGridGroupingCo
                 if (value.agregationFunction == "ctr") {
                     columnDef.aggregationType = stats.aggregator.ctrFooter,
                             columnDef.treeAggregation = {type: uiGridGroupingConstants.aggregation.CUSTOM},
-                            columnDef.customTreeAggregationFn = stats.aggregator.ctr,
+                    columnDef.customTreeAggregationFn = stats.aggregator.ctr,
                             columnDef.treeAggregationType = uiGridGroupingConstants.aggregation.SUM,
                             columnDef.cellFilter = 'gridDisplayFormat:"dsaf"',
                             columnDef.cellTooltip = true,
@@ -1064,7 +1089,7 @@ app.directive('tickerDirective', function ($http, $stateParams) {
     };
 });
 
-app.directive('lineChartDirective', function ($http, $stateParams) {
+app.directive('lineChartDirective', function ($http,$filter, $stateParams) {
     return{
         restrict: 'A',
         template: '<div ng-show="loadingLine" class="text-center"><img src="static/img/logos/loader.gif"></div>' +
@@ -1096,6 +1121,8 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
             var axes = {};
             var startDate = "";
             var endDate = "";
+            var sortFields = [];
+           
             angular.forEach(JSON.parse(scope.widgetColumns), function (value, key) {
                 console.log(value)
                 if (!labels["format"]) {
@@ -1130,29 +1157,112 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                 if (value.yAxis > 1) {
                     y2 = {show: true, label: ''};
                 }
+                if (value.sortOrder) {
+                    sortFields.push({fieldName: value.fieldName, sortOrder: value.sortOrder, fieldType: value.fieldType});
+                }
             });
             var xData = [];
             var xTicks = [];
+            scope.orderData = function (list, fieldnames) {
+                if (fieldnames.length == 0) {
+                    return list;
+                }
+                var fieldsOrder = [];
+                angular.forEach(fieldnames, function (value, key) {
+                    if (value.fieldType == "string") {
+                        if (value.sortOrder == "asc") {
+                            fieldsOrder.push(value.fieldName);
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push("-" + value.fieldName);
+                        }
+                        console.log(fieldsOrder);
+                    } else if (value.fieldType == "number") {
+                        if (value.sortOrder == "asc") {
+                            //fieldsOrder.push(value.fieldname);
+                            fieldsOrder.push(function (a) {
 
+                                var parsedValue = parseFloat(a[value.fieldName]);
+                                console.log(parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return 0;
+                                }
+                                return parsedValue;
+                            });
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push(function (a) {
+                                var parsedValue = parseFloat(a[value.fieldName]);
+                                console.log(parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return 0;
+                                }
+                                return -1 * parsedValue;
+                            });
+                        }
+                    } else if (value.fieldType == "date") {
+                        if (value.sortOrder == "asc") {
+                            //fieldsOrder.push(value.fieldname);
+                            fieldsOrder.push(function (a) {
 
-            function sortResults(unsortedData, prop, asc) {
-                sortedData = unsortedData.sort(function (a, b) {
-                    if (asc) {
-                        if (isNaN(a[prop])) {
-                            return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
-                        } else {
-                            return (parseInt(a[prop]) > parseInt(b[prop])) ? 1 : ((parseInt(a[prop]) < parseInt(b[prop])) ? -1 : 0);
+                                var parsedDate = new Date(a[value.fieldName]);
+                                var parsedValue = parsedDate.getTime() / 1000;
+                                console.log(parsedValue);
+                                console.log("TIME ---> " + parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return 0;
+                                }
+                                return parsedValue;
+                            });
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push(function (a) {
+                                var parsedDate = new Date(a[value.fieldName]);
+                                var parsedValue = parsedDate.getTime() / 1000;
+                                console.log(parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return 0;
+                                }
+                                return -1 * parsedValue;
+                            });
                         }
                     } else {
-                        if (isNaN(a[prop])) {
-                            return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
-                        } else {
-                            return (parseInt(b[prop]) > parseInt(a[prop])) ? 1 : ((parseInt(b[prop]) < parseInt(a[prop])) ? -1 : 0);
+                        if (value.sortOrder == "asc") {
+                            //fieldsOrder.push(value.fieldname);
+                            fieldsOrder.push(function (a) {
+
+                                var parsedValue = parseFloat(a[value.fieldName]);
+                                console.log(parsedValue);
+                                if (isNaN(parsedValue)) {
+                                    return a[value.fieldName];
+                                }
+                                return parsedValue;
+                            });
+                        } else if (value.sortOrder == "desc") {
+                            fieldsOrder.push(function (a) {
+                                return -1 * parseFloat(a[value.fieldName])
+                            });
                         }
                     }
                 });
-                return sortedData;
+                return $filter('orderBy')(list, fieldsOrder);
             }
+
+//            function sortResults(unsortedData, prop, asc) {
+//                sortedData = unsortedData.sort(function (a, b) {
+//                    if (asc) {
+//                        if (isNaN(a[prop])) {
+//                            return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+//                        } else {
+//                            return (parseInt(a[prop]) > parseInt(b[prop])) ? 1 : ((parseInt(a[prop]) < parseInt(b[prop])) ? -1 : 0);
+//                        }
+//                    } else {
+//                        if (isNaN(a[prop])) {
+//                            return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+//                        } else {
+//                            return (parseInt(b[prop]) > parseInt(a[prop])) ? 1 : ((parseInt(b[prop]) < parseInt(a[prop])) ? -1 : 0);
+//                        }
+//                    }
+//                });
+//                return sortedData;
+//            }
 
             if (scope.lineChartUrl) {
                 $http.get("admin/proxy/getJson?url=" + scope.lineChartUrl + "&widgetId=" + scope.widgetId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate + "&dealerId=" + $stateParams.dealerId).success(function (response) {
@@ -1165,11 +1275,9 @@ app.directive('lineChartDirective', function ($http, $stateParams) {
                         scope.xAxis = [];
                         var loopCount = 0;
                         var chartData = response.data;
-                        if (sortField != "") {
-                            chartData = sortResults(chartData, sortField, sortOrder);
+                        if (sortFields.length > 0) {
+                            chartData = scope.orderData(chartData, sortFields);
                         }
-                        console.log(xAxis)
-                        console.log(xAxis.fieldName)
                         xTicks = [xAxis.fieldName];
                         xData = chartData.map(function (a) {
                             xTicks.push(loopCount);
