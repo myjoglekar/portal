@@ -1,4 +1,4 @@
-app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService, $sce) {
+app.controller('WidgetController', function ($scope, $http, $stateParams, $timeout, $filter, localStorageService, $sce, $window) {
     $scope.permission = localStorageService.get("permission");
     $scope.addToPdf = function (data) {
         console.log("Adding to pdf");
@@ -72,7 +72,8 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
     $scope.isEditPreviewColumn = false;
 
     $scope.downloadPdf = function () { 
-        $http.get("admin/proxy/download/" + $stateParams.tabId + "?dealerId=" + $stateParams.dealerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate)
+        var url = "admin/proxy/download/" + $stateParams.tabId + "?dealerId=" + $stateParams.dealerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate;
+        $window.open(url);
     };
 
 
