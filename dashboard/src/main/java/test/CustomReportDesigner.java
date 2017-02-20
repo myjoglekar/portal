@@ -906,7 +906,7 @@ public class CustomReportDesigner {
                         r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         r.setBaseItemLabelsVisible(true);
                         ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
-                                TextAnchor.BASELINE_CENTER);
+                                TextAnchor.CENTER_LEFT);
                         r.setBasePositiveItemLabelPosition(position);
                         if (r != null) {
                             final LegendItem item = r.getLegendItem(0, 0);
@@ -922,7 +922,7 @@ public class CustomReportDesigner {
                         renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         renderer2.setBaseItemLabelsVisible(true);
                         ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
-                                TextAnchor.BOTTOM_RIGHT);
+                                TextAnchor.CENTER_RIGHT);
                         renderer2.setBasePositiveItemLabelPosition(position);
                         if (renderer2 != null) {
                             final LegendItem item = renderer2.getLegendItem(1, 1);
@@ -1065,7 +1065,7 @@ public class CustomReportDesigner {
                         r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         r.setBaseItemLabelsVisible(true);
                         ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
-                                TextAnchor.BASELINE_CENTER);
+                                TextAnchor.CENTER_LEFT);
                         r.setBasePositiveItemLabelPosition(position);
 
                         if (r != null) {
@@ -1082,7 +1082,7 @@ public class CustomReportDesigner {
                         renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         renderer2.setBaseItemLabelsVisible(true);
                         ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
-                                TextAnchor.BOTTOM_RIGHT);
+                                TextAnchor.CENTER_RIGHT);
                         renderer2.setBasePositiveItemLabelPosition(position);
                         if (renderer2 != null) {
                             final LegendItem item = renderer2.getLegendItem(1, 1);
@@ -1193,6 +1193,7 @@ public class CustomReportDesigner {
             if (sortFields.size() > 0) {
                 data = sortData(data, sortFields);
             }
+            
             if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
                 data = data.subList(0, tabWidget.getMaxRecord());
             }
