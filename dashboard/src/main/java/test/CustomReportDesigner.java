@@ -718,15 +718,12 @@ public class CustomReportDesigner {
             reportHeader.getReportHeader(document);
             document.add(new Phrase("\n"));
             document.add(new Phrase("\n"));
-            PdfPTable layoutTable = new PdfPTable(1);
-
+            
             for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
                 TabWidget tabWidget = iterator.next();
                 if (tabWidget.getChartType().equalsIgnoreCase("table")) {
                     PdfPTable pdfTable = dynamicPdfTable(tabWidget);
-                    PdfPCell contentCell = new PdfPCell(pdfTable);
-                    layoutTable.addCell(contentCell);
-                    //document.add(pdfTable);
+                    document.add(pdfTable);
                 } else if (tabWidget.getChartType().equalsIgnoreCase("pie")) {
 
                     PdfPTable table = new PdfPTable(1);
@@ -751,9 +748,7 @@ public class CustomReportDesigner {
                         chartCell.setBorderColor(widgetBorderColor);
                         chartCell.setPadding(10);
                         table.addCell(chartCell);
-                        PdfPCell contentCell = new PdfPCell(table);
-                        layoutTable.addCell(contentCell);
-                        //document.add(table);
+                        document.add(table);
                     }
 
                 } else if (tabWidget.getChartType().equalsIgnoreCase("bar")) {
@@ -780,9 +775,7 @@ public class CustomReportDesigner {
                         chartCell.setBorderColor(widgetBorderColor);
                         chartCell.setPadding(10);
                         table.addCell(chartCell);
-                        PdfPCell contentCell = new PdfPCell(table);
-                        layoutTable.addCell(contentCell);
-                        //document.add(table);
+                        document.add(table);
                     }
 
                 } else if (tabWidget.getChartType().equalsIgnoreCase("line")) {
@@ -806,15 +799,13 @@ public class CustomReportDesigner {
                         chartCell.setBorderColor(widgetBorderColor);
                         chartCell.setPadding(10);
                         table.addCell(chartCell);
-                        PdfPCell contentCell = new PdfPCell(table);
-                        layoutTable.addCell(contentCell);
-                        //document.add(table);
+                        document.add(table);
                     }
                 } else if (tabWidget.getChartType().equalsIgnoreCase("areaChart")) {
                     document.add(multiAxisAreaChart(writer, tabWidget));
                 }
                 // System.out.println("Chart Type ===> " + tabWidget.getChartType());
-                document.add(layoutTable);
+
                 document.add(new Phrase("\n"));
                 document.add(new Phrase("\n"));
                 document.add(new Phrase("\n"));
