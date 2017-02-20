@@ -303,7 +303,7 @@ public class CustomReportDesigner {
                 WidgetColumn column = iterator.next();
                 pdfFontHeader.setSize(13);
                 pdfFontHeader.setColor(tableTitleFontColor);
-                
+
                 PdfPCell dataCell = new PdfPCell(new Phrase(WordUtils.capitalize(column.getFieldName()), pdfFontHeader));
                 dataCell.setPadding(5);
                 dataCell.setBorderColor(widgetBorderColor);
@@ -588,7 +588,7 @@ public class CustomReportDesigner {
             f.setSize(20);
             f.setColor(reportTitleColor);
             f.setStyle(Font.BOLD);
-            
+
             Paragraph reportTitle = new Paragraph("Month End Report".toUpperCase(), f);
             reportTitle.setAlignment(Paragraph.ALIGN_LEFT);
             //reportTitle.setFirstLineIndent(25);
@@ -596,7 +596,7 @@ public class CustomReportDesigner {
 
             LineSeparator dottedline = new LineSeparator();
             BaseColor dottedLineColor = new BaseColor(90, 113, 122);
-            
+
             dottedline.setOffset(6);
             dottedline.setLineWidth(4);
             dottedline.setPercentage(95);
@@ -724,7 +724,32 @@ public class CustomReportDesigner {
                     PdfPTable pdfTable = dynamicPdfTable(tabWidget);
                     document.add(pdfTable);
                 } else if (tabWidget.getChartType().equalsIgnoreCase("pie")) {
-                    document.add(generatePieChart(writer, tabWidget));
+
+                    PdfPTable table = new PdfPTable(1);
+                    PdfPCell cell;
+                    table.setWidthPercentage(95f);
+                    pdfFontTitle.setSize(14);
+                    pdfFontTitle.setStyle(Font.BOLD);
+                    pdfFontTitle.setColor(tableTitleFontColor);
+                    cell = new PdfPCell(new Phrase(tabWidget.getWidgetTitle(), pdfFontTitle));
+                    cell.setFixedHeight(30);
+                    cell.setBorderColor(widgetBorderColor);
+                    cell.setBackgroundColor(tableTitleColor);
+                    cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                    cell.setColspan(1);
+                    cell.setPaddingTop(5);
+                    cell.setPaddingLeft(10);
+                    table.addCell(cell);
+                    Image pieChart = generatePieChart(writer, tabWidget);
+
+                    if (pieChart != null) {
+                        PdfPCell chartCell = new PdfPCell(pieChart);
+                        chartCell.setBorderColor(widgetBorderColor);
+                        chartCell.setPadding(10);
+                        table.addCell(chartCell);
+                        document.add(table);
+                    }
+
                 } else if (tabWidget.getChartType().equalsIgnoreCase("bar")) {
                     //document.add(multiAxisBarChart(writer, tabWidget));
                     PdfPTable table = new PdfPTable(1);
@@ -742,7 +767,7 @@ public class CustomReportDesigner {
                     cell.setPaddingTop(5);
                     cell.setPaddingLeft(10);
                     table.addCell(cell);
-                    
+
                     Image barChart = multiAxisBarChart(writer, tabWidget);
                     if (barChart != null) {
                         PdfPCell chartCell = new PdfPCell(barChart);
@@ -810,7 +835,7 @@ public class CustomReportDesigner {
                 });
 //        renderer.setLabelGenerator(new StandardCategoryLabelGenerator());
         renderer.setItemLabelsVisible(true);
-        
+
 //        final ItemLabelPosition p = new ItemLabelPosition(
 //                ItemLabelAnchor.CENTER, TextAnchor.CENTER, TextAnchor.CENTER, 45.0
 //        );
@@ -886,7 +911,7 @@ public class CustomReportDesigner {
             final CategoryDataset dataset1 = createDataset1(data, firstAxis, secondAxis, xAxis);
             final CategoryDataset dataset2 = createDataset2(data, secondAxis, firstAxis, xAxis);
             final CategoryAxis domainAxis = new CategoryAxis(xAxis);
-                       // final NumberAxis rangeAxis = new NumberAxis("Value");
+            // final NumberAxis rangeAxis = new NumberAxis("Value");
             final NumberAxis rangeAxis = new NumberAxis();
             final LineAndShapeRenderer renderer1 = new LineAndShapeRenderer();
             final CategoryPlot plot = new CategoryPlot(dataset1, domainAxis, rangeAxis, renderer1) {
@@ -905,7 +930,7 @@ public class CustomReportDesigner {
                         final CategoryItemRenderer r = getRenderer();
                         r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         r.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
                                 TextAnchor.CENTER_LEFT);
                         r.setBasePositiveItemLabelPosition(position);
                         if (r != null) {
@@ -921,7 +946,7 @@ public class CustomReportDesigner {
                         final CategoryItemRenderer renderer2 = getRenderer(1);
                         renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         renderer2.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
                                 TextAnchor.CENTER_RIGHT);
                         renderer2.setBasePositiveItemLabelPosition(position);
                         if (renderer2 != null) {
@@ -935,7 +960,7 @@ public class CustomReportDesigner {
                 }
 
             };
-            
+
             plot.setRangeGridlinesVisible(true);
             plot.setDomainGridlinesVisible(true);
             plot.setOrientation(PlotOrientation.VERTICAL);
@@ -1064,7 +1089,7 @@ public class CustomReportDesigner {
                         final CategoryItemRenderer r = getRenderer();
                         r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         r.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
                                 TextAnchor.CENTER_LEFT);
                         r.setBasePositiveItemLabelPosition(position);
 
@@ -1081,7 +1106,7 @@ public class CustomReportDesigner {
                         final CategoryItemRenderer renderer2 = getRenderer(1);
                         renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         renderer2.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
                                 TextAnchor.CENTER_RIGHT);
                         renderer2.setBasePositiveItemLabelPosition(position);
                         if (renderer2 != null) {
@@ -1193,7 +1218,7 @@ public class CustomReportDesigner {
             if (sortFields.size() > 0) {
                 data = sortData(data, sortFields);
             }
-            
+
             if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
                 data = data.subList(0, tabWidget.getMaxRecord());
             }
@@ -1222,7 +1247,7 @@ public class CustomReportDesigner {
                         final CategoryItemRenderer r = getRenderer();
                         r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         r.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
                                 TextAnchor.BASELINE_CENTER);
                         r.setBasePositiveItemLabelPosition(position);
                         if (r != null) {
@@ -1238,7 +1263,7 @@ public class CustomReportDesigner {
                         final CategoryItemRenderer renderer2 = getRenderer(1);
                         renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
                         renderer2.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, 
+                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
                                 TextAnchor.BASELINE_CENTER);
                         renderer2.setBasePositiveItemLabelPosition(position);
                         if (renderer2 != null) {
@@ -1559,7 +1584,7 @@ public class CustomReportDesigner {
                 });
 //        renderer.setLabelGenerator(new StandardCategoryLabelGenerator());
         renderer.setItemLabelsVisible(true);
-        
+
 //        final ItemLabelPosition p = new ItemLabelPosition(
 //                ItemLabelAnchor.CENTER, TextAnchor.CENTER, TextAnchor.CENTER, 45.0
 //        );
