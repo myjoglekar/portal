@@ -16,13 +16,13 @@ import org.apache.commons.beanutils.PropertyUtils;
  */
 public class Permission {
 
-    private Boolean allowCreateWidget;
-    private Boolean allowDeleteWidget;
-    private Boolean allowCreateTab;
-    private Boolean allowCreateReport;
-    private Boolean allowDeleteReport;
-    private Boolean allowDownloadReport;
-    private Boolean allowScheduleReport;
+    private Boolean allowCreateWidget = true;
+    private Boolean allowDeleteWidget = true;
+    private Boolean allowCreateTab = true;
+    private Boolean allowCreateReport = true;
+    private Boolean allowDeleteReport = true;
+    private Boolean allowDownloadReport = true;
+    private Boolean allowScheduleReport = true;
 
     public Boolean getAllowCreateWidget() {
         return allowCreateWidget;

@@ -138,14 +138,18 @@ public class PaidTabController {
                 List<CampaignPerformanceReportRow> campaignPerformanceReportRow = adWordsCampaignPerformanceReport.getCampaignPerformanceReportRow();
                 for (Iterator<CampaignPerformanceReportRow> iterator = campaignPerformanceReportRow.iterator(); iterator.hasNext();) {
                     CampaignPerformanceReportRow reportRow = iterator.next();
+                    System.out.println("Conversion => " + reportRow.getPhoneCalls());
                     conversionSum += ApiUtils.toInteger(reportRow.getPhoneCalls());
                 }
-                
+
                 CallConversionReport accountCallConversionsReport = adwordsService.getAccountCallConversionsReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "SEARCH");
-                List<CallConversionReportRow> callConversionReportRow = accountCallConversionsReport.getCallConversionReportRow();
-                for (Iterator<CallConversionReportRow> iterator = callConversionReportRow.iterator(); iterator.hasNext();) {
-                    CallConversionReportRow reportRow = iterator.next();
-                    conversionSum += ApiUtils.toInteger(reportRow.getConversions());
+                if (accountCallConversionsReport != null) {
+                    List<CallConversionReportRow> callConversionReportRow = accountCallConversionsReport.getCallConversionReportRow();
+                    for (Iterator<CallConversionReportRow> iterator = callConversionReportRow.iterator(); iterator.hasNext();) {
+                        CallConversionReportRow reportRow = iterator.next();
+                        System.out.println("Conversion1 => " + ApiUtils.toDouble(reportRow.getConversions()));
+                        conversionSum += ApiUtils.toDouble(reportRow.getConversions()).intValue();
+                    }
                 }
                 List<AccountReportRow> adwordsAccountRow = adwordsAccountReport.getAccountReportRow();
 
@@ -190,6 +194,7 @@ public class PaidTabController {
                     performanceBean.setCost(row.getSpend().getValue());
                     performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                     performanceBean.setAveragePosition(row.getAveragePosition().getValue());
+                    System.out.println("Bing Conversions" + row.getPhoneCalls().getValue());
                     performanceBean.setConversions(row.getPhoneCalls().getValue());
                     performanceBean.setCpa(row.getCostPerConversion().getValue());
                     performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
@@ -203,6 +208,7 @@ public class PaidTabController {
             String dealerId = request.getParameter("dealerMapId");
             if (dealerId != null) {
                 Integer totalNoOfCalls = centuryCallService.getTotalNoOfCalls(startDate, endDate, dealerId, fieldsOnly);
+                System.out.println("TOTAL CALLS " + totalNoOfCalls);
                 AccountPerformanceReportBean performanceBean = new AccountPerformanceReportBean();
                 performanceBean.setConversions(totalNoOfCalls + "");
                 performanceBean.setOverall("Overall");
@@ -622,7 +628,7 @@ public class PaidTabController {
                 performanceBean.setAveragePosition(row.getAvgPosition());
                 performanceBean.setCost(row.getCost());
                 performanceBean.setAverageCpc(row.getAvgCPC());
-                performanceBean.setConversions(row.getPhoneCalls());
+                performanceBean.setConversions(row.getAllConv());
                 performanceBean.setCpa(row.getCostConv());
                 //performanceBean.setPhoneCalls(row.getPhoneCalls());
                 performanceBean.setSearchImpressionsShare(row.getSearchExactMatchIS());

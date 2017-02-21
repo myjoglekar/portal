@@ -3,7 +3,7 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.fullName = $cookies.getObject("fullname");
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
-    
+
     console.log($scope.tabId)
 
     //$scope.selectTabID = $state;
@@ -137,6 +137,25 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     };
 
     $(function () {
+        $(document).on('click', '.table-condensed .month', function () {
+            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            var selectedMonth = $(this).text();
+            var splitMY = selectedMonth.split(" ");
+            var monthvalue = $.inArray(splitMY[0], months);
+            var FirstDay = new Date(splitMY[1], monthvalue, 1);
+            var LastDay = new Date(splitMY[1], monthvalue + 1, 0);
+
+            $("input[name='daterangepicker_start']").daterangepicker({
+                singleDatePicker: false,
+                startDate: FirstDay
+            });
+
+            $("input[name='daterangepicker_end']").daterangepicker({
+                singleDatePicker: false,
+                startDate: LastDay
+            });
+
+        });
         //Initialize Select2 Elements
         $(".select2").select2();
         //Datemask dd/mm/yyyy
@@ -160,13 +179,13 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
                         'This Month': [moment().startOf('month'), moment().endOf(new Date())],
                         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                     },
-                    startDate: moment().subtract(29, 'days'),
-                    endDate: moment(),
+                    startDate: $stateParams.startDate ? $stateParams.startDate : moment().subtract(29, 'days'),
+                    endDate: $stateParams.endDate ? $stateParams.endDate : moment(),
                     maxDate: new Date()
                 },
-        function (start, end) {
-            $('#daterange-btn span').html(start.format('MM-DD-YYYY') + ' - ' + end.format('MM-DD-YYYY'));
-        }
+                function (start, end) {
+                    $('#daterange-btn span').html(start.format('MM-DD-YYYY') + ' - ' + end.format('MM-DD-YYYY'));
+                }
         );
         //Date picker
         $('#datepicker').datepicker({
@@ -194,6 +213,6 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
         //Timepicker
         $(".timepicker").timepicker({
             showInputs: false
-        });
+        });        
     });
 });
