@@ -8,6 +8,7 @@ package com.visumbu.api.admin.controller;
 import com.google.api.services.analyticsreporting.v4.model.GetReportsResponse;
 import com.visumbu.api.admin.service.BingService;
 import com.visumbu.api.admin.service.GaService;
+import com.visumbu.api.admin.service.GaTestService;
 import com.visumbu.api.admin.service.UserService;
 import com.visumbu.api.bean.LoginUserBean;
 import com.visumbu.api.utils.DateUtils;
@@ -41,6 +42,20 @@ public class GaController {
     @Autowired
     private GaService gaService;
     
+     @Autowired
+    private GaTestService gaTestService;
+
+    @RequestMapping(value = "testGaDs", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object testGaDs(HttpServletRequest request, HttpServletResponse response) {
+        String clientId = request.getParameter("clientId");
+        String clientSecret = request.getParameter("clientSecret");
+        String accountId = request.getParameter("accountId");
+        String viewId = request.getParameter("viewId");
+        Date startDate1 = DateUtils.get30DaysBack();
+        Date endDate1 = new Date();
+        return gaTestService.getResponseAsMap(gaTestService.getSeoPerformance(clientId, clientSecret, accountId, viewId, startDate1, endDate1, null, null));
+    }
 
     @RequestMapping(value = "getGa", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
