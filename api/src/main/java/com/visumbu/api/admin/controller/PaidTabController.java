@@ -8,6 +8,7 @@ package com.visumbu.api.admin.controller;
 import com.visumbu.api.admin.service.AdwordsService;
 import com.visumbu.api.admin.service.BingService;
 import com.visumbu.api.admin.service.CenturyCallService;
+import com.visumbu.api.admin.service.GaTestService;
 import com.visumbu.api.admin.service.UserService;
 import com.visumbu.api.adwords.report.xml.bean.AccountDeviceReport;
 import com.visumbu.api.adwords.report.xml.bean.AccountDeviceReportRow;
@@ -217,6 +218,7 @@ public class PaidTabController {
 
             }
             returnMap.put("data", sumPerSource(performanceReportBeans, null));
+            returnMap.put("rawData", performanceReportBeans);
 
         } catch (InterruptedException ex) {
             Logger.getLogger(PaidTabController.class.getName()).log(Level.SEVERE, null, ex);

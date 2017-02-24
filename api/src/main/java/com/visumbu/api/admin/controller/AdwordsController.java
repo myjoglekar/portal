@@ -6,6 +6,7 @@
 package com.visumbu.api.admin.controller;
 
 import com.visumbu.api.admin.service.AdwordsService;
+import com.visumbu.api.admin.service.AdwordsTestService;
 import com.visumbu.api.utils.DateUtils;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -34,7 +35,32 @@ public class AdwordsController {
 
     @Autowired
     private AdwordsService adwordsService;
-
+    @Autowired
+    private AdwordsTestService adwordsTestService;
+    
+    @RequestMapping(value = "getAdwordsDs", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    Object testAdwordsDs(HttpServletRequest request, HttpServletResponse response) {
+        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
+        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
+        String accountId = request.getParameter("accountId");
+        String fields[] = request.getParameterValues("fields");
+        String aggregation = request.getParameter("aggregation");
+        String reportType = request.getParameter("reportType");
+        String clientId = request.getParameter("clientId");
+        String clientSecret = request.getParameter("clientSecret");
+        String refreshToken = request.getParameter("refreshToken");
+        String developerToken = request.getParameter("developerToken");
+        Map<String, String> filter = new HashMap<>();
+        String filters[] = request.getParameterValues("filters");
+        for (int i = 0; i < filters.length; i++) {
+            String filterString = filters[i];
+            String[] filterArr = filterString.split(",");
+            filter.put(filterArr[0], filterArr[1]);
+        }
+        return adwordsTestService.adWordsAsMap(clientId, clientSecret, refreshToken, developerToken, accountId, startDate, endDate, fields, filter, aggregation, reportType);
+    }
+    
     @RequestMapping(value = "getAdwords", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object testAdwords(HttpServletRequest request, HttpServletResponse response) {
