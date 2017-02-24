@@ -195,8 +195,7 @@ public class PaidTabController {
                     performanceBean.setCost(row.getSpend().getValue());
                     performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                     performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-                    System.out.println("Bing Conversions" + row.getPhoneCalls().getValue());
-                    performanceBean.setConversions(row.getPhoneCalls().getValue());
+                    performanceBean.setConversions((ApiUtils.toDouble(row.getPhoneCalls() == null ? "0" : row.getPhoneCalls().getValue()) + ApiUtils.toDouble(row.getConversions() == null ? "0" : row.getConversions().getValue())) + "");
                     performanceBean.setCpa(row.getCostPerConversion().getValue());
                     performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                     performanceBean.setSearchBudgetLostImpressionShare("-");
@@ -346,7 +345,7 @@ public class PaidTabController {
                     Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                     Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
                     Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                    Double conversions = parseDouble(accountReportRow.getPhoneCalls() == null ? "0" : accountReportRow.getPhoneCalls().getValue());
+                    Double conversions = ApiUtils.toDouble(accountReportRow.getPhoneCalls() == null ? "0" : accountReportRow.getPhoneCalls().getValue()) + ApiUtils.toDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
 
                     String bingStartDayOfWeek = day;
                     ClicksImpressionsHourOfDayBean oldBean = dataMap.get(bingStartDayOfWeek);
@@ -448,7 +447,7 @@ public class PaidTabController {
                     Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                     Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
                     Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                    Double conversions = parseDouble(accountReportRow.getPhoneCalls() == null ? "0" : accountReportRow.getPhoneCalls().getValue());
+                    Double conversions = ApiUtils.toDouble(accountReportRow.getPhoneCalls() == null ? "0" : accountReportRow.getPhoneCalls().getValue()) + ApiUtils.toDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
 
                     String bingStartDayOfWeek = DateUtils.getDayOfWeek(Integer.parseInt(day));
                     ClicksImpressionsGraphBean oldBean = dataMap.get(bingStartDayOfWeek);
@@ -549,7 +548,7 @@ public class PaidTabController {
                     Integer clicks = Integer.parseInt(accountReportRow.getClicks() == null ? "0" : accountReportRow.getClicks().getValue());
                     Integer impressions = Integer.parseInt(accountReportRow.getImpressions() == null ? "0" : accountReportRow.getImpressions().getValue());
                     Double cost = parseDouble(accountReportRow.getSpend() == null ? "0" : accountReportRow.getSpend().getValue());
-                    Double conversions = parseDouble(accountReportRow.getPhoneCalls() == null ? "0" : accountReportRow.getPhoneCalls().getValue());
+                    Double conversions = ApiUtils.toDouble(accountReportRow.getPhoneCalls() == null ? "0" : accountReportRow.getPhoneCalls().getValue()) + ApiUtils.toDouble(accountReportRow.getConversions() == null ? "0" : accountReportRow.getConversions().getValue());
                     Double cpc = parseDouble(accountReportRow.getAverageCpc() == null ? "0" : accountReportRow.getAverageCpc().getValue());
                     Double cpa = parseDouble(accountReportRow.getCostPerConversion() == null ? "0" : accountReportRow.getCostPerConversion().getValue());
 
@@ -657,7 +656,7 @@ public class PaidTabController {
                 performanceBean.setAverageCpc(row.getClicks().getValue());
                 performanceBean.setCtr(row.getCtr().getValue());
                 performanceBean.setAverageCpc(row.getAverageCpc().getValue());
-                performanceBean.setConversions(row.getPhoneCalls().getValue());
+                performanceBean.setConversions((ApiUtils.toDouble(row.getPhoneCalls() == null ? "0" : row.getPhoneCalls().getValue()) + ApiUtils.toDouble(row.getConversions() == null ? "0" : row.getConversions().getValue())) + "");
                 performanceBean.setCpa(row.getCostPerConversion().getValue());
                 performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 performanceBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
@@ -805,7 +804,7 @@ public class PaidTabController {
                 DevicePerformanceReportBean performanceBean = new DevicePerformanceReportBean();
                 performanceBean.setSource("Bing");
                 performanceBean.setDevice(row.getDeviceType().getValue());
-                performanceBean.setConversions(row.getPhoneCalls().getValue());
+                performanceBean.setConversions((ApiUtils.toDouble(row.getPhoneCalls() == null ? "0" : row.getPhoneCalls().getValue()) + ApiUtils.toDouble(row.getConversions() == null ? "0" : row.getConversions().getValue())) + "");
                 performanceReportBeans.add(performanceBean);
             }
         }
@@ -896,7 +895,7 @@ public class PaidTabController {
                 performanceBean.setCost(row.getSpend().getValue());
                 performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                 performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-                performanceBean.setConversions(row.getPhoneCalls().getValue());
+                performanceBean.setConversions((ApiUtils.toDouble(row.getPhoneCalls() == null ? "0" : row.getPhoneCalls().getValue()) + ApiUtils.toDouble(row.getConversions() == null ? "0" : row.getConversions().getValue())) + "");
                 performanceBean.setCpa(row.getCostPerConversion().getValue());
                 performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 performanceReportBeans.add(performanceBean);
@@ -991,7 +990,7 @@ public class PaidTabController {
                 performanceBean.setCost(row.getSpend().getValue());
                 performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                 performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-                performanceBean.setConversions(row.getPhoneCalls().getValue());
+                performanceBean.setConversions((ApiUtils.toDouble(row.getPhoneCalls() == null ? "0" : row.getPhoneCalls().getValue()) + ApiUtils.toDouble(row.getConversions() == null ? "0" : row.getConversions().getValue())) + "");
                 performanceBean.setCpa(row.getCostPerConversion().getValue());
                 performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 performanceReportBeans.add(performanceBean);
@@ -1115,7 +1114,7 @@ public class PaidTabController {
                 performanceBean.setCost(row.getSpend().getValue());
                 performanceBean.setAverageCpc(row.getAverageCpc().getValue());
                 performanceBean.setAveragePosition(row.getAveragePosition().getValue());
-                performanceBean.setConversions(row.getPhoneCalls().getValue());
+                performanceBean.setConversions((ApiUtils.toDouble(row.getPhoneCalls() == null ? "0" : row.getPhoneCalls().getValue()) + ApiUtils.toDouble(row.getConversions() == null ? "0" : row.getConversions().getValue())) + "");
                 performanceBean.setCpa(row.getCostPerConversion().getValue());
                 performanceBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 performanceReportBeans.add(performanceBean);
@@ -1291,7 +1290,7 @@ public class PaidTabController {
                 campaignBean.setCost(row.getSpend().getValue());
                 campaignBean.setAverageCpc(row.getAverageCpc().getValue());
                 campaignBean.setAveragePosition(row.getAveragePosition().getValue());
-                campaignBean.setConversions(row.getPhoneCalls().getValue());
+                campaignBean.setConversions((ApiUtils.toDouble(row.getPhoneCalls() == null ? "0" : row.getPhoneCalls().getValue()) + ApiUtils.toDouble(row.getConversions() == null ? "0" : row.getConversions().getValue())) + "");
                 campaignBean.setCpa(row.getCostPerConversion().getValue());
                 campaignBean.setSearchImpressionsShare(row.getImpressionSharePercent().getValue());
                 campaignBean.setSearchImpressionsShareLostByBudget(row.getImpressionLostToBudgetPercent().getValue());
