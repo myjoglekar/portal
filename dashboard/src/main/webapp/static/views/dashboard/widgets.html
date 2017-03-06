@@ -122,6 +122,7 @@
         <div class="btn-group">
             <a class="refresh" ng-click="pageRefresh()"><i class="fa fa-repeat"></i> Refresh Data</a>
         </div>
+            <a class="refresh" ng-click="downloadPdf()"><i class="fa fa-download"></i> PDF</a>
         <div ng-if="permission.allowCreateWidget == true" class="btn-group dropdown">
             <!--<div class="btn-group dropdown">-->
             <a class="dropdown-toggle" type="button" data-toggle="dropdown">
@@ -189,6 +190,8 @@
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
+<!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                            </button>-->
                             <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                             </button>
                             <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
@@ -305,8 +308,8 @@
                                                                 <div ng-if="selectDateDuration.value == '' && selectType == true;">
                                                                     <input type="text" ng-model="selectDateDuration.frequencyDuration" class="form-control">
                                                                 </div>
-                                                                <div ng-if="selectDateDuration.value == 'custom' && selectType == true;">                                                                    
-                                                                    <input date-Range-Picker class="form-control" ng-model="widget.customRange" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+                                                                <div class="nDaySelect" ng-if="selectDateDuration.value == 'custom' && selectType == true;">                                                                    
+                                                                    <input date-Range-Picker class="form-control widget-datePicker" ng-model="widget.customRange" type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
                                                                 </div>
                                                             </a>
                                                         </li>
@@ -316,6 +319,7 @@
                                             <select class="form-control" ng-model="widget.durations" ng-options="selectDateDuration.duration for selectDateDuration in selectDateDurations"></select>
                                         </div> 
                                     </div>-->
+                                    
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Product</label>
