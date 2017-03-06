@@ -80,11 +80,12 @@ app.directive('previewTable', function ($http, $filter, $stateParams) {
                 '</table>',
         link: function (scope, element, attr) {
             scope.loadingTable = true;
-            var dataSourcePath = JSON.parse(scope.path)
-            console.log(dataSourcePath)
-            console.log(dataSourcePath.dataSourceId.userName)
+            var dataSourcePath = JSON.parse(scope.path);
+            console.log(dataSourcePath);
+            console.log(dataSourcePath.dataSourceId.userName);
+            console.log(scope.dataSourcePath.dataSource.password);
             $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + dataSourcePath.dataSourceId.connectionString + '&username=' + dataSourcePath.dataSourceId.userName + '&port=3306&schema=vb&query=' + dataSourcePath.query).success(function (response) {
-//            $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + scope.dataSourcePath.dataSource.connectionString + '&username=' + scope.dataSourcePath.dataSource.userName + '&password=' + scope.dataSourcePath.dataSource.password + '&port=3306&schema=vb&query=' + scope.dataSourcePath.query).success(function (response) {
+          // $http.get('../dbApi/admin/dataSet/getData?connectionUrl=' + scope.dataSourcePath.dataSource.connectionString + '&username=' + scope.dataSourcePath.dataSource.userName + '&password=' + scope.dataSourcePath.dataSource.password + '&port=3306&schema=dashboard&query=' + scope.dataSourcePath.query).success(function (response) {
                 scope.ajaxLoadingCompleted = true;
                 scope.loadingTable = false;
                 scope.tableColumns = response.columnDefs;
