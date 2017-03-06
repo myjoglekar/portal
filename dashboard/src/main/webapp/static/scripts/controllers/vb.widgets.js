@@ -140,6 +140,7 @@ app.controller('WidgetController', function ($scope, $http, $stateParams, $timeo
         $http.get("admin/user/datasets").success(function (response) {                //User Based Products and Urls
             $scope.userProducts = [];
             $http.get('admin/ui/product/' + $stateParams.dealerId).success(function (response) {
+                console.log(response);
                 $scope.products = response;
             });
             console.log("Product")
