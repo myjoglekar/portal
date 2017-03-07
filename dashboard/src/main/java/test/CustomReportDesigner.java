@@ -35,6 +35,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -73,6 +77,16 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.renderer.category.AreaRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.util.IOUtils;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.ChartUtilities;
+import java.util.Iterator;
 
 /**
  *
@@ -165,9 +179,6 @@ public class CustomReportDesigner {
     }
 
     private List<Map<String, Object>> sortData(List<Map<String, Object>> data, List<SortType> sortType) {
-        if (1 == 1) {
-            return data;
-        }
         Collections.sort(data, (Map<String, Object> o1, Map<String, Object> o2) -> {
             for (Iterator<SortType> iterator = sortType.iterator(); iterator.hasNext();) {
                 SortType sortType1 = iterator.next();
@@ -191,17 +202,6 @@ public class CustomReportDesigner {
             }
             return 0;
         });
-
-//        Collections.sort(data, new Comparator<Map<String, Object>>() {
-//            @Override
-//            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-//                for (Iterator<SortType> iterator = sortType.iterator(); iterator.hasNext();) {
-//                    SortType sortType = iterator.next();
-//                    
-//                }
-//                return 0;
-//            }
-//        });
         return data;
     }
 
@@ -349,16 +349,10 @@ public class CustomReportDesigner {
         if (sortFields.size() > 0) {
             data = sortData(data, sortFields);
         }
-        // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size****2 " + data.size());
-
         if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
             data = data.subList(0, tabWidget.getMaxRecord());
         }
         Map groupedMapData = new HashMap();
-        // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size****1 " + data.size());
-
-        // System.out.prin`tln("Group by Fields --> " + groupByFields.size());
-        // System.out.println(groupByFields);
         List<String> originalGroupByFields = new ArrayList<>(groupByFields);
         if (groupByFields.size() > 0) {
             List groupedData = groupData(data, groupByFields, aggreagtionList);
@@ -370,9 +364,6 @@ public class CustomReportDesigner {
             groupedMapData.putAll(aggregateData(data, aggreagtionList));
             groupedMapData.put("data", data);
         }
-        // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size " + data.size());
-        // System.out.println(groupedMapData.get("_groupFields"));
-
         return generateTable(groupedMapData, tabWidget);
 
     }
@@ -700,6 +691,78 @@ public class CustomReportDesigner {
         }
     }
 
+    public void dynamicPptDownload(List<TabWidget> tabWidgets, OutputStream out) {
+
+    }
+
+    public void dynamicXlsDownload(List<TabWidget> tabWidgets, OutputStream out) {
+        try {
+            /* Read Excel and the Chart Data */
+
+            String sheetName = "Sheet1";//name of sheet
+
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.createSheet(sheetName);
+
+            /* Specify the height and width of the Pie Chart */
+            int width = 640; /* Width of the chart */
+
+            int height = 480; /* Height of the chart */
+
+            float quality = 1; /* Quality factor */
+            /* We don't want to create an intermediate file. So, we create a byte array output stream
+             and byte array input stream
+             And we pass the chart data directly to input stream through this */
+            /* Write chart as JPG to Output Stream */
+
+            ByteArrayOutputStream chart_out = new ByteArrayOutputStream();
+            ChartUtilities.writeChartAsJPEG(chart_out, quality, getSampleJFreeChart(), width, height);
+            /* We now read from the output stream and frame the input chart data */
+            /* We don't need InputStream, as it is required only to convert the output chart to byte array */
+            /* We can directly use toByteArray() method to get the data in bytes */
+            /* Add picture to workbook */
+            int my_picture_id = wb.addPicture(chart_out.toByteArray(), Workbook.PICTURE_TYPE_JPEG);
+            /* Close the output stream */
+            chart_out.close();
+            /* Create the drawing container */
+            XSSFDrawing drawing = sheet.createDrawingPatriarch();
+            /* Create an anchor point */
+            ClientAnchor my_anchor = new XSSFClientAnchor();
+            /* Define top left corner, and we can resize picture suitable from there */
+            my_anchor.setCol1(4);
+            my_anchor.setRow1(5);
+            /* Invoke createPicture and pass the anchor point and ID */
+            XSSFPicture my_picture = drawing.createPicture(my_anchor, my_picture_id);
+            /* Call resize method, which resizes the image */
+            my_picture.resize();
+            /* Close the FileInputStream */
+            /* Write Pie Chart back to the XLSX file */
+            //FileOutputStream out = new FileOutputStream(new File("xlsx_pie_chart.xlsx"));
+            wb.write(out);
+            out.flush();
+            out.close();
+        } catch (IOException ex) {
+            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public JFreeChart getSampleJFreeChart() {
+        DefaultCategoryDataset line_chart_dataset = new DefaultCategoryDataset();
+        line_chart_dataset.addValue(15, "schools", "1970");
+        line_chart_dataset.addValue(30, "schools", "1980");
+        line_chart_dataset.addValue(60, "schools", "1990");
+        line_chart_dataset.addValue(120, "schools", "2000");
+        line_chart_dataset.addValue(240, "schools", "2010");
+        line_chart_dataset.addValue(300, "schools", "2014");
+
+        JFreeChart lineChartObject = ChartFactory.createLineChart(
+                "Schools Vs Years", "Year",
+                "Schools Count",
+                line_chart_dataset, PlotOrientation.VERTICAL,
+                true, true, false);
+        return lineChartObject;
+    }
+
     public void dynamicPdfTable(List<TabWidget> tabWidgets, OutputStream out) {
         try {
             PdfWriter writer = null;
@@ -718,7 +781,7 @@ public class CustomReportDesigner {
             reportHeader.getReportHeader(document);
             document.add(new Phrase("\n"));
             document.add(new Phrase("\n"));
-            
+
             for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
                 TabWidget tabWidget = iterator.next();
                 if (tabWidget.getChartType().equalsIgnoreCase("table")) {
@@ -942,24 +1005,24 @@ public class CustomReportDesigner {
 
                     // the JDK 1.2.2 compiler complained about the name of this
                     // variable 
-                    final CategoryDataset dset2 = getDataset(1);
-                    if (dset2 != null) {
-                        final CategoryItemRenderer renderer2 = getRenderer(1);
-                        renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-                        renderer2.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
-                                TextAnchor.BASELINE_RIGHT);
-                        renderer2.setBasePositiveItemLabelPosition(position);
-                        if (renderer2 != null) {
-                            final LegendItem item = renderer2.getLegendItem(1, 1);
-                            result.add(item);
+                    if (secondAxis.isEmpty()) {
+                    } else {
+                        final CategoryDataset dset2 = getDataset(1);
+                        if (dset2 != null) {
+                            final CategoryItemRenderer renderer2 = getRenderer(1);
+                            renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                            renderer2.setBaseItemLabelsVisible(true);
+                            ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
+                                    TextAnchor.BASELINE_RIGHT);
+                            renderer2.setBasePositiveItemLabelPosition(position);
+                            if (renderer2 != null) {
+                                final LegendItem item = renderer2.getLegendItem(1, 1);
+                                result.add(item);
+                            }
                         }
                     }
-
                     return result;
-
                 }
-
             };
 
             plot.setRangeGridlinesVisible(true);
@@ -1115,11 +1178,8 @@ public class CustomReportDesigner {
                             result.add(item);
                         }
                     }
-
                     return result;
-
                 }
-
             };
             plot.setRangeGridlinesVisible(true);
             plot.setDomainGridlinesVisible(true);
@@ -1259,17 +1319,20 @@ public class CustomReportDesigner {
 
                     // the JDK 1.2.2 compiler complained about the name of this
                     // variable 
-                    final CategoryDataset dset2 = getDataset(1);
-                    if (dset2 != null) {
-                        final CategoryItemRenderer renderer2 = getRenderer(1);
-                        renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-                        renderer2.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
-                                TextAnchor.BASELINE_CENTER);
-                        renderer2.setBasePositiveItemLabelPosition(position);
-                        if (renderer2 != null) {
-                            final LegendItem item = renderer2.getLegendItem(1, 1);
-                            result.add(item);
+                    if (secondAxis.isEmpty()) {
+                    } else {
+                        final CategoryDataset dset2 = getDataset(1);
+                        if (dset2 != null) {
+                            final CategoryItemRenderer renderer2 = getRenderer(1);
+                            renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                            renderer2.setBaseItemLabelsVisible(true);
+                            ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
+                                    TextAnchor.BASELINE_CENTER);
+                            renderer2.setBasePositiveItemLabelPosition(position);
+                            if (renderer2 != null) {
+                                final LegendItem item = renderer2.getLegendItem(1, 1);
+                                result.add(item);
+                            }
                         }
                     }
                     return result;

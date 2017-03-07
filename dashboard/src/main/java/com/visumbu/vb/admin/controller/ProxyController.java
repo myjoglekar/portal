@@ -105,6 +105,25 @@ public class ProxyController {
         }
     }
 
+    @RequestMapping(value = "testXls", method = RequestMethod.GET)
+    public @ResponseBody
+    void testDownload(HttpServletRequest request, HttpServletResponse response) {
+        OutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            CustomReportDesigner crd = new CustomReportDesigner();
+            crd.dynamicXlsDownload(null, out);
+        } catch (IOException ex) {
+            Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     @RequestMapping(value = "download/{tabId}", method = RequestMethod.GET)
     public @ResponseBody
     void download(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
