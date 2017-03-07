@@ -175,12 +175,17 @@ public class CustomReportDesigner {
     }
 
     private List<Map<String, Object>> sortData(List<Map<String, Object>> data, List<SortType> sortType) {
-        if (1 == 1) {
-            return data;
-        }
+//        if (1 == 1) {
+//            return data;
+//        }
         Collections.sort(data, (Map<String, Object> o1, Map<String, Object> o2) -> {
             for (Iterator<SortType> iterator = sortType.iterator(); iterator.hasNext();) {
                 SortType sortType1 = iterator.next();
+                System.out.println(sortType1.getSortOrder());
+                System.out.println(sortType1.getFieldType());
+                if(sortType1.getFieldType()== null || sortType1.getFieldType().isEmpty()){
+                    continue;
+                }
                 int order = 1;
                 if (sortType1.getSortOrder().equalsIgnoreCase("desc")) {
                     order = -1;
@@ -390,7 +395,7 @@ public class CustomReportDesigner {
         }
         // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size " + data.size());
         // System.out.println(groupedMapData.get("_groupFields"));
-
+        System.out.println("groupedMapData: "+groupedMapData);
         return generateTable(groupedMapData, tabWidget);
 
     }
@@ -459,11 +464,42 @@ public class CustomReportDesigner {
 
         List<WidgetColumn> columns = tabWidget.getColumns();
         List<Map<String, Object>> data = tabWidget.getData();
+        System.out.println("Data: "+data);
         List<String> groupFields = (List< String>) groupedData.get("_groupFields");
         Integer noOfColumns = countColumns(columns); //.size();
         if (groupFields != null && groupFields.size() > 0) {
             noOfColumns++;
         }
+        
+        List<SortType> sortFields = new ArrayList<>();
+        List<Aggregation> aggreagtionList = new ArrayList<>();
+        List<String> groupByFields = new ArrayList<>();
+
+        for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
+            WidgetColumn column = iterator.next();
+            System.out.println("table iterator");
+            if (column.getSortOrder() != null) {
+                sortFields.add(new SortType(column.getFieldName(), column.getSortOrder(), column.getFieldType()));
+            }
+            if (column.getAgregationFunction() != null) {
+                aggreagtionList.add(new Aggregation(column.getFieldName(), column.getAgregationFunction()));
+            }
+            if (column.getGroupPriority() != null) {
+                groupByFields.add(column.getFieldName());
+            }
+        }
+        if (sortFields.size() > 0) {
+            System.out.println("sortFields");
+            data = sortData(data, sortFields);
+        }
+        System.out.println("SortData: "+data);
+                
+        if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
+            System.out.println("get Max Record");
+            System.out.println(tabWidget.getMaxRecord());
+            data = data.subList(0, tabWidget.getMaxRecord());
+        }
+        
         PdfPTable table = new PdfPTable(noOfColumns);
         PdfPCell cell;
         pdfFontTitle.setSize(14);
