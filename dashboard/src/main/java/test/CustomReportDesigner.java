@@ -101,7 +101,16 @@ public class CustomReportDesigner {
     static {
         FontFactory.register(FONT, "proxima_nova_rgregular");
         calcualtedFunctions.add(new CalcualtedFunction("ctr", "clicks", "impressions"));
-        calcualtedFunctions.add(new CalcualtedFunction("cpa", "cost", "conversions"));
+        calcualtedFunctions.add(new CalcualtedFunction("cpa", "cost", " conversions"));
+        calcualtedFunctions.add(new CalcualtedFunction("cpc", "cost", "clicks"));
+        calcualtedFunctions.add(new CalcualtedFunction("cps", "spend", "clicks"));
+        calcualtedFunctions.add(new CalcualtedFunction("cpagee", "spend", "actions_page_engagement"));
+        calcualtedFunctions.add(new CalcualtedFunction("cplc", "spend", "actions_link_click"));
+        calcualtedFunctions.add(new CalcualtedFunction("cpr", "spend", "actions_post_reaction"));
+        calcualtedFunctions.add(new CalcualtedFunction("cpcomment", "spend", "actions_comment"));
+        calcualtedFunctions.add(new CalcualtedFunction("cposte","spend","actions_post_engagement"));
+        calcualtedFunctions.add(new CalcualtedFunction("cpp", "spend", "actions_post"));
+        calcualtedFunctions.add(new CalcualtedFunction("ctl", "spend", "actions_like"));
     }
     Font pdfFont = FontFactory.getFont("proxima_nova_rgregular", "Cp1253", true);
     Font pdfFontTitle = FontFactory.getFont("proxima_nova_rgregular", "Cp1253", true);
@@ -121,6 +130,7 @@ public class CustomReportDesigner {
         Double sum = 0.0;
         for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
             Map<String, Object> mapData = iterator.next();
+            System.out.println(fieldName+" "+mapData.get(fieldName));
             sum += ApiUtils.toDouble(mapData.get(fieldName) + "");
         }
         return sum;
@@ -250,7 +260,10 @@ public class CustomReportDesigner {
         Map<String, Object> returnMap = new HashMap<>();
         for (Iterator<Aggregation> iterator = aggreagtionList.iterator(); iterator.hasNext();) {
             Aggregation aggregation = iterator.next();
+            System.out.println("FieldName: " + aggregation.getFieldName());
+
             if (aggregation.getAggregationType().equalsIgnoreCase("sum")) {
+                System.out.println(aggregation.getFieldName()+" "+data);
                 returnMap.put(aggregation.getFieldName(), sum(data, aggregation.getFieldName()) + "");
             }
             if (aggregation.getAggregationType().equalsIgnoreCase("avg")) {
@@ -336,6 +349,7 @@ public class CustomReportDesigner {
 
         for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
             WidgetColumn column = iterator.next();
+            System.out.println("table iterator");
             if (column.getSortOrder() != null) {
                 sortFields.add(new SortType(column.getFieldName(), column.getSortOrder(), column.getFieldType()));
             }
@@ -347,11 +361,14 @@ public class CustomReportDesigner {
             }
         }
         if (sortFields.size() > 0) {
+            System.out.println("sortFields");
             data = sortData(data, sortFields);
         }
         // System.out.println(tabWidget.getWidgetTitle() + " Grouped Data Size****2 " + data.size());
-
+        System.out.println("Max Record: "+tabWidget.getMaxRecord());
         if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
+            System.out.println("get Max Record");
+            System.out.println(tabWidget.getMaxRecord());
             data = data.subList(0, tabWidget.getMaxRecord());
         }
         Map groupedMapData = new HashMap();
@@ -362,11 +379,12 @@ public class CustomReportDesigner {
         List<String> originalGroupByFields = new ArrayList<>(groupByFields);
         if (groupByFields.size() > 0) {
             List groupedData = groupData(data, groupByFields, aggreagtionList);
-
+            System.out.println("groupByFields");
             groupedMapData.putAll(aggregateData(data, aggreagtionList));
             groupedMapData.put("_groupFields", originalGroupByFields);
             groupedMapData.put("data", groupedData);
         } else {
+            System.out.println("else groupByFields");
             groupedMapData.putAll(aggregateData(data, aggreagtionList));
             groupedMapData.put("data", data);
         }
@@ -472,6 +490,7 @@ public class CustomReportDesigner {
         }
         for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
             WidgetColumn column = iterator.next();
+            System.out.println("generate Table iterator");
             if (column.getColumnHide() == null || column.getColumnHide() == 0) {
                 PdfPCell dataCell = new PdfPCell(new Phrase(column.getDisplayName(), pdfFontHeader));
                 dataCell.setPadding(5);
@@ -484,6 +503,7 @@ public class CustomReportDesigner {
             }
         }
         if (groupFields == null || groupFields.isEmpty()) {
+            System.out.println("generate Table Group Fields");
             // System.out.println(tabWidget.getWidgetTitle() + "No Group Enabled ===> " + data.size());
             for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
                 Map<String, Object> dataMap = iterator.next();
@@ -510,7 +530,9 @@ public class CustomReportDesigner {
 
         if (tabWidget.getTableFooter() != null && tabWidget.getTableFooter()) {
             Boolean totalDisplayed = false;
+            System.out.println("generate table footer");
             if (groupFields != null && groupFields.size() > 0) {
+                System.out.println("generate table total");
                 pdfFont.setColor(tableTitleFontColor);
                 PdfPCell dataCell = new PdfPCell(new Phrase("Total:", pdfFont));
                 dataCell.setBorderColor(widgetBorderColor);
@@ -520,6 +542,7 @@ public class CustomReportDesigner {
             }
             for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
                 WidgetColumn column = iterator.next();
+                System.out.println("generate table total1");
                 if (column.getColumnHide() == null || column.getColumnHide() == 0) {
                     if (totalDisplayed == false) {
                         pdfFont.setColor(tableTitleFontColor);
@@ -718,7 +741,7 @@ public class CustomReportDesigner {
             reportHeader.getReportHeader(document);
             document.add(new Phrase("\n"));
             document.add(new Phrase("\n"));
-            
+
             for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
                 TabWidget tabWidget = iterator.next();
                 if (tabWidget.getChartType().equalsIgnoreCase("table")) {
@@ -926,36 +949,41 @@ public class CustomReportDesigner {
 
                     final LegendItemCollection result = new LegendItemCollection();
 
-                    final CategoryDataset data = getDataset();
-                    if (data != null) {
-                        final CategoryItemRenderer r = getRenderer();
-                        r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-                        r.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
-                                TextAnchor.BASELINE_LEFT);
-                        r.setBasePositiveItemLabelPosition(position);
-                        if (r != null) {
-                            final LegendItem item = r.getLegendItem(0, 0);
-                            result.add(item);
+                    if (firstAxis.isEmpty()) {
+                    } else {
+                        final CategoryDataset data = getDataset();
+                        if (data != null) {
+                            final CategoryItemRenderer r = getRenderer();
+                            r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                            r.setBaseItemLabelsVisible(true);
+                            ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
+                                    TextAnchor.BASELINE_LEFT);
+                            r.setBasePositiveItemLabelPosition(position);
+                            if (r != null) {
+                                final LegendItem item = r.getLegendItem(0, 0);
+                                result.add(item);
+                            }
                         }
                     }
 
                     // the JDK 1.2.2 compiler complained about the name of this
                     // variable 
-                    final CategoryDataset dset2 = getDataset(1);
-                    if (dset2 != null) {
-                        final CategoryItemRenderer renderer2 = getRenderer(1);
-                        renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-                        renderer2.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
-                                TextAnchor.BASELINE_RIGHT);
-                        renderer2.setBasePositiveItemLabelPosition(position);
-                        if (renderer2 != null) {
-                            final LegendItem item = renderer2.getLegendItem(1, 1);
-                            result.add(item);
+                    if (secondAxis.isEmpty()) {
+                    } else {
+                        final CategoryDataset dset2 = getDataset(1);
+                        if (dset2 != null) {
+                            final CategoryItemRenderer renderer2 = getRenderer(1);
+                            renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                            renderer2.setBaseItemLabelsVisible(true);
+                            ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
+                                    TextAnchor.BASELINE_RIGHT);
+                            renderer2.setBasePositiveItemLabelPosition(position);
+                            if (renderer2 != null) {
+                                final LegendItem item = renderer2.getLegendItem(1, 1);
+                                result.add(item);
+                            }
                         }
                     }
-
                     return result;
 
                 }
@@ -1085,37 +1113,41 @@ public class CustomReportDesigner {
 
                     final LegendItemCollection result = new LegendItemCollection();
 
-                    final CategoryDataset data = getDataset();
-                    if (data != null) {
-                        final CategoryItemRenderer r = getRenderer();
-                        r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-                        r.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
-                                TextAnchor.BASELINE_LEFT);
-                        r.setBasePositiveItemLabelPosition(position);
+                    if (firstAxis.isEmpty()) {
+                    } else {
+                        final CategoryDataset data = getDataset();
+                        if (data != null) {
+                            final CategoryItemRenderer r = getRenderer();
+                            r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                            r.setBaseItemLabelsVisible(true);
+                            ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
+                                    TextAnchor.BASELINE_LEFT);
+                            r.setBasePositiveItemLabelPosition(position);
 
-                        if (r != null) {
-                            final LegendItem item = r.getLegendItem(0, 0);
-                            result.add(item);
+                            if (r != null) {
+                                final LegendItem item = r.getLegendItem(0, 0);
+                                result.add(item);
+                            }
                         }
                     }
-
                     // the JDK 1.2.2 compiler complained about the name of this
                     // variable 
-                    final CategoryDataset dset2 = getDataset(1);
-                    if (dset2 != null) {
-                        final CategoryItemRenderer renderer2 = getRenderer(1);
-                        renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-                        renderer2.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
-                                TextAnchor.BASELINE_RIGHT);
-                        renderer2.setBasePositiveItemLabelPosition(position);
-                        if (renderer2 != null) {
-                            final LegendItem item = renderer2.getLegendItem(1, 1);
-                            result.add(item);
+                    if (secondAxis.isEmpty()) {
+                    } else {
+                        final CategoryDataset dset2 = getDataset(1);
+                        if (dset2 != null) {
+                            final CategoryItemRenderer renderer2 = getRenderer(1);
+                            renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                            renderer2.setBaseItemLabelsVisible(true);
+                            ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
+                                    TextAnchor.BASELINE_RIGHT);
+                            renderer2.setBasePositiveItemLabelPosition(position);
+                            if (renderer2 != null) {
+                                final LegendItem item = renderer2.getLegendItem(1, 1);
+                                result.add(item);
+                            }
                         }
                     }
-
                     return result;
 
                 }
@@ -1243,33 +1275,38 @@ public class CustomReportDesigner {
 
                     final LegendItemCollection result = new LegendItemCollection();
 
-                    final CategoryDataset data = getDataset();
-                    if (data != null) {
-                        final CategoryItemRenderer r = getRenderer();
-                        r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-                        r.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
-                                TextAnchor.BASELINE_CENTER);
-                        r.setBasePositiveItemLabelPosition(position);
-                        if (r != null) {
-                            final LegendItem item = r.getLegendItem(0, 0);
-                            result.add(item);
+                    if (firstAxis.isEmpty()) {
+                    } else {
+                        final CategoryDataset data = getDataset();
+                        if (data != null) {
+                            final CategoryItemRenderer r = getRenderer();
+                            r.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                            r.setBaseItemLabelsVisible(true);
+                            ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
+                                    TextAnchor.BASELINE_CENTER);
+                            r.setBasePositiveItemLabelPosition(position);
+                            if (r != null) {
+                                final LegendItem item = r.getLegendItem(0, 0);
+                                result.add(item);
+                            }
                         }
                     }
-
                     // the JDK 1.2.2 compiler complained about the name of this
                     // variable 
-                    final CategoryDataset dset2 = getDataset(1);
-                    if (dset2 != null) {
-                        final CategoryItemRenderer renderer2 = getRenderer(1);
-                        renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-                        renderer2.setBaseItemLabelsVisible(true);
-                        ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
-                                TextAnchor.BASELINE_CENTER);
-                        renderer2.setBasePositiveItemLabelPosition(position);
-                        if (renderer2 != null) {
-                            final LegendItem item = renderer2.getLegendItem(1, 1);
-                            result.add(item);
+                    if (secondAxis.isEmpty()) {
+                    } else {
+                        final CategoryDataset dset2 = getDataset(1);
+                        if (dset2 != null) {
+                            final CategoryItemRenderer renderer2 = getRenderer(1);
+                            renderer2.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+                            renderer2.setBaseItemLabelsVisible(true);
+                            ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,
+                                    TextAnchor.BASELINE_CENTER);
+                            renderer2.setBasePositiveItemLabelPosition(position);
+                            if (renderer2 != null) {
+                                final LegendItem item = renderer2.getLegendItem(1, 1);
+                                result.add(item);
+                            }
                         }
                     }
                     return result;

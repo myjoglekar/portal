@@ -750,7 +750,7 @@ app.directive('dynamicTable', function ($http, $filter, $stateParams, $sce) {
                 {name: 'cpcomment', field1: 'spend', field2: 'actions_comment'},
                 {name: 'cposte', field1: 'spend', field2: 'actions_post_engagement'},
                 {name: 'cpagee', field1: 'spend', field2: 'actions_page_engagement'},
-                {name: 'cpp', field1: 'spend', field2: 'actions_post'},
+                {name: 'cpp', field1: 'spend', field2: 'actions_post'}
             ];
 
             function aggregate(list, aggreationList) {

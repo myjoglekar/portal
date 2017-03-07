@@ -126,8 +126,14 @@ public class ProxyController {
         List<TabWidget> tabWidgets = uiService.getTabWidget(tabId);
         for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
             TabWidget tabWidget = iterator.next();
+            System.out.println("tabwidget chart type: " +tabWidget.getChartType());
+           
+            if(tabWidget.getChartType() == null || tabWidget.getChartType().isEmpty()){
+                continue;
+            }
             try {
                 String url = tabWidget.getDirectUrl();
+                System.out.println("url: "+url);
                 Integer port = request.getServerPort();
 
                 String localUrl = request.getScheme() + "://" + request.getServerName() + ":" + port + "/";
