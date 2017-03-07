@@ -13,6 +13,8 @@ import com.visumbu.vb.utils.JsonSimpleUtils;
 import com.visumbu.vb.utils.Rest;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -76,6 +78,9 @@ public class ProxyController {
             for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
                 String key = entrySet.getKey();
                 String[] value = entrySet.getValue();
+                for (int i = 0; i < value.length; i++) {
+                    value[i] = URLEncoder.encode(value[i], "UTF-8");
+                }
                 valueMap.put(key, Arrays.asList(value));
             }
             String data = Rest.getData(url, valueMap);
@@ -104,30 +109,95 @@ public class ProxyController {
             }
         }
     }
-
-    @RequestMapping(value = "testXls", method = RequestMethod.GET)
-    public @ResponseBody
-    void testDownload(HttpServletRequest request, HttpServletResponse response) {
-        OutputStream out = null;
-        try {
-            out = response.getOutputStream();
-            CustomReportDesigner crd = new CustomReportDesigner();
-            crd.dynamicXlsDownload(null, out);
-        } catch (IOException ex) {
-            Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                out.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
+//
+//    @RequestMapping(value = "testXls/{tabId}", method = RequestMethod.GET)
+//    public @ResponseBody
+//    void xlsDownload(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
+//        OutputStream out = null;
+//        try {
+//            String dealerId = request.getParameter("dealerId");
+//            Map<String, String> dealerAccountDetails = dealerService.getDealerAccountDetails(dealerId);
+//            MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
+//            for (Map.Entry<String, String> entrySet : dealerAccountDetails.entrySet()) {
+//                String key = entrySet.getKey();
+//                String value = entrySet.getValue();
+//                valueMap.put(key, Arrays.asList(value));
+//            }
+//            Map<String, String[]> parameterMap = request.getParameterMap();
+//            for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
+//                String key = entrySet.getKey();
+//                String[] value = entrySet.getValue();
+//                valueMap.put(key, Arrays.asList(value));
+//            }
+//
+//            List<TabWidget> tabWidgets = uiService.getTabWidget(tabId);
+//            for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
+//                TabWidget tabWidget = iterator.next();
+//                try {
+//                    if (tabWidget.getDataSourceId() == null) {
+//                        continue;
+//                    }
+//                    String url = tabWidget.getDirectUrl();
+//                    System.out.println("TYPE => " + tabWidget.getDataSourceId().getDataSourceType());
+//                    if (tabWidget.getDataSourceId().getDataSourceType().equalsIgnoreCase("sql")) {
+//                        url = "../dbApi/admin/dataSet/getData";
+//                        valueMap.put("username", Arrays.asList(tabWidget.getDataSourceId().getUserName()));
+//                        valueMap.put("password", Arrays.asList(tabWidget.getDataSourceId().getPassword()));
+//                        valueMap.put("query", Arrays.asList(URLEncoder.encode(tabWidget.getDataSetId().getQuery(), "UTF-8")));
+//                    }
+//                    if (tabWidget.getDataSourceId().getDataSourceType().equalsIgnoreCase("csv")) {
+//                        System.out.println("DS TYPE ==>  CSV");
+//                        url = "../VizBoard/admin/csv/getData";
+//                    }
+//                    valueMap.put("connectionUrl", Arrays.asList(URLEncoder.encode(tabWidget.getDataSourceId().getConnectionString(), "UTF-8")));
+//                    valueMap.put("driver", Arrays.asList(URLEncoder.encode(tabWidget.getDataSourceId().getSqlDriver(), "UTF-8")));
+//                    valueMap.put("location", Arrays.asList(URLEncoder.encode(request.getParameter("location"), "UTF-8")));
+//
+//                    Integer port = request.getServerPort();
+//
+//                    String localUrl = request.getScheme() + "://" + request.getServerName() + ":" + port + "/";
+//                    System.out.println("UR:" + url);
+//                    if (url.startsWith("../")) {
+//                        url = url.replaceAll("\\.\\./", localUrl);
+//                    }
+//                    System.out.println("url: " + url);
+//                    System.out.println("valuemap: " + valueMap);
+//                    String data = Rest.getData(url, valueMap);
+//                    JSONParser parser = new JSONParser();
+//                    Object jsonObj = parser.parse(data);
+//                    Map<String, Object> responseMap = JsonSimpleUtils.toMap((JSONObject) jsonObj);
+//                    List dataList = (List) responseMap.get("data");
+//                    tabWidget.setData(dataList);
+//
+//                } catch (ParseException ex) {
+//                    Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (UnsupportedEncodingException ex) {
+//                    Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//            out = response.getOutputStream();
+//
+//            CustomReportDesigner crd = new CustomReportDesigner();
+//            // crd.dynamicXlsDownload(tabWidgets, out);
+//        } catch (IOException ex) {
+//            Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            try {
+//                out.close();
+//            } catch (IOException ex) {
+//                Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//    }
 
     @RequestMapping(value = "download/{tabId}", method = RequestMethod.GET)
     public @ResponseBody
     void download(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
         String dealerId = request.getParameter("dealerId");
+        String exportType = request.getParameter("exportType");
+        if (exportType == null || exportType.isEmpty()) {
+            exportType = "pdf";
+        }
         Map<String, String> dealerAccountDetails = dealerService.getDealerAccountDetails(dealerId);
         MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
         for (Map.Entry<String, String> entrySet : dealerAccountDetails.entrySet()) {
@@ -168,7 +238,11 @@ public class ProxyController {
         try {
             OutputStream out = response.getOutputStream();
             CustomReportDesigner crd = new CustomReportDesigner();
-            crd.dynamicPdfTable(tabWidgets, out);
+            if (exportType.equalsIgnoreCase("ppt")) {
+                crd.dynamicPptDownload(tabWidgets, out);
+            } else {
+                crd.dynamicPdfTable(tabWidgets, out);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
