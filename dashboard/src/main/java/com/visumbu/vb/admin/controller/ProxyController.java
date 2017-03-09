@@ -122,7 +122,10 @@ public class ProxyController {
             String[] value = entrySet.getValue();
             valueMap.put(key, Arrays.asList(value));
         }
-
+//        int dealeerId =  Integer.parseInt(dealerId);
+//        List<String> dealerName = (List<String>) dealerService.readDealerById(dealeerId);
+//        System.out.println("DealerName :"+dealerName);
+                
         List<TabWidget> tabWidgets = uiService.getTabWidget(tabId);
         for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
             TabWidget tabWidget = iterator.next();
