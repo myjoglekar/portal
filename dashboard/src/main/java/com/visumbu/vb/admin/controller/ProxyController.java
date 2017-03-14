@@ -5,6 +5,7 @@
  */
 package com.visumbu.vb.admin.controller;
 
+import com.visumbu.vb.admin.dao.DealerDao;
 import com.visumbu.vb.admin.service.DealerService;
 import com.visumbu.vb.admin.service.UiService;
 import com.visumbu.vb.admin.service.UserService;
@@ -51,6 +52,9 @@ public class ProxyController {
 
     @Autowired
     private DealerService dealerService;
+    
+    @Autowired
+    private DealerDao dealerDao;
 
     @RequestMapping(value = "getJson", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
@@ -108,7 +112,7 @@ public class ProxyController {
     @RequestMapping(value = "download/{tabId}", method = RequestMethod.GET)
     public @ResponseBody
     void download(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
-        String dealerId = request.getParameter("dealerId");
+        String dealerId = request.getParameter("dealerId");                
         Map<String, String> dealerAccountDetails = dealerService.getDealerAccountDetails(dealerId);
         MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
         for (Map.Entry<String, String> entrySet : dealerAccountDetails.entrySet()) {
@@ -122,9 +126,9 @@ public class ProxyController {
             String[] value = entrySet.getValue();
             valueMap.put(key, Arrays.asList(value));
         }
-//        int dealeerId =  Integer.parseInt(dealerId);
-//        List<String> dealerName = (List<String>) dealerService.readDealerById(dealeerId);
-//        System.out.println("DealerName :"+dealerName);
+        int dealeerId =  Integer.parseInt(dealerId);
+        List dealerList = dealerDao.getDealerNameById(dealeerId);
+        String dealerName = (String) dealerList.get(0);
                 
         List<TabWidget> tabWidgets = uiService.getTabWidget(tabId);
         for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
@@ -158,7 +162,7 @@ public class ProxyController {
         try {
             OutputStream out = response.getOutputStream();
             CustomReportDesigner crd = new CustomReportDesigner();
-            crd.dynamicPdfTable(tabWidgets, out);
+            crd.dynamicPdfTable(dealerName, tabWidgets, out);
         } catch (Exception e) {
             e.printStackTrace();
         }

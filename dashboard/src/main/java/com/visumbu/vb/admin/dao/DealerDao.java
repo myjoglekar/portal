@@ -70,6 +70,13 @@ public class DealerDao extends BaseDao {
         List<Dealer> dealers = query.list();
         return dealers;
     }
+    
+    public List<Dealer> getDealerNameById(Integer id){
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Dealer.findDealerNameById");
+        query.setParameter("id", id);
+        List<Dealer> dealers = query.list();
+        return dealers;
+    }
 
     public List<DealerAccountBean> getDealerAccountDetails(String dealerId) {
         String queryStr = "SELECT d.dealer_ref_id dealerMapId, d.id dealerId, product_name productName, dps.account_id accountId, "
