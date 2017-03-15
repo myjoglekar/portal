@@ -14,6 +14,8 @@ import com.visumbu.vb.utils.JsonSimpleUtils;
 import com.visumbu.vb.utils.Rest;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;

@@ -1061,9 +1061,15 @@ public class AdwordsService {
             response.saveToFile(filename);
 
             AdReport report = (AdReport) FileReader.readXML(filename, AdReport.class);
-            System.out.println(report);
-            System.out.printf("Report successfully downloaded to: %s%n", filename);
-            return report;
+            if(report == null){
+                System.out.println("If");
+                System.out.println("Report: "+report);
+                return null;
+            } else {
+                System.out.println("ELSE");
+                System.out.printf("Report successfully downloaded to: %s%n", filename);
+                return report;
+            }
         } catch (ReportDownloadResponseException e) {
             System.out.printf("Report was not downloaded due to: %s%n", e);
         } catch (ReportException ex) {

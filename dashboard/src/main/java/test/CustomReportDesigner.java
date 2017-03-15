@@ -35,18 +35,41 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang.WordUtils;
+import org.apache.poi.POIXMLDocumentPart.RelationPart;
+import org.apache.poi.sl.usermodel.TableCell;
+import org.apache.poi.sl.usermodel.TextParagraph;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFPictureData;
+import org.apache.poi.xslf.usermodel.XSLFRelation;
+import org.apache.poi.xslf.usermodel.XSLFSlide;
+import org.apache.poi.xslf.usermodel.XSLFTable;
+import org.apache.poi.xslf.usermodel.XSLFTableCell;
+import org.apache.poi.xslf.usermodel.XSLFTableRow;
+import org.apache.poi.xslf.usermodel.XSLFTextParagraph;
+import org.apache.poi.xslf.usermodel.XSLFTextRun;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
+import org.apache.poi.xssf.usermodel.XSSFPicture;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.CategoryPlot;
@@ -54,7 +77,6 @@ import org.jfree.chart.plot.DefaultDrawingSupplier;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.TextAnchor;
 import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.plot.PlotOrientation;
@@ -66,9 +88,6 @@ import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAnchor;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
@@ -76,6 +95,17 @@ import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.renderer.category.AreaRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTBlip;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTBlipFillProperties;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTRelativeRect;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTTableCell;
+
+import org.apache.poi.util.IOUtils;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.ChartUtilities;
+import java.util.Iterator;
 
 /**
  *
@@ -209,17 +239,6 @@ public class CustomReportDesigner {
             }
             return 0;
         });
-
-//        Collections.sort(data, new Comparator<Map<String, Object>>() {
-//            @Override
-//            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-//                for (Iterator<SortType> iterator = sortType.iterator(); iterator.hasNext();) {
-//                    SortType sortType = iterator.next();
-//                    
-//                }
-//                return 0;
-//            }
-//        });
         return data;
     }
 
@@ -480,7 +499,7 @@ public class CustomReportDesigner {
 //            }
         }
         if (sortFields.size() > 0) {
-            data = sortData(data, sortFields);                    
+            data = sortData(data, sortFields);
         }
 
         if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
@@ -1017,9 +1036,7 @@ public class CustomReportDesigner {
                         }
                     }
                     return result;
-
                 }
-
             };
 
             plot.setRangeGridlinesVisible(true);
@@ -1040,7 +1057,7 @@ public class CustomReportDesigner {
             plot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
             Paint[] paintSequence = new Paint[]{
                 new Color(31, 119, 180),
-                new Color (225, 127, 14)
+                new Color(225, 127, 14)
             };
             final LineAndShapeRenderer renderer2 = new LineAndShapeRenderer();
             renderer2.setSeriesPaint(0, paintSequence[0]);
@@ -1113,7 +1130,6 @@ public class CustomReportDesigner {
                 data = data.subList(0, tabWidget.getMaxRecord());
             }
 
-
             final CategoryDataset dataset1 = createDataset1(data, firstAxis, secondAxis, xAxis);
             final CategoryDataset dataset2 = createDataset1(data, secondAxis, firstAxis, xAxis);
             final CategoryAxis domainAxis = new CategoryAxis(xAxis);
@@ -1166,9 +1182,7 @@ public class CustomReportDesigner {
                         }
                     }
                     return result;
-
                 }
-
             };
             plot.setRangeGridlinesVisible(true);
             plot.setDomainGridlinesVisible(true);
@@ -1329,7 +1343,7 @@ public class CustomReportDesigner {
             plot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
             Paint[] paintSequence = new Paint[]{
                 new Color(31, 119, 180),
-                new Color (225, 127, 14)
+                new Color(225, 127, 14)
             };
             final BarRenderer renderer2 = new BarRenderer();
             renderer2.setSeriesPaint(0, paintSequence[0]);
@@ -1387,16 +1401,14 @@ public class CustomReportDesigner {
             for (Iterator<String> iterator1 = firstAxis.iterator(); iterator1.hasNext();) {
                 String axis = iterator1.next();
                 System.out.println(ApiUtils.toDouble(dataMap.get(axis) + "") + "---" + axis + "----" + dataMap.get(xAxis) + "");
-                System.out.println("Type: "+dataMap.get(axis).getClass().getSimpleName());
-                String value = (String) dataMap.get(axis);
-                dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(value)) + ""), axis, dataMap.get(xAxis) + "");
+                String data1 = dataMap.get(axis).getClass().getSimpleName();
+                System.out.println("Type: "+data1);
+                 if (data1.equalsIgnoreCase("String")) {
+                    dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(dataMap.get(axis).toString())) + ""), axis, dataMap.get(xAxis) + "");
+                } else {
+                    dataset.addValue(ApiUtils.toDouble(df.format(dataMap.get(axis)) + ""), axis, dataMap.get(xAxis) + "");
+                }
             }
-//            for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
-//                String axis = iterator1.next();
-//                System.out.println(null + "---" + axis + "----" + dataMap.get(xAxis) + "");
-//                dataset.addValue(null, axis, dataMap.get(xAxis) + "");
-//            }
-
         }
         for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
             Map<String, Object> dataMap = iterator.next();
@@ -1407,16 +1419,6 @@ public class CustomReportDesigner {
                 dataset.addValue(null, axis, dataMap.get(xAxis) + "");
             }
         }
-
-//        dataset.addValue(1.0, series1, category1);
-//        dataset.addValue(4.0, series1, category2);
-//        dataset.addValue(3.0, series1, category3);
-//        dataset.addValue(5.0, series1, category4);
-//
-//        dataset.addValue(null, series2, category1);
-//        dataset.addValue(null, series2, category2);
-//        dataset.addValue(null, series2, category3);
-//        dataset.addValue(null, series2, category4);
         return dataset;
     }
 
@@ -1426,15 +1428,6 @@ public class CustomReportDesigner {
      * @return The dataset.
      */
     private CategoryDataset createDataset2(List<Map<String, Object>> data, List<String> secondAxis, List<String> firstAxis, String xAxis) {
-        // row keys...
-//        final String series1 = "Series 1";
-//        final String series2 = "Dummy 1";
-//
-//        // column keys...
-//        final String category1 = "Category 1";
-//        final String category2 = "Category 2";
-//        final String category3 = "Category 3";
-//        final String category4 = "Category 4";
 
         // create the dataset...
         DecimalFormat df = new DecimalFormat(".##");
@@ -1454,9 +1447,13 @@ public class CustomReportDesigner {
             for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
                 String axis = iterator1.next();
                 System.out.println(null + "---" + axis + "----" + dataMap.get(xAxis) + "");
-                System.out.println("Type2: "+dataMap.get(axis).getClass().getSimpleName());
-                String value = (String) dataMap.get(axis);       
-                dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(value)) + ""), axis, dataMap.get(xAxis) + "");
+                String data1 = dataMap.get(axis).getClass().getSimpleName();
+                System.out.println("Type2: "+data1);
+                if (data1.equalsIgnoreCase("String")) {
+                    dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(dataMap.get(axis).toString())) + ""), axis, dataMap.get(xAxis) + "");
+                } else {
+                    dataset.addValue(ApiUtils.toDouble(df.format(dataMap.get(axis)) + ""), axis, dataMap.get(xAxis) + "");
+                }
             }
         }
         return dataset;
@@ -1648,8 +1645,9 @@ public class CustomReportDesigner {
         List<Map<String, Object>> originalData = tabWidget.getData();
         if (originalData == null || originalData.isEmpty()) {
             return null;
-        } 
-        List<Map<String, Object>> data; data = new ArrayList<>(originalData);
+        }
+        List<Map<String, Object>> data;
+        data = new ArrayList<>(originalData);
 
         String xAxis = null;
         String yAxis = null;
@@ -1677,7 +1675,7 @@ public class CustomReportDesigner {
 
         Paint[] paintSequence = new Paint[]{
             new Color(31, 119, 180),
-            new Color (225, 127, 14),
+            new Color(225, 127, 14),
             new Color(44, 160, 44),
             new Color(214, 39, 40),
             new Color(148, 103, 189)
