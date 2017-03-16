@@ -43,8 +43,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,7 +139,7 @@ public class CustomReportDesigner {
     static {
         FontFactory.register(FONT, "proxima_nova_rgregular");
         calcualtedFunctions.add(new CalcualtedFunction("ctr", "clicks", "impressions"));
-        calcualtedFunctions.add(new CalcualtedFunction("cpa", "cost", " conversions"));
+        calcualtedFunctions.add(new CalcualtedFunction("cpa", "cost", "conversions"));
         calcualtedFunctions.add(new CalcualtedFunction("cpc", "cost", "clicks"));
         calcualtedFunctions.add(new CalcualtedFunction("cps", "spend", "clicks"));
         calcualtedFunctions.add(new CalcualtedFunction("cpagee", "spend", "actions_page_engagement"));
@@ -207,23 +212,81 @@ public class CustomReportDesigner {
         return value;
     }
 
+    enum DAY {
+        Monday("Monday", 2), Tuesday("Tuesday", 3), Wednesday("Wednesday", 4), Thursday("Thursday", 5), Friday("Friday", 6), Saturday("Saturday", 7), Sunday("Sunday", 1);
+        private String m_name;
+        private int m_weight;
+
+        DAY(String name, int weight) {
+            m_name = name;
+            m_weight = weight;
+        }
+
+        public int getWeight() {
+            return this.m_weight;
+        }
+    }
+
     private List<Map<String, Object>> sortData(List<Map<String, Object>> data, List<SortType> sortType) {
 //        if (1 == 1) {
 //            return data;
 //        }
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
         Collections.sort(data, (Map<String, Object> o1, Map<String, Object> o2) -> {
             for (Iterator<SortType> iterator = sortType.iterator(); iterator.hasNext();) {
                 SortType sortType1 = iterator.next();
                 System.out.println(sortType1.getSortOrder());
                 System.out.println(sortType1.getFieldType());
+                System.out.println("sort type: " + sortType1.getFieldType());
+                
+                
                 if (sortType1.getFieldType() == null || sortType1.getFieldType().isEmpty()) {
-                    continue;
+
+                    String day1 = o1.get(sortType1.getFieldName()).toString();
+                    String day2 = o2.get(sortType1.getFieldName()).toString();
+                    System.out.println(day1);
+                   // System.out.println(day2);
+                    System.out.println(day1.length());
+                    //System.out.println(day2.length());
+                    if (day1.length() >= 6) {
+                        if (day1.substring(day1.length() - 3, day1.length()).equalsIgnoreCase("day") && day2.substring(day2.length() - 3, day2.length()).equalsIgnoreCase("day")) {
+                         // List dayList = Arrays.asList(new DAY[]{DAY.Monday, DAY.Wednesday, DAY.Tuesday, DAY.Thursday, DAY.Sunday, DAY.Saturday, DAY.Friday});
+                         // System.out.println("Day1: " + day1 + " " + "Day2: " + day2);
+                         DAY dayOne = DAY.valueOf(day1);
+                         System.out.println("DayOne: "+dayOne);
+                         DAY dayTwo = DAY.valueOf(day2);
+                         System.out.println("DayTwo: "+dayTwo);
+//                           Collections.sort(dayList, new Comparator<DAY>() {
+//                                public int compare(DAY day1, DAY day2) {
+//                                    System.out.println(day1+" "+day2);
+//                                    System.out.println("Day1: " + day1.getWeight() + " " + "Day2: " + day2.getWeight());
+                         return dayOne.getWeight() - dayTwo.getWeight();
+//                                }
+//                            });
+                            
+                           // DAY dayOne = (DAY) day1;
+//                            return day1.getWeight() - day2.getWeight();
+                        } else {
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
                 }
                 int order = 1;
                 if (sortType1.getSortOrder().equalsIgnoreCase("desc")) {
                     order = -1;
                 }
-                if (sortType1.getFieldType().equalsIgnoreCase("number")) {
+                if (sortType1.getFieldType().equalsIgnoreCase("date")) {
+                    try {
+                        Date date1 = sdf.parse(o1.get(sortType1.getFieldName()).toString());
+                        Date date2 = sdf.parse(o2.get(sortType1.getFieldName()).toString());
+                        return date1.compareTo(date2);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (sortType1.getFieldType().equalsIgnoreCase("number")) {
                     Double value1 = ApiUtils.toDouble(o1.get(sortType1.getFieldName()) + "");
                     Double value2 = ApiUtils.toDouble(o2.get(sortType1.getFieldName()) + "");
                     if (value1 != value2) {
@@ -236,6 +299,7 @@ public class CustomReportDesigner {
                         return order * value1.compareTo(value2);
                     }
                 }
+
             }
             return 0;
         });
@@ -1402,8 +1466,8 @@ public class CustomReportDesigner {
                 String axis = iterator1.next();
                 System.out.println(ApiUtils.toDouble(dataMap.get(axis) + "") + "---" + axis + "----" + dataMap.get(xAxis) + "");
                 String data1 = dataMap.get(axis).getClass().getSimpleName();
-                System.out.println("Type: "+data1);
-                 if (data1.equalsIgnoreCase("String")) {
+                System.out.println("Type: " + data1);
+                if (data1.equalsIgnoreCase("String")) {
                     dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(dataMap.get(axis).toString())) + ""), axis, dataMap.get(xAxis) + "");
                 } else {
                     dataset.addValue(ApiUtils.toDouble(df.format(dataMap.get(axis)) + ""), axis, dataMap.get(xAxis) + "");
@@ -1448,7 +1512,7 @@ public class CustomReportDesigner {
                 String axis = iterator1.next();
                 System.out.println(null + "---" + axis + "----" + dataMap.get(xAxis) + "");
                 String data1 = dataMap.get(axis).getClass().getSimpleName();
-                System.out.println("Type2: "+data1);
+                System.out.println("Type2: " + data1);
                 if (data1.equalsIgnoreCase("String")) {
                     dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(dataMap.get(axis).toString())) + ""), axis, dataMap.get(xAxis) + "");
                 } else {
