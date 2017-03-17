@@ -37,6 +37,7 @@ import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -192,6 +193,29 @@ public class CustomReportDesigner {
         }
     }
 
+    DateFormat primaryFormat = new SimpleDateFormat("h:mm a");
+    DateFormat secondaryFormat = new SimpleDateFormat("H:mm");
+
+    public int timeInMillis(String time) throws ParseException {
+        System.out.println("time: " + time);
+        return timeInMillis(time, primaryFormat);
+    }
+
+    private int timeInMillis(String time, DateFormat format) throws ParseException {
+        // you may need more advanced logic here when parsing the time if some times have am/pm and others don't.
+        try {
+            Date date = format.parse(time);
+            System.out.println("Date: " + date);
+            return (int) date.getTime();
+        } catch (ParseException e) {
+            if (format != secondaryFormat) {
+                return timeInMillis(time, secondaryFormat);
+            } else {
+                throw e;
+            }
+        }
+    }
+
     private List<Map<String, Object>> sortData(List<Map<String, Object>> data, List<SortType> sortType) {
 //        if (1 == 1) {
 //            return data;
@@ -204,19 +228,72 @@ public class CustomReportDesigner {
                 System.out.println(sortType1.getSortOrder());
                 System.out.println(sortType1.getFieldType());
                 System.out.println("sort type: " + sortType1.getFieldType());
-                
-                
+
                 if (sortType1.getFieldType() == null || sortType1.getFieldType().isEmpty()) {
 
                     String day1 = o1.get(sortType1.getFieldName()).toString();
                     String day2 = o2.get(sortType1.getFieldName()).toString();
                     System.out.println(day1);
+                    System.out.println(day2);
                     System.out.println(day1.length());
                     if (day1.length() >= 6) {
                         if (day1.substring(day1.length() - 3, day1.length()).equalsIgnoreCase("day") && day2.substring(day2.length() - 3, day2.length()).equalsIgnoreCase("day")) {
-                         DAY dayOne = DAY.valueOf(day1);
-                         DAY dayTwo = DAY.valueOf(day2);
-                         return dayOne.getWeight() - dayTwo.getWeight();
+                            DAY dayOne = DAY.valueOf(day1);
+                            System.out.println("dayOne: " + dayOne);
+                            DAY dayTwo = DAY.valueOf(day2);
+                            System.out.println("dayTwo: " + dayTwo);
+                            return dayOne.getWeight() - dayTwo.getWeight();
+                        } else {
+                            continue;
+                        }
+                    } else if (day1.length() == 4 || day1.length() == 5) {
+                        if ((day1.substring(day1.length() - 2, day1.length()).equalsIgnoreCase("pm") || day1.substring(day1.length() - 2, day1.length()).equalsIgnoreCase("am")) && (day2.substring(day2.length() - 2, day2.length()).equalsIgnoreCase("pm") || day2.substring(day2.length() - 2, day2.length()).equalsIgnoreCase("am"))) {
+                            try {
+                                StringBuilder time1, time2;
+                                if (day1.length() == 5 && day2.length() == 5) {
+                                    time1 = new StringBuilder(day1);
+                                    time2 = new StringBuilder(day2);
+                                    if (time1.substring(0, 2).equalsIgnoreCase("10") || time1.substring(0, 2).equalsIgnoreCase("11")) {
+                                        time1.replace(1, 2, "0:00");
+                                    } else {
+                                        time1.replace(1, 2, ":00");
+                                    }
+                                    if (time2.substring(0, 2).equalsIgnoreCase("10") || time2.substring(0, 2).equalsIgnoreCase("11")) {
+                                        time2.replace(1, 2, "0:00");
+                                    } else {
+                                        time2.replace(1, 2, ":00");
+                                    }
+                                    return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
+                                } else if (day1.length() == 5 && day2.length() == 4) {
+                                    time1 = new StringBuilder(day1);
+                                    time2 = new StringBuilder(day2);
+                                    if (time1.substring(0, 2).equalsIgnoreCase("10") || time1.substring(0, 2).equalsIgnoreCase("11")) {
+                                        time1.replace(1, 2, "0:00");
+                                    } else {
+                                        time1.replace(1, 2, ":00");
+                                    }
+                                    time2.replace(1, 1, ":00");
+                                    return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
+                                } else if (day1.length() == 4 && day2.length() == 5) {
+                                    time1 = new StringBuilder(day1);
+                                    time2 = new StringBuilder(day2);
+                                    if (time2.substring(0, 2).equalsIgnoreCase("10") || time2.substring(0, 2).equalsIgnoreCase("11")) {
+                                        time2.replace(1, 2, "0:00");
+                                    } else {
+                                        time2.replace(1, 2, ":00");
+                                    }
+                                    time1.replace(1, 1, ":00");
+                                    return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
+                                } else if (day1.length() == 4 && day2.length() == 4) {
+                                    time1 = new StringBuilder(day1);
+                                    time2 = new StringBuilder(day2);
+                                    time1.replace(1, 1, ":00");
+                                    time2.replace(1, 1, ":00");
+                                    return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
+                                }
+                            } catch (ParseException ex) {
+                                Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         } else {
                             continue;
                         }
@@ -978,10 +1055,10 @@ public class CustomReportDesigner {
                     aggreagtionList.add(new Aggregation(column.getFieldName(), column.getAgregationFunction()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) == 1) {
-                    firstAxis.add(new FirstAxis(column.getFieldName(),column.getDisplayName()));
+                    firstAxis.add(new FirstAxis(column.getFieldName(), column.getDisplayName()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) > 1) {
-                    secondAxis.add(new SecondAxis(column.getFieldName(),column.getDisplayName()));
+                    secondAxis.add(new SecondAxis(column.getFieldName(), column.getDisplayName()));
                 }
                 if (column.getxAxis() != null) {
                     xAxis = column.getFieldName();
@@ -991,6 +1068,7 @@ public class CustomReportDesigner {
             if (sortFields.size() > 0) {
                 data = sortData(data, sortFields);
             }
+
             if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
                 data = data.subList(0, tabWidget.getMaxRecord());
             }
@@ -1127,7 +1205,7 @@ public class CustomReportDesigner {
                     aggreagtionList.add(new Aggregation(column.getFieldName(), column.getAgregationFunction()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) == 1) {
-                    firstAxis.add(new FirstAxis(column.getFieldName(),column.getDisplayName()));
+                    firstAxis.add(new FirstAxis(column.getFieldName(), column.getDisplayName()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) > 1) {
                     secondAxis.add(new SecondAxis(column.getFieldName(), column.getDisplayName()));
@@ -1891,8 +1969,9 @@ public class CustomReportDesigner {
             this.fieldType = fieldType;
         }
     }
-    
+
     public class FirstAxis {
+
         private String fieldName;
         private String displayName;
 
@@ -1911,14 +1990,15 @@ public class CustomReportDesigner {
         public void setDisplayName(String displayName) {
             this.displayName = displayName;
         }
-        
-        public FirstAxis(String fieldName, String displayName){
+
+        public FirstAxis(String fieldName, String displayName) {
             this.fieldName = fieldName;
             this.displayName = displayName;
         }
     }
-    
-     public class SecondAxis {
+
+    public class SecondAxis {
+
         private String fieldName;
         private String displayName;
 
@@ -1937,8 +2017,8 @@ public class CustomReportDesigner {
         public void setDisplayName(String displayName) {
             this.displayName = displayName;
         }
-        
-        public SecondAxis(String fieldName, String displayName){
+
+        public SecondAxis(String fieldName, String displayName) {
             this.fieldName = fieldName;
             this.displayName = displayName;
         }
