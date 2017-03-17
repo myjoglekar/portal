@@ -35,20 +35,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,25 +49,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang.WordUtils;
-import org.apache.poi.POIXMLDocumentPart.RelationPart;
-import org.apache.poi.sl.usermodel.TableCell;
-import org.apache.poi.sl.usermodel.TextParagraph;
-import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xslf.usermodel.XMLSlideShow;
-import org.apache.poi.xslf.usermodel.XSLFPictureData;
-import org.apache.poi.xslf.usermodel.XSLFRelation;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
-import org.apache.poi.xslf.usermodel.XSLFTable;
-import org.apache.poi.xslf.usermodel.XSLFTableCell;
-import org.apache.poi.xslf.usermodel.XSLFTableRow;
-import org.apache.poi.xslf.usermodel.XSLFTextParagraph;
-import org.apache.poi.xslf.usermodel.XSLFTextRun;
-import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
-import org.apache.poi.xssf.usermodel.XSSFDrawing;
-import org.apache.poi.xssf.usermodel.XSSFPicture;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.plot.CategoryPlot;
@@ -95,21 +69,12 @@ import org.jfree.chart.axis.ValueAxis;
 
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.renderer.category.AreaRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.openxmlformats.schemas.drawingml.x2006.main.CTBlip;
-import org.openxmlformats.schemas.drawingml.x2006.main.CTBlipFillProperties;
-import org.openxmlformats.schemas.drawingml.x2006.main.CTRelativeRect;
-import org.openxmlformats.schemas.drawingml.x2006.main.CTTableCell;
-
-import org.apache.poi.util.IOUtils;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.ChartUtilities;
 import java.util.Iterator;
 
 /**
@@ -246,27 +211,12 @@ public class CustomReportDesigner {
                     String day1 = o1.get(sortType1.getFieldName()).toString();
                     String day2 = o2.get(sortType1.getFieldName()).toString();
                     System.out.println(day1);
-                   // System.out.println(day2);
                     System.out.println(day1.length());
-                    //System.out.println(day2.length());
                     if (day1.length() >= 6) {
                         if (day1.substring(day1.length() - 3, day1.length()).equalsIgnoreCase("day") && day2.substring(day2.length() - 3, day2.length()).equalsIgnoreCase("day")) {
-                         // List dayList = Arrays.asList(new DAY[]{DAY.Monday, DAY.Wednesday, DAY.Tuesday, DAY.Thursday, DAY.Sunday, DAY.Saturday, DAY.Friday});
-                         // System.out.println("Day1: " + day1 + " " + "Day2: " + day2);
                          DAY dayOne = DAY.valueOf(day1);
-                         System.out.println("DayOne: "+dayOne);
                          DAY dayTwo = DAY.valueOf(day2);
-                         System.out.println("DayTwo: "+dayTwo);
-//                           Collections.sort(dayList, new Comparator<DAY>() {
-//                                public int compare(DAY day1, DAY day2) {
-//                                    System.out.println(day1+" "+day2);
-//                                    System.out.println("Day1: " + day1.getWeight() + " " + "Day2: " + day2.getWeight());
                          return dayOne.getWeight() - dayTwo.getWeight();
-//                                }
-//                            });
-                            
-                           // DAY dayOne = (DAY) day1;
-//                            return day1.getWeight() - day2.getWeight();
                         } else {
                             continue;
                         }
@@ -1015,8 +965,8 @@ public class CustomReportDesigner {
 
             List<SortType> sortFields = new ArrayList<>();
             List<Aggregation> aggreagtionList = new ArrayList<>();
-            List<String> firstAxis = new ArrayList<>();
-            List<String> secondAxis = new ArrayList<>();
+            List<FirstAxis> firstAxis = new ArrayList<>();
+            List<SecondAxis> secondAxis = new ArrayList<>();
             String xAxis = null;
 
             for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
@@ -1028,10 +978,10 @@ public class CustomReportDesigner {
                     aggreagtionList.add(new Aggregation(column.getFieldName(), column.getAgregationFunction()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) == 1) {
-                    firstAxis.add(column.getFieldName());
+                    firstAxis.add(new FirstAxis(column.getFieldName(),column.getDisplayName()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) > 1) {
-                    secondAxis.add(column.getFieldName());
+                    secondAxis.add(new SecondAxis(column.getFieldName(),column.getDisplayName()));
                 }
                 if (column.getxAxis() != null) {
                     xAxis = column.getFieldName();
@@ -1164,8 +1114,8 @@ public class CustomReportDesigner {
 
             List<SortType> sortFields = new ArrayList<>();
             List<Aggregation> aggreagtionList = new ArrayList<>();
-            List<String> firstAxis = new ArrayList<>();
-            List<String> secondAxis = new ArrayList<>();
+            List<FirstAxis> firstAxis = new ArrayList<>();
+            List<SecondAxis> secondAxis = new ArrayList<>();
             String xAxis = null;
 
             for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
@@ -1177,10 +1127,10 @@ public class CustomReportDesigner {
                     aggreagtionList.add(new Aggregation(column.getFieldName(), column.getAgregationFunction()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) == 1) {
-                    firstAxis.add(column.getFieldName());
+                    firstAxis.add(new FirstAxis(column.getFieldName(),column.getDisplayName()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) > 1) {
-                    secondAxis.add(column.getFieldName());
+                    secondAxis.add(new SecondAxis(column.getFieldName(), column.getDisplayName()));
                 }
                 if (column.getxAxis() != null) {
                     xAxis = column.getFieldName();
@@ -1195,7 +1145,7 @@ public class CustomReportDesigner {
             }
 
             final CategoryDataset dataset1 = createDataset1(data, firstAxis, secondAxis, xAxis);
-            final CategoryDataset dataset2 = createDataset1(data, secondAxis, firstAxis, xAxis);
+            final CategoryDataset dataset2 = createDataset2(data, secondAxis, firstAxis, xAxis);
             final CategoryAxis domainAxis = new CategoryAxis(xAxis);
             final NumberAxis rangeAxis = new NumberAxis();
             final AreaRenderer renderer1 = new AreaRenderer();
@@ -1304,8 +1254,8 @@ public class CustomReportDesigner {
 
             List<SortType> sortFields = new ArrayList<>();
             List<Aggregation> aggreagtionList = new ArrayList<>();
-            List<String> firstAxis = new ArrayList<>();
-            List<String> secondAxis = new ArrayList<>();
+            List<FirstAxis> firstAxis = new ArrayList<>();
+            List<SecondAxis> secondAxis = new ArrayList<>();
             String xAxis = null;
 
             for (Iterator<WidgetColumn> iterator = columns.iterator(); iterator.hasNext();) {
@@ -1317,10 +1267,10 @@ public class CustomReportDesigner {
                     aggreagtionList.add(new Aggregation(column.getFieldName(), column.getAgregationFunction()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) == 1) {
-                    firstAxis.add(column.getFieldName());
+                    firstAxis.add(new FirstAxis(column.getFieldName(), column.getDisplayName()));
                 }
                 if (column.getyAxis() != null && ApiUtils.toDouble(column.getyAxis()) > 1) {
-                    secondAxis.add(column.getFieldName());
+                    secondAxis.add(new SecondAxis(column.getFieldName(), column.getDisplayName()));
                 }
                 if (column.getxAxis() != null) {
                     xAxis = column.getFieldName();
@@ -1446,7 +1396,7 @@ public class CustomReportDesigner {
      *
      * @return The dataset.
      */
-    private CategoryDataset createDataset1(List<Map<String, Object>> data, List<String> firstAxis, List<String> secondAxis, String xAxis) {
+    private CategoryDataset createDataset1(List<Map<String, Object>> data, List<FirstAxis> firstAxis, List<SecondAxis> secondAxis, String xAxis) {
         // row keys...
 //        final String series1 = "Series 1";
 //        final String series2 = "Dummy 1";
@@ -1462,25 +1412,25 @@ public class CustomReportDesigner {
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
             Map<String, Object> dataMap = iterator.next();
-            for (Iterator<String> iterator1 = firstAxis.iterator(); iterator1.hasNext();) {
-                String axis = iterator1.next();
-                System.out.println(ApiUtils.toDouble(dataMap.get(axis) + "") + "---" + axis + "----" + dataMap.get(xAxis) + "");
-                String data1 = dataMap.get(axis).getClass().getSimpleName();
+            for (Iterator<FirstAxis> iterator1 = firstAxis.iterator(); iterator1.hasNext();) {
+                FirstAxis axis = iterator1.next();
+                System.out.println(ApiUtils.toDouble(dataMap.get(axis.getFieldName()) + "") + "---" + axis.getDisplayName() + "----" + dataMap.get(xAxis) + "");
+                String data1 = dataMap.get(axis.getFieldName()).getClass().getSimpleName();
                 System.out.println("Type: " + data1);
                 if (data1.equalsIgnoreCase("String")) {
-                    dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(dataMap.get(axis).toString())) + ""), axis, dataMap.get(xAxis) + "");
+                    dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(dataMap.get(axis.getFieldName()).toString())) + ""), axis.getDisplayName(), dataMap.get(xAxis) + "");
                 } else {
-                    dataset.addValue(ApiUtils.toDouble(df.format(dataMap.get(axis)) + ""), axis, dataMap.get(xAxis) + "");
+                    dataset.addValue(ApiUtils.toDouble(df.format(dataMap.get(axis.getFieldName())) + ""), axis.getDisplayName(), dataMap.get(xAxis) + "");
                 }
             }
         }
         for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
             Map<String, Object> dataMap = iterator.next();
 
-            for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
-                String axis = iterator1.next();
-                System.out.println(null + "---" + axis + "----" + dataMap.get(xAxis) + "");
-                dataset.addValue(null, axis, dataMap.get(xAxis) + "");
+            for (Iterator<SecondAxis> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
+                SecondAxis axis = iterator1.next();
+                System.out.println(null + "---" + axis.getDisplayName() + "----" + dataMap.get(xAxis) + "");
+                dataset.addValue(null, axis.getDisplayName(), dataMap.get(xAxis) + "");
             }
         }
         return dataset;
@@ -1491,32 +1441,31 @@ public class CustomReportDesigner {
      *
      * @return The dataset.
      */
-    private CategoryDataset createDataset2(List<Map<String, Object>> data, List<String> secondAxis, List<String> firstAxis, String xAxis) {
+    private CategoryDataset createDataset2(List<Map<String, Object>> data, List<SecondAxis> secondAxis, List<FirstAxis> firstAxis, String xAxis) {
 
         // create the dataset...
         DecimalFormat df = new DecimalFormat(".##");
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
             Map<String, Object> dataMap = iterator.next();
-            for (Iterator<String> iterator1 = firstAxis.iterator(); iterator1.hasNext();) {
-                String axis = iterator1.next();
-                System.out.println(ApiUtils.toDouble(dataMap.get(axis) + "") + "---" + axis + "----" + dataMap.get(xAxis) + "");
-                dataset.addValue(null, axis, dataMap.get(xAxis) + "");
+            for (Iterator<FirstAxis> iterator1 = firstAxis.iterator(); iterator1.hasNext();) {
+                FirstAxis axis = iterator1.next();
+                System.out.println(ApiUtils.toDouble(dataMap.get(axis.getFieldName()) + "") + "---" + axis.getDisplayName() + "----" + dataMap.get(xAxis) + "");
+                dataset.addValue(null, axis.getDisplayName(), dataMap.get(xAxis) + "");
             }
 
         }
         for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
             Map<String, Object> dataMap = iterator.next();
 
-            for (Iterator<String> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
-                String axis = iterator1.next();
-                System.out.println(null + "---" + axis + "----" + dataMap.get(xAxis) + "");
-                String data1 = dataMap.get(axis).getClass().getSimpleName();
-                System.out.println("Type2: " + data1);
+            for (Iterator<SecondAxis> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
+                SecondAxis axis = iterator1.next();
+                System.out.println(null + "---" + axis.getDisplayName() + "----" + dataMap.get(xAxis) + "");
+                String data1 = dataMap.get(axis.getFieldName()).getClass().getSimpleName();
                 if (data1.equalsIgnoreCase("String")) {
-                    dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(dataMap.get(axis).toString())) + ""), axis, dataMap.get(xAxis) + "");
+                    dataset.addValue(ApiUtils.toDouble(df.format(Float.parseFloat(dataMap.get(axis.getFieldName()).toString())) + ""), axis.getDisplayName(), dataMap.get(xAxis) + "");
                 } else {
-                    dataset.addValue(ApiUtils.toDouble(df.format(dataMap.get(axis)) + ""), axis, dataMap.get(xAxis) + "");
+                    dataset.addValue(ApiUtils.toDouble(df.format(dataMap.get(axis.getFieldName())) + ""), axis.getDisplayName(), dataMap.get(xAxis) + "");
                 }
             }
         }
@@ -1942,16 +1891,63 @@ public class CustomReportDesigner {
             this.fieldType = fieldType;
         }
     }
+    
+    public class FirstAxis {
+        private String fieldName;
+        private String displayName;
+
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public void setFieldName(String fieldName) {
+            this.fieldName = fieldName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public void setDisplayName(String displayName) {
+            this.displayName = displayName;
+        }
+        
+        public FirstAxis(String fieldName, String displayName){
+            this.fieldName = fieldName;
+            this.displayName = displayName;
+        }
+    }
+    
+     public class SecondAxis {
+        private String fieldName;
+        private String displayName;
+
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public void setFieldName(String fieldName) {
+            this.fieldName = fieldName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public void setDisplayName(String displayName) {
+            this.displayName = displayName;
+        }
+        
+        public SecondAxis(String fieldName, String displayName){
+            this.fieldName = fieldName;
+            this.displayName = displayName;
+        }
+    }
 
     public static class PageNumeration extends PdfPageEventHelper {
 
         @Override
         public void onEndPage(PdfWriter writer, Document document) {
-            //            ColumnText ct = new ColumnText(writer.getDirectContent());
-//            ct.setSimpleColumn(new Rectangle(36, 832, 559, 810));
-//            for (Element e : header) {
-//                ct.addElement(e);
-//            }
             PdfPTable table = new PdfPTable(1);
 
             table.setTotalWidth(523);
@@ -1959,9 +1955,6 @@ public class CustomReportDesigner {
             cell.setBorder(Rectangle.NO_BORDER);
             //cell.setBackgroundColor(BaseColor.ORANGE);
             table.addCell(cell);
-            //cell = new PdfPCell(new Phrase("This is a copyright notice"));
-            //cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            //table.addCell(cell);
             table.writeSelectedRows(0, -1, 36, 64, writer.getDirectContent());
 
         }
@@ -1982,12 +1975,7 @@ public class CustomReportDesigner {
         @Override
         public void onEndPage(PdfWriter writer, Document document) {
             try {
-                //            ColumnText ct = new ColumnText(writer.getDirectContent());
-//            ct.setSimpleColumn(new Rectangle(36, 832, 559, 810));
-//            for (Element e : header) {
-//                ct.addElement(e);
-//            }
-                // System.out.println("LOCATION PATH " + getClass().getProtectionDomain().getCodeSource().getLocation());
+
                 Rectangle rectangle = pageSize; // new Rectangle(10, 900, 100, 850);
                 Image img = Image.getInstance(CustomReportDesigner.class.getResource("") + "/../images/l2tmedia-logo-dark.png");
                 img.scaleToFit(200, 200);
@@ -2007,5 +1995,4 @@ public class CustomReportDesigner {
             }
         }
     }
-
 }
