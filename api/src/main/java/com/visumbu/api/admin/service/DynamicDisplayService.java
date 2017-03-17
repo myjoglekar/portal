@@ -44,6 +44,9 @@ public class DynamicDisplayService {
                 url +=  "&fieldsOnly=true";
             }
             String data = Rest.getData(url);
+            if(data == null  || data.isEmpty()){
+                return null;
+            }
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(data);
             return JsonSimpleUtils.toMap((JSONObject)jsonObj);
@@ -65,6 +68,9 @@ public class DynamicDisplayService {
                 url +=  "&fieldsOnly=true";
             }
             String data = Rest.getData(url);
+            if(data == null  ||  data.isEmpty()){
+                return null;
+            }
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(data);
             return jsonObj;
