@@ -43,6 +43,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -222,113 +223,147 @@ public class CustomReportDesigner {
 //        }
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
-        Collections.sort(data, (Map<String, Object> o1, Map<String, Object> o2) -> {
-            for (Iterator<SortType> iterator = sortType.iterator(); iterator.hasNext();) {
-                SortType sortType1 = iterator.next();
-                System.out.println(sortType1.getSortOrder());
-                System.out.println(sortType1.getFieldType());
-                System.out.println("sort type: " + sortType1.getFieldType());
+        Collections.sort(data, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                for (Iterator<SortType> iterator = sortType.iterator(); iterator.hasNext();) {
+                    SortType sortType1 = iterator.next();
+                    int order = 1;
+                    System.out.println("sort Order: " + sortType1.getSortOrder());
+                    System.out.println("sort type: " + sortType1.getFieldType());
+                    String day1 = o1.get(sortType1.getFieldName()) + "";
+                    String day2 = o2.get(sortType1.getFieldName()) + "";
+                    System.out.println("day1: " + day1);
+                    System.out.println("day2: " + day2);
+                    System.out.println("day1 length: " + day1.length());
 
-                if (sortType1.getFieldType() == null || sortType1.getFieldType().isEmpty()) {
-
-                    String day1 = o1.get(sortType1.getFieldName()).toString();
-                    String day2 = o2.get(sortType1.getFieldName()).toString();
-                    System.out.println(day1);
-                    System.out.println(day2);
-                    System.out.println(day1.length());
-                    if (day1.length() >= 6) {
-                        if (day1.substring(day1.length() - 3, day1.length()).equalsIgnoreCase("day") && day2.substring(day2.length() - 3, day2.length()).equalsIgnoreCase("day")) {
-                            DAY dayOne = DAY.valueOf(day1);
-                            System.out.println("dayOne: " + dayOne);
-                            DAY dayTwo = DAY.valueOf(day2);
-                            System.out.println("dayTwo: " + dayTwo);
-                            return dayOne.getWeight() - dayTwo.getWeight();
-                        } else {
-                            continue;
-                        }
-                    } else if (day1.length() == 4 || day1.length() == 5) {
-                        if ((day1.substring(day1.length() - 2, day1.length()).equalsIgnoreCase("pm") || day1.substring(day1.length() - 2, day1.length()).equalsIgnoreCase("am")) && (day2.substring(day2.length() - 2, day2.length()).equalsIgnoreCase("pm") || day2.substring(day2.length() - 2, day2.length()).equalsIgnoreCase("am"))) {
-                            try {
-                                StringBuilder time1, time2;
-                                if (day1.length() == 5 && day2.length() == 5) {
-                                    time1 = new StringBuilder(day1);
-                                    time2 = new StringBuilder(day2);
-                                    if (time1.substring(0, 2).equalsIgnoreCase("10") || time1.substring(0, 2).equalsIgnoreCase("11")) {
-                                        time1.replace(1, 2, "0:00");
-                                    } else {
-                                        time1.replace(1, 2, ":00");
-                                    }
-                                    if (time2.substring(0, 2).equalsIgnoreCase("10") || time2.substring(0, 2).equalsIgnoreCase("11")) {
-                                        time2.replace(1, 2, "0:00");
-                                    } else {
-                                        time2.replace(1, 2, ":00");
-                                    }
-                                    return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
-                                } else if (day1.length() == 5 && day2.length() == 4) {
-                                    time1 = new StringBuilder(day1);
-                                    time2 = new StringBuilder(day2);
-                                    if (time1.substring(0, 2).equalsIgnoreCase("10") || time1.substring(0, 2).equalsIgnoreCase("11")) {
-                                        time1.replace(1, 2, "0:00");
-                                    } else {
-                                        time1.replace(1, 2, ":00");
-                                    }
-                                    time2.replace(1, 1, ":00");
-                                    return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
-                                } else if (day1.length() == 4 && day2.length() == 5) {
-                                    time1 = new StringBuilder(day1);
-                                    time2 = new StringBuilder(day2);
-                                    if (time2.substring(0, 2).equalsIgnoreCase("10") || time2.substring(0, 2).equalsIgnoreCase("11")) {
-                                        time2.replace(1, 2, "0:00");
-                                    } else {
-                                        time2.replace(1, 2, ":00");
-                                    }
-                                    time1.replace(1, 1, ":00");
-                                    return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
-                                } else if (day1.length() == 4 && day2.length() == 4) {
-                                    time1 = new StringBuilder(day1);
-                                    time2 = new StringBuilder(day2);
-                                    time1.replace(1, 1, ":00");
-                                    time2.replace(1, 1, ":00");
-                                    return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
-                                }
-                            } catch (ParseException ex) {
-                                Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+                    if (sortType1.getSortOrder().equalsIgnoreCase("asc")) {
+                        if (day1.length() == 1) {
+                            System.out.println("Numbers ------>");
+                            if (day1.compareTo(day2) != 0) {
+                                return order * day1.compareTo(day2);
+                            } else {
+                                continue;
                             }
                         } else {
                             continue;
                         }
-                    } else {
+                    }
+
+                    if (sortType1.getFieldType() == null || sortType1.getFieldType().isEmpty()) {
+
+                        if (day1.length() >= 6) {
+                            System.out.println("Days ------>");
+                            if (day1.substring(day1.length() - 3, day1.length()).equalsIgnoreCase("day") && day2.substring(day2.length() - 3, day2.length()).equalsIgnoreCase("day")) {
+                                DAY dayOne = DAY.valueOf(day1);
+                                System.out.println("dayOne: " + dayOne);
+                                DAY dayTwo = DAY.valueOf(day2);
+                                System.out.println("dayTwo: " + dayTwo);
+                                return dayOne.getWeight() - dayTwo.getWeight();
+                            } else {
+                                continue;
+                            }
+                        }
+                        if (day1.length() == 4 || day1.length() == 5) {
+                            System.out.println("Time ------>");
+                            if ((day1.substring(day1.length() - 2, day1.length()).equalsIgnoreCase("pm") || day1.substring(day1.length() - 2, day1.length()).equalsIgnoreCase("am")) && (day2.substring(day2.length() - 2, day2.length()).equalsIgnoreCase("pm") || day2.substring(day2.length() - 2, day2.length()).equalsIgnoreCase("am"))) {
+                                try {
+                                    StringBuilder time1, time2;
+                                    if (day1.length() == 5 && day2.length() == 5) {
+                                        System.out.println("if ---> 1");
+                                        time1 = new StringBuilder(day1);
+                                        time2 = new StringBuilder(day2);
+                                        if (time1.substring(0, 2).equalsIgnoreCase("10")) {
+                                            time1.replace(1, 2, "0:00");
+                                        } else if (time1.substring(0, 2).equalsIgnoreCase("11")) {
+                                            time1.replace(1, 2, "1:00");
+                                        } else {
+                                            time1.replace(1, 2, ":00");
+                                        }
+                                        if (time2.substring(0, 2).equalsIgnoreCase("10")) {
+                                            time2.replace(1, 2, "0:00");
+                                        } else if (time2.substring(0, 2).equalsIgnoreCase("11")) {
+                                            time2.replace(1, 2, "1:00");
+                                        } else {
+                                            time2.replace(1, 2, ":00");
+                                        }
+                                        return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
+                                    } else if (day1.length() == 5 && day2.length() == 4) {
+                                        System.out.println("if ---> 2");
+                                        time1 = new StringBuilder(day1);
+                                        time2 = new StringBuilder(day2);
+                                        if (time1.substring(0, 2).equalsIgnoreCase("10")) {
+                                            time1.replace(1, 2, "0:00");
+                                        } else if (time1.substring(0, 2).equalsIgnoreCase("11")) {
+                                            time1.replace(1, 2, "1:00");
+                                        } else {
+                                            time1.replace(1, 2, ":00");
+                                        }
+                                        time2.replace(1, 1, ":00");
+                                        return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
+                                    } else if (day1.length() == 4 && day2.length() == 5) {
+                                        System.out.println("if ---> 3");
+                                        time1 = new StringBuilder(day1);
+                                        time2 = new StringBuilder(day2);
+                                        if (time2.substring(0, 2).equalsIgnoreCase("10")) {
+                                            time2.replace(1, 2, "0:00");
+                                        } else if (time2.substring(0, 2).equalsIgnoreCase("11")) {
+                                            time2.replace(1, 2, "1:00");
+                                        } else {
+                                            time2.replace(1, 2, ":00");
+                                        }
+                                        time1.replace(1, 1, ":00");
+                                        return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
+                                    } else if (day1.length() == 4 && day2.length() == 4) {
+                                        System.out.println("if ---> 4");
+                                        time1 = new StringBuilder(day1);
+                                        time2 = new StringBuilder(day2);
+                                        time1.replace(1, 1, ":00");
+                                        time2.replace(1, 1, ":00");
+                                        return timeInMillis(time1.toString()) - timeInMillis(time2.toString());
+                                    } else {
+                                        continue;
+                                    }
+                                } catch (ParseException ex) {
+                                    Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            } else {
+                                continue;
+                            }
+                        }
                         continue;
                     }
-                }
-                int order = 1;
-                if (sortType1.getSortOrder().equalsIgnoreCase("desc")) {
-                    order = -1;
-                }
-                if (sortType1.getFieldType().equalsIgnoreCase("date")) {
-                    try {
-                        Date date1 = sdf.parse(o1.get(sortType1.getFieldName()).toString());
-                        Date date2 = sdf.parse(o2.get(sortType1.getFieldName()).toString());
-                        return date1.compareTo(date2);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else if (sortType1.getFieldType().equalsIgnoreCase("number")) {
-                    Double value1 = ApiUtils.toDouble(o1.get(sortType1.getFieldName()) + "");
-                    Double value2 = ApiUtils.toDouble(o2.get(sortType1.getFieldName()) + "");
-                    if (value1 != value2) {
-                        return order * new Double(value1 - value2).intValue();
-                    }
-                } else {
-                    String value1 = o1.get(sortType1.getFieldName()) + "";
-                    String value2 = o2.get(sortType1.getFieldName()) + "";
-                    if (value1.compareTo(value2) != 0) {
-                        return order * value1.compareTo(value2);
-                    }
-                }
 
+                    if (sortType1.getSortOrder().equalsIgnoreCase("desc")) {
+                        order = -1;
+                    }
+
+                    if (sortType1.getFieldType().equalsIgnoreCase("date")) {
+                        try {
+                            Date date1 = sdf.parse(o1.get(sortType1.getFieldName()).toString());
+                            Date date2 = sdf.parse(o2.get(sortType1.getFieldName()).toString());
+                            return date1.compareTo(date2);
+                        } catch (ParseException ex) {
+                            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+                    if (sortType1.getFieldType().equalsIgnoreCase("number")) {
+                        Double value1 = ApiUtils.toDouble(o1.get(sortType1.getFieldName()) + "");
+                        Double value2 = ApiUtils.toDouble(o2.get(sortType1.getFieldName()) + "");
+                        if (value1 != value2) {
+                            return order * new Double(value1 - value2).intValue();
+                        }
+                    } else {
+                        String value1 = o1.get(sortType1.getFieldName()) + "";
+                        String value2 = o2.get(sortType1.getFieldName()) + "";
+                        if (value1.compareTo(value2) != 0) {
+                            return order * value1.compareTo(value2);
+                        }
+                    }
+                }
+                return 0;
             }
-            return 0;
         });
         return data;
     }
@@ -514,10 +549,13 @@ public class CustomReportDesigner {
                 String groupValue = mapData.get(mapData.get("_groupField")) + "";
                 pdfFont.setColor(tableTitleFontColor);
                 PdfPCell dataCell = new PdfPCell(new Phrase(groupValue, pdfFont));
+                System.out.println("Get GroupField Name ---> " + groupValue);
+
                 dataCell.setBorderColor(widgetBorderColor);
                 table.addCell(dataCell);
             } else {
                 PdfPCell dataCell = new PdfPCell(new Phrase(""));
+                System.out.println("Get GroupField Name ---> ");
                 dataCell.setBorderColor(widgetBorderColor);
                 table.addCell(dataCell);
             }
@@ -530,6 +568,7 @@ public class CustomReportDesigner {
                             value = Formatter.format(column.getDisplayFormat(), value);
                         }
                         pdfFont.setColor(tableTitleFontColor);
+                        System.out.println("Get GroupField Name ---> " + value);
                         PdfPCell dataCell = new PdfPCell(new Phrase(value, pdfFont));
                         if (column.getAlignment() != null) {
                             dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
@@ -538,6 +577,7 @@ public class CustomReportDesigner {
                         table.addCell(dataCell);
                     } else {
                         PdfPCell dataCell = new PdfPCell(new Phrase(""));
+                        System.out.println("Get GroupField Name -------> ");
                         dataCell.setBorderColor(widgetBorderColor);
                         table.addCell(dataCell);
                     }
@@ -625,6 +665,7 @@ public class CustomReportDesigner {
             WidgetColumn column = iterator.next();
             if (column.getColumnHide() == null || column.getColumnHide() == 0) {
                 PdfPCell dataCell = new PdfPCell(new Phrase(column.getDisplayName(), pdfFontHeader));
+                System.out.println("Get Display Name ---> " + column.getDisplayName());
                 dataCell.setPadding(5);
                 dataCell.setBorderColor(widgetBorderColor);
                 dataCell.setBackgroundColor(tableHeaderColor);
@@ -645,6 +686,7 @@ public class CustomReportDesigner {
                         value = Formatter.format(column.getDisplayFormat(), value);
                     }
                     pdfFont.setColor(tableTitleFontColor);
+                    System.out.println("Get Value ---> " + value);
                     dataCell = new PdfPCell(new Phrase(value, pdfFont));
                     if (column.getAlignment() != null) {
                         dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
@@ -683,6 +725,8 @@ public class CustomReportDesigner {
                             value = Formatter.format(column.getDisplayFormat(), value);
                         }
                         pdfFont.setColor(tableTitleFontColor);
+                        System.out.println("Get Total Value ---> " + value);
+
                         PdfPCell dataCell = new PdfPCell(new Phrase(value, pdfFont));
                         if (column.getAlignment() != null) {
                             dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
@@ -1535,7 +1579,6 @@ public class CustomReportDesigner {
         }
         for (Iterator<Map<String, Object>> iterator = data.iterator(); iterator.hasNext();) {
             Map<String, Object> dataMap = iterator.next();
-
             for (Iterator<SecondAxis> iterator1 = secondAxis.iterator(); iterator1.hasNext();) {
                 SecondAxis axis = iterator1.next();
                 System.out.println(null + "---" + axis.getDisplayName() + "----" + dataMap.get(xAxis) + "");
