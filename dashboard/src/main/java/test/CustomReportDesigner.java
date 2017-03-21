@@ -237,14 +237,10 @@ public class CustomReportDesigner {
                     System.out.println("day2: " + day2);
                     System.out.println("day1 length: " + day1.length());
 
-                    if (sortType1.getSortOrder().equalsIgnoreCase("asc")) {
-                        if (day1.length() == 1) {
-                            System.out.println("Numbers ------>");
-                            if (day1.compareTo(day2) != 0) {
-                                return order * day1.compareTo(day2);
-                            } else {
-                                continue;
-                            }
+                    if (day1.length() == 1 && day2.length() == 1 && sortType1.getSortOrder().equalsIgnoreCase("asc")) {
+                        System.out.println("numbers --- >");
+                        if (day1.compareTo(day2) != 0) {
+                            return order * day1.compareTo(day2);
                         } else {
                             continue;
                         }
@@ -393,7 +389,7 @@ public class CustomReportDesigner {
         List<Map<String, Object>> groupedData = new ArrayList<>();
         String groupingField = currentFields.get(0);
         Map<String, List<Map<String, Object>>> currentListGrouped = groupBy(actualList, groupingField);
-        groupByFields.remove(0);
+        //groupByFields.remove(0);
         for (Map.Entry<String, List<Map<String, Object>>> entrySet : currentListGrouped.entrySet()) {
             String key = entrySet.getKey();
             List<Map<String, Object>> value = entrySet.getValue();
@@ -403,7 +399,9 @@ public class CustomReportDesigner {
             dataToPush.put("_groupField", groupingField);
             // Merge aggregation
             dataToPush.putAll(aggregateData(value, aggreagtionList));
-            dataToPush.put("data", groupData(value, groupByFields, aggreagtionList));
+            dataToPush.put("data", groupData(value, groupByFields.subList(1, groupByFields.size()), aggreagtionList));
+            System.out.println("Group Data -------->");
+            System.out.println(dataToPush);
             groupedData.add(dataToPush);
         }
         return groupedData;
@@ -519,6 +517,8 @@ public class CustomReportDesigner {
         if (sortFields.size() > 0) {
             data = sortData(data, sortFields);
         }
+        System.out.println("Group By Fields -----> ");
+        System.out.println(groupByFields);
         if (tabWidget.getMaxRecord() != null && tabWidget.getMaxRecord() > 0) {
             System.out.println(tabWidget.getMaxRecord());
             data = data.subList(0, tabWidget.getMaxRecord());
@@ -535,56 +535,69 @@ public class CustomReportDesigner {
             groupedMapData.putAll(aggregateData(data, aggreagtionList));
             groupedMapData.put("data", data);
         }
+        System.out.println("Grouped Data ---->");
+        System.out.println(groupedMapData);
         return generateTable(groupedMapData, tabWidget);
-
     }
 
     private void generateGroupedRows(Map groupedData, TabWidget tabWidget, PdfPTable table) {
         BaseColor tableTitleFontColor = new BaseColor(61, 70, 77);
         List<WidgetColumn> columns = tabWidget.getColumns();
         List data = (List) groupedData.get("data");
-        for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-            Map mapData = (Map) iterator.next();
-            if (mapData.get(mapData.get("_groupField")) != null) {
-                String groupValue = mapData.get(mapData.get("_groupField")) + "";
-                pdfFont.setColor(tableTitleFontColor);
-                PdfPCell dataCell = new PdfPCell(new Phrase(groupValue, pdfFont));
-                System.out.println("Get GroupField Name ---> " + groupValue);
+        System.out.println("List Data : " + data);
+        System.out.println("List Data size: " + data.size());
+        System.out.println("Column size: " + columns.size());
 
-                dataCell.setBorderColor(widgetBorderColor);
-                table.addCell(dataCell);
-            } else {
-                PdfPCell dataCell = new PdfPCell(new Phrase(""));
-                System.out.println("Get GroupField Name ---> ");
+        PdfPCell dataCell;
+        String groupValue = null;
+        int count = 0;
+        for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+            System.out.println("for Column 1 ---->");
+            Map mapData = (Map) iterator.next();
+            System.out.println("Map Data : " + mapData);
+            if (mapData.get(mapData.get("_groupField")) != null) {
+                groupValue = mapData.get(mapData.get("_groupField")) + "";
+                pdfFont.setColor(tableTitleFontColor);
+                dataCell = new PdfPCell(new Phrase(groupValue, pdfFont));
+                System.out.println("Get GroupField Data Name ---> " + groupValue);
                 dataCell.setBorderColor(widgetBorderColor);
                 table.addCell(dataCell);
             }
-            for (Iterator<WidgetColumn> iterator1 = columns.iterator(); iterator1.hasNext();) {
-                WidgetColumn column = iterator1.next();
-                if (column.getColumnHide() == null || column.getColumnHide() == 0) {
-                    if (mapData.get(column.getFieldName()) != null) {
-                        String value = mapData.get(column.getFieldName()) + "";
-                        if (column.getDisplayFormat() != null) {
-                            value = Formatter.format(column.getDisplayFormat(), value);
+//            else {
+//                dataCell = new PdfPCell(new Phrase(""));
+//                System.out.println("Get GroupField Else Data Name ---> ");
+//                dataCell.setBorderColor(widgetBorderColor);
+//                table.addCell(dataCell);
+//            }
+            if (groupValue != null) {
+                for (Iterator<WidgetColumn> iterator1 = columns.iterator(); iterator1.hasNext();) {
+                    System.out.println("for widget Column 1 ---->");
+                    WidgetColumn column = iterator1.next();
+                    if (column.getColumnHide() == null || column.getColumnHide() == 0) {
+                        if (mapData.get(column.getFieldName()) != null) {
+                            String value = mapData.get(column.getFieldName()) + "";
+                            if (column.getDisplayFormat() != null) {
+                                value = Formatter.format(column.getDisplayFormat(), value);
+                            }
+                            pdfFont.setColor(tableTitleFontColor);
+                            System.out.println("Get GroupField Widget Column Name ---> " + value);
+                            dataCell = new PdfPCell(new Phrase(value, pdfFont));
+                            if (column.getAlignment() != null) {
+                                dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
+                            }
+                            dataCell.setBorderColor(widgetBorderColor);
+                            table.addCell(dataCell);
+                        } else {
+                            dataCell = new PdfPCell(new Phrase(" "));
+                            System.out.println("Get GroupField Else Widget Column Name -------> ");
+                            dataCell.setBorderColor(widgetBorderColor);
+                            table.addCell(dataCell);
                         }
-                        pdfFont.setColor(tableTitleFontColor);
-                        System.out.println("Get GroupField Name ---> " + value);
-                        PdfPCell dataCell = new PdfPCell(new Phrase(value, pdfFont));
-                        if (column.getAlignment() != null) {
-                            dataCell.setHorizontalAlignment(column.getAlignment().equalsIgnoreCase("right") ? PdfPCell.ALIGN_RIGHT : column.getAlignment().equalsIgnoreCase("center") ? PdfPCell.ALIGN_CENTER : PdfPCell.ALIGN_LEFT);
-                        }
-                        dataCell.setBorderColor(widgetBorderColor);
-                        table.addCell(dataCell);
-                    } else {
-                        PdfPCell dataCell = new PdfPCell(new Phrase(""));
-                        System.out.println("Get GroupField Name -------> ");
-                        dataCell.setBorderColor(widgetBorderColor);
-                        table.addCell(dataCell);
                     }
                 }
             }
-
             if (mapData.get("data") != null) {
+                System.out.println("if data ---->");
                 generateGroupedRows(mapData, tabWidget, table);
             }
         }
@@ -887,8 +900,10 @@ public class CustomReportDesigner {
             table.addCell(bottomCell);
 
             document.add(table);
+
         } catch (DocumentException ex) {
-            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomReportDesigner.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1022,10 +1037,14 @@ public class CustomReportDesigner {
             document.close();
             out.flush();
             out.close();
+
         } catch (DocumentException ex) {
-            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomReportDesigner.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (IOException ex) {
-            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomReportDesigner.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1220,8 +1239,10 @@ public class CustomReportDesigner {
             // contentByte.addTemplate(templatePie, 30, 30);
             Image img = Image.getInstance(templatePie);
             return img;
+
         } catch (BadElementException ex) {
-            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomReportDesigner.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -1355,8 +1376,10 @@ public class CustomReportDesigner {
             // contentByte.addTemplate(templatePie, 30, 30);
             Image img = Image.getInstance(templatePie);
             return img;
+
         } catch (BadElementException ex) {
-            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomReportDesigner.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -1399,6 +1422,7 @@ public class CustomReportDesigner {
                 }
             }
 
+            System.out.println("sortField: " + sortFields.size());
             if (sortFields.size() > 0) {
                 data = sortData(data, sortFields);
             }
@@ -1507,8 +1531,10 @@ public class CustomReportDesigner {
             // contentByte.addTemplate(templatePie, 30, 30);
             Image img = Image.getInstance(templatePie);
             return img;
+
         } catch (BadElementException ex) {
-            Logger.getLogger(CustomReportDesigner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CustomReportDesigner.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -1842,6 +1868,7 @@ public class CustomReportDesigner {
         //contentByte.addTemplate(templateBar, 30, 30);
         Image img = Image.getInstance(templateBar);
         return img;
+
     }
 
     public static class CustomRenderer extends BarRenderer {
