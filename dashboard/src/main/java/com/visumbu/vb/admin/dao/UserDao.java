@@ -136,12 +136,12 @@ public class UserDao extends BaseDao {
             initWidgetColumns(user, tabWidget, newObject);
             returnList.add(newObject);
         }
-            log.debug("End function of initDashboardTabWidget in UserDao class");
+        log.debug("End function of initDashboardTabWidget in UserDao class");
         return returnList;
     }
 
     private List<WidgetColumn> initWidgetColumns(VbUser user, TabWidget oldWidget, TabWidget newWidget) {
-                    log.debug("Start function of initWidgetColumns in UserDao class");
+        log.debug("Start function of initWidgetColumns in UserDao class");
         List<WidgetColumn> returnList = new ArrayList<>();
         Query query = sessionFactory.getCurrentSession().getNamedQuery("WidgetColumn.findByWidget");
         query.setParameter("widget", oldWidget);
@@ -152,15 +152,14 @@ public class UserDao extends BaseDao {
             try {
                 BeanUtils.copyProperties(newObject, widgetColumn);
             } catch (IllegalAccessException | InvocationTargetException ex) {
-                log.error("Exception in initWidgetColumns function: "+ex);
+                log.error("Exception in initWidgetColumns function: " + ex);
             }
             newObject.setId(null);
             newObject.setWidgetId(newWidget);
             create(newObject);
             returnList.add(newObject);
         }
-                    log.debug("End function of initWidgetColumns in UserDao class");
+        log.debug("End function of initWidgetColumns in UserDao class");
         return returnList;
     }
-
 }

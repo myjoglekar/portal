@@ -69,6 +69,6 @@ public class CsvController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        e.printStackTrace();
+        log.error("HttpMessageNotReadableException in handle function: "+e);
     }
 }
