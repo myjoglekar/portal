@@ -7,14 +7,16 @@ package com.visumbu.vb.utils;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author user
  */
 public class Formatter {
-
+final static Logger log = Logger.getLogger(Formatter.class);
     public static String format(String format, String value) {
+                log.debug("Start function of format in Formatter class");
         String returnValue = value;
         String jFormat = format;
         String prefix = "";
@@ -36,12 +38,15 @@ public class Formatter {
         if (jFormat != null && !jFormat.isEmpty()) {
             returnValue = prefix + String.format("%" + jFormat, multiplier * ApiUtils.toDouble(value)) + sufix;
         }
+                        log.debug("End function of format in Formatter class");
         return returnValue;
     }
     
     public static void main(String argv[]) {
+        log.debug("Start main function in Formatter class");
         String format = ".1%";
         String value = "5346.00";
-        System.out.println(Formatter.format(format, value));
+        log.debug(Formatter.format(format, value));
+       log.debug("End main function in Formatter class");
     }
 }

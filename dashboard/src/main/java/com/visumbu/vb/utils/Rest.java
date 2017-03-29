@@ -21,11 +21,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponents;
@@ -38,12 +37,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class Rest {
 
     private final static String USER_AGENT = "ApiAgent";
+    final static Logger log = Logger.getLogger(Rest.class);
 
     public static String getData(String urlString) {
+        log.debug("Start function of getData in Rest class");
+        log.debug("End function of getData in Rest class");
         return getData(urlString, null);
     }
 
     public static String getData(String url, MultiValueMap<String, String> params) {
+        log.debug("Start function of getData(String url, MultiValueMap<String, String> params) in Rest class");
         String urlString = url;
         if (params != null) {
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(url).queryParams(params).build();
@@ -51,20 +54,20 @@ public class Rest {
         }
         String returnStr = "";
         try {
-            System.out.println(urlString);
+            log.debug(urlString);
             URL httpUrl = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) httpUrl.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
 
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                System.out.println(urlString);
-                System.out.println("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
+                log.debug(urlString);
+                log.debug("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
                 throw new RuntimeException("Failed : HTTP error code : "
                         + conn.getResponseCode());
             } else {
-                System.out.println(urlString);
-                System.out.println("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
+                log.debug(urlString);
+                log.debug("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
 
             }
 
@@ -72,22 +75,24 @@ public class Rest {
                     (conn.getInputStream())));
 
             String output;
-            System.out.println("Output from Server .... \n");
+            log.debug("Output from Server .... \n");
             while ((output = br.readLine()) != null) {
-                System.out.println(output);
+                log.debug(output);
                 returnStr += output;
             }
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            log.error("MalformedURLException in getData function in rest class:" + e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("IOException in getData function in rest class:" + e);
         }
+        log.debug("End function of getData(String url, MultiValueMap<String, String> params) in Rest class");
         return returnStr;
     }
 
     public static String getData(String url, MultiValueMap<String, String> params, Map<String, String> header) {
+        log.debug("Start function of getData(String url, MultiValueMap<String, String> params, Map<String, String> header) in Rest class");
         String urlString = url;
         if (params != null) {
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(url).queryParams(params).build();
@@ -95,7 +100,7 @@ public class Rest {
         }
         String returnStr = "";
         try {
-            System.out.println(urlString);
+            log.debug(urlString);
             URL httpUrl = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) httpUrl.openConnection();
             for (Map.Entry<String, String> entrySet : header.entrySet()) {
@@ -108,13 +113,13 @@ public class Rest {
             conn.setRequestProperty("Accept", "application/json");
 
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                System.out.println(urlString);
-                System.out.println("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
+                log.debug(urlString);
+                log.debug("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
                 throw new RuntimeException("Failed : HTTP error code : "
                         + conn.getResponseCode());
             } else {
-                System.out.println(urlString);
-                System.out.println("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
+                log.debug(urlString);
+                log.debug("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
 
             }
 
@@ -122,25 +127,27 @@ public class Rest {
                     (conn.getInputStream())));
 
             String output;
-            System.out.println("Output from Server .... \n");
+            log.debug("Output from Server .... \n");
             while ((output = br.readLine()) != null) {
-                System.out.println(output);
+                log.debug(output);
                 returnStr += output;
             }
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            log.error("MalformedURLException in getData function in rest class:" + e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("IOException in getData function in rest class:" + e);
         }
+        log.debug("End function of getData(String url, MultiValueMap<String, String> params, Map<String, String> header) in Rest class");
         return returnStr;
     }
 
     public static String postRawForm(String postUrl, String postParams) throws IOException {
+        log.debug("Start function of postRawForm in Rest class");
         String returnStr = null;
-        System.out.println("URL -> " + postUrl);
-        System.out.println("URL Params -> " + postParams);
+        log.debug("URL -> " + postUrl);
+        log.debug("URL Params -> " + postParams);
         URL obj = new URL(postUrl);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
@@ -157,7 +164,7 @@ public class Rest {
         // For POST only - END
 
         int responseCode = con.getResponseCode();
-        System.out.println("POST Response Code :: " + responseCode);
+        log.debug("POST Response Code :: " + responseCode);
 
         if (responseCode == HttpURLConnection.HTTP_OK) { //success
             BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -170,15 +177,17 @@ public class Rest {
             }
             in.close();
             // print result
-            System.out.println(response.toString());
+            log.debug(response.toString());
             returnStr = response.toString();
         } else {
-            System.out.println("POST request not worked");
+            log.debug("POST request not worked");
         }
+        log.debug("End function of postRawForm in Rest class");
         return returnStr;
     }
 
     public static void main(String args[]) {
+        log.debug("Start main function in Rest class");
         try {
             String output = postRawForm(Settings.getSecurityTokenUrl(), "client_id=f8f06d06436f4104ade219fd7d535654&client_secret=ba082149c90f41c49e86f4862e22e980&grant_type=password&scope=FullControl&username=admin&password=admin123");
             ObjectMapper mapper = new ObjectMapper();
@@ -188,12 +197,11 @@ public class Rest {
             accessHeader.put("Authorization", token.getAccessToken());
             String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=00959ecd-41c5-4b92-8bd9-78c26d10486c", null, accessHeader);
             SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
-
-            System.out.println(authData);
-
+            log.debug(authData);
         } catch (IOException ex) {
-            Logger.getLogger(Rest.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("IOException in main function: " + ex);
         }
+        log.debug("End main function in Rest class");
     }
 
 }

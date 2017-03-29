@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -16,26 +17,32 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ApiUtils {
 
+    final static Logger log = Logger.getLogger(ApiUtils.class);
 
     public static Integer toInteger(String string) {
+        log.debug("Start function of toInteger in ApiUtils class");
         try {
             return Integer.parseInt(string);
-        } catch (Exception e) {
-
+        } catch (NumberFormatException e) {
+            log.error("NumberFormatException in toInteger function: " + e);
         }
+        log.debug("End function of toInteger in ApiUtils class");
         return 0;
     }
 
     public static Double toDouble(String string) {
+                log.debug("Start function of toDouble in ApiUtils class");
         try {
             return Double.parseDouble(string);
-        } catch (Exception e) {
-
+        } catch (NumberFormatException e) {
+            log.error("NumberFormatException in toDouble function: " + e);
         }
+                log.debug("End function of toDouble in ApiUtils class");
         return 0.0;
     }
 
     public static String getCityById(String cityId) {
+                log.debug("Start function of getCityById in ApiUtils class");
         String line = "";
         String cvsSplitBy = ",";
         ClassLoader classLoader = ApiUtils.class.getClassLoader();
@@ -48,19 +55,20 @@ public class ApiUtils {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("IOException in getCityById function: "+e);
         }
+                        log.debug("End function of getCityById in ApiUtils class");
         return "Unknown";
     }
 
-   
-
     public static String toGaAccountId(String ppcBingAccountId) {
+                                log.debug("Start function of toGaAccountId in ApiUtils class");
+                        log.debug("End function of toGaAccountId in ApiUtils class");
         return ppcBingAccountId.substring(0, 3) + "-" + ppcBingAccountId.substring(3, 6) + "-" + ppcBingAccountId.substring(6);
     }
 
-
     public static String removePercent(String value) {
+        log.debug("Start function of removePercent in ApiUtils class");
         if (value == null) {
             return "0.0";
         }
@@ -70,19 +78,21 @@ public class ApiUtils {
         } catch (Exception e) {
 
         }
+                log.debug("End function of removePercent in ApiUtils class");
         return "0.0";
     }
 
-
     public static String toMins(String seconds) {
+                log.debug("Start function of toMins in ApiUtils class");
         Double secondsInt = toDouble(seconds);
-        Double minsInt = secondsInt/60;
-        secondsInt = secondsInt%60;
+        Double minsInt = secondsInt / 60;
+        secondsInt = secondsInt % 60;
+                        log.debug("End function of toMins in ApiUtils class");
         return String.format("%02d", minsInt.intValue()) + ":" + String.format("%02d", secondsInt.intValue());
     }
 
-     public static void main(String[] argv) {
-        System.out.println(toMins("7468"));
+    public static void main(String[] argv) {
+        log.debug(toMins("7468"));
     }
-    
+
 }

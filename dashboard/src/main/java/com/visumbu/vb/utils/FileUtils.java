@@ -6,11 +6,13 @@
 package com.visumbu.vb.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -27,19 +29,24 @@ public class FileUtils {
             + "Description, Suspected Trouble Component, Action Type, "
             + "SLA Responded, SLA Resolved, Created By, Created Time, Last Modified Time";
 
+    final static Logger log = Logger.getLogger(FileUtils.class);
+
     public static Object readXML(String fileName, Class inputClass) {
+        log.debug("Start function of readXML in FileUtils class");
         try {
             JAXBContext context = JAXBContext.newInstance(inputClass);
             Unmarshaller um = context.createUnmarshaller();
             Object obj = (Object) um.unmarshal(new FileReader(fileName));
             return obj;
-        } catch (Exception ex) {
-
+        } catch (FileNotFoundException | JAXBException ex) {
+            log.error("Exception in readXML function: " + ex);
         }
+        log.debug("End function of readXML in FileUtils class");
         return null;
     }
 
     public static void writeXML(String fileName, Object object, Class inputClass) {
+        log.debug("Start function of writeXML in FileUtils class");
         try {
             // create JAXB context and instantiate marshaller
             JAXBContext context = JAXBContext.newInstance(inputClass);
@@ -51,8 +58,9 @@ public class FileUtils {
             m.marshal(object, System.out);
 
         } catch (JAXBException ex) {
-
+            log.error("JAXBException in writeXML function");
         }
+        log.debug("End function of writeXML in FileUtils class");
     }
 
 }
