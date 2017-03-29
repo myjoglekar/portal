@@ -4,12 +4,11 @@
  */
 package com.visumbu.mail;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -19,11 +18,15 @@ public class TextMail {
 
     private MailProperties props = null;
 
+    final static Logger log = Logger.getLogger(TextMail.class);
+
     public TextMail(MailProperties props) {
         this.props = props;
     }
 
     public String sendMail() {
+        log.debug("Start function of sendMail in TextMail class");
+
         try {
             Email email = new SimpleEmail();
             email.setHostName(props.getHostName());
@@ -37,9 +40,9 @@ public class TextMail {
             email.addCc(props.getCc());
             return email.send();
         } catch (EmailException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(TextMail.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("EmailException in sendMail function: " + ex);
         }
+        log.debug("End function of sendMail in TextMail class");
         return "Not Sent";
     }
 }

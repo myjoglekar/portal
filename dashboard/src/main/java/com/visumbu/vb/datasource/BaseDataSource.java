@@ -13,8 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
@@ -25,17 +24,23 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
  */
 public abstract class BaseDataSource {
 
+    final static Logger log = Logger.getLogger(BaseDataSource.class);
+
     public static BaseDataSource getInstance(String dataSourceName) throws IOException, GeneralSecurityException {
+        log.debug("Start function of getInstance in BaseDataSource class");
         BaseDataSource bds = null;
         if (dataSourceName.equalsIgnoreCase("GaDataSource")) {
+            log.debug("End function of getInstance in BaseDataSource class");
             return new GaDataSource();
         }
         if (dataSourceName.equalsIgnoreCase("BingDataSource")) {
+            log.debug("End function of getInstance in BaseDataSource class");
             return new BingDataSource();
         }
         if (dataSourceName.equalsIgnoreCase("fbAnalytics")) {
 
         }
+        log.debug("End function of getInstance in BaseDataSource class");
         return bds;
     }
 
@@ -44,14 +49,15 @@ public abstract class BaseDataSource {
     public abstract List getDataDimensions();
 
     public abstract List getDataDimensions(String dataSetName);
-    
-    public  Object getData(String dataSetName, Map options, ReportPage page)  throws IOException {
+
+    public Object getData(String dataSetName, Map options, ReportPage page) throws IOException {
         return null;
     }
-    
 
     public static List<String> getAllDataSources() {
-        String[] dataSourcesArr = {"BingDataSource", "CenturyInteractiveDataSource", "DealerVaultDataSource", "FacebookDataSource", "GaDataSource", "GoogleAdWordsDataSource", "MapDataSource", "ReviewPushDataSource", "SpeedShiftDataSource", "YestDataSource"};
+        log.debug("Start function of getAllDataSources in BaseDataSource class");
+        String[] dataSourcesArr = {"BingDataSource", "CenturyInteractiveDataSource", "DealerVaultDataSource", "FacebookDataSource", "GaDataSource", "GoogleBaseDataSource", "MapDataSource", "ReviewPushDataSource", "SpeedShiftDataSource", "YestDataSource"};
+        log.debug("End function of getAllDataSources in BaseDataSource class");
         return Arrays.asList(dataSourcesArr);
         /*
          List<String> dataSources = new ArrayList<>();
@@ -74,7 +80,8 @@ public abstract class BaseDataSource {
     }
 
     public static void main(String argv[]) {
+        log.debug("Start main function of BaseDataSource class");
         BaseDataSource.getAllDataSources();
+        log.debug("End main function of BaseDataSource class");
     }
-
 }

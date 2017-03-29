@@ -20,10 +20,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,10 +56,13 @@ public class ProxyController {
     
     @Autowired
     private DealerDao dealerDao;
+    
+   final static Logger log = Logger.getLogger(ProxyController.class);
 
     @RequestMapping(value = "getJson", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getJson(HttpServletRequest request, HttpServletResponse response) {
+        log.debug("Start Function of getJson");
         String url = request.getParameter("url");
         String dealerId = request.getParameter("dealerId");
         Map<String, String> dealerAccountDetails = dealerService.getDealerAccountDetails(dealerId);
@@ -87,14 +89,16 @@ public class ProxyController {
             String data = Rest.getData(url, valueMap);
             return data;
         } catch (Exception ex) {
-            Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("Exception in getJson Function: " + ex);
         }
+        log.debug("End Function of getJson");
         return null;
     }
 
     @RequestMapping(value = "get", method = RequestMethod.GET)
     public @ResponseBody
     void get(HttpServletRequest request, HttpServletResponse response) {
+        log.debug("Start Function of get");
         String url = request.getParameter("url");
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
@@ -106,7 +110,7 @@ public class ProxyController {
                 String data = Rest.getData(url, valueMap);
                 response.getOutputStream().write(data.getBytes());
             } catch (IOException ex) {
-                Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("IOException in get Function: "+ex);
             }
         }
     }
@@ -114,6 +118,7 @@ public class ProxyController {
     @RequestMapping(value = "download/{tabId}", method = RequestMethod.GET)
     public @ResponseBody
     void download(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
+        log.debug("Start Function of download");
         String dealerId = request.getParameter("dealerId");                
         Map<String, String> dealerAccountDetails = dealerService.getDealerAccountDetails(dealerId);
         MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
@@ -135,14 +140,14 @@ public class ProxyController {
         List<TabWidget> tabWidgets = uiService.getTabWidget(tabId);
         for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
             TabWidget tabWidget = iterator.next();
-            System.out.println("tabwidget chart type: " +tabWidget.getChartType());
+            log.debug("tabwidget chart type: " +tabWidget.getChartType());
            
             if(tabWidget.getChartType() == null || tabWidget.getChartType().isEmpty()){
                 continue;
             }
             try {
                 String url = tabWidget.getDirectUrl();
-                System.out.println("url: "+url);
+                log.debug("url: "+url);
                 Integer port = request.getServerPort();
 
                 String localUrl = request.getScheme() + "://" + request.getServerName() + ":" + port + "/";
@@ -158,7 +163,7 @@ public class ProxyController {
                 tabWidget.setData(dataList);
 
             } catch (ParseException ex) {
-                Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("ParseException in download Function: "+ex);
             }
         }
         try {
@@ -166,8 +171,9 @@ public class ProxyController {
             CustomReportDesigner crd = new CustomReportDesigner();
             crd.dynamicPdfTable(dealerName, tabWidgets, out);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in download function: "+e);
         }
+        log.debug("End Function of download");
     }
 
     public static void main(String argv[]) {
@@ -176,7 +182,7 @@ public class ProxyController {
         if (url.startsWith("../")) {
             url = url.replaceAll("\\.\\./", localUrl);
         }
-        System.out.println(url);
+        log.debug(url);
     }
 
     @ExceptionHandler

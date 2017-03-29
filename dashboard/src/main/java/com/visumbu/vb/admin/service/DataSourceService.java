@@ -13,6 +13,7 @@ import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,24 +29,32 @@ public class DataSourceService {
 
     @Autowired
     private DashboardDao dashboardDao;
+    final static Logger log = Logger.getLogger(DataSourceService.class);
 
     public List getAllDataSources() {
+        log.debug("Start function of getAllDataSources in DataSourceService class");
+        log.debug("End function of getAllDataSources in DataSourceService class");
         return BaseDataSource.getAllDataSources();
     }
-    
+
     public List getAllDataSets(String dataSourceName) throws IOException, GeneralSecurityException {
+        log.debug("Start function of getAllDataSets in DataSourceService class");
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
+        log.debug("End function of getAllDataSets in DataSourceService class");
         return dataSource.getDataSets();
     }
-    
+
     public List getAllDimensions(String dataSourceName, String dataSet) throws IOException, GeneralSecurityException {
+        log.debug("Start function of getAllDimensions in DataSourceService class");
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
+        log.debug("End function of getAllDimensions in DataSourceService class");
         return dataSource.getDataDimensions();
     }
-    
+
     public Object getData(String dataSourceName, String dataSet, Map options, ReportPage page) throws IOException, GeneralSecurityException {
+        log.debug("Start function of getData in DataSourceService class");
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
+        log.debug("End function of getData in DataSourceService class");
         return dataSource.getData(dataSet, options, page);
     }
-
 }

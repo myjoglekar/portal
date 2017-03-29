@@ -7,19 +7,22 @@ package com.visumbu.vb.controller;
 
 import com.visumbu.vb.bean.ReportPage;
 import javax.servlet.http.HttpServletRequest;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.http.auth.AuthenticationException;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author user
  */
 public class BaseController {
+
+    final static Logger log = Logger.getLogger(BaseController.class);
+
     public ReportPage getPage(HttpServletRequest request) {
+        log.debug("Start function of getPage in BaseController class");
         ReportPage reportPage = new ReportPage();
         if (request.getParameter("page") == null && request.getParameter("count") == null) {
+            log.debug("End function of getPage in UserService class");
             return null;
         }
         Integer count = 50;
@@ -34,17 +37,21 @@ public class BaseController {
             reportPage.setPageNo(page);
             reportPage.setCount(count);
         }
+        log.debug("End function of getPage in UserService class");
         return reportPage;
     }
+
     protected String getUser(HttpServletRequest request) {
+        log.debug("Start function of getUser in UserService class");
         String username = (String) request.getSession().getAttribute("username");
-        if(username == null) {
+        if (username == null) {
             try {
                 throw new AuthenticationException("User not logged in");
             } catch (AuthenticationException ex) {
-                Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("Authentication Exception in getUser function: " + ex);
             }
         }
+        log.debug("End function of getUser in UserService class");
         return username;
     }
 }

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,41 +30,48 @@ public class DealerService {
     @Autowired
     private DealerDao dealerDao;
 
+    final static Logger log = Logger.getLogger(DealerService.class);
+
     public Dealer read(Integer id) {
+        log.debug("Start function of read in DealerService class - Dealer");
+        log.debug("End function of read in DealerService class - Dealer");
         return (Dealer) dealerDao.read(Dealer.class, id);
     }
 
     public List<Dealer> read() {
+        log.debug("Start function of read in DealerService class");
         List<Dealer> dealer = dealerDao.read(Dealer.class);
+        log.debug("End function of read in DealerService class");
         return dealer;
     }
 
     public Map<String, String> getDealerAccountDetails(String dealerId) {
-        System.out.println(dealerId);
+        log.debug("Start function of getDealerAccountDetails in DealerService class");
+        log.debug(dealerId);
         List<DealerAccountBean> dealerAccountDetails = dealerDao.getDealerAccountDetails(dealerId);
         Map<String, String> accountMap = new HashMap<>();
         for (Iterator<DealerAccountBean> iterator = dealerAccountDetails.iterator(); iterator.hasNext();) {
             DealerAccountBean accountBean = iterator.next();
             String serviceName = accountBean.getServiceName();
-            if(serviceName.equalsIgnoreCase("none")) {
-                if(accountBean.getProductName().toLowerCase().indexOf("seo") >= 0){
+            if (serviceName.equalsIgnoreCase("none")) {
+                if (accountBean.getProductName().toLowerCase().indexOf("seo") >= 0) {
                     serviceName = "seo";
                 }
-                if(accountBean.getProductName().indexOf("Reputation Management") > 0){
+                if (accountBean.getProductName().indexOf("Reputation Management") > 0) {
                     serviceName = "reputation";
                 }
-                if(accountBean.getProductName().indexOf("Social Impact") > 0){
+                if (accountBean.getProductName().indexOf("Social Impact") > 0) {
                     serviceName = "socialimpact";
                 }
             }
-            String accountName = serviceName + " " + accountBean.getSourceName() + " Account Id" ;
-            String profileName = serviceName + " " + accountBean.getSourceName() + " Profile Id" ;
+            String accountName = serviceName + " " + accountBean.getSourceName() + " Account Id";
+            String profileName = serviceName + " " + accountBean.getSourceName() + " Profile Id";
             accountMap.put("dealerId", accountBean.getDealerId());
             accountMap.put("dealerMapId", accountBean.getDealerMapId());
             accountMap.put(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, accountName.toLowerCase().replace(" ", "_")), accountBean.getAccountId());
             accountMap.put(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, profileName.toLowerCase().replace(" ", "_")), accountBean.getProfileId());
         }
+        log.debug("End function of getDealerAccountDetails in DealerService class");
         return accountMap;
     }
-
 }

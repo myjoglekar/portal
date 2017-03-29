@@ -10,6 +10,7 @@ import com.visumbu.vb.bean.ReportPage;
 import com.visumbu.vb.dao.BaseDao;
 import java.util.Date;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
@@ -24,17 +25,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Repository("reportDao")
 public class ReportDao extends BaseDao {
-
+   final static Logger log = Logger.getLogger(ReportDao.class);
     public List getVisitDetailedList(Date startDate, Date endDate, ReportPage page) {
+        log.debug("Start function of getVisitDetailedList in ReportDao class");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("VisitLog.findByVisitTimeRange");
         query.setParameter("startTime", startDate);
-        System.out.println(startDate);
+        log.debug("StartDate: "+startDate);
         query.setParameter("endTime", endDate);
-        System.out.println(endDate);
+        log.debug("EndTime: "+endDate);
         if (page != null) {
             query.setFirstResult(page.getStart());
             query.setMaxResults(page.getCount());
         }
+                log.debug("End function of getVisitDetailedList in ReportDao class");
         return query.list();
     }
     

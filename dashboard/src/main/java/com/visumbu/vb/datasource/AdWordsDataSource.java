@@ -20,15 +20,14 @@ import com.google.api.ads.common.lib.exception.OAuthException;
 import com.google.api.ads.common.lib.exception.ValidationException;
 import com.google.api.client.auth.oauth2.Credential;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author user
  */
 public class AdWordsDataSource extends BaseDataSource {
-
+final static Logger log = Logger.getLogger(AdWordsDataSource.class);
     @Override
     public List getDataSets() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -45,7 +44,7 @@ public class AdWordsDataSource extends BaseDataSource {
     }
 
     public static void main(String argv[]) {
-
+log.debug("Start main function of AdWordsDataSource class");
         try {
             /**
              * Create an AdWordsSession instance, loading credentials from the
@@ -106,12 +105,13 @@ public class AdWordsDataSource extends BaseDataSource {
             // Get all campaigns.
             CampaignPage page = campaignService.get(selector);
         } catch (OAuthException ex) {
-            Logger.getLogger(AdWordsDataSource.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("OAuthException in AdWordsDataSource function: "+ex);
         } catch (ValidationException ex) {
-            Logger.getLogger(AdWordsDataSource.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ValidationException in AdWordsDataSource function: "+ex);
         } catch (RemoteException ex) {
-            Logger.getLogger(AdWordsDataSource.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("RemoteException in AdWordsDataSource function: "+ex);
         }
+        log.debug("End main function of AdWordsDataSource class");
     }
 
 }

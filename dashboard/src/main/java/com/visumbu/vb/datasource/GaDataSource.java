@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -42,8 +43,11 @@ public class GaDataSource extends BaseDataSource {
     private static final String KEY_FILE_LOCATION = "f:\\API Project-da31f3788962.p12";
     private static final String SERVICE_ACCOUNT_EMAIL = "vs-test-ga@api-project-384381056232.iam.gserviceaccount.com";
     private static Analytics analytics = null;
+    
+    final static Logger log = Logger.getLogger(GaDataSource.class);
 
     public static List<GaMetric> getAllMetrics() {
+        log.debug("Start function of getAllMetrics in GaDataSource class");
         List<GaMetric> metricList = new ArrayList();
 
         GaMetric gaSessionMetric = new GaMetric();
@@ -63,7 +67,7 @@ public class GaDataSource extends BaseDataSource {
         gaUserMetric.setDisplayName("Users");
         gaUserMetric.setDimenstions("User Type,ga:userType;Session Count,ga:sessionCount;Days Since Last Session,ga:daysSinceLastSession");
         metricList.add(gaUserMetric);
-
+        log.debug("End function of getAllMetrics in GaDataSource class");
         return metricList;
     }
 
@@ -74,22 +78,29 @@ public class GaDataSource extends BaseDataSource {
 
     @Override
     public List getDataDimensions() {
+                log.debug("Start function of getDataDimensions() in GaDataSource class");
+                        log.debug("End function of getDataDimensions() in GaDataSource class");
         return getDataDimensions("all");
     }
 
     @Override
     public List getDataDimensions(String dataSetName) {
+                        log.debug("Start function of getDataDimensions(dataSetName) in GaDataSource class");
         List<GaMetric> allMetrics = getAllMetrics();
         for (Iterator<GaMetric> iterator = allMetrics.iterator(); iterator.hasNext();) {
             GaMetric metric = iterator.next();
             if (metric.getName().equalsIgnoreCase(dataSetName)) {
+                                        log.debug("End function of getDataDimensions(dataSetName) in GaDataSource class");
                 return metric.getDimensions();
             }
         }
+                                log.debug("End function of getDataDimensions(dataSetName) in GaDataSource class");
         return null;
     }
 
     public static List<Map<String, String>> getAllDataSets() {
+                        log.debug("Start function of getDataDimensions in GaDataSource class");
+                        log.debug("End function of getDataDimensions in GaDataSource class");
         List<Map<String, String>> dataSets = new ArrayList<>();
         List<GaMetric> allMetrics = getAllMetrics();
         for (Iterator<GaMetric> iterator = allMetrics.iterator(); iterator.hasNext();) {

@@ -5,13 +5,17 @@
 package com.visumbu.mail;
 
 import java.util.concurrent.BlockingQueue;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author varghees
  */
 public class MailConsumer implements Runnable {
+
     protected BlockingQueue queue = null;
+
+    final static Logger log = Logger.getLogger(MailConsumer.class);
 
     public MailConsumer(BlockingQueue queue) {
         this.queue = queue;
@@ -19,6 +23,7 @@ public class MailConsumer implements Runnable {
 
     @Override
     public void run() {
+        log.debug("Running of thread function in MailConsumer class");
         while (true) {
             if (queue.isEmpty()) {
                 queue.poll();
@@ -35,23 +40,31 @@ public class MailConsumer implements Runnable {
             MailProperties props = (MailProperties) obj;
             switch (props.getType()) {
                 case Constants.TEXT_MAIL:
+                    log.debug("Starting case of TEXT_MAIL  in  MailConsumer class");
                     TextMail mail = new TextMail(props);
                     status = mail.sendMail();
+                    log.debug("Ending of thread function in MailConsumer class");
                     break;
                 case Constants.TEXT_MAIL_WITH_ATTACHMENT:
+                    log.debug("Starting case of TEXT_MAIL _WITH_ATTACHMENT in  MailConsumer class");
                     TextMailWithAttachment textMailWithAttachment = new TextMailWithAttachment(props);
                     status = textMailWithAttachment.sendMail();
-                     break;
+                    log.debug("Ending of thread function in MailConsumer class");
+                    break;
                 case Constants.HTML_MAIL:
+                    log.debug("Starting case of HTML_MAIL  in  MailConsumer class");
                     HtmlMail htmlMail = new HtmlMail(props);
                     status = htmlMail.sendMail();
+                    log.debug("Ending of thread function in MailConsumer class");
                     break;
                 case Constants.HTML_WITH_EMBEDDED_IMAGE:
                     // Dummy function
+                    log.debug("Starting case of HTML_WITH_EMBEDDED_IMAGE  in  MailConsumer class");
                     HtmlMailWithEmbeddedImage htmlMailWithEmbeddedImage = new HtmlMailWithEmbeddedImage(props);
                     status = htmlMailWithEmbeddedImage.sendMail();
+                    log.debug("Ending of thread function in MailConsumer class");
                     break;
-            }            
+            }
         }
     }
 }

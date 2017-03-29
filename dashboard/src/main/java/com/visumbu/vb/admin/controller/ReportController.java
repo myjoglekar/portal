@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -35,17 +36,21 @@ public class ReportController {
 
     @Autowired
     private ReportService reportService;
+    final static Logger log = Logger.getLogger(ReportController.class);
 
     @RequestMapping(value = "visitDetails", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List topDealersByVisit(HttpServletRequest request, HttpServletResponse response) {
+        log.debug("Start function of topDealersByVisit in ReportController class");
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
         ReportPage page = getPage(request);
+        log.debug("End function of topDealersByVisit in ReportController class");
         return reportService.getVisitDetailedList(startDate, endDate, page);
     }
 
     private ReportPage getPage(HttpServletRequest request) {
+        log.debug("Start function of getPage in ReportController class");
         ReportPage reportPage = new ReportPage();
         if (request.getParameter("page") == null && request.getParameter("count") == null) {
             return null;
@@ -62,6 +67,7 @@ public class ReportController {
             reportPage.setPageNo(page);
             reportPage.setCount(count);
         }
+        log.debug("End function of getPage in ReportController.class");
         return reportPage;
     }
 

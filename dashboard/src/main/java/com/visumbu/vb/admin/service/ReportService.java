@@ -9,6 +9,7 @@ import com.visumbu.vb.admin.dao.ReportDao;
 import com.visumbu.vb.bean.ReportPage;
 import java.util.Date;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,9 +26,11 @@ public class ReportService {
     @Autowired
     private ReportDao reportDao;
 
+    final static Logger log = Logger.getLogger(ReportService.class);
+
     public List getVisitDetailedList(Date startDate, Date endDate, ReportPage page) {
+        log.debug("Start function of getVisitDetailedList in ReportService class");
+        log.debug("End function of getVisitDetailedList in ReportService class");
         return reportDao.getVisitDetailedList(startDate, endDate, page);
     }
-    
-
 }
