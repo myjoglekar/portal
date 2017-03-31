@@ -24,18 +24,17 @@ public class JsonSimpleUtils {
     final static Logger log = Logger.getLogger(JsonSimpleUtils.class);
 
     public static Map<String, Object> jsonToMap(JSONObject json) {
-        log.debug("Start function of jsonToMap in JsonSimpleUtils class");
+        log.debug("Calling function of jsonToMap in JsonSimpleUtils class");
         Map<String, Object> retMap = new HashMap<String, Object>();
 
         if (json != null) {
             retMap = toMap(json);
         }
-        log.debug("End function of jsonToMap in JsonSimpleUtils class");
         return retMap;
     }
 
     public static Map<String, Object> toMap(JSONObject object) {
-        log.debug("Start function of toMap in JsonSimpleUtils class");
+        log.debug("Calling function of toMap in JsonSimpleUtils class");
         Map<String, Object> map = new HashMap<String, Object>();
 
         Iterator<String> keysItr = object.keySet().iterator();
@@ -50,12 +49,11 @@ public class JsonSimpleUtils {
             }
             map.put(key, value);
         }
-        log.debug("End function of toMap in JsonSimpleUtils class");
         return map;
     }
 
     public static List<Object> toList(JSONArray array) {
-        log.debug("Start function of toList in JsonSimpleUtils class");
+        log.debug("Calling function of toList in JsonSimpleUtils class");
         List<Object> list = new ArrayList<Object>();
         for (int i = 0; i < array.size(); i++) {
             Object value = array.get(i);
@@ -66,7 +64,6 @@ public class JsonSimpleUtils {
             }
             list.add(value);
         }
-        log.debug("Start function of toList in JsonSimpleUtils class");
         return list;
     }
 }

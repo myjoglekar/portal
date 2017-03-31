@@ -29,7 +29,7 @@ public class XlsDataSet {
     final static Logger log = Logger.getLogger(XlsDataSet.class);
 
     public static Map XlsDataSet(String filename, String sheetName) throws FileNotFoundException, IOException {
-        log.debug("Start function of XlsDataSet(String filename, String sheetName) in XlsDataSet class");
+        log.debug("Calling function of XlsDataSet(String filename, String sheetName) in XlsDataSet class");
 
         Map returnMap = new HashMap();
 
@@ -72,16 +72,16 @@ public class XlsDataSet {
 
             log.debug(returnMap);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error("FileNotFoundException in XlsDataSet function: "+e);
         } catch (IOException e) {
-            e.printStackTrace();
+                        log.error("IOException in XlsDataSet function: "+e);
+
         }
-        log.debug("End function of XlsDataSet(String filename, String sheetName) in XlsDataSet class");
         return returnMap;
     }
 
     public static Map XlsDataSet(String filename, Integer sheetNo) throws FileNotFoundException, IOException {
-        log.debug("Start function of XlsDataSet(String filename, Integer sheetNo) in XlsDataSet class");
+        log.debug("Calling function of XlsDataSet(String filename, Integer sheetNo) in XlsDataSet class");
         Map returnMap = new HashMap();
 
         try {
@@ -127,12 +127,11 @@ public class XlsDataSet {
         } catch (IOException e) {
             log.error("IOException in XlsDataSet function: " + e);
         }
-        log.debug("End function of XlsDataSet(String filename, Integer sheetNo) in XlsDataSet class");
         return returnMap;
     }
 
     public static Map XlsxDataSet(String filename, Integer sheetNo) throws FileNotFoundException, IOException {
-        log.debug("Start function of XlsxDataSet(String filename, Integer sheetNo) in XlsDataSet class");
+        log.debug("Calling function of XlsxDataSet(String filename, Integer sheetNo) in XlsDataSet class");
         Map returnMap = new HashMap();
 
         try {
@@ -174,17 +173,15 @@ public class XlsDataSet {
         } catch (IOException e) {
             log.error("IOException in XlsxDataSet function: " + e);
         }
-        log.debug("End function of XlsxDataSet(String filename, Integer sheetNo) in XlsDataSet class");
         return returnMap;
     }
 
     public static void main(String[] argv) {
-        log.debug("Start main function in XlsDataSet");
+        log.debug("Calling main function in XlsDataSet");
         try {
             XlsxDataSet("/tmp/test.xlsx", 0);
         } catch (IOException ex) {
             log.error("IOException in main function: " + ex);
         }
-        log.debug("End main function in XlsDataSet");
     }
 }

@@ -36,8 +36,7 @@ public class DealerController {
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List read(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start function of read in DealerController class");
-        log.debug("Stop function of read in DealerController class");
+        log.debug("Calling read function in DealerController class");
         return dealerService.read();
     }
 

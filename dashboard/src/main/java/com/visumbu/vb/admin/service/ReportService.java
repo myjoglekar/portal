@@ -29,8 +29,7 @@ public class ReportService {
     final static Logger log = Logger.getLogger(ReportService.class);
 
     public List getVisitDetailedList(Date startDate, Date endDate, ReportPage page) {
-        log.debug("Start function of getVisitDetailedList in ReportService class");
-        log.debug("End function of getVisitDetailedList in ReportService class");
+        log.debug("Calling function of getVisitDetailedList in ReportService class");
         return reportDao.getVisitDetailedList(startDate, endDate, page);
     }
 }

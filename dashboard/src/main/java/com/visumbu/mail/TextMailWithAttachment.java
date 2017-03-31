@@ -25,7 +25,7 @@ public class TextMailWithAttachment {
     }
 
     public String sendMail() {
-        log.debug("Start function of sendMail in TextMailWithAttachment class");
+        log.debug("Calling sendMail function in TextMailWithAttachment class");
         try {
             // Create the email message
             MultiPartEmail email = new MultiPartEmail();
@@ -58,7 +58,6 @@ public class TextMailWithAttachment {
         } catch (EmailException ex) {
             log.error("EmailException in sendMail function: "+ex);
         }
-                log.debug("End function of sendMail in TextMailWithAttachment class");
         return "Not Sent";
     }
 }

@@ -33,20 +33,18 @@ public class DealerService {
     final static Logger log = Logger.getLogger(DealerService.class);
 
     public Dealer read(Integer id) {
-        log.debug("Start function of read in DealerService class - Dealer");
-        log.debug("End function of read in DealerService class - Dealer");
+        log.debug("Calling function of read in DealerService class - Dealer");
         return (Dealer) dealerDao.read(Dealer.class, id);
     }
 
     public List<Dealer> read() {
-        log.debug("Start function of read in DealerService class");
+        log.debug("Calling function of read in DealerService class");
         List<Dealer> dealer = dealerDao.read(Dealer.class);
-        log.debug("End function of read in DealerService class");
         return dealer;
     }
 
     public Map<String, String> getDealerAccountDetails(String dealerId) {
-        log.debug("Start function of getDealerAccountDetails in DealerService class");
+        log.debug("Calling function of getDealerAccountDetails in DealerService class");
         log.debug(dealerId);
         List<DealerAccountBean> dealerAccountDetails = dealerDao.getDealerAccountDetails(dealerId);
         Map<String, String> accountMap = new HashMap<>();
@@ -71,7 +69,6 @@ public class DealerService {
             accountMap.put(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, accountName.toLowerCase().replace(" ", "_")), accountBean.getAccountId());
             accountMap.put(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, profileName.toLowerCase().replace(" ", "_")), accountBean.getProfileId());
         }
-        log.debug("End function of getDealerAccountDetails in DealerService class");
         return accountMap;
     }
 }

@@ -34,7 +34,7 @@ public class ReviewPushDataSource extends BaseDataSource {
 
     @Override
     public List getDataSets() {
-        log.debug("Start function of getDataSets in ReviewPushDataSource class");
+        log.debug("Calling function of getDataSets in ReviewPushDataSource class");
 
         List<Map<String, String>> dataSets = new ArrayList<>();
         Map map = new HashMap();
@@ -43,13 +43,12 @@ public class ReviewPushDataSource extends BaseDataSource {
         map1.put("Reviews", "reviews");
         dataSets.add(map);
         dataSets.add(map1);
-        log.debug("End function of getDataSets in ReviewPushDataSource class");
         return dataSets;
     }
 
     @Override
     public List getDataDimensions(String dataSetName) {
-        log.debug("Start function of getDataDimensions in ReviewPushDataSource class");
+        log.debug("Calling function of getDataDimensions in ReviewPushDataSource class");
         List<Map<String, String>> dataDimensions = new ArrayList<>();
         Map map = new HashMap();
         map.put("Locations", "locations");
@@ -60,13 +59,12 @@ public class ReviewPushDataSource extends BaseDataSource {
         Map map2 = new HashMap();
         map2.put("Rating", "rating");
         dataDimensions.add(map2);
-        log.debug("End function of getDataDimensions in ReviewPushDataSource class");
         return dataDimensions;
     }
 
     @Override
     public Object getData(String dataSetName, Map options, ReportPage page) throws IOException {
-        log.debug("Start function of getData in ReviewPushDataSource class");
+        log.debug("Calling function of getData in ReviewPushDataSource class");
         if (options == null) {
             options = new HashMap();
         }
@@ -80,7 +78,6 @@ public class ReviewPushDataSource extends BaseDataSource {
         log.debug("CALLING -> " + dataSetName);
         String data = Rest.getData(API_URL + "/" + dataSetName, params);
         log.debug(data);
-        log.debug("End function of getData in ReviewPushDataSource class");
         return null;
     }
 
@@ -90,14 +87,13 @@ public class ReviewPushDataSource extends BaseDataSource {
     }
 
     public static void main(String argv[]) {
-        log.debug("Start main function in ReviewPushDataSource class");
+        log.debug("Calling main function in ReviewPushDataSource class");
         try {
             BaseDataSource dataSource = new ReviewPushDataSource();
             dataSource.getData("reviews", null, null);
         } catch (IOException ex) {
             log.error("IOException in main function: " + ex);
         }
-        log.debug("End main function in ReviewPushDataSource class");
     }
 
 }

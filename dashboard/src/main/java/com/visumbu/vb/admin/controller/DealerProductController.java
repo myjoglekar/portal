@@ -30,8 +30,7 @@ public class DealerProductController {
     @RequestMapping(method=RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List read(HttpServletRequest request, HttpServletResponse response){
-         log.debug("Start function of getAllDataDimensions in DealerProductController");
-        log.debug("End function of getAllDataDimensions in DealerProductController");
+         log.debug("Calling getAllDataDimensionsn function in DealerProductController");
         return dealerProductService.read();
     }
 }

@@ -54,47 +54,42 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     VbUser create(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
-        log.debug("Start function of create in UserController class - VbUser");
-        log.debug("End function of create in UserController class - VbUser");
+        log.debug("Calling create function in UserController class - VbUser");
         return userService.create(teUser);
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     VbUser update(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
-        log.debug("Start function of update in UserController class - VbUser");
-        log.debug("End function of update in UserController class - VbUser");
+        log.debug("Calling update function in UserController class - VbUser");
         return userService.update(teUser);
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List read(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start function of read in UserController class");
-        log.debug("End function of read in UserController class");
+        log.debug("Calling read function in UserController class");
         return userService.read();
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     VbUser read(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
-        log.debug("Start function of read in UserController class - VbUser");
-        log.debug("End function of read in UserController class - VbUser");
+        log.debug("Calling read function using id in UserController class - VbUser");
         return userService.read(id);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     VbUser delete(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
-        log.debug("Start function of delete in UserController class - VbUser");
-        log.debug("End function of delete in UserController class - VbUser");
+        log.debug("Calling delete function using id in UserController class - VbUser");
         return userService.delete(id);
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     Map login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
-        log.debug("Start function of login in UserController class");
+        log.debug("Calling login function in UserController class");
         SecurityAuthBean authData = userService.getPermissions(loginUserBean);
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
         HttpSession session = request.getSession();
@@ -115,14 +110,13 @@ public class UserController {
         Map returnMap = new HashMap();
         returnMap.put("authData", authData);
         returnMap.put("dealers", getDealerBySecuityBean(authData));
-        log.debug("End function of login in UserController class");
         return returnMap;
     }
 
     @RequestMapping(value = "allowedDealers", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List<Dealer> allowedDealers(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start function of allowedDealer in UserController class");
+        log.debug("Calling function of allowedDealer in UserController class");
         HttpSession session = request.getSession();
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
@@ -130,20 +124,18 @@ public class UserController {
         log.debug((String) session.getAttribute("userGuid"));
         log.debug((String) session.getAttribute("accessToken"));
         SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"), (String) session.getAttribute("userGuid"));
-        log.debug("End function of allowedDealer in UserController class");
         return getDealerBySecuityBean(authData);
     }
 
     @RequestMapping(value = "sampleDealers", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List<Dealer> sampleDealers(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start function of sampleDealers in UserController class");
-        log.debug("End function of sampleDealers in UserController class");
+        log.debug("Calling function of sampleDealers in UserController class");
         return userService.getSampleDealers();
     }
 
     private List<Dealer> getDealerBySecuityBean(SecurityAuthBean authData) {
-        log.debug("Start function of getDealerBySecuityBean in UserController class");
+        log.debug("Calling function of getDealerBySecuityBean in UserController class");
         List<Dealer> returnList = new ArrayList<>();
         List<SecurityAuthRoleBean> roles = authData.getRoles();
         for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
@@ -169,14 +161,13 @@ public class UserController {
             }
         }
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
-        log.debug("End function of getDealerBySecuityBean in UserController class");
         return returnList;
     }
 
     @RequestMapping(value = "authData", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getAuthData(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start function of getAuthData in UserController class");
+        log.debug("Calling function of getAuthData in UserController class");
         HttpSession session = request.getSession();
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
@@ -198,24 +189,22 @@ public class UserController {
         Map returnMap = new HashMap();
         returnMap.put("authData", authData);
         //returnMap.put("dealers", getDealerBySecuityBean(authData));
-        log.debug("End function of getAuthData in UserController class");
         return returnMap;
     }
 
     @RequestMapping(value = "logout", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.debug("Start function of logout in UserController class");
+        log.debug("Calling function of logout in UserController class");
         HttpSession session = request.getSession();
         session.invalidate();
         response.sendRedirect("../../login.html");
-        log.debug("End function of logout in UserController class");
     }
 
     @RequestMapping(value = "datasets", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getDataSets(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.debug("Start function of getDataSets in UserController class");
+        log.debug("Calling function of getDataSets in UserController class");
         Map returnMap = new LinkedHashMap();
         returnMap.put("Overall", getOverallDataSets());
         returnMap.put("Paid Search", getPaidDataSets());
@@ -226,12 +215,11 @@ public class UserController {
         returnMap.put("Paid Social", getPaidSocialDataSets());
         returnMap.put("Social Impact", getSocialImpactDataSets());
         returnMap.put("Reputation Management", getReviewPushDataSets());
-        log.debug("End function of getDataSets in UserController class");
         return returnMap;
     }
 
     private List<UrlBean> getOverallDataSets() {
-        log.debug("Start function of getOverallDataSets in UserController class");
+        log.debug("Calling function of getOverallDataSets in UserController class");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/overall/overallPerformance/summary/day/0;Summary",
@@ -247,12 +235,11 @@ public class UserController {
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
         }
-        log.debug("End function of getOverallDataSets in UserController class");
         return returnList;
     }
 
     private List<UrlBean> getPaidDataSets() {
-        log.debug("Start function of getPaidDataSets in UserController class");
+        log.debug("Calling function of getPaidDataSets in UserController class");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/paid/accountPerformance;Account Performance",
@@ -272,12 +259,11 @@ public class UserController {
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
         }
-        log.debug("End function of getPaidDataSets in UserController class");
         return returnList;
     }
 
     private List<UrlBean> getDynamicDisplayDataSets() {
-        log.debug("Start function of getDynamicDisplayDataSets in UserController class");
+        log.debug("Calling function of getDynamicDisplayDataSets in UserController class");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/dynamicDisplay/overallPerformance;Overall Performance",
@@ -288,12 +274,11 @@ public class UserController {
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
         }
-        log.debug("End function of getDynamicDisplayDataSets in UserController class");
         return returnList;
     }
 
     private List<UrlBean> getDisplayDataSets() {
-        log.debug("Start function of getDisplayDataSets in UserController class");
+        log.debug("Calling function of getDisplayDataSets in UserController class");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/display/geoPerformance;Geo Performance",
@@ -309,12 +294,11 @@ public class UserController {
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
         }
-        log.debug("End function of getDisplayDataSets in UserController class");
         return returnList;
     }
 
     private List<UrlBean> getVideoDataSets() {
-        log.debug("Start function of getVideoDataSets in UserController class");
+        log.debug("Calling function of getVideoDataSets in UserController class");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/video/campaignDevicePerformance;Campaign Device Performance",
@@ -330,12 +314,11 @@ public class UserController {
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
         }
-        log.debug("End function of getVideoDataSets in UserController class");
         return returnList;
     }
 
     private List<UrlBean> getSeoDataSets() {
-        log.debug("Start function of getSeoDataSets in UserController class");
+        log.debug("Calling function of getSeoDataSets in UserController class");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/seo/accountPerformance;Account Performance",
@@ -350,12 +333,11 @@ public class UserController {
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
         }
-        log.debug("End function of getSeoDataSets in UserController class");
         return returnList;
     }
 
     private List<UrlBean> getPaidSocialDataSets() {
-        log.debug("Start function of getPaidSocialDataSets in UserController class");
+        log.debug("Calling function of getPaidSocialDataSets in UserController class");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/paidSocial/accountPerformance;Account Performance",
@@ -371,12 +353,11 @@ public class UserController {
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
         }
-        log.debug("End function of getPaidSocialDataSets in UserController class");
         return returnList;
     }
 
     private List<UrlBean> getSocialImpactDataSets() {
-        log.debug("Start function of getSocialImpactDataSets in UserController class");
+        log.debug("Calling function of getSocialImpactDataSets in UserController class");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/socialImpact/postPerformance;Post Performance",
@@ -388,12 +369,11 @@ public class UserController {
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
         }
-        log.debug("End function of getSocialImpactDataSets in UserController class");
         return returnList;
     }
 
     private List<UrlBean> getReviewPushDataSets() {
-        log.debug("Start function of getReviewPushDataSets in UserController class");
+        log.debug("Calling function of getReviewPushDataSets in UserController class");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/reviewPush/reviews;Reviews",
@@ -405,7 +385,6 @@ public class UserController {
             String[] url = urlStr.split(";");
             returnList.add(new UrlBean(url[0], url[1]));
         }
-        log.debug("End function of getReviewPushDataSets in UserController class");
         return returnList;
     }
 

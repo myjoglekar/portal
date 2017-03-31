@@ -53,16 +53,16 @@ public class ProxyController {
 
     @Autowired
     private DealerService dealerService;
-    
+
     @Autowired
     private DealerDao dealerDao;
-    
-   final static Logger log = Logger.getLogger(ProxyController.class);
+
+    final static Logger log = Logger.getLogger(ProxyController.class);
 
     @RequestMapping(value = "getJson", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getJson(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start Function of getJson");
+        log.debug("Calling getJson function in ProxyController class");
         String url = request.getParameter("url");
         String dealerId = request.getParameter("dealerId");
         Map<String, String> dealerAccountDetails = dealerService.getDealerAccountDetails(dealerId);
@@ -89,16 +89,15 @@ public class ProxyController {
             String data = Rest.getData(url, valueMap);
             return data;
         } catch (Exception ex) {
-                log.error("Exception in getJson Function: " + ex);
+            log.error("Exception in getJson Function: " + ex);
         }
-        log.debug("End Function of getJson");
         return null;
     }
 
     @RequestMapping(value = "get", method = RequestMethod.GET)
     public @ResponseBody
     void get(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start Function of get");
+        log.debug("Calling get function in ProxyController class");
         String url = request.getParameter("url");
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
@@ -110,7 +109,7 @@ public class ProxyController {
                 String data = Rest.getData(url, valueMap);
                 response.getOutputStream().write(data.getBytes());
             } catch (IOException ex) {
-                log.error("IOException in get Function: "+ex);
+                log.error("IOException in get Function: " + ex);
             }
         }
     }
@@ -118,8 +117,8 @@ public class ProxyController {
     @RequestMapping(value = "download/{tabId}", method = RequestMethod.GET)
     public @ResponseBody
     void download(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
-        log.debug("Start Function of download");
-        String dealerId = request.getParameter("dealerId");                
+        log.debug("Calling download function in ProxyController class");
+        String dealerId = request.getParameter("dealerId");
         Map<String, String> dealerAccountDetails = dealerService.getDealerAccountDetails(dealerId);
         MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
         for (Map.Entry<String, String> entrySet : dealerAccountDetails.entrySet()) {
@@ -133,21 +132,21 @@ public class ProxyController {
             String[] value = entrySet.getValue();
             valueMap.put(key, Arrays.asList(value));
         }
-        int dealeerId =  Integer.parseInt(dealerId);
+        int dealeerId = Integer.parseInt(dealerId);
         List dealerList = dealerDao.getDealerNameById(dealeerId);
         String dealerName = (String) dealerList.get(0);
-                
+
         List<TabWidget> tabWidgets = uiService.getTabWidget(tabId);
         for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
             TabWidget tabWidget = iterator.next();
-            log.debug("tabwidget chart type: " +tabWidget.getChartType());
-           
-            if(tabWidget.getChartType() == null || tabWidget.getChartType().isEmpty()){
+            log.debug("tabwidget chart type: " + tabWidget.getChartType());
+
+            if (tabWidget.getChartType() == null || tabWidget.getChartType().isEmpty()) {
                 continue;
             }
             try {
                 String url = tabWidget.getDirectUrl();
-                log.debug("url: "+url);
+                log.debug("url: " + url);
                 Integer port = request.getServerPort();
 
                 String localUrl = request.getScheme() + "://" + request.getServerName() + ":" + port + "/";
@@ -163,7 +162,7 @@ public class ProxyController {
                 tabWidget.setData(dataList);
 
             } catch (ParseException ex) {
-                log.error("ParseException in download Function: "+ex);
+                log.error("ParseException in download Function: " + ex);
             }
         }
         try {
@@ -171,12 +170,12 @@ public class ProxyController {
             CustomReportDesigner crd = new CustomReportDesigner();
             crd.dynamicPdfTable(dealerName, tabWidgets, out);
         } catch (Exception e) {
-            log.error("Exception in download function: "+e);
+            log.error("Exception in download function: " + e);
         }
-        log.debug("End Function of download");
     }
 
     public static void main(String argv[]) {
+        log.debug("Calling main function in ProxyController class");
         String url = "../api/admin/paid/clicksImpressionsGraph";
         String localUrl = "Test";
         if (url.startsWith("../")) {
@@ -188,6 +187,6 @@ public class ProxyController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        log.error("HttpMessageNotReadableException in handle function: "+e);
+        log.error("HttpMessageNotReadableException in handle function: " + e);
     }
 }

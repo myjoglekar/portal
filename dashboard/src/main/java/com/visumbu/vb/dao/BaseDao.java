@@ -26,7 +26,7 @@ public class BaseDao {
     final static Logger log = Logger.getLogger(BaseDao.class);
 
     public Object create(Object object) {
-        log.debug("Start function of create in BaseDao class");
+        log.debug("Calling function of create in BaseDao class");
         try {
             log.debug("Object: " + object);
             sessionFactory.getCurrentSession().save(object);
@@ -36,12 +36,11 @@ public class BaseDao {
             log.error("Exception in create function: " + e);
             return null;
         }
-        log.debug("End function of create in BaseDao class");
         return object;
     }
 
     public Object update(Object object) {
-        log.debug("Start function of update in BaseDao class");
+        log.debug("Calling function of update in BaseDao class");
         try {
             sessionFactory.getCurrentSession().merge(object);
             sessionFactory.getCurrentSession().flush();
@@ -50,24 +49,21 @@ public class BaseDao {
             log.error("Exception in update function: " + e);
             return null;
         }
-        log.debug("End function of update in BaseDao class");
         return object;
     }
 
     public List read(Class c) {
-        log.debug("Start function of read in BaseDao class using list");
-        log.debug("Start function of read in BaseDao class using list");
+        log.debug("Calling function of read in BaseDao class using list");
         return sessionFactory.getCurrentSession().createCriteria(c).list();
     }
 
     public Object read(Class c, Serializable id) {
-        log.debug("Start function of read in BaseDao class using object");
-        log.debug("End function of read in BaseDao class using object");
+        log.debug("Calling function of read in BaseDao class using object");
         return sessionFactory.getCurrentSession().get(c, id);
     }
 
     public Object delete(Object object) {
-        log.debug("Start function of delete in BaseDao class using object");
+        log.debug("Calling function of delete in BaseDao class using object");
         try {
             sessionFactory.getCurrentSession().delete(object);
         } catch (Exception e) {
@@ -75,7 +71,6 @@ public class BaseDao {
             log.error("Exception in delete function: " + e);
             return null;
         }
-        log.debug("End function of delete in BaseDao class using object");
         return object;
     }
 }

@@ -24,7 +24,7 @@ public class HtmlMail {
     }
 
     public String sendMail() {
-        log.debug("Start function of sendMail in HtmlMail class");
+        log.debug("Calling sendMail function in HtmlMail class");
         try {
             // Create the email message
             HtmlEmail email = new HtmlEmail();
@@ -77,7 +77,6 @@ public class HtmlMail {
         } catch (EmailException ex) {
             log.error("EmailException in sendMail function: "+ex);
         }
-        log.debug("Start function of sendMail in HtmlMail class");
         return "Not Sent";
     }
 }

@@ -30,37 +30,33 @@ public class MailQ {
     }
 
     public static MailQ getInstance() {
-        log.debug("Start function of getInstance in MailQ class");
+        log.debug("Calling getInstance function in MailQ class");
         if (instance == null) {
             synchronized (MailQ.class) {
                 instance = new MailQ();
             }
         }
-        log.debug("End function of getInstance in MailQ class");
+        log.debug("Ending getInstance function in MailQ class");
         return instance;
     }
 
     public void add(Object obj) {
-        log.debug("Start function of add in MailQ class");
+        log.debug("Calling add function in MailQ class");
         producer.accept(obj);
-        log.debug("End function of add in MailQ class");
     }
 
     public int count() {
-        log.debug("Start function of count in MailQ class");
-        log.debug("End function of count in MailQ class");
+        log.debug("Calling count function in MailQ class");
         return queue.size();
     }
 
     public int remainingCapacity() {
-        log.debug("Start function of remainingCapacity in MailQ class");
-        log.debug("End function of remainingCapacity in MailQ class");
+        log.debug("Calling remainingCapacity function in MailQ class");
         return queue.remainingCapacity();
     }
 
     public static void main(String args[]) {
-        log.debug("Start Main function in MailQ class");
+        log.debug("Calling Main function in MailQ class");
         MailQ q = MailQ.getInstance();
-        log.debug("Start Main function  in MailQ class");
     }
 }

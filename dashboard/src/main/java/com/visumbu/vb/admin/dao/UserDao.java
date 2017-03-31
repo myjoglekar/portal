@@ -33,40 +33,36 @@ public class UserDao extends BaseDao {
     final static Logger log = Logger.getLogger(UserDao.class);
 
     public List<VbUser> read() {
-        log.debug("Start function of read in UserDao class");
+        log.debug("Calling function of read in UserDao class");
         Query query = sessionFactory.getCurrentSession().createQuery("from VbUser where status is null or status != 'Deleted'");
-        log.debug("End function of read in UserDao class");
         return query.list();
     }
 
     public List<VbUser> findByUserName(String username) {
-        log.debug("Start function of findByUserName in UserDao class");
+        log.debug("Calling function of findByUserName in UserDao class");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("VbUser.findByUserName");
         query.setParameter("userName", username);
-        log.debug("End function of findByUserName in UserDao class");
         return query.list();
     }
 
     public VbUser createNewUser(String userId, String userName, String fullName) {
-        log.debug("Start function of createNewUser in UserDao class");
+        log.debug("Calling function of createNewUser in UserDao class");
         VbUser user = new VbUser();
         user.setUserRefId(userId);
         user.setUserName(userName);
         create(user);
         log.debug("Created User " + user);
-        log.debug("End function of createNewUser in UserDao class");
         return user;
     }
 
     public void initUser(VbUser user) {
-        log.debug("Start function of initUser in UserDao class");
+        log.debug("Calling function of initUser in UserDao class");
         List<Dashboard> dashboards = initDashboardItems(user);
-        log.debug("End function of initUser in UserDao class");
 
     }
 
     private List<Dashboard> initDashboardItems(VbUser user) {
-        log.debug("Start function of initDashboardItems in UserDao class");
+        log.debug("Calling function of initDashboardItems in UserDao class");
         List<Dashboard> returnList = new ArrayList<>();
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Dashboard.findByUserId");
         query.setParameter("userId", 1);
@@ -86,12 +82,11 @@ public class UserDao extends BaseDao {
             initDashboardTabs(user, dashboard, newObject);
             returnList.add(newObject);
         }
-        log.debug("End function of initDashboardItems in UserDao class");
         return returnList;
     }
 
     private List<DashboardTabs> initDashboardTabs(VbUser user, Dashboard oldDashboard, Dashboard newDashboard) {
-        log.debug("Start function of initDashboardTabs in UserDao class");
+        log.debug("Calling function of initDashboardTabs in UserDao class");
         List<DashboardTabs> returnList = new ArrayList<>();
         Query query = sessionFactory.getCurrentSession().getNamedQuery("DashboardTabs.findByDashboard");
         query.setParameter("dashboardId", oldDashboard);
@@ -111,12 +106,11 @@ public class UserDao extends BaseDao {
             initDashboardTabWidget(user, dashboardTab, newObject);
             returnList.add(newObject);
         }
-        log.debug("End function of initDashboardTabs in UserDao class");
         return returnList;
     }
 
     private List<TabWidget> initDashboardTabWidget(VbUser user, DashboardTabs oldDashboardTab, DashboardTabs newDashboardTab) {
-        log.debug("Start function of initDashboardTabWidget in UserDao class");
+        log.debug("Calling function of initDashboardTabWidget in UserDao class");
         List<TabWidget> returnList = new ArrayList<>();
         Query query = sessionFactory.getCurrentSession().getNamedQuery("TabWidget.findByTab");
         query.setParameter("tab", oldDashboardTab);
@@ -136,12 +130,11 @@ public class UserDao extends BaseDao {
             initWidgetColumns(user, tabWidget, newObject);
             returnList.add(newObject);
         }
-        log.debug("End function of initDashboardTabWidget in UserDao class");
         return returnList;
     }
 
     private List<WidgetColumn> initWidgetColumns(VbUser user, TabWidget oldWidget, TabWidget newWidget) {
-        log.debug("Start function of initWidgetColumns in UserDao class");
+        log.debug("Calling function of initWidgetColumns in UserDao class");
         List<WidgetColumn> returnList = new ArrayList<>();
         Query query = sessionFactory.getCurrentSession().getNamedQuery("WidgetColumn.findByWidget");
         query.setParameter("widget", oldWidget);
@@ -159,7 +152,6 @@ public class UserDao extends BaseDao {
             create(newObject);
             returnList.add(newObject);
         }
-        log.debug("End function of initWidgetColumns in UserDao class");
         return returnList;
     }
 }

@@ -19,10 +19,9 @@ public class BaseController {
     final static Logger log = Logger.getLogger(BaseController.class);
 
     public ReportPage getPage(HttpServletRequest request) {
-        log.debug("Start function of getPage in BaseController class");
+        log.debug("Calling function of getPage in BaseController class");
         ReportPage reportPage = new ReportPage();
         if (request.getParameter("page") == null && request.getParameter("count") == null) {
-            log.debug("End function of getPage in UserService class");
             return null;
         }
         Integer count = 50;
@@ -37,12 +36,11 @@ public class BaseController {
             reportPage.setPageNo(page);
             reportPage.setCount(count);
         }
-        log.debug("End function of getPage in UserService class");
         return reportPage;
     }
 
     protected String getUser(HttpServletRequest request) {
-        log.debug("Start function of getUser in UserService class");
+        log.debug("Calling function of getUser in UserService class");
         String username = (String) request.getSession().getAttribute("username");
         if (username == null) {
             try {
@@ -51,7 +49,6 @@ public class BaseController {
                 log.error("Authentication Exception in getUser function: " + ex);
             }
         }
-        log.debug("End function of getUser in UserService class");
         return username;
     }
 }

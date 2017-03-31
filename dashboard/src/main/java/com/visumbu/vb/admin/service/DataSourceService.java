@@ -32,29 +32,25 @@ public class DataSourceService {
     final static Logger log = Logger.getLogger(DataSourceService.class);
 
     public List getAllDataSources() {
-        log.debug("Start function of getAllDataSources in DataSourceService class");
-        log.debug("End function of getAllDataSources in DataSourceService class");
+        log.debug("Calling function of getAllDataSources in DataSourceService class");
         return BaseDataSource.getAllDataSources();
     }
 
     public List getAllDataSets(String dataSourceName) throws IOException, GeneralSecurityException {
-        log.debug("Start function of getAllDataSets in DataSourceService class");
+        log.debug("Calling function of getAllDataSets in DataSourceService class");
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
-        log.debug("End function of getAllDataSets in DataSourceService class");
         return dataSource.getDataSets();
     }
 
     public List getAllDimensions(String dataSourceName, String dataSet) throws IOException, GeneralSecurityException {
-        log.debug("Start function of getAllDimensions in DataSourceService class");
+        log.debug("Calling function of getAllDimensions in DataSourceService class");
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
-        log.debug("End function of getAllDimensions in DataSourceService class");
         return dataSource.getDataDimensions();
     }
 
     public Object getData(String dataSourceName, String dataSet, Map options, ReportPage page) throws IOException, GeneralSecurityException {
-        log.debug("Start function of getData in DataSourceService class");
+        log.debug("Calling function of getData in DataSourceService class");
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
-        log.debug("End function of getData in DataSourceService class");
         return dataSource.getData(dataSet, options, page);
     }
 }

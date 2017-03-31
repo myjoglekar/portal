@@ -32,7 +32,7 @@ public class FileUtils {
     final static Logger log = Logger.getLogger(FileUtils.class);
 
     public static Object readXML(String fileName, Class inputClass) {
-        log.debug("Start function of readXML in FileUtils class");
+        log.debug("Calling function of readXML in FileUtils class");
         try {
             JAXBContext context = JAXBContext.newInstance(inputClass);
             Unmarshaller um = context.createUnmarshaller();
@@ -41,12 +41,11 @@ public class FileUtils {
         } catch (FileNotFoundException | JAXBException ex) {
             log.error("Exception in readXML function: " + ex);
         }
-        log.debug("End function of readXML in FileUtils class");
         return null;
     }
 
     public static void writeXML(String fileName, Object object, Class inputClass) {
-        log.debug("Start function of writeXML in FileUtils class");
+        log.debug("Calling function of writeXML in FileUtils class");
         try {
             // create JAXB context and instantiate marshaller
             JAXBContext context = JAXBContext.newInstance(inputClass);
@@ -60,7 +59,6 @@ public class FileUtils {
         } catch (JAXBException ex) {
             log.error("JAXBException in writeXML function");
         }
-        log.debug("End function of writeXML in FileUtils class");
     }
 
 }

@@ -26,17 +26,16 @@ public class DateUtils {
     final static Logger log = Logger.getLogger(DateUtils.class);
 
     public static Date get30DaysBack() {
-        log.debug("Start function of get30DaysBack in DateUtils class");
+        log.debug("Calling function of get30DaysBack in DateUtils class");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd ");
         Calendar cal = Calendar.getInstance();
         Calendar calReturn = Calendar.getInstance();
         calReturn.add(Calendar.DATE, -30);
-        log.debug("End function of get30DaysBack in DateUtils class");
         return calReturn.getTime();
     }
 
     public static String getQueryString(String tableName, String searchText) {
-        log.debug("Start function of getQueryString in DateUtils class");
+        log.debug("Calling function of getQueryString in DateUtils class");
         String searchString = searchText;
         searchString = searchString.replaceAll("\\s+and\\s+", " matchand ");
         searchString = searchString.replaceAll("\\s+or\\s+", " matchor ");
@@ -72,95 +71,85 @@ public class DateUtils {
             }
             queryString += searchStr;
         }
-        log.debug("End function of getQueryString in DateUtils class");
         return queryString;
     }
 
     public static String toJSDate(Date date) {
-        log.debug("Start function of toJSDate in DateUtils class");
+        log.debug("Calling function of toJSDate in DateUtils class");
         String format = "yyyy-MM-dd HH:mm:ss";
-        log.debug("End function of toJSDate in DateUtils class");
         return dateToString(date, format);
     }
 
     public static String toTTDate(Date date) {
-        log.debug("Start function of toTTDate in DateUtils class");
+        log.debug("Calling function of toTTDate in DateUtils class");
         String format = "dd/MM/yyyy HH:mm:ss";
-        log.debug("End function of toTTDate in DateUtils class");
         return dateToString(date, format);
     }
 
     public static String dateToString(Date date, String format) {
-        log.debug("Start function of dateToString in DateUtils class");
+        log.debug("Calling function of dateToString in DateUtils class");
         if (date == null) {
             return "-";
         }
         DateFormat df = new SimpleDateFormat(format);
         String reportDate = df.format(date);
-        log.debug("End function of dateToString in DateUtils class");
         return reportDate;
     }
 
     public static Date getFirstDateOfCurrentMonth() {
-        log.debug("Start function of getFirstDateOfCurrentMonth in DateUtils class");
+        log.debug("Calling function of getFirstDateOfCurrentMonth in DateUtils class");
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMinimum(Calendar.DAY_OF_MONTH));
-        log.debug("End function of getFirstDateOfCurrentMonth in DateUtils class");
         return cal.getTime();
     }
 
     public static Date getFirstDayOfLastMonth() {
-        log.debug("Start function of getFirstDayOfLastMonth in DateUtils class");
+        log.debug("Calling function of getFirstDayOfLastMonth in DateUtils class");
         Date date = getFirstDateOfCurrentMonth();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.MONTH, -1);
-        log.debug("End function of getFirstDayOfLastMonth in DateUtils class");
         return cal.getTime();
     }
 
     public static Date getFirstDayOfNextMonth() {
-        log.debug("Start function of getFirstDayOfNextMonth in DateUtils class");
+        log.debug("Calling function of getFirstDayOfNextMonth in DateUtils class");
         Date date = getFirstDateOfCurrentMonth();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.MONTH, 1);
-        log.debug("End function of getFirstDayOfNextMonth in DateUtils class");
         return cal.getTime();
     }
 
     public static Date getTonight() {
-        log.debug("Start function of getTonight in DateUtils class");
+        log.debug("Calling function of getTonight in DateUtils class");
         Calendar calendar = new GregorianCalendar();
         calendar.set(Calendar.HOUR_OF_DAY, 23); //anything 0 - 23
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         Date today = calendar.getTime(); //the midnight, that's the first second of the day.
-        log.debug("End function of getTonight in DateUtils class");
         return today;
     }
 
     public static Date getToday() {
-        log.debug("Start function of getToday in DateUtils class");
+        log.debug("Calling function of getToday in DateUtils class");
         Calendar calendar = new GregorianCalendar();
         calendar.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         Date today = calendar.getTime(); //the midnight, that's the first second of the day.
-        log.debug("End function of getToday in DateUtils class");
         return today;
     }
 
     public static Date get24HoursBack() {
-        log.debug("Start function of get24HoursBack in DateUtils class");
+        log.debug("Calling function of get24HoursBack in DateUtils class");
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
-        log.debug("End function of get24HoursBack in DateUtils class");
         return cal.getTime();
     }
 
     public static Date getOneMonthsBack(Date date) {
-        log.debug("Start function of getOneMonthsBack in DateUtils class");
+        log.debug("Calling function of getOneMonthsBack in DateUtils class");
         Calendar cal = Calendar.getInstance();
         if (date != null) {
             cal.setTime(date);
@@ -169,12 +158,11 @@ public class DateUtils {
         cal.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
-        log.debug("End function of getOneMonthsBack in DateUtils class");
         return cal.getTime();
     }
 
     public static Date getSixMonthsBack(Date date) {
-        log.debug("Start function of getSixMonthsBack in DateUtils class");
+        log.debug("Calling function of getSixMonthsBack in DateUtils class");
         Calendar cal = Calendar.getInstance();
         if (date != null) {
             cal.setTime(date);
@@ -183,23 +171,21 @@ public class DateUtils {
         cal.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
-        log.debug("End function of getSixMonthsBack in DateUtils class");
         return cal.getTime();
     }
 
     public static Date getYesterday() {
-        log.debug("Start function of getYesterday() in DateUtils class");
+        log.debug("Calling function of getYesterday() in DateUtils class");
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         cal.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
-        log.debug("End function of getYesterday() in DateUtils class");
         return cal.getTime();
     }
 
     public static Date getYesterday(String date) {
-        log.debug("Start function of getYesterday(String date) in DateUtils class");
+        log.debug("Calling function of getYesterday(String date) in DateUtils class");
         Calendar cal = Calendar.getInstance();
         Date parsedDate = getEndDate(date);
         cal.setTime(parsedDate);
@@ -207,12 +193,11 @@ public class DateUtils {
         cal.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
-        log.debug("End function of getYesterday(String date) in DateUtils class");
         return cal.getTime();
     }
 
     public static Date getEndDate(String strEnd) {
-        log.debug("Start function of getEndDate in DateUtils class");
+        log.debug("Calling function of getEndDate in DateUtils class");
         log.debug("Start Date " + strEnd);
         if (strEnd.length() < 12) {
             strEnd += " 23:59:59";
@@ -225,12 +210,11 @@ public class DateUtils {
             log.debug("Exception End ");
             endDate = new Date();
         }
-        log.debug("End function of getEndDate in DateUtils class");
         return endDate;
     }
 
     public static Date getStartDate(String strStart) {
-        log.debug("Start function of getStartDate in DateUtils class");
+        log.debug("Calling function of getStartDate in DateUtils class");
         log.debug("Start Date " + strStart);
         if (strStart.length() < 12) {
             strStart += " 00:00:00";
@@ -243,12 +227,11 @@ public class DateUtils {
             log.debug("Exception Start ");
             startDate = DateUtils.getYesterday();
         }
-        log.debug("End function of getStartDate in DateUtils class");
         return startDate;
     }
 
     public static Date getStartTodayDate(String strStart) {
-        log.debug("Start function of getStartTodayDate in DateUtils class");
+        log.debug("Calling function of getStartTodayDate in DateUtils class");
         log.debug("Start Date " + strStart);
         if (strStart.length() < 12) {
             strStart += " 00:00:00";
@@ -261,12 +244,11 @@ public class DateUtils {
             log.debug("Exception Start ");
             startDate = DateUtils.getToday();
         }
-        log.debug("End function of getStartTodayDate in DateUtils class");
         return startDate;
     }
 
     public static Date toDate(String dateStr, String formatStr) {
-        log.debug("Start function of toDate(String dateStr, String formatStr) in DateUtils class");
+        log.debug("Calling function of toDate(String dateStr, String formatStr) in DateUtils class");
         if (dateStr == null || dateStr.isEmpty()) {
             return null;
         }
@@ -277,59 +259,53 @@ public class DateUtils {
         } catch (ParseException ex) {
             log.error("ParseException in toDate function: " + ex);
         }
-        log.debug("End function of toDate(String dateStr, String formatStr) in DateUtils class");
         return null;
     }
 
     public static Date toDate(String dateStr) {
-        log.debug("Start function of toDate(String dateStr) in DateUtils class");
+        log.debug("Calling function of toDate(String dateStr) in DateUtils class");
         if (dateStr.length() < 12) {
             dateStr += " 00:00:00";
         }
         String format = "dd-M-yyyy HH:mm:ss";
-        log.debug("End function of toDate(String dateStr) in DateUtils class");
         return toDate(dateStr, format);
     }
 
     public static Date jsToJavaDate(String dateStr) {
-        log.debug("Start function of jsToJavaDate in DateUtils class");
+        log.debug("Calling function of jsToJavaDate in DateUtils class");
         if (dateStr.length() < 12) {
             dateStr += " 00:00:00";
         }
         String format = "dd/M/yyyy HH:mm:ss";
-        log.debug("End function of jsToJavaDate in DateUtils class");
         return toDate(dateStr, format);
     }
 
     public static Long dateDiff(Date date1, Date date2) {
-        log.debug("Start function of dateDiff in DateUtils class");
+        log.debug("Calling function of dateDiff in DateUtils class");
         if (date1 == null || date2 == null) {
             return 0L;
         }
-        log.debug("End function of dateDiff in DateUtils class");
         return Math.abs(date1.getTime() - date2.getTime()) / (60 * 60 * 1000);
     }
 
     public static Long dateDiffInSec(Date date1, Date date2) {
-        log.debug("Start function of dateDiffInSec in DateUtils class");
+        log.debug("Calling function of dateDiffInSec in DateUtils class");
         if (date1 == null || date2 == null) {
             return 0L;
         }
-        log.debug("End function of dateDiffInSec in DateUtils class");
         return (date1.getTime() - date2.getTime()) / 1000;
     }
 
     public static Long timeDiff(Date date1, Date date2) {
-        log.debug("Start function of timeDiff in DateUtils class");
+        log.debug("Calling function of timeDiff in DateUtils class");
         if (date1 == null || date2 == null) {
             return 0L;
         }
-        log.debug("End function of timeDiff in DateUtils class");
         return Math.abs(date1.getTime() - date2.getTime());
     }
 
     public static Integer getDifferenceInMonths(Date startDate, Date endDate) {
-        log.debug("Start function of getDifferenceInMonths in DateUtils class");
+        log.debug("Calling function of getDifferenceInMonths in DateUtils class");
         Calendar c1 = Calendar.getInstance();
         c1.setTime(startDate);
         Calendar c2 = Calendar.getInstance();
@@ -350,12 +326,11 @@ public class DateUtils {
                 }
             }
         }
-        log.debug("End function of getDifferenceInMonths in DateUtils class");
         return diff;
     }
 
     public static List<Date> getDaysBetweenDates(Date startdate, Date enddate) {
-        log.debug("Start function of getDaysBetweenDates in DateUtils class");
+        log.debug("Calling function of getDaysBetweenDates in DateUtils class");
         List<Date> dates = new ArrayList<Date>();
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(startdate);
@@ -365,7 +340,6 @@ public class DateUtils {
             dates.add(result);
             calendar.add(Calendar.DATE, 1);
         }
-        log.debug("End function of getDaysBetweenDates in DateUtils class");
         return dates;
     }
 }

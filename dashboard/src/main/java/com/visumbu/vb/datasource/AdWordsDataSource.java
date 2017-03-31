@@ -27,7 +27,9 @@ import org.apache.log4j.Logger;
  * @author user
  */
 public class AdWordsDataSource extends BaseDataSource {
-final static Logger log = Logger.getLogger(AdWordsDataSource.class);
+
+    final static Logger log = Logger.getLogger(AdWordsDataSource.class);
+
     @Override
     public List getDataSets() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -44,7 +46,7 @@ final static Logger log = Logger.getLogger(AdWordsDataSource.class);
     }
 
     public static void main(String argv[]) {
-log.debug("Start main function of AdWordsDataSource class");
+        log.debug("Calling main function of AdWordsDataSource class");
         try {
             /**
              * Create an AdWordsSession instance, loading credentials from the
@@ -62,29 +64,30 @@ log.debug("Start main function of AdWordsDataSource class");
                     .fromFile()
                     .withOAuth2Credential(credential)
                     .build(); */
-            
+
             String clientId = "162577857765-le844eg61vkr4rejv4br7grl3cplvn9h.apps.googleusercontent.com";
             String clientSecret = "n3ZXN2YOLwcWx7HZk4AmIq66";
             String refreshToken = "";
             String developerToken = "X4glgfA7zjlwzeL3jNQjkw";
             /**
-             * Alternatively, you can specify your credentials in the constructor:
+             * Alternatively, you can specify your credentials in the
+             * constructor:
              */
             // Get an OAuth2 credential.
             Credential credential = new OfflineCredentials.Builder()
                     .forApi(OfflineCredentials.Api.ADWORDS)
                     .withClientSecrets(clientId, clientSecret)
-                   // .withRefreshToken(refreshToken)
+                    // .withRefreshToken(refreshToken)
                     .build()
                     .generateCredential();
-            
+
             // Construct an AdWordsSession.
             AdWordsSession session = new AdWordsSession.Builder()
                     .withDeveloperToken(developerToken)
                     // ...
                     .withOAuth2Credential(credential)
                     .build();
-            
+
             /**
              * Instantiate the desired service class using the AdWordsServices
              * utility and a Class object representing your service.
@@ -92,26 +95,25 @@ log.debug("Start main function of AdWordsDataSource class");
             // Get the CampaignService.
             CampaignServiceInterface campaignService
                     = new AdWordsServices().get(session, CampaignServiceInterface.class);
-            
+
             /**
-             * Create data objects and invoke methods on the service class instance.
-             * The data objects and methods map directly to the data objects and
-             * requests for the corresponding web service.
+             * Create data objects and invoke methods on the service class
+             * instance. The data objects and methods map directly to the data
+             * objects and requests for the corresponding web service.
              */
             // Create selector.
             Selector selector = new Selector();
             selector.setFields(new String[]{"Id", "Name"});
-            
+
             // Get all campaigns.
             CampaignPage page = campaignService.get(selector);
         } catch (OAuthException ex) {
-            log.error("OAuthException in AdWordsDataSource function: "+ex);
+            log.error("OAuthException in AdWordsDataSource function: " + ex);
         } catch (ValidationException ex) {
-            log.error("ValidationException in AdWordsDataSource function: "+ex);
+            log.error("ValidationException in AdWordsDataSource function: " + ex);
         } catch (RemoteException ex) {
-            log.error("RemoteException in AdWordsDataSource function: "+ex);
+            log.error("RemoteException in AdWordsDataSource function: " + ex);
         }
-        log.debug("End main function of AdWordsDataSource class");
     }
 
 }

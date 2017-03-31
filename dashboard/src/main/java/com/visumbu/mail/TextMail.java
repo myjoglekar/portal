@@ -25,7 +25,7 @@ public class TextMail {
     }
 
     public String sendMail() {
-        log.debug("Start function of sendMail in TextMail class");
+        log.debug("Calling sendMail function in TextMail class");
 
         try {
             Email email = new SimpleEmail();
@@ -42,7 +42,6 @@ public class TextMail {
         } catch (EmailException ex) {
             log.error("EmailException in sendMail function: " + ex);
         }
-        log.debug("End function of sendMail in TextMail class");
         return "Not Sent";
     }
 }

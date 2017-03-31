@@ -53,24 +53,22 @@ public class EmailServer {
     }
 
     public void setFrom(String fromAddress) {
-        log.debug("Start function of setFrom in EmailServer class");
+        log.debug("Calling setFrom function in EmailServer class");
         FROM_ADDRESS = fromAddress;
-        log.debug("End function of setFrom in EmailServer class");
     }
 
     public static void main(String[] args) {
         EmailServer email = new EmailServer("test");
-        log.debug("Start main function in EmailServer class");
+        log.debug("Calling main function in EmailServer class");
         //Sending test email
         String[] attachFiles = {"d:\\work\\SeacomFiles\\1425457085123-1-TT USEr.txt", "d:\\work\\SeacomFiles\\1425464768539-1-logo.png"};
         email.createAndSendEmail("varghees@gmail.com", "varghees@netphenix.com", "Test email subject",
                 "<b>Congratulations </b>!!! \nThis is test email sent by java class.");
-        log.debug("End main function in EmailServer class");
     }
 
     public void createAndSendEmail(String emailAddressTo, String emailAddressCc,
             String msgSubject, String msgText, String[] attachments) {
-        log.debug("Start function of createAndSendEmail in EmailServer class");
+        log.debug("Calling createAndSendEmail function with attachments in EmailServer class");
         String[] emailArray = emailAddressTo.split(",");
         List<String> emailArrayList = new ArrayList<>();
         for (int i = 0; i < emailArray.length; i++) {
@@ -121,7 +119,7 @@ public class EmailServer {
     }
 
     private void sendEmailMessage() {
-        log.debug("Start function of sendEmailMessage in EmailServer class");
+        log.debug("Calling sendEmailMessage function in EmailServer class");
         log.debug("TO --> " + emailAddressTo);
         log.debug("CC --> " + emailAddressCc);
         log.debug("Subject --> " + msgSubject);
@@ -164,7 +162,6 @@ public class EmailServer {
         if (USER_NAME.equals("")) {
             return;
         }
-        log.debug("End function of sendEmailMessage in EmailServer class");
     }
 
     public void setEmailAddressTo(String emailAddressTo) {

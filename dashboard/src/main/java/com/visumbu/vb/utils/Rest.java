@@ -40,13 +40,12 @@ public class Rest {
     final static Logger log = Logger.getLogger(Rest.class);
 
     public static String getData(String urlString) {
-        log.debug("Start function of getData in Rest class");
-        log.debug("End function of getData in Rest class");
+        log.debug("Calling function of getData in Rest class");
         return getData(urlString, null);
     }
 
     public static String getData(String url, MultiValueMap<String, String> params) {
-        log.debug("Start function of getData(String url, MultiValueMap<String, String> params) in Rest class");
+        log.debug("Calling function of getData(String url, MultiValueMap<String, String> params) in Rest class");
         String urlString = url;
         if (params != null) {
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(url).queryParams(params).build();
@@ -87,12 +86,11 @@ public class Rest {
         } catch (IOException e) {
             log.error("IOException in getData function in rest class:" + e);
         }
-        log.debug("End function of getData(String url, MultiValueMap<String, String> params) in Rest class");
         return returnStr;
     }
 
     public static String getData(String url, MultiValueMap<String, String> params, Map<String, String> header) {
-        log.debug("Start function of getData(String url, MultiValueMap<String, String> params, Map<String, String> header) in Rest class");
+        log.debug("Calling function of getData(String url, MultiValueMap<String, String> params, Map<String, String> header) in Rest class");
         String urlString = url;
         if (params != null) {
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(url).queryParams(params).build();
@@ -139,12 +137,11 @@ public class Rest {
         } catch (IOException e) {
             log.error("IOException in getData function in rest class:" + e);
         }
-        log.debug("End function of getData(String url, MultiValueMap<String, String> params, Map<String, String> header) in Rest class");
         return returnStr;
     }
 
     public static String postRawForm(String postUrl, String postParams) throws IOException {
-        log.debug("Start function of postRawForm in Rest class");
+        log.debug("Calling function of postRawForm in Rest class");
         String returnStr = null;
         log.debug("URL -> " + postUrl);
         log.debug("URL Params -> " + postParams);
@@ -182,12 +179,11 @@ public class Rest {
         } else {
             log.debug("POST request not worked");
         }
-        log.debug("End function of postRawForm in Rest class");
         return returnStr;
     }
 
     public static void main(String args[]) {
-        log.debug("Start main function in Rest class");
+        log.debug("Calling main function in Rest class");
         try {
             String output = postRawForm(Settings.getSecurityTokenUrl(), "client_id=f8f06d06436f4104ade219fd7d535654&client_secret=ba082149c90f41c49e86f4862e22e980&grant_type=password&scope=FullControl&username=admin&password=admin123");
             ObjectMapper mapper = new ObjectMapper();
@@ -201,7 +197,6 @@ public class Rest {
         } catch (IOException ex) {
             log.error("IOException in main function: " + ex);
         }
-        log.debug("End main function in Rest class");
     }
 
 }

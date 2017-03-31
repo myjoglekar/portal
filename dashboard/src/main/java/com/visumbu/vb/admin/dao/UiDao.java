@@ -38,42 +38,38 @@ public class UiDao extends BaseDao {
     final static Logger log = Logger.getLogger(UiDao.class);
 
     public List<Dashboard> getDashboards(VbUser user) {
-        log.debug("Start function of getDashboards in UiDao class");
+        log.debug("Calling function of getDashboards in UiDao class");
         String queryStr = "select d from Dashboard d where d.userId = :user";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("user", user);
-        log.debug("End function of getDashboards in UiDao class");
         return query.list();
     }
 
     public List<DashboardTabs> getDashboardTabs(Integer dbId) {
-        log.debug("Start function of getDashboardTabs in UiDao class");
+        log.debug("Calling function of getDashboardTabs in UiDao class");
         String queryStr = "select d from DashboardTabs d where (d.status is null or d.status != 'Deleted') and d.dashboardId.id = :dashboardId order by tabOrder";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("dashboardId", dbId);
-        log.debug("End function of getDashboardTabs in UiDao class");
         return query.list();
     }
 
     public DashboardTabs getDashboardTabById(Integer tabId) {
-        log.debug("Start function of getDashboardTabById in UiDao class");
+        log.debug("Calling function of getDashboardTabById in UiDao class");
         DashboardTabs dashboardTabs = (DashboardTabs) sessionFactory.getCurrentSession().get(DashboardTabs.class, tabId);
-        log.debug("End function of getDashboardTabById in UiDao class");
         return dashboardTabs;
     }
 
     public DashboardTabs deleteDashboardTab(Integer id) {
-        log.debug("Start function of deleteDashboardTab in UiDao class");
+        log.debug("Calling function of deleteDashboardTab in UiDao class");
         String queryStr = "update DashboardTabs d set status = 'Deleted'  where d.id = :dashboardTabId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("dashboardTabId", id);
         query.executeUpdate();
-        log.debug("End function of deleteDashboardTab in UiDao class");
         return null;
     }
 
     public List<TabWidget> getTabWidget(Integer tabId) {
-        log.debug("Start function of getTabWidget in UiDao class");
+        log.debug("Calling function of getTabWidget in UiDao class");
         String queryStr = "select d from TabWidget d where d.tabId.id = :tabId and (status is null or status != 'Deleted') order by widgetOrder";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("tabId", tabId);
@@ -83,167 +79,145 @@ public class UiDao extends BaseDao {
             TabWidget widget = iterator.next();
             widget.setColumns(getColumns(widget));
         }
-        log.debug("End function of getTabWidget in UiDao class");
         return tabWidgets;
     }
 
     public TabWidget getTabWidgetById(Integer widgetId) {
-        log.debug("Start function of getTabWidgetById in UiDao class");
+        log.debug("Calling function of getTabWidgetById in UiDao class");
         TabWidget tabWidget = (TabWidget) sessionFactory.getCurrentSession().get(TabWidget.class, widgetId);
         tabWidget.setColumns(getColumns(tabWidget));
-        log.debug("End function of getTabWidgetById in UiDao class");
         return tabWidget;
     }
 
     public Dashboard getDashboardById(Integer dashboardId) {
-        log.debug("Start function of getDashboardbyId in UiDao class");
-        log.debug("End function of getDashboardbyId in UiDao class");
+        log.debug("Calling function of getDashboardbyId in UiDao class");
         return (Dashboard) sessionFactory.getCurrentSession().get(Dashboard.class, dashboardId);
     }
 
     private List<WidgetColumn> getColumns(TabWidget widget) {
-        log.debug("Start function of getColumns in UiDao class");
+        log.debug("Calling function of getColumns in UiDao class");
         String queryStr = "select d from WidgetColumn d where d.widgetId = :widgetId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("widgetId", widget);
-        log.debug("End function of getColumns in UiDao class");
         return query.list();
     }
 
     public WidgetColumn addWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
-        log.debug("Start function of addWidgetColumn in UiDao class");
+        log.debug("Calling function of addWidgetColumn in UiDao class");
         widgetColumn.setWidgetId(getTabWidgetById(widgetId));
         create(widgetColumn);
-        log.debug("End function of addWidgetColumn in UiDao class");
         return widgetColumn;
     }
 
     public WidgetColumn updateWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
-        log.debug("Start function of updateWidgetColumn in UiDao class");
+        log.debug("Calling function of updateWidgetColumn in UiDao class");
         if (widgetColumn.getId() != null) {
             widgetColumn.setWidgetId(getTabWidgetById(widgetId));
             update(widgetColumn);
         }
-        log.debug("End function of updateWidgetColumn in UiDao class");
         return widgetColumn;
     }
 
     public void deleteWidgetColumns(Integer widgetId) {
-        log.debug("Start function of deleteWidgetColumns in UiDao class");
+        log.debug("Calling function of deleteWidgetColumns in UiDao class");
         String queryStr = "delete from WidgetColumn d where d.widgetId.id = :widgetId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("widgetId", widgetId);
         query.executeUpdate();
-        log.debug("End function of deleteWidgetColumns in UiDao class");
     }
 
     public TabWidget deleteTabWidget(Integer id) {
-        log.debug("Start function of deleteTabWidget in UiDao class");
+        log.debug("Calling function of deleteTabWidget in UiDao class");
         String queryStr = "delete from WidgetColumn d where d.widgetId.id = :widgetId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("widgetId", id);
         query.executeUpdate();
         delete(getTabWidgetById(id));
-        log.debug("End function of deleteTabWidget in UiDao class");
         return null;
     }
 
     public WidgetColumn deleteWidgetColumn(Integer id) {
-        log.debug("Start function of deleteWidgetColumn in UiDao class");
+        log.debug("Calling function of deleteWidgetColumn in UiDao class");
         delete(getTabWidgetColumnById(id));
-        log.debug("End function of deleteWidgetColumn in UiDao class");
         return null;
     }
 
     private WidgetColumn getTabWidgetColumnById(Integer id) {
-        log.debug("Start function of getTabWidgetColumnById in UiDao class");
+        log.debug("Calling function of getTabWidgetColumnById in UiDao class");
         WidgetColumn widgetColumn = (WidgetColumn) sessionFactory.getCurrentSession().get(WidgetColumn.class, id);
-        log.debug("End function of getTabWidgetColumnById in UiDao class");
         return widgetColumn;
     }
 
     public DashboardTabs getTabById(Integer tabId) {
-        log.debug("Start function of getTabById in UiDao class");
+        log.debug("Calling function of getTabById in UiDao class");
         DashboardTabs dashboardTab = (DashboardTabs) sessionFactory.getCurrentSession().get(DashboardTabs.class, tabId);
-        log.debug("End function of getTabById in UiDao class");
         return dashboardTab;
     }
 
     public TabWidget saveTabWidget(TabWidget tabWidget) {
-        log.debug("Start function of saveTabWidget in UiDao class");
+        log.debug("Calling function of saveTabWidget in UiDao class");
         sessionFactory.getCurrentSession().saveOrUpdate(tabWidget);
-        log.debug("End function of saveTabWidget in UiDao class");
         return tabWidget;
     }
 
     public WidgetColumn getWidgetColunmById(Integer id) {
-        log.debug("Start function of getWidgetColunmById in UiDao class");
+        log.debug("Calling function of getWidgetColunmById in UiDao class");
         WidgetColumn widgetColumn = (WidgetColumn) sessionFactory.getCurrentSession().get(WidgetColumn.class, id);
-        log.debug("End function of getWidgetColunmById in UiDao class");
         return widgetColumn;
     }
 
     public void saveOrUpdate(Object object) {
-        log.debug("Start function of saveOrUpdate in UiDao class");
+        log.debug("Calling function of saveOrUpdate in UiDao class");
         sessionFactory.getCurrentSession().saveOrUpdate(object);
-        log.debug("End function of saveOrUpdate in UiDao class");
     }
 
     public List readReportType(Integer reportTypeId) {
-        log.debug("Start function of readReportType in UiDao class");
+        log.debug("Calling function of readReportType in UiDao class");
         ReportType reportTypes = (ReportType) sessionFactory.getCurrentSession().get(ReportType.class, reportTypeId);
-        log.debug("End function of readReportType in UiDao class");
         return (List) reportTypes;
     }
 
     public Report addReport(Report report, Integer reportTypeId) {
-        log.debug("Start function of addReport in UiDao class");
+        log.debug("Calling function of addReport in UiDao class");
         report.setReportTypeId(getReportTypeById(reportTypeId));
         create(report);
-        log.debug("End function of addReport in UiDao class");
         return report;
     }
 
     private ReportType getReportTypeById(Integer reportTypeId) {
-        log.debug("Start function of getReportTypeById in UiDao class");
+        log.debug("Calling function of getReportTypeById in UiDao class");
         ReportType reportType = (ReportType) sessionFactory.getCurrentSession().get(ReportType.class, reportTypeId);
-        log.debug("End function of getReportTypeById in UiDao class");
         return reportType;
     }
 
     public Report getReportById(Integer reportId) {
-        log.debug("Start function of getReportById in UiDao class");
+        log.debug("Calling function of getReportById in UiDao class");
         Report report = (Report) sessionFactory.getCurrentSession().get(Report.class, reportId);
-        log.debug("End function of getReportById in UiDao class");
         return report;
     }
 
     public ReportWidget getReportWidgetById(Integer reportId) {
-        log.debug("Start function of getReportWidgetById in UiDao class");
+        log.debug("Calling function of getReportWidgetById in UiDao class");
         ReportWidget reportWidget = (ReportWidget) sessionFactory.getCurrentSession().get(ReportWidget.class, reportId);
-        log.debug("End function of getReportWidgetById in UiDao class");
         return reportWidget;
     }
 
     public ReportWidget saveReportWidget(ReportWidget reportWidget) {
-        log.debug("Start function of saveReportWidget in UiDao class");
-
+        log.debug("Calling function of saveReportWidget in UiDao class");
         sessionFactory.getCurrentSession().saveOrUpdate(reportWidget);
-        log.debug("End function of saveReportWidget in UiDao class");
         return reportWidget;
     }
 
     public void deleteReportColumns(Integer reportId) {
-        log.debug("Start function of deleteReportColumns in UiDao class");
+        log.debug("Calling function of deleteReportColumns in UiDao class");
         String queryStr = "delete from ReportColumn d where d.reportId.id = :reportId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", reportId);
         query.executeUpdate();
-        log.debug("End function of deleteReportColumns in UiDao class");
     }
 
     public List<ReportWidget> getReportWidget(Integer reportId) {
-        log.debug("Start function of getReportWidget in UiDao class");
+        log.debug("Calling function of getReportWidget in UiDao class");
         String queryStr = "select d from ReportWidget d where d.reportId.id = :reportId order by widgetOrder";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", reportId);
@@ -253,32 +227,29 @@ public class UiDao extends BaseDao {
             ReportWidget widget = iterator.next();
             widget.setColumns(getColumns(widget));
         }
-        log.debug("End function of getReportWidget in UiDao class");
         return reportWidgets;
     }
 
     private List<ReportColumn> getColumns(ReportWidget widget) {
-        log.debug("Start function of  getColumns in UiDao class");
+        log.debug("Calling function of  getColumns in UiDao class");
         String queryStr = "select d from ReportColumn d where d.reportId = :reportId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", widget);
-        log.debug("End function of getColumns in UiDao class");
         return query.list();
     }
 
     public ReportWidget deleteReportWidget(Integer id) {
-        log.debug("Start function of deleteReportWidget  in UiDao class");
+        log.debug("Calling function of deleteReportWidget  in UiDao class");
         String queryStr = "delete from ReportColumn d where d.reportId.id = :reportId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", id);
         query.executeUpdate();
         delete(getReportWidgetById(id));
-        log.debug("End function of deleteReportWidget in UiDao class");
         return null;
     }
 
     public String updateWidgetUpdateOrder(Integer tabId, String widgetOrder) {
-        log.debug("Start function of updateWidgetUpdateOrder in UiDao class");
+        log.debug("Calling function of updateWidgetUpdateOrder in UiDao class");
         String[] widgetOrderArray = widgetOrder.split(",");
         for (int i = 0; i < widgetOrderArray.length; i++) {
             Integer widgetId = Integer.parseInt(widgetOrderArray[i]);
@@ -286,12 +257,11 @@ public class UiDao extends BaseDao {
             tabWidget.setWidgetOrder(i);
             update(tabWidget);
         }
-        log.debug("End function of updateWidgetUpdateOrder in UiDao class");
         return "Success";
     }
 
     public String updateTabOrder(Integer dashboardId, String tabOrder) {
-        log.debug("Start function of updateTabOrder in UiDao class");
+        log.debug("Calling function of updateTabOrder in UiDao class");
         String[] tabOrderArray = tabOrder.split(",");
         for (int i = 0; i < tabOrderArray.length; i++) {
             Integer tabId = Integer.parseInt(tabOrderArray[i]);
@@ -299,12 +269,11 @@ public class UiDao extends BaseDao {
             dashboardTabs.setTabOrder(i);
             update(dashboardTabs);
         }
-        log.debug("End function of updateTabOrder in UiDao class");
         return null;
     }
 
     public String updateReportOrder(Integer reportId, String widgetOrder) {
-        log.debug("Start function of updateReportOrder in UiDao class");
+        log.debug("Calling function of updateReportOrder in UiDao class");
         String[] reportOrderArray = widgetOrder.split(",");
         for (int i = 0; i < reportOrderArray.length; i++) {
             Integer reportWidgetId = Integer.parseInt(reportOrderArray[i]);
@@ -312,12 +281,11 @@ public class UiDao extends BaseDao {
             reportWidget.setWidgetOrder(i);
             update(reportWidget);
         }
-        log.debug("End function of updateReportOrder in UiDao class");
         return null;
     }
 
     public List<Product> getDealerProduct(Integer dealerId) {
-        log.debug("Start function of getDealerProduct in UiDao class");
+        log.debug("Calling function of getDealerProduct in UiDao class");
         String queryStr = "select p from DealerProduct dp, Product p where (p.productName = dp.productName or (dp.productName='PPC' and p.productName = 'Paid Search')"
                 + " or (p.productName like 'You%Tube%' and dp.productName like 'Video')) and dp.dealerId.id = :dealerId";
 
@@ -343,8 +311,7 @@ public class UiDao extends BaseDao {
                 .addScalar("icon", StringType.INSTANCE)
                 .setResultTransformer(Transformers.aliasToBean(ProductBean.class));
         query.setParameter("dealerId", dealerId);
-        log.debug("End function of getDealerProduct in UiDao class");
         return query.list();
     }
-
+    
 }

@@ -29,74 +29,67 @@ public class DealerDao extends BaseDao {
     final static Logger log = Logger.getLogger(DealerDao.class);
 
     public Dealer findBySiteId(String siteId) {
-        log.debug("Start function of findBySiteId in DealerDao class");
+        log.debug("Calling function of findBySiteId in DealerDao class");
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where siteId = :siteId");
         query.setParameter("siteId", siteId);
         List<Dealer> dealers = query.list();
         if (dealers == null || dealers.isEmpty()) {
             return null;
         }
-        log.debug("End function of findBySiteId in DealerDao class");
         return dealers.get(0);
     }
 
     public List<Dealer> getAllowedDealerByMapId(String dealerRefId) {
-        log.debug("Start function of getAllowedDealerByMapId in DealerDao class");
+        log.debug("Calling function of getAllowedDealerByMapId in DealerDao class");
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where dealerRefId = :dealerRefId");
         query.setParameter("dealerRefId", dealerRefId);
         List<Dealer> dealers = query.list();
-        log.debug("End function of getAllowedDealerByMapId in DealerDao class");
         return dealers;
     }
 
     public List<Dealer> getAllowedDealerByGroupId(String dealerGroupId) {
-        log.debug("Start function of getAllowedDealerByGroupId in DealerDao class");
+        log.debug("Calling function of getAllowedDealerByGroupId in DealerDao class");
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where dealerGroup = :dealerGroupId");
         query.setParameter("dealerGroupId", dealerGroupId);
         List<Dealer> dealers = query.list();
-        log.debug("End function of getAllowedDealerByMapId in DealerDao class");
         return dealers;
     }
 
     public List<Dealer> getAllowedDealerByGroupName(String groupName) {
-        log.debug("Start function of getAllowedDealerByGroupName in DealerDao class");
+        log.debug("Calling function of getAllowedDealerByGroupName in DealerDao class");
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where dealerGroup = :groupName");
         query.setParameter("groupName", groupName);
         List<Dealer> dealers = query.list();
-        log.debug("End function of getAllowedDealerByGroupName in DealerDao class");
         return dealers;
     }
 
     public List<Dealer> getAllowedDealerByOemRegionId(String oemRegionId) {
-        log.debug("Start function of getAllowedDealerByOemRegionId in DealerDao class");
+        log.debug("Calling function of getAllowedDealerByOemRegionId in DealerDao class");
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where oemRegionId = :oemRegionId");
         query.setParameter("oemRegionId", oemRegionId);
         List<Dealer> dealers = query.list();
-        log.debug("End function of getAllowedDealerByOemRegionId in DealerDao class");
         return dealers;
     }
 
     public List<Dealer> getSampleDealers() {
-        log.debug("Start function of getSampleDealers in DealerDao class");
+        log.debug("Calling function of getSampleDealers in DealerDao class");
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer");
         query.setFirstResult(new Random().nextInt(1000));
         query.setMaxResults(100);
         List<Dealer> dealers = query.list();
-        log.debug("End function of getSampleDealers in DealerDao class");
         return dealers;
     }
 
     public List<Dealer> getDealerNameById(Integer id) {
-        log.debug("Start function of getDealerNameById in DealerDao class");
+        log.debug("Calling function of getDealerNameById in DealerDao class");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Dealer.findDealerNameById");
         query.setParameter("id", id);
         List<Dealer> dealers = query.list();
-        log.debug("End function of getDealerNameById in DealerDao class");
         return dealers;
     }
 
     public List<DealerAccountBean> getDealerAccountDetails(String dealerId) {
-        log.debug("Start function of getDealerAccountDetails in DealerDao class");
+        log.debug("Calling function of getDealerAccountDetails in DealerDao class");
         String queryStr = "SELECT d.dealer_ref_id dealerMapId, d.id dealerId, product_name productName, dps.account_id accountId, "
                 + " dps.profile_id profileId, source_name sourceName, "
                 + " case when ps.service_name is null then 'none' else ps.service_name end serviceName "
@@ -121,7 +114,6 @@ public class DealerDao extends BaseDao {
                 .addScalar("serviceName", StringType.INSTANCE)
                 .setResultTransformer(Transformers.aliasToBean(DealerAccountBean.class));
         query.setParameter("dealerId", dealerId);
-        log.debug("End function of getDealerAccountDetails in DealerDao class");
         return query.list();
     }
 }

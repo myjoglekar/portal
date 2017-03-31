@@ -55,14 +55,13 @@ public class CsvController {
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getCsvData(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
-        log.debug("Start function of getCsvData in CsvController class");
+        log.debug("Calling getCsvData function in CsvController class");
         try {
             String filename = request.getParameter("filename");
             return CsvDataSet.CsvDataSet(filename);
         } catch (IOException ex) {
             log.error("IOException in getCsvData function: " + ex);
         }
-        log.debug("End function of getCsvData in CsvController class");
         return null;
     }
 

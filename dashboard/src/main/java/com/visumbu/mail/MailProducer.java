@@ -21,13 +21,12 @@ public class MailProducer implements Runnable {
     }
 
     public void accept(Object obj) {
-        log.debug("Start function of accept in MailConsumer class");
+        log.debug("Calling accept function in MailConsumer class");
         try {
             queue.put(obj);
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+           log.error("InterruptedException in accept function: "+ex);
         }
-        log.debug("End function of accept in MailConsumer class");
     }
 
     @Override
