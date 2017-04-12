@@ -26,7 +26,7 @@ public class CsvDataSet {
     final static Logger log = Logger.getLogger(CsvDataSet.class);
 
     public static Map CsvDataSet(String filename) throws FileNotFoundException, IOException {
-        log.debug("Calling function of CsvDataSet in CsvDataSet class");
+        log.debug("Calling CsvDataSet function with return type Map with parameter filename "+filename);
         //Create the CSVFormat object
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         //initialize the CSVParser object
@@ -61,11 +61,11 @@ public class CsvDataSet {
     }
 
     public static void main(String[] argv) {
-        log.debug("Calling main function of CsvDataSet in CsvDataSet class");
+        log.debug("Calling main function");
         try {
             log.debug(CsvDataSet("/tmp/employees.csv"));
         } catch (IOException ex) {
-            log.error("IOException in main function in CsvDataSet class: " + ex);
+            log.error("Error in file name /tmp/employees.csv " + ex);
         }
     }
 }

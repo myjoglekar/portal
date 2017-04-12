@@ -27,7 +27,7 @@ public abstract class BaseDataSource {
     final static Logger log = Logger.getLogger(BaseDataSource.class);
 
     public static BaseDataSource getInstance(String dataSourceName) throws IOException, GeneralSecurityException {
-        log.debug("Calling function of getInstance in BaseDataSource class");
+        log.debug("Calling getInstance function with return type BaseDataSource with parameter dataSourceName "+dataSourceName);
         BaseDataSource bds = null;
         if (dataSourceName.equalsIgnoreCase("GaDataSource")) {
             return new GaDataSource();
@@ -52,9 +52,8 @@ public abstract class BaseDataSource {
     }
 
     public static List<String> getAllDataSources() {
-        log.debug("Calling function of getAllDataSources in BaseDataSource class");
+        log.debug("Calling getAllDataSources function with List contains String");
         String[] dataSourcesArr = {"BingDataSource", "CenturyInteractiveDataSource", "DealerVaultDataSource", "FacebookDataSource", "GaDataSource", "GoogleBaseDataSource", "MapDataSource", "ReviewPushDataSource", "SpeedShiftDataSource", "YestDataSource"};
-        log.debug("End function of getAllDataSources in BaseDataSource class");
         return Arrays.asList(dataSourcesArr);
         /*
          List<String> dataSources = new ArrayList<>();
@@ -77,7 +76,7 @@ public abstract class BaseDataSource {
     }
 
     public static void main(String argv[]) {
-        log.debug("Calling main function of BaseDataSource class");
+        log.debug("Calling main function");
         BaseDataSource.getAllDataSources();
     }
 }

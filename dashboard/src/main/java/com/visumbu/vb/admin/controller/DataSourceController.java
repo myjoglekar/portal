@@ -50,21 +50,21 @@ public class DataSourceController {
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getAllDataSources(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Calling getAllDataSources function in DataSourceController class");
+        log.debug("Calling getAllDataSources function with return type List");
         return dataSourceService.getAllDataSources();
     }
 
     @RequestMapping(value = "dataSet/{dataSourceName}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getAllDataSets(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName) throws IOException, GeneralSecurityException {
-        log.debug("Calling getAllDataSets function in DataSourceController class");
+        log.debug("Calling getAllDataSets function with return type List with parameter dataSourceName: "+dataSourceName);
         return dataSourceService.getAllDataSets(dataSourceName);
     }
 
     @RequestMapping(value = "dataDimensions/{dataSourceName}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getAllDataDimensions(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName) throws IOException, GeneralSecurityException {
-        log.debug("Calling getAllDataDimensions function in DataSourceController class");
+        log.debug("Calling getAllDataDimensions function with return type List with parameter dataSourceName: "+dataSourceName);
         String dataSet = request.getParameter("dataSet");
         return dataSourceService.getAllDimensions(dataSourceName, dataSet);
     }
@@ -72,7 +72,7 @@ public class DataSourceController {
     @RequestMapping(value = "data/{dataSourceName}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object getData(HttpServletRequest request, HttpServletResponse response, @PathVariable String dataSourceName) throws IOException, GeneralSecurityException {
-        log.debug("Calling getData function in DataSourceController class");
+        log.debug("Calling getData function with return type Object with parameter dataSourceName: "+dataSourceName);
         String profileId = request.getParameter("profileId");
         String dimensions = request.getParameter("dimensions");
         String dataSet = request.getParameter("dataSet");
@@ -88,7 +88,7 @@ public class DataSourceController {
     }
 
     private ReportPage getPage(HttpServletRequest request) {
-        log.debug("Calling getPage function in DataSourceController");
+        log.debug("Calling getPage function with return type ReportPage");
         ReportPage reportPage = new ReportPage();
         if (request.getParameter("page") == null && request.getParameter("count") == null) {
             return null;
@@ -111,6 +111,6 @@ public class DataSourceController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        log.error("HttpMessageNotReadableException in handle function: " + e);
+        log.error("Error handling bad request: " + e);
     }
 }

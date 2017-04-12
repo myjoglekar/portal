@@ -55,7 +55,7 @@ public class CsvController {
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getCsvData(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
-        log.debug("Calling getCsvData function in CsvController class");
+        log.debug("Calling getCsvData function with return type Map with parameter teUser"+teUser);
         try {
             String filename = request.getParameter("filename");
             return CsvDataSet.CsvDataSet(filename);
@@ -68,6 +68,6 @@ public class CsvController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        log.error("HttpMessageNotReadableException in handle function: "+e);
+        log.error("Error handling bad request: "+e);
     }
 }

@@ -29,7 +29,7 @@ public class XlsDataSet {
     final static Logger log = Logger.getLogger(XlsDataSet.class);
 
     public static Map XlsDataSet(String filename, String sheetName) throws FileNotFoundException, IOException {
-        log.debug("Calling function of XlsDataSet(String filename, String sheetName) in XlsDataSet class");
+        log.debug("Calling XlsDataSet function with return type Map with parameter filename " + filename + " and sheetName " + sheetName);
 
         Map returnMap = new HashMap();
 
@@ -72,16 +72,16 @@ public class XlsDataSet {
 
             log.debug(returnMap);
         } catch (FileNotFoundException e) {
-            log.error("FileNotFoundException in XlsDataSet function: "+e);
+            log.error("Error in file " + filename + " " + e);
         } catch (IOException e) {
-                        log.error("IOException in XlsDataSet function: "+e);
+            log.error("Error in readling file " + filename + " " + e);
 
         }
         return returnMap;
     }
 
     public static Map XlsDataSet(String filename, Integer sheetNo) throws FileNotFoundException, IOException {
-        log.debug("Calling function of XlsDataSet(String filename, Integer sheetNo) in XlsDataSet class");
+        log.debug("Calling XlsDataSet function with return type Map with parameter filename " + filename + " sheetNo " + sheetNo);
         Map returnMap = new HashMap();
 
         try {
@@ -123,15 +123,15 @@ public class XlsDataSet {
 
             log.debug(returnMap);
         } catch (FileNotFoundException e) {
-            log.error("FileNotFoundException in XlsDataSet function: " + e);
+            log.error("Error in file " + filename + " " + e);
         } catch (IOException e) {
-            log.error("IOException in XlsDataSet function: " + e);
+            log.error("Error in reading file " + filename + " " + e);
         }
         return returnMap;
     }
 
     public static Map XlsxDataSet(String filename, Integer sheetNo) throws FileNotFoundException, IOException {
-        log.debug("Calling function of XlsxDataSet(String filename, Integer sheetNo) in XlsDataSet class");
+        log.debug("Calling XlsxDataSet function with return type Map with parameters filename" + filename + " and sheetNo " + sheetNo);
         Map returnMap = new HashMap();
 
         try {
@@ -169,19 +169,19 @@ public class XlsDataSet {
             returnMap.put("data", data);
             log.debug(returnMap);
         } catch (FileNotFoundException e) {
-            log.error("FileNotFoundException in XlsxDataSet function: " + e);
+            log.error("Error in file " + filename + " " + e);
         } catch (IOException e) {
-            log.error("IOException in XlsxDataSet function: " + e);
+            log.error("Error in reading file " + filename + " " + e);
         }
         return returnMap;
     }
 
     public static void main(String[] argv) {
-        log.debug("Calling main function in XlsDataSet");
+        log.debug("Calling main function");
         try {
             XlsxDataSet("/tmp/test.xlsx", 0);
         } catch (IOException ex) {
-            log.error("IOException in main function: " + ex);
+            log.error("Error in reading file /tmp/test.xlsx " + ex);
         }
     }
 }

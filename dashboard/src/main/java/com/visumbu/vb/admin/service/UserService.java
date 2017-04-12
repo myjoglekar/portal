@@ -38,49 +38,47 @@ public class UserService {
     final static Logger log = Logger.getLogger(UserService.class);
 
     public VbUser create(VbUser teUser) {
-        log.debug("Calling function of create in UserService class - VbUser");
+        log.debug("Calling create function with return type VbUser with parameter teUser " + teUser);
         List<VbUser> users = userDao.findByUserName(teUser.getUserName());
         if (users.isEmpty()) {
             teUser.setStatus("Active");
             teUser.setCreatedTime(new Date());
             teUser.setTheme("default");
-            log.debug("End function of create in UserService class - VbUser");
             return (VbUser) userDao.create(teUser);
         }
-        log.debug("End function of create in UserService class - VbUser");
         return null;
     }
 
     public VbUser read(Integer id) {
-        log.debug("Calling function of read in UserService class - VbUser");
+        log.debug("Calling read function with return type VbUser");
         return (VbUser) userDao.read(VbUser.class, id);
     }
 
     public List<VbUser> read() {
-        log.debug("Calling function of read in UserService class - List<VbUser>");
+        log.debug("Calling read function with return type List contains VbUser Objects");
         List<VbUser> users = userDao.read();
         return users;
     }
 
     public VbUser update(VbUser teUser) {
-        log.debug("Calling function of update in UserService class - VbUser");
+        log.debug("Calling update function with return type VbUser");
         return (VbUser) userDao.update(teUser);
     }
 
     public VbUser delete(Integer id) {
-        log.debug("Calling function of delete in UserService class - VbUser");
+        log.debug("Calling delete function with return type VbUser with parameter id " + id);
         VbUser teUser = read(id);
         teUser.setStatus("Deleted");
         return update(teUser);
     }
 
     public VbUser delete(VbUser teUser) {
-        log.debug("Calling function of delete in UserService class - VbUser");
+        log.debug("Calling delete function with return type VbUser with parameter teUser " + teUser);
         return (VbUser) userDao.delete(teUser);
     }
 
     public VbUser findByUsername(String username) {
-        log.debug("Calling function of findByUsername in UserService class - VbUser");
+        log.debug("Calling findByUsername function with return type VbUser with parameter username " + username);
         List<VbUser> vbUsers = userDao.findByUserName(username);
         if (!vbUsers.isEmpty()) {
             return vbUsers.get(0);
@@ -89,17 +87,17 @@ public class UserService {
     }
 
     public SecurityAuthBean getPermissions(LoginUserBean userBean) {
-        log.debug("Calling function of getPermissions in UserService class - VbUser");
+        log.debug("Calling getPermissions function with return type securityAuthBean with parameter userBean " + userBean);
         return VbUtils.getAuthData(userBean.getUsername(), userBean.getPassword());
     }
 
     public SecurityAuthBean getPermissions(String accessToken, String userGuid) {
-        log.debug("Calling function of getPermissions in UserService class - VbUser");
+        log.debug("Calling getPermissions function with return type securityAuthBean with parameters accessToken " + accessToken + " and userGuid " + userGuid);
         return VbUtils.getAuthDataByGuid(accessToken, userGuid);
     }
 
     public LoginUserBean authenicate(LoginUserBean userBean) {
-        log.debug("Calling function of authenicate in UserService class - LoginUserBean");
+        log.debug("Calling authenicate function with return type authenicate with parameter userBean " + userBean);
         List<VbUser> users = userDao.findByUserName(userBean.getUsername());
         LoginUserBean loginUserBean = null;
         if (!users.isEmpty()) {
@@ -124,7 +122,7 @@ public class UserService {
     }
 
     private LoginUserBean toLoginUserBean(VbUser teUser) {
-        log.debug("Calling function of toLoginUserBean in UserService class");
+        log.debug("Calling toLoginUserBean function with return type LoginUserBean with parameter teUser " + teUser);
         LoginUserBean userBean = new LoginUserBean();
         userBean.setUsername(teUser.getUserName());
         userBean.setFailLoginCount(teUser.getFailedLoginCount());
@@ -132,33 +130,33 @@ public class UserService {
         return userBean;
     }
 
-    public List<Dealer> getAllowedDealerByMapId(String delaerRefId) {
-        log.debug("Calling function of getAllowedDealerByMapId in UserService class");
-        return dealerDao.getAllowedDealerByMapId(delaerRefId);
+    public List<Dealer> getAllowedDealerByMapId(String delearRefId) {
+        log.debug("Calling getAllowedDealerByMapId function with return type List contains Dealer objects with parameter teUser " + delearRefId);
+        return dealerDao.getAllowedDealerByMapId(delearRefId);
     }
 
     public List<Dealer> getAllowedDealerByGroupId(String groupId) {
-        log.debug("Calling function of getAllowedDealerByGroupId in UserService class");
+        log.debug("Calling getAllowedDealerByGroupId function with return type List contains Dealer objects with parameter groupId " + groupId);
         return dealerDao.getAllowedDealerByGroupId(groupId);
     }
 
     public List<Dealer> getAllowedDealerByGroupName(String groupName) {
-        log.debug("Calling function of getAllowedDealerByGroupName in UserService class");
+        log.debug("Calling getAllowedDealerByGroupName function with return type List contains Dealer objects with parameter groupName " + groupName);
         return dealerDao.getAllowedDealerByGroupName(groupName);
     }
 
     public List<Dealer> getAllowedDealerByOemRegionId(String oemRegionId) {
-        log.debug("Calling function of getAllowedDealerByOemRegionId in UserService class");
+        log.debug("Calling getAllowedDealerByOemRegionId function with return type List contains Dealer objects with parameter oemRegionId " + oemRegionId);
         return dealerDao.getAllowedDealerByOemRegionId(oemRegionId);
     }
 
     public List<Dealer> getSampleDealers() {
-        log.debug("Calling function of getSampleDealers in UserService class");
+        log.debug("Calling getSampleDealers function with return type List");
         return dealerDao.getSampleDealers();
     }
 
     public VbUser createNewUser(SecurityAuthBean authData) {
-        log.debug("Calling function of createNewUser in UserService class");
+        log.debug("Calling createNewUser function with return type VbUser with parameter authData " + authData);
         String userId = authData.getUserId();
         String userName = authData.getUserName();
         List<VbUser> users = userDao.findByUserName(userName);

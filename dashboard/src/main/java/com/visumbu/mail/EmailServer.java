@@ -41,11 +41,13 @@ public class EmailServer {
     final static Logger log = Logger.getLogger(EmailServer.class);
 
     public EmailServer(String test) {
+        log.debug("Calling EmailServer constructor with parameter " + test);
         this.HOST_NAME = "mail.nmsworks.co.in";
         this.PORT = 25;
     }
 
     public EmailServer(EmailConfig emailConfig) {
+        log.debug("Calling EmailSever constructor with parameter " + emailConfig);
         this.USER_NAME = emailConfig.getUsername();
         this.PASSWORD = emailConfig.getPassword();
         this.HOST_NAME = emailConfig.getServerIp();
@@ -53,13 +55,13 @@ public class EmailServer {
     }
 
     public void setFrom(String fromAddress) {
-        log.debug("Calling setFrom function in EmailServer class");
+        log.debug("Calling setFrom function by passing " + fromAddress + " as parameter");
         FROM_ADDRESS = fromAddress;
     }
 
     public static void main(String[] args) {
         EmailServer email = new EmailServer("test");
-        log.debug("Calling main function in EmailServer class");
+        log.debug("Calling main function");
         //Sending test email
         String[] attachFiles = {"d:\\work\\SeacomFiles\\1425457085123-1-TT USEr.txt", "d:\\work\\SeacomFiles\\1425464768539-1-logo.png"};
         email.createAndSendEmail("varghees@gmail.com", "varghees@netphenix.com", "Test email subject",
@@ -68,7 +70,7 @@ public class EmailServer {
 
     public void createAndSendEmail(String emailAddressTo, String emailAddressCc,
             String msgSubject, String msgText, String[] attachments) {
-        log.debug("Calling createAndSendEmail function with attachments in EmailServer class");
+        log.debug("Calling createAndSendEmail function by passing emailAddressTo " + emailAddressTo + " emailAddressCc " + emailAddressCc + " msgSubject " + msgSubject + " msgText " + msgText + " and attachments " + attachments + " as parameters");
         String[] emailArray = emailAddressTo.split(",");
         List<String> emailArrayList = new ArrayList<>();
         for (int i = 0; i < emailArray.length; i++) {
@@ -110,16 +112,16 @@ public class EmailServer {
             this.attachFiles = attachments;
         }
         sendEmailMessage();
-        log.debug("End function of createAndSendEmail in EmailSever class");
     }
 
     public void createAndSendEmail(String emailAddressTo, String emailAddressCc,
             String msgSubject, String msgText) {
+        log.debug("Calling createAndSendEmail function by passing emailAddressTo " + emailAddressTo + " emailAddressCc " + emailAddressCc + " msgSubject " + msgSubject + " and msgText " + msgText + " as parameters");
         this.createAndSendEmail(emailAddressTo, emailAddressCc, msgSubject, msgText, null);
     }
 
     private void sendEmailMessage() {
-        log.debug("Calling sendEmailMessage function in EmailServer class");
+        log.debug("Calling sendEmailMessage function");
         log.debug("TO --> " + emailAddressTo);
         log.debug("CC --> " + emailAddressCc);
         log.debug("Subject --> " + msgSubject);
@@ -165,14 +167,17 @@ public class EmailServer {
     }
 
     public void setEmailAddressTo(String emailAddressTo) {
+        log.debug("Calling setEmailAddressTo function with parameter emailAddressTo " + emailAddressTo);
         this.emailAddressTo = emailAddressTo;
     }
 
     public void setSubject(String subject) {
+        log.debug("Calling setSubject function with parameter subject " + subject);
         this.msgSubject = subject;
     }
 
     public void setMessageText(String msgText) {
+        log.debug("Calling setMessageText function with parameter msgText " + msgText);
         this.msgText = msgText;
     }
 }

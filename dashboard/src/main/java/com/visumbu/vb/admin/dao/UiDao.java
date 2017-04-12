@@ -38,7 +38,7 @@ public class UiDao extends BaseDao {
     final static Logger log = Logger.getLogger(UiDao.class);
 
     public List<Dashboard> getDashboards(VbUser user) {
-        log.debug("Calling function of getDashboards in UiDao class");
+        log.debug("Calling getDashboards function with return type List contains Dashboard objects with parameter user " + user);
         String queryStr = "select d from Dashboard d where d.userId = :user";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("user", user);
@@ -46,7 +46,7 @@ public class UiDao extends BaseDao {
     }
 
     public List<DashboardTabs> getDashboardTabs(Integer dbId) {
-        log.debug("Calling function of getDashboardTabs in UiDao class");
+        log.debug("Calling getDashboardTabs function with return type List contains DashboardTabs Objects with parameter dbId " + dbId);
         String queryStr = "select d from DashboardTabs d where (d.status is null or d.status != 'Deleted') and d.dashboardId.id = :dashboardId order by tabOrder";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("dashboardId", dbId);
@@ -54,13 +54,13 @@ public class UiDao extends BaseDao {
     }
 
     public DashboardTabs getDashboardTabById(Integer tabId) {
-        log.debug("Calling function of getDashboardTabById in UiDao class");
+        log.debug("Calling getDashboardTabById function with return type DashboardTabs with parameter tabId " + tabId);
         DashboardTabs dashboardTabs = (DashboardTabs) sessionFactory.getCurrentSession().get(DashboardTabs.class, tabId);
         return dashboardTabs;
     }
 
     public DashboardTabs deleteDashboardTab(Integer id) {
-        log.debug("Calling function of deleteDashboardTab in UiDao class");
+        log.debug("Calling deleteDashboardTab function with return type DashboardTabs with parameter id " + id);
         String queryStr = "update DashboardTabs d set status = 'Deleted'  where d.id = :dashboardTabId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("dashboardTabId", id);
@@ -69,7 +69,7 @@ public class UiDao extends BaseDao {
     }
 
     public List<TabWidget> getTabWidget(Integer tabId) {
-        log.debug("Calling function of getTabWidget in UiDao class");
+        log.debug("Calling getTabWidget function with return type List contains TabWidget as Objects with parameter tabId " + tabId);
         String queryStr = "select d from TabWidget d where d.tabId.id = :tabId and (status is null or status != 'Deleted') order by widgetOrder";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("tabId", tabId);
@@ -83,19 +83,19 @@ public class UiDao extends BaseDao {
     }
 
     public TabWidget getTabWidgetById(Integer widgetId) {
-        log.debug("Calling function of getTabWidgetById in UiDao class");
+        log.debug("Calling getTabWidgetById function with return type TabWidget with parameter widgetId " + widgetId);
         TabWidget tabWidget = (TabWidget) sessionFactory.getCurrentSession().get(TabWidget.class, widgetId);
         tabWidget.setColumns(getColumns(tabWidget));
         return tabWidget;
     }
 
     public Dashboard getDashboardById(Integer dashboardId) {
-        log.debug("Calling function of getDashboardbyId in UiDao class");
+        log.debug("Calling getDashboardbyId function with return type Dashboard with parameter dashboardId " + dashboardId);
         return (Dashboard) sessionFactory.getCurrentSession().get(Dashboard.class, dashboardId);
     }
 
     private List<WidgetColumn> getColumns(TabWidget widget) {
-        log.debug("Calling function of getColumns in UiDao class");
+        log.debug("Calling getColumns function with return type List contains WidgetColumn Objects with parameter widget " + widget);
         String queryStr = "select d from WidgetColumn d where d.widgetId = :widgetId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("widgetId", widget);
@@ -103,14 +103,14 @@ public class UiDao extends BaseDao {
     }
 
     public WidgetColumn addWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
-        log.debug("Calling function of addWidgetColumn in UiDao class");
+        log.debug("Calling addWidgetColumn function with return type WidgetColumn with parameter widgetid " + widgetId + " widgetColumn " + widgetColumn);
         widgetColumn.setWidgetId(getTabWidgetById(widgetId));
         create(widgetColumn);
         return widgetColumn;
     }
 
     public WidgetColumn updateWidgetColumn(Integer widgetId, WidgetColumn widgetColumn) {
-        log.debug("Calling function of updateWidgetColumn in UiDao class");
+        log.debug("Calling updateWidgetColumn function with return type WidgetColumn with parameter widgetId " + widgetId + " widgetColumn " + widgetColumn);
         if (widgetColumn.getId() != null) {
             widgetColumn.setWidgetId(getTabWidgetById(widgetId));
             update(widgetColumn);
@@ -119,7 +119,7 @@ public class UiDao extends BaseDao {
     }
 
     public void deleteWidgetColumns(Integer widgetId) {
-        log.debug("Calling function of deleteWidgetColumns in UiDao class");
+        log.debug("Calling deleteWidgetColumns function with parameter widgetId" + widgetId);
         String queryStr = "delete from WidgetColumn d where d.widgetId.id = :widgetId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("widgetId", widgetId);
@@ -127,7 +127,7 @@ public class UiDao extends BaseDao {
     }
 
     public TabWidget deleteTabWidget(Integer id) {
-        log.debug("Calling function of deleteTabWidget in UiDao class");
+        log.debug("Calling deleteTabWidget function with return type TabWidget with parameter id " + id);
         String queryStr = "delete from WidgetColumn d where d.widgetId.id = :widgetId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("widgetId", id);
@@ -137,79 +137,79 @@ public class UiDao extends BaseDao {
     }
 
     public WidgetColumn deleteWidgetColumn(Integer id) {
-        log.debug("Calling function of deleteWidgetColumn in UiDao class");
+        log.debug("Calling deleteWidgetColumn function with return type Widgetcolumn with parameter id " + id);
         delete(getTabWidgetColumnById(id));
         return null;
     }
 
     private WidgetColumn getTabWidgetColumnById(Integer id) {
-        log.debug("Calling function of getTabWidgetColumnById in UiDao class");
+        log.debug("Calling getTabWidgetColumnById function with return type WidgetColumn with parameter id " + id);
         WidgetColumn widgetColumn = (WidgetColumn) sessionFactory.getCurrentSession().get(WidgetColumn.class, id);
         return widgetColumn;
     }
 
     public DashboardTabs getTabById(Integer tabId) {
-        log.debug("Calling function of getTabById in UiDao class");
+        log.debug("Calling getTabById function with return type DashboardTabs with parameter tabId " + tabId);
         DashboardTabs dashboardTab = (DashboardTabs) sessionFactory.getCurrentSession().get(DashboardTabs.class, tabId);
         return dashboardTab;
     }
 
     public TabWidget saveTabWidget(TabWidget tabWidget) {
-        log.debug("Calling function of saveTabWidget in UiDao class");
+        log.debug("Calling saveTabWidget function with return type TabWiget with parameter tabWidget " + tabWidget);
         sessionFactory.getCurrentSession().saveOrUpdate(tabWidget);
         return tabWidget;
     }
 
     public WidgetColumn getWidgetColunmById(Integer id) {
-        log.debug("Calling function of getWidgetColunmById in UiDao class");
+        log.debug("Calling getWidgetColunmById function with return type WidgetColumn with parameter id " + id);
         WidgetColumn widgetColumn = (WidgetColumn) sessionFactory.getCurrentSession().get(WidgetColumn.class, id);
         return widgetColumn;
     }
 
     public void saveOrUpdate(Object object) {
-        log.debug("Calling function of saveOrUpdate in UiDao class");
+        log.debug("Calling saveOrUpdate function with parameter object " + object);
         sessionFactory.getCurrentSession().saveOrUpdate(object);
     }
 
     public List readReportType(Integer reportTypeId) {
-        log.debug("Calling function of readReportType in UiDao class");
+        log.debug("Calling readReportType function with return type List with parameter reportTypeId " + reportTypeId);
         ReportType reportTypes = (ReportType) sessionFactory.getCurrentSession().get(ReportType.class, reportTypeId);
         return (List) reportTypes;
     }
 
     public Report addReport(Report report, Integer reportTypeId) {
-        log.debug("Calling function of addReport in UiDao class");
+        log.debug("Calling addReport function with return type Report with parameter report " + report + " reportTypeId " + reportTypeId);
         report.setReportTypeId(getReportTypeById(reportTypeId));
         create(report);
         return report;
     }
 
     private ReportType getReportTypeById(Integer reportTypeId) {
-        log.debug("Calling function of getReportTypeById in UiDao class");
+        log.debug("Calling getReportTypeById function with return type ReportType with parameter reportTypeId " + reportTypeId);
         ReportType reportType = (ReportType) sessionFactory.getCurrentSession().get(ReportType.class, reportTypeId);
         return reportType;
     }
 
     public Report getReportById(Integer reportId) {
-        log.debug("Calling function of getReportById in UiDao class");
+        log.debug("Calling getReportById function with return type Report with parameter reportId " + reportId);
         Report report = (Report) sessionFactory.getCurrentSession().get(Report.class, reportId);
         return report;
     }
 
     public ReportWidget getReportWidgetById(Integer reportId) {
-        log.debug("Calling function of getReportWidgetById in UiDao class");
+        log.debug("Calling getReportWidgetById function with return type ReportWidget with parameter reportId " + reportId);
         ReportWidget reportWidget = (ReportWidget) sessionFactory.getCurrentSession().get(ReportWidget.class, reportId);
         return reportWidget;
     }
 
     public ReportWidget saveReportWidget(ReportWidget reportWidget) {
-        log.debug("Calling function of saveReportWidget in UiDao class");
+        log.debug("Calling saveReportWidget function with return type ReportWidget with parameter reportWidget " + reportWidget);
         sessionFactory.getCurrentSession().saveOrUpdate(reportWidget);
         return reportWidget;
     }
 
     public void deleteReportColumns(Integer reportId) {
-        log.debug("Calling function of deleteReportColumns in UiDao class");
+        log.debug("Calling deleteReportColumns function with parameter reportId "+reportId);
         String queryStr = "delete from ReportColumn d where d.reportId.id = :reportId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", reportId);
@@ -217,7 +217,7 @@ public class UiDao extends BaseDao {
     }
 
     public List<ReportWidget> getReportWidget(Integer reportId) {
-        log.debug("Calling function of getReportWidget in UiDao class");
+        log.debug("Calling getReportWidget function with return type List as ReportWidget object with parameter reportId " +reportId);
         String queryStr = "select d from ReportWidget d where d.reportId.id = :reportId order by widgetOrder";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", reportId);
@@ -231,7 +231,7 @@ public class UiDao extends BaseDao {
     }
 
     private List<ReportColumn> getColumns(ReportWidget widget) {
-        log.debug("Calling function of  getColumns in UiDao class");
+        log.debug("Calling getColumns function with return type List as ReportColumn object with parameter widget " +widget);
         String queryStr = "select d from ReportColumn d where d.reportId = :reportId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", widget);
@@ -239,7 +239,7 @@ public class UiDao extends BaseDao {
     }
 
     public ReportWidget deleteReportWidget(Integer id) {
-        log.debug("Calling function of deleteReportWidget  in UiDao class");
+        log.debug("Calling deleteReportWidget function with return type ReportWidget with parameter id " +id);
         String queryStr = "delete from ReportColumn d where d.reportId.id = :reportId";
         Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("reportId", id);
@@ -249,7 +249,7 @@ public class UiDao extends BaseDao {
     }
 
     public String updateWidgetUpdateOrder(Integer tabId, String widgetOrder) {
-        log.debug("Calling function of updateWidgetUpdateOrder in UiDao class");
+        log.debug("Calling updateWidgetUpdateOrder function with return type String with parameters tabId " +tabId+" and widgetOrder "+widgetOrder);
         String[] widgetOrderArray = widgetOrder.split(",");
         for (int i = 0; i < widgetOrderArray.length; i++) {
             Integer widgetId = Integer.parseInt(widgetOrderArray[i]);
@@ -261,7 +261,7 @@ public class UiDao extends BaseDao {
     }
 
     public String updateTabOrder(Integer dashboardId, String tabOrder) {
-        log.debug("Calling function of updateTabOrder in UiDao class");
+        log.debug("Calling updateTabOrder function with return type String with parameters dashboardId "+dashboardId+" and tabOrder "+tabOrder);
         String[] tabOrderArray = tabOrder.split(",");
         for (int i = 0; i < tabOrderArray.length; i++) {
             Integer tabId = Integer.parseInt(tabOrderArray[i]);
@@ -273,7 +273,7 @@ public class UiDao extends BaseDao {
     }
 
     public String updateReportOrder(Integer reportId, String widgetOrder) {
-        log.debug("Calling function of updateReportOrder in UiDao class");
+        log.debug("Calling updateReportOrder function with return type String with parameters reportId "+reportId+" and widgetOrder "+widgetOrder);
         String[] reportOrderArray = widgetOrder.split(",");
         for (int i = 0; i < reportOrderArray.length; i++) {
             Integer reportWidgetId = Integer.parseInt(reportOrderArray[i]);
@@ -285,7 +285,7 @@ public class UiDao extends BaseDao {
     }
 
     public List<Product> getDealerProduct(Integer dealerId) {
-        log.debug("Calling function of getDealerProduct in UiDao class");
+        log.debug("Calling getDealerProduct function with return type List contains Product objects with parameter dealerId "+dealerId);
         String queryStr = "select p from DealerProduct dp, Product p where (p.productName = dp.productName or (dp.productName='PPC' and p.productName = 'Paid Search')"
                 + " or (p.productName like 'You%Tube%' and dp.productName like 'Video')) and dp.dealerId.id = :dealerId";
 
@@ -313,5 +313,5 @@ public class UiDao extends BaseDao {
         query.setParameter("dealerId", dealerId);
         return query.list();
     }
-    
+
 }

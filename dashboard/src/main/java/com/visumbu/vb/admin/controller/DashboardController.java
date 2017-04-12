@@ -40,6 +40,6 @@ public class DashboardController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        log.error("HttpMessageNotReadableException in handle function: " + e);
+        log.error("Error handling bad request: " + e);
     }
 }

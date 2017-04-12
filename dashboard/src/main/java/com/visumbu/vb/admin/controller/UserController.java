@@ -54,42 +54,42 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     VbUser create(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
-        log.debug("Calling create function in UserController class - VbUser");
+        log.debug("Calling create function with return type VbUser by passing VbUser "+teUser+" as parameter");
         return userService.create(teUser);
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     VbUser update(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
-        log.debug("Calling update function in UserController class - VbUser");
+        log.debug("Calling update function with return type VbUser by passing VbUser "+teUser+" as parameter");
         return userService.update(teUser);
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List read(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Calling read function in UserController class");
+        log.debug("Calling read function with return type List");
         return userService.read();
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     VbUser read(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
-        log.debug("Calling read function using id in UserController class - VbUser");
+        log.debug("Calling read function with return type VbUser by passing id "+id+" as parameter");
         return userService.read(id);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     VbUser delete(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
-        log.debug("Calling delete function using id in UserController class - VbUser");
+        log.debug("Calling delete function with return type VbUser by passing id "+id+" as parameter");
         return userService.delete(id);
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     Map login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
-        log.debug("Calling login function in UserController class");
+        log.debug("Calling login function with return type Map by passing loginUserBean "+loginUserBean+" as parameter");
         SecurityAuthBean authData = userService.getPermissions(loginUserBean);
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
         HttpSession session = request.getSession();
@@ -116,7 +116,7 @@ public class UserController {
     @RequestMapping(value = "allowedDealers", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List<Dealer> allowedDealers(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Calling function of allowedDealer in UserController class");
+        log.debug("Calling allowedDealers function with return type List contains Dealer Objects");
         HttpSession session = request.getSession();
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
@@ -130,12 +130,12 @@ public class UserController {
     @RequestMapping(value = "sampleDealers", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List<Dealer> sampleDealers(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Calling function of sampleDealers in UserController class");
+        log.debug("Calling sampleDealers function with return type List contains Dealer Objects");
         return userService.getSampleDealers();
     }
 
     private List<Dealer> getDealerBySecuityBean(SecurityAuthBean authData) {
-        log.debug("Calling function of getDealerBySecuityBean in UserController class");
+        log.debug("Calling getDealerBySecuityBean function with return type List contains Dealer Objects by passing authData "+authData+" as parameter");
         List<Dealer> returnList = new ArrayList<>();
         List<SecurityAuthRoleBean> roles = authData.getRoles();
         for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
@@ -167,7 +167,7 @@ public class UserController {
     @RequestMapping(value = "authData", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getAuthData(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Calling function of getAuthData in UserController class");
+        log.debug("Calling getAuthData function with return type Map");
         HttpSession session = request.getSession();
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
@@ -195,7 +195,7 @@ public class UserController {
     @RequestMapping(value = "logout", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.debug("Calling function of logout in UserController class");
+        log.debug("Calling logout function");
         HttpSession session = request.getSession();
         session.invalidate();
         response.sendRedirect("../../login.html");
@@ -204,7 +204,7 @@ public class UserController {
     @RequestMapping(value = "datasets", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getDataSets(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.debug("Calling function of getDataSets in UserController class");
+        log.debug("Calling getDataSets function with return type Map");
         Map returnMap = new LinkedHashMap();
         returnMap.put("Overall", getOverallDataSets());
         returnMap.put("Paid Search", getPaidDataSets());
@@ -219,7 +219,7 @@ public class UserController {
     }
 
     private List<UrlBean> getOverallDataSets() {
-        log.debug("Calling function of getOverallDataSets in UserController class");
+        log.debug("Calling getOverallDataSets function with return type List contains UrlBean as objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/overall/overallPerformance/summary/day/0;Summary",
@@ -239,7 +239,7 @@ public class UserController {
     }
 
     private List<UrlBean> getPaidDataSets() {
-        log.debug("Calling function of getPaidDataSets in UserController class");
+        log.debug("Calling getPaidDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/paid/accountPerformance;Account Performance",
@@ -263,7 +263,7 @@ public class UserController {
     }
 
     private List<UrlBean> getDynamicDisplayDataSets() {
-        log.debug("Calling function of getDynamicDisplayDataSets in UserController class");
+        log.debug("Calling getDynamicDisplayDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/dynamicDisplay/overallPerformance;Overall Performance",
@@ -278,7 +278,7 @@ public class UserController {
     }
 
     private List<UrlBean> getDisplayDataSets() {
-        log.debug("Calling function of getDisplayDataSets in UserController class");
+        log.debug("Calling getDisplayDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/display/geoPerformance;Geo Performance",
@@ -298,7 +298,7 @@ public class UserController {
     }
 
     private List<UrlBean> getVideoDataSets() {
-        log.debug("Calling function of getVideoDataSets in UserController class");
+        log.debug("Calling getVideoDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/video/campaignDevicePerformance;Campaign Device Performance",
@@ -318,7 +318,7 @@ public class UserController {
     }
 
     private List<UrlBean> getSeoDataSets() {
-        log.debug("Calling function of getSeoDataSets in UserController class");
+        log.debug("Calling getSeoDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/seo/accountPerformance;Account Performance",
@@ -337,7 +337,7 @@ public class UserController {
     }
 
     private List<UrlBean> getPaidSocialDataSets() {
-        log.debug("Calling function of getPaidSocialDataSets in UserController class");
+        log.debug("Calling getPaidSocialDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/paidSocial/accountPerformance;Account Performance",
@@ -357,7 +357,7 @@ public class UserController {
     }
 
     private List<UrlBean> getSocialImpactDataSets() {
-        log.debug("Calling function of getSocialImpactDataSets in UserController class");
+        log.debug("Calling getSocialImpactDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/socialImpact/postPerformance;Post Performance",
@@ -373,7 +373,7 @@ public class UserController {
     }
 
     private List<UrlBean> getReviewPushDataSets() {
-        log.debug("Calling function of getReviewPushDataSets in UserController class");
+        log.debug("Calling getReviewPushDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/reviewPush/reviews;Reviews",
@@ -391,6 +391,6 @@ public class UserController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        log.error("HttpMessageNotReadableException in handle function: " + e);
+        log.error("Error handling bad request: " + e);
     }
 }

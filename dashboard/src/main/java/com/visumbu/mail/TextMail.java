@@ -21,11 +21,12 @@ public class TextMail {
     final static Logger log = Logger.getLogger(TextMail.class);
 
     public TextMail(MailProperties props) {
+        log.debug("Calling TextMail function with parameter " + props);
         this.props = props;
     }
 
     public String sendMail() {
-        log.debug("Calling sendMail function in TextMail class");
+        log.debug("Calling sendMail function with return type String");
 
         try {
             Email email = new SimpleEmail();
@@ -40,7 +41,7 @@ public class TextMail {
             email.addCc(props.getCc());
             return email.send();
         } catch (EmailException ex) {
-            log.error("EmailException in sendMail function: " + ex);
+            log.error("Error in setting of mail properties " + props + " which catch " + ex);
         }
         return "Not Sent";
     }

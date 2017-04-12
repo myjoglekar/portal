@@ -24,7 +24,7 @@ public class HtmlMail {
     }
 
     public String sendMail() {
-        log.debug("Calling sendMail function in HtmlMail class");
+        log.debug("Calling sendMail function");
         try {
             // Create the email message
             HtmlEmail email = new HtmlEmail();
@@ -75,7 +75,7 @@ public class HtmlMail {
             return email.send();
 
         } catch (EmailException ex) {
-            log.error("EmailException in sendMail function: "+ex);
+            log.error("Error in mail properties " + props + " which catch " + ex);
         }
         return "Not Sent";
     }

@@ -29,7 +29,7 @@ public class DealerDao extends BaseDao {
     final static Logger log = Logger.getLogger(DealerDao.class);
 
     public Dealer findBySiteId(String siteId) {
-        log.debug("Calling function of findBySiteId in DealerDao class");
+        log.debug("Calling findBySiteId function with return type Dealer with parameter siteId "+siteId);
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where siteId = :siteId");
         query.setParameter("siteId", siteId);
         List<Dealer> dealers = query.list();
@@ -40,7 +40,7 @@ public class DealerDao extends BaseDao {
     }
 
     public List<Dealer> getAllowedDealerByMapId(String dealerRefId) {
-        log.debug("Calling function of getAllowedDealerByMapId in DealerDao class");
+        log.debug("Calling getAllowedDealerByMapId function with return type List contains Dealer objects with parameter dealerRefId "+dealerRefId);
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where dealerRefId = :dealerRefId");
         query.setParameter("dealerRefId", dealerRefId);
         List<Dealer> dealers = query.list();
@@ -48,7 +48,7 @@ public class DealerDao extends BaseDao {
     }
 
     public List<Dealer> getAllowedDealerByGroupId(String dealerGroupId) {
-        log.debug("Calling function of getAllowedDealerByGroupId in DealerDao class");
+        log.debug("Calling getAllowedDealerByGroupId function with return type List contains Dealer objects with parameter dealerGroupId "+dealerGroupId);
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where dealerGroup = :dealerGroupId");
         query.setParameter("dealerGroupId", dealerGroupId);
         List<Dealer> dealers = query.list();
@@ -56,7 +56,7 @@ public class DealerDao extends BaseDao {
     }
 
     public List<Dealer> getAllowedDealerByGroupName(String groupName) {
-        log.debug("Calling function of getAllowedDealerByGroupName in DealerDao class");
+        log.debug("Calling getAllowedDealerByGroupName function with return type List contains Dealer objects with parameter groupName "+groupName);
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where dealerGroup = :groupName");
         query.setParameter("groupName", groupName);
         List<Dealer> dealers = query.list();
@@ -64,7 +64,7 @@ public class DealerDao extends BaseDao {
     }
 
     public List<Dealer> getAllowedDealerByOemRegionId(String oemRegionId) {
-        log.debug("Calling function of getAllowedDealerByOemRegionId in DealerDao class");
+        log.debug("Calling getAllowedDealerByOemRegionId function with return type List contains Dealer objects with parameter oemRegionId "+oemRegionId);
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer where oemRegionId = :oemRegionId");
         query.setParameter("oemRegionId", oemRegionId);
         List<Dealer> dealers = query.list();
@@ -72,7 +72,7 @@ public class DealerDao extends BaseDao {
     }
 
     public List<Dealer> getSampleDealers() {
-        log.debug("Calling function of getSampleDealers in DealerDao class");
+        log.debug("Calling getSampleDealers function with return type List contains Dealer objects");
         Query query = sessionFactory.getCurrentSession().createQuery("from Dealer");
         query.setFirstResult(new Random().nextInt(1000));
         query.setMaxResults(100);
@@ -81,7 +81,7 @@ public class DealerDao extends BaseDao {
     }
 
     public List<Dealer> getDealerNameById(Integer id) {
-        log.debug("Calling function of getDealerNameById in DealerDao class");
+        log.debug("Calling getDealerNameById function with return type List contains Dealer objects with parameter id "+id);
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Dealer.findDealerNameById");
         query.setParameter("id", id);
         List<Dealer> dealers = query.list();
@@ -89,7 +89,7 @@ public class DealerDao extends BaseDao {
     }
 
     public List<DealerAccountBean> getDealerAccountDetails(String dealerId) {
-        log.debug("Calling function of getDealerAccountDetails in DealerDao class");
+        log.debug("Calling getDealerAccountDetails function with return type List contains DealerAccountBean objects with parameter dealerId "+dealerId);
         String queryStr = "SELECT d.dealer_ref_id dealerMapId, d.id dealerId, product_name productName, dps.account_id accountId, "
                 + " dps.profile_id profileId, source_name sourceName, "
                 + " case when ps.service_name is null then 'none' else ps.service_name end serviceName "

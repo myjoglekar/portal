@@ -23,14 +23,14 @@ public class FontTest {
     public static final String FONT = "E:\\work\\vizboard\\dashboard\\src\\main\\webapp\\static\\lib\\fonts\\proxima\\proximanova-reg-webfont.woff";
 final static Logger log = Logger.getLogger(FontTest.class);
     public static void main(String[] args) throws IOException, DocumentException {
-        log.debug("Calling main function in FontTest class");
+        log.debug("Calling main function");
         File file = new File(DEST);
         file.getParentFile().mkdirs();
         new FontTest().createPdf(DEST);
     }
 
     public void createPdf(String dest) throws IOException, DocumentException {
-                log.debug("Calling createpdf function in FontTest class");
+                log.debug("Calling createpdf function with parameter dest "+dest);
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream(dest));
         document.open();

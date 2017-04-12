@@ -33,20 +33,20 @@ public class UserDao extends BaseDao {
     final static Logger log = Logger.getLogger(UserDao.class);
 
     public List<VbUser> read() {
-        log.debug("Calling function of read in UserDao class");
+        log.debug("Calling read function with return type List contains VbUser objects");
         Query query = sessionFactory.getCurrentSession().createQuery("from VbUser where status is null or status != 'Deleted'");
         return query.list();
     }
 
     public List<VbUser> findByUserName(String username) {
-        log.debug("Calling function of findByUserName in UserDao class");
+        log.debug("Calling findByUserName function with return type List contains VbUser Objects with parameter username " + username);
         Query query = sessionFactory.getCurrentSession().getNamedQuery("VbUser.findByUserName");
         query.setParameter("userName", username);
         return query.list();
     }
 
     public VbUser createNewUser(String userId, String userName, String fullName) {
-        log.debug("Calling function of createNewUser in UserDao class");
+        log.debug("Calling createNewUser function with return type VbUser with parameters userId " + userId + " userName " + userName + " and fullName " + fullName);
         VbUser user = new VbUser();
         user.setUserRefId(userId);
         user.setUserName(userName);
@@ -56,13 +56,12 @@ public class UserDao extends BaseDao {
     }
 
     public void initUser(VbUser user) {
-        log.debug("Calling function of initUser in UserDao class");
+        log.debug("Calling initUser function with parameter user " + user);
         List<Dashboard> dashboards = initDashboardItems(user);
-
     }
 
     private List<Dashboard> initDashboardItems(VbUser user) {
-        log.debug("Calling function of initDashboardItems in UserDao class");
+        log.debug("Calling initDashboardItems function with parameter user " + user);
         List<Dashboard> returnList = new ArrayList<>();
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Dashboard.findByUserId");
         query.setParameter("userId", 1);
@@ -72,8 +71,10 @@ public class UserDao extends BaseDao {
             Dashboard newObject = new Dashboard();
             try {
                 BeanUtils.copyProperties(newObject, dashboard);
-            } catch (IllegalAccessException | InvocationTargetException ex) {
-                log.error("Exception in initDashboardItems function: " + ex);
+            } catch (InvocationTargetException ex) {
+                log.error("Error in dashboard " + dashboard + " and object " + newObject + " " + ex);
+            } catch (IllegalAccessException ex) {
+                log.error("Error in accessing dashboard " + dashboard + " and object " + newObject + " " + ex);
             }
             newObject.setId(null);
             newObject.setUserId(user);
@@ -86,7 +87,7 @@ public class UserDao extends BaseDao {
     }
 
     private List<DashboardTabs> initDashboardTabs(VbUser user, Dashboard oldDashboard, Dashboard newDashboard) {
-        log.debug("Calling function of initDashboardTabs in UserDao class");
+        log.debug("Calling initDashboardTabs function with return type List contains DashboardTabs Object with parameters user "+user+" oldDashboard "+oldDashboard+" and newDashboard "+newDashboard);
         List<DashboardTabs> returnList = new ArrayList<>();
         Query query = sessionFactory.getCurrentSession().getNamedQuery("DashboardTabs.findByDashboard");
         query.setParameter("dashboardId", oldDashboard);
@@ -96,8 +97,10 @@ public class UserDao extends BaseDao {
             DashboardTabs newObject = new DashboardTabs();
             try {
                 BeanUtils.copyProperties(newObject, dashboardTab);
-            } catch (IllegalAccessException | InvocationTargetException ex) {
-                log.error("Exception in initDashboardTabs function: " + ex);
+            } catch (InvocationTargetException ex) {
+                log.error("Error in dashboardTab " + dashboardTab + " and object " + newObject + " " + ex);
+            } catch (IllegalAccessException ex) {
+                log.error("Error in accessing dashboardTab " + dashboardTab + " and object " + newObject + " " + ex);
             }
             newObject.setId(null);
             newObject.setDashboardId(newDashboard);
@@ -110,7 +113,7 @@ public class UserDao extends BaseDao {
     }
 
     private List<TabWidget> initDashboardTabWidget(VbUser user, DashboardTabs oldDashboardTab, DashboardTabs newDashboardTab) {
-        log.debug("Calling function of initDashboardTabWidget in UserDao class");
+        log.debug("Calling initDashboardTabWidget function with return type List contains TabWidget Object with parameters user "+user+" oldDashboardTab "+oldDashboardTab+" and newDashboard "+newDashboardTab);
         List<TabWidget> returnList = new ArrayList<>();
         Query query = sessionFactory.getCurrentSession().getNamedQuery("TabWidget.findByTab");
         query.setParameter("tab", oldDashboardTab);
@@ -120,8 +123,10 @@ public class UserDao extends BaseDao {
             TabWidget newObject = new TabWidget();
             try {
                 BeanUtils.copyProperties(newObject, tabWidget);
-            } catch (IllegalAccessException | InvocationTargetException ex) {
-                log.error("Exception in initDashboardTabWidget function: " + ex);
+            } catch (InvocationTargetException ex) {
+                log.error("Error in tabWidget " + tabWidget + " and object " + newObject + " " + ex);
+            } catch (IllegalAccessException ex) {
+                log.error("Error in accessing tabWidget " + tabWidget + " and object " + newObject + " " + ex);
             }
             newObject.setId(null);
             newObject.setTabId(newDashboardTab);
@@ -134,7 +139,7 @@ public class UserDao extends BaseDao {
     }
 
     private List<WidgetColumn> initWidgetColumns(VbUser user, TabWidget oldWidget, TabWidget newWidget) {
-        log.debug("Calling function of initWidgetColumns in UserDao class");
+        log.debug("Calling initWidgetColumns function with return type List contains WidgetColumn Object with parameters user "+user+" oldWidget "+oldWidget+" and newWidget "+newWidget);
         List<WidgetColumn> returnList = new ArrayList<>();
         Query query = sessionFactory.getCurrentSession().getNamedQuery("WidgetColumn.findByWidget");
         query.setParameter("widget", oldWidget);
@@ -144,8 +149,10 @@ public class UserDao extends BaseDao {
             WidgetColumn newObject = new WidgetColumn();
             try {
                 BeanUtils.copyProperties(newObject, widgetColumn);
-            } catch (IllegalAccessException | InvocationTargetException ex) {
-                log.error("Exception in initWidgetColumns function: " + ex);
+            } catch (InvocationTargetException ex) {
+                log.error("Error in widgetColumn " + widgetColumn + " and object " + newObject + " " + ex);
+            } catch (IllegalAccessException ex) {
+                log.error("Error in accessing widgetColumn " + widgetColumn + " and object " + newObject + " " + ex);
             }
             newObject.setId(null);
             newObject.setWidgetId(newWidget);

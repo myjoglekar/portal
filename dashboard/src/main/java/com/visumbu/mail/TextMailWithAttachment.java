@@ -17,15 +17,16 @@ import org.apache.log4j.Logger;
 public class TextMailWithAttachment {
 
     private MailProperties props = null;
-    
+
     final static Logger log = Logger.getLogger(TextMailWithAttachment.class);
 
     public TextMailWithAttachment(MailProperties props) {
+        log.debug("Calling TextMailWithAttachment constructor with parameter " + props);
         this.props = props;
     }
 
     public String sendMail() {
-        log.debug("Calling sendMail function in TextMailWithAttachment class");
+        log.debug("Calling sendMail function with return type String");
         try {
             // Create the email message
             MultiPartEmail email = new MultiPartEmail();
@@ -56,7 +57,7 @@ public class TextMailWithAttachment {
             return email.send();
 
         } catch (EmailException ex) {
-            log.error("EmailException in sendMail function: "+ex);
+            log.error("Error in setting of mail properties " + props + " which catch " + ex);
         }
         return "Not Sent";
     }

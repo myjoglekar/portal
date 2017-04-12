@@ -7,6 +7,7 @@ package com.visumbu.vb.dao;
 
 import java.io.Serializable;
 import java.util.List;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,49 +27,49 @@ public class BaseDao {
     final static Logger log = Logger.getLogger(BaseDao.class);
 
     public Object create(Object object) {
-        log.debug("Calling function of create in BaseDao class");
+        log.debug("Calling create function with return type Object with parameter Object " + object);
         try {
             log.debug("Object: " + object);
             sessionFactory.getCurrentSession().save(object);
             //sessionFactory.getCurrentSession().flush();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             // Exception need tobe logged
-            log.error("Exception in create function: " + e);
+            log.error("Error in saving object " + object + " which catch " + e);
             return null;
         }
         return object;
     }
 
     public Object update(Object object) {
-        log.debug("Calling function of update in BaseDao class");
+        log.debug("Calling update function with return type Object with parameter Object " + object);
         try {
             sessionFactory.getCurrentSession().merge(object);
             sessionFactory.getCurrentSession().flush();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             // Exception need tobe logged
-            log.error("Exception in update function: " + e);
+            log.error("Error in updating object " + object + " which catch " + e);
             return null;
         }
         return object;
     }
 
     public List read(Class c) {
-        log.debug("Calling function of read in BaseDao class using list");
+        log.debug("Calling read function with return type List");
         return sessionFactory.getCurrentSession().createCriteria(c).list();
     }
 
     public Object read(Class c, Serializable id) {
-        log.debug("Calling function of read in BaseDao class using object");
+        log.debug("Calling read with return type Object with parameters class " + c + " and id " + id);
         return sessionFactory.getCurrentSession().get(c, id);
     }
 
     public Object delete(Object object) {
-        log.debug("Calling function of delete in BaseDao class using object");
+        log.debug("Calling delete with return type Object with parameters object " + object);
         try {
             sessionFactory.getCurrentSession().delete(object);
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             // Exception need tobe logged
-            log.error("Exception in delete function: " + e);
+            log.error("Error in deleting object " + object + " which catch " + e);
             return null;
         }
         return object;

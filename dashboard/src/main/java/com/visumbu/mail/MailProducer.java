@@ -17,15 +17,16 @@ public class MailProducer implements Runnable {
     final static Logger log = Logger.getLogger(MailProducer.class);
 
     public MailProducer(BlockingQueue queue) {
+        log.error("Calling MailProducer constructor with parameter queue: "+queue);
         this.queue = queue;
     }
 
     public void accept(Object obj) {
-        log.debug("Calling accept function in MailConsumer class");
+        log.debug("Calling accept function with parameter " + obj);
         try {
             queue.put(obj);
         } catch (InterruptedException ex) {
-           log.error("InterruptedException in accept function: "+ex);
+            log.error("Error in adding obj in queue" + obj + " which catch " + ex);
         }
     }
 

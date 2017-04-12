@@ -57,33 +57,32 @@ public class UiController extends BaseController {
     @RequestMapping(value = "product", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getProduct(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Calling getProduct function in UiController class");
+        log.debug("Calling getProduct function with return type List");
         return uiService.getProduct();
     }
 
     @RequestMapping(value = "product/{dealerId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDealerProduct(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dealerId) {
-        log.debug("Calling getDealerProduct function in UiController class");
+        log.debug("Calling getDealerProduct function with return type List by passing dealerId "+dealerId+" as parameter");
         return uiService.getDealerProduct(dealerId);
     }
 
     @RequestMapping(value = "dashboard", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDashboards(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Calling getDashboards function in UiController class");
+        log.debug("Calling getDashboards function with return type List");
         VbUser user = userService.findByUsername(getUser(request));
         if (user == null) {
             return null;
         }
-        log.debug("Ending getDashboards function in UiController class");
         return uiService.getDashboards(user);
     }
 
     @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     DashboardTabs createDashboardTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId, @RequestBody DashboardTabs dashboardTabs) {
-        log.debug("Calling createDashboardTab function in UiController class");
+        log.debug("Calling createDashboardTab function with return type List by passing dashboardId "+dashboardId+ " and DashboardTabs "+dashboardTabs+ " as parameters");
         dashboardTabs.setDashboardId(uiService.getDashboardById(dashboardId));
         return uiService.createDashboardTabs(dashboardTabs);
     }
@@ -91,14 +90,14 @@ public class UiController extends BaseController {
     @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     DashboardTabs updateTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId, @RequestBody DashboardTabs dashboardTab) {
-        log.debug("Calling updateTab function in UiController class");
+        log.debug("Calling updateTab function with return type DashboardTabs by passing dashboardId "+dashboardId+ " and DashboardTabs "+dashboardTab+ " as parameters");
         return uiService.updateTab(dashboardTab);
     }
 
     @RequestMapping(value = "dbTabUpdateOrder/{dashboardId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object updateDashboardTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId) {
-        log.debug("Calling updateDashboardTab function in UiController class");
+        log.debug("Calling updateDashboardTab function with return type Object by passing dashboardId "+dashboardId+ " as parameters");
         String tabOrder = request.getParameter("tabOrder");
         uiService.updateDashboardTab(dashboardId, tabOrder);
         return null;
@@ -107,28 +106,28 @@ public class UiController extends BaseController {
     @RequestMapping(value = "dbTabs/{dashboardId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDashboardTabs(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer dashboardId) {
-        log.debug("Calling getDashboardTabs function in UiController class");
+        log.debug("Calling getDashboardTabs function with return type List by passing dashboardId "+dashboardId+ " as parameters");
         return uiService.getDashboardTabs(dashboardId);
     }
 
     @RequestMapping(value = "dbTab/{tabId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     DashboardTabs deleteDashboardTab(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
-        log.debug("Calling deleteDashboardTab function in UiController class");
+        log.debug("Calling deleteDashboardTab function with return type DashboardTabs by passing tabId "+tabId+ " as parameters");
         return uiService.deleteDashboardTab(tabId);
     }
 
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     TabWidget createTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId, @RequestBody TabWidget tabWidget) {
-        log.debug("Calling createTabWidget function in UiController class");
+        log.debug("Calling createTabWidget function with return type TabWidget by passing tabId "+tabId+" and tabWidget "+tabWidget+" as parameters");
         return uiService.createTabWidget(tabId, tabWidget);
     }
 
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     TabWidget updateTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId, @RequestBody TabWidgetBean tabWidget) {
-        log.debug("Calling updateTabWidget function in UiController class");
+        log.debug("Calling updateTabWidget function with return type TabWidget by passing tabId "+tabId+" and tabWidget "+tabWidget+ " as parameters");
         log.debug("TabWidget: " + tabWidget);
         return uiService.saveTabWidget(tabId, tabWidget);
         //return null; //uiService.createTabWidget(tabId, tabWidget);
@@ -137,7 +136,7 @@ public class UiController extends BaseController {
     @RequestMapping(value = "dbWidgetUpdateOrder/{tabId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object updateWidgetUpdateOrder(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
-        log.debug("Calling updateWidgetUpdateOrder function in UiController class");
+        log.debug("Calling updateWidgetUpdateOrder function with return type Object by passing tabId "+tabId+ " as parameter");
         String widgetOrder = request.getParameter("widgetOrder");
         uiService.updateWidgetUpdateOrder(tabId, widgetOrder);
         return null;
@@ -146,63 +145,63 @@ public class UiController extends BaseController {
     @RequestMapping(value = "dbWidget/{tabId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer tabId) {
-        log.debug("Calling getTabWidget function in UiController class");
+        log.debug("Calling getTabWidget function with return type Object by passing tabId" +tabId+ " as parameter");
         return uiService.getTabWidget(tabId);
     }
 
     @RequestMapping(value = "dbWidget/{widgetId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     TabWidget deleteTabWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer widgetId) {
-        log.debug("Calling deleteTabWidget function in UiController class");
+        log.debug("Calling deleteTabWidget function with return type TabWidget by passing widgetId" +widgetId+ " as parameter");
         return uiService.deleteTabWidget(widgetId);
     }
 
     @RequestMapping(value = "widgetColumn/{widgetId}", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     WidgetColumn addWidgetColumn(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer widgetId, @RequestBody WidgetColumn widgetColumn) {
-        log.debug("Calling addWidgetColumn fucntion in UiController class");
+        log.debug("Calling addWidgetColumn function with return type TabWidget by passing widgetId" +widgetId+" and widgetColumn "+widgetColumn+ " as parameters");
         return uiService.addWidgetColumn(widgetId, widgetColumn);
     }
 
     @RequestMapping(value = "widgetColumn/{widgetId}", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     WidgetColumn update(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer widgetId, @RequestBody WidgetColumn widgetColumn) {
-        log.debug("Calling update function in UiController class");
+        log.debug("Calling update function with return type WidgetColumn by passing widgetId" +widgetId+" and widgetColumn "+widgetColumn+ " as parameters");
         return uiService.updateWidgetColumn(widgetId, widgetColumn);
     }
 
     @RequestMapping(value = "widgetColumn/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     WidgetColumn deleteWidgetColumn(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
-        log.debug("Calling deleteWidgetColumn function in UiController class");
+        log.debug("Calling deleteWidgetColumn function with return type WidgetColumn by passing id " +id +" as parameter");
         return uiService.deleteWidgetColumn(id);
     }
 
     @RequestMapping(value = "reportType", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     ReportType addReportType(HttpServletRequest request, HttpServletResponse response, @RequestBody ReportType reportTypes) {
-        log.debug("Calling addReportType function in UiController class");
+        log.debug("Calling addReportType function with return type ReportType by passing reportTypes" +reportTypes+" as parameter");
         return uiService.addReportType(reportTypes);
     }
 
     @RequestMapping(value = "reportType", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     ReportType update(HttpServletRequest request, HttpServletResponse response, @RequestBody ReportType reportTypes) {
-        log.debug("Calling update function in UiController class - ReportType");
+        log.debug("Calling update function with return type ReportType by passing reportTypes" +reportTypes+" as parameter");
         return uiService.updateReportType(reportTypes);
     }
 
     @RequestMapping(value = "reportTypes/{reportTypeId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     ReportType deleteReportType(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportTypeId) {
-        log.debug("Calling deleteReportType function in UiController class");
+        log.debug("Calling deleteReportType function with return type ReportType by passing reportTypeId" +reportTypeId+" as parameter");
         return uiService.deleteReportType(reportTypeId);
     }
 
     @RequestMapping(value = "reportTypes/{reportTypeId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getReportType(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportTypeId) {
-        log.debug("Calling getReportType function in UiController class");
+        log.debug("Calling getReportType function with return type List by passing reportTypeId "+reportTypeId+" as parameter");
         return uiService.getReportType(reportTypeId);
     }
 
@@ -210,7 +209,7 @@ public class UiController extends BaseController {
     public @ResponseBody
     Report addReport(HttpServletRequest request, HttpServletResponse response// , @RequestBody Report report
     ) {
-        log.debug("Calling addReport function in UiController class");
+        log.debug("Calling addReport function with return type Report");
         try {
             //        Integer getReportTypeId = 1;
 //        log.debug(report);
@@ -224,7 +223,7 @@ public class UiController extends BaseController {
 //            String jsonString = sb.toString();
 //            log.debug(jsonString);
         } catch (Exception ex) {
-            log.error("Exception in addReport function: " + ex);
+            log.error("Error occurs: " + ex);
         }
         return null;
     }
@@ -233,7 +232,7 @@ public class UiController extends BaseController {
     public @ResponseBody
     Report update(HttpServletRequest request, HttpServletResponse response// @RequestBody Report report
     ) {
-        log.debug("Calling update function in UiController class - Report");
+        log.debug("Calling update function with return type Report");
         try {
             //        Integer getReportTypeId = 1;
 //        log.debug(report);
@@ -249,8 +248,8 @@ public class UiController extends BaseController {
             Report report = mapper.readValue(jsonString, Report.class);
             log.debug(jsonString);
             return uiService.updateReport(report);
-        } catch (Exception ex) {
-            log.error("Exception in update function - Report: " + ex);
+        } catch (IOException ex) {
+            log.error("Error in reading value " + ex);
         }
         return null;
 
@@ -259,51 +258,45 @@ public class UiController extends BaseController {
     @RequestMapping(value = "dbReportUpdateOrder/{reportId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object updateReportUpdateOrder(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
-        log.debug("Start function of updateReportUpdateOrder in UiController class");
+        log.debug("Calling updateReportUpdateOrder function with return type Object by passing reportId "+reportId+" as parameter");
         String widgetOrder = request.getParameter("widgetOrder");
         uiService.updateReportOrder(reportId, widgetOrder);
-        log.debug("End function of updateReportUpdateOrder in UiController class");
         return null;
     }
 
     @RequestMapping(value = "report/{reportId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     Report deleteReport(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
-        log.debug("Start function of deleteReport in UiController class");
-        log.debug("End function of deleteReport in UiController class");
+        log.debug("Calling deleteReport function with return type Report by passing reportId "+reportId+" as parameter");
         return uiService.deleteReport(reportId);
     }
 
     @RequestMapping(value = "report", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getReport(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start function of getReport in UiController class");
-        log.debug("End function of getReport in UiController class");
+        log.debug("Calling getReport function with return type List");
         return uiService.getReport();
     }
 
     @RequestMapping(value = "report/{reportId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Report getReportById(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
-        log.debug("Start function of getReportById in UiController class");
-        log.debug("End function of getReportById in UiController class");
+        log.debug("Calling getReportById function with return type Report by passing reportId "+reportId+" as parameter");
         return uiService.getReportById(reportId);
     }
 
     @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     ReportWidget createReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId, @RequestBody ReportWidget reportWidget) {
-        log.debug("Start function of createReportWidget in UiController class");
-        log.debug("End function of createReportWidget in UiController class");
+        log.debug("Calling createReportWidget function with return type ReportWidget by passing reportId "+reportId+" and reportWidget" +reportWidget+" as parameters");
         return uiService.createReportWidget(reportId, reportWidget);
     }
 
     @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     ReportWidget updateReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId, @RequestBody ReportWidgetBean reportWidgetBean) {
-        log.debug("Start function of updateReportWidget in UiController class");
-        log.debug(reportWidgetBean);
-        log.debug("End function of updateReportWidget in UiController class");
+        log.debug("Calling updateReportWidget function with return type ReportWidget by passing reportId "+reportId+" and reportWidgetBean" +reportWidgetBean+" as parameters");
+        log.debug("reportWidgetBean: "+reportWidgetBean);
         return uiService.saveReportWidget(reportId, reportWidgetBean);
         //return null; //uiService.createTabWidget(tabId, tabWidget);
     }
@@ -311,86 +304,76 @@ public class UiController extends BaseController {
     @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
-        log.debug("Start function of getReportWidget in UiController class");
-        log.debug("End function of getReportWidget in UiController class");
+        log.debug("Calling getReportWidget function with return type List by passing reportId "+reportId+" as parameter");
         return uiService.getReportWidget(reportId);
     }
 
     @RequestMapping(value = "reportWidget/{reportId}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     ReportWidget deleteReportWidget(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
-        log.debug("Start fucntion of deleteReportWidget in UiController class");
-        log.debug("End function of deleteReportWidget in UiController class");
+        log.debug("Calling deleteReportWidget function with return type ReportWidget by passing reportId "+reportId+" as parameter");
         return uiService.deleteReportWidget(reportId);
     }
 
     @RequestMapping(value = "dataSource", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     DataSource create(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSource dataSource) {
-        log.debug("Start fucntion of create in UiController class - DataSource");
-        log.debug("End function of create in UiController class - DataSource");
+        log.debug("Calling create function with return type DataSource by passing dataSource "+dataSource+" as parameter");
         return uiService.create(dataSource);
     }
 
     @RequestMapping(value = "dataSource", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     DataSource update(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSource dataSource) {
-        log.debug("Start function of update in UiController class - DataSource");
-        log.debug("End function of update in UiController class - DataSource");
+        log.debug("Calling update function with return type DataSource by passing dataSource "+dataSource+" as parameter");
         return uiService.update(dataSource);
     }
 
     @RequestMapping(value = "dataSource", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDataSource(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start function of getDataSource in UiController class");
-        log.debug("End function of getDataSource in UiController class");
+        log.debug("Calling getDataSource function with return type List");
         return uiService.getDataSource();
     }
 
     @RequestMapping(value = "dataSource/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     DataSource delete(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
-        log.debug("Start  function of delete in UiController class - DataSource");
-        log.debug("End function of delete in UiController class - DataSource");
+        log.debug("Calling delete function with return type DataSource by passing id "+id+" as parameter");
         return uiService.delete(id);
     }
 
     @RequestMapping(value = "dataSet", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     DataSet create(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSet dataSet) {
-        log.debug("Start function of create in UiController class - DataSet");
-        log.debug("End function of create in UiController class - DataSet");
+        log.debug("Calling create function with return type DataSet by passing dataSet "+dataSet+" as parameter");
         return uiService.create(dataSet);
     }
 
     @RequestMapping(value = "dataSet", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     DataSet update(HttpServletRequest request, HttpServletResponse response, @RequestBody DataSet dataSet) {
-        log.debug("Start function of update in UiController class - DataSet");
-        log.debug("End function of update in UiController class - DataSet");
+        log.debug("Calling update function with return type DataSet by passing dataSet "+dataSet+" as parameter");
         return uiService.update(dataSet);
     }
 
     @RequestMapping(value = "dataSet", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List getDataSet(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Start function of getDataSet in UiController class");
-        log.debug("End function of getDataSet in UiController class");
+        log.debug("Calling create function with return type List");
         return uiService.getDateSet();
     }
 
     @RequestMapping(value = "dataSet/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     DataSet deleteDataSet(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
-        log.debug("Start function of deleteDataSet in UiController class");
-        log.debug("End function of deleteDataSet in UiController class");
+        log.debug("Calling deleteDataSet function with return type DataSet by passing id "+id+" as parameter");
         return uiService.deleteDataSet(id);
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        log.error("HttpMessageNotReadableException in handle function: " + e);
+        log.error("Error handling bad request " + e);
     }
 }

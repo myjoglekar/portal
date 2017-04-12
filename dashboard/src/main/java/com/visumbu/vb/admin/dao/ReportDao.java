@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReportDao extends BaseDao {
    final static Logger log = Logger.getLogger(ReportDao.class);
     public List getVisitDetailedList(Date startDate, Date endDate, ReportPage page) {
-        log.debug("Calling function of getVisitDetailedList in ReportDao class");
+        log.debug("Calling getVisitDetailedList function with return type List by passing startDate "+startDate+" endDate "+endDate+" page "+page+" as parameters");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("VisitLog.findByVisitTimeRange");
         query.setParameter("startTime", startDate);
         log.debug("StartDate: "+startDate);

@@ -30,6 +30,7 @@ import com.google.common.collect.Lists;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * This example will create an OAuth2 refresh token that can be used with the
@@ -57,6 +58,7 @@ public class GetRefreshToken {
 
   // This callback URL will allow you to copy the token from the success screen.
   private static final String CALLBACK_URL = "urn:ietf:wg:oauth:2.0:oob";
+    final static Logger log = Logger.getLogger(GetRefreshToken.class);
 
   private static Credential getOAuth2Credential(GoogleClientSecrets clientSecrets)
       throws Exception {
@@ -76,7 +78,7 @@ public class GetRefreshToken {
     System.out.printf("Paste this url in your browser:%n%s%n", authorizeUrl);
 
     // Wait for the authorization code.
-    System.out.println("Type the code you received here: ");
+    log.debug("Type the code you received here: ");
     String authorizationCode = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
     // Authorize the OAuth2 token.

@@ -24,7 +24,7 @@ public class JsonSimpleUtils {
     final static Logger log = Logger.getLogger(JsonSimpleUtils.class);
 
     public static Map<String, Object> jsonToMap(JSONObject json) {
-        log.debug("Calling function of jsonToMap in JsonSimpleUtils class");
+        log.debug("Calling jsonToMap function with return type Map with parameter json "+json);
         Map<String, Object> retMap = new HashMap<String, Object>();
 
         if (json != null) {
@@ -34,7 +34,7 @@ public class JsonSimpleUtils {
     }
 
     public static Map<String, Object> toMap(JSONObject object) {
-        log.debug("Calling function of toMap in JsonSimpleUtils class");
+        log.debug("Calling toMap function with return type Map with parameter object "+object);
         Map<String, Object> map = new HashMap<String, Object>();
 
         Iterator<String> keysItr = object.keySet().iterator();
@@ -53,7 +53,7 @@ public class JsonSimpleUtils {
     }
 
     public static List<Object> toList(JSONArray array) {
-        log.debug("Calling function of toList in JsonSimpleUtils class");
+        log.debug("Calling toList function wtih return type List contains Object with parameter array "+array);
         List<Object> list = new ArrayList<Object>();
         for (int i = 0; i < array.size(); i++) {
             Object value = array.get(i);

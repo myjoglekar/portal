@@ -32,24 +32,24 @@ public class DataSourceService {
     final static Logger log = Logger.getLogger(DataSourceService.class);
 
     public List getAllDataSources() {
-        log.debug("Calling function of getAllDataSources in DataSourceService class");
+        log.debug("Calling getAllDataSources function with return type List");
         return BaseDataSource.getAllDataSources();
     }
 
     public List getAllDataSets(String dataSourceName) throws IOException, GeneralSecurityException {
-        log.debug("Calling function of getAllDataSets in DataSourceService class");
+        log.debug("Calling getAllDataSets function with return type List with parameter dataSourceName " + dataSourceName);
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
         return dataSource.getDataSets();
     }
 
     public List getAllDimensions(String dataSourceName, String dataSet) throws IOException, GeneralSecurityException {
-        log.debug("Calling function of getAllDimensions in DataSourceService class");
+        log.debug("Calling getAllDimensions function with return type List with parameters dataSourceName " + dataSourceName + " and dataSet " + dataSet);
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
         return dataSource.getDataDimensions();
     }
 
     public Object getData(String dataSourceName, String dataSet, Map options, ReportPage page) throws IOException, GeneralSecurityException {
-        log.debug("Calling function of getData in DataSourceService class");
+        log.debug("Calling getData function with return type List with parameters dataSourceName " + dataSourceName + " dataSet " + dataSet + " options " + options + " and page " + page);
         BaseDataSource dataSource = BaseDataSource.getInstance(dataSourceName);
         return dataSource.getData(dataSet, options, page);
     }

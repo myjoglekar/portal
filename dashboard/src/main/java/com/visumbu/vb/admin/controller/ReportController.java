@@ -41,7 +41,7 @@ public class ReportController {
     @RequestMapping(value = "visitDetails", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List topDealersByVisit(HttpServletRequest request, HttpServletResponse response) {
-        log.debug("Calling topDealersByVisit function in ReportController class");
+        log.debug("Calling topDealersByVisit function with return type List");
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
         ReportPage page = getPage(request);
@@ -49,7 +49,7 @@ public class ReportController {
     }
 
     private ReportPage getPage(HttpServletRequest request) {
-        log.debug("Calling getPage function in ReportController class");
+        log.debug("Calling getPage function with return type ReportPage");
         ReportPage reportPage = new ReportPage();
         if (request.getParameter("page") == null && request.getParameter("count") == null) {
             return null;
@@ -72,6 +72,6 @@ public class ReportController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        log.error("HttpMessageNotReadableException in handle function: " + e);
+        log.error("Error handling bad request: " + e);
     }
 }

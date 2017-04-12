@@ -44,7 +44,7 @@ public class GetCampaigns {
     final static Logger log = Logger.getLogger(GetCampaigns.class);
 
     public static void main(String[] args) throws Exception {
-        log.debug("Calling main function in GetCampaigns class");
+        log.debug("Calling main function");
 
         // Generate a refreshable OAuth2 credential.
         /* Credential oAuth2Credential = new OfflineCredentials.Builder()

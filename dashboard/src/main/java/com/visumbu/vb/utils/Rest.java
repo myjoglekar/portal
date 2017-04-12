@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -40,18 +41,19 @@ public class Rest {
     final static Logger log = Logger.getLogger(Rest.class);
 
     public static String getData(String urlString) {
-        log.debug("Calling function of getData in Rest class");
+        log.debug("Calling getData function with return type String with parameter urlString " + urlString);
         return getData(urlString, null);
     }
 
     public static String getData(String url, MultiValueMap<String, String> params) {
-        log.debug("Calling function of getData(String url, MultiValueMap<String, String> params) in Rest class");
+        log.debug("Calling getData function with return type String with parameters url " + url + "and params " + params);
         String urlString = url;
         if (params != null) {
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(url).queryParams(params).build();
             urlString = uriComponents.toUriString();
         }
         String returnStr = "";
+        BufferedReader br = null;
         try {
             log.debug(urlString);
             URL httpUrl = new URL(urlString);
@@ -70,7 +72,7 @@ public class Rest {
 
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
+            br = new BufferedReader(new InputStreamReader(
                     (conn.getInputStream())));
 
             String output;
@@ -81,22 +83,21 @@ public class Rest {
             }
             conn.disconnect();
 
-        } catch (MalformedURLException e) {
-            log.error("MalformedURLException in getData function in rest class:" + e);
         } catch (IOException e) {
-            log.error("IOException in getData function in rest class:" + e);
+            log.error("Error in reading " + br + " " + e);
         }
         return returnStr;
     }
 
     public static String getData(String url, MultiValueMap<String, String> params, Map<String, String> header) {
-        log.debug("Calling function of getData(String url, MultiValueMap<String, String> params, Map<String, String> header) in Rest class");
+        log.debug("Calling getData function with return type String with parameter url " + url + " params " + params + " and header " + header);
         String urlString = url;
         if (params != null) {
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(url).queryParams(params).build();
             urlString = uriComponents.toUriString();
         }
         String returnStr = "";
+        BufferedReader br = null;
         try {
             log.debug(urlString);
             URL httpUrl = new URL(urlString);
@@ -121,7 +122,7 @@ public class Rest {
 
             }
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
+            br = new BufferedReader(new InputStreamReader(
                     (conn.getInputStream())));
 
             String output;
@@ -132,16 +133,14 @@ public class Rest {
             }
             conn.disconnect();
 
-        } catch (MalformedURLException e) {
-            log.error("MalformedURLException in getData function in rest class:" + e);
         } catch (IOException e) {
-            log.error("IOException in getData function in rest class:" + e);
+            log.error("Error in reading " + br + " " + e);
         }
         return returnStr;
     }
 
     public static String postRawForm(String postUrl, String postParams) throws IOException {
-        log.debug("Calling function of postRawForm in Rest class");
+        log.debug("Calling postRawForm function with return type String with parameter with postUrl" + postUrl + " and postParams " + postParams);
         String returnStr = null;
         log.debug("URL -> " + postUrl);
         log.debug("URL Params -> " + postParams);
@@ -183,9 +182,10 @@ public class Rest {
     }
 
     public static void main(String args[]) {
-        log.debug("Calling main function in Rest class");
+        String output = null;
         try {
-            String output = postRawForm(Settings.getSecurityTokenUrl(), "client_id=f8f06d06436f4104ade219fd7d535654&client_secret=ba082149c90f41c49e86f4862e22e980&grant_type=password&scope=FullControl&username=admin&password=admin123");
+            log.debug("Calling main function");
+            output = postRawForm(Settings.getSecurityTokenUrl(), "client_id=f8f06d06436f4104ade219fd7d535654&client_secret=ba082149c90f41c49e86f4862e22e980&grant_type=password&scope=FullControl&username=admin&password=admin123");
             ObjectMapper mapper = new ObjectMapper();
             SecurityTokenBean token = mapper.readValue(output, SecurityTokenBean.class);
 
@@ -195,7 +195,7 @@ public class Rest {
             SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
             log.debug(authData);
         } catch (IOException ex) {
-            log.error("IOException in main function: " + ex);
+            log.error("Error in reading value " + output + " " + ex);
         }
     }
 

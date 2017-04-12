@@ -19,7 +19,7 @@ public class BaseController {
     final static Logger log = Logger.getLogger(BaseController.class);
 
     public ReportPage getPage(HttpServletRequest request) {
-        log.debug("Calling function of getPage in BaseController class");
+        log.debug("Calling getPage function with return type ReportType");
         ReportPage reportPage = new ReportPage();
         if (request.getParameter("page") == null && request.getParameter("count") == null) {
             return null;
@@ -40,13 +40,13 @@ public class BaseController {
     }
 
     protected String getUser(HttpServletRequest request) {
-        log.debug("Calling function of getUser in UserService class");
+        log.debug("Calling getUser function with return type ReportType");
         String username = (String) request.getSession().getAttribute("username");
         if (username == null) {
             try {
                 throw new AuthenticationException("User not logged in");
             } catch (AuthenticationException ex) {
-                log.error("Authentication Exception in getUser function: " + ex);
+                log.error("Error in username " + username + " which catch " + ex);
             }
         }
         return username;

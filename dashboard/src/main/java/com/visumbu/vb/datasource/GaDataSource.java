@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -47,7 +48,7 @@ public class GaDataSource extends BaseDataSource {
     final static Logger log = Logger.getLogger(GaDataSource.class);
 
     public static List<GaMetric> getAllMetrics() {
-        log.debug("Calling function of getAllMetrics in GaDataSource class");
+        log.debug("Calling getAllMetrics function with return type List contains GaMetric objects");
         List<GaMetric> metricList = new ArrayList();
 
         GaMetric gaSessionMetric = new GaMetric();
@@ -77,13 +78,13 @@ public class GaDataSource extends BaseDataSource {
 
     @Override
     public List getDataDimensions() {
-        log.debug("Calling function of getDataDimensions() in GaDataSource class");
+        log.debug("Calling getDataDimensions function with return type List");
         return getDataDimensions("all");
     }
 
     @Override
     public List getDataDimensions(String dataSetName) {
-        log.debug("Calling function of getDataDimensions(dataSetName) in GaDataSource class");
+        log.debug("Calling getDataDimensions function with return type List with parameter dataSetName " + dataSetName);
         List<GaMetric> allMetrics = getAllMetrics();
         for (Iterator<GaMetric> iterator = allMetrics.iterator(); iterator.hasNext();) {
             GaMetric metric = iterator.next();
@@ -95,7 +96,7 @@ public class GaDataSource extends BaseDataSource {
     }
 
     public static List<Map<String, String>> getAllDataSets() {
-        log.debug("Calling function of getAllDataSets in GaDataSource class");
+        log.debug("Calling getAllDataSets function with return type List contains Map");
         List<Map<String, String>> dataSets = new ArrayList<>();
         List<GaMetric> allMetrics = getAllMetrics();
         for (Iterator<GaMetric> iterator = allMetrics.iterator(); iterator.hasNext();) {
@@ -110,7 +111,7 @@ public class GaDataSource extends BaseDataSource {
 
     @Override
     public Object getData(String dataSetName, Map options, ReportPage page) throws IOException {
-        log.debug("Calling function of getData in GaDataSource class");
+        log.debug("Calling getData function with return type Object with parameters dataSetName " + dataSetName + " options " + options + " and page " + page);
         if (options == null) {
             options = new HashMap();
         }
@@ -155,7 +156,7 @@ public class GaDataSource extends BaseDataSource {
          * Client secret: 1nJygCmZKdFCOykaGmbjBpKy U: l2tanalytics@gmail.com P:
          * l2tmedia2016!!
          */
-        log.debug("Calling of GaDataSource Constructor in GaDataSource class");
+        log.debug("Calling of GaDataSource Constructor");
 
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GoogleCredential credential = new GoogleCredential.Builder()
@@ -169,7 +170,6 @@ public class GaDataSource extends BaseDataSource {
         // Construct the Analytics service object.
         analytics = new Analytics.Builder(httpTransport, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME).build();
-        log.debug("End of GaDataSource Constructor in GaDataSource class");
 
     }
 
@@ -178,7 +178,7 @@ public class GaDataSource extends BaseDataSource {
 
         // Construct a GoogleCredential object with the service account email
         // and p12 file downloaded from the developer console.
-        log.debug("Calling function of  initializeAnalytics  in GaDataSource class");
+        log.debug("Calling initializeAnalytics function with return type Analytics");
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GoogleCredential credential = new GoogleCredential.Builder()
                 .setTransport(httpTransport)
@@ -194,7 +194,7 @@ public class GaDataSource extends BaseDataSource {
     }
 
     private static String getProfileByName(String profileName) throws IOException {
-        log.debug("Calling function of getProfileByName in GaDataSource class");
+        log.debug("Calling getProfileByName function with return type String with parameter profileName " + profileName);
         // Get the first view (profile) ID for the authorized user.
         String profileId = null;
 
@@ -244,7 +244,7 @@ public class GaDataSource extends BaseDataSource {
     }
 
     private static String getFirstProfileId(Analytics analytics) throws IOException {
-        log.debug("Calling function of getFirstProfileId in GaDataSource class");
+        log.debug("Calling getFirstProfileId function with return type String with parameter analytics " + analytics);
         // Get the first view (profile) ID for the authorized user.
         String profileId = null;
 
@@ -282,7 +282,7 @@ public class GaDataSource extends BaseDataSource {
     }
 
     private static GaData getResults(String profileId, String metric, String dimentions) throws IOException {
-        log.debug("Calling function of getResults(String profileId, String metric, String dimentions) in GaDataSource class");
+        log.debug("Calling getResults function with return type GaData with parameters profileId " + profileId + " metric " + metric + " and dimentions " + dimentions);
         return analytics.data().ga()
                 .get("ga:" + profileId, "7daysAgo", "today", "ga:organicSearches")
                 .setDimensions("ga:source,ga:medium")
@@ -292,7 +292,7 @@ public class GaDataSource extends BaseDataSource {
     private static GaData getResults(Analytics analytics, String profileId) throws IOException {
         // Query the Core Reporting API for the number of sessions
         // in the past seven days.
-        log.debug("Calling function of getResults(Analytics analytics, String profileId)  in GaDataSource class");
+        log.debug("Calling getResults function with return type GaData with parameters profileId " + profileId + "and analytics " + analytics);
         return analytics.data().ga()
                 .get("ga:" + profileId, "7daysAgo", "today", "ga:newUsers,ga:percentNewSessions")
                 .setDimensions("ga:userType")
@@ -300,7 +300,7 @@ public class GaDataSource extends BaseDataSource {
     }
 
     private static void printResults(GaData results) {
-        log.debug("Calling function of printResults  in GaDataSource class");
+        log.debug("Calling printResults function with parameter results " + results);
         log.debug(" Total Data " + results.getRows());
 
         // Parse the response from the Core Reporting API for
@@ -315,16 +315,17 @@ public class GaDataSource extends BaseDataSource {
     }
 
     public static void main(String[] args) {
-        log.debug("Calling main function in GaDataSource class");
-
         try {
+            log.debug("Calling main function");
+            
             Analytics analytics = initializeAnalytics();
 
             String profile = getFirstProfileId(analytics);
             log.debug("First Profile Id: " + profile);
             printResults(getResults(analytics, profile));
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            log.error("Error in analytics "+analytics+" "+ex);
         }
+       
     }
 }

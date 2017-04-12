@@ -32,7 +32,7 @@ public class VbUtils {
     final static Logger log = Logger.getLogger(VbUtils.class);
 
     public static String getPageName(String url) {
-        log.debug("Calling function of getPageName in VbUtils class");
+        log.debug("Calling getPageName function with return type String with parameter url " + url);
 
         String baseName = FilenameUtils.getBaseName(url);
         String extension = FilenameUtils.getExtension(url);
@@ -46,51 +46,53 @@ public class VbUtils {
     }
 
     public static Long toLong(String longVal) {
-        log.debug("Calling function of toLong in VbUtils class");
+        log.debug("Calling toLong unction with return type String with parameter longVal " + longVal);
         if (longVal == null) {
             return 0L;
         }
         Long returnValue = 0L;
         try {
             returnValue = Long.parseLong(longVal);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             returnValue = 0L;
         }
         return returnValue;
     }
 
     public static Integer toInteger(String integer) {
-        log.debug("Calling function of toInteger in VbUtils class");
+        log.debug("Calling toInteger function with return type Integer with parameter integer " + integer);
         if (integer == null) {
             return 0;
         }
         Integer returnValue = 0;
         try {
             returnValue = Integer.parseInt(integer);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             returnValue = 0;
         }
         return returnValue;
     }
 
     public static String getDomainName(String url) {
-        log.debug("Calling function of getDomainName in VbUtils class");
+        log.debug("Calling getDomainName with return type String with parameter url " + url);
         // Alternative Solution
         // http://stackoverflow.com/questions/2939218/getting-the-external-ip-address-in-java
+        String domain = null;
         try {
             URI uri = new URI(url);
-            String domain = uri.getHost();
+            domain = uri.getHost();
             return domain.startsWith("www.") ? domain.substring(4) : domain;
         } catch (URISyntaxException ex) {
-            log.error("URISyntaxException in getDomainName function: " + ex);
+            log.error("Error in url " + domain + " " + ex);
         }
         return null;
     }
 
     public static SecurityAuthBean getAuthData(String username, String password) {
-        log.debug("Calling function of getAuthData in VbUtils class");
+        log.debug("Calling getAuthData function with return type SecurityAuthBean with parameter username" + username + " and password " + password);
+        String output = null;
         try {
-            String output = Rest.postRawForm(Settings.getSecurityTokenUrl(), "client_id=f8f06d06436f4104ade219fd7d535654&client_secret=ba082149c90f41c49e86f4862e22e980&grant_type=password&scope=FullControl&username=" + username + "&password=" + password);
+            output = Rest.postRawForm(Settings.getSecurityTokenUrl(), "client_id=f8f06d06436f4104ade219fd7d535654&client_secret=ba082149c90f41c49e86f4862e22e980&grant_type=password&scope=FullControl&username=" + username + "&password=" + password);
             if (output == null) {
                 return null;
             }
@@ -109,19 +111,22 @@ public class VbUtils {
             Permission permission = getPermissions(authData);
             authData.setPermission(permission);
             return authData;
-        } catch (IOException | NullPointerException ex) {
-            log.error("Exception in getAuthData function: " + ex);
+        } catch (IOException ex) {
+            log.error("Error in reading output " + output + " " + ex);
+        } catch (NullPointerException ex) {
+            log.error(" Output is  " + output + " " + ex);
         }
         return null;
     }
 
     public static SecurityAuthBean getAuthDataByGuid(String accessToken, String userGuid) {
-        log.debug("Calling function of getAuthDataByGuid in VbUtils class");
+        log.debug("Calling getAuthDataByGuid function with parameter SecurityAuthBean with parameter accessToken " + accessToken + " and userGuid " + userGuid);
+        String dataOut = null;
         try {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, String> accessHeader = new HashMap<>();
             accessHeader.put("Authorization", accessToken);
-            String dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=" + userGuid, null, accessHeader);
+            dataOut = getData(Settings.getSecurityAuthUrl() + "?Userid=" + userGuid, null, accessHeader);
             SecurityAuthBean authData = mapper.readValue(dataOut, SecurityAuthBean.class);
             authData.setAccessToken(accessToken);
             authData.setAccessToken(userGuid);
@@ -130,13 +135,13 @@ public class VbUtils {
             authData.setPermission(permission);
             return authData;
         } catch (IOException ex) {
-            log.error("IOException in getAuthDataByGuid function: " + ex);
+            log.error("Error in reading dataOut " + dataOut + " " + ex);
         }
         return null;
     }
 
     private static Permission getPermissions(SecurityAuthBean authData) {
-        log.debug("Calling function of getPermissions in VbUtils class");
+        log.debug("Calling getPermissions function with return type Permission with parameter authData " + authData);
         List<SecurityAuthRoleBean> roles = authData.getRoles();
         Permission permission = new Permission();
         for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {

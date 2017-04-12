@@ -34,7 +34,7 @@ public class ReviewPushDataSource extends BaseDataSource {
 
     @Override
     public List getDataSets() {
-        log.debug("Calling function of getDataSets in ReviewPushDataSource class");
+        log.debug("Calling getDataSets function with return type List");
 
         List<Map<String, String>> dataSets = new ArrayList<>();
         Map map = new HashMap();
@@ -48,7 +48,7 @@ public class ReviewPushDataSource extends BaseDataSource {
 
     @Override
     public List getDataDimensions(String dataSetName) {
-        log.debug("Calling function of getDataDimensions in ReviewPushDataSource class");
+        log.debug("Calling getDataDimensions function with return type List with parameter dataSetName "+dataSetName);
         List<Map<String, String>> dataDimensions = new ArrayList<>();
         Map map = new HashMap();
         map.put("Locations", "locations");
@@ -64,7 +64,7 @@ public class ReviewPushDataSource extends BaseDataSource {
 
     @Override
     public Object getData(String dataSetName, Map options, ReportPage page) throws IOException {
-        log.debug("Calling function of getData in ReviewPushDataSource class");
+        log.debug("Calling getData function with return type Object with parameters dataSetName "+dataSetName+" options "+options+" and page "+page);
         if (options == null) {
             options = new HashMap();
         }
@@ -87,12 +87,12 @@ public class ReviewPushDataSource extends BaseDataSource {
     }
 
     public static void main(String argv[]) {
-        log.debug("Calling main function in ReviewPushDataSource class");
+        log.debug("Calling main function");
         try {
             BaseDataSource dataSource = new ReviewPushDataSource();
             dataSource.getData("reviews", null, null);
         } catch (IOException ex) {
-            log.error("IOException in main function: " + ex);
+            log.error("Error in getting data " + ex);
         }
     }
 

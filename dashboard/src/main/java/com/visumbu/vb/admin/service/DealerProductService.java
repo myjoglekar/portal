@@ -28,7 +28,7 @@ public class DealerProductService {
     final static Logger log = Logger.getLogger(DealerProductService.class);
 
     public List<DealerProduct> read() {
-        log.debug("Calling function of read in DealerProductService class");
+        log.debug("Calling read with return type List contains DealerProduct");
         List<DealerProduct> dealerProduct = dealerProductDao.read(DealerProduct.class);
         return dealerProduct;
     }

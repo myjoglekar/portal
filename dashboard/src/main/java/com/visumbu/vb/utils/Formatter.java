@@ -18,7 +18,7 @@ public class Formatter {
     final static Logger log = Logger.getLogger(Formatter.class);
 
     public static String format(String format, String value) {
-        log.debug("Calling function of format in Formatter class");
+        log.debug("Calling format function with return type String with parameter format "+format+" and value "+value);
         String returnValue = value;
         String jFormat = format;
         String prefix = "";
@@ -40,12 +40,11 @@ public class Formatter {
         if (jFormat != null && !jFormat.isEmpty()) {
             returnValue = prefix + String.format("%" + jFormat, multiplier * ApiUtils.toDouble(value)) + sufix;
         }
-        log.debug("End function of format in Formatter class");
         return returnValue;
     }
 
     public static void main(String argv[]) {
-        log.debug("Calling main function in Formatter class");
+        log.debug("Calling main function");
         String format = ".1%";
         String value = "5346.00";
         log.debug(Formatter.format(format, value));

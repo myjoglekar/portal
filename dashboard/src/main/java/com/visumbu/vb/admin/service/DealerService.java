@@ -33,18 +33,18 @@ public class DealerService {
     final static Logger log = Logger.getLogger(DealerService.class);
 
     public Dealer read(Integer id) {
-        log.debug("Calling function of read in DealerService class - Dealer");
+        log.debug("Calling read function with return type Dealer with parameter id "+id);
         return (Dealer) dealerDao.read(Dealer.class, id);
     }
 
     public List<Dealer> read() {
-        log.debug("Calling function of read in DealerService class");
+        log.debug("Calling read function with return type List contains Dealer");
         List<Dealer> dealer = dealerDao.read(Dealer.class);
         return dealer;
     }
 
     public Map<String, String> getDealerAccountDetails(String dealerId) {
-        log.debug("Calling function of getDealerAccountDetails in DealerService class");
+        log.debug("Calling getDealerAccountDetails function with return type Map contains String, String with parameter dealerId "+dealerId);
         log.debug(dealerId);
         List<DealerAccountBean> dealerAccountDetails = dealerDao.getDealerAccountDetails(dealerId);
         Map<String, String> accountMap = new HashMap<>();
