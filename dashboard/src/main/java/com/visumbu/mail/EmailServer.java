@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -37,12 +38,16 @@ public class EmailServer {
     public static final int HTML_WITH_ATTACHMENT = 303;
     public static final int HTML_WITH_EMBEDDED_IMAGE = 304;
 
+    final static Logger log = Logger.getLogger(EmailServer.class);
+
     public EmailServer(String test) {
+        log.debug("Calling EmailServer constructor with parameter " + test);
         this.HOST_NAME = "mail.nmsworks.co.in";
         this.PORT = 25;
     }
 
     public EmailServer(EmailConfig emailConfig) {
+        log.debug("Calling EmailSever constructor with parameter " + emailConfig);
         this.USER_NAME = emailConfig.getUsername();
         this.PASSWORD = emailConfig.getPassword();
         this.HOST_NAME = emailConfig.getServerIp();
@@ -50,11 +55,13 @@ public class EmailServer {
     }
 
     public void setFrom(String fromAddress) {
+        log.debug("Calling setFrom function by passing " + fromAddress + " as parameter");
         FROM_ADDRESS = fromAddress;
     }
 
     public static void main(String[] args) {
         EmailServer email = new EmailServer("test");
+        log.debug("Calling main function");
         //Sending test email
         String[] attachFiles = {"d:\\work\\SeacomFiles\\1425457085123-1-TT USEr.txt", "d:\\work\\SeacomFiles\\1425464768539-1-logo.png"};
         email.createAndSendEmail("varghees@gmail.com", "varghees@netphenix.com", "Test email subject",
@@ -63,6 +70,7 @@ public class EmailServer {
 
     public void createAndSendEmail(String emailAddressTo, String emailAddressCc,
             String msgSubject, String msgText, String[] attachments) {
+        log.debug("Calling createAndSendEmail function by passing emailAddressTo " + emailAddressTo + " emailAddressCc " + emailAddressCc + " msgSubject " + msgSubject + " msgText " + msgText + " and attachments " + attachments + " as parameters");
         String[] emailArray = emailAddressTo.split(",");
         List<String> emailArrayList = new ArrayList<>();
         for (int i = 0; i < emailArray.length; i++) {
@@ -87,7 +95,7 @@ public class EmailServer {
 
         emailAddressCc = StringUtils.join(emailArrayList, ',');
 
-        System.out.println("Sending email to " + emailAddressTo + " CC " + emailAddressCc + " Subject " + msgSubject);
+        log.debug("Sending email to " + emailAddressTo + " CC " + emailAddressCc + " Subject " + msgSubject);
         if (emailAddressTo == null || emailAddressTo.isEmpty()) {
             if (emailAddressCc == null || emailAddressCc.isEmpty()) {
                 return;
@@ -100,24 +108,25 @@ public class EmailServer {
         }
         this.msgSubject = msgSubject;
         this.msgText = msgText;
-        if(attachments!= null){
+        if (attachments != null) {
             this.attachFiles = attachments;
         }
         sendEmailMessage();
-
     }
 
     public void createAndSendEmail(String emailAddressTo, String emailAddressCc,
             String msgSubject, String msgText) {
+        log.debug("Calling createAndSendEmail function by passing emailAddressTo " + emailAddressTo + " emailAddressCc " + emailAddressCc + " msgSubject " + msgSubject + " and msgText " + msgText + " as parameters");
         this.createAndSendEmail(emailAddressTo, emailAddressCc, msgSubject, msgText, null);
     }
 
     private void sendEmailMessage() {
-        System.out.println("TO --> " + emailAddressTo);
-        System.out.println("CC --> " + emailAddressCc);
-        System.out.println("Subject --> " + msgSubject);
-        System.out.println("Text --> " + msgText);
-        System.out.println("attachments --> " + attachFiles);
+        log.debug("Calling sendEmailMessage function");
+        log.debug("TO --> " + emailAddressTo);
+        log.debug("CC --> " + emailAddressCc);
+        log.debug("Subject --> " + msgSubject);
+        log.debug("Text --> " + msgText);
+        log.debug("attachments --> " + attachFiles);
 
         MailQ mailq = MailQ.getInstance();
         MailProperties props = new MailProperties();
@@ -128,11 +137,11 @@ public class EmailServer {
         props.setAuthPasswd(this.PASSWORD);
         props.setFrom(this.FROM_ADDRESS);
         props.setTo(emailAddressTo);
-        if(attachFiles != null && attachFiles.length > 0){
+        if (attachFiles != null && attachFiles.length > 0) {
             List<MailAttachment> mailAttachments = new ArrayList<>();
             for (int i = 0; i < attachFiles.length; i++) {
                 String attachFile = attachFiles[i];
-                System.out.println("Attaching file " + attachFile);
+                log.debug("Attaching file " + attachFile);
                 MailAttachment mailAttachment = new MailAttachment();
                 mailAttachment.setAttachmentPath(attachFile);
                 mailAttachment.setAttachName(Paths.get(attachFile).getFileName().toString());
@@ -158,14 +167,17 @@ public class EmailServer {
     }
 
     public void setEmailAddressTo(String emailAddressTo) {
+        log.debug("Calling setEmailAddressTo function with parameter emailAddressTo " + emailAddressTo);
         this.emailAddressTo = emailAddressTo;
     }
 
     public void setSubject(String subject) {
+        log.debug("Calling setSubject function with parameter subject " + subject);
         this.msgSubject = subject;
     }
 
     public void setMessageText(String msgText) {
+        log.debug("Calling setMessageText function with parameter msgText " + msgText);
         this.msgText = msgText;
     }
 }

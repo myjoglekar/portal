@@ -8,6 +8,7 @@ package com.visumbu.vb.admin.service;
 import com.visumbu.vb.admin.dao.DealerProductDao;
 import com.visumbu.vb.model.DealerProduct;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,11 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("dealerProductService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class DealerProductService {
+
     @Autowired
     private DealerProductDao dealerProductDao;
-    
-    public List<DealerProduct> read(){
-        List<DealerProduct> dealerProduct = dealerProductDao.read(DealerProduct.class);        
+
+    final static Logger log = Logger.getLogger(DealerProductService.class);
+
+    public List<DealerProduct> read() {
+        log.debug("Calling read with return type List contains DealerProduct");
+        List<DealerProduct> dealerProduct = dealerProductDao.read(DealerProduct.class);
         return dealerProduct;
     }
 }

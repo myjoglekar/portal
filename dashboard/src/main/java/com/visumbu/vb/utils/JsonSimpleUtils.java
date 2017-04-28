@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,7 +21,10 @@ import org.json.simple.JSONObject;
  */
 public class JsonSimpleUtils {
 
+    final static Logger log = Logger.getLogger(JsonSimpleUtils.class);
+
     public static Map<String, Object> jsonToMap(JSONObject json) {
+        log.debug("Calling jsonToMap function with return type Map with parameter json "+json);
         Map<String, Object> retMap = new HashMap<String, Object>();
 
         if (json != null) {
@@ -30,6 +34,7 @@ public class JsonSimpleUtils {
     }
 
     public static Map<String, Object> toMap(JSONObject object) {
+        log.debug("Calling toMap function with return type Map with parameter object "+object);
         Map<String, Object> map = new HashMap<String, Object>();
 
         Iterator<String> keysItr = object.keySet().iterator();
@@ -48,6 +53,7 @@ public class JsonSimpleUtils {
     }
 
     public static List<Object> toList(JSONArray array) {
+        log.debug("Calling toList function wtih return type List contains Object with parameter array "+array);
         List<Object> list = new ArrayList<Object>();
         for (int i = 0; i < array.size(); i++) {
             Object value = array.get(i);

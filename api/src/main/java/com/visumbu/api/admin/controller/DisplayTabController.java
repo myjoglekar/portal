@@ -108,7 +108,12 @@ public class DisplayTabController {
         if (accountDetails.getAdwordsAccountId() != null) {
             //GeoReport adwordsGeoReport = adwordsService.getGeoReport(startDate, endDate, "391-089-0213", "", "CONTENT");
             GeoReport adwordsGeoReport = adwordsService.getGeoReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "CONTENT");
+            System.out.println("adwordsGeoReport: "+adwordsGeoReport);
+            if(adwordsGeoReport == null){
+                return null;
+            }
             List<GeoReportRow> adwordsGeoReportRow = adwordsGeoReport.getGeoReportRow();
+            System.out.println("adwordsGeoReportRow: "+adwordsGeoReportRow);
             List<Map<String, String>> gaData = new ArrayList<>();
             if (accountDetails.getAnalyticsProfileId() != null) {
                 GetReportsResponse goals = gaService.getGeoGoals(accountDetails.getAnalyticsAccountId(),accountDetails.getAnalyticsProfileId(), startDate, endDate);
@@ -282,6 +287,9 @@ public class DisplayTabController {
         List<DevicePerformanceReportBean> performanceReportBeans = new ArrayList<>();
         if (accountDetails.getAdwordsAccountId() != null) {
             AccountDeviceReport adwordsAccountDeviceReport = adwordsService.getAccountDevicePerformanceReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "CONTENT");
+            if(adwordsAccountDeviceReport == null){
+                return null;
+            }
             List<AccountDeviceReportRow> adwordsAccountDeviceReportRow = adwordsAccountDeviceReport.getAccountDeviceReportRow();
             List<Map<String, String>> gaData = new ArrayList<>();
             if (accountDetails.getAnalyticsProfileId() != null) {
@@ -390,6 +398,9 @@ public class DisplayTabController {
         List<AdPerformanceReportBean> performanceReportBeans = new ArrayList<>();
         if (accountDetails.getAdwordsAccountId() != null) {
             AdReport adwordsAdReport = adwordsService.getAdReport(startDate, endDate, accountDetails.getAdwordsAccountId(), "", "CONTENT");
+            if(adwordsAdReport == null){
+                return null;
+            }
             List<Map<String, String>> gaData = new ArrayList<>();
             if (accountDetails.getAnalyticsProfileId() != null) {
                 GetReportsResponse goals = gaService.getAdGoals(accountDetails.getAnalyticsAccountId(),accountDetails.getAnalyticsProfileId(), startDate, endDate, "");

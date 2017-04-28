@@ -13,19 +13,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.ColumnDefault;
 
 public class CsvDataSet {
 
-    public static Map CsvDataSet(String filename) throws FileNotFoundException, IOException {
+    final static Logger log = Logger.getLogger(CsvDataSet.class);
 
+    public static Map CsvDataSet(String filename) throws FileNotFoundException, IOException {
+        log.debug("Calling CsvDataSet function with return type Map with parameter filename "+filename);
         //Create the CSVFormat object
         CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
         //initialize the CSVParser object
@@ -37,15 +38,14 @@ public class CsvDataSet {
             Integer value = entrySet.getValue();
             ColumnDef columnDef = new ColumnDef(key, "string", key);
             columnDefs.add(columnDef);
-
         }
         Map returnMap = new HashMap();
         returnMap.put("columnDefs", columnDefs);
         List<Map<String, String>> data = new ArrayList<>();
-        System.out.println(headerMap);
+        log.debug(headerMap);
         for (CSVRecord record : parser) {
-            System.out.println(record);
-            System.out.println(record.get("Name"));
+            log.debug(record);
+            log.debug(record.get("Name"));
             for (Map.Entry<String, Integer> entrySet : headerMap.entrySet()) {
                 String key = entrySet.getKey();
                 Map<String, String> dataMap = new HashMap<>();
@@ -56,16 +56,16 @@ public class CsvDataSet {
         returnMap.put(data, data);
         //close the parser
         parser.close();
-        System.out.println(returnMap);
+        log.debug(returnMap);
         return returnMap;
     }
 
-    
     public static void main(String[] argv) {
+        log.debug("Calling main function");
         try {
-            System.out.println(CsvDataSet("/tmp/employees.csv"));
+            log.debug(CsvDataSet("/tmp/employees.csv"));
         } catch (IOException ex) {
-            Logger.getLogger(CsvDataSet.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error in file name /tmp/employees.csv " + ex);
         }
     }
 }

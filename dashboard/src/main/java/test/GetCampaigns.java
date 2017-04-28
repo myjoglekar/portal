@@ -24,6 +24,7 @@ import com.google.api.ads.adwords.lib.selectorfields.v201609.cm.CampaignField;
 import com.google.api.ads.common.lib.auth.OfflineCredentials;
 import com.google.api.ads.common.lib.auth.OfflineCredentials.Api;
 import com.google.api.client.auth.oauth2.Credential;
+import org.apache.log4j.Logger;
 
 /**
  * This example gets all campaigns. To add a campaign, run AddCampaign.java.
@@ -40,10 +41,13 @@ public class GetCampaigns {
     private static String clientSecret = "UxF3VNJFWfNBEQ86reUTk09M";
     private static String refreshToken = "1/75VMEAe7i9UOm69maPpsPMaYH1e58R1xUGlulN--3Pg";
     private static String developerToken = "X4glgfA7zjlwzeL3jNQjkw";
+    final static Logger log = Logger.getLogger(GetCampaigns.class);
 
     public static void main(String[] args) throws Exception {
+        log.debug("Calling main function");
+
         // Generate a refreshable OAuth2 credential.
-       /* Credential oAuth2Credential = new OfflineCredentials.Builder()
+        /* Credential oAuth2Credential = new OfflineCredentials.Builder()
          .forApi(Api.ADWORDS)
          .fromFile()
          .build()
@@ -80,7 +84,7 @@ public class GetCampaigns {
         Campaign[] entries = page.getEntries();
         for (int i = 0; i < entries.length; i++) {
             Campaign entry = entries[i];
-            System.out.println(entry.getName());
+           log.debug(entry.getName());
         }
     }
 

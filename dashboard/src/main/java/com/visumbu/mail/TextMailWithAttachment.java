@@ -5,11 +5,10 @@
 package com.visumbu.mail;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -19,11 +18,15 @@ public class TextMailWithAttachment {
 
     private MailProperties props = null;
 
+    final static Logger log = Logger.getLogger(TextMailWithAttachment.class);
+
     public TextMailWithAttachment(MailProperties props) {
+        log.debug("Calling TextMailWithAttachment constructor with parameter " + props);
         this.props = props;
     }
 
     public String sendMail() {
+        log.debug("Calling sendMail function with return type String");
         try {
             // Create the email message
             MultiPartEmail email = new MultiPartEmail();
@@ -54,7 +57,7 @@ public class TextMailWithAttachment {
             return email.send();
 
         } catch (EmailException ex) {
-            Logger.getLogger(TextMailWithAttachment.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error in setting of mail properties " + props + " which catch " + ex);
         }
         return "Not Sent";
     }

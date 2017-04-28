@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.OrderedMap;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -48,39 +49,47 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    final static Logger log = Logger.getLogger(UserController.class);
+
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     VbUser create(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
+        log.debug("Calling create function with return type VbUser by passing VbUser "+teUser+" as parameter");
         return userService.create(teUser);
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
     VbUser update(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
+        log.debug("Calling update function with return type VbUser by passing VbUser "+teUser+" as parameter");
         return userService.update(teUser);
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List read(HttpServletRequest request, HttpServletResponse response) {
+        log.debug("Calling read function with return type List");
         return userService.read();
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     VbUser read(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+        log.debug("Calling read function with return type VbUser by passing id "+id+" as parameter");
         return userService.read(id);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = "application/json")
     public @ResponseBody
     VbUser delete(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+        log.debug("Calling delete function with return type VbUser by passing id "+id+" as parameter");
         return userService.delete(id);
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody
     Map login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginUserBean loginUserBean) {
+        log.debug("Calling login function with return type Map by passing loginUserBean "+loginUserBean+" as parameter");
         SecurityAuthBean authData = userService.getPermissions(loginUserBean);
         //LoginUserBean userBean = userService.authenicate(loginUserBean);
         HttpSession session = request.getSession();
@@ -107,12 +116,13 @@ public class UserController {
     @RequestMapping(value = "allowedDealers", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List<Dealer> allowedDealers(HttpServletRequest request, HttpServletResponse response) {
+        log.debug("Calling allowedDealers function with return type List contains Dealer Objects");
         HttpSession session = request.getSession();
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
         }
-        System.out.println((String) session.getAttribute("userGuid"));
-        System.out.println((String) session.getAttribute("accessToken"));
+        log.debug((String) session.getAttribute("userGuid"));
+        log.debug((String) session.getAttribute("accessToken"));
         SecurityAuthBean authData = userService.getPermissions((String) session.getAttribute("accessToken"), (String) session.getAttribute("userGuid"));
         return getDealerBySecuityBean(authData);
     }
@@ -120,21 +130,23 @@ public class UserController {
     @RequestMapping(value = "sampleDealers", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List<Dealer> sampleDealers(HttpServletRequest request, HttpServletResponse response) {
+        log.debug("Calling sampleDealers function with return type List contains Dealer Objects");
         return userService.getSampleDealers();
     }
 
     private List<Dealer> getDealerBySecuityBean(SecurityAuthBean authData) {
+        log.debug("Calling getDealerBySecuityBean function with return type List contains Dealer Objects by passing authData "+authData+" as parameter");
         List<Dealer> returnList = new ArrayList<>();
         List<SecurityAuthRoleBean> roles = authData.getRoles();
         for (Iterator<SecurityAuthRoleBean> iterator = roles.iterator(); iterator.hasNext();) {
             SecurityAuthRoleBean role = iterator.next();
-            System.out.println("DEALER ID " + role.getDealer().getId());
+            log.debug("DEALER ID " + role.getDealer().getId());
             if (role.getDealer() != null && !role.getDealer().getId().isEmpty() && !role.getDealer().getId().equalsIgnoreCase("0")) {
-                System.out.println("DEALER ID " + role.getDealer().getId());
+                log.debug("DEALER ID " + role.getDealer().getId());
                 returnList.addAll(userService.getAllowedDealerByMapId(role.getDealer().getId()));
             }
             if (role.getGroup() != null && !role.getGroup().getId().isEmpty() && !role.getGroup().getId().equalsIgnoreCase("0")) {
-                System.out.println("GROUP ID " + role.getGroup().getId());
+                log.debug("GROUP ID " + role.getGroup().getId());
                 List<Dealer> dealers = userService.getAllowedDealerByGroupId(role.getGroup().getId());
                 if (dealers == null || dealers.isEmpty()) {
                     dealers = userService.getAllowedDealerByGroupName(role.getGroup().getName());
@@ -144,7 +156,7 @@ public class UserController {
             if (role.getOem() != null && role.getOem().getRegion() != null
                     && role.getOem().getRegion().getId() != null && !role.getOem().getRegion().getId().isEmpty()
                     && !role.getOem().getRegion().getId().equalsIgnoreCase("0")) {
-                System.out.println("OEM REGION ID " + role.getOem().getRegion().getId());
+                log.debug("OEM REGION ID " + role.getOem().getRegion().getId());
                 returnList.addAll(userService.getAllowedDealerByOemRegionId(role.getOem().getRegion().getId()));
             }
         }
@@ -155,6 +167,7 @@ public class UserController {
     @RequestMapping(value = "authData", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getAuthData(HttpServletRequest request, HttpServletResponse response) {
+        log.debug("Calling getAuthData function with return type Map");
         HttpSession session = request.getSession();
         if (!((Boolean) session.getAttribute("isAuthenticated"))) {
             return null;
@@ -182,6 +195,7 @@ public class UserController {
     @RequestMapping(value = "logout", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        log.debug("Calling logout function");
         HttpSession session = request.getSession();
         session.invalidate();
         response.sendRedirect("../../login.html");
@@ -190,6 +204,7 @@ public class UserController {
     @RequestMapping(value = "datasets", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getDataSets(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        log.debug("Calling getDataSets function with return type Map");
         Map returnMap = new LinkedHashMap();
         returnMap.put("Overall", getOverallDataSets());
         returnMap.put("Paid Search", getPaidDataSets());
@@ -204,6 +219,7 @@ public class UserController {
     }
 
     private List<UrlBean> getOverallDataSets() {
+        log.debug("Calling getOverallDataSets function with return type List contains UrlBean as objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/overall/overallPerformance/summary/day/0;Summary",
@@ -223,6 +239,7 @@ public class UserController {
     }
 
     private List<UrlBean> getPaidDataSets() {
+        log.debug("Calling getPaidDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/paid/accountPerformance;Account Performance",
@@ -246,6 +263,7 @@ public class UserController {
     }
 
     private List<UrlBean> getDynamicDisplayDataSets() {
+        log.debug("Calling getDynamicDisplayDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/dynamicDisplay/overallPerformance;Overall Performance",
@@ -260,6 +278,7 @@ public class UserController {
     }
 
     private List<UrlBean> getDisplayDataSets() {
+        log.debug("Calling getDisplayDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/display/geoPerformance;Geo Performance",
@@ -276,10 +295,10 @@ public class UserController {
             returnList.add(new UrlBean(url[0], url[1]));
         }
         return returnList;
-
     }
 
     private List<UrlBean> getVideoDataSets() {
+        log.debug("Calling getVideoDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/video/campaignDevicePerformance;Campaign Device Performance",
@@ -296,10 +315,10 @@ public class UserController {
             returnList.add(new UrlBean(url[0], url[1]));
         }
         return returnList;
-
     }
 
     private List<UrlBean> getSeoDataSets() {
+        log.debug("Calling getSeoDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/seo/accountPerformance;Account Performance",
@@ -318,6 +337,7 @@ public class UserController {
     }
 
     private List<UrlBean> getPaidSocialDataSets() {
+        log.debug("Calling getPaidSocialDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/paidSocial/accountPerformance;Account Performance",
@@ -334,10 +354,10 @@ public class UserController {
             returnList.add(new UrlBean(url[0], url[1]));
         }
         return returnList;
-
     }
 
     private List<UrlBean> getSocialImpactDataSets() {
+        log.debug("Calling getSocialImpactDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/socialImpact/postPerformance;Post Performance",
@@ -350,10 +370,10 @@ public class UserController {
             returnList.add(new UrlBean(url[0], url[1]));
         }
         return returnList;
-
     }
 
     private List<UrlBean> getReviewPushDataSets() {
+        log.debug("Calling getReviewPushDataSets function with return type List contains UrlBean objects");
         List<UrlBean> returnList = new ArrayList<>();
         String[] urlList = {
             "../api/admin/reviewPush/reviews;Reviews",
@@ -371,6 +391,6 @@ public class UserController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        e.printStackTrace();
+        log.error("Error handling bad request: " + e);
     }
 }

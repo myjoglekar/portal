@@ -43,7 +43,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Dealer.findByCreatedTime", query = "SELECT w FROM Dealer w WHERE w.createdTime = :createdTime"),
     @NamedQuery(name = "Dealer.findByEmail", query = "SELECT w FROM Dealer w WHERE w.email = :email"),
     @NamedQuery(name = "Dealer.findByLastSiteVisit", query = "SELECT w FROM Dealer w WHERE w.lastSiteVisit = :lastSiteVisit"),
-    @NamedQuery(name = "Dealer.findByStatus", query = "SELECT w FROM Dealer w WHERE w.status = :status")})
+    @NamedQuery(name = "Dealer.findByStatus", query = "SELECT w FROM Dealer w WHERE w.status = :status"),
+    @NamedQuery(name = "Dealer.findDealerNameById", query = "SELECT w.dealerName FROM Dealer w WHERE w.id = :id"),
+})
 public class Dealer implements Serializable {
     @Size(max = 255)
     @Column(name = "accountmanager_email")

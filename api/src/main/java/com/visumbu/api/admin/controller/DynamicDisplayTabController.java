@@ -134,6 +134,9 @@ public class DynamicDisplayTabController {
         String fieldsOnly = request.getParameter("fieldsOnly");
         String dealerId = request.getParameter("dealerMapId");
         Map map = (Map) dynamicDisplayService.getAccountPerformance(startDate, endDate, dealerId, fieldsOnly);
+        if(map == null){
+            return null;
+        }
         List list = (List) map.get("columnDefs");
         list.addAll(columnDefs);
         if (fieldsOnly != null) {
@@ -163,7 +166,6 @@ public class DynamicDisplayTabController {
             }
         }
         return map;
-
     }
 
     @RequestMapping(value = "accountPerformance12Weeks", method = RequestMethod.GET, produces = "application/json")
@@ -173,6 +175,11 @@ public class DynamicDisplayTabController {
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
         String fieldsOnly = request.getParameter("fieldsOnly");
         String dealerId = request.getParameter("dealerMapId");
+        System.out.println("startDate: "+startDate);
+        System.out.println("endDate: "+endDate);
+        System.out.println("fieldsOnly: "+fieldsOnly);
+        System.out.println("dealerId: "+dealerId);
+        System.out.println("object: "+dynamicDisplayService.getLast12Weeks(startDate, endDate, dealerId, fieldsOnly));
         return dynamicDisplayService.getLast12Weeks(startDate, endDate, dealerId, fieldsOnly);
     }
 

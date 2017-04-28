@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -35,10 +36,12 @@ public class ReportController {
 
     @Autowired
     private ReportService reportService;
+    final static Logger log = Logger.getLogger(ReportController.class);
 
     @RequestMapping(value = "visitDetails", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     List topDealersByVisit(HttpServletRequest request, HttpServletResponse response) {
+        log.debug("Calling topDealersByVisit function with return type List");
         Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
         Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
         ReportPage page = getPage(request);
@@ -46,6 +49,7 @@ public class ReportController {
     }
 
     private ReportPage getPage(HttpServletRequest request) {
+        log.debug("Calling getPage function with return type ReportPage");
         ReportPage reportPage = new ReportPage();
         if (request.getParameter("page") == null && request.getParameter("count") == null) {
             return null;
@@ -68,6 +72,6 @@ public class ReportController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        e.printStackTrace();
+        log.error("Error handling bad request: " + e);
     }
 }

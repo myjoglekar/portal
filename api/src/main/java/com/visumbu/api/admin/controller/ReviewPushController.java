@@ -107,7 +107,12 @@ public class ReviewPushController extends BaseController {
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "none");
         System.out.println("Review Push Account Id " + accountDetails.getReviewPushAccountId());
         if (accountDetails.getReviewPushAccountId() != null) {
-            returnMap.put("data", reviewPushService.getRatingSummaryByDealer(startDate, endDate, accountDetails.getReviewPushAccountId()));
+            System.out.println("StartDate: " + startDate + " EndDate: " + endDate + " accountDetails: " + accountDetails.getReviewPushAccountId());
+            try {
+                returnMap.put("data", reviewPushService.getRatingSummaryByDealer(startDate, endDate, accountDetails.getReviewPushAccountId()));
+            } catch (Exception e) {
+                returnMap.put("data", null);
+            }
         } else {
             returnMap.put("data", null);
         }
@@ -137,7 +142,11 @@ public class ReviewPushController extends BaseController {
         }
         AccountDetails accountDetails = ApiUtils.toAccountDetails(request, "none");
         if (accountDetails.getReviewPushAccountId() != null) {
-            returnMap.put("data", reviewPushService.getBySources(startDate, endDate, accountDetails.getReviewPushAccountId()));
+            try {
+                returnMap.put("data", reviewPushService.getBySources(startDate, endDate, accountDetails.getReviewPushAccountId()));
+            } catch (Exception e) {
+                returnMap.put("data", null);
+            }
         } else {
             returnMap.put("data", null);
         }

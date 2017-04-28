@@ -131,9 +131,8 @@ public class FileReader {
             Object obj = (Object) um.unmarshal(source);
             return obj;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            return null;
         }
-        return null;
     }
     public static Object readXmlAsMap(String fileName) {
         try {
