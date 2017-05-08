@@ -1,5 +1,4 @@
-var app = angular.module("loginApp", ['ngCookies', 'LocalStorageModule']);
-app.controller("LoginController", function ($scope, $http, $window, $cookies, localStorageService, $timeout) {
+app.controller("LoginController", function ($scope, $http, $window, $cookies, localStorageService, $timeout, $state, $location) {
     $scope.loadDashboard = true;
     $scope.authenticate = function (login) {
         $scope.errorMessage = "";
@@ -13,8 +12,11 @@ app.controller("LoginController", function ($scope, $http, $window, $cookies, lo
                 $cookies.putObject("fullname", response.authData.fullName);
                 $cookies.putObject("username", response.authData.userName);
                 localStorageService.set("permission", response.authData.permission)
+//                $location.path("index/dashboard/1/2") 
                 //$cookies.putObject("isAdmin", response.isAdmin);
                 $window.location.href = 'index.html' 
+//                $window.location.href = 'index.html#/index/dashboard/1/2' 
+//$state.go('index.dashboard', {dealerId: 1, productId: 2})
                 $scope.loadDashboard = false;
             }
         });

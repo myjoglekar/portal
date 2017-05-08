@@ -27,6 +27,10 @@ public class DateRange {
         this.endDate = endDate;
     }
     
+    public DateRange() {
+        System.out.println("This is DateRange Constructor");
+    }
+    
     public Date getStartDate() {
         return startDate;
     }

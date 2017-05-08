@@ -7,8 +7,10 @@ package com.visumbu.vb.admin.controller;
 
 import com.visumbu.vb.admin.dao.DealerDao;
 import com.visumbu.vb.admin.service.DealerService;
+import com.visumbu.vb.admin.service.ReportService;
 import com.visumbu.vb.admin.service.UiService;
 import com.visumbu.vb.admin.service.UserService;
+import com.visumbu.vb.model.ReportWidget;
 import com.visumbu.vb.model.TabWidget;
 import com.visumbu.vb.utils.JsonSimpleUtils;
 import com.visumbu.vb.utils.Rest;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +57,9 @@ public class ProxyController {
 
     @Autowired
     private DealerService dealerService;
+    
+    @Autowired
+    private ReportService reportService;
     
     @Autowired
     private DealerDao dealerDao;
@@ -108,6 +114,72 @@ public class ProxyController {
             } catch (IOException ex) {
                 Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+    
+    @RequestMapping(value = "downloadReport/{reportId}", method = RequestMethod.GET)
+    public @ResponseBody
+    void downloadReport(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {
+        System.out.println("function call");
+        String dealerId = request.getParameter("dealerId");                
+        Map<String, String> dealerAccountDetails = dealerService.getDealerAccountDetails(dealerId);
+        MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
+        for (Map.Entry<String, String> entrySet : dealerAccountDetails.entrySet()) {
+            String key = entrySet.getKey();
+            String value = entrySet.getValue();
+            valueMap.put(key, Arrays.asList(value));
+        }
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
+            String key = entrySet.getKey();
+            String[] value = entrySet.getValue();
+            valueMap.put(key, Arrays.asList(value));
+        }
+        int dealeerId =  Integer.parseInt(dealerId);
+        List dealerList = dealerDao.getDealerNameById(dealeerId);
+        String dealerName = (String) dealerList.get(0);
+                
+        List<TabWidget> tabWidgets = new ArrayList<>();
+        List<ReportWidget> reportWidgets = reportService.getReportWidget(reportId);
+        for(Iterator<ReportWidget> iterator =reportWidgets.iterator();iterator.hasNext();){
+            ReportWidget reportWidget = iterator.next();
+            TabWidget widget = reportWidget.getWidgetId();
+            tabWidgets.add(widget);
+        }
+        for (Iterator<TabWidget> iterator = tabWidgets.iterator(); iterator.hasNext();) {
+            TabWidget tabWidget = iterator.next();
+            System.out.println("tabwidget chart type: " +tabWidget.getChartType());
+           
+            if(tabWidget.getChartType() == null || tabWidget.getChartType().isEmpty()){
+                continue;
+            }
+            try {
+                String url = tabWidget.getDirectUrl();
+                System.out.println("url: "+url);
+                Integer port = request.getServerPort();
+
+                String localUrl = request.getScheme() + "://" + request.getServerName() + ":" + port + "/";
+
+                if (url.startsWith("../")) {
+                    url = url.replaceAll("\\.\\./", localUrl);
+                }
+                String data = Rest.getData(url, valueMap);
+                JSONParser parser = new JSONParser();
+                Object jsonObj = parser.parse(data);
+                Map<String, Object> responseMap = JsonSimpleUtils.toMap((JSONObject) jsonObj);
+                List dataList = (List) responseMap.get("data");
+                tabWidget.setData(dataList);
+
+            } catch (ParseException ex) {
+                Logger.getLogger(ProxyController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        try {
+            OutputStream out = response.getOutputStream();
+            CustomReportDesigner crd = new CustomReportDesigner();
+            crd.dynamicPdfTable(dealerName, tabWidgets, out);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,4 +1,4 @@
-app.controller("NewOrEditReportController", function ($scope, $http, $stateParams, $filter) {
+app.controller("NewOrEditReportController", function ($scope, $http, $stateParams, $filter, $state) {
 
     $scope.reportId = $stateParams.reportId;
     $scope.startDate = $stateParams.startDate;
@@ -61,8 +61,11 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         {name: 'No', value: "no"}
     ];
 
-    $http.get("admin/ui/report/" + $stateParams.reportId + "?dealerId=" + $stateParams.dealerId).success(function (response) {
+    $http.get("admin/report/" + $stateParams.reportId).success(function (response) {
         $scope.reports = response;
+        if (!response) {
+            $scope.editReport = true;
+        }
         $scope.reportTitle = response.reportTitle;
         $scope.description = response.description;
         $scope.reportTitle = response.reportTitle;
@@ -72,9 +75,31 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         })
     });
 
-    $http.get('admin/ui/reportWidget/' + $stateParams.reportId + "?dealerId=" + $stateParams.dealerId).success(function (response) {
+    $http.get('admin/report/reportWidget/' + $stateParams.reportId).success(function (response) {
+        console.log(response)
         $scope.reportWidgets = response;
-    })
+        angular.forEach(response, function (value, key) {
+            console.log(value.widgetId)
+        })
+        console.log($scope.reportWidgets)
+    });
+
+
+
+//    $http.get("admin/report/report/" + $stateParams.reportId + "?dealerId=" + $stateParams.dealerId).success(function (response) {
+//        $scope.reports = response;
+//        $scope.reportTitle = response.reportTitle;
+//        $scope.description = response.description;
+//        $scope.reportTitle = response.reportTitle;
+//        $scope.uploadLogo = response.logo;
+//        angular.forEach($scope.report, function (value, key) {
+//            $scope.logo = window.atob(value.logo);
+//        })
+//    });
+//
+//    $http.get('admin/report/reportWidget/' + $stateParams.reportId + "?dealerId=" + $stateParams.dealerId).success(function (response) {
+//        $scope.reportWidgets = response;
+//    })
 
     $scope.uploadLogo = "static/img/logos/digital1.png";       //Logo Upload
     $scope.imageUpload = function (event) {
@@ -101,28 +126,28 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
             logo: $scope.uploadLogo   //window.btoa($scope.uploadLogo)
         };
         console.log(data.logo);
-        $http({method: $stateParams.reportId ? 'PUT' : 'POST', url: 'admin/ui/report', data: data});
+        $http({method: $stateParams.reportId ? 'PUT' : 'POST', url: 'admin/report/report', data: data});
     };
 
     $scope.addReportWidget = function (newWidget) {                                     //Add new Report Widget
         var data = {
             width: newWidget, 'minHeight': 25, columns: []
         };
-        $http({method: 'POST', url: 'admin/ui/reportWidget/' + $stateParams.reportId, data: data}).success(function (response) {
+        $http({method: 'POST', url: 'admin/report/reportWidget/' + $stateParams.reportId, data: data}).success(function (response) {
             $scope.reportWidgets.push({id: response.id, width: newWidget, 'minHeight': 25, columns: []});
         });
     };
 
     $scope.deleteReportWidget = function (reportWidget, index) {                            //Delete Widget
-        $http({method: 'DELETE', url: 'admin/ui/reportWidget/' + reportWidget.id}).success(function (response) {
+        $http({method: 'DELETE', url: 'admin/report/reportWidget/' + reportWidget.id}).success(function (response) {
             $scope.reportWidgets.splice(index, 1);
         });
     };
-    
+
     $scope.deleteColumn = function (widgetColumns, index) {        //Delete Columns - Popup
         widgetColumns.splice(index, 1);
     };
-    
+
     $scope.dynamicLoadingUrl = function (reportWidget) {                                //Dynamic Url from columns Type data - Popup
         if (reportWidget.columns) {
             reportWidget.columns = reportWidget.columns;
@@ -177,9 +202,9 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         $scope.setPreviewColumn = reportWidget;
     };
     $scope.changeUrl = function (displayName, reportWidget) {                                       //Search dynamic Url  
-        angular.forEach($scope.productFields,function(value, key){
-            if(value.productDisplayName == displayName){
-               $scope.requiredUrl = value.url;
+        angular.forEach($scope.productFields, function (value, key) {
+            if (value.productDisplayName == displayName) {
+                $scope.requiredUrl = value.url;
             }
         });
         //var searchUrl = $filter('filter')($scope.productFields, {productDisplayName: url})[0];
@@ -211,25 +236,96 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
         $scope.previewChartUrl = reportWidget.previewUrl;
     };
 
+//    $scope.saveReport = function (reportWidget) {
+//        console.log(reportWidget.id)
+//        console.log($scope.editChartTypes)
+//        reportWidget.directUrl = reportWidget.previewUrl ? reportWidget.previewUrl : reportWidget.directUrl;
+//        var data = {
+//            id: reportWidget.id,
+//            chartType: $scope.editChartType ? $scope.editChartType : reportWidget.chartType,
+//            directUrl: reportWidget.directUrl,
+//            widgetTitle: reportWidget.previewTitle,
+//            reportColumns: reportWidget.columns,
+//            productName: reportWidget.productName,
+//            productDisplayName: reportWidget.productDisplayName
+//        };
+//        reportWidget.chartType = "";
+//        $http({method: reportWidget.id ? 'PUT' : 'POST', url: 'admin/report/reportWidget/' + $stateParams.reportId, data: data}).success(function (response) {
+//            reportWidget.chartType = data.chartType;
+//        });
+//        reportWidget.widgetTitle = reportWidget.previewTitle ? reportWidget.previewTitle : reportWidget.widgetTitle;
+//        reportWidget.reportColumns = reportWidget.columns;
+//    };
+
     $scope.saveReport = function (reportWidget) {
-        console.log(reportWidget.id)
-        console.log($scope.editChartTypes)
+        console.log(reportWidget)
         reportWidget.directUrl = reportWidget.previewUrl ? reportWidget.previewUrl : reportWidget.directUrl;
+        var widgetColumnsData = [];
+        angular.forEach(reportWidget.columns, function (value, key) {
+            var hideColumn = value.columnHide;
+            if (value.groupPriority > 0) {
+                hideColumn = 1;
+            }
+
+            var columnData = {
+                id: value.id,
+                fieldName: value.fieldName,
+                displayName: value.displayName,
+                agregationFunction: value.agregationFunction,
+                groupPriority: isNaN(value.groupPriority) ? null : value.groupPriority,
+                xAxis: isNaN(value.xAxis) ? null : value.xAxis,
+                yAxis: isNaN(value.yAxis) ? null : value.yAxis,
+                sortOrder: value.sortOrder,
+                displayFormat: value.displayFormat,
+                alignment: value.alignment,
+                baseFieldName: value.baseFieldName,
+                fieldGenerationFields: value.fieldGenerationFields,
+                fieldGenerationFunction: value.fieldGenerationFunction,
+                fieldType: value.fieldType,
+                functionParameters: value.functionParameters,
+                remarks: value.remarks,
+                sortPriority: isNaN(value.sortPriority) ? null : value.sortPriority,
+                width: isNaN(value.width) ? null : value.width,
+                wrapText: value.wrapText,
+                xAxisLabel: value.xAxisLabel,
+                yAxisLabel: value.yAxisLabel,
+                columnHide: hideColumn
+            };
+            widgetColumnsData.push(columnData);
+        });
+//        if (widget.dateDuration) {
+//            widget.customRange = "";
+//        }
+
+        if (reportWidget.dateDuration == 'None' || reportWidget.dateDuration == "This Month" || reportWidget.dateDuration == "This Year" || reportWidget.dateDuration == "Last Year" || reportWidget.dateDuration == "Yesterday" || reportWidget.dateDuration == "Custom") {
+            reportWidget.frequencyDuration = "";
+        }
+
         var data = {
             id: reportWidget.id,
             chartType: $scope.editChartType ? $scope.editChartType : reportWidget.chartType,
-            directUrl: reportWidget.directUrl,
+            directUrl: reportWidget.previewUrl,
             widgetTitle: reportWidget.previewTitle,
-            reportColumns: reportWidget.columns,
+            widgetColumns: widgetColumnsData,
             productName: reportWidget.productName,
-            productDisplayName: reportWidget.productDisplayName
+            productDisplayName: reportWidget.productDisplayName,
+            tableFooter: reportWidget.tableFooter,
+            zeroSuppression: reportWidget.zeroSuppression,
+            maxRecord: reportWidget.maxRecord,
+            dateDuration: reportWidget.dateDuration,
+            frequencyDuration: reportWidget.frequencyDuration,
+            customRange: reportWidget.customRange
         };
         reportWidget.chartType = "";
-        $http({method: reportWidget.id ? 'PUT' : 'POST', url: 'admin/ui/reportWidget/' + $stateParams.reportId, data: data}).success(function (response) {
+        $http({method: reportWidget.id ? 'PUT' : 'POST', url: 'admin/report/dbWidget/' + reportWidget.tabId.id, data: data}).success(function (response) {
+            reportWidget.columns = response.columns; // widget.columns;
             reportWidget.chartType = data.chartType;
         });
         reportWidget.widgetTitle = reportWidget.previewTitle ? reportWidget.previewTitle : reportWidget.widgetTitle;
-        reportWidget.reportColumns = reportWidget.columns;
+//        widget.dateDuration = widget.dateDuration;
+//        widget.frequencyDuration = widget.frequencyDuration;
+//        widget.customRange = widget.customRange;
+        reportWidget.widgetColumns = widgetColumnsData; // widget.columns;
     };
 
     $scope.onDropComplete = function (index, reportWidget, evt) {
@@ -245,8 +341,9 @@ app.controller("NewOrEditReportController", function ($scope, $http, $stateParam
                 return value.id;
             }).join(',');
             if (widgetOrder) {
-                $http({method: 'GET', url: 'admin/ui/dbReportUpdateOrder/' + $stateParams.reportId + "?widgetOrder=" + widgetOrder});
+                $http({method: 'GET', url: 'admin/report/dbReportUpdateOrder/' + $stateParams.reportId + "?widgetOrder=" + widgetOrder});
             }
-        };
+        }
+        ;
     };
 });

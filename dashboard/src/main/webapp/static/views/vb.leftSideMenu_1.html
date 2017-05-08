@@ -1,0 +1,34 @@
+
+    <section ng-controller="MenuController"> 
+        <!-- Sidebar Menu -->
+        <ul>
+            <li class="treeview active">
+                <a>
+                    <i class="fa fa-th"></i>
+                    <span>Products</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li ng-repeat="product in products">
+                        <a class="active"  ng-click="setParamsDate(product); loadNewUrl()" style="cursor: pointer">
+                            {{product.productName}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a data-ui-sref="index.report.reports({dealerId: dealerId, startDate: startDate, endDate: endDate})">
+                    <i class="fa fa-file-text"></i> Report
+                </a>
+            </li>
+<!--            <li>
+                <a data-ui-sref="index.dataSource({dealerId: dealerId, startDate: startDate, endDate: endDate})">
+                    <i class="fa fa-database"></i> Data Source
+                </a>
+            </li>
+            <li>
+                <a data-ui-sref="index.dataSet({dealerId: dealerId, startDate: startDate, endDate: endDate})">
+                    <i class="fa fa-database"></i> Data Set
+                </a>
+            </li>-->
+        </ul>    
+    </section>

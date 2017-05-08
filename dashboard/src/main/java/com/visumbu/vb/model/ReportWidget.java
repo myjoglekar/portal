@@ -143,8 +143,11 @@ public class ReportWidget implements Serializable {
     private String productDisplayName;
     @Size(max = 255)
     @Column(name = "productName")
-    private String productName;
-    @JoinColumn(name = "reportId", referencedColumnName = "id")
+    private String productName;    
+    @JoinColumn(name = "widget_id", referencedColumnName = "id")
+    @ManyToOne
+    private TabWidget widgetId;
+    @JoinColumn(name = "report_id", referencedColumnName = "id")
     @ManyToOne
     private Report reportId;
     @OneToMany(mappedBy = "reportId")
@@ -399,6 +402,14 @@ public class ReportWidget implements Serializable {
     public void setColumns(List<ReportColumn> columns) {
         this.columns = columns;
     } 
+
+    public TabWidget getWidgetId() {
+        return widgetId;
+    }
+
+    public void setWidgetId(TabWidget widgetId) {
+        this.widgetId = widgetId;
+    }
 
     @XmlTransient
     @JsonIgnore

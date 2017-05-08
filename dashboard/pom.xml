@@ -7,7 +7,7 @@
     <version>1</version>
     <packaging>war</packaging>
 
-    <name>Dashboard</name>
+    <name>L2TDashboard</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -98,11 +98,13 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.8.0</version>
         </dependency>
-        <dependency>
-            <groupId>c3p0</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>0.9.1.2</version>
-        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
+<dependency>
+    <groupId>com.mchange</groupId>
+    <artifactId>c3p0</artifactId>
+    <version>0.9.2.1</version>
+</dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

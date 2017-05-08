@@ -6,14 +6,15 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/vb.index.html"
             })
             .state("index.dashboard", {
-                url: "/dashboard/:dealerId/:productId",
+                url: "/dashboard/:dealerId/:productId/:tabId?:startDate/:endDate",
                 templateUrl: "static/views/dashboard/dashboard.html",
+                controller: 'UiController'
             })
-            .state("index.dashboard.widget", {
-                url: "/widget/:tabId?:startDate/:endDate",
-                templateUrl: "static/views/dashboard/widgets.html",
-                controller: 'WidgetController'
-            })
+//            .state("index.dashboard.widget", {
+//                url: "/widget/:tabId?:startDate/:endDate",
+//                templateUrl: "static/views/dashboard/widgets.html",
+//                controller: 'WidgetController'
+//            })
             .state("index.report", {
                 url: "/reportIndex/:dealerId",
                 templateUrl: "static/views/reports/reportIndex.html",
@@ -35,7 +36,21 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: "/newOrEdit/:dealerId/:reportId?:startDate/:endDate",
                 templateUrl: "static/views/reports/newOrEditReports.html",
                 controller: 'NewOrEditReportController',
-                activetab: 'report'
+            })
+            .state("index.schedulerIndex", {
+                url: "/schedulerIndex/:dealerId",
+                templateUrl: "static/views/scheduler/schedulerIndex.html",
+                controller: 'SchedulerIndexController'
+            })
+            .state("index.schedulerIndex.scheduler", {
+                url: "/scheduler?:startDate/:endDate",
+                templateUrl: "static/views/scheduler/scheduler.html",
+                controller: 'SchedulerController'
+            })
+            .state("index.schedulerIndex.editOrNewScheduler", {
+                url: "/editOrNewScheduler/:schedulerId?:startDate/:endDate",
+                templateUrl: "static/views/scheduler/newOrEditScheduler.html",
+                controller: 'NewOrEditSchedulerController'
             })
             .state("index.dataSource", {
                 url: "/dataSource/:dealerId?:startDate/:endDate",
@@ -46,8 +61,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/source/dataSet.html",
                 controller: 'DataSetController'
             });
-
-    $urlRouterProvider.otherwise('index/dashboard/1/2');
+            
+    $urlRouterProvider.otherwise(function ($injector, $http){       
+        $injector.get('$state').go('index.dashboard');
+    });
+//    $urlRouterProvider.otherwise('index/dashboard/1/2');
 });
 //
 //Array.prototype.move = function (from, to) {

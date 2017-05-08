@@ -1,26 +1,103 @@
 <section class="content-header">
-    <h1 class="text-capitalize">Dashboard Reports</h1>        
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown dropdown-dealer">
+                            <a class="dropdown-toggle" data-toggle="dropdown">Dealer<br>
+                                <span class="drop-dealer">Dealer Group of Anywhere </span> <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                            <ul class="dropdown-menu dealer-ht" role="menu">
+                                <li>
+                                    <a><input type="text" ng-model="search" class="form-control"></a>
+                                </li>
+                                <li ng-repeat="dealer in dealers| filter: search" ng-click="getDealerId(dealer); loadNewUrl()">
+                                    <a>{{dealer.dealerName}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-dealer">
+                            <a class="dropdown-toggle" data-toggle="dropdown">Dashboard<br>
+                                <span class="drop-dealer">Overview </span> <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li ng-repeat="product in products">
+                                    <a class="active"  ng-click="setReportParamsDate(product);" style="cursor: pointer">
+                                        {{product.productName}}
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li ng-click="setParams()">
+                                    <a data-ui-sref="index.report.reports({dealerId: dealerId, startDate: startDate, endDate: endDate})">
+                                        <i class="fa fa-file-text"></i> Report
+                                    </a>
+                                </li>
+                                <li ng-click="setParams()">
+                                    <a data-ui-sref="index.schedulerIndex.scheduler({dealerId: dealerId, startDate: startDate, endDate: endDate})">
+                                        <i class="fa fa-clock-o" aria-hidden="true"></i> Scheduler
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-dealer">
+                            <a id="daterange-btn">
+                                <i class="fa fa-calendar" id="date"></i>
+                                <span class="date-border">
+                                    {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
+                                </span>
+                            </a>                   
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <ul class="button-add">                    
+                    <li>
+                        <div class="btn-group">
+                            <span ui-sref="index.report.newOrEdit({dealerId: dealerId, reportId: 0, startDate: startDate, endDate: endDate})">
+                                <button type="button" class="btn btn-block btn-primary btn-flat"><i class="fa fa-plus-circle"></i> Add Reports</button>
+                            </span>
+                        </div>
+                    </li>
+                    <!--                    <li>
+                                            <button class="btn btn-primary" ng-click="pageRefresh()"><i class="fa fa-repeat"></i></button>
+                                        </li>
+                                        <li>
+                                            <button class="btn btn-primary" ng-click="downloadPdf()"><i class="fa fa-download"></i></button>
+                                        </li>-->
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown-features col-md-12"></div>
+        <div class="col-md-12">
+            <h2>
+                Dashboard Reports
+                <!--                <small>Overview Dashboard</small><br>
+                                {{dashboardName}}-->
+            </h2>
+        </div>
+    </div>
 </section>
-<section class="content">  
-   
-    <div class="nav-tabs-custom">
-        <ul class="nav nav-tabs">
-<!--            <li ng-class="{active: $state.current.activetab == 'template'}">
-                <a ui-sref="index.report.template({reportId: reportId, startDate: startDate, endDate: endDate})" style="padding:3px 15px;display: inline-block;">
-                    Template
-                </a>
-            </li>-->
-            <li ng-class="{active: $state.current.activetab == 'report'}">
-                <!--<a ui-sref="index.report.reports({dealerId: dealerId, reportId: reportId, startDate: startDate, endDate: endDate})" style="padding:3px 15px;display: inline-block;">-->
-                <a style="padding:3px 15px;display: inline-block;">
-                    Reports
-                </a>
-            </li>
-        </ul>
-    </div>
- <div class="row">
-    <div class="tab-content">
-        <div ui-view></div>
-    </div>
+
+<section class="content-wrapper">
+    <div class="container">
+        <section class="content">
+            <div class="row">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li ng-class="{active: $state.current.activetab == 'report'}">
+                            <!--<a ui-sref="index.report.reports({dealerId: dealerId, reportId: reportId, startDate: startDate, endDate: endDate})" style="padding:3px 15px;display: inline-block;">-->
+                            <a style="padding:3px 15px;display: inline-block;">
+                                Reports
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="tab-content">
+                        <div ui-view></div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </section>
