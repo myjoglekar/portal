@@ -2017,7 +2017,9 @@ opacity:1
 .btn-primary {
     background-color: #71c2c5;
     border-color: #71c2c5;
+    color:#FFFFFF;
 }
+
 .btn-primary.hover {
 	background-color: #74c4c6 !important
 }
@@ -2040,11 +2042,15 @@ opacity:1
 	background-color: #00acd6
 }
 .btn-danger {
-	background-color: #dd4b39;
-	border-color: #d73925
+	background-color: #ffffff !important;
+	border-color: #74c4c6;
+        color:#74c4c6
 }
 .btn-danger:hover, .btn-danger:active, .btn-danger.hover {
-	background-color: #d73925
+	background-color: #ffffff !important;
+        border-color:#74c4c6 !important;
+        color:#74c4c6;
+        
 }
 .btn-warning {
 	background-color: #f39c12;
@@ -3721,12 +3727,12 @@ table.text-center, table.text-center td, table.text-center th {
 .select2-container--default.select2-container--focus, .select2-selection.select2-container--focus, .select2-container--default:focus, .select2-selection:focus, .select2-container--default:active, .select2-selection:active {
 	outline: none
 }
-.select2-container--default .select2-selection--single, .select2-selection .select2-selection--single {
+/*.select2-container--default .select2-selection--single, .select2-selection .select2-selection--single {
 	border: 1px solid #d2d6de;
 	border-radius: 0;
 	padding: 6px 12px;
 	height: 34px
-}
+}*/
 .select2-container--default.select2-container--open {
 	border-color: #3c8dbc
 }

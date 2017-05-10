@@ -221,7 +221,7 @@
     <section class="content-header">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">
                             <li class="dropdown dropdown-dealer">
@@ -259,17 +259,21 @@
                                 </ul>
                             </li>
                             <li class="dropdown dropdown-dealer">
-                                <a id="daterange-btn">
-                                    <i class="fa fa-calendar" id="date"></i>
+                                <a id="daterange-btn" style="padding: 21px;">
+                                    <div style="border: 1px solid #D2D8DB; padding: 4px 13px 3px 12px;">
+                                    <i class="fa fa-calendar" id="date" style="padding-right: 2px;"></i>
                                     <span class="date-border">
-                                        {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
+                                        <span style="padding-right: 5px;">
+                                            {{firstDate| date: "MM/dd/yyyy"}}
+                                        </span> - <span style="padding-left: 5px;padding-right: 4px;">{{lastDate| date: "MM/dd/yyyy"}}</span> <i class="fa fa-caret-down"></i>
                                     </span>
+                                    </div>
                                 </a>                   
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <ul class="button-add">                    
                         <li>
                             <div class="btn-group dropdown">
@@ -354,7 +358,7 @@
                                 </div>
                             </div>
                         </li> 
-                        <li ng-if="permission.allowCreateTab == true" class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
+<!--                        <li ng-if="permission.allowCreateTab == true" class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
 
                         <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
                             <div class="modal-dialog modal-md">
@@ -388,7 +392,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </ul>
                 </div>
                 <div class="tab-content">

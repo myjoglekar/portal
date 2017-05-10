@@ -44,8 +44,13 @@ public class ReportService {
         return reportDao.updateReportOrder(reportId, widgetOrder);
     }
     
+//    public Report deleteReport(Integer reportId) {
+//        System.out.println(reportId);
+//        return reportDao.deleteReport(reportId);
+//    }
+    
     public Report deleteReport(Integer reportId) {
-        return (Report) reportDao.delete(reportId);
+        return reportDao.deleteReport(reportId);
     }
     
     public Report getReportById(Integer reportId) {
@@ -53,8 +58,8 @@ public class ReportService {
     }
 
     public List<Report> getReport() {
-        List<Report> report = reportDao.read(Report.class);
-        return report;
+//        List<Report> report = reportDao.read(Report.class);
+        return reportDao.getReport();
     }
 
     public ReportWidget createReportWidget(ReportWidget reportWidget) {
@@ -80,6 +85,6 @@ public class ReportService {
 
     public TabWidget saveTabWidget(Integer tabId, TabWidgetBean tabWidget) {
         return uiService.saveTabWidget(tabId, tabWidget);
-    }
+    }   
 
 }

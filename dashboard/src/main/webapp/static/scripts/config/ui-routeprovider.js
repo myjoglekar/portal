@@ -57,12 +57,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: "static/views/source/dataSource.html",
                 controller: 'DataSourceController'
             }).state("index.dataSet", {
-                url: "/dataSet/:dealerId?:startDate/:endDate",
-                templateUrl: "static/views/source/dataSet.html",
-                controller: 'DataSetController'
-            });
-            
-    $urlRouterProvider.otherwise(function ($injector, $http){       
+        url: "/dataSet/:dealerId?:startDate/:endDate",
+        templateUrl: "static/views/source/dataSet.html",
+        controller: 'DataSetController'
+    });
+
+    $urlRouterProvider.otherwise(function ($injector, $http) {
         $injector.get('$state').go('index.dashboard');
     });
 //    $urlRouterProvider.otherwise('index/dashboard/1/2');
@@ -72,3 +72,21 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 //    this.splice(to, 0, this.splice(from, 1)[0]);
 //    return this;
 //};
+app.run(['$window', '$rootScope', '$stateParams',
+    function ($window, $rootScope, $stateParams) {
+        $rootScope.goBack = function () {
+            $window.history.back();
+        }
+
+        $rootScope.printReport = function (dispButton, runUrl) {
+            if (dispButton === true) {
+                this.showButton = true;
+            }else{        
+                this.showButton = false;
+            }
+            if (runUrl === true) {
+                var url = "admin/proxy/downloadReport/" + $stateParams.reportId + "?dealerId=" + $stateParams.dealerId + "&startDate=" + $stateParams.startDate + "&endDate=" + $stateParams.endDate;
+                $window.open(url);
+            }
+        }
+    }]);

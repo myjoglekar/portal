@@ -50,15 +50,31 @@
                             </ul>
                         </li>
                         <li class="dropdown dropdown-dealer">
-                            <a id="daterange-btn">
-                                <i class="fa fa-calendar" id="date"></i>
+                            <a id="daterange-btn" style="padding: 21px;">
+                                <div style="border: 1px solid #D2D8DB; padding: 4px 13px 3px 12px;">
+                                <i class="fa fa-calendar" id="date" style="padding-right: 2px;"></i>
                                 <span class="date-border">
-                                    {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
+                                    <span style="padding-right: 5px;">
+                                        {{firstDate| date: "MM/dd/yyyy"}}
+                                    </span> - <span style="padding-left: 5px;padding-right: 4px;">{{lastDate| date: "MM/dd/yyyy"}}</span> <i class="fa fa-caret-down"></i>
                                 </span>
+                                </div>
                             </a>                   
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="col-md-6">
+                <ul class="button-add">                    
+                    <li>
+                        <div class="btn-group">
+                            <button type="button" ng-click="setParams(); goBack()"
+                                    class="btn btn-block btn-primary btn-flat">
+                                <i class="fa fa-arrow-left"></i> Back
+                            </button>
+                        </div>
+                    </li>
+                </ul>
             </div>
             <!--            <div class="col-md-6">
                             <ul class="button-add">                    

@@ -83,9 +83,42 @@ public class ReportDao extends BaseDao {
         }
         return null;
     }
+    
+    public Report deleteReport(Integer reportId) {
+        
+//        String querySchis = "delete from SchedulerHistory d where d.reportId.id = :reportId";
+//        Query querySeshis = sessionFactory.getCurrentSession().createQuery(querySchis);
+//        querySeshis.setParameter("reportId", reportId);
+//        querySeshis.executeUpdate();
+//        
+//        String querySch = "delete from Scheduler d where d.reportId.id = :reportId";
+//        Query querySes = sessionFactory.getCurrentSession().createQuery(querySch);
+//        querySes.setParameter("reportId", reportId);
+//        querySes.executeUpdate();
+//        
+//        String queryString = "delete from ReportWidget d where d.reportId.id = :reportId";
+//        Query querySess = sessionFactory.getCurrentSession().createQuery(queryString);
+//        querySess.setParameter("reportId", reportId);
+//        querySess.executeUpdate();
+        
+        String queryStr = "update Report d set status = 'Deleted'  where d.id = :reportId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("reportId", reportId);
+        query.executeUpdate();
+        
+         return null;
+    }
 
     public ReportWidget deleteReportWidget(Integer id) {
         delete(getReportWidgetById(id));
         return null;
     }    
+
+    public List<Report> getReport() {
+        String queryStr = "select d from Report d where (status is null or status != 'Deleted')";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        //query.setParameter("tabId", tabId);
+        
+        return query.list();
+    }
 }

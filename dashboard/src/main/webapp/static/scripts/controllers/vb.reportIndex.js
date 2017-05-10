@@ -1,4 +1,4 @@
-app.controller('ReportIndexController', function ($scope, $stateParams, $state, $http, $location) {
+app.controller('ReportIndexController', function ($scope, $stateParams, $state, $http, $location, $rootScope) {    
     $scope.$state = $state;//Find Active Tabs
 //    $scope.productId = $stateParams.productId ? $stateParams.productId : 0;
 //    $scope.reportId = $stateParams.reportId ? $stateParams.reportId : 0;
@@ -22,7 +22,7 @@ app.controller('ReportIndexController', function ($scope, $stateParams, $state, 
             $stateParams.productId = changeProductId;
             //getTabs();
         });
-    }
+    }    
 
     $scope.setReportParamsDate = function (product) {
         console.log($stateParams.startDate);
@@ -39,7 +39,7 @@ app.controller('ReportIndexController', function ($scope, $stateParams, $state, 
         $scope.startDate = $stateParams.startDate;
         $scope.endDate = $stateParams.endDate;
 //        $state.go("index.report.reports", {dealerId: $stateParams.dealerId, productId: $stateParams.productId, startDate: $scope.startDate, endDate: $scope.endDate});
-    };    
+    };
 
     $scope.toDate = function (strDate) {
         if (!strDate) {
@@ -126,8 +126,8 @@ app.controller('ReportIndexController', function ($scope, $stateParams, $state, 
             return "widget";
         }
         return "widget";
-    };
-
+    };    
+   
     $(document).ready(function (e) {
         $(document).on('click', '.applyBtn', function () {
             $scope.loadNewUrl();

@@ -24,13 +24,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="report in reports" ui-sref="index.report.newOrEdit({dealerId: dealerId, reportId: report.id?report.id:0, startDate: startDate, endDate: endDate})">
+                    <tr ng-repeat="report in reports">
                         <td>{{$index + 1}}</td>
                         <td>{{report.reportTitle}}</td>
                         <td>{{report.time}}</td>
                         <td>{{report.user}}</td>
                         <!--<td><img class="img-responsive img-thumbnail" src="{{report.logo}}"/></td>-->
-                        <td><button class="btn btn-info btn-xs"><i class="fa fa-download"></i></button></td>
+                        <td>
+                            <button ng-click="printReport(true, false)" class="btn btn-default btn-xs" ui-sref="index.report.newOrEdit({dealerId: dealerId, reportId: report.id?report.id:0, startDate: startDate, endDate: endDate})">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button class="btn btn-default btn-xs" ng-click="downloadReport(report)"><i class="fa fa-download"></i></button>
+                            <button class="btn btn-default btn-xs" ng-click="deleteReport(report, $index)"><i class="fa fa-trash-o"></i></button>
+                        </td>
                     </tr>
                 </tbody>
             </table>

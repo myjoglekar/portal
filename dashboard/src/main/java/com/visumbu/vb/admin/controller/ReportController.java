@@ -138,6 +138,12 @@ public class ReportController extends BaseController {
         return reportService.deleteReport(reportId);
     }
     
+//    @RequestMapping(value = "report/{reportId}", method = RequestMethod.DELETE, produces = "application/json")
+//    public @ResponseBody
+//    Report deleteReport(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+//        return reportService.deleteReport(id);
+//    }
+    
     @RequestMapping(value = "{reportId}", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Report getReportById(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer reportId) {

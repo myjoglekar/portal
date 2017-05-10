@@ -106,11 +106,11 @@
         <section class="content">
             <div class="row">
                 <div class="pull-right-container pull-right">
-                    <div class="btn-group"> 
+<!--                    <div class="btn-group"> 
                         <a ui-sref="index.report.reports({dealerId: dealerId, reportId: reportId, startDate: startDate, endDate: endDate})"><i class="fa fa-arrow-left"></i> Back</a>
-                    </div>
+                    </div>-->
                     <div class="btn-group"> 
-                        <a style="cursor: pointer;"><i class="fa fa-print"></i> Print</a> 
+<!--                        <a style="cursor: pointer;"><i class="fa fa-print"></i> Print</a> -->
                     </div>
                 </div>
                 <br/>
@@ -140,7 +140,7 @@
                             </div>                
                         </div>
                         <div class="col-sm-12">
-                            <button class="btn btn-info pull-right" ng-click="saveReportData()">Save</button>
+                            <button class="btn btn-primary btn-flat pull-right" ng-click="saveReportData()">Save</button>
                         </div>
                         <!--</div>-->
                     </div>
@@ -172,7 +172,7 @@
                                                         <span>Want to delete ? </span>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button class="btn btn-info btn-xs" ng-click="deleteReportWidget(reportWidget, $index)" data-dismiss="modal">Ok</button>
+                                                        <button class="btn btn-primary btn-flat btn-xs" ng-click="deleteReportWidget(reportWidget, $index)" data-dismiss="modal">Ok</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -406,7 +406,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button data-dismiss="modal" class="btn btn-info" ng-click="saveReport(reportWidget.widgetId); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-save"></span> Save</button>
+                                        <button data-dismiss="modal" class="btn btn-primary btn-flat" ng-click="saveReport(reportWidget.widgetId); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-save"></span> Save</button>
                                         <button data-dismiss="modal" class="btn btn-danger"><span class="fa fa-times"></span> Cancel</button>
                                     </div>
                                 </div>

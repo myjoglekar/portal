@@ -56,6 +56,7 @@ public class BaseDao {
     }
 
     public Object delete(Object object) {
+        System.out.println(object);
         try {
             sessionFactory.getCurrentSession().delete(object);
         } catch (Exception e) {

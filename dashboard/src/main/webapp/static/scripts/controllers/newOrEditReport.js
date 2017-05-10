@@ -1,5 +1,5 @@
-app.controller("NewOrEditReportController", function ($scope, $http, $stateParams, $filter, $state) {
-
+app.controller("NewOrEditReportController", function ($scope, $http, $stateParams, $filter, $state, $rootScope) {
+ $rootScope.printReport(true, false)
     $scope.reportId = $stateParams.reportId;
     $scope.startDate = $stateParams.startDate;
     $scope.endDate = $stateParams.endDate;
