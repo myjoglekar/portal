@@ -90,4 +90,10 @@ public class SchedulerController {
     Scheduler deleteScheduler(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer schedulerId) {
         return schedulerService.deleteScheduler(schedulerId);
     }
+    
+    @RequestMapping(value = "schedulerStatus/enableOrDisable", method = RequestMethod.PUT, produces = "application/json")
+    public @ResponseBody
+    Scheduler updateSchedulerEnableDisable(HttpServletRequest request, HttpServletResponse response, @RequestBody Scheduler scheduler) {
+        return schedulerService.updateSchedulerEnableDisable(scheduler);
+    }
 }

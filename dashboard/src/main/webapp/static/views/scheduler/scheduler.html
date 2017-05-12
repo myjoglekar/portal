@@ -36,13 +36,21 @@
                             <!--<td ng-click="showSchedulerHistory(scheduler);selectTableRow($index, scheduler.id)">{{scheduler.dealerId}}</td>-->
                             <td>
                                 <div class="checkbox checkbox-slider--b schedule-on">
-                                    <label class="" for="field{{$index + 1}}">
-                                        <input id="field{{$index + 1}}" type="checkbox"                                             
-                                               ng-click="saveSchedulerStatus(scheduler)"
-                                               ng-checked="scheduler.status == 'Active'"
-                                               ng-model="scheduler.status"/>
-                                        <span></span>
+                                    <label class="switch" for="field{{$index + 1}}">
+                                        <input id="field{{$index + 1}}" 
+                                               type="checkbox" 
+                                               ng-click="saveSchedulerStatus(scheduler)" 
+                                               ng-checked="scheduler.status == 'Active'" 
+                                               ng-model="scheduler.status">
+                                        <div class="slider round"></div>
                                     </label>
+                                    <!--                                    <label class="" for="field{{$index + 1}}">
+                                                                            <input id="field{{$index + 1}}" type="checkbox"                                             
+                                                                                   ng-click="saveSchedulerStatus(scheduler)"
+                                                                                   ng-checked="scheduler.status == 'Active'"
+                                                                                   ng-model="scheduler.status"/>
+                                                                            <span></span>
+                                                                        </label>-->
                                 </div>
                             </td>
                             <td>                           

@@ -156,4 +156,20 @@ public class SchedulerDao extends BaseDao {
         return null;
     }
 
+    public Scheduler updateSchedulerEnableDisable(Scheduler scheduler) {
+        String queryStr;
+        Integer schedulerId = scheduler.getId();
+        Boolean activeStatus = Boolean.parseBoolean(scheduler.getStatus());
+        if (activeStatus == true) {
+            queryStr = "update Scheduler d set status = 'Active' where d.id = :schedulerId";
+        } else {
+            queryStr = "update Scheduler d set status = 'InActive' where d.id = :schedulerId";
+        }   
+        System.out.println(queryStr);
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("schedulerId", schedulerId);
+        query.executeUpdate();
+        return null;
+    }
+
 }

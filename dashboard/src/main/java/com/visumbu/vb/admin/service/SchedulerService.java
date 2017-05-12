@@ -346,4 +346,8 @@ public class SchedulerService {
     public Scheduler deleteScheduler(Integer schedulerId) {
        return schedulerDao.deleteScheduler(schedulerId);
     }
+
+    public Scheduler updateSchedulerEnableDisable(Scheduler scheduler) {
+        return schedulerDao.updateSchedulerEnableDisable(scheduler);
+    }
 }
