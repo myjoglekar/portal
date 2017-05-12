@@ -143,4 +143,17 @@ public class SchedulerDao extends BaseDao {
         return query.list();
     }
 
+    public Scheduler deleteScheduler(Integer schedulerId) {
+        String queryStr = "delete SchedulerHistory s where s.schedulerId.id = :schedulerId";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("schedulerId", schedulerId);
+        query.executeUpdate();
+        
+        String queryString = "delete Scheduler s where s.id = :schedulerId";
+        Query querySess = sessionFactory.getCurrentSession().createQuery(queryString);
+        querySess.setParameter("schedulerId", schedulerId);
+        querySess.executeUpdate();
+        return null;
+    }
+
 }

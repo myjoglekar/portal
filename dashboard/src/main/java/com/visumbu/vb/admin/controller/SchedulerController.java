@@ -84,4 +84,10 @@ public class SchedulerController {
     List getSchedulerHistoryById(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer schedulerId) {
         return schedulerService.getSchedulerHistoryById(schedulerId);
     }
+    
+    @RequestMapping(value = "scheduler/{schedulerId}", method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    Scheduler deleteScheduler(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer schedulerId) {
+        return schedulerService.deleteScheduler(schedulerId);
+    }
 }

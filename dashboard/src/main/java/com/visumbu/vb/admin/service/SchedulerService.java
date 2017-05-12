@@ -342,4 +342,8 @@ public class SchedulerService {
     public SchedulerHistory createSchedulerHistory(SchedulerHistory schedulerHistory) {
         return (SchedulerHistory) schedulerDao.create(schedulerHistory);
     }
+
+    public Scheduler deleteScheduler(Integer schedulerId) {
+       return schedulerDao.deleteScheduler(schedulerId);
+    }
 }
