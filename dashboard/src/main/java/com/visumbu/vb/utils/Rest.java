@@ -5,6 +5,7 @@
  */
 package com.visumbu.vb.utils;
 
+import com.visumbu.vb.bean.MapParameter;
 import com.visumbu.vb.bean.map.auth.SecurityAuthBean;
 import com.visumbu.vb.bean.map.auth.SecurityTokenBean;
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +29,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -43,6 +46,23 @@ public class Rest {
     public static String getData(String urlString) {
         log.debug("Calling getData function with return type String with parameter urlString " + urlString);
         return getData(urlString, null);
+    }
+
+    public static String getMapData(String url, MapParameter parameters, String accessToken, List<String> clientIds) {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.put("startDate", Arrays.asList(parameters.getStartDate()));
+        map.put("endDate", Arrays.asList(parameters.getEndDate()));
+        map.put("level", Arrays.asList(parameters.getLevel()));
+        map.put("limit", Arrays.asList(parameters.getLimit()));
+        map.put("offset", Arrays.asList(parameters.getOffset()));
+        map.put("segment", Arrays.asList(parameters.getSegment()));
+        Map<String, String> accessHeader = new HashMap<>();
+        String clients = String.join(",", clientIds);
+        String accessHeaderData = "{\"token\":\"" + accessToken + "\", \"clientIds\":[" + clients + "]}";
+        accessHeader.put("Authorization", accessHeaderData);
+        String data = getData(url, map, accessHeader);
+        System.out.println(data);
+        return data;
     }
 
     public static String getData(String url, MultiValueMap<String, String> params) {
@@ -62,6 +82,7 @@ public class Rest {
             conn.setRequestProperty("Accept", "application/json");
 
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println(conn.getResponseMessage());
                 log.debug(urlString);
                 log.debug("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
                 throw new RuntimeException("Failed : HTTP error code : "

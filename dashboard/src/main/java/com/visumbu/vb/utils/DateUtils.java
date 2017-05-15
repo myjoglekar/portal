@@ -368,4 +368,8 @@ public class DateUtils {
         calendar.setTime(date);
         return  calendar.get(Calendar.WEEK_OF_YEAR);
     }
+
+    public static String toMapFormat(Date startDate) {
+        return dateToString(startDate, "yyyy-MM-dd");
+    }
 }
