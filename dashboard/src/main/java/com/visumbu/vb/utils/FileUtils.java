@@ -6,11 +6,13 @@
 package com.visumbu.vb.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -27,19 +29,25 @@ public class FileUtils {
             + "Description, Suspected Trouble Component, Action Type, "
             + "SLA Responded, SLA Resolved, Created By, Created Time, Last Modified Time";
 
+    final static Logger log = Logger.getLogger(FileUtils.class);
+
     public static Object readXML(String fileName, Class inputClass) {
+        log.debug("Calling readXML function with return type Object with parameters fileName " + fileName + " and inputClass " + inputClass);
         try {
             JAXBContext context = JAXBContext.newInstance(inputClass);
             Unmarshaller um = context.createUnmarshaller();
             Object obj = (Object) um.unmarshal(new FileReader(fileName));
             return obj;
-        } catch (Exception ex) {
-
+        } catch (FileNotFoundException ex) {
+            log.error("Error in finding file " + fileName + " " + ex);
+        } catch (JAXBException ex) {
+            log.error("Error in finding inputClass is not known to this context " + inputClass + " " + ex);
         }
         return null;
     }
 
     public static void writeXML(String fileName, Object object, Class inputClass) {
+        log.debug("Calling writeXML function with return type Object with parameters fileName " + fileName + " Object " + object + " and inputClass " + inputClass);
         try {
             // create JAXB context and instantiate marshaller
             JAXBContext context = JAXBContext.newInstance(inputClass);
@@ -51,7 +59,7 @@ public class FileUtils {
             m.marshal(object, System.out);
 
         } catch (JAXBException ex) {
-
+            log.error("Error in finding inputClass is not known to this context " + inputClass + " " + ex);
         }
     }
 

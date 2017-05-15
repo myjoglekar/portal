@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,17 +30,22 @@ public class DealerService {
     @Autowired
     private DealerDao dealerDao;
 
+    final static Logger log = Logger.getLogger(DealerService.class);
+
     public Dealer read(Integer id) {
+        log.debug("Calling read function with return type Dealer with parameter id "+id);
         return (Dealer) dealerDao.read(Dealer.class, id);
     }
 
     public List<Dealer> read() {
+        log.debug("Calling read function with return type List contains Dealer");
         List<Dealer> dealer = dealerDao.read(Dealer.class);
         return dealer;
     }
 
     public Map<String, String> getDealerAccountDetails(String dealerId) {
-        System.out.println(dealerId);
+        log.debug("Calling getDealerAccountDetails function with return type Map contains String, String with parameter dealerId "+dealerId);
+        log.debug(dealerId);
         List<DealerAccountBean> dealerAccountDetails = dealerDao.getDealerAccountDetails(dealerId);
         Map<String, String> accountMap = new HashMap<>();
         for (Iterator<DealerAccountBean> iterator = dealerAccountDetails.iterator(); iterator.hasNext();) {
@@ -65,5 +71,4 @@ public class DealerService {
         }
         return accountMap;
     }
-
 }

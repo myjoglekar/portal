@@ -7,17 +7,19 @@ package com.visumbu.vb.controller;
 
 import com.visumbu.vb.bean.ReportPage;
 import javax.servlet.http.HttpServletRequest;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.http.auth.AuthenticationException;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author user
  */
 public class BaseController {
+
+    final static Logger log = Logger.getLogger(BaseController.class);
+
     public ReportPage getPage(HttpServletRequest request) {
+        log.debug("Calling getPage function with return type ReportType");
         ReportPage reportPage = new ReportPage();
         if (request.getParameter("page") == null && request.getParameter("count") == null) {
             return null;
@@ -36,13 +38,15 @@ public class BaseController {
         }
         return reportPage;
     }
+
     protected String getUser(HttpServletRequest request) {
+        log.debug("Calling getUser function with return type ReportType");
         String username = (String) request.getSession().getAttribute("username");
-        if(username == null) {
+        if (username == null) {
             try {
                 throw new AuthenticationException("User not logged in");
             } catch (AuthenticationException ex) {
-                Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("Error in username " + username + " which catch " + ex);
             }
         }
         return username;

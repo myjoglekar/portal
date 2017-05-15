@@ -13,8 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
@@ -25,7 +24,10 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
  */
 public abstract class BaseDataSource {
 
+    final static Logger log = Logger.getLogger(BaseDataSource.class);
+
     public static BaseDataSource getInstance(String dataSourceName) throws IOException, GeneralSecurityException {
+        log.debug("Calling getInstance function with return type BaseDataSource with parameter dataSourceName " + dataSourceName);
         BaseDataSource bds = null;
         if (dataSourceName.equalsIgnoreCase("GaDataSource")) {
             return new GaDataSource();
@@ -44,13 +46,13 @@ public abstract class BaseDataSource {
     public abstract List getDataDimensions();
 
     public abstract List getDataDimensions(String dataSetName);
-    
-    public  Object getData(String dataSetName, Map options, ReportPage page)  throws IOException {
+
+    public Object getData(String dataSetName, Map options, ReportPage page) throws IOException {
         return null;
     }
-    
 
     public static List<String> getAllDataSources() {
+        log.debug("Calling getAllDataSources function with List contains String");
         String[] dataSourcesArr = {"BingDataSource", "CenturyInteractiveDataSource", "DealerVaultDataSource", "FacebookDataSource", "GaDataSource", "GoogleAdWordsDataSource", "MapDataSource", "ReviewPushDataSource", "SpeedShiftDataSource", "YestDataSource"};
         return Arrays.asList(dataSourcesArr);
         /*
@@ -74,7 +76,7 @@ public abstract class BaseDataSource {
     }
 
     public static void main(String argv[]) {
+        log.debug("Calling main function");
         BaseDataSource.getAllDataSources();
     }
-
 }

@@ -22,12 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.OrderedMap;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -51,23 +50,24 @@ public class CsvController {
     @Autowired
     private UserService userService;
 
+    final static Logger log = Logger.getLogger(CsvController.class);
+
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Map getCsvData(HttpServletRequest request, HttpServletResponse response, @RequestBody VbUser teUser) {
+        log.debug("Calling getCsvData function with return type Map with parameter teUser"+teUser);
         try {
             String filename = request.getParameter("filename");
-            
             return CsvDataSet.CsvDataSet(filename);
         } catch (IOException ex) {
-            Logger.getLogger(CsvController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("IOException in getCsvData function: " + ex);
         }
         return null;
     }
 
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        e.printStackTrace();
+        log.error("Error handling bad request: "+e);
     }
 }

@@ -15,10 +15,9 @@ import com.visumbu.vb.model.ReportWidget;
 import com.visumbu.vb.model.TabWidget;
 import java.io.BufferedReader;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,58 +43,8 @@ public class ReportController extends BaseController {
     private ReportService reportService;
     @Autowired
     private UserService userService;
+final static Logger log = Logger.getLogger(ReportController.class);
 
-//    @RequestMapping(value = "visitDetails", method = RequestMethod.GET, produces = "application/json")
-//    public @ResponseBody
-//    List topDealersByVisit(HttpServletRequest request, HttpServletResponse response) {
-//        Date startDate = DateUtils.getStartDate(request.getParameter("startDate"));
-//        Date endDate = DateUtils.getEndDate(request.getParameter("endDate"));
-//        ReportPage page = getPage(request);
-//        return reportService.getVisitDetailedList(startDate, endDate, page);
-//    }
-//
-//    private ReportPage getPage(HttpServletRequest request) {
-//        ReportPage reportPage = new ReportPage();
-//        if (request.getParameter("page") == null && request.getParameter("count") == null) {
-//            return null;
-//        }
-//        Integer count = 50;
-//        if (request.getParameter("count") != null) {
-//            count = Integer.parseInt(request.getParameter("count"));
-//        }
-//        if (request.getParameter("page") != null) {
-//            Integer start = 0;
-//            Integer page = Integer.parseInt(request.getParameter("page"));
-//            start = count * (page - 1);
-//            reportPage.setStart(start);
-//            reportPage.setPageNo(page);
-//            reportPage.setCount(count);
-//        }
-//        return reportPage;
-//    }
-    
-     @RequestMapping(value = "report", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody
-    Report addReport(HttpServletRequest request, HttpServletResponse response// , @RequestBody Report report
-    ) {
-
-        try {
-            //        Integer getReportTypeId = 1;
-//        System.out.println(report);
-////        return uiService.addReport(report, getReportTypeId);
-//            StringBuilder sb = new StringBuilder();
-//            BufferedReader reader = request.getReader();
-//            String line = "";
-//            while((line = reader.readLine()) != null) {
-//                sb.append(reader.readLine());
-//            }
-//            String jsonString = sb.toString();
-//            System.out.println(jsonString);
-        } catch (Exception ex) {
-            Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
     
     @RequestMapping(value = "report", method = RequestMethod.PUT, produces = "application/json")
     public @ResponseBody
@@ -118,7 +67,7 @@ public class ReportController extends BaseController {
             System.out.println(jsonString);
             return reportService.updateReport(report);
         } catch (Exception ex) {
-            Logger.getLogger(UiController.class.getName()).log(Level.SEVERE, null, ex);
+           log.error("Error handling bad request: " + ex);
         }
         return null;
 
@@ -208,6 +157,6 @@ public class ReportController extends BaseController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(HttpMessageNotReadableException e) {
-        e.printStackTrace();
+        log.error("Error handling bad request: " + e);
     }
 }

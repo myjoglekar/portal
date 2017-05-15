@@ -14,8 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
 /**
@@ -24,7 +23,10 @@ import org.joda.time.LocalDate;
  */
 public class DateUtils {
 
+    final static Logger log = Logger.getLogger(DateUtils.class);
+
     public static Date get30DaysBack() {
+        log.debug("Calling get30DaysBack function with return type Date");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd ");
         Calendar cal = Calendar.getInstance();
         Calendar calReturn = Calendar.getInstance();
@@ -33,6 +35,7 @@ public class DateUtils {
     }
 
     public static String getQueryString(String tableName, String searchText) {
+        log.debug("Calling getQueryString function with return type String with parameters tableName " + tableName + "and searchText " + searchText);
         String searchString = searchText;
         searchString = searchString.replaceAll("\\s+and\\s+", " matchand ");
         searchString = searchString.replaceAll("\\s+or\\s+", " matchor ");
@@ -50,7 +53,7 @@ public class DateUtils {
                 queryString += " or ";
                 searchStr = searchStr.replaceFirst("or ", "");
             }
-            System.out.println(searchStr);
+            log.debug(searchStr);
 
             searchStr = searchStr.trim();
             if (searchStr.contains("!=")) {
@@ -72,16 +75,19 @@ public class DateUtils {
     }
 
     public static String toJSDate(Date date) {
+        log.debug("Calling toJSDate function with return type String with parameter date " + date);
         String format = "yyyy-MM-dd HH:mm:ss";
         return dateToString(date, format);
     }
 
     public static String toTTDate(Date date) {
+        log.debug("Calling toTTDate function with return type String with parameter date " + date);
         String format = "dd/MM/yyyy HH:mm:ss";
         return dateToString(date, format);
     }
 
     public static String dateToString(Date date, String format) {
+        log.debug("Calling dateToString function with return type String with parameters date " + date + " and format " + format);
         if (date == null) {
             return "-";
         }
@@ -91,12 +97,14 @@ public class DateUtils {
     }
 
     public static Date getFirstDateOfCurrentMonth() {
+        log.debug("Calling getFirstDateOfCurrentMonth function with return type Date");
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMinimum(Calendar.DAY_OF_MONTH));
         return cal.getTime();
     }
 
     public static Date getFirstDayOfLastMonth() {
+        log.debug("Calling getFirstDayOfLastMonth function with return type Date");
         Date date = getFirstDateOfCurrentMonth();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -105,6 +113,7 @@ public class DateUtils {
     }
 
     public static Date getFirstDayOfNextMonth() {
+        log.debug("Calling getFirstDayOfNextMonth function with return type Date");
         Date date = getFirstDateOfCurrentMonth();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -113,6 +122,7 @@ public class DateUtils {
     }
 
     public static Date getTonight() {
+        log.debug("Calling getTonight function with return type Date");
         Calendar calendar = new GregorianCalendar();
         calendar.set(Calendar.HOUR_OF_DAY, 23); //anything 0 - 23
         calendar.set(Calendar.MINUTE, 59);
@@ -122,6 +132,7 @@ public class DateUtils {
     }
 
     public static Date getToday() {
+        log.debug("Calling getToday function with return type Date");
         Calendar calendar = new GregorianCalendar();
         calendar.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
         calendar.set(Calendar.MINUTE, 0);
@@ -131,12 +142,14 @@ public class DateUtils {
     }
 
     public static Date get24HoursBack() {
+        log.debug("Calling get24HoursBack function with return type Date");
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         return cal.getTime();
     }
 
     public static Date getOneMonthsBack(Date date) {
+        log.debug("Calling getOneMonthsBack function with return type Date");
         Calendar cal = Calendar.getInstance();
         if (date != null) {
             cal.setTime(date);
@@ -149,6 +162,7 @@ public class DateUtils {
     }
 
     public static Date getSixMonthsBack(Date date) {
+        log.debug("Calling getSixMonthsBack function with return type Date with parameter date " + date);
         Calendar cal = Calendar.getInstance();
         if (date != null) {
             cal.setTime(date);
@@ -161,6 +175,7 @@ public class DateUtils {
     }
 
     public static Date getYesterday() {
+        log.debug("Calling function of getYesterday function with return type Date");
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         cal.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
@@ -170,6 +185,7 @@ public class DateUtils {
     }
 
     public static Date getYesterday(String date) {
+        log.debug("Calling getYesterday function with return type Date with parameter date " + date);
         Calendar cal = Calendar.getInstance();
         Date parsedDate = getEndDate(date);
         cal.setTime(parsedDate);
@@ -181,7 +197,8 @@ public class DateUtils {
     }
 
     public static Date getEndDate(String strEnd) {
-        System.out.println("Start Date " + strEnd);
+        log.debug("Calling getEndDate function with return type Date with parameter strEnd " + strEnd);
+        log.debug("Start Date " + strEnd);
         if (strEnd.length() < 12) {
             strEnd += " 23:59:59";
         }
@@ -190,14 +207,15 @@ public class DateUtils {
         try {
             endDate = (Date) formatter.parse(strEnd);
         } catch (Exception ex) {
-            System.out.println("Exception End ");
+            log.debug("Exception End ");
             endDate = new Date();
         }
         return endDate;
     }
 
     public static Date getStartDate(String strStart) {
-        System.out.println("Start Date " + strStart);
+        log.debug("Calling getStartDate function with return type Date with parameter strStart " + strStart);
+        log.debug("Start Date " + strStart);
         if (strStart.length() < 12) {
             strStart += " 00:00:00";
         }
@@ -206,14 +224,15 @@ public class DateUtils {
         try {
             startDate = (Date) formatter.parse(strStart);
         } catch (Exception ex) {
-            System.out.println("Exception Start ");
+            log.debug("Exception Start ");
             startDate = DateUtils.getYesterday();
         }
         return startDate;
     }
 
     public static Date getStartTodayDate(String strStart) {
-        System.out.println("Start Date " + strStart);
+        log.debug("Calling getStartTodayDate function with return type Date with parameter strStart " + strStart);
+        log.debug("Start Date " + strStart);
         if (strStart.length() < 12) {
             strStart += " 00:00:00";
         }
@@ -222,13 +241,14 @@ public class DateUtils {
         try {
             startDate = (Date) formatter.parse(strStart);
         } catch (Exception ex) {
-            System.out.println("Exception Start ");
+            log.debug("Exception Start ");
             startDate = DateUtils.getToday();
         }
         return startDate;
     }
 
     public static Date toDate(String dateStr, String formatStr) {
+        log.debug("Calling toDate function with return type Date with parameters dateStr " + dateStr + " and formatStr " + formatStr);
         if (dateStr == null || dateStr.isEmpty()) {
             return null;
         }
@@ -237,21 +257,22 @@ public class DateUtils {
             Date date = format.parse(dateStr);
             return date;
         } catch (ParseException ex) {
-            Logger.getLogger(DateUtils.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error in converting String " + dateStr + " to Date" + ex);
         }
         return null;
     }
 
     public static Date toDate(String dateStr) {
+        log.debug("Calling toDate function with return type Date with parameter dateStr " + dateStr);
         if (dateStr.length() < 12) {
             dateStr += " 00:00:00";
         }
         String format = "dd-M-yyyy HH:mm:ss";
         return toDate(dateStr, format);
-
     }
 
     public static Date jsToJavaDate(String dateStr) {
+        log.debug("Calling jsToJavaDate function with return type Date with parameter dateStr " + dateStr);
         if (dateStr.length() < 12) {
             dateStr += " 00:00:00";
         }
@@ -260,6 +281,7 @@ public class DateUtils {
     }
 
     public static Long dateDiff(Date date1, Date date2) {
+        log.debug("Calling dateDiff function with return type Date with parameters date1 " + date1 + " and date2 " + date2);
         if (date1 == null || date2 == null) {
             return 0L;
         }
@@ -267,6 +289,7 @@ public class DateUtils {
     }
 
     public static Long dateDiffInSec(Date date1, Date date2) {
+        log.debug("Calling dateDiffInSec function with return type Date with parameters date1 " + date1 + " and date2 " + date2);
         if (date1 == null || date2 == null) {
             return 0L;
         }
@@ -274,6 +297,7 @@ public class DateUtils {
     }
 
     public static Long timeDiff(Date date1, Date date2) {
+        log.debug("Calling timeDiff function with return type Long with parameters date1 " + date1 + " and date2 " + date2);
         if (date1 == null || date2 == null) {
             return 0L;
         }
@@ -281,6 +305,7 @@ public class DateUtils {
     }
 
     public static Integer getDifferenceInMonths(Date startDate, Date endDate) {
+        log.debug("Calling getDifferenceInMonths function with return type Date with parameters startDate " + startDate + " and endDate " + endDate);
         Calendar c1 = Calendar.getInstance();
         c1.setTime(startDate);
         Calendar c2 = Calendar.getInstance();
@@ -305,6 +330,7 @@ public class DateUtils {
     }
 
     public static List<Date> getDaysBetweenDates(Date startdate, Date enddate) {
+        log.debug("Calling getDaysBetweenDates function with return type Date with parameters startDate " + startdate + " and endDate " + enddate);
         List<Date> dates = new ArrayList<Date>();
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(startdate);

@@ -5,20 +5,26 @@
 package com.visumbu.mail;
 
 import java.util.concurrent.BlockingQueue;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author varghees
  */
 public class MailConsumer implements Runnable {
+
     protected BlockingQueue queue = null;
 
+    final static Logger log = Logger.getLogger(MailConsumer.class);
+
     public MailConsumer(BlockingQueue queue) {
+        log.debug("Calling of MailConsumer contructor with parameter queue: "+queue);
         this.queue = queue;
     }
 
     @Override
     public void run() {
+        log.debug("Running of thread");
         while (true) {
             if (queue.isEmpty()) {
                 queue.poll();
@@ -28,7 +34,7 @@ public class MailConsumer implements Runnable {
             try {
                 obj = (Object) queue.take(); // take the element
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                log.error("Error in queue "+queue+" which catch "+ex);
             }
             String status = "";
             // Send mail
@@ -41,7 +47,7 @@ public class MailConsumer implements Runnable {
                 case Constants.TEXT_MAIL_WITH_ATTACHMENT:
                     TextMailWithAttachment textMailWithAttachment = new TextMailWithAttachment(props);
                     status = textMailWithAttachment.sendMail();
-                     break;
+                    break;
                 case Constants.HTML_MAIL:
                     HtmlMail htmlMail = new HtmlMail(props);
                     status = htmlMail.sendMail();
@@ -51,7 +57,7 @@ public class MailConsumer implements Runnable {
                     HtmlMailWithEmbeddedImage htmlMailWithEmbeddedImage = new HtmlMailWithEmbeddedImage(props);
                     status = htmlMailWithEmbeddedImage.sendMail();
                     break;
-            }            
+            }
         }
     }
 }

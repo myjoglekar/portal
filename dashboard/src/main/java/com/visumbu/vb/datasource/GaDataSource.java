@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -43,7 +45,10 @@ public class GaDataSource extends BaseDataSource {
     private static final String SERVICE_ACCOUNT_EMAIL = "vs-test-ga@api-project-384381056232.iam.gserviceaccount.com";
     private static Analytics analytics = null;
 
+    final static Logger log = Logger.getLogger(GaDataSource.class);
+
     public static List<GaMetric> getAllMetrics() {
+        log.debug("Calling getAllMetrics function with return type List contains GaMetric objects");
         List<GaMetric> metricList = new ArrayList();
 
         GaMetric gaSessionMetric = new GaMetric();
@@ -63,7 +68,6 @@ public class GaDataSource extends BaseDataSource {
         gaUserMetric.setDisplayName("Users");
         gaUserMetric.setDimenstions("User Type,ga:userType;Session Count,ga:sessionCount;Days Since Last Session,ga:daysSinceLastSession");
         metricList.add(gaUserMetric);
-
         return metricList;
     }
 
@@ -74,11 +78,13 @@ public class GaDataSource extends BaseDataSource {
 
     @Override
     public List getDataDimensions() {
+        log.debug("Calling getDataDimensions function with return type List");
         return getDataDimensions("all");
     }
 
     @Override
     public List getDataDimensions(String dataSetName) {
+        log.debug("Calling getDataDimensions function with return type List with parameter dataSetName " + dataSetName);
         List<GaMetric> allMetrics = getAllMetrics();
         for (Iterator<GaMetric> iterator = allMetrics.iterator(); iterator.hasNext();) {
             GaMetric metric = iterator.next();
@@ -90,12 +96,13 @@ public class GaDataSource extends BaseDataSource {
     }
 
     public static List<Map<String, String>> getAllDataSets() {
+        log.debug("Calling getAllDataSets function with return type List contains Map");
         List<Map<String, String>> dataSets = new ArrayList<>();
         List<GaMetric> allMetrics = getAllMetrics();
         for (Iterator<GaMetric> iterator = allMetrics.iterator(); iterator.hasNext();) {
             GaMetric gaMetric = iterator.next();
             Map map = new HashMap();
-            map.put("name", gaMetric.getName()); 
+            map.put("name", gaMetric.getName());
             map.put("displayName", gaMetric.getDisplayName());
             dataSets.add(map);
         }
@@ -104,6 +111,7 @@ public class GaDataSource extends BaseDataSource {
 
     @Override
     public Object getData(String dataSetName, Map options, ReportPage page) throws IOException {
+        log.debug("Calling getData function with return type Object with parameters dataSetName " + dataSetName + " options " + options + " and page " + page);
         if (options == null) {
             options = new HashMap();
         }
@@ -148,6 +156,7 @@ public class GaDataSource extends BaseDataSource {
          * Client secret: 1nJygCmZKdFCOykaGmbjBpKy U: l2tanalytics@gmail.com P:
          * l2tmedia2016!!
          */
+        log.debug("Calling of GaDataSource Constructor");
 
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GoogleCredential credential = new GoogleCredential.Builder()
@@ -161,13 +170,15 @@ public class GaDataSource extends BaseDataSource {
         // Construct the Analytics service object.
         analytics = new Analytics.Builder(httpTransport, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME).build();
+
     }
 
     private static Analytics initializeAnalytics() throws Exception {
-    // Initializes an authorized analytics service object.
+        // Initializes an authorized analytics service object.
 
         // Construct a GoogleCredential object with the service account email
         // and p12 file downloaded from the developer console.
+        log.debug("Calling initializeAnalytics function with return type Analytics");
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GoogleCredential credential = new GoogleCredential.Builder()
                 .setTransport(httpTransport)
@@ -183,6 +194,7 @@ public class GaDataSource extends BaseDataSource {
     }
 
     private static String getProfileByName(String profileName) throws IOException {
+        log.debug("Calling getProfileByName function with return type String with parameter profileName " + profileName);
         // Get the first view (profile) ID for the authorized user.
         String profileId = null;
 
@@ -190,10 +202,10 @@ public class GaDataSource extends BaseDataSource {
         Accounts accounts = analytics.management().accounts().list().execute();
 
         if (accounts.getItems().isEmpty()) {
-            System.err.println("No accounts found");
+            log.error("No accounts found");
         } else {
             String accountId = null;
-            System.out.println("Total Accounts :" + accounts.getItems().size());
+            log.debug("Total Accounts :" + accounts.getItems().size());
             List<Account> accountList = accounts.getItems();
             for (Iterator<Account> iterator = accountList.iterator(); iterator.hasNext();) {
                 Account account = iterator.next();
@@ -202,7 +214,7 @@ public class GaDataSource extends BaseDataSource {
                 }
             }
             if (accountId == null) {
-                System.err.println("Account doesnt match");
+                log.error("Account doesnt match");
                 return null;
             }
             //String accountId = accounts.getItems().get(0).getId();
@@ -212,7 +224,7 @@ public class GaDataSource extends BaseDataSource {
                     .list(accountId).execute();
 
             if (properties.getItems().isEmpty()) {
-                System.err.println("No Webproperties found");
+                log.error("No Webproperties found");
             } else {
                 String firstWebpropertyId = properties.getItems().get(0).getId();
 
@@ -221,7 +233,7 @@ public class GaDataSource extends BaseDataSource {
                         .list(accountId, firstWebpropertyId).execute();
 
                 if (profiles.getItems().isEmpty()) {
-                    System.err.println("No views (profiles) found");
+                    log.error("No views (profiles) found");
                 } else {
                     // Return the first (view) profile associated with the property.
                     profileId = profiles.getItems().get(0).getId();
@@ -232,6 +244,7 @@ public class GaDataSource extends BaseDataSource {
     }
 
     private static String getFirstProfileId(Analytics analytics) throws IOException {
+        log.debug("Calling getFirstProfileId function with return type String with parameter analytics " + analytics);
         // Get the first view (profile) ID for the authorized user.
         String profileId = null;
 
@@ -239,9 +252,9 @@ public class GaDataSource extends BaseDataSource {
         Accounts accounts = analytics.management().accounts().list().execute();
 
         if (accounts.getItems().isEmpty()) {
-            System.err.println("No accounts found");
+            log.error("No accounts found");
         } else {
-            System.out.println("Total Accounts :" + accounts.getItems().size());
+            log.debug("Total Accounts :" + accounts.getItems().size());
             String firstAccountId = accounts.getItems().get(0).getId();
 
             // Query for the list of properties associated with the first account.
@@ -249,7 +262,7 @@ public class GaDataSource extends BaseDataSource {
                     .list(firstAccountId).execute();
 
             if (properties.getItems().isEmpty()) {
-                System.err.println("No Webproperties found");
+                log.error("No Webproperties found");
             } else {
                 String firstWebpropertyId = properties.getItems().get(0).getId();
 
@@ -258,7 +271,7 @@ public class GaDataSource extends BaseDataSource {
                         .list(firstAccountId, firstWebpropertyId).execute();
 
                 if (profiles.getItems().isEmpty()) {
-                    System.err.println("No views (profiles) found");
+                    log.error("No views (profiles) found");
                 } else {
                     // Return the first (view) profile associated with the property.
                     profileId = profiles.getItems().get(0).getId();
@@ -269,6 +282,7 @@ public class GaDataSource extends BaseDataSource {
     }
 
     private static GaData getResults(String profileId, String metric, String dimentions) throws IOException {
+        log.debug("Calling getResults function with return type GaData with parameters profileId " + profileId + " metric " + metric + " and dimentions " + dimentions);
         return analytics.data().ga()
                 .get("ga:" + profileId, "7daysAgo", "today", "ga:organicSearches")
                 .setDimensions("ga:source,ga:medium")
@@ -278,6 +292,7 @@ public class GaDataSource extends BaseDataSource {
     private static GaData getResults(Analytics analytics, String profileId) throws IOException {
         // Query the Core Reporting API for the number of sessions
         // in the past seven days.
+        log.debug("Calling getResults function with return type GaData with parameters profileId " + profileId + "and analytics " + analytics);
         return analytics.data().ga()
                 .get("ga:" + profileId, "7daysAgo", "today", "ga:newUsers,ga:percentNewSessions")
                 .setDimensions("ga:userType")
@@ -285,29 +300,32 @@ public class GaDataSource extends BaseDataSource {
     }
 
     private static void printResults(GaData results) {
-        System.out.println(" Total Data " + results.getRows());
+        log.debug("Calling printResults function with parameter results " + results);
+        log.debug(" Total Data " + results.getRows());
 
         // Parse the response from the Core Reporting API for
         // the profile name and number of sessions.
         if (results != null && !results.getRows().isEmpty()) {
-            System.out.println("View (Profile) Name: "
+            log.debug("View (Profile) Name: "
                     + results.getProfileInfo().getProfileName());
-            System.out.println("Total Sessions: " + results.getRows().get(0).get(0));
+            log.debug("Total Sessions: " + results.getRows().get(0).get(0));
         } else {
-            System.out.println("No results found");
+            log.debug("No results found");
         }
     }
 
     public static void main(String[] args) {
         try {
+            log.debug("Calling main function");
+            
             Analytics analytics = initializeAnalytics();
 
             String profile = getFirstProfileId(analytics);
-            System.out.println("First Profile Id: " + profile);
+            log.debug("First Profile Id: " + profile);
             printResults(getResults(analytics, profile));
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            log.error("Error in analytics "+analytics+" "+ex);
         }
+       
     }
-
 }

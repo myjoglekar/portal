@@ -5,11 +5,10 @@
 package com.visumbu.mail;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -17,6 +16,7 @@ import org.apache.commons.mail.HtmlEmail;
  */
 public class HtmlMail {
 
+    final static Logger log = Logger.getLogger(HtmlMail.class);
     private MailProperties props = null;
 
     public HtmlMail(MailProperties props) {
@@ -24,6 +24,7 @@ public class HtmlMail {
     }
 
     public String sendMail() {
+        log.debug("Calling sendMail function");
         try {
             // Create the email message
             HtmlEmail email = new HtmlEmail();
@@ -74,7 +75,7 @@ public class HtmlMail {
             return email.send();
 
         } catch (EmailException ex) {
-            Logger.getLogger(HtmlMail.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error in mail properties " + props + " which catch " + ex);
         }
         return "Not Sent";
     }

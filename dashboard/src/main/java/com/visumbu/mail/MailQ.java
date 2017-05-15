@@ -6,6 +6,7 @@ package com.visumbu.mail;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -18,7 +19,10 @@ public class MailQ {
     private MailProducer producer = null;
     private MailConsumer consumer = null;
 
+    final static Logger log = Logger.getLogger(MailQ.class);
+
     private MailQ() {
+        log.debug("Calling Mailq constructor");
         producer = new MailProducer(queue);
         consumer = new MailConsumer(queue);
 
@@ -27,6 +31,7 @@ public class MailQ {
     }
 
     public static MailQ getInstance() {
+        log.debug("Calling getInstance function with return type MailQ");
         if (instance == null) {
             synchronized (MailQ.class) {
                 instance = new MailQ();
@@ -36,19 +41,22 @@ public class MailQ {
     }
 
     public void add(Object obj) {
+        log.debug("Calling add function");
         producer.accept(obj);
     }
 
     public int count() {
+        log.debug("Calling count function with return type int");
         return queue.size();
     }
 
     public int remainingCapacity() {
+        log.debug("Calling remainingCapacity function with return type int");
         return queue.remainingCapacity();
     }
-    
-    public static void main(String args[])
-    {
+
+    public static void main(String args[]) {
+        log.debug("Calling Main function");
         MailQ q = MailQ.getInstance();
     }
 }

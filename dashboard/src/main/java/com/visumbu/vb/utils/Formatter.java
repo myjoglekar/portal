@@ -7,6 +7,7 @@ package com.visumbu.vb.utils;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -14,7 +15,10 @@ import java.util.Locale;
  */
 public class Formatter {
 
+    final static Logger log = Logger.getLogger(Formatter.class);
+
     public static String format(String format, String value) {
+        log.debug("Calling format function with return type String with parameter format "+format+" and value "+value);
         String returnValue = value;
         String jFormat = format;
         String prefix = "";
@@ -38,10 +42,11 @@ public class Formatter {
         }
         return returnValue;
     }
-    
+
     public static void main(String argv[]) {
+        log.debug("Calling main function");
         String format = ".1%";
         String value = "5346.00";
-        System.out.println(Formatter.format(format, value));
+        log.debug(Formatter.format(format, value));
     }
 }

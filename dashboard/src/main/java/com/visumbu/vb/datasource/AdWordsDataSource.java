@@ -20,14 +20,15 @@ import com.google.api.ads.common.lib.exception.OAuthException;
 import com.google.api.ads.common.lib.exception.ValidationException;
 import com.google.api.client.auth.oauth2.Credential;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author user
  */
 public class AdWordsDataSource extends BaseDataSource {
+
+    final static Logger log = Logger.getLogger(AdWordsDataSource.class);
 
     @Override
     public List getDataSets() {
@@ -45,7 +46,12 @@ public class AdWordsDataSource extends BaseDataSource {
     }
 
     public static void main(String argv[]) {
-
+        log.debug("Calling main function");
+        String clientId = "162577857765-le844eg61vkr4rejv4br7grl3cplvn9h.apps.googleusercontent.com";
+        String clientSecret = "n3ZXN2YOLwcWx7HZk4AmIq66";
+        String refreshToken = "";
+        String developerToken = "X4glgfA7zjlwzeL3jNQjkw";
+        Selector selector = null;
         try {
             /**
              * Create an AdWordsSession instance, loading credentials from the
@@ -64,10 +70,6 @@ public class AdWordsDataSource extends BaseDataSource {
                     .withOAuth2Credential(credential)
                     .build(); */
             
-            String clientId = "162577857765-le844eg61vkr4rejv4br7grl3cplvn9h.apps.googleusercontent.com";
-            String clientSecret = "n3ZXN2YOLwcWx7HZk4AmIq66";
-            String refreshToken = "";
-            String developerToken = "X4glgfA7zjlwzeL3jNQjkw";
             /**
              * Alternatively, you can specify your credentials in the constructor:
              */
@@ -100,17 +102,17 @@ public class AdWordsDataSource extends BaseDataSource {
              * requests for the corresponding web service.
              */
             // Create selector.
-            Selector selector = new Selector();
+            selector = new Selector();
             selector.setFields(new String[]{"Id", "Name"});
             
             // Get all campaigns.
             CampaignPage page = campaignService.get(selector);
         } catch (OAuthException ex) {
-            Logger.getLogger(AdWordsDataSource.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error in clientId " + clientId + " and clientSecret" + clientSecret + " " + ex);
         } catch (ValidationException ex) {
-            Logger.getLogger(AdWordsDataSource.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error in building clientId " + clientId + " and clientSecret" + clientSecret + " " + ex);
         } catch (RemoteException ex) {
-            Logger.getLogger(AdWordsDataSource.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error in selector " +selector + " " + ex);
         }
     }
 
