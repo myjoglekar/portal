@@ -13,10 +13,19 @@ public class Settings {
 
     private static String securityTokenUrl = "http://52.7.231.175:8080/MAPDataLayer/oauth/access_token";
     private static String securityAuthUrl = "http://52.7.231.175:8080/L2T1.5QA/rest/userpermissons";
+    private static String lamdaApiUrl = "https://phv4ebmu97.execute-api.us-east-1.amazonaws.com/qa";
 
 //    private static String securityTokenUrl = "http://52.5.156.250:8080/L2TQA/oauth/access_token";
 //    private static String securityAuthUrl = "http://52.5.156.250:8080/L2TQA/rest/userpermissons";
 
+    public static String getLamdaApiUrl() {
+        return lamdaApiUrl;
+    }
+
+    public static void setLamdaApiUrl(String lamdaApiUrl) {
+        Settings.lamdaApiUrl = lamdaApiUrl;
+    }
+    
     public static String getSecurityTokenUrl() {
         return securityTokenUrl;
     }
