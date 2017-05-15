@@ -56,11 +56,17 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: "/dataSource/:dealerId?:startDate/:endDate",
                 templateUrl: "static/views/source/dataSource.html",
                 controller: 'DataSourceController'
-            }).state("index.dataSet", {
-        url: "/dataSet/:dealerId?:startDate/:endDate",
-        templateUrl: "static/views/source/dataSet.html",
-        controller: 'DataSetController'
-    });
+            })
+            .state("index.dataSet", {
+                url: "/dataSet/:dealerId?:startDate/:endDate",
+                templateUrl: "static/views/source/dataSet.html",
+                controller: 'DataSetController'
+            })
+            .state("index.map", {
+                url: "mapReport",
+                templateUrl: "static/views/admin/mapReport.html",
+                controller: 'MapReportController'
+            });
 
     $urlRouterProvider.otherwise(function ($injector, $http) {
         $injector.get('$state').go('index.dashboard');
@@ -81,7 +87,7 @@ app.run(['$window', '$rootScope', '$stateParams',
         $rootScope.printReport = function (dispButton, runUrl) {
             if (dispButton === true) {
                 this.showButton = true;
-            }else{        
+            } else {
                 this.showButton = false;
             }
             if (runUrl === true) {

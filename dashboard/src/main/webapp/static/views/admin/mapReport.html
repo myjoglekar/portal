@@ -1,0 +1,41 @@
+<div>
+    <table class="table table-responsive table-bordered">
+        <thead>
+        <th>Sl.No</th>
+        <th>Report Name</th>            
+        <th>Map Url Path</th>            
+        <th>Level</th>            
+        <th>Segment</th>            
+        <th><button class="btn btn-success btn-xs" ng-click="addMapReport()"><i class="fa fa-plus"></i></button></th>            
+        </thead>  
+        <tbody>
+            <tr ng-repeat="mapReport in mapReports">
+                <td>{{$index + 1}}</td>
+                <td>
+                    <div ng-hide="mapReport.isEdit">{{mapReport.reportName}}</div>
+                    <div ng-show="mapReport.isEdit"><input class="form-control" ng-model="mapReport.reportName"></div>
+                </td>
+                <td>
+                    <div ng-hide="mapReport.isEdit">{{mapReport.mapUrlPath}}</div>
+                    <div ng-show="mapReport.isEdit"><input class="form-control" ng-model="mapReport.mapUrlPath"></div>
+                </td>
+                <td>
+                    <div ng-hide="mapReport.isEdit">{{mapReport.level}}</div>
+                    <div ng-show="mapReport.isEdit"><input class="form-control" ng-model="mapReport.level"></div>
+                </td>
+                <td>
+                    <div ng-hide="mapReport.isEdit">{{mapReport.segment}}</div>
+                    <div ng-show="mapReport.isEdit"><input class="form-control" ng-model="mapReport.segment"></div>
+                </td>
+                <td>      
+                    <div ng-show="mapReport.isEdit">
+                        <button class="btn btn-default" ng-click="saveMapReport(mapReport); mapReport.isEdit = false;"><i class="fa fa-save"></i></button>
+                    </div>
+                    <div ng-hide="mapReport.isEdit">
+                        <button class="btn btn-default" ng-click="mapReport.isEdit = true"><i class="fa fa-pencil"></i></button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

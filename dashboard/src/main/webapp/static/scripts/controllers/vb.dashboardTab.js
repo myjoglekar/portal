@@ -64,7 +64,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         $scope.startDate = $stateParams.startDate;
         $scope.endDate = $stateParams.endDate;
     }
-    
+
     $scope.setTabParams = function (tab) {
         $stateParams.tabId = tab.id;
         //$state.go("index.dashboard", {tabId: $stateParams.tabId, startDate: $stateParams.startDate, endDate: $stateParams.endDate});
@@ -122,6 +122,8 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
             $state.go("index.dataSource", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else if ($scope.getCurrentPage() === "dataSet") {
             $state.go("index.dataSet", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
+        } else if ($scope.getCurrentPage() === "mapReport") {
+            $state.go("index.map");
         } else {
             $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
         }
@@ -146,6 +148,9 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         }
         if (url.indexOf("dataSet") > 0) {
             return "dataSet";
+        }
+        if (url.indexOf("mapReport") > 0) {
+            return "mapReport";
         }
         return "dashboard";
     };
