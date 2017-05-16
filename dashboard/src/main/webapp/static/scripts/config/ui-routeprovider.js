@@ -66,6 +66,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: "mapReport",
                 templateUrl: "static/views/admin/mapReport.html",
                 controller: 'MapReportController'
+            })
+            .state("index.settings", {
+                url: "settings",
+                templateUrl: "static/views/fieldSettings/fieldSettings.html",
+                controller: 'FieldSettingsController'
             });
 
     $urlRouterProvider.otherwise(function ($injector, $http) {

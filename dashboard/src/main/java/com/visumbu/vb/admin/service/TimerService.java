@@ -280,7 +280,7 @@ public class TimerService {
             System.out.println("startDateStr ---> "+startDateStr);
             System.out.println("endDateStr ----> "+endDateStr);
 
-            String urlStr = "http://localhost:8080/VizBoard/admin/proxy/downloadReport/" + reportId + "?dealerId=" + dealerId + "&startDate=" + startDateStr + "&endDate=" + endDateStr;
+            String urlStr = "http://ec2-35-165-70-155.us-west-2.compute.amazonaws.com:8080/richanalytics/admin/proxy/downloadReport/" + reportId + "?dealerId=" + dealerId + "&startDate=" + startDateStr + "&endDate=" + endDateStr;
 //            String urlStr = "http://localhost:8080/dashboard/admin/proxy/downloadReport/" + reportId + "?dealerId=" + accountId + "&startDate=" + startDateStr + "&endDate=" + endDateStr + "&location=" + accountId + "&accountId=" + accountId;
             System.out.println(urlStr);
             URL website = new URL(urlStr);

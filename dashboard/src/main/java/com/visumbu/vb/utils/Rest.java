@@ -55,11 +55,14 @@ public class Rest {
         map.put("level", Arrays.asList(parameters.getLevel()));
         map.put("limit", Arrays.asList(parameters.getLimit()));
         map.put("offset", Arrays.asList(parameters.getOffset()));
-        map.put("segment", Arrays.asList(parameters.getSegment()));
+        if (parameters.getSegment() != null) {
+            map.put("segment", Arrays.asList(parameters.getSegment()));
+        }
         Map<String, String> accessHeader = new HashMap<>();
         String clients = String.join(",", clientIds);
         String accessHeaderData = "{\"token\":\"" + accessToken + "\", \"clientIds\":[" + clients + "]}";
         accessHeader.put("Authorization", accessHeaderData);
+        System.out.println("Access Token " + accessHeaderData);
         String data = getData(url, map, accessHeader);
         System.out.println(data);
         return data;
@@ -133,6 +136,8 @@ public class Rest {
             conn.setRequestProperty("Accept", "application/json");
 
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println(conn.getResponseMessage());
+                System.out.println(urlString);
                 log.debug(urlString);
                 log.debug("Code ---->" + conn.getResponseCode() + " Message ----> " + conn.getResponseMessage());
                 throw new RuntimeException("Failed : HTTP error code : "
