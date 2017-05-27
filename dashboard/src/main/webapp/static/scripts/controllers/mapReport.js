@@ -1,4 +1,6 @@
-app.controller('MapReportController', function ($scope, $http) {
+app.controller('MapReportController', function ($scope, $http, $stateParams) {
+    $scope.startDate = $stateParams.startDate;
+    $scope.endDate = $stateParams.endDate;
 
     $scope.mapReports = []
 

@@ -57,7 +57,7 @@ public class MapDataService {
 
     final static Logger log = Logger.getLogger(MapDataService.class);
 
-    public List<Map<String, Object>> getMapData(Date startDate, Date endDate, String accessToken, List<String> clientIds, String urlPath, String level, String segment) {
+    public Map getMapData(Date startDate, Date endDate, String accessToken, List<String> clientIds, String urlPath, String level, String segment) {
         MapParameter mapParameter = null;
         if (segment == null || segment.isEmpty()) {
             mapParameter = new MapParameter(startDate, endDate, level);
@@ -66,19 +66,26 @@ public class MapDataService {
         }
         String data = Rest.getMapData(Settings.getLamdaApiUrl() + urlPath, mapParameter, accessToken, clientIds);
         Map<String, Object> jsonToMap = JsonSimpleUtils.toMap(data);
-        List<Map<String, Object>> mapDataToList = mapDataToList(jsonToMap);
+        Map mapDataToList = mapDataToList(jsonToMap);
         return mapDataToList;
     }
 
     public Map getMapDataByReportName(Date startDate, Date endDate, String accessToken, List<String> clientIds, String reportName) {
         MapReportLevel mapReport = mapreportDao.getMapReportByReportName(reportName);
-        List<Map<String, Object>> mapData = getMapData(startDate, endDate, accessToken, clientIds, mapReport.getMapUrlPath(), mapReport.getLevel(), mapReport.getSegment());
-        Map returnData  = new HashMap<>();
-        returnData.put("data", mapData);
-        returnData.put("columnDefs", getColumnDefObject(mapData));
+        Map mapData = getMapData(startDate, endDate, accessToken, clientIds, mapReport.getMapUrlPath(), mapReport.getLevel(), mapReport.getSegment());
+        Map returnData = new HashMap<>();
+        if (mapData.get("data") != null) {
+            List data = (List) mapData.get("data");
+            returnData.put("data", data);
+            returnData.put("columnDefs", getColumnDefObject((List<Map<String, Object>>) mapData.get("data")));
+        }
+        returnData.put("errors", mapData.get("errors"));
+        if (mapData == null) {
+            return null;
+        }
         return returnData;
     }
-    
+
     private List<ColumnDef> getColumnDefObject(List<Map<String, Object>> data) {
         log.debug("Calling of getColumnDef function in ProxyController class");
         List<ColumnDef> columnDefs = new ArrayList<>();
@@ -90,9 +97,9 @@ public class MapDataService {
 //                if (fieldProperties != null) {
 //                    columnDefs.add(new ColumnDef(key, fieldProperties.getDataType() == null ? "string" : fieldProperties.getDataType(), fieldProperties.getDisplayName(), fieldProperties.getAgregationFunction(), fieldProperties.getDisplayFormat()));
 //                } else {
-                    Object value = entrySet.getValue();
-                    System.out.println(value.getClass());
-                    columnDefs.add(new ColumnDef(key, "string", key));
+                Object value = entrySet.getValue();
+                System.out.println(value.getClass());
+                columnDefs.add(new ColumnDef(key, "string", key));
 //                }
             }
             return columnDefs;
@@ -174,7 +181,9 @@ public class MapDataService {
         System.out.println(paidSearchService.getMapData(startDate, endDate, accessToken, clientIds, "/mdl/paidsearch", "CLIENT", "DOW"));
     }
 
-    List<Map<String, Object>> mapDataToList(Map<String, Object> mapData) {
+    Map mapDataToList(Map<String, Object> mapData) {
+        Map returnMap = new HashMap<>();
+        returnMap.put("errors", mapData.get("errors"));
         List<Map<String, Object>> returnData = new ArrayList<>();
         if (mapData.get("totalElements") != null) {
             Long totalElements = (Long) mapData.get("totalElements");
@@ -211,10 +220,11 @@ public class MapDataService {
                     }
                     returnData.add(dataMap);
                 }
-                return returnData;
+                returnMap.put("data", returnData);
+                return returnMap;
             }
         }
-        return null;
+        return returnMap;
     }
 
 }

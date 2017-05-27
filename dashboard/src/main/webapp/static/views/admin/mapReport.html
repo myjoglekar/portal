@@ -6,7 +6,9 @@
         <th>Map Url Path</th>            
         <th>Level</th>            
         <th>Segment</th>            
-        <th><button class="btn btn-success btn-xs" ng-click="addMapReport()"><i class="fa fa-plus"></i></button></th>            
+        <th>
+            <button class="btn btn-success btn-xs" ng-click="addMapReport()"><i class="fa fa-plus"></i></button>
+        </th>            
         </thead>  
         <tbody>
             <tr ng-repeat="mapReport in mapReports">
@@ -33,6 +35,7 @@
                     </div>
                     <div ng-hide="mapReport.isEdit">
                         <button class="btn btn-default" ng-click="mapReport.isEdit = true"><i class="fa fa-pencil"></i></button>
+                        <a class="btn btn-success btn-xs" ng-href="admin/mapdata/getData?reportName={{mapReport.reportName}}&startDate=01/01/2016&endDate={{endDate}}&dealerIds=8,16" target="_blank"><i class="fa fa-link"></i></a>
                     </div>
                 </td>
             </tr>

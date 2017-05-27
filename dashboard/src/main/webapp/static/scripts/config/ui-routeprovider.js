@@ -63,7 +63,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'DataSetController'
             })
             .state("index.map", {
-                url: "mapReport",
+                url: "mapReport?:startDate/:endDate",
                 templateUrl: "static/views/admin/mapReport.html",
                 controller: 'MapReportController'
             })
