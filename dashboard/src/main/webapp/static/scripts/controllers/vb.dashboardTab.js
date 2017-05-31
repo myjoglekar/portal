@@ -124,6 +124,8 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
             $state.go("index.dataSet", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else if ($scope.getCurrentPage() === "mapReport") {
             $state.go("index.map", {startDate: $scope.startDate, endDate: $scope.endDate});
+        }  else if ($scope.getCurrentPage() === "viewFavouritesWidget") {
+            $state.go("index.viewFavouritesWidget", {startDate: $scope.startDate, endDate: $scope.endDate});
         } else {
             $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
         }
@@ -151,6 +153,9 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         }
         if (url.indexOf("mapReport") > 0) {
             return "mapReport";
+        }
+        if (url.indexOf("viewFavouritesWidget") > 0) {
+            return "viewFavouritesWidget";
         }
         return "dashboard";
     };
@@ -420,10 +425,36 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
 //            $stateParams.tabId = 1;
 //        }
         $http.get("admin/ui/dbWidget/" + $stateParams.tabId).success(function (response) {
-            $scope.widgets = response;
+            var widgetItems = [];
+            widgetItems = response;
+            $http.get("admin/fav/getAllFav/").success(function (favResponse) {
+                widgetItems.forEach(function (value, key) {
+                    favWidget = $.grep(favResponse, function (b) {
+                        return b.id === value.id;
+                    });
+                    if (favWidget.length > 0) {
+                        value.isFav = true;
+                    } else {
+                        value.isFav = false;
+                    }
+                });
+            })
+            
+            $scope.widgets = widgetItems;
             console.log("Widget Items : ==================>>>>")
             console.log(response)
         });
+    }
+    
+    $scope.toggleFavourite = function (widget) {
+        var isFav = widget.isFav;
+        if (isFav) {
+            $http({method: 'POST', url: "admin/fav/removeFav/" + widget.id});
+            widget.isFav = false;
+        } else {
+            $http({method: 'POST', url: "admin/fav/setFav/" + widget.id});
+            widget.isFav = true;
+        }
     }
 
     $http.get('admin/report/getReport').success(function (response) {

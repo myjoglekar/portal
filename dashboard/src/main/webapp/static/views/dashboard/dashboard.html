@@ -215,6 +215,18 @@
     .selected{
         background-color: #EBEEE1;
     }
+    
+     /*Favorites*/
+    .red {
+        color:red;
+    }
+    .green {
+        color:#555;
+    }
+    .fa-heart{
+        font-size: 13px !important;
+        cursor:pointer;
+    }
 </style>
 
 <div>
@@ -262,8 +274,13 @@
                                         </a>
                                     </li>
                                     <li ng-click="setParams()">
-                                        <a data-ui-sref="index.settings">
+                                        <a data-ui-sref="index.settings({startDate: startDate, endDate: endDate})">
                                             <i class="fa fa-clock-o" aria-hidden="true"></i> Field Settings
+                                        </a>
+                                    </li>
+                                    <li ng-click="setParams()">
+                                        <a data-ui-sref="index.viewFavouritesWidget({favouriteName: 'Favourite',startDate: startDate, endDate: endDate})">
+                                            <i class="fa fa-star" aria-hidden="true"></i> Favourites
                                         </a>
                                     </li>
                                 </ul>
@@ -285,7 +302,7 @@
                 </div>
                 <div class="col-md-4">
                     <ul class="button-add">                    
-                        <li>
+                        <li ng-if="permission.allowCreateWidget == true">
                             <div class="btn-group dropdown">
                                 <div class="btn-group dropdown">
                                     <a class="dropdown-toggle" type="button" data-toggle="dropdown">
@@ -451,9 +468,9 @@
                                             </h3>
 
                                             <div class="box-tools pull-right">
-                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                                </button>
+                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                                                 <a title="Report" ng-click="showReportList[widget.id] = true;"><i class="fa fa-file-text"></i></a>
+<a title="Favourites" ng-click="toggleFavourite(widget)"><i class="fa fa-heart" ng-class="{'red':widget.isFav,'black':!widget.isFav}"></i></a>
                                                 <!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                                                                             </button>-->
                                                 <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>

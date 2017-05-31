@@ -46,6 +46,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "DashboardTabs.findByStatus", query = "SELECT d FROM DashboardTabs d WHERE d.status = :status"),
     @NamedQuery(name = "DashboardTabs.findByTabOrder", query = "SELECT d FROM DashboardTabs d WHERE d.tabOrder = :tabOrder")})
 public class DashboardTabs implements Serializable {
+
+    @OneToMany(mappedBy = "tabId")
+    private Collection<TabWidget> tabWidgetCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -179,6 +182,16 @@ public class DashboardTabs implements Serializable {
     @Override
     public String toString() {
         return "com.visumbu.vb.model.DashboardTabs[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<TabWidget> getTabWidgetCollection() {
+        return tabWidgetCollection;
+    }
+
+    public void setTabWidgetCollection(Collection<TabWidget> tabWidgetCollection) {
+        this.tabWidgetCollection = tabWidgetCollection;
     }
     
 }

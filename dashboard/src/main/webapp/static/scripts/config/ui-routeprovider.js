@@ -68,9 +68,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'MapReportController'
             })
             .state("index.settings", {
-                url: "settings",
+                url: "settings?:startDate/:endDate",
                 templateUrl: "static/views/fieldSettings/fieldSettings.html",
                 controller: 'FieldSettingsController'
+            })
+            .state("index.viewFavouritesWidget", {
+                url: "viewFavouritesWidget/:favouriteName?:startDate/:endDate",
+                templateUrl: "static/views/admin/viewFavouritesWidget.html",
+                controller: 'ViewFavouritesWidgetController'
             });
 
     $urlRouterProvider.otherwise(function ($injector, $http) {

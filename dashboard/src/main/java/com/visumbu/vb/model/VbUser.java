@@ -54,6 +54,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 public class VbUser implements Serializable {
 
     @OneToMany(mappedBy = "userId")
+    private Collection<WidgetTag> widgetTagCollection;
+
+    @OneToMany(mappedBy = "userId")
     private Collection<DataSet> dataSetCollection;
     @OneToMany(mappedBy = "userId")
     private Collection<DataSource> dataSourceCollection;
@@ -369,6 +372,16 @@ public class VbUser implements Serializable {
 
     public void setDataSourceCollection(Collection<DataSource> dataSourceCollection) {
         this.dataSourceCollection = dataSourceCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<WidgetTag> getWidgetTagCollection() {
+        return widgetTagCollection;
+    }
+
+    public void setWidgetTagCollection(Collection<WidgetTag> widgetTagCollection) {
+        this.widgetTagCollection = widgetTagCollection;
     }
 
 }

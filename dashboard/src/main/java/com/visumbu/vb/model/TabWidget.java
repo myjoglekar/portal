@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -65,6 +66,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     , @NamedQuery(name = "TabWidget.findByOrder", query = "SELECT t FROM TabWidget t WHERE t.widgetOrder = :widgetOrder")
     , @NamedQuery(name = "TabWidget.findByDirectUrl", query = "SELECT t FROM TabWidget t WHERE t.directUrl = :directUrl")})
 public class TabWidget implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "widgetId")
+    private Collection<WidgetTag> widgetTagCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -504,6 +508,16 @@ public class TabWidget implements Serializable {
     @Override
     public String toString() {
         return "com.visumbu.vb.model.TabWidget[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<WidgetTag> getWidgetTagCollection() {
+        return widgetTagCollection;
+    }
+
+    public void setWidgetTagCollection(Collection<WidgetTag> widgetTagCollection) {
+        this.widgetTagCollection = widgetTagCollection;
     }
 
 }
