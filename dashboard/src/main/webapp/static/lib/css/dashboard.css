@@ -1,0 +1,256 @@
+.ui-select-bootstrap .ui-select-toggle > .caret {
+    position: absolute;
+    height: 10px;
+    top: 50%;
+    right: 10px;
+    margin-top: -2px;
+    padding: 0px;
+}
+.previewChart {
+    border-radius: 5px;
+    border: none;
+    font-size: 30px;
+    padding: 20px;
+    color: #99a5aa;
+    line-height: 1px;
+}
+.selected {
+    color: rgb(240, 173, 78);
+    font-size: 30px;
+    line-height: 1px;
+    border-radius: 5px;
+    border: none;
+    padding: 1vw;
+}
+.full-height {
+    /*height: 100%;*/
+}
+
+#changes-height {
+    /*height: 400px;*/
+    /*background-color: #88ddaa;*/
+}
+.wid i{
+    font-size:30px;
+    color: #99a5aa !important;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    color: #2b2d2f;
+    text-decoration: none;
+    margin:0;
+    padding:0;
+    border:1px solid #cdcdcd;
+}
+
+.dropdown-content {
+    position: absolute;
+    float: left;
+    width:280px;
+    margin-left: -151px;
+    text-align: center;
+}
+.dropdown-item {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+}
+
+.firstrow {
+    margin: 5px 11px;
+}
+
+.secondrow {
+    margin: 5px 11px;
+    width: 126px;
+}
+
+.thirdrow {
+    margin: 5px 11px;
+    width: 260px;
+}
+
+.btn-apps {
+    border-radius: 3px;
+    position: relative;
+    padding: 15px 5px;
+    margin: 5px 0px 5px 10px;
+    min-width: 80px;
+    /*        height: 40px;*/
+    text-align: center;
+    color: #666;
+    border: 1px solid #ddd;
+    background-color: #fcfcfc;
+    font-size: 12px;
+}
+
+.lay-wid {
+    text-align:left;
+}
+
+.wrap{
+    white-space: normal;
+}
+.ui-grid-cell{
+    height: auto !important;
+}
+
+.c3-chart-text .c3-texts .c3-text {
+    font-size: 10px;
+    fill:#3D464D !important;
+    /*fill: black;*/
+}
+.as-sortable-item, .as-sortable-placeholder {
+    display: table-row !important;
+}
+*.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    /*
+      Introduced in IE 10.
+      See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+    */
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.report-bottomMenu{
+    z-index: 9999;
+    position: fixed;
+    border: 1px solid #ccc;
+    background-color: #FFF;
+    font-size: 12px;
+    width: 300px;
+    height: 466px;
+    right: 70px;
+    bottom: 0px;
+    padding: 0;
+
+}
+.report-menuBody{
+    padding: 18px 0px 0px 0px;
+}
+.report-menuHeader{
+    background: #304445 none repeat scroll 0 0 !important;
+    border-bottom: 3px solid #ccc;
+    color: #fff;
+    display: table;
+    width: 100%;
+    padding: 8px;
+}
+.report-header-icon{
+    border: 2px solid #5a7172;
+    border-radius: 12px;
+    float: left;
+    width: 14px;
+    margin: 3px;
+}
+.report-header-title{
+    float: left;
+    font-size: 18px;
+    margin: 0px 0px 5px 5px;
+    color: #fff;
+}
+.report-header-tools{
+    margin: 2px 0 0;
+}
+.report-header-closeBtn{
+    background: transparent none repeat scroll 0 0;
+    border: 1px solid #fff;
+    border-radius: 7px;
+    font-size: 10px;
+    height: 17px;
+    opacity: 0.9;
+    padding: 0;
+    text-align: center;
+    width: 18px;
+}
+.report-body-content{
+    padding: 16px;
+    overflow: auto;
+    height: 300px;
+}
+.report-body-img{
+    float: left;
+}
+.report-body-imgs.in{
+    border-radius: 50%;
+    width: 74px;
+}
+.report-body-imgs{
+    border: 0 none;
+    box-sizing: border-box;
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+}
+.report-body-descr{
+    list-style: outside none none;
+    padding: 0;
+    float: left;
+    margin: 0 0 0 20px;
+    max-width: 62%;
+}
+.report-desc-list{
+
+    color: #000000;
+    border-radius:5px;
+    clear: both;
+    display: block;
+    border: 1px solid #ddd;
+    float: left;
+    font-size: 13px;
+    padding: 8px 16px;
+    position: relative;
+    margin: 0;
+    list-style: outside none none;
+    word-break: break-all;
+}
+.report-footer-btn{
+    padding: 16px;
+}
+.selected{
+    background-color: #EBEEE1;
+}
+.calendarIcon{
+    padding-right: 2px;
+    color: #088478;
+}
+.iconColor,.iconColor:focus{
+    color: #71c2c5 !important;
+}
+.iconColor:hover{
+    color: #009896 !important;
+}
+.table > thead > tr > th {
+    font-family: 'proxima_nova_rgregular' !important;
+    font-weight: normal;
+}
+.table >tbody > tr > td{
+    font-family: 'proxima_nova_rgregular' !important;
+    font-size:11px;
+    font-weight: normal;
+}
+.table >tfoot{
+    font-family: 'proxima_nova_ltsemibold' !important;
+    font-weight: normal;
+}
+.modalHead{
+    background-color:#f0f1f1 !important;
+    color: #999 !important;
+}
+.iconColormodal, .iconColormodal:hover{
+    background-color: #71c2c5 !important;
+}
+.grouping-bg tr{
+    background-color: #f6f8f8;
+}
+.grouping-bg>tr:nth-of-type(odd) {
+    background-color: #fff !important;
+}
+
+.navbar-nav>li>a .dropdown-toggle:hover{
+    background-color:none;
+}

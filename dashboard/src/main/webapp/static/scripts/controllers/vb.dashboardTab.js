@@ -570,7 +570,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         }, 100);
     };
     $scope.addWidget = function (newWidget) {
-        alert()      //Add Widget
+//        alert()      //Add Widget
         var data = {
             width: newWidget, 'minHeight': 25, columns: [], chartType: ""
         };

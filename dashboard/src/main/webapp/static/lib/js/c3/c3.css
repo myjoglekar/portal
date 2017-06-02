@@ -1,11 +1,13 @@
 /*-- Chart --*/
 .c3 svg {
-  font: 10px sans-serif;
+    font-family: 'proxima_nova_rgregular';
+  font-size: 10px;
   -webkit-tap-highlight-color: transparent; }
 
 .c3 path, .c3 line {
   fill: none;
-  stroke: #000; }
+/*  stroke: #000; */
+}
 
 .c3 text {
   -webkit-user-select: none;
@@ -24,7 +26,7 @@
 
 .c3-chart-arc text {
   fill: #fff;
-  font-size: 13px; }
+  font-size: 10px; }
 
 /*-- Axis --*/
 /*-- Grid --*/
@@ -40,7 +42,7 @@
 /*-- Text on Chart --*/
 .c3-text.c3-empty {
   fill: #808080;
-  font-size: 2em; }
+  font-size: 10px; }
 
 /*-- Line --*/
 .c3-line {
@@ -84,7 +86,7 @@
 /*-- Select - Drag --*/
 /*-- Legend --*/
 .c3-legend-item {
-  font-size: 12px; }
+  font-size: 10px; }
 
 .c3-legend-item-hidden {
   opacity: 0.15; }
@@ -97,7 +99,8 @@
 
 /*-- Title --*/
 .c3-title {
-  font: 14px sans-serif; }
+  font-size: 10px;
+}
 
 /*-- Tooltip --*/
 .c3-tooltip-container {
@@ -118,13 +121,13 @@
 
 .c3-tooltip th {
   background-color: #aaa;
-  font-size: 14px;
+  font-size: 10px;
   padding: 2px 5px;
   text-align: left;
   color: #FFF; }
 
 .c3-tooltip td {
-  font-size: 13px;
+  font-size: 10px;
   padding: 3px 6px;
   background-color: #fff;
   border-left: 1px dotted #999; }
@@ -146,7 +149,7 @@
 /*-- Arc --*/
 .c3-chart-arcs-title {
   dominant-baseline: middle;
-  font-size: 1.3em; }
+  font-size: 10px; }
 
 .c3-chart-arcs .c3-chart-arcs-background {
   fill: #e0e0e0;
@@ -154,7 +157,7 @@
 
 .c3-chart-arcs .c3-chart-arcs-gauge-unit {
   fill: #000;
-  font-size: 16px; }
+  font-size: 10px; }
 
 .c3-chart-arcs .c3-chart-arcs-gauge-max {
   fill: #777; }
@@ -165,3 +168,21 @@
 .c3-chart-arc .c3-gauge-value {
   fill: #000;
   /*  font-size: 28px !important;*/ }
+.c3-axis-y text{
+    fill: #3D464D;
+    opacity: 0.57;
+    font-size: 10px;
+}
+.c3-axis-x text{
+    opacity: 0.57;
+    fill:#3D464D;
+    font-size: 10px;
+}
+
+.c3-chart-text{
+    font-size: 10px;
+    color:#3D464D !important;
+}
+.c3-axis-y2{
+    font-family: 'rajdhanilight';
+}
