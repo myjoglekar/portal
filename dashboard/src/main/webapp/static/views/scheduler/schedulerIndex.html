@@ -1,4 +1,29 @@
-<!--<div class="normalheader transition animated fadeIn">
+
+<style>
+    .schedulerDropdown{
+        padding: 21px;
+    }
+    .schedulerDate{
+        border: 1px solid #D2D8DB;
+        padding: 4px 13px 3px 12px;
+    }
+    .schedulerCalendar-Icon{
+        padding-right: 2px;
+        color: #088478;
+    }
+    .schedulerStartdate{
+        padding-right: 5px;
+        margin-right: 13px;
+        margin-left: 13px;
+
+    }
+    .schedulerEnddate{
+        padding-left: 5px;
+        padding-right: 4px;
+        margin-right: 13px;
+        margin-left: 13px;
+    }
+   </style><!--<div class="normalheader transition animated fadeIn">
     <div class="hpanel">
         <div class="panel-body header-title">
             <div id="hbreadcrumb" class="pull-right">
@@ -12,7 +37,7 @@
 <section class="content-header">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="dropdown dropdown-dealer">
@@ -50,13 +75,13 @@
                             </ul>
                         </li>
                         <li class="dropdown dropdown-dealer">
-                            <a id="daterange-btn" style="padding: 21px;">
-                                <div style="border: 1px solid #D2D8DB; padding: 4px 13px 3px 12px;">
-                                <i class="fa fa-calendar" id="date" style="padding-right: 2px;"></i>
+                            <a id="daterange-btn schedulerDropdown">Date
+                                <div class="schedulerDate">
+                                <i class="fa fa-calendar schedulerCalendar-Icon" id="date"></i>
                                 <span class="date-border">
-                                    <span style="padding-right: 5px;">
+                                    <span class="schedulerStartdate">
                                         {{firstDate| date: "MM/dd/yyyy"}}
-                                    </span> - <span style="padding-left: 5px;padding-right: 4px;">{{lastDate| date: "MM/dd/yyyy"}}</span> <i class="fa fa-caret-down"></i>
+                                    </span> - <span class="schedulerEnddate">{{lastDate| date: "MM/dd/yyyy"}}</span> <i class="fa fa-caret-down"></i>
                                 </span>
                                 </div>
                             </a>                   
@@ -64,7 +89,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <ul class="button-add">                    
                     <li>
                         <div class="btn-group">

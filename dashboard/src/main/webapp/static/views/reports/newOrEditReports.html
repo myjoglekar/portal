@@ -98,7 +98,13 @@
     .lay-wid {
         text-align:left;
     }
-
+    .editReport-header{
+       background-color:#9DD6D7;
+       color:black; 
+    }
+    .previewChart-show{
+        overflow: auto;
+    }
 </style>
 
 <section class="content-wrapper">
@@ -164,7 +170,7 @@
                                         <div id="delete{{reportWidget.widgetId.id}}" class="modal">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
-                                                    <div class="modal-header" style="background-color:#9DD6D7;color:black;">
+                                                    <div class="modal-header editReport-header">
                                                         <strong>Delete</strong>
                                                         <strong><button class="close" data-dismiss="modal">&times;</button></strong>
                                                     </div>
@@ -399,7 +405,7 @@
                                                 <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
                                                     <div pie-Chart-Url='{{previewChartUrl}}' widget-Columns="{{previewColumn.columns}}" widget-Obj="{{previewColumn}}" pie-Chart-Directive style="min-height:{{reportWidget.widgetId.minHeight}}"></div>
                                                 </div> 
-                                                <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
+                                                <div class="box-body chart-responsive previewChart-show" ng-if="previewChartType === 'table'">
                                                     <div dynamic-Table dynamic-Table-Url="{{previewChartUrl}}" widget-Id="{{previewColumn.id}}" widget-Obj="{{previewColumn}}" widget-Columns="{{previewColumn.columns}}"></div>
                                                 </div> 
                                             </div>

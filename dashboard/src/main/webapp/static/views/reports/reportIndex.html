@@ -1,7 +1,39 @@
+<style>
+    .reportOverview{
+        cursor: pointer;
+    }
+    .reportDropdown{
+        padding: 21px;
+    }
+    .reportDate{
+        border: 1px solid #D2D8DB;
+        padding: 4px 13px 3px 12px;
+    }
+    .reportCalendar-Icon{
+        padding-right: 2px;
+        color: #088478;
+    }
+    .reportStartdate{
+        padding-right: 5px;
+        margin-right: 13px;
+        margin-left: 13px;
+
+    }
+    .reportEnddate{
+        padding-left: 5px;
+        padding-right: 4px;
+        margin-right: 13px;
+        margin-left: 13px;
+    }
+    .reports-tabs{
+        padding:3px 15px;
+        display: inline-block; 
+    }
+</style>
 <section class="content-header">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="dropdown dropdown-dealer">
@@ -21,7 +53,7 @@
                                 <span class="drop-dealer">Overview </span> <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li ng-repeat="product in products">
-                                    <a class="active"  ng-click="setReportParamsDate(product);" style="cursor: pointer">
+                                    <a class="active reportOverview"  ng-click="setReportParamsDate(product);">
                                         {{product.productName}}
                                     </a>
                                 </li>
@@ -39,13 +71,13 @@
                             </ul>
                         </li>
                         <li class="dropdown dropdown-dealer">
-                            <a id="daterange-btn" style="padding: 21px;">
-                                <div style="border: 1px solid #D2D8DB; padding: 4px 13px 3px 12px;">
-                                    <i class="fa fa-calendar" id="date" style="padding-right: 2px;"></i>
+                            <a id="daterange-btn reportDropdown">Date
+                                <div class="reportDate">
+                                    <i class="fa fa-calendar reportCalendar-Icon" id="date"></i>
                                     <span class="date-border">
-                                        <span style="padding-right: 5px;">
+                                        <span class="reportStartdate">
                                             {{firstDate| date: "MM/dd/yyyy"}}
-                                        </span> - <span style="padding-left: 5px;padding-right: 4px;">{{lastDate| date: "MM/dd/yyyy"}}</span> <i class="fa fa-caret-down"></i>
+                                        </span> - <span class="reportEnddate">{{lastDate| date: "MM/dd/yyyy"}}</span> <i class="fa fa-caret-down"></i>
                                     </span>
                                 </div>
                             </a>                   
@@ -53,7 +85,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <ul class="button-add">                    
                     <li>
                         <div class="btn-group">
@@ -93,7 +125,7 @@
                     <ul class="nav nav-tabs">
                         <li ng-class="{active: $state.current.activetab == 'report'}">
                             <!--<a ui-sref="index.report.reports({dealerId: dealerId, reportId: reportId, startDate: startDate, endDate: endDate})" style="padding:3px 15px;display: inline-block;">-->
-                            <a style="padding:3px 15px;display: inline-block;">
+                            <a class="reports-tabs">
                                 Reports
                             </a>
                         </li>
