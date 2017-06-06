@@ -1,27 +1,3 @@
-<style>
-    ul.navbar-nav li.dropdown-dealer a:hover{
-        background: none !important;
-    }
-    .calendarOuter{
-        padding: 21px;
-    }
-    .calendarInner{
-        border: 1px solid #D2D8DB;
-        padding: 4px 13px 3px 12px;
-    }
-    .calendarStartdate{
-        padding-right: 5px;
-        margin-right: 13px;
-        margin-left: 13px;
-    }
-    .calendarEnddate{
-        padding-left: 5px;
-        padding-right: 4px;
-        margin-right: 13px;
-        margin-left: 13px;
-    }
-</style>
-
 <div>
     <section class="content-header">
         <div class="container">
@@ -42,9 +18,10 @@
                                 </ul>
                             </li>
                             <li class="dropdown dropdown-dealer">
-                                <a class="dropdown-toggle" data-toggle="dropdown">Dashboard<br>
+                                <a class="dropdown-toggle product-Dropdown" data-placement='bottom' href='#' data-toggle="popover">Dashboard<br>  
+                                    <!--<a class='dealerName' data-placement='bottom' href='#' data-toggle="popover" style="border-bottom:2px solid #E6E6E6;color:#3D464D;text-decoration:none;font-size:18px;">Over view <i class="fa fa-angle-down col-sm-offset-5"></i></a>-->
                                     <span class="drop-dealer">Overview </span> <i class="fa fa-angle-down" aria-hidden="true"></i></a>
-                                <ul class="dropdown-menu" role="menu">
+                                <ul class="dropdown-menu hide" id="product-Items" role="menu">
                                     <li ng-repeat="product in products">
                                         <a class="active"  ng-click="setParamsDate(product); loadNewUrl()">
                                             {{product.productName}}
@@ -73,6 +50,38 @@
                                     </li>
                                 </ul>
                             </li>
+                            <!--                            <li class="dropdown dropdown-dealer">
+                                                            <a class="dropdown-toggle" data-toggle="dropdown">Dashboard<br>
+                                                                <span class="drop-dealer">Overview </span> <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                                            <ul class="dropdown-menu" role="menu">
+                                                                <li ng-repeat="product in products">
+                                                                    <a class="active"  ng-click="setParamsDate(product); loadNewUrl()">
+                                                                        {{product.productName}}
+                                                                    </a>
+                                                                </li>
+                                                                <li class="divider"></li>
+                                                                <li ng-click="setParams()">
+                                                                    <a data-ui-sref="index.report.reports({dealerId: dealerId, startDate: startDate, endDate: endDate})">
+                                                                        <i class="fa fa-file-text"></i> Report
+                                                                    </a>
+                                                                </li>
+                                                                <li ng-click="setParams()">
+                                                                    <a data-ui-sref="index.schedulerIndex.scheduler({dealerId: dealerId, startDate: startDate, endDate: endDate})">
+                                                                        <i class="fa fa-clock-o" aria-hidden="true"></i> Scheduler
+                                                                    </a>
+                                                                </li>
+                                                                <li ng-click="setParams()">
+                                                                    <a data-ui-sref="index.map({startDate: startDate, endDate: endDate})">
+                                                                        <i class="fa fa-clock-o" aria-hidden="true"></i> Map Report Level
+                                                                    </a>
+                                                                </li>
+                                                                <li ng-click="setParams()">
+                                                                    <a data-ui-sref="index.settings">
+                                                                        <i class="fa fa-clock-o" aria-hidden="true"></i> Field Settings
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>-->
                             <li class="dropdown dropdown-dealer">
                                 <a id="daterange-btn" class="calendarOuter">Date
                                     <div class="calendarInner">
@@ -227,7 +236,7 @@
                                                     <div id="delete{{widget.id}}" class="modal">
                                                         <div class="modal-dialog modal-lg">
                                                             <div class="modal-content">
-                                                                <div class="modal-header modalHead widgetDelete" style="color:black;">
+                                                                <div class="modal-header modalHead widgetDelete headerTitle">
                                                                     <strong>Delete</strong>
                                                                     <strong><button class="close" data-dismiss="modal">&times;</button></strong>
                                                                 </div>
@@ -267,14 +276,14 @@
                                                                 <div class="modal-content">
                                                                     <div class="modal-header modalHead">
                                                                         <div class="col-md-10">
-                                                                            <h1 class="report-header-title" style="color:black;">Add {{widget.widgetTitle}} To Report</h1>
+                                                                            <h1 class="report-header-title headerTitle">Add {{widget.widgetTitle}} To Report</h1>
                                                                         </div>
                                                                         <strong><button class="close" data-dismiss="modal">&times;</button></strong>
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <label class="col-sm-2">Report</label>
                                                                         <div class="col-sm-10">
-                                                                            <ui-select ng-model="widget.reportWidget" on-select="selectReport(widget.reportWidget)" theme="select2" ng-disabled="disabled" style="width: 220px;">
+                                                                            <ui-select ng-model="widget.reportWidget" on-select="selectReport(widget.reportWidget)" theme="select2" ng-disabled="disabled" class="modelSelect">
                                                                                 <ui-select-match placeholder="Select Report...">{{$select.selected.reportTitle}}</ui-select-match>
                                                                                 <ui-select-choices repeat="report in reportList | filter: $select.search">
                                                                                     <span ng-bind-html="report.reportTitle | highlight: $select.search"></span>
@@ -480,7 +489,7 @@
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header modalHead">
-                                                    <label style="font-weight:normal;">Widget</label>
+                                                    <label class="widgetNew">Widget</label>
                                                     <button class="close" data-dismiss="modal">&times;</button>
                                                 </div>
                                                 <div class="modal-body">
@@ -520,7 +529,7 @@
                                                                     <div class="form-group">
                                                                         <label>Type</label><br/>
                                                                         <a class="btn btn-app" ng-repeat="chartType in chartTypes track by chartType.id"> <span ng-click="previewChart(chartType, widget, $index);" class="previewChart" title="{{chartType.name}}"> 
-                                                                                <i style="cursor: pointer" class="fa {{chartType.icon}}" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i> </span>
+                                                                                <i class="fa {{chartType.icon}} typeChart" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i> </span>
                                                                         </a>
                                                                     </div>             
                                                                 </div>
@@ -746,7 +755,7 @@
                                                                      style="min-height:{{widget.minHeight}}">
                                                                 </div>
                                                             </div> 
-                                                            <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
+                                                            <div class="box-body previousChart chart-responsive" ng-if="previewChartType === 'table'">
                                                                 <div dynamic-Table dynamic-Table-Url="{{previewChartUrl}}" 
                                                                      widget-Id="{{previewColumn.id}}" 
                                                                      widget-Columns="{{previewColumn.columns}}" 

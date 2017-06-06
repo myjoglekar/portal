@@ -254,3 +254,40 @@
 .navbar-nav>li>a .dropdown-toggle:hover{
     background-color:none;
 }
+.headerTitle{
+    color:black;
+}
+ ul.navbar-nav li.dropdown-dealer a:hover,ul.navbar-nav li.dropdown-dealer a:focus{
+        background: none !important;
+    }
+    .calendarOuter{
+        padding: 21px;
+    }
+    .calendarInner{
+        border: 1px solid #D2D8DB;
+        padding: 4px 13px 3px 12px;
+    }
+    .calendarStartdate{
+        padding-right: 5px;
+        margin-right: 13px;
+        margin-left: 13px;
+    }
+    .calendarEnddate{
+        padding-left: 5px;
+        padding-right: 4px;
+        margin-right: 13px;
+        margin-left: 13px;
+    }
+    .modelSelect{
+        width: 220px;
+    }
+    .widgetNew{
+        font-weight:normal;
+    }
+    .typeChart{
+        cursor: pointer;
+    }
+    .previousChart{
+        overflow: auto;
+    }
+  

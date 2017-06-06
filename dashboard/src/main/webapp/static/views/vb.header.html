@@ -6,119 +6,15 @@
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <li class="dropdown user user-menu">
-                    <!--                    <a class="dropdown-toggle" data-toggle="dropdown">
-                                            <span> {{userName}}</span>
-                                            <i class="fa fa-user-circle icon-circle"></i>
-                                            <span> {{fullName}}</span>
-                                        </a>-->
-                    <a class='dealerName' data-placement='bottom'><span class="loginUser"> {{userName}}</span> <i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
-
-
-                    <div id="popover-content" class="hide">
+                    <a class="user-LogOut" data-placement="bottom" href="#" data-toggle="popover">
+                        <span class="loginUser"> {{userName}}</span> 
+                        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                    </a>
+                    <div id="userLogout" class="hide">
                         <a href="admin/user/logout" class="btn btn-default btn-flat">Sign out</a>
                     </div>
-                    <!--<ul class="dropdown-menu">-->
-                    <!--                        <li class="user-header">
-                                                <img src="static/img/logos/user.png" class="img-circle" alt="User Image">
-                                                <p>
-                                                    {{fullName}}
-                                                    {{userName}}
-                                                    <small>Member since Nov. 2012</small>
-                                                </p>
-                                            </li>-->
-                    <!--<li class="user-footer pull-right">-->
-                    <!--                            <div class="pull-left">
-                                                    <a class="btn btn-default btn-flat">Profile</a>
-                                                </div>-->
-                    <!--<div class="pull-right">-->
-                    <!--<a href="admin/user/logout" class="btn btn-default btn-flat">Sign out</a>-->
-                    <!--</div>-->
-                    <!--</li>-->
-                    <!--</ul>-->
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-
-
-
-
-
-<!--<div ng-controller="HeaderController">-->
-<!--    <a href="" class="logo"> 
-        <span class="logo-mini"><img src="static/img/logo-mobile.png" width="30" /></span> 
-        <span class="logo-lg"><img src="static/img/logos/l2tmedia.png" width="150" /></span> 
-    </a>-->
-<!--    <li class="pull-right user user-menu mobile-navbar visible-xs">
-        <a class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a>
-    </li>-->
-<!--Mobile Device-->
-<!--    <section class="mobile-l2t-header" >
-        <ol class="breadcrumb mobile-navbar visible-xs mobile-l2t-navbar">
-            <li class="pull-right user user-menu">
-                <a data-toggle="dropdown" class="logout">
-                    <i class="fa fa-user" style="font-size:20px;"></i> {{userName}}</a>
-                <ul class="dropdown-menu pull-left">
-                    <li><a href="admin/user/logout">Logout</a></li>
-                </ul>
-            </li>
-            <li class="pull-left">
-            <ui-select ng-model="selectDealer.selected" on-select="getDealerId(selectDealer.selected); loadNewUrl()" theme="selectize" ng-disabled="disabled" style="width:180px;">
-                <ui-select-match placeholder="Select Dealer...">{{$select.selected.dealerName}}</ui-select-match>
-                <ui-select-choices repeat="dealer in dealers | filter: $select.search">
-                    <a>
-                        <span ng-bind-html="dealer.dealerName | highlight: $select.search"></span>
-                        <small ng-bind-html="country.code | highlight: $select.search"></small>
-                    </a>
-                </ui-select-choices>
-            </ui-select>
-            </li>
-            <li class="pull-left">              
-                <a id="daterange-btn">
-                                    <i class="fa fa-calendar" id="date"></i>
-                    <span class="date-border">
-                        {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
-                    </span>
-                </a>                   
-            </li>
-            <li> <span class="label label-info" ng-click="loadNewUrl()">Go</span></li>
-        </ol>
-    </section>-->
-
-<!--Desktop Device-->
-<!--    <section class="content-header header-menu" >
-        <ol class="breadcrumb hidden-xs">
-        <ol class="breadcrumb">
-            <li>
-            <ui-select ng-model="selectDealer.selected" on-select="getDealerId(selectDealer.selected); loadNewUrl()" theme="selectize" ng-disabled="disabled" style="width:180px;">
-                <ui-select-match placeholder="Select Dealer...">{{$select.selected.dealerName}}</ui-select-match>
-                <ui-select-choices repeat="dealer in dealers | filter: $select.search">
-                    <a>
-                        <span ng-bind-html="dealer.dealerName | highlight: $select.search"></span>
-                        <small ng-bind-html="country.code | highlight: $select.search"></small>
-                    </a>
-                </ui-select-choices>
-            </ui-select>
-            </li>
-            <li>              
-                <a class="pull-right header-datePicker" id="daterange-btn">
-                                    <i class="fa fa-calendar" id="date"></i>
-                    <span class="date-border">
-                        {{firstDate| date: "MM/dd/yyyy"}} - {{lastDate| date: "MM/dd/yyyy"}} <i class="fa fa-caret-down"></i>
-                    </span>
-                </a>                   
-            </li>
-            <li> <span class="label label-info" ng-click="loadNewUrl()">Go</span></li>
-            <li class="pull-right user user-menu">
-                <a data-toggle="dropdown" class="logout">
-                    <i class="fa fa-user" style="font-size:20px;"></i> {{fullName}}</a>
-                <ul class="dropdown-menu pull-left">
-                    <li><a href="admin/user/logout">Logout</a></li>
-                </ul>
-            </li>
-                    <li class="pull-right user user-menu">
-                        <a class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a>
-                    </li>
-        </ol>
-    </section>-->

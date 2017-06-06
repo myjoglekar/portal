@@ -18,24 +18,16 @@ i.fa.fa-user-circle-o {
     padding-left: 5px;
     font-size: 18px;
 }
-.popover {
-    position: absolute;
-    top: 0;
-    z-index: 1060;
-    display: none;
-    max-width:100px;
-    padding: 1px;
-    font-family: 'proxima_nova_rglight';
-}
+/*.popover {
+    min-width:98px !important;
+    font-family: 'proxima_nova_rglight' !important;
+}*/
 
-.list{
-    padding:5px;
-}
 
-.fade {
+/*.fade {
     min-width:98px !important;
     opacity:1;
-}
+}*/
 .bidpopover {
     padding: 6px;
     transition-duration: 0.4s;
@@ -62,7 +54,7 @@ i.fa.fa-user-circle-o {
     max-width:10px;
 }
 .popover-content {
-    padding: 10px 10px;
+    padding: 10px 10px !important;
 }
 
 /*Arrow down*/

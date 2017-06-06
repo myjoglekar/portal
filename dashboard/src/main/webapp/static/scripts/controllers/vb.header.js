@@ -4,10 +4,10 @@ app.controller('HeaderController', function ($scope, $cookies, $http, $filter, $
     $scope.productId = $stateParams.productId;
     $scope.tabId = $stateParams.tabId;
      $(document).ready(function () {
-        $('.dealerName').popover({
+        $('.user-LogOut').popover({
             html: true,
             content: function () {
-                return $('#popover-content').html();
+                return $('#userLogout').html();
             }
         });
     });
