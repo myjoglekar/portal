@@ -1,4 +1,10 @@
-app.controller('ViewFavouritesWidgetController', function ($http, $scope, $stateParams, $timeout, $state) {
+app.controller('ViewFavouritesWidgetController', function ($http, $scope, $stateParams, $timeout, $state, $rootScope) {
+    
+    console.log($rootScope.dealerIdRange)
+    console.log($rootScope.stateDateRange)
+    console.log($rootScope.endDateRange)
+    
+    
     $scope.accountId = $stateParams.accountId;
     $scope.accountName = $stateParams.accountName;
     $scope.productId = $stateParams.productId;
@@ -12,7 +18,6 @@ app.controller('ViewFavouritesWidgetController', function ($http, $scope, $state
         $http.get("admin/fav/getAllFav/").success(function (favResponse) {
             widgetItems.forEach(function (value, key) {
                 favWidget = $.grep(favResponse, function (b) {
-                    console.log(b)
                     return b.id === value.widgetId.id;
                 });
                 if (favWidget.length > 0) {
@@ -22,7 +27,6 @@ app.controller('ViewFavouritesWidgetController', function ($http, $scope, $state
                 }
             });
         });
-
         $scope.favouritesWidgets = widgetItems;
     });
 
@@ -93,9 +97,8 @@ app.controller('ViewFavouritesWidgetController', function ($http, $scope, $state
             });
         }, 50);
     }
-    
+
     $scope.deleteReportWidget = function (favouritesWidget, index) {                            //Delete Widget
-        console.log(favouritesWidget)
         $http({method: 'DELETE', url: 'admin/ui/dbWidget/' + favouritesWidget.widgetId.id}).success(function (response) {
             $scope.favouritesWidgets.splice(index, 1);
         });
@@ -163,4 +166,101 @@ app.controller('ViewFavouritesWidgetController', function ($http, $scope, $state
     $scope.setTickerFn = function (tickerFn) {
         $scope.directiveTickerFn = tickerFn;
     };
+
+    $scope.selectAggregations = [
+        {name: 'None', value: ""},
+        {name: 'Sum', value: "sum"},
+        {name: 'CTR', value: "ctr"},
+        {name: 'CPC', value: "cpc"},
+        {name: 'CPS', value: "cps"},
+        {name: 'CPA', value: "cpa"},
+        {name: 'Avg', value: "avg"},
+        {name: 'Count', value: "count"},
+        {name: 'Min', value: "min"},
+        {name: 'Max', value: "max"},
+        {name: 'CPL', value: "cpl"},
+        {name: 'CPLC', value: "cplc"},
+        {name: 'CPComment', value: "cpcomment"},
+        {name: 'CPostE', value: "cposte"},
+        {name: 'CPageE', value: "cpagee"},
+        {name: 'CPP', value: "cpp"},
+        {name: 'CPR', value: "cpr"}
+
+    ];   //Aggregation Type-Popup
+    $scope.selectGroupPriorities = [
+        {num: 'None', value: ""},
+        {num: 1, value: 1},
+        {num: 2, value: 2}
+    ];
+    $scope.selectDateDurations = [
+        {duration: "None", value: 'none'},
+        {duration: "Today", value: 'today'},
+        {duration: "Last N days", value: ''},
+        {duration: "Last N Weeks", value: ''},
+        {duration: "Last N Months", value: ''},
+        {duration: "This Month", value: 'thisMonth'},
+        {duration: "This Year", value: 'thisYear'},
+        {duration: "Last Year", value: 'lastYear'},
+        {duration: "Yesterday", value: 'yesterday'},
+        {duration: "Custom", value: 'custom'}
+    ]; // Month Durations-Popup
+    $scope.selectXAxis = [
+        {label: 'None', value: ""},
+        {label: "X-1", value: 1}
+    ];
+    $scope.selectYAxis = [
+        {label: 'None', value: ""},
+        {label: "Y-1", value: 1},
+        {label: "Y-2", value: 2}
+    ];
+    $scope.alignments = [
+        {name: '', displayName: 'None'},
+        {name: "left", displayName: "Left"},
+        {name: "right", displayName: "Right"},
+        {name: "center", displayName: "Center"}
+    ];
+    $scope.sorting = [
+        {name: 'None', value: ''},
+        {name: 'asc', value: 'asc'},
+        {name: 'desc', value: 'desc'}
+    ];
+    $scope.tableWrapText = [
+        {name: 'None', value: ''},
+        {name: 'Yes', value: "yes"}
+    ];
+    $scope.hideOptions = [
+        {name: 'Yes', value: 1},
+        {name: 'No', value: ''}
+    ];
+    $scope.isEditPreviewColumn = false;
+
+    $scope.favEditWidget = function (widget) {     //Edit widget
+        $scope.favTableDef(widget);
+        $scope.selectedRow = widget.chartType;
+        widget.previewUrl = widget.directUrl;
+        widget.previewType = widget.chartType;
+        widget.previewTitle = widget.widgetTitle;
+        $scope.editChartType = widget.chartType;
+        $scope.selectProductName(widget.productName, widget);
+    };
+
+    $scope.favTableDef = function (widget) {      //Dynamic Url from columns Type data - Popup
+        if (widget.columns) {
+            if (widget.directUrl) {
+                favFieldOnly(widget)
+            }
+        } else {
+            if (widget.directUrl) {
+                favFieldOnly(widget)
+            }
+        }
+    };
+
+    function favFieldOnly(widget) {
+        $http.get("admin/proxy/getJson?url=" + widget.directUrl + "&fieldsOnly=true").success(function (response) {
+            $scope.collectionFields = [];
+            widget.columns = response.columnDefs;
+            $scope.collectionFields = response.columnDefs;
+        });
+    }
 });

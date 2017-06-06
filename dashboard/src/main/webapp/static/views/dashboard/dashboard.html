@@ -215,8 +215,8 @@
     .selected{
         background-color: #EBEEE1;
     }
-    
-     /*Favorites*/
+
+    /*Favorites*/
     .red {
         color:red;
     }
@@ -228,7 +228,6 @@
         cursor:pointer;
     }
 </style>
-
 <div>
     <section class="content-header">
         <div class="container">
@@ -279,7 +278,7 @@
                                         </a>
                                     </li>
                                     <li ng-click="setParams()">
-                                        <a data-ui-sref="index.viewFavouritesWidget({favouriteName: 'Favourite',startDate: startDate, endDate: endDate})">
+                                        <a data-ui-sref="index.viewFavouritesWidget({dealerId: dealerId, favouriteName: 'Favourite',startDate: startDate, endDate: endDate})">
                                             <i class="fa fa-star" aria-hidden="true"></i> Favourites
                                         </a>
                                     </li>
@@ -288,12 +287,12 @@
                             <li class="dropdown dropdown-dealer">
                                 <a id="daterange-btn" style="padding: 21px;">
                                     <div style="border: 1px solid #D2D8DB; padding: 4px 13px 3px 12px;">
-                                    <i class="fa fa-calendar" id="date" style="padding-right: 2px;"></i>
-                                    <span class="date-border">
-                                        <span style="padding-right: 5px;">
-                                            {{firstDate| date: "MM/dd/yyyy"}}
-                                        </span> - <span style="padding-left: 5px;padding-right: 4px;">{{lastDate| date: "MM/dd/yyyy"}}</span> <i class="fa fa-caret-down"></i>
-                                    </span>
+                                        <i class="fa fa-calendar" id="date" style="padding-right: 2px;"></i>
+                                        <span class="date-border">
+                                            <span style="padding-right: 5px;">
+                                                {{firstDate| date: "MM/dd/yyyy"}}
+                                            </span> - <span style="padding-left: 5px;padding-right: 4px;">{{lastDate| date: "MM/dd/yyyy"}}</span> <i class="fa fa-caret-down"></i>
+                                        </span>
                                     </div>
                                 </a>                   
                             </li>
@@ -349,570 +348,569 @@
         <div class="container">
             <section class="content">
                 <div class="row">
-            <div class="col-md-12">
-                <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs">
-                        <li ng-repeat="tab in tabs" ui-sref-active="active"
-                            ng-dblclick="startEditing(tab);" 
-                            ng-drop="true" 
-                            ng-drop-success="onDropTabComplete($index, $data,$event)">
-                            <a class="active" ng-drag="true" ng-drag-data="tab"
-                               ui-sref="index.dashboard({productId: productId, tabId: tab.id?tab.id:0})">
-                                <span ng-hide="tab.editing">{{tab.tabName}}</span>
-                                <form ng-submit="doneEditing(tab)" ng-show="tab.editing">
-                                    <input class="form-control" ng-model="tab.tabName" ng-blur="doneEditing(tab)" ng-focus="tab == editedItem">
-                                </form>
-                            </a>
-                            <button ng-if="permission.allowCreateTab == true" class="close closeTab" data-toggle="modal" data-target="#deleteTabModal{{tab.id}}" type="button">×</button>
-                            <div id="deleteTabModal{{tab.id}}" class="modal bd-example-modal-md">
-                                <div class="modal-dialog modal-xs">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Delete</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <span>Want to delete ?</span>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <div class="col-sm-12">
-                                                <button type="button" class="btn btn-primary btn-xs" ng-click="deleteTab($index, tab)" data-dismiss="modal"><span class="fa fa-save"></span> Yes</button>  
-                                                <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> No
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li> 
-<!--                        <li ng-if="permission.allowCreateTab == true" class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
-
-                        <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
-                            <div class="modal-dialog modal-md">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">TAB</h4>
-                                    </div>
-
-                                    <div class="modal-body ">
-                                        <form class="form-horizontal" role="form">
-
-                                            <div class="form-group">
-                                                <div class="col-sm-12  col-md-12">
-                                                    <div class="col-sm-3 col-md-3">
-                                                        <label>Tab Name </label>
-                                                    </div>
-                                                    <div class="col-sm-9 col-md-9">
-                                                        <input type="text" ng-model="tab.tabName" class="form-control "/>
-                                                    </div>
-                                                </div>
-                                            </div>
+                    <div class="col-md-12">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li ng-repeat="tab in tabs" ui-sref-active="active"
+                                    ng-dblclick="startEditing(tab);" 
+                                    ng-drop="true" 
+                                    ng-drop-success="onDropTabComplete($index, $data,$event)">
+                                    <a class="active" ng-drag="true" ng-drag-data="tab"
+                                       ui-sref="index.dashboard({productId: productId, tabId: tab.id?tab.id:0})">
+                                        <span ng-hide="tab.editing">{{tab.tabName}}</span>
+                                        <form ng-submit="doneEditing(tab)" ng-show="tab.editing">
+                                            <input class="form-control" ng-model="tab.tabName" ng-blur="doneEditing(tab)" ng-focus="tab == editedItem">
                                         </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div class="col-sm-12">
-                                            <button type="button" class="btn btn-primary btn-xs" ng-click="addTab(tab)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>  
-                                            <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
-                    </ul>
-                </div>
-                <div class="tab-content">
-                    <!--<div class="row" ngsf-fullscreen="fullscreenCtrl">-->
-
-                    <!--<ui-view></ui-view>-->
-                    <div>
-                        <div ng-repeat="widget in widgets">
-                            <div ng-if="widget.chartType == 'ticker'">
-                                <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data, $event)">
-                                    <div class="box-body chart-responsive" ng-drag="true" ng-drag-data="widget">
-                                        <div class="box-tools pull-right hover-delete">
-                                            <button  type="button" ng-if="permission.allowCreateWidget == true" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                                            </button>
-                                            <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
-                                            <div id="delete{{widget.id}}" class="modal">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header" style="background-color:#9DD6D7;color:black;">
-                                                            <strong>Delete</strong>
-                                                            <strong><button class="close" data-dismiss="modal">&times;</button></strong>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <span>Want to delete ? </span>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
-                                                            <button class="btn btn-danger btn-xs" data-dismiss="modal"> No</button>
-                                                        </div>
+                                    </a>
+                                    <button ng-if="permission.allowCreateTab == true" class="close closeTab" data-toggle="modal" data-target="#deleteTabModal{{tab.id}}" type="button">×</button>
+                                    <div id="deleteTabModal{{tab.id}}" class="modal bd-example-modal-md">
+                                        <div class="modal-dialog modal-xs">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Delete</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <span>Want to delete ?</span>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="col-sm-12">
+                                                        <button type="button" class="btn btn-primary btn-xs" ng-click="deleteTab($index, tab)" data-dismiss="modal"><span class="fa fa-save"></span> Yes</button>  
+                                                        <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> No
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div ticker-Directive ticker-Url="{{widget.directUrl}}" ticker-Id="{{widget.id}}" ticker-Columns="{{widget.columns}}"></div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div ng-if="widget.chartType != 'ticker'">
-                                <div class="col-md-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
-                                    <div class="box box-primary box-l2t" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl"  ng-drag="true" ng-drag-data="widget"> 
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title">
-                                                <span class="{{widget.icon}}"></span> 
-                                                <span class="text-capitalize">{{widget.widgetTitle}}</span>
-                                            </h3>
-
-                                            <div class="box-tools pull-right">
-                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                                <a title="Report" ng-click="showReportList[widget.id] = true;"><i class="fa fa-file-text"></i></a>
-<a title="Favourites" ng-click="toggleFavourite(widget)"><i class="fa fa-heart" ng-class="{'red':widget.isFav,'black':!widget.isFav}"></i></a>
-                                                <!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                                                                            </button>-->
-                                                <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
-                                                </button>
-                                                <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
-                                                <div id="delete{{widget.id}}" class="modal">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header" style="background-color:#9DD6D7;color:black;">
-                                                                <strong>Delete</strong>
-                                                                <strong><button class="close" data-dismiss="modal">&times;</button></strong>
+                                </li> 
+                                <!--                        <li ng-if="permission.allowCreateTab == true" class="pull-left add-tab"  data-toggle="modal" data-target="#tabModal"><i class="fa fa-plus-circle"></i> Add Tab</a></li>             
+                                
+                                                        <div class="modal fade bd-example-modal-md" id="tabModal" role="dialog">
+                                                            <div class="modal-dialog modal-md">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                        <h4 class="modal-title">TAB</h4>
+                                                                    </div>
+                                
+                                                                    <div class="modal-body ">
+                                                                        <form class="form-horizontal" role="form">
+                                
+                                                                            <div class="form-group">
+                                                                                <div class="col-sm-12  col-md-12">
+                                                                                    <div class="col-sm-3 col-md-3">
+                                                                                        <label>Tab Name </label>
+                                                                                    </div>
+                                                                                    <div class="col-sm-9 col-md-9">
+                                                                                        <input type="text" ng-model="tab.tabName" class="form-control "/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <div class="col-sm-12">
+                                                                            <button type="button" class="btn btn-primary btn-xs" ng-click="addTab(tab)" data-dismiss="modal"><span class="fa fa-save"></span> Save</button>  
+                                                                            <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> Cancel
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="modal-body">
-                                                                <span>Want to delete ? </span>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
-                                                                <button class="btn btn-danger btn-xs" data-dismiss="modal"> No</button>
+                                                        </div>-->
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <!--<div class="row" ngsf-fullscreen="fullscreenCtrl">-->
+
+                            <!--<ui-view></ui-view>-->
+                            <div>
+                                <div ng-repeat="widget in widgets">
+                                    <div ng-if="widget.chartType == 'ticker'">
+                                        <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data, $event)">
+                                            <div class="box-body chart-responsive" ng-drag="true" ng-drag-data="widget">
+                                                <div class="box-tools pull-right hover-delete">
+                                                    <button  type="button" ng-if="permission.allowCreateWidget == true" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                                                    </button>
+                                                    <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                                                    <div id="delete{{widget.id}}" class="modal">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header" style="background-color:#9DD6D7;color:black;">
+                                                                    <strong>Delete</strong>
+                                                                    <strong><button class="close" data-dismiss="modal">&times;</button></strong>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <span>Want to delete ? </span>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
+                                                                    <button class="btn btn-danger btn-xs" data-dismiss="modal"> No</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div ticker-Directive ticker-Url="{{widget.directUrl}}" ticker-Id="{{widget.id}}" ticker-Columns="{{widget.columns}}"></div>
                                             </div>
-                                        </div>
-
-                                        <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">{{lineEmptyMessage}}
-                                            <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" 
-                                                 widget-Date-Duration="{{widget.dateDuration}}" 
-                                                 widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                 widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                                                 widget-Columns="{{widget.columns}}">                                 
-                                            </div>
-                                        </div> 
-                                        <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
-                                            <div bar-Chart-Directive bar-Chart-Url="{{widget.directUrl}}" 
-                                                 widget-Date-Duration="{{widget.dateDuration}}" 
-                                                 widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                 widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                                                 widget-Columns="{{widget.columns}}">                                 
-                                            </div>
-                                        </div> 
-                                        <div class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
-
-                                            <div pie-Chart-Directive pie-Chart-Url='{{widget.directUrl}}' 
-                                                 widget-Date-Duration="{{widget.dateDuration}}" 
-                                                 widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                 widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                                                 widget-Columns="{{widget.columns}}">                                 
-                                            </div>
-                                        </div> 
-                                        <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
-                                            <div area-Chart-Directive area-Chart-Url="{{widget.directUrl}}" 
-                                                 widget-Date-Duration="{{widget.dateDuration}}" 
-                                                 widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                 widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                                                 widget-Columns="{{widget.columns}}">                                 
-                                            </div>
-                                        </div> 
-                                        <div class="box-body full-height" ng-if="widget.chartType === 'table'" adjust-height>                                           
-                                            <div id="changes-height" class="table-responsive">
-                                                <div id="changes-height" class="table-responsive">
-                                                    <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" 
-                                                         set-Table-Chart-Fn="setTableFn(tableChartFn)"
-                                                         widget-Date-Duration="{{widget.dateDuration}}" 
-                                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                         widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
-                                                         widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" 
-                                                         widget-Columns="{{widget.columns}}">                                     
-                                                    </div> 
-                                                </div>
-                                            </div> 
-                                            <!--<div dynamic-Table pdf-function="addToPdf(test)" dynamic-Table-Url="{{widget.directUrl}}" widget-Id="{{widget.id}}" widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" widget-Columns="{{widget.columns}}"></div>--> 
-                                        </div>
-                                    </div> 
-                                </div>
-                                <!----------Report Popup-------------------->
-                                <div class="report-bottomMenu pull-right" ng-show="showReportList[widget.id]">
-                                    <div class="report-menuHeader">
-                                        <div class="col-md-10">
-                                            <!--<i class="report-header-icon fa fa-user" title="{{widget.widgetTitle}}"></i>-->
-                                            <h1 class="report-header-title">Add {{widget.widgetTitle}} To Report</h1>
-                                        </div>
-                                        <div class="report-header-tools pull-right">
-                                            <button class="report-header-closeBtn" ng-click="clearReport(); showReportList[widget.id] = false;"><i class="fa fa-close"></i></button>
                                         </div>
                                     </div>
-                                    <div class="report-menuBody">
-                                        <label class="col-sm-2">Report</label>
-                                        <div class="col-sm-10">
-                                            <ui-select ng-model="widget.reportWidget" on-select="selectReport(widget.reportWidget)" theme="select2" ng-disabled="disabled" style="width: 220px;">
-                                                <ui-select-match placeholder="Select Report...">{{$select.selected.reportTitle}}</ui-select-match>
-                                                <ui-select-choices repeat="report in reportList | filter: $select.search">
-                                                    <span ng-bind-html="report.reportTitle | highlight: $select.search"></span>
-                                                </ui-select-choices>
-                                            </ui-select>
-                                        </div>
-                                        <div class="report-body-content">
-                                            <div class="row report-chat-box">
-                                                <div class="report-body-img">
-                                                    <img class="report-body-imgs in" src="{{reportLogo}}">
-                                                </div>
-                                                <div class="form-group">
-                                                    <ul class="report-body-descr" ng-if="reportDescription">
-                                                        <li class="report-desc-list" ng-init="limit = 150; moreShown = false">
-                                                            <p>
-                                                                {{reportDescription| limitTo: limit}} {{reportDescription.length > limit ? '...' : ''}}
-                                                                <a ng-show="reportDescription.length > limit" href ng-click="limit = reportDescription.length; moreShown = true">  More</a>
-                                                                <a ng-show="moreShown" href ng-click="limit = 150; moreShown = false"> Less </a>
-                                                            </p>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
 
-                                            <div class="row form-group">
-                                                <div class="col-sm-12">
-                                                    <table class="table table-bordered" ng-show="showReportWidgetName">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Sl.No</th>
-                                                                <th>Widget Name</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr ng-repeat="titleName in reportWidgetTitle">
-                                                                <td>{{$index + 1}}</td>
-                                                                <td>{{titleName.widgetId.widgetTitle}}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <div ng-show="showReportEmptyMessage">
-                                                        <span><h4>{{reportEmptyMessage}}</h4></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="report-footer-btn">
-                                            <button class="btn btn-success pull-left" ng-click="goReport()">Goto Report</button>
-                                            <button class="btn btn-success" ng-click="addWidgetToReport(widget); showReportList[widget.id] = false;" style="float: right">Add</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!--------- New Or Edit------------->
-
-
-                            <div id="preview{{widget.id}}" class="modal fade">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <label style="font-weight:normal;">Widget</label>
-                                            <button class="close" data-dismiss="modal">&times;</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="box box-default">
+                                    <div ng-if="widget.chartType != 'ticker'">
+                                        <div class="col-md-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data,$event)">
+                                            <div class="box box-primary box-l2t" ng-hide="hidenewchart" ngsf-fullscreen="widgetCtrl"  ng-drag="true" ng-drag-data="widget"> 
                                                 <div class="box-header with-border">
-                                                    <h3 class="box-title">Features</h3>
+                                                    <h3 class="box-title">
+                                                        <span class="{{widget.icon}}"></span> 
+                                                        <span class="text-capitalize">{{widget.widgetTitle}}</span>
+                                                    </h3>
 
                                                     <div class="box-tools pull-right">
                                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div class="box-body popup-head">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label>Widget Title</label>
-                                                                <input type="text" class="form-control" ng-model="widget.previewTitle">
-                                                            </div> 
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label>Product</label>
-                                                                <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="userProduct for userProduct in userProducts">
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label>Name</label>
-                                                                <select class="form-control" ng-model="widget.productDisplayName" ng-change="changeUrl(widget.productDisplayName, widget)">
-                                                                    <option ng-repeat="productField in productFields">{{productField.productDisplayName}}</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label>Type</label><br/>
-                                                                <a class="btn btn-app" ng-repeat="chartType in chartTypes track by chartType.id"> <span ng-click="previewChart(chartType, widget, $index);" class="previewChart" title="{{chartType.name}}"> 
-                                                                        <i style="cursor: pointer" class="fa {{chartType.icon}}" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i> </span>
-                                                                </a>
-                                                            </div>             
-                                                        </div>
-                                                        <div class="col-md-2" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
-                                                            <div class="form-group">
-                                                                <input type="checkbox" ng-model="widget.tableFooter" ng-checked="widget.tableFooter == 1" />
-                                                                <!--<input type="checkbox" ng-model="widget.tableFooter" ng-checked="widget.tableFooter == true" />-->
-                                                                <label>Table Footer</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <input type="checkbox" ng-model="advanceMenu" value="true">
-                                                                <label>Advanced menu</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
-                                                            <div class="form-group">
-                                                                <input type="checkbox" ng-model="widget.zeroSuppression" ng-checked="widget.zeroSuppression == 1">
-                                                                <label>Zero Suppression</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
-                                                            <div class="form-group">
-                                                                <label class="col-sm-4">Max Record </label>
-                                                                <div class="col-sm-8">
-                                                                    <input type="text" class="form-control" ng-model="widget.maxRecord" placeholder="max record">
+                                                        <a title="Report" ng-click="showReportList[widget.id] = true;"><i class="fa fa-file-text"></i></a>
+                                                        <a title="Favourites" ng-click="toggleFavourite(widget)"><i class="fa fa-heart" ng-class="{'red':widget.isFav,'black':!widget.isFav}"></i></a>
+                                                        <!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                                                                                    </button>-->
+                                                        <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                                                        </button>
+                                                        <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                                                        <div id="delete{{widget.id}}" class="modal">
+                                                            <div class="modal-dialog modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header" style="background-color:#9DD6D7;color:black;">
+                                                                        <strong>Delete</strong>
+                                                                        <strong><button class="close" data-dismiss="modal">&times;</button></strong>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <span>Want to delete ? </span>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
+                                                                        <button class="btn btn-danger btn-xs" data-dismiss="modal"> No</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>                                    
+                                                        </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">{{lineEmptyMessage}}
+                                                    <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" 
+                                                         widget-Date-Duration="{{widget.dateDuration}}" 
+                                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                         widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                                                         widget-Columns="{{widget.columns}}">                                 
+                                                    </div>
+                                                </div> 
+                                                <div class="box-body chart-responsive" ng-if="widget.chartType === 'bar'">
+                                                    <div bar-Chart-Directive bar-Chart-Url="{{widget.directUrl}}" 
+                                                         widget-Date-Duration="{{widget.dateDuration}}" 
+                                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                         widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                                                         widget-Columns="{{widget.columns}}">                                 
+                                                    </div>
+                                                </div> 
+                                                <div class="box-body chart-responsive" ng-if="widget.chartType === 'pie'">
+
+                                                    <div pie-Chart-Directive pie-Chart-Url='{{widget.directUrl}}' 
+                                                         widget-Date-Duration="{{widget.dateDuration}}" 
+                                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                         widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                                                         widget-Columns="{{widget.columns}}">                                 
+                                                    </div>
+                                                </div> 
+                                                <div class="box-body chart-responsive" ng-if="widget.chartType === 'area'">
+                                                    <div area-Chart-Directive area-Chart-Url="{{widget.directUrl}}" 
+                                                         widget-Date-Duration="{{widget.dateDuration}}" 
+                                                         widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                         widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                                                         widget-Columns="{{widget.columns}}">                                 
+                                                    </div>
+                                                </div> 
+                                                <div class="box-body full-height" ng-if="widget.chartType === 'table'" adjust-height>                                           
+                                                    <div id="changes-height" class="table-responsive">
+                                                        <div id="changes-height" class="table-responsive">
+                                                            <div dynamic-Table dynamic-Table-Url="{{widget.directUrl}}" 
+                                                                 set-Table-Chart-Fn="setTableFn(tableChartFn)"
+                                                                 widget-Date-Duration="{{widget.dateDuration}}" 
+                                                                 widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                                 widget-Custom-Range="{{widget.customRange}}" widget-Id="{{widget.id}}" 
+                                                                 widget-Obj="{{widget}}" table-Footer="{{widget.tableFooter}}" 
+                                                                 widget-Columns="{{widget.columns}}">                                     
+                                                            </div> 
+                                                        </div>
+                                                    </div> 
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <!----------Report Popup-------------------->
+                                        <div class="report-bottomMenu pull-right" ng-show="showReportList[widget.id]">
+                                            <div class="report-menuHeader">
+                                                <div class="col-md-10">
+                                                    <!--<i class="report-header-icon fa fa-user" title="{{widget.widgetTitle}}"></i>-->
+                                                    <h1 class="report-header-title">Add {{widget.widgetTitle}} To Report</h1>
+                                                </div>
+                                                <div class="report-header-tools pull-right">
+                                                    <button class="report-header-closeBtn" ng-click="clearReport(); showReportList[widget.id] = false;"><i class="fa fa-close"></i></button>
+                                                </div>
                                             </div>
-                                            <div class="box">
-                                                <div class="box-header with-border">
-                                                    <h3 class="box-title">Columns</h3>
-                                                    <div class="box-tools">
+                                            <div class="report-menuBody">
+                                                <label class="col-sm-2">Report</label>
+                                                <div class="col-sm-10">
+                                                    <ui-select ng-model="widget.reportWidget" on-select="selectReport(widget.reportWidget)" theme="select2" ng-disabled="disabled" style="width: 220px;">
+                                                        <ui-select-match placeholder="Select Report...">{{$select.selected.reportTitle}}</ui-select-match>
+                                                        <ui-select-choices repeat="report in reportList | filter: $select.search">
+                                                            <span ng-bind-html="report.reportTitle | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                                <div class="report-body-content">
+                                                    <div class="row report-chat-box">
+                                                        <div class="report-body-img">
+                                                            <img class="report-body-imgs in" src="{{reportLogo}}">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <ul class="report-body-descr" ng-if="reportDescription">
+                                                                <li class="report-desc-list" ng-init="limit = 150; moreShown = false">
+                                                                    <p>
+                                                                        {{reportDescription| limitTo: limit}} {{reportDescription.length > limit ? '...' : ''}}
+                                                                        <a ng-show="reportDescription.length > limit" href ng-click="limit = reportDescription.length; moreShown = true">  More</a>
+                                                                        <a ng-show="moreShown" href ng-click="limit = 150; moreShown = false"> Less </a>
+                                                                    </p>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row form-group">
+                                                        <div class="col-sm-12">
+                                                            <table class="table table-bordered" ng-show="showReportWidgetName">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Sl.No</th>
+                                                                        <th>Widget Name</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="titleName in reportWidgetTitle">
+                                                                        <td>{{$index + 1}}</td>
+                                                                        <td>{{titleName.widgetId.widgetTitle}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <div ng-show="showReportEmptyMessage">
+                                                                <span><h4>{{reportEmptyMessage}}</h4></span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="box-body table-responsive no-padding">
-                                                    <table class="table table-bordered table-hover" >
-                                                        <thead>
-                                                            <tr>
-                                                                <td>Field Name</td>
-                                                                <td ng-if="advanceMenu == true">Display Name</td>
-                                                                <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Aggregation Function</td>
-                                                                <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Group Priority</td>
-                                                                <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">X-Axis</td>
-                                                                <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Y-Axis</td>
-                                                                <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Sort</td>
-                                                                <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">Format</td>
-                                                                <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Alignment</td>
-                                                                <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Column Hide</td>
-                                                                <!--<td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Width</td>-->
-                                                                <!--<td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Wrap</td>-->
-                                                                <td><button class="btn btn-info" ng-click="addColumns(widget)"><i class="fa fa-plus"></i></button></td>
-                                                            </tr>
-                                                        </thead>
-                                                        <!--<tbody ui:sortable ng:model="widget.columns">-->
-                                                        <tbody data-as-sortable="" data-ng-model="widget.columns" unselectable="on" class="unselectable">
-                                                            <tr ng-repeat="currentColumn in widget.columns" data-as-sortable-item>
-                                                                <td data-as-sortable-item-handle>
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayName}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <select ng-model="currentColumn.fieldName" class="form-control" ng-change="dispName(currentColumn)">
-                                                                            <option ng-repeat="collectionField in collectionFields" value="{{collectionField.fieldName}}">{{collectionField.displayName}}</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td data-as-sortable-item-handle ng-if="advanceMenu == true">
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayName}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <input type="text" class="form-control" ng-model="currentColumn.displayName">
-                                                                    </div>
-                                                                </td>
-                                                                <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.agregationFunction}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <!--<input type="text" class="form-control" ng-model="column.agregationFunction">-->
-                                                                        <select ng-model="currentColumn.agregationFunction" class="form-control">
-                                                                            <option ng-repeat="selectAggregation in selectAggregations" value="{{selectAggregation.value}}">{{selectAggregation.name}}</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.groupPriority}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <select ng-model="currentColumn.groupPriority" class="form-control">
-                                                                            <option ng-repeat="selectGroupPriority in selectGroupPriorities" value="{{selectGroupPriority.value}}">{{selectGroupPriority.num}}</option>
-                                                                        </select>
-                                                                        <!--<input type="text" class="form-control" ng-model="currentColumn.groupPriority">-->
-                                                                    </div>
-                                                                </td>
-                                                                <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.xAxis| xAxis}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <select ng-model="currentColumn.xAxis" class="form-control">
-                                                                            <option ng-repeat="selectxAxis in selectXAxis" value="{{selectxAxis.value}}">{{selectxAxis.label}}</option>
-                                                                        </select>
-                                                                        <!--<input type="text" class="form-control" ng-model="currentColumn.xAxis">-->
-                                                                    </div>
-                                                                </td>
-                                                                <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.yAxis| yAxis}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <select ng-model="currentColumn.yAxis" class="form-control">
-                                                                            <option ng-repeat="selectyAxis in selectYAxis" value="{{selectyAxis.value}}">{{selectyAxis.label}}</option>
-                                                                        </select>
-                                                                        <!--<input type="text" class="form-control" ng-model="currentColumn.yAxis">-->
-                                                                    </div>  
-                                                                </td>
-                                                                <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.sortOrder}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <!--<input type="text" class="form-control" ng-model="widget.sortOrder">-->
-                                                                        <select ng-model="currentColumn.sortOrder" class="form-control">
-                                                                            <option ng-repeat="sort in sorting" value="{{sort.value}}">{{sort.name}}</option>
-                                                                        </select>
-                                                                    </div> 
-                                                                </td>
-                                                                <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayFormat}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <input type="text" class="form-control" ng-model="currentColumn.displayFormat">
-                                                                    </div>
-                                                                </td>
-                                                                <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.alignment}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <select ng-model="currentColumn.alignment" class="form-control">
-                                                                            <option ng-repeat="alignment in alignments" value="{{alignment.name}}">{{alignment.name}}</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
-                                                                    <div ng-hide="currentColumn.isEdit"> {{currentColumn.columnHide| hideColumn}}</div>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <select ng-model="currentColumn.columnHide" class="form-control">
-                                                                            <option ng-repeat="hideOption in hideOptions" value="{{hideOption.value}}">{{hideOption.name}}</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <!--                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
-                                                                                                                <div ng-hide="isEdit"> {{currentColumn.width}}</div>
-                                                                                                                <div ng-show="isEdit">
-                                                                                                                    <input type="text" class="form-control" ng-model="currentColumn.width">
-                                                                                                                </div>
-                                                                                                            </td>-->
-                                                                <!--                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
-                                                                                                                <div ng-hide="isEdit"> {{currentColumn.wrapText| capitalize}}</div>
-                                                                                                                <div ng-show="isEdit">                                                
-                                                                                                                    <select ng-model="currentColumn.wrapText" class="form-control">
-                                                                                                                        <option ng-repeat="tableWrap in tableWrapText" value="{{tableWrap.value}}">{{tableWrap.name}}</option>
-                                                                                                                    </select>
-                                                                                                                </div>
-                                                                                                            </td>-->
-                                                                <td data-as-sortable-item-handle>
-                                                                    <div ng-show="currentColumn.isEdit">
-                                                                        <button class="btn btn-default btn-xs" ng-click="currentColumn.isEdit = false"><i class="fa fa-save"></i></button>
-                                                                        <!--<button class="btn btn-default btn-xs" ng-click="saveColumn(widget, column); widget.isEdit = false"><i class="fa fa-save"></i></button>-->
-                                                                        <button class="btn btn-default btn-xs" ng-click="currentColumn.isEdit = false"><i class="fa fa-close"></i></button>
-                                                                        <button class="btn btn-default btn-xs" ng-click="deleteColumn(widget.columns, $index)"><i class="fa fa-trash"></i></button>
-                                                                    </div>
-                                                                    <div ng-hide="currentColumn.isEdit">
-                                                                        <button class="btn btn-default btn-xs" ng-click="currentColumn.isEdit = true"><i class="fa fa-pencil"></i></button>
-                                                                        <button class="btn btn-default btn-xs" ng-click="deleteColumn(widget.columns, $index)"><i class="fa fa-trash"></i></button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>                            
-                                                </div>
-                                            </div>
-
-                                            <button class="btn btn-info" ng-click="showPreview(widget); showPreviewChart = !showPreviewChart">
-                                                <i class="fa" ng-class="{'fa-angle-down': !showPreviewChart, 'fa-angle-up': showPreviewChart}"></i> Preview 
-                                            </button>
-
-                                            <div ng-show="showPreviewChart">
-                                                <div class="col-md-12">
-                                                    <div class="box-body chart-responsive" ng-if="previewChartType === 'ticker'">
-                                                        <div ticker-Directive ticker-Url="{{previewChartUrl}}" 
-                                                             ticker-Id="{{widget.id}}" ticker-Columns="{{previewColumn.columns}}" 
-                                                             widget-Date-Duration="{{widget.dateDuration}}" 
-                                                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                             widget-Custom-Range="{{widget.customRange}}">                                             
-                                                        </div>
-                                                    </div> 
-                                                    <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
-                                                        <div line-Chart-Url='{{previewChartUrl}}' 
-                                                             widget-Columns="{{previewColumn.columns}}" 
-                                                             widget-Date-Duration="{{widget.dateDuration}}" 
-                                                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                             widget-Custom-Range="{{widget.customRange}}" 
-                                                             line-Chart-Directive 
-                                                             style="min-height:{{widget.minHeight}}">                                             
-                                                        </div>
-                                                    </div> 
-                                                    <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
-                                                        <div area-Chart-Url='{{previewChartUrl}}' 
-                                                             widget-Columns="{{previewColumn.columns}}" 
-                                                             area-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
-                                                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                             widget-Custom-Range="{{widget.customRange}}" 
-                                                             style="min-height:{{widget.minHeight}}">
-                                                        </div>
-                                                    </div> 
-                                                    <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
-                                                        <div bar-Chart-Url='{{previewChartUrl}}' 
-                                                             widget-Columns="{{previewColumn.columns}}" 
-                                                             bar-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
-                                                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                             widget-Custom-Range="{{widget.customRange}}" 
-                                                             style="min-height:{{widget.minHeight}}">                                             
-                                                        </div>
-                                                    </div> 
-                                                    <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
-                                                        <div pie-Chart-Url='{{previewChartUrl}}' 
-                                                             widget-Columns="{{previewColumn.columns}}" 
-                                                             pie-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
-                                                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                             widget-Custom-Range="{{widget.customRange}}" 
-                                                             style="min-height:{{widget.minHeight}}">
-                                                        </div>
-                                                    </div> 
-                                                    <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
-                                                        <div dynamic-Table dynamic-Table-Url="{{previewChartUrl}}" 
-                                                             widget-Id="{{previewColumn.id}}" 
-                                                             widget-Columns="{{previewColumn.columns}}" 
-                                                             widget-Date-Duration="{{widget.dateDuration}}" 
-                                                             widget-Obj="{{widget}}"
-                                                             widget-Frequency-Duration="{{widget.frequencyDuration}}" 
-                                                             widget-Custom-Range="{{widget.customRange}}">
-                                                        </div>
-                                                    </div> 
+                                                <div class="report-footer-btn">
+                                                    <button class="btn btn-success pull-left" ng-click="goReport()">Goto Report</button>
+                                                    <button class="btn btn-success" ng-click="addWidgetToReport(widget); showReportList[widget.id] = false;" style="float: right">Add</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button data-dismiss="modal" class="btn btn-info" ng-click="save(widget); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-save"></span> Save</button>
-                                            <button data-dismiss="modal" class="btn btn-danger" ng-click="closeWidget(widget); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-times"></span> Cancel</button>
+                                    </div>
+
+                                    <!--------- New Or Edit------------->
+
+
+                                    <div id="preview{{widget.id}}" class="modal fade">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <label style="font-weight:normal;">Widget</label>
+                                                    <button class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="box box-default">
+                                                        <div class="box-header with-border">
+                                                            <h3 class="box-title">Features</h3>
+
+                                                            <div class="box-tools pull-right">
+                                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="box-body popup-head">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Widget Title</label>
+                                                                        <input type="text" class="form-control" ng-model="widget.previewTitle">
+                                                                    </div> 
+                                                                </div>
+
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label>Product</label>
+                                                                        <select class="form-control" ng-model="widget.productName" ng-change="selectProductName(widget.productName, widget)" ng-options="userProduct for userProduct in userProducts">
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label>Name</label>
+                                                                        <select class="form-control" ng-model="widget.productDisplayName" ng-change="changeUrl(widget.productDisplayName, widget)">
+                                                                            <option ng-repeat="productField in productFields">{{productField.productDisplayName}}</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Type</label><br/>
+                                                                        <a class="btn btn-app" ng-repeat="chartType in chartTypes track by chartType.id"> <span ng-click="previewChart(chartType, widget, $index);" class="previewChart" title="{{chartType.name}}"> 
+                                                                                <i style="cursor: pointer" class="fa {{chartType.icon}}" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i> </span>
+                                                                        </a>
+                                                                    </div>             
+                                                                </div>
+                                                                <div class="col-md-2" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
+                                                                    <div class="form-group">
+                                                                        <input type="checkbox" ng-model="widget.tableFooter" ng-checked="widget.tableFooter == 1" />
+                                                                        <!--<input type="checkbox" ng-model="widget.tableFooter" ng-checked="widget.tableFooter == true" />-->
+                                                                        <label>Table Footer</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <input type="checkbox" ng-model="advanceMenu" value="true">
+                                                                        <label>Advanced menu</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
+                                                                    <div class="form-group">
+                                                                        <input type="checkbox" ng-model="widget.zeroSuppression" ng-checked="widget.zeroSuppression == 1">
+                                                                        <label>Zero Suppression</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4" ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker'">
+                                                                    <div class="form-group">
+                                                                        <label class="col-sm-4">Max Record </label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="text" class="form-control" ng-model="widget.maxRecord" placeholder="max record">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>                                    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="box">
+                                                        <div class="box-header with-border">
+                                                            <h3 class="box-title">Columns</h3>
+                                                            <div class="box-tools">
+                                                            </div>
+                                                        </div>
+                                                        <div class="box-body table-responsive no-padding">
+                                                            <table class="table table-bordered table-hover" >
+                                                                <thead>
+                                                                    <tr>
+                                                                        <td>Field Name</td>
+                                                                        <td ng-if="advanceMenu == true">Display Name</td>
+                                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Aggregation Function</td>
+                                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Group Priority</td>
+                                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">X-Axis</td>
+                                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Y-Axis</td>
+                                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Sort</td>
+                                                                        <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">Format</td>
+                                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Alignment</td>
+                                                                        <td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table' && (widget.widgetChartType ? widget.widgetChartType : widget.chartType) !== 'ticker' && advanceMenu == true">Column Hide</td>
+                                                                        <!--<td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Width</td>-->
+                                                                        <!--<td ng-if="(widget.widgetChartType ? widget.widgetChartType : widget.chartType) === 'table'">Wrap</td>-->
+                                                                        <td><button class="btn btn-info" ng-click="addColumns(widget)"><i class="fa fa-plus"></i></button></td>
+                                                                    </tr>
+                                                                </thead>
+                                                                <!--<tbody ui:sortable ng:model="widget.columns">-->
+                                                                <tbody data-as-sortable="" data-ng-model="widget.columns" unselectable="on" class="unselectable">
+                                                                    <tr ng-repeat="currentColumn in widget.columns" data-as-sortable-item>
+                                                                        <td data-as-sortable-item-handle>
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayName}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <select ng-model="currentColumn.fieldName" class="form-control" ng-change="dispName(currentColumn)">
+                                                                                    <option ng-repeat="collectionField in collectionFields" value="{{collectionField.fieldName}}">{{collectionField.displayName}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td data-as-sortable-item-handle ng-if="advanceMenu == true">
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayName}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <input type="text" class="form-control" ng-model="currentColumn.displayName">
+                                                                            </div>
+                                                                        </td>
+                                                                        <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.agregationFunction}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <!--<input type="text" class="form-control" ng-model="column.agregationFunction">-->
+                                                                                <select ng-model="currentColumn.agregationFunction" class="form-control">
+                                                                                    <option ng-repeat="selectAggregation in selectAggregations" value="{{selectAggregation.value}}">{{selectAggregation.name}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.groupPriority}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <select ng-model="currentColumn.groupPriority" class="form-control">
+                                                                                    <option ng-repeat="selectGroupPriority in selectGroupPriorities" value="{{selectGroupPriority.value}}">{{selectGroupPriority.num}}</option>
+                                                                                </select>
+                                                                                <!--<input type="text" class="form-control" ng-model="currentColumn.groupPriority">-->
+                                                                            </div>
+                                                                        </td>
+                                                                        <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.xAxis| xAxis}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <select ng-model="currentColumn.xAxis" class="form-control">
+                                                                                    <option ng-repeat="selectxAxis in selectXAxis" value="{{selectxAxis.value}}">{{selectxAxis.label}}</option>
+                                                                                </select>
+                                                                                <!--<input type="text" class="form-control" ng-model="currentColumn.xAxis">-->
+                                                                            </div>
+                                                                        </td>
+                                                                        <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.yAxis| yAxis}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <select ng-model="currentColumn.yAxis" class="form-control">
+                                                                                    <option ng-repeat="selectyAxis in selectYAxis" value="{{selectyAxis.value}}">{{selectyAxis.label}}</option>
+                                                                                </select>
+                                                                                <!--<input type="text" class="form-control" ng-model="currentColumn.yAxis">-->
+                                                                            </div>  
+                                                                        </td>
+                                                                        <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.sortOrder}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <!--<input type="text" class="form-control" ng-model="widget.sortOrder">-->
+                                                                                <select ng-model="currentColumn.sortOrder" class="form-control">
+                                                                                    <option ng-repeat="sort in sorting" value="{{sort.value}}">{{sort.name}}</option>
+                                                                                </select>
+                                                                            </div> 
+                                                                        </td>
+                                                                        <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.displayFormat}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <input type="text" class="form-control" ng-model="currentColumn.displayFormat">
+                                                                            </div>
+                                                                        </td>
+                                                                        <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.alignment}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <select ng-model="currentColumn.alignment" class="form-control">
+                                                                                    <option ng-repeat="alignment in alignments" value="{{alignment.name}}">{{alignment.name}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td data-as-sortable-item-handle ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table' && (setPreviewChartType ? setPreviewChartType : editChartType) !== 'ticker' && advanceMenu == true">
+                                                                            <div ng-hide="currentColumn.isEdit"> {{currentColumn.columnHide| hideColumn}}</div>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <select ng-model="currentColumn.columnHide" class="form-control">
+                                                                                    <option ng-repeat="hideOption in hideOptions" value="{{hideOption.value}}">{{hideOption.name}}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </td>
+                                                                        <!--                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
+                                                                                                                        <div ng-hide="isEdit"> {{currentColumn.width}}</div>
+                                                                                                                        <div ng-show="isEdit">
+                                                                                                                            <input type="text" class="form-control" ng-model="currentColumn.width">
+                                                                                                                        </div>
+                                                                                                                    </td>-->
+                                                                        <!--                                            <td ng-if="(setPreviewChartType ? setPreviewChartType : editChartType) === 'table'">
+                                                                                                                        <div ng-hide="isEdit"> {{currentColumn.wrapText| capitalize}}</div>
+                                                                                                                        <div ng-show="isEdit">                                                
+                                                                                                                            <select ng-model="currentColumn.wrapText" class="form-control">
+                                                                                                                                <option ng-repeat="tableWrap in tableWrapText" value="{{tableWrap.value}}">{{tableWrap.name}}</option>
+                                                                                                                            </select>
+                                                                                                                        </div>
+                                                                                                                    </td>-->
+                                                                        <td data-as-sortable-item-handle>
+                                                                            <div ng-show="currentColumn.isEdit">
+                                                                                <button class="btn btn-default btn-xs" ng-click="currentColumn.isEdit = false"><i class="fa fa-save"></i></button>
+                                                                                <!--<button class="btn btn-default btn-xs" ng-click="saveColumn(widget, column); widget.isEdit = false"><i class="fa fa-save"></i></button>-->
+                                                                                <button class="btn btn-default btn-xs" ng-click="currentColumn.isEdit = false"><i class="fa fa-close"></i></button>
+                                                                                <button class="btn btn-default btn-xs" ng-click="deleteColumn(widget.columns, $index)"><i class="fa fa-trash"></i></button>
+                                                                            </div>
+                                                                            <div ng-hide="currentColumn.isEdit">
+                                                                                <button class="btn btn-default btn-xs" ng-click="currentColumn.isEdit = true"><i class="fa fa-pencil"></i></button>
+                                                                                <button class="btn btn-default btn-xs" ng-click="deleteColumn(widget.columns, $index)"><i class="fa fa-trash"></i></button>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>                            
+                                                        </div>
+                                                    </div>
+
+                                                    <button class="btn btn-info" ng-click="showPreview(widget); showPreviewChart = !showPreviewChart">
+                                                        <i class="fa" ng-class="{'fa-angle-down': !showPreviewChart, 'fa-angle-up': showPreviewChart}"></i> Preview 
+                                                    </button>
+
+                                                    <div ng-show="showPreviewChart">
+                                                        <div class="col-md-12">
+                                                            <div class="box-body chart-responsive" ng-if="previewChartType === 'ticker'">
+                                                                <div ticker-Directive ticker-Url="{{previewChartUrl}}" 
+                                                                     ticker-Id="{{widget.id}}" ticker-Columns="{{previewColumn.columns}}" 
+                                                                     widget-Date-Duration="{{widget.dateDuration}}" 
+                                                                     widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                                     widget-Custom-Range="{{widget.customRange}}">                                             
+                                                                </div>
+                                                            </div> 
+                                                            <div class="box-body chart-responsive" ng-if="previewChartType === 'line'">
+                                                                <div line-Chart-Url='{{previewChartUrl}}' 
+                                                                     widget-Columns="{{previewColumn.columns}}" 
+                                                                     widget-Date-Duration="{{widget.dateDuration}}" 
+                                                                     widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                                     widget-Custom-Range="{{widget.customRange}}" 
+                                                                     line-Chart-Directive 
+                                                                     style="min-height:{{widget.minHeight}}">                                             
+                                                                </div>
+                                                            </div> 
+                                                            <div class="box-body chart-responsive" ng-if="previewChartType === 'area'">
+                                                                <div area-Chart-Url='{{previewChartUrl}}' 
+                                                                     widget-Columns="{{previewColumn.columns}}" 
+                                                                     area-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
+                                                                     widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                                     widget-Custom-Range="{{widget.customRange}}" 
+                                                                     style="min-height:{{widget.minHeight}}">
+                                                                </div>
+                                                            </div> 
+                                                            <div class="box-body chart-responsive" ng-if="previewChartType === 'bar'">
+                                                                <div bar-Chart-Url='{{previewChartUrl}}' 
+                                                                     widget-Columns="{{previewColumn.columns}}" 
+                                                                     bar-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
+                                                                     widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                                     widget-Custom-Range="{{widget.customRange}}" 
+                                                                     style="min-height:{{widget.minHeight}}">                                             
+                                                                </div>
+                                                            </div> 
+                                                            <div class="box-body chart-responsive" ng-if="previewChartType === 'pie'">
+                                                                <div pie-Chart-Url='{{previewChartUrl}}' 
+                                                                     widget-Columns="{{previewColumn.columns}}" 
+                                                                     pie-Chart-Directive widget-Date-Duration="{{widget.dateDuration}}" 
+                                                                     widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                                     widget-Custom-Range="{{widget.customRange}}" 
+                                                                     style="min-height:{{widget.minHeight}}">
+                                                                </div>
+                                                            </div> 
+                                                            <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
+                                                                <div dynamic-Table dynamic-Table-Url="{{previewChartUrl}}" 
+                                                                     widget-Id="{{previewColumn.id}}" 
+                                                                     widget-Columns="{{previewColumn.columns}}" 
+                                                                     widget-Date-Duration="{{widget.dateDuration}}" 
+                                                                     widget-Obj="{{widget}}"
+                                                                     widget-Frequency-Duration="{{widget.frequencyDuration}}" 
+                                                                     widget-Custom-Range="{{widget.customRange}}">
+                                                                </div>
+                                                            </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button data-dismiss="modal" class="btn btn-info" ng-click="save(widget); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-save"></span> Save</button>
+                                                    <button data-dismiss="modal" class="btn btn-danger" ng-click="closeWidget(widget); showFieldTable = false; showPreviewChart = false; showAddButton = false;"><span class="fa fa-times"></span> Cancel</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <!--</div>-->
                         </div>
                     </div>
-                    <!--</div>-->
-                </div>
-            </div>
                 </div>
             </section>
         </div>

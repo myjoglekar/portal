@@ -73,7 +73,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 controller: 'FieldSettingsController'
             })
             .state("index.viewFavouritesWidget", {
-                url: "viewFavouritesWidget/:favouriteName?:startDate/:endDate",
+                url: "viewFavouritesWidget/:dealerId/:favouriteName?:startDate/:endDate",
                 templateUrl: "static/views/admin/viewFavouritesWidget.html",
                 controller: 'ViewFavouritesWidgetController'
             });
@@ -92,8 +92,15 @@ app.run(['$window', '$rootScope', '$stateParams',
     function ($window, $rootScope, $stateParams) {
         $rootScope.goBack = function () {
             $window.history.back();
-        }
+        };
 
+        $rootScope.setStateParamaters = function () {
+            console.log($stateParams.startDate)
+            $rootScope.dealerIdRange = $stateParams.dealerId;
+            $rootScope.startDateRange = $stateParams.startDate;
+            $rootScope.endDateRange = $stateParams.endDate;
+        }
+        
         $rootScope.printReport = function (dispButton, runUrl) {
             if (dispButton === true) {
                 this.showButton = true;

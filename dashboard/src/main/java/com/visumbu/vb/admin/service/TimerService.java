@@ -133,7 +133,7 @@ public class TimerService {
 //            } else if (dateRangeName.equalsIgnoreCase("Last Month")) {
 //                dateRangeSelect = Range.LAST_MONTH;
 //            } else if (dateRangeName.equalsIgnoreCase("This Year")) {
-//                dateRangeSelect = Range.THIS_YEAR;
+//                dateRangeSelect = Range.THIS_YEAR; 
 //            } else if (dateRangeName.equalsIgnoreCase("Last Year")) {
 //                dateRangeSelect = Range.LAST_YEAR;
 //            } 

@@ -1,11 +1,26 @@
-app.controller('ReportIndexController', function ($scope, $stateParams, $state, $http, $location, $rootScope) {    
-    $scope.$state = $state;//Find Active Tabs
-//    $scope.productId = $stateParams.productId ? $stateParams.productId : 0;
-//    $scope.reportId = $stateParams.reportId ? $stateParams.reportId : 0;
+app.controller('ReportIndexController', function ($scope, $stateParams, $state, $http, $location, $rootScope) {
+    $stateParams.startDate = $rootScope.startDateRange;
+    $stateParams.endDate = $rootScope.endDateRange;
+    console.log($stateParams.dealerIdRange)
+    console.log($stateParams.stateDateRange)
+    console.log($stateParams.endDateRange)
+
+    console.log($rootScope.dealerIdRange)
+    console.log($rootScope.startDateRange)
+    console.log($rootScope.endDateRange)
+
+var paramValue = $location.search().startDate;
+console.log("---------------")
+console.log(decode(paramValue))
+console.log("---------------")
+
+    $scope.$state = $state;
     $scope.startDate = $stateParams.startDate;
     $scope.endDate = $stateParams.endDate;
     $scope.dealerId = $stateParams.dealerId;
     console.log($scope.dealerId)
+    console.log($scope.startDate)
+    console.log($scope.endDate)
     $http.get('admin/dealer').success(function (response) {
         $scope.dealers = response;
         var changeDealerId = $stateParams.dealerId;
@@ -22,7 +37,7 @@ app.controller('ReportIndexController', function ($scope, $stateParams, $state, 
             $stateParams.productId = changeProductId;
             //getTabs();
         });
-    }    
+    }
 
     $scope.setReportParamsDate = function (product) {
         console.log($stateParams.startDate);
@@ -126,8 +141,8 @@ app.controller('ReportIndexController', function ($scope, $stateParams, $state, 
             return "widget";
         }
         return "widget";
-    };    
-   
+    };
+
     $(document).ready(function (e) {
         $(document).on('click', '.applyBtn', function () {
             $scope.loadNewUrl();

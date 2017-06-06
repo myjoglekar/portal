@@ -125,7 +125,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         } else if ($scope.getCurrentPage() === "mapReport") {
             $state.go("index.map", {startDate: $scope.startDate, endDate: $scope.endDate});
         }  else if ($scope.getCurrentPage() === "viewFavouritesWidget") {
-            $state.go("index.viewFavouritesWidget", {startDate: $scope.startDate, endDate: $scope.endDate});
+            $state.go("index.viewFavouritesWidget", {dealerId: $stateParams.dealerId, startDate: $scope.startDate, endDate: $scope.endDate});
         } else {
             $location.path("/" + "?startDate=" + $('#startDate').val() + "&endDate=" + $('#endDate').val());
         }
