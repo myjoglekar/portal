@@ -1,233 +1,3 @@
-<style>
-    .ui-select-bootstrap .ui-select-toggle > .caret {
-        position: absolute;
-        height: 10px;
-        top: 50%;
-        right: 10px;
-        margin-top: -2px;
-        padding: 0px;
-    }
-    .previewChart {
-        border-radius: 5px;
-        border: none;
-        font-size: 30px;
-        padding: 20px;
-        color: #99a5aa;
-        line-height: 1px;
-    }
-    .selected {
-        color: rgb(240, 173, 78);
-        font-size: 30px;
-        line-height: 1px;
-        border-radius: 5px;
-        border: none;
-        padding: 1vw;
-    }
-    .full-height {
-        /*height: 100%;*/
-    }
-
-    #changes-height {
-        /*height: 400px;*/
-        /*background-color: #88ddaa;*/
-    }
-    .wid i{
-        font-size:30px;
-        color: #99a5aa !important;
-    }
-
-    .dropdown-item:focus, .dropdown-item:hover {
-        color: #2b2d2f;
-        text-decoration: none;
-        margin:0;
-        padding:0;
-        border:1px solid #cdcdcd;
-    }
-
-    .dropdown-content {
-        position: absolute;
-        float: left;
-        width:280px;
-        margin-left: -151px;
-        text-align: center;
-    }
-    .dropdown-item {
-        display: block;
-        width: 100%;
-        overflow: hidden;
-    }
-
-    .firstrow {
-        margin: 5px 11px;
-    }
-
-    .secondrow {
-        margin: 5px 11px;
-        width: 126px;
-    }
-
-    .thirdrow {
-        margin: 5px 11px;
-        width: 260px;
-    }
-
-    .btn-apps {
-        border-radius: 3px;
-        position: relative;
-        padding: 15px 5px;
-        margin: 5px 0px 5px 10px;
-        min-width: 80px;
-        /*        height: 40px;*/
-        text-align: center;
-        color: #666;
-        border: 1px solid #ddd;
-        background-color: #fcfcfc;
-        font-size: 12px;
-    }
-
-    .lay-wid {
-        text-align:left;
-    }
-
-    .wrap{
-        white-space: normal;
-    }
-    .ui-grid-cell{
-        height: auto !important;
-    }
-
-    .c3-chart-text .c3-texts .c3-text {
-        font-weight: bold;
-        font-size: 12px
-            /*fill: black;*/
-    }
-    .as-sortable-item, .as-sortable-placeholder {
-        display: table-row !important;
-    }
-    *.unselectable {
-        -moz-user-select: -moz-none;
-        -khtml-user-select: none;
-        -webkit-user-select: none;
-
-        /*
-          Introduced in IE 10.
-          See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
-        */
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    .report-bottomMenu{
-        z-index: 9999;
-        position: fixed;
-        border: 1px solid #ccc;
-        background-color: #FFF;
-        font-size: 12px;
-        width: 300px;
-        height: 466px;
-        right: 70px;
-        bottom: 0px;
-        padding: 0;
-
-    }
-    .report-menuBody{
-        padding: 18px 0px 0px 0px;
-    }
-    .report-menuHeader{
-        background: #304445 none repeat scroll 0 0 !important;
-        border-bottom: 3px solid #ccc;
-        color: #fff;
-        display: table;
-        width: 100%;
-        padding: 8px;
-    }
-    .report-header-icon{
-        border: 2px solid #5a7172;
-        border-radius: 12px;
-        float: left;
-        width: 14px;
-        margin: 3px;
-    }
-    .report-header-title{
-        float: left;
-        font-size: 18px;
-        margin: 0px 0px 5px 5px;
-        color: #fff;
-    }
-    .report-header-tools{
-        margin: 2px 0 0;
-    }
-    .report-header-closeBtn{
-        background: transparent none repeat scroll 0 0;
-        border: 1px solid #fff;
-        border-radius: 7px;
-        font-size: 10px;
-        height: 17px;
-        opacity: 0.9;
-        padding: 0;
-        text-align: center;
-        width: 18px;
-    }
-    .report-body-content{
-        padding: 16px;
-        overflow: auto;
-        height: 300px;
-    }
-    .report-body-img{
-        float: left;
-    }
-    .report-body-imgs.in{
-        border-radius: 50%;
-        width: 74px;
-    }
-    .report-body-imgs{
-        border: 0 none;
-        box-sizing: border-box;
-        height: auto;
-        max-width: 100%;
-        vertical-align: middle;
-    }
-    .report-body-descr{
-        list-style: outside none none;
-        padding: 0;
-        float: left;
-        margin: 0 0 0 20px;
-        max-width: 62%;
-    }
-    .report-desc-list{
-
-        color: #000000;
-        border-radius:5px;
-        clear: both;
-        display: block;
-        border: 1px solid #ddd;
-        float: left;
-        font-size: 13px;
-        padding: 8px 16px;
-        position: relative;
-        margin: 0;
-        list-style: outside none none;
-        word-break: break-all;
-    }
-    .report-footer-btn{
-        padding: 16px;
-    }
-    .selected{
-        background-color: #EBEEE1;
-    }
-
-    /*Favorites*/
-    .red {
-        color:red;
-    }
-    .green {
-        color:#555;
-    }
-    .fa-heart{
-        font-size: 13px !important;
-        cursor:pointer;
-    }
-</style>
 <div>
     <section class="content-header">
         <div class="container">
@@ -248,11 +18,12 @@
                                 </ul>
                             </li>
                             <li class="dropdown dropdown-dealer">
-                                <a class="dropdown-toggle" data-toggle="dropdown">Dashboard<br>
+                                <a class="dropdown-toggle product-Dropdown" data-placement='bottom' href='#' data-toggle="popover">Dashboard<br>  
+                                    <!--<a class='dealerName' data-placement='bottom' href='#' data-toggle="popover" style="border-bottom:2px solid #E6E6E6;color:#3D464D;text-decoration:none;font-size:18px;">Over view <i class="fa fa-angle-down col-sm-offset-5"></i></a>-->
                                     <span class="drop-dealer">Overview </span> <i class="fa fa-angle-down" aria-hidden="true"></i></a>
-                                <ul class="dropdown-menu" role="menu">
+                                <ul class="dropdown-menu hide" id="product-Items" role="menu">
                                     <li ng-repeat="product in products">
-                                        <a class="active"  ng-click="setParamsDate(product); loadNewUrl()" style="cursor: pointer">
+                                        <a class="active"  ng-click="setParamsDate(product); loadNewUrl()">
                                             {{product.productName}}
                                         </a>
                                     </li>
@@ -284,14 +55,47 @@
                                     </li>
                                 </ul>
                             </li>
+                            <!--                            <li class="dropdown dropdown-dealer">
+                                                            <a class="dropdown-toggle" data-toggle="dropdown">Dashboard<br>
+                                                                <span class="drop-dealer">Overview </span> <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                                            <ul class="dropdown-menu" role="menu">
+                                                                <li ng-repeat="product in products">
+                                                                    <a class="active"  ng-click="setParamsDate(product); loadNewUrl()">
+                                                                        {{product.productName}}
+                                                                    </a>
+                                                                </li>
+                                                                <li class="divider"></li>
+                                                                <li ng-click="setParams()">
+                                                                    <a data-ui-sref="index.report.reports({dealerId: dealerId, startDate: startDate, endDate: endDate})">
+                                                                        <i class="fa fa-file-text"></i> Report
+                                                                    </a>
+                                                                </li>
+                                                                <li ng-click="setParams()">
+                                                                    <a data-ui-sref="index.schedulerIndex.scheduler({dealerId: dealerId, startDate: startDate, endDate: endDate})">
+                                                                        <i class="fa fa-clock-o" aria-hidden="true"></i> Scheduler
+                                                                    </a>
+                                                                </li>
+                                                                <li ng-click="setParams()">
+                                                                    <a data-ui-sref="index.map({startDate: startDate, endDate: endDate})">
+                                                                        <i class="fa fa-clock-o" aria-hidden="true"></i> Map Report Level
+                                                                    </a>
+                                                                </li>
+                                                                <li ng-click="setParams()">
+                                                                    <a data-ui-sref="index.settings">
+                                                                        <i class="fa fa-clock-o" aria-hidden="true"></i> Field Settings
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>-->
                             <li class="dropdown dropdown-dealer">
-                                <a id="daterange-btn" style="padding: 21px;">
-                                    <div style="border: 1px solid #D2D8DB; padding: 4px 13px 3px 12px;">
-                                        <i class="fa fa-calendar" id="date" style="padding-right: 2px;"></i>
+                                <a id="daterange-btn" class="calendarOuter">Date
+                                    <div class="calendarInner">
+                                        <i class="fa fa-calendar calendarIcon" id="date"></i>
                                         <span class="date-border">
-                                            <span style="padding-right: 5px;">
+                                            <span class="calendarStartdate">
                                                 {{firstDate| date: "MM/dd/yyyy"}}
-                                            </span> - <span style="padding-left: 5px;padding-right: 4px;">{{lastDate| date: "MM/dd/yyyy"}}</span> <i class="fa fa-caret-down"></i>
+                                            </span> - <span class="calendarEnddate">{{lastDate| date: "MM/dd/yyyy"}}</span> 
+                                            <!--<i class="fa fa-caret-down"></i>-->
                                         </span>
                                     </div>
                                 </a>                   
@@ -305,7 +109,7 @@
                             <div class="btn-group dropdown">
                                 <div class="btn-group dropdown">
                                     <a class="dropdown-toggle" type="button" data-toggle="dropdown">
-                                        <button type="button" class="btn btn-block btn-primary"><i class="fa fa-plus-circle"></i> Add Widget</button>
+                                        <button type="button" class="btn btn-block btn-primary">New Widget</button>
                                     </a>
                                     <div class="dropdown-menu dropdown-content">
                                         <span class="lay-wid">Select the Layout</span>
@@ -366,7 +170,7 @@
                                     <div id="deleteTabModal{{tab.id}}" class="modal bd-example-modal-md">
                                         <div class="modal-dialog modal-xs">
                                             <div class="modal-content">
-                                                <div class="modal-header">
+                                                <div class="modal-header modalHead">
                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     <h4 class="modal-title">Delete</h4>
                                                 </div>
@@ -375,8 +179,8 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <div class="col-sm-12">
-                                                        <button type="button" class="btn btn-primary btn-xs" ng-click="deleteTab($index, tab)" data-dismiss="modal"><span class="fa fa-save"></span> Yes</button>  
-                                                        <button type="button" class="btn btn-danger btn-xs " data-dismiss="modal"><span class="fa fa-times"></span> No
+                                                        <button type="button" class="btn btn-primary iconColormodal" ng-click="deleteTab($index, tab)" data-dismiss="modal"><span class="fa fa-save"></span> Yes</button>  
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-times"></span> No
                                                         </button>
                                                     </div>
                                                 </div>
@@ -431,13 +235,13 @@
                                         <div class="col-sm-{{2 * widget.width}}" ng-drop="true" ng-drop-success="onDropComplete($index, $data, $event)">
                                             <div class="box-body chart-responsive" ng-drag="true" ng-drag-data="widget">
                                                 <div class="box-tools pull-right hover-delete">
-                                                    <button  type="button" ng-if="permission.allowCreateWidget == true" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                                                    <button  type="button" ng-if="permission.allowCreateWidget == true" class="btn btn-box-tool iconColor" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                                                     </button>
-                                                    <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                                                    <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool iconColor" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
                                                     <div id="delete{{widget.id}}" class="modal">
                                                         <div class="modal-dialog modal-lg">
                                                             <div class="modal-content">
-                                                                <div class="modal-header" style="background-color:#9DD6D7;color:black;">
+                                                                <div class="modal-header modalHead widgetDelete headerTitle">
                                                                     <strong>Delete</strong>
                                                                     <strong><button class="close" data-dismiss="modal">&times;</button></strong>
                                                                 </div>
@@ -445,8 +249,8 @@
                                                                     <span>Want to delete ? </span>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
-                                                                    <button class="btn btn-danger btn-xs" data-dismiss="modal"> No</button>
+                                                                    <button class="btn btn-info iconColormodal" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
+                                                                    <button class="btn btn-danger" data-dismiss="modal"> No</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -467,18 +271,85 @@
                                                     </h3>
 
                                                     <div class="box-tools pull-right">
-                                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                                        <a title="Report" ng-click="showReportList[widget.id] = true;"><i class="fa fa-file-text"></i></a>
-                                                        <a title="Favourites" ng-click="toggleFavourite(widget)"><i class="fa fa-heart" ng-class="{'red':widget.isFav,'black':!widget.isFav}"></i></a>
+                                                        <button type="button" class="btn btn-box-tool iconColor" data-toggle="modal" data-target="#report{{widget.id}}"><i class="fa fa-file-text"></i></button>
+
+                                                        <!--                                                        <button title="Report" class="btn-box-tool iconColor" ng-click="showReportList[widget.id] = true;"><i class="fa fa-file-text"></i></button>-->
                                                         <!--                            <button  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                                                                                     </button>-->
-                                                        <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
+                                                        <div id="report{{widget.id}}" class="modal">
+                                                            <div class="modal-dialog modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header modalHead">
+                                                                        <div class="col-md-10">
+                                                                            <h1 class="report-header-title headerTitle">Add {{widget.widgetTitle}} To Report</h1>
+                                                                        </div>
+                                                                        <strong><button class="close" data-dismiss="modal">&times;</button></strong>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <label class="col-sm-2">Report</label>
+                                                                        <div class="col-sm-10">
+                                                                            <ui-select ng-model="widget.reportWidget" on-select="selectReport(widget.reportWidget)" theme="select2" ng-disabled="disabled" class="modelSelect">
+                                                                                <ui-select-match placeholder="Select Report...">{{$select.selected.reportTitle}}</ui-select-match>
+                                                                                <ui-select-choices repeat="report in reportList | filter: $select.search">
+                                                                                    <span ng-bind-html="report.reportTitle | highlight: $select.search"></span>
+                                                                                </ui-select-choices>
+                                                                            </ui-select>
+                                                                        </div>
+                                                                        <div class="report-body-content">
+                                                                            <!--<div class="row report-chat-box">-->
+                                                                            <div class="report-body-img">
+                                                                                <img class="report-body-imgs in" src="{{reportLogo}}">
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <ul class="report-body-descr" ng-if="reportDescription">
+                                                                                    <li class="report-desc-list" ng-init="limit = 150; moreShown = false">
+                                                                                        <p>
+                                                                                            {{reportDescription| limitTo: limit}} {{reportDescription.length > limit ? '...' : ''}}
+                                                                                            <a ng-show="reportDescription.length > limit" href ng-click="limit = reportDescription.length; moreShown = true">  More</a>
+                                                                                            <a ng-show="moreShown" href ng-click="limit = 150; moreShown = false"> Less </a>
+                                                                                        </p>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <!--</div>-->
+
+                                                                            <div class="row form-group">
+                                                                                <div class="col-sm-12">
+                                                                                    <table class="table table-bordered table-striped" ng-show="showReportWidgetName">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th>Sl.No</th>
+                                                                                                <th>Widget Name</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <tr ng-repeat="titleName in reportWidgetTitle">
+                                                                                                <td>{{$index + 1}}</td>
+                                                                                                <td>{{titleName.widgetId.widgetTitle}}</td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                    <div ng-show="showReportEmptyMessage">
+                                                                                        <span><h4>{{reportEmptyMessage}}</h4></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button class="btn btn-primary iconColormodal" ng-click="addWidgetToReport(widget); showReportList[widget.id] = false;" data-dismiss="modal">Add</button>
+                                                                        <button class="btn btn-primary iconColormodal" ng-click="goReport()">Goto Report</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button  ng-if="permission.allowCreateWidget == true"  type="button" class="btn btn-box-tool iconColor" data-toggle="modal" data-target="#preview{{widget.id}}" ng-click="editWidget(widget);"><i class="fa fa-pencil"></i>
                                                         </button>
-                                                        <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-times"></i></button>
+                                                        <button ng-if="permission.allowDeleteWidget == true" type="button" class="btn btn-box-tool iconColor" data-toggle="modal" data-target="#delete{{widget.id}}"><i class="fa fa-trash"></i></button>
                                                         <div id="delete{{widget.id}}" class="modal">
                                                             <div class="modal-dialog modal-lg">
                                                                 <div class="modal-content">
-                                                                    <div class="modal-header" style="background-color:#9DD6D7;color:black;">
+                                                                    <div class="modal-header modalHead">
                                                                         <strong>Delete</strong>
                                                                         <strong><button class="close" data-dismiss="modal">&times;</button></strong>
                                                                     </div>
@@ -486,15 +357,16 @@
                                                                         <span>Want to delete ? </span>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button class="btn btn-info btn-xs" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
-                                                                        <button class="btn btn-danger btn-xs" data-dismiss="modal"> No</button>
+                                                                        <button class="btn btn-info iconColormodal" ng-click="deleteWidget(widget, $index)" data-dismiss="modal"> Yes</button>
+                                                                        <button class="btn btn-danger" data-dismiss="modal"> No</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <button type="button" class="btn btn-box-tool iconColor" data-widget="collapse"><i class="fa fa-minus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
-
                                                 <div class="box-body chart-responsive" ng-if="widget.chartType === 'line'">{{lineEmptyMessage}}
                                                     <div line-Chart-Directive line-Chart-Url="{{widget.directUrl}}" 
                                                          widget-Date-Duration="{{widget.dateDuration}}" 
@@ -611,6 +483,74 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    
+                                        <!----------Report Popup-------------------->
+                                        <!--                                        <div class="report-bottomMenu pull-right" ng-show="showReportList[widget.id]">
+                                                                                    <div class="report-menuHeader">
+                                                                                        <div class="col-md-10">
+                                                                                            <i class="report-header-icon fa fa-user" title="{{widget.widgetTitle}}"></i>
+                                                                                            <h1 class="report-header-title">Add {{widget.widgetTitle}} To Report</h1>
+                                                                                        </div>
+                                                                                        <div class="report-header-tools pull-right">
+                                                                                            <button class="report-header-closeBtn" ng-click="clearReport(); showReportList[widget.id] = false;"><i class="fa fa-close"></i></button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="report-menuBody">
+                                                                                        <label class="col-sm-2">Report</label>
+                                                                                        <div class="col-sm-10">
+                                                                                            <ui-select ng-model="widget.reportWidget" on-select="selectReport(widget.reportWidget)" theme="select2" ng-disabled="disabled" style="width: 220px;">
+                                                                                                <ui-select-match placeholder="Select Report...">{{$select.selected.reportTitle}}</ui-select-match>
+                                                                                                <ui-select-choices repeat="report in reportList | filter: $select.search">
+                                                                                                    <span ng-bind-html="report.reportTitle | highlight: $select.search"></span>
+                                                                                                </ui-select-choices>
+                                                                                            </ui-select>
+                                                                                        </div>
+                                                                                        <div class="report-body-content">
+                                                                                            <div class="row report-chat-box">
+                                                                                                <div class="report-body-img">
+                                                                                                    <img class="report-body-imgs in" src="{{reportLogo}}">
+                                                                                                </div>
+                                                                                                <div class="form-group">
+                                                                                                    <ul class="report-body-descr" ng-if="reportDescription">
+                                                                                                        <li class="report-desc-list" ng-init="limit = 150; moreShown = false">
+                                                                                                            <p>
+                                                                                                                {{reportDescription| limitTo: limit}} {{reportDescription.length > limit ? '...' : ''}}
+                                                                                                                <a ng-show="reportDescription.length > limit" href ng-click="limit = reportDescription.length; moreShown = true">  More</a>
+                                                                                                                <a ng-show="moreShown" href ng-click="limit = 150; moreShown = false"> Less </a>
+                                                                                                            </p>
+                                                                                                        </li>
+                                                                                                    </ul>
+                                                                                                </div>
+                                                                                            </div>
+                                        
+                                                                                            <div class="row form-group">
+                                                                                                <div class="col-sm-12">
+                                                                                                    <table class="table table-bordered" ng-show="showReportWidgetName">
+                                                                                                        <thead>
+                                                                                                            <tr>
+                                                                                                                <th>Sl.No</th>
+                                                                                                                <th>Widget Name</th>
+                                                                                                            </tr>
+                                                                                                        </thead>
+                                                                                                        <tbody>
+                                                                                                            <tr ng-repeat="titleName in reportWidgetTitle">
+                                                                                                                <td>{{$index + 1}}</td>
+                                                                                                                <td>{{titleName.widgetId.widgetTitle}}</td>
+                                                                                                            </tr>
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                    <div ng-show="showReportEmptyMessage">
+                                                                                                        <span><h4>{{reportEmptyMessage}}</h4></span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="report-footer-btn">
+                                                                                            <button class="btn btn-success pull-left" ng-click="goReport()">Goto Report</button>
+                                                                                            <button class="btn btn-success" ng-click="addWidgetToReport(widget); showReportList[widget.id] = false;" style="float: right">Add</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>-->
                                     </div>
 
                                     <!--------- New Or Edit------------->
@@ -619,8 +559,8 @@
                                     <div id="preview{{widget.id}}" class="modal fade">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <label style="font-weight:normal;">Widget</label>
+                                                <div class="modal-header modalHead">
+                                                    <label class="widgetNew">Widget</label>
                                                     <button class="close" data-dismiss="modal">&times;</button>
                                                 </div>
                                                 <div class="modal-body">
@@ -660,7 +600,7 @@
                                                                     <div class="form-group">
                                                                         <label>Type</label><br/>
                                                                         <a class="btn btn-app" ng-repeat="chartType in chartTypes track by chartType.id"> <span ng-click="previewChart(chartType, widget, $index);" class="previewChart" title="{{chartType.name}}"> 
-                                                                                <i style="cursor: pointer" class="fa {{chartType.icon}}" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i> </span>
+                                                                                <i class="fa {{chartType.icon}} typeChart" ng-class="{'selected': chartType.type == (selectedRow?selectedRow:widget.chartType)}"></i> </span>
                                                                         </a>
                                                                     </div>             
                                                                 </div>
@@ -886,7 +826,7 @@
                                                                      style="min-height:{{widget.minHeight}}">
                                                                 </div>
                                                             </div> 
-                                                            <div class="box-body chart-responsive" ng-if="previewChartType === 'table'"  style="overflow: auto;">
+                                                            <div class="box-body previousChart chart-responsive" ng-if="previewChartType === 'table'">
                                                                 <div dynamic-Table dynamic-Table-Url="{{previewChartUrl}}" 
                                                                      widget-Id="{{previewColumn.id}}" 
                                                                      widget-Columns="{{previewColumn.columns}}" 

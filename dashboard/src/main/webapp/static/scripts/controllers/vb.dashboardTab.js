@@ -601,7 +601,7 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
         }, 100);
     };
     $scope.addWidget = function (newWidget) {
-        alert()      //Add Widget
+//        alert()      //Add Widget
         var data = {
             width: newWidget, 'minHeight': 25, columns: [], chartType: ""
         };
@@ -766,7 +766,25 @@ app.controller('UiController', function ($scope, $http, $stateParams, $state, $f
             }
         }
     };
+    
+    $(document).ready(function () {
+        $('.product-Dropdown').popover({
+            html: true,
+            content: function () {
+                return $('#product-Items').html();
+            }
+        });
+    });
 
+    $(document).on('click', function (e) {
+        $('[data-toggle="popover"],[data-original-title]').each(function () {
+
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                $(this).popover('hide').data('bs.popover').inState.click = false
+            }
+
+        });
+    });
 });
 
 app.directive('ngBlur', function () {

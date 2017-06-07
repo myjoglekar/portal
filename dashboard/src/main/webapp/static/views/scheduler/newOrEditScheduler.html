@@ -58,15 +58,26 @@
     .agency-bt {
         margin-bottom:10px;
     }
+    .schedulerDuration{
+        width: 60px;
+        display: contents;
+        height: 25px;
+    }
+    .schedulerSelect{
+      min-width:225px;
+    }
+    .schedulerImage{
+        width: 40px;
+    }
 </style>
 <section class="content">    
 
     <div class="box box-primary box-l2t">
         <div class="box-header with-border">
             <h3 class="box-title">
-<!--                <span>
-                    Schedule Report
-                </span> -->
+                <!--                <span>
+                                    Schedule Report
+                                </span> -->
             </h3>
             <div class="pull-right-container pull-right agency-bt">
                 <div class="btn-group"> 
@@ -177,15 +188,15 @@
                                         <div class="col-md-6">
                                             <label>Report</label>
                                             <div>
-                                                <ui-select ng-model="scheduler.reportId" theme="select2" ng-disabled="disabled" style="min-width:225px;">
+                                                <ui-select ng-model="scheduler.reportId" theme="select2" ng-disabled="disabled" class="schedulerSelect" style="">
                                                     <ui-select-match placeholder="Select Report...">
-                                                        <img ng-if="$select.selected.logo" style="width: 40px" ng-src="{{ $select.selected.logo}}" />
-                                                        <img ng-if="!$select.selected.logo" style="width: 40px" ng-src="static/img/logos/emptyLogo.jpg" />
+                                                        <img ng-if="$select.selected.logo" class="schedulerImage" ng-src="{{ $select.selected.logo}}" />
+                                                        <img ng-if="!$select.selected.logo" class="schedulerImage" ng-src="static/img/logos/emptyLogo.jpg" />
                                                         {{$select.selected.reportTitle}}
                                                     </ui-select-match>
                                                     <ui-select-choices repeat="report in reports | filter: $select.search">                                
-                                                        <img ng-if="report.logo" style="width: 40px" ng-src="{{ report.logo}}" />
-                                                        <img ng-if="!report.logo" style="width: 40px" ng-src="static/img/logos/emptyLogo.jpg" />
+                                                        <img ng-if="report.logo" class="schedulerImage" ng-src="{{ report.logo}}" />
+                                                        <img ng-if="!report.logo" class="schedulerImage" ng-src="static/img/logos/emptyLogo.jpg" />
                                                         <div ng-bind-html="report.reportTitle | highlight: $select.search" style="display: inline">
                                                         </div>                                
                                                         <small><span style="display: list-item;">Description : {{report.description| limitTo: 25}}{{report.description.length > 25 ? '...' : ''}}</span></small>
@@ -247,9 +258,8 @@
                                                             <a>Last <input type="text"
                                                                            ng-model="scheduler.lastNdays" 
                                                                            ng-change="selectDuration('Last N Days', scheduler)" 
-                                                                           class="form-control" 
-                                                                           ng-model-options="{debounce: 500}"
-                                                                           style="width: 60px; display: contents; height: 25px;"> 
+                                                                           class="form-control schedulerDuration" 
+                                                                           ng-model-options="{debounce: 500}"> 
                                                                 Days
                                                             </a>
                                                         </li>
@@ -257,9 +267,8 @@
                                                             <a>Last <input type="text" 
                                                                            ng-model="scheduler.lastNweeks" 
                                                                            ng-change="selectDuration('Last N Weeks', scheduler)"
-                                                                           class="form-control" 
-                                                                           ng-model-options="{debounce: 500}"
-                                                                           style="width: 60px; display: contents; height: 25px;"> 
+                                                                           class="form-control schedulerDuration" 
+                                                                           ng-model-options="{debounce: 500}">
                                                                 Weeks
                                                             </a>
                                                         </li>
@@ -267,9 +276,8 @@
                                                             <a>Last <input type="text" 
                                                                            ng-model="scheduler.lastNmonths" 
                                                                            ng-change="selectDuration('Last N Months', scheduler)"
-                                                                           class="form-control" 
-                                                                           ng-model-options="{debounce: 500}"
-                                                                           style="width: 60px; display: contents; height: 25px;"> 
+                                                                           class="form-control schedulerDuration" 
+                                                                           ng-model-options="{debounce: 500}">
                                                                 Months
                                                             </a>
                                                         </li>
@@ -277,9 +285,8 @@
                                                             <a>Last <input type="text" 
                                                                            ng-model="scheduler.lastNyears" 
                                                                            ng-change="selectDuration('Last N Years', scheduler)"
-                                                                           class="form-control" 
-                                                                           ng-model-options="{debounce: 500}"
-                                                                           style="width: 60px; display: contents; height: 25px;"> 
+                                                                           class="form-control schedulerDuration" 
+                                                                           ng-model-options="{debounce: 500}">
                                                                 Years
                                                             </a>
                                                         </li>
@@ -329,15 +336,15 @@
                                                     <input class="scheduler-checkBox" type="checkbox" ng-checked="scheduler.schedulerType == 'pdf'" ng-true-value="'pdf'" ng-model="scheduler.schedulerType" /> 
                                                 </div>  
                                             </div>
-<!--                                            <div class="col-sm-2">
-                                                <label class="scheduler-checkBox-label">
-                                                    <span>PPT</span>
-                                                </label>
-                                                <div>
-                                                    <input class="scheduler-checkBox" type="checkbox" ng-checked="scheduler.schedulerType == 'ppt'" ng-true-value="'ppt'" ng-model="scheduler.schedulerType" /> 
-
-                                                </div>
-                                            </div>-->
+                                            <!--                                            <div class="col-sm-2">
+                                                                                            <label class="scheduler-checkBox-label">
+                                                                                                <span>PPT</span>
+                                                                                            </label>
+                                                                                            <div>
+                                                                                                <input class="scheduler-checkBox" type="checkbox" ng-checked="scheduler.schedulerType == 'ppt'" ng-true-value="'ppt'" ng-model="scheduler.schedulerType" /> 
+                                            
+                                                                                            </div>
+                                                                                        </div>-->
                                             <!--                                    <div class="col-sm-2">
                                                                                     <label class="scheduler-checkBox-label">
                                                                                         <span>XLS</span>
