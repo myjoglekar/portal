@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author user
+ * @author Mandar Y. Joglekar
  */
 @XmlRootElement(name = "report")
 public class CampaignReport {
