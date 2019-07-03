@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
- * @author Varghees Samraj
+ * @author Mandar Y. Joglekar
  */
 @Controller
 @RequestMapping("adwords")
