@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author jp
+ * @author Mandar Y. Joglekar
  */
 @Service("userService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
