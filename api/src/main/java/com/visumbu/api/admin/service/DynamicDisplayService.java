@@ -29,7 +29,7 @@ import org.json.simple.parser.ParseException;
 
 /**
  *
- * @author jp
+ * @author Mandar Y. Joglekar
  */
 @Service("dynamicDisplayService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
