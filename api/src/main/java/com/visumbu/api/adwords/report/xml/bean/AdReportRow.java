@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author duc-dev-04
+ * @author Mandar Y. Joglekar
  */
 @XmlRootElement(name = "row")
 public class AdReportRow {
