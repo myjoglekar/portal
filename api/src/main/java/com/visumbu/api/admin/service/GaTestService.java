@@ -51,7 +51,7 @@ import com.google.api.services.analytics.model.Goals;
 
 /**
  *
- * @author Varghees
+ * @author Mandar Y. Joglekar
  */
 @Service("gaTestService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
