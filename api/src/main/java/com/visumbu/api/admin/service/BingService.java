@@ -78,7 +78,7 @@ import static test.BingApi.customerId;
 
 /**
  *
- * @author jp
+ * @author Mandar Y. Joglekar
  */
 @Service("bingService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
