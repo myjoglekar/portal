@@ -59,7 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author jp
+ * @author Mandar Y. Joglekar
  */
 @Service("adwordsService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
