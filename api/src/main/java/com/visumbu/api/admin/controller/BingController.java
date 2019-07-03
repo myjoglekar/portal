@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
- * @author jp
+ * @author Mandar Y. Joglekar
  */
 @Controller
 @RequestMapping("bing")
