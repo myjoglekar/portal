@@ -7,7 +7,7 @@ package com.visumbu.api.bean;
 
 /**
  *
- * @author user
+ * @author Mandar Y. Joglekar
  */
 public class ReportPage {
     private Integer start;
