@@ -85,7 +85,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
- * @author Varghees
+ * @author Mandar Y. Joglekar
  */
 @Controller
 @RequestMapping("video")
