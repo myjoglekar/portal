@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  *
- * @author duc-dev-04
+ * @author Mandar Y. Joglekar
  */
 public class CallConversionReportRow {
 
